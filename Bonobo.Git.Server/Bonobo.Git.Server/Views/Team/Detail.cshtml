@@ -1,0 +1,52 @@
+﻿@model Bonobo.Git.Server.Models.TeamDetailModel
+@{
+    ViewBag.Title = Resources.Team_Detail_Title;
+}
+@if (Model == null)
+{    
+    @Html.Partial("~/Views/Shared/_ItemNotFound.cshtml") 
+}
+else
+{  
+    <div class="uniForm">
+        <h2>@Resources.Team_Detail_Title</h2>
+        <fieldset class="inlineLabels detail">
+            <h3>@Model.Name</h3>
+            <div class="ctrlHolder">
+                <h5>@Html.LabelFor(m => m.Name)</h5>
+                <div class="content">@Model.Name</div>
+            </div>
+            <div class="ctrlHolder">
+                <h5>@Html.LabelFor(m => m.Description)</h5>
+                <div class="content">@Model.Description</div>
+            </div>
+            <div class="ctrlHolder">
+                <h5>@Html.LabelFor(m => m.Members)</h5>
+                <div class="content">
+                    @for (int i = 0; i < Model.Members.Length; i++)
+                    {
+                        @Html.ActionLink(@Model.Members[i], "Detail", "Account", new { id = @Model.Members[i] }, null)if (i + 1 != Model.Members.Length)
+                                                                                                                      {<text>, </text>}
+                    }
+                </div>
+            </div>
+            <div class="ctrlHolder">
+                <h5>@Html.LabelFor(m => m.Repositories)</h5>
+                <div class="content">
+                    @for (int i = 0; i < Model.Repositories.Length; i++)
+                    {
+                        @Html.ActionLink(@Model.Repositories[i], "Detail", "Repository", new { id = @Model.Repositories[i] }, null)if (i + 1 != Model.Repositories.Length)
+                                                                                                                                   {<text>, </text>}
+                    }
+                </div>
+            </div>
+            <div class="buttonHolder">
+                @Html.ActionLink("←  " + Resources.Team_Detail_Back, "Index", null, new { @class = "secondaryAction" })
+                @if (User.IsInRole(Definitions.Roles.Administrator))
+                {
+                    @Html.ActionLink(Resources.Team_Detail_Edit, "Edit", new { id = Model.Name }, new { @class = "primaryAction" })@Html.ActionLink(Resources.Team_Detail_Delete, "Delete", new { id = Model.Name }, new { @class = "primaryAction" })
+                }
+            </div>
+        </fieldset>
+    </div>
+}

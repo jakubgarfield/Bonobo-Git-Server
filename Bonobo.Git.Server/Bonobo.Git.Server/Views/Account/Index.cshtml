@@ -1,0 +1,43 @@
+﻿@using Bonobo.Git.Server.Extensions;
+@model IList<UserDetailModel>
+@{
+    ViewBag.Title = Resources.Account_Index_Title;
+}
+<h2>@Resources.Account_Index_Title</h2>
+@if (ViewBag.DeleteSuccess != null)
+{
+    if (ViewBag.DeleteSuccess)
+    {
+        <div class="uniForm">    
+        <div id="okMsg">
+            <p>@Resources.Account_Delete_Success</p>
+        </div>
+        </div>
+    }
+    else
+    {
+        <div class="uniForm">    
+        <div id="errorMsg">
+            <p>@Resources.Account_Delete_DeleteCurrentUser</p>
+        </div>
+        </div>
+    }
+}
+@{
+    var grid = new WebGrid(source: Model, defaultSort: "Username", rowsPerPage: 15);
+}
+<div class="w-grid">
+    @grid.GetHtml(
+        tableStyle: "grid",
+        headerStyle: "head",
+        alternatingRowStyle: "even",
+        columns: grid.Columns(
+            grid.Column("Username", header: typeof(UserDetailModel).GetDisplayValue("Username"), format: (item) => Html.ActionLink((string)item.Username, "Detail", new { id = item.Username }, new { @class = "user" })),
+            grid.Column("Name", typeof(UserDetailModel).GetDisplayValue("Name")),
+            grid.Column("Surname", typeof(UserDetailModel).GetDisplayValue("Surname")),
+            grid.Column("Email", typeof(UserDetailModel).GetDisplayValue("Email")),
+            grid.Column(format: (item) => Html.ActionLink(Resources.Grid_Edit, "Edit", new { id = item.Username }), style: "action"),
+            grid.Column(format: (item) => Html.ActionLink(Resources.Grid_Delete, "Delete", new { id = item.Username }), style: "action")
+        )
+    )
+</div>

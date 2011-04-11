@@ -1,0 +1,26 @@
+﻿@{
+    var path = ViewData["path"] as string;    
+    
+    <p id="repositoryAddress">
+        @Html.ActionLink(Resources.Repository_AddressBar_Root, "Tree", new { id = ViewBag.ID, name = ViewData["currentBranch"] ?? ViewData["name"], path = ""})
+        @if (path != null)
+        {
+            <text>/</text>
+            var dirs = path.Replace(".browse", "").Split('/');
+            for (int i = 0; i < dirs.Length; i++)
+            {
+                string currentPath = string.Empty;
+                for (int j = 0; j < i; j++)
+                {
+                    currentPath += dirs[j] + "/";
+                }
+                currentPath += dirs[i];
+                @Html.ActionLink(dirs[i], ViewContext.RouteData.Values["Action"].ToString(), new { path = currentPath + ".browse", id = ViewBag.ID })
+                if (i + 1 != dirs.Length)
+                {
+                        <text>/</text>
+                }
+            }
+        }
+    </p>
+}

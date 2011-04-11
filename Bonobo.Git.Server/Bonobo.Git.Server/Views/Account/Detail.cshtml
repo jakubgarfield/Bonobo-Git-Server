@@ -1,0 +1,50 @@
+﻿@model Bonobo.Git.Server.Models.UserDetailModel
+@{
+    ViewBag.Title = @Resources.Account_Detail_Title;
+}
+@if (Model == null)
+{   
+    <h2 class="error">@Resources.Item_NotFound</h2>
+}
+else
+{  
+    <h2>@Resources.Account_Detail_Title</h2>
+    <div class="uniForm">
+        <fieldset class="inlineLabels detail">
+            <h3>@Model.Username</h3>
+            <div class="ctrlHolder">
+                <h5>@Html.LabelFor(m => m.Username)</h5>
+                <div class="content">@Model.Username</div>
+            </div>
+            <div class="ctrlHolder">
+                <h5>@Html.LabelFor(m => m.Name)</h5>
+                <div class="content">@Model.Name</div>
+            </div>
+            <div class="ctrlHolder">
+                <h5>@Html.LabelFor(m => m.Surname)</h5>
+                <div class="content">@Model.Surname</div>
+            </div>
+            <div class="ctrlHolder">
+                <h5>@Html.LabelFor(m => m.Email)</h5>
+                <div class="content">@Model.Email</div>
+            </div>
+            <div class="ctrlHolder">
+                <h5>@Html.LabelFor(m => m.Roles)</h5>
+                <div class="content">
+                    @for (int i = 0; i < Model.Roles.Length; i++)
+                    {
+                        @Model.Roles[i]if (i + 1 != Model.Roles.Length)
+                                       {<text>, </text>}
+                    }
+                </div>
+            </div>
+        </fieldset>
+        @if (User.IsInRole(Definitions.Roles.Administrator))
+        {
+            <div class="buttonHolder">
+                @Html.ActionLink("←  " + Resources.Account_Detail_Back, "Index", null, new { @class = "secondaryAction" })
+                @Html.ActionLink(Resources.Account_Detail_Edit, "Edit", new { id = Model.Username }, new { @class = "primaryAction" })@Html.ActionLink(Resources.Account_Detail_Delete, "Delete", new { id = Model.Username }, new { @class = "primaryAction" })
+            </div>
+        }
+    </div>
+}

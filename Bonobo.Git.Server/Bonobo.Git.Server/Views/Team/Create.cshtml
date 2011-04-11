@@ -1,0 +1,36 @@
+﻿@model Bonobo.Git.Server.Models.TeamDetailModel
+@{
+    ViewBag.Title = Resources.Team_Create_Title;
+}
+<h2>@Resources.Team_Create_Title</h2>
+@using (Html.BeginForm("Create", "Team", FormMethod.Post, new { @class = "uniForm" }))
+{
+    @Html.ValidationSummary(false, Resources.Team_Create_Fail, new { @id = "errorMsg" })
+    <fieldset>
+        <h3>@Resources.Team_Create_TeamInformations</h3>
+        <div class="ctrlHolder"> 
+            @Html.LabelFor(m => m.Name)
+            @Html.TextBoxFor(m => m.Name, new { @class = "textInput small" })<em>*</em>
+            <p class="formHint">
+              @Html.ValidationMessageFor(m => m.Name)
+            </p> 
+        </div> 
+        <div class="ctrlHolder"> 
+            @Html.LabelFor(m => m.Description)
+            @Html.TextAreaFor(m => m.Description, new { @class = "textInput medium" })
+            <p class="formHint">
+            </p> 
+        </div> 
+        <div class="ctrlHolder"> 
+            @Html.LabelFor(m => m.Members)
+            @Html.ListBoxFor(m => m.Members, new MultiSelectList(ViewData["AvailableUsers"] as System.Collections.IEnumerable), new { @class = "selectInput medium" })  
+            <p class="formHint">
+            </p> 
+        </div>
+        <div class="buttonHolder"> 
+            @Html.ActionLink("← " + Resources.Team_Create_Back, "Index", null, new { @class = "secondaryAction" })
+            <button type="reset" class="secondaryAction">← @Resources.Reset</button> 
+            <input type="submit" value="@Resources.Team_Create_Submit" class="primaryAction" />
+       </div>
+    </fieldset> 
+}

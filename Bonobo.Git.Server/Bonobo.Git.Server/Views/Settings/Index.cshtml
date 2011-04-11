@@ -1,0 +1,36 @@
+﻿@using Bonobo.Git.Server.Extensions
+@model Bonobo.Git.Server.Models.GlobalSettingsModel
+@{
+    ViewBag.Title = Resources.Settings_Index_Title;
+}
+<h2>@Resources.Settings_Index_Title</h2>
+@using (Html.BeginForm("Index", "Settings", FormMethod.Post, new { @class = "uniForm" }))
+{
+    if (ViewBag.UpdateSuccess != null && ViewBag.UpdateSuccess)
+    {
+        <div id="okMsg">
+            <p>@Resources.Settings_Index_UpdateSuccess</p>
+        </div>
+    }
+    @Html.ValidationSummary(false, Resources.Settings_Index_Failed, new { @id = "errorMsg" })
+    <fieldset>
+        <h3>@Resources.Settings_Index_Title</h3>
+        <div class="ctrlHolder noLabel"> 
+            <label for="AllowAnonymousPush">@Html.CheckBoxFor(m => m.AllowAnonymousPush) @Model.GetType().GetDisplayValue("AllowAnonymousPush")</label>
+            <p class="formHint">              
+            </p> 
+        </div> 
+        <div class="ctrlHolder"> 
+            @Html.LabelFor(m => m.RepositoryPath)
+            @Html.TextBoxFor(m => m.RepositoryPath, new { @class = "textInput" })<em>*</em>
+            <p class="formHint">
+              @Html.ValidationMessageFor(m => m.RepositoryPath)
+              @Resources.GlobalSettings_DirectoryHint
+            </p> 
+        </div> 
+        <div class="buttonHolder"> 
+            <button type="reset" class="secondaryAction">← @Resources.Reset</button> 
+            <input type="submit" value="@Resources.Settings_Index_Save" class="primaryAction" />
+        </div>
+    </fieldset>
+}

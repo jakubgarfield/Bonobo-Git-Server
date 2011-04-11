@@ -1,0 +1,57 @@
+﻿@using Bonobo.Git.Server.Extensions
+@model Bonobo.Git.Server.Models.RepositoryDetailModel
+@{
+    ViewBag.Title = Resources.Repository_Create_Title;
+}
+<h2>@Resources.Repository_Create_Title</h2>
+@using (Html.BeginForm("Create", "Repository", FormMethod.Post, new { @class = "uniForm" }))
+{    
+    @Html.ValidationSummary(false, Resources.Repository_Create_Fail, new { @id = "errorMsg" })
+    <fieldset>
+        <h3>@Resources.Repository_Create_Informations</h3>
+        <div class="ctrlHolder">
+            @Html.LabelFor(m => m.Name)
+            @Html.TextBoxFor(m => m.Name, new { @class = "textInput small" })<em>*</em>
+            <p class="formHint">@Html.ValidationMessageFor(m => m.Name)</p>
+        </div>
+        <div class="ctrlHolder">
+            @Html.LabelFor(m => m.Description)
+            @Html.TextAreaFor(m => m.Description, new { @class = "textInput medium" })
+            <p class="formHint"></p>
+        </div>
+        <div class="ctrlHolder noLabel">
+            @Html.LabelFor(m => m.AllowAnonymous)
+            @Html.CheckBoxFor(m => m.AllowAnonymous)
+            <p class="formHint">
+                @Resources.Repository_AllowAnonymousHint
+            </p>
+        </div>
+        <div class="ctrlHolder">
+            @Html.LabelFor(m => m.Users)
+            @Html.ListBoxFor(m => m.Users, new MultiSelectList(ViewData["AvailableUsers"] as System.Collections.IEnumerable), new { @class = "selectInput medium" })
+            <p class="formHint">
+                @Resources.Repository_UsersHint
+            </p>
+        </div>
+        <div class="ctrlHolder">
+            @Html.LabelFor(m => m.Administrators)
+            @Html.ListBoxFor(m => m.Administrators, new MultiSelectList(ViewData["AvailableAdministrators"] as System.Collections.IEnumerable), new { @class = "selectInput medium" })
+            <p class="formHint">
+                @Html.ValidationMessageFor(m => m.Administrators)
+                @Resources.Repository_AdministratorsHint
+            </p>
+        </div>
+        <div class="ctrlHolder">
+            @Html.LabelFor(m => m.Teams)
+            @Html.ListBoxFor(m => m.Teams, new MultiSelectList(ViewData["AvailableTeams"] as System.Collections.IEnumerable), new { @class = "selectInput medium" })
+            <p class="formHint">
+                @Resources.Repository_TeamsHint                
+            </p>
+        </div>
+        <div class="buttonHolder">
+            @Html.ActionLink("← " + Resources.Repository_Create_Back, "Index", null, new { @class = "secondaryAction" })
+            <button type="reset" class="secondaryAction">← @Resources.Reset</button>
+            <input type="submit" value="@Resources.Repository_Create_Submit" class="primaryAction" />
+        </div>
+    </fieldset>
+}

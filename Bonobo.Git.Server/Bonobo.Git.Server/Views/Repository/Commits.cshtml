@@ -1,0 +1,24 @@
+﻿@using Bonobo.Git.Server.Extensions
+@model RepositoryCommitsModel
+@{
+    Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
+    ViewBag.Title = Resources.Repository_Commits_Title;
+}
+@if (Model != null)
+{
+    <div class="uniForm">
+        <fieldset class="inlineLabels detail">
+            <h3>@Model.Name</h3>
+        </fieldset>
+    </div>
+    <div class="repositoryContent">
+        @Html.Partial("_BranchSwitcher")
+        @if (Model.Commits != null)
+        {
+            foreach (var item in Model.Commits)
+            {
+                @Html.Partial("_Commit", item)
+            }
+        }
+    </div>
+}

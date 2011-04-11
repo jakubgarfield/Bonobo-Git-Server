@@ -1,0 +1,59 @@
+﻿@model RepositoryCommitModel
+@using Bonobo.Git.Server.Extensions
+@{
+    ViewBag.Title = Resources.Repository_Commit_Detail;
+    Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
+}
+@if (Model != null)
+{
+    <div class="uniForm">
+        <fieldset class="inlineLabels detail">
+            <h3>@Model.Name</h3>
+        </fieldset>
+    </div>
+    <div class="repositoryContent">
+        @Html.Partial("_Commit", Model)
+        <div class="changes">
+            <h3>@Model.GetType().GetDisplayValue("Changes")</h3>
+            @foreach (var item in Model.Changes)
+            {
+                <div class="item">
+                    <p>
+                        @if (item.Type == GitSharp.ChangeType.Added)
+                        {
+                            <text><img src="@Url.Content("~/Content/Images/action_added.gif")" alt="@Resources.Repository_Commit_Added" /></text>
+                        }
+                        else if (item.Type == GitSharp.ChangeType.Modified)
+                        {
+                            <text><img src="@Url.Content("~/Content/Images/action_modified.gif")" alt="@Resources.Repository_Commit_Modified" /></text>
+                        }
+                        else if (item.Type == GitSharp.ChangeType.Deleted)
+                        {
+                            <text><img src="@Url.Content("~/Content/Images/action_deleted.gif")" alt="@Resources.Repository_Commit_Deleted" /></text>
+                        }
+                        else if (item.Type == GitSharp.ChangeType.Renamed)
+                        {
+                            <text><img src="@Url.Content("~/Content/Images/action_renamed.gif")" alt="@Resources.Repository_Commit_Renamed" /></text>
+                        }
+                        else if (item.Type == GitSharp.ChangeType.Copied)
+                        {
+                            <text><img src="@Url.Content("~/Content/Images/action_copied.gif")" alt="@Resources.Repository_Commit_Copied" /></text>
+                        }
+                        else if (item.Type == GitSharp.ChangeType.TypeChanged)
+                        {
+                            <text><img src="@Url.Content("~/Content/Images/action_typechanged.gif")" alt="@Resources.Repository_Commit_TypeChanged" /></text>
+                        }
+                        @if (item.Type != GitSharp.ChangeType.Deleted)
+                        {
+                            @Html.ActionLink(item.Path, "Tree", new { id = ViewBag.ID, path = item.Path, name = Model.ID })
+                        }
+                        else
+                        {
+                            @item.Path
+                        }
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,12 @@
+﻿@if (ViewData["branches"] != null)
+{
+    <div class="branchSwitcher">
+        <h4>@Resources.Repository_SwitchBranch</h4>
+        <ul class="clearfix">
+            @foreach (var item in ViewData["branches"] as IEnumerable<string>)
+            {
+                <li class="@(String.Equals(ViewData["currentBranch"], item) ? "active" : "inactive")">@Html.ActionLink(item as string, ViewContext.RouteData.Values["Action"].ToString(), new { name = item, id = ViewBag.ID })</li>
+            }
+        </ul>
+    </div>
+}

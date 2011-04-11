@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-language" content="en" />
+    <link rel="shortcut icon" href="@Url.Content("~/Content/images/favicon.png")" type="image/x-icon" />
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/uni/css/uni-form.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/uni/css/default.uni-form.css")" rel="stylesheet" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/syntaxhighlighter/styles/shCoreDefault.css")"/>
+    <!--[if lte IE 7]><link rel="stylesheet" href="@Url.Content("~/Content/Msie.css")" type="text/css" media="screen,projection" /><![endif]-->
+</head>
+<body>
+    <div class="page" id="@ViewContext.ViewData["PageID"]">
+        <div id="header">
+            <div id="title">
+                <h1>@Html.ActionLink(Resources.Layout_Title, "", "")</h1>
+            </div>
+            <div id="topMenu">
+                <div id="accountInfo">
+                    @if (Request.IsAuthenticated)
+                    {
+                        <p><strong>@Context.User.Identity.Name</strong> [ @Html.ActionLink(Resources.Layout_AccountSettings, "Edit", "Account", new { id = User.Identity.Name }, null) | @Html.ActionLink(Resources.Layout_LogOff, "LogOff", "Home") ]</p>
+                    }
+                    else
+                    {
+                        <p>[ @Html.ActionLink(Resources.Layout_LogOn, "LogOn", "Home") | @Html.ActionLink(Resources.Layout_Register, "Register", "Home")]</p>
+                    }
+                </div>
+                <div id="languageBar">
+                    <p>@Html.ActionLink("English", "ChangeCulture", "Home", new { lang = "en", returnUrl = this.Request.RawUrl }, new { @id = "en" }) @Html.ActionLink("Čeština", "ChangeCulture", "Home", new { lang = "cs-CZ", returnUrl = this.Request.RawUrl }, null)</p>
+                </div>
+            </div>
+        </div>
+        <div class="window">
+            <div id="main">
+                <div class="clearfix">
+                    <div id="menu">
+                        @if (Request.IsAuthenticated)
+                        {
+                            <ul>
+                                <li>@Html.ActionLink(Resources.Layout_Repositories, "Index", "Repository")</li>
+                                <li>@Html.ActionLink(Resources.Layout_About, "About", "Home")</li>
+                            </ul>                
+                        }
+                        @if (User.IsInRole(Definitions.Roles.Administrator))
+                        {
+                            <h3>@Resources.Layout_Administration</h3>
+                            <ul>
+                                <li>@Html.ActionLink(Resources.Layout_AdministrationUsers, "Index", "Account")</li>
+                                <li>@Html.ActionLink(Resources.Layout_AdministrationTeams, "Index", "Team")</li>
+                                <li>@Html.ActionLink(Resources.Layout_AdministrationGlobalSettings, "Index", "Settings")</li>
+                            </ul>
+                        }
+                    </div>
+                    <div id="content">                        
+                        @RenderBody()
+                    </div>
+                </div>
+                <div id="footer">
+                    <p>&copy; 2011 <a href="http://www.chodounsky.net">Jakub Chodounský</a>. @Resources.Layout_Footer_Copyright</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shCore.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushJScript.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushBash.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushCpp.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushCsharp.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushCss.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushDelphi.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushDiff.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushErlang.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushJava.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushPerl.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushPhp.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushPowerShell.js")"></script>    
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushPython.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushRuby.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushScala.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushSql.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushVb.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushXml.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/syntaxhighlighter/scripts/shBrushPlain.js")"></script>
+    <script src="@Url.Content("~/Scripts/jquery-1.4.4.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/uni/js/uni-form-validation.jquery.js")"></script>
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+
+        $('form.uniForm').uniform();
+    </script>
+</body>
+</html>

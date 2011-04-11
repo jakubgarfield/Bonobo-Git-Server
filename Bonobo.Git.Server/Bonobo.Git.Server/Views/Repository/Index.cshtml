@@ -1,0 +1,40 @@
+﻿@using Bonobo.Git.Server.Extensions
+@model IEnumerable<RepositoryDetailModel>
+@{
+    ViewBag.Title = Resources.Repository_Index_Title;
+}
+<h2>@Resources.Repository_Index_Title</h2>
+@if (ViewBag.CreateSuccess != null && ViewBag.CreateSuccess)
+{
+    <div class="uniForm">    
+        <div id="okMsg">
+            <p>@Resources.Repository_Create_Success</p>
+        </div>
+    </div>
+}
+@if (ViewBag.DeleteSuccess != null && ViewBag.DeleteSuccess)
+{
+    <div class="uniForm">    
+        <div id="okMsg">
+            <p>@Resources.Repository_Delete_Success</p>
+        </div>
+    </div>
+}
+<div class="create">@Html.ActionLink(Resources.Repository_Index_CreateNew, "Create")</div>
+<h3>@Resources.Repository_Index_Repositories</h3>
+<div class="w-grid">
+    @{
+        var permitted = new WebGrid(source: Model, defaultSort: "Name", rowsPerPage: 15);
+        @permitted.GetHtml(
+        tableStyle: "grid",
+        headerStyle: "head",
+        alternatingRowStyle: "even",
+                    columns: permitted.Columns(
+                             permitted.Column("Name", header: typeof(RepositoryDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink((string)item.Name, "Detail", new { id = item.Name }, new { @class = "repository" })),
+                             permitted.Column("Description", typeof(RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string)item.Description).Length > 100)) ? ((string)item.Description).Substring(0, 100) + " ... " : item.Description),
+                             permitted.Column("IsCurrentUserAdministrator", header: typeof(RepositoryDetailModel).GetDisplayValue("IsCurrentUserAdministrator"), format: (item) => item.Value.IsCurrentUserAdministrator ? Resources.Repository_Index_Yes : Resources.Repository_Index_No, style: "bool"),
+                             permitted.Column("AllowAnonymous", header: typeof(RepositoryDetailModel).GetDisplayValue("AllowAnonymous"), format: (item) => item.Value.AllowAnonymous ? Resources.Repository_Index_Yes : Resources.Repository_Index_No, style: "bool")
+        )
+    )
+    }
+</div>

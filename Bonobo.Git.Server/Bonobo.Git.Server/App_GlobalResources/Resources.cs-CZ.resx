@@ -1,0 +1,675 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Account_Delete_DeleteCurrentUser" xml:space="preserve">
+    <value>Nemůžete smazat sám sebe.</value>
+  </data>
+  <data name="Account_Delete_Success" xml:space="preserve">
+    <value>Uživatel byl smazán.</value>
+  </data>
+  <data name="Account_Detail_Back" xml:space="preserve">
+    <value>Zpět na seznam</value>
+  </data>
+  <data name="Account_Detail_Delete" xml:space="preserve">
+    <value>Smazat</value>
+  </data>
+  <data name="Account_Detail_Edit" xml:space="preserve">
+    <value>Upravit</value>
+  </data>
+  <data name="Account_Detail_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Account_Detail_Name" xml:space="preserve">
+    <value>Jméno</value>
+  </data>
+  <data name="Account_Detail_Roles" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Account_Detail_Surname" xml:space="preserve">
+    <value>Příjmení</value>
+  </data>
+  <data name="Account_Detail_Title" xml:space="preserve">
+    <value>Uživatelský profil</value>
+  </data>
+  <data name="Account_Detail_Username" xml:space="preserve">
+    <value>Uživatelské jméno</value>
+  </data>
+  <data name="Account_Edit_AccountInformation" xml:space="preserve">
+    <value>Account information</value>
+  </data>
+  <data name="Account_Edit_Back" xml:space="preserve">
+    <value>Zpět na seznam</value>
+  </data>
+  <data name="Account_Edit_Cancel" xml:space="preserve">
+    <value>Zrušit</value>
+  </data>
+  <data name="Account_Edit_CannotRemoveYourselfFromAdminRole" xml:space="preserve">
+    <value>Nemůžete odebrat sám sebe z administrátorů.</value>
+  </data>
+  <data name="Account_Edit_ConfirmPassword" xml:space="preserve">
+    <value>Potvrdit heslo</value>
+  </data>
+  <data name="Account_Edit_CurrentPassword" xml:space="preserve">
+    <value>Stávající heslo</value>
+  </data>
+  <data name="Account_Edit_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Account_Edit_Name" xml:space="preserve">
+    <value>Jméno</value>
+  </data>
+  <data name="Account_Edit_NewPassword" xml:space="preserve">
+    <value>Nové heslo</value>
+  </data>
+  <data name="Account_Edit_OldPasswordEmpty" xml:space="preserve">
+    <value>Nove heslo nemůže být prázdné.</value>
+  </data>
+  <data name="Account_Edit_OldPasswordIncorrect" xml:space="preserve">
+    <value>Staré heslo je neplatné.</value>
+  </data>
+  <data name="Account_Edit_Roles" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Account_Edit_RolesHint" xml:space="preserve">
+    <value>Skupina administrátorů má přístup k všem repozitářům a má přístup ke všem operacím s uživateli, týmy a repozitáři.</value>
+  </data>
+  <data name="Account_Edit_Submit" xml:space="preserve">
+    <value>Uložit</value>
+  </data>
+  <data name="Account_Edit_Surname" xml:space="preserve">
+    <value>Příjmení</value>
+  </data>
+  <data name="Account_Edit_Title" xml:space="preserve">
+    <value>Upravit uživatelský profil</value>
+  </data>
+  <data name="Account_Edit_Unsuccessfull" xml:space="preserve">
+    <value>Úprava uživatele se nezdařila. Opravte chyby a zkuste to znovu.</value>
+  </data>
+  <data name="Account_Edit_UpdateSuccess" xml:space="preserve">
+    <value>Úprava uživatele proběhla úspěšně.</value>
+  </data>
+  <data name="Account_Index_Title" xml:space="preserve">
+    <value>Uživatelé</value>
+  </data>
+  <data name="DateTimeFormat" xml:space="preserve">
+    <value>dd.MM.yyyy hh:mm</value>
+  </data>
+  <data name="GitAccess_ProjectForbidden" xml:space="preserve">
+    <value>Nemáte dostatečná oprávnění pro přístup k projektu.</value>
+  </data>
+  <data name="GlobalSettings_DirectoryHint" xml:space="preserve">
+    <value>Adresář, kde jsou uloženy gitové repozitáře.</value>
+  </data>
+  <data name="Grid_Delete" xml:space="preserve">
+    <value>Smazat</value>
+  </data>
+  <data name="Grid_Edit" xml:space="preserve">
+    <value>Upravit</value>
+  </data>
+  <data name="Home_About_Thanks" xml:space="preserve">
+    <value>Děkuji!</value>
+  </data>
+  <data name="Home_About_Thanks_p" xml:space="preserve">
+    <value>Bonobo Git Server využívá několik opensourcových a freewarových projektů. Děkuji všem jejich autorům za skvělou práci při jejich tvorbě.</value>
+  </data>
+  <data name="Home_About_Title" xml:space="preserve">
+    <value>O projektu</value>
+  </data>
+  <data name="Home_Error_Text" xml:space="preserve">
+    <value>Při zpracování došlo k chybě. Zkuste znovu, nebo kontaktujte administrátora, případně autora.</value>
+  </data>
+  <data name="Home_Error_Title" xml:space="preserve">
+    <value>Při zpracování došlo k chybě</value>
+  </data>
+  <data name="Home_LogOn_AccountInformation" xml:space="preserve">
+    <value>Informace o uživateli</value>
+  </data>
+  <data name="Home_LogOn_Failed" xml:space="preserve">
+    <value>Přihlášení se nezdařilo. Opravte chyby a zkuste znovu.</value>
+  </data>
+  <data name="Home_LogOn_LogOn" xml:space="preserve">
+    <value>Přihlásit</value>
+  </data>
+  <data name="Home_LogOn_Password" xml:space="preserve">
+    <value>Heslo</value>
+  </data>
+  <data name="Home_LogOn_RememberMe" xml:space="preserve">
+    <value>Zapamatovat uživatele</value>
+  </data>
+  <data name="Home_LogOn_Title" xml:space="preserve">
+    <value>Přihlášení</value>
+  </data>
+  <data name="Home_LogOn_Username" xml:space="preserve">
+    <value>Uživatelské jméno</value>
+  </data>
+  <data name="Home_LogOn_UsernamePasswordIncorrect" xml:space="preserve">
+    <value>Zadané uživatelské jméno a heslo je nesprávné.</value>
+  </data>
+  <data name="Home_PageNotFound_Text" xml:space="preserve">
+    <value>Stránka nebyla nalezena. Zkuste to prosím znovy nebo konktaktujte administrátora, případně autora.</value>
+  </data>
+  <data name="Home_PageNotFound_Title" xml:space="preserve">
+    <value>404 Stránka nebyla nalezena</value>
+  </data>
+  <data name="Home_Register_AccountAlreadyExists" xml:space="preserve">
+    <value>Uživatel s tímto uživatelským jménem již existuje.</value>
+  </data>
+  <data name="Home_Register_AccountInformation" xml:space="preserve">
+    <value>Informace o uživateli</value>
+  </data>
+  <data name="Home_Register_ConfirmPassword" xml:space="preserve">
+    <value>Potvrzení hesla</value>
+  </data>
+  <data name="Home_Register_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Home_Register_Name" xml:space="preserve">
+    <value>Jméno</value>
+  </data>
+  <data name="Home_Register_Password" xml:space="preserve">
+    <value>Heslo</value>
+  </data>
+  <data name="Home_Register_Submit" xml:space="preserve">
+    <value>Vytvořit nového uživatele</value>
+  </data>
+  <data name="Home_Register_Surname" xml:space="preserve">
+    <value>Příjmení</value>
+  </data>
+  <data name="Home_Register_Title" xml:space="preserve">
+    <value>Registrace</value>
+  </data>
+  <data name="Home_Register_Unsuccessfull" xml:space="preserve">
+    <value>Vytvoření uživatele se nezdařilo. Opravte chyby a zkuste znovu.</value>
+  </data>
+  <data name="Home_Register_Username" xml:space="preserve">
+    <value>Uživatelské jméno</value>
+  </data>
+  <data name="Home_ServerError_Text" xml:space="preserve">
+    <value>Při zpracování došlo k serverové chybě. Zkuste znovu, nebo kontaktujte administrátora, případně autora.</value>
+  </data>
+  <data name="Home_ServerError_Title" xml:space="preserve">
+    <value>500 Serverová chyba</value>
+  </data>
+  <data name="Home_Unauthorized_Text" xml:space="preserve">
+    <value>Nemáte požadovaná oprávnění k dané stránce nebo akci.</value>
+  </data>
+  <data name="Home_Unauthorized_Title" xml:space="preserve">
+    <value>Nedostatečná oprávnění</value>
+  </data>
+  <data name="Item_NotFound" xml:space="preserve">
+    <value>Položka nebyla nalezena</value>
+  </data>
+  <data name="Layout_About" xml:space="preserve">
+    <value>O projektu</value>
+  </data>
+  <data name="Layout_AccountSettings" xml:space="preserve">
+    <value>Nastavení účtu</value>
+  </data>
+  <data name="Layout_Administration" xml:space="preserve">
+    <value>Administrace</value>
+  </data>
+  <data name="Layout_AdministrationGlobalSettings" xml:space="preserve">
+    <value>Nastavení</value>
+  </data>
+  <data name="Layout_AdministrationRepositories" xml:space="preserve">
+    <value>Repozitáře</value>
+  </data>
+  <data name="Layout_AdministrationTeams" xml:space="preserve">
+    <value>Týmy</value>
+  </data>
+  <data name="Layout_AdministrationUsers" xml:space="preserve">
+    <value>Uživatelé</value>
+  </data>
+  <data name="Layout_Footer_Copyright" xml:space="preserve">
+    <value>Všechna práva vyhrazena.</value>
+  </data>
+  <data name="Layout_Home" xml:space="preserve">
+    <value>Domů</value>
+  </data>
+  <data name="Layout_LogOff" xml:space="preserve">
+    <value>Odhlásit</value>
+  </data>
+  <data name="Layout_LogOn" xml:space="preserve">
+    <value>Přihlásit</value>
+  </data>
+  <data name="Layout_Register" xml:space="preserve">
+    <value>Registrace</value>
+  </data>
+  <data name="Layout_Repositories" xml:space="preserve">
+    <value>Repozitáře</value>
+  </data>
+  <data name="Layout_Title" xml:space="preserve">
+    <value>Bonobo Git Server</value>
+  </data>
+  <data name="Repository_AddressBar_Root" xml:space="preserve">
+    <value>Domů</value>
+  </data>
+  <data name="Repository_AdministratorsHint" xml:space="preserve">
+    <value>Administrátoři mají plný přístup k repozitářům. Mohou také upravovat jejich metadata nebo repozitář smazat.</value>
+  </data>
+  <data name="Repository_AllowAnonymousHint" xml:space="preserve">
+    <value>Jestliže je umožněn anonymní přístup k repozitáři, mohou všichni provádět akce pull a clone. Push je možný pouze pokud je nastaven v nastavení serveru.</value>
+  </data>
+  <data name="Repository_Commits_Title" xml:space="preserve">
+    <value>Commity</value>
+  </data>
+  <data name="Repository_Commit_Added" xml:space="preserve">
+    <value>Přidáno</value>
+  </data>
+  <data name="Repository_Commit_Author" xml:space="preserve">
+    <value>Autor</value>
+  </data>
+  <data name="Repository_Commit_AuthorEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Repository_Commit_Changes" xml:space="preserve">
+    <value>Změněné soubory</value>
+  </data>
+  <data name="Repository_Commit_Copied" xml:space="preserve">
+    <value>Zkopírováno</value>
+  </data>
+  <data name="Repository_Commit_Date" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="Repository_Commit_Deleted" xml:space="preserve">
+    <value>Smazáno</value>
+  </data>
+  <data name="Repository_Commit_Detail" xml:space="preserve">
+    <value>Detail commitu</value>
+  </data>
+  <data name="Repository_Commit_ID" xml:space="preserve">
+    <value>Commit</value>
+  </data>
+  <data name="Repository_Commit_Message" xml:space="preserve">
+    <value>Zpráva</value>
+  </data>
+  <data name="Repository_Commit_Modified" xml:space="preserve">
+    <value>Modified</value>
+  </data>
+  <data name="Repository_Commit_Parents" xml:space="preserve">
+    <value>Parents</value>
+  </data>
+  <data name="Repository_Commit_Renamed" xml:space="preserve">
+    <value>Přejmenováno</value>
+  </data>
+  <data name="Repository_Commit_TreeID" xml:space="preserve">
+    <value>Tree</value>
+  </data>
+  <data name="Repository_Commit_TypeChanged" xml:space="preserve">
+    <value>Typ změny</value>
+  </data>
+  <data name="Repository_Create_Back" xml:space="preserve">
+    <value>Zpět na seznam</value>
+  </data>
+  <data name="Repository_Create_DirectoryExists" xml:space="preserve">
+    <value>Adresář s tímto názvem již existuje. Vyberte jiné jméno, nebo daný adresář odstraňte.</value>
+  </data>
+  <data name="Repository_Create_Fail" xml:space="preserve">
+    <value>Vytvoření repozitáře se nezdařilo. Opravte chyby a zkuste znovu.</value>
+  </data>
+  <data name="Repository_Create_Failure" xml:space="preserve">
+    <value>Repozitář s tímto jménem již existuje.</value>
+  </data>
+  <data name="Repository_Create_Informations" xml:space="preserve">
+    <value>Informace o repozitáři</value>
+  </data>
+  <data name="Repository_Create_NameFailure" xml:space="preserve">
+    <value>Jméno nesmí obsahovat pouze mezery</value>
+  </data>
+  <data name="Repository_Create_Submit" xml:space="preserve">
+    <value>Vytvořit</value>
+  </data>
+  <data name="Repository_Create_Success" xml:space="preserve">
+    <value>Repozitář byl úspěšně vytvořen.</value>
+  </data>
+  <data name="Repository_Create_Title" xml:space="preserve">
+    <value>Vytvořit nový repozitář</value>
+  </data>
+  <data name="Repository_Delete_Success" xml:space="preserve">
+    <value>Repozitář byl úspěšně smazán.</value>
+  </data>
+  <data name="Repository_Detail_Administrators" xml:space="preserve">
+    <value>Administrátoři</value>
+  </data>
+  <data name="Repository_Detail_Anonymous" xml:space="preserve">
+    <value>Anonymní</value>
+  </data>
+  <data name="Repository_Detail_Back" xml:space="preserve">
+    <value>Zpět na seznam</value>
+  </data>
+  <data name="Repository_Detail_Delete" xml:space="preserve">
+    <value>Smazat</value>
+  </data>
+  <data name="Repository_Detail_Description" xml:space="preserve">
+    <value>Popis</value>
+  </data>
+  <data name="Repository_Detail_Detail" xml:space="preserve">
+    <value>Detail</value>
+  </data>
+  <data name="Repository_Detail_Edit" xml:space="preserve">
+    <value>Upravit</value>
+  </data>
+  <data name="Repository_Detail_IsCurrentUserAdmin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Repository_Detail_Location" xml:space="preserve">
+    <value>Git adresa </value>
+  </data>
+  <data name="Repository_Detail_Name" xml:space="preserve">
+    <value>Jméno</value>
+  </data>
+  <data name="Repository_Detail_No" xml:space="preserve">
+    <value>Ne</value>
+  </data>
+  <data name="Repository_Detail_Teams" xml:space="preserve">
+    <value>Týmy</value>
+  </data>
+  <data name="Repository_Detail_Title" xml:space="preserve">
+    <value>Detail repozitáře</value>
+  </data>
+  <data name="Repository_Detail_Users" xml:space="preserve">
+    <value>Přispěvovatelé</value>
+  </data>
+  <data name="Repository_Detail_Yes" xml:space="preserve">
+    <value>Ano</value>
+  </data>
+  <data name="Repository_Edit_Back" xml:space="preserve">
+    <value>Zpět na seznam</value>
+  </data>
+  <data name="Repository_Edit_CantRemoveYourself" xml:space="preserve">
+    <value>Nemůžete se odebrat z administrátorů.</value>
+  </data>
+  <data name="Repository_Edit_Fail" xml:space="preserve">
+    <value>Upráva repozitáře se nezdařila. Opravte chyby a zkuste znovu.</value>
+  </data>
+  <data name="Repository_Edit_Submit" xml:space="preserve">
+    <value>Uložit</value>
+  </data>
+  <data name="Repository_Edit_Title" xml:space="preserve">
+    <value>Upravit repozitář</value>
+  </data>
+  <data name="Repository_Edit_UpdateSuccess" xml:space="preserve">
+    <value>Úprava repozitáře proběhla úspěšně.</value>
+  </data>
+  <data name="Repository_Index_AdministratedRepositories" xml:space="preserve">
+    <value>Administrované repozitáře</value>
+  </data>
+  <data name="Repository_Index_AllRepositories" xml:space="preserve">
+    <value>Všechny repozitáře</value>
+  </data>
+  <data name="Repository_Index_CreateNew" xml:space="preserve">
+    <value>Vytvořit nový repozitář</value>
+  </data>
+  <data name="Repository_Index_No" xml:space="preserve">
+    <value>Ne</value>
+  </data>
+  <data name="Repository_Index_Repositories" xml:space="preserve">
+    <value>Repozitáře</value>
+  </data>
+  <data name="Repository_Index_Title" xml:space="preserve">
+    <value>Správa repozitářů</value>
+  </data>
+  <data name="Repository_Index_Yes" xml:space="preserve">
+    <value>Ano</value>
+  </data>
+  <data name="Repository_Layout_Browse" xml:space="preserve">
+    <value>Procházení repozitářem</value>
+  </data>
+  <data name="Repository_Layout_Commits" xml:space="preserve">
+    <value>Commity</value>
+  </data>
+  <data name="Repository_SwitchBranch" xml:space="preserve">
+    <value>Změnit větev</value>
+  </data>
+  <data name="Repository_TeamsHint" xml:space="preserve">
+    <value>Týmy mají přístup k repozitáři. Mohou provádět akce pull, push a clone a zobrazovat metadata. Všichni uživatelé z týmu mají toto právo.</value>
+  </data>
+  <data name="Repository_Tree_Author" xml:space="preserve">
+    <value>Autor</value>
+  </data>
+  <data name="Repository_Tree_CommitDate" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="Repository_Tree_CommitMessage" xml:space="preserve">
+    <value>Zpráva</value>
+  </data>
+  <data name="Repository_Tree_Name" xml:space="preserve">
+    <value>Jméno</value>
+  </data>
+  <data name="Repository_Tree_Title" xml:space="preserve">
+    <value>Procházet</value>
+  </data>
+  <data name="Repository_UsersHint" xml:space="preserve">
+    <value>Uživatelé mají přístup k repozitáři. Mohou provádět akce pull, push a clone a zobrazovat metadata.</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Settings_Global_AllowAnonymousPush" xml:space="preserve">
+    <value>Umožnit anonymní push</value>
+  </data>
+  <data name="Settings_Global_RepositoryPath" xml:space="preserve">
+    <value>Adresář s repozitáři</value>
+  </data>
+  <data name="Settings_Index_Failed" xml:space="preserve">
+    <value>Uložení nastavení se nezdařilo. Opravte chyby a zkuste znovu.</value>
+  </data>
+  <data name="Settings_Index_Save" xml:space="preserve">
+    <value>Uložit</value>
+  </data>
+  <data name="Settings_Index_Title" xml:space="preserve">
+    <value>Nastavení</value>
+  </data>
+  <data name="Settings_Index_UpdateSuccess" xml:space="preserve">
+    <value>Nastavení bylo úspěšně uloženo.</value>
+  </data>
+  <data name="Settings_RepositoryPathNotExists" xml:space="preserve">
+    <value>Vybraná cesta neexistuje. Vytvořte adresář nebo vyberte jinou cestu.</value>
+  </data>
+  <data name="Settings_RepositoryPathUnauthorized" xml:space="preserve">
+    <value>Nemáte právo zápisu na daný adresář. Vyberte jinou cestu.</value>
+  </data>
+  <data name="Team_Create_Back" xml:space="preserve">
+    <value>Zpět na seznam</value>
+  </data>
+  <data name="Team_Create_Fail" xml:space="preserve">
+    <value>Vytvoření nového týmu se nezdařilo. Opravte chyby a zkuste znovu.</value>
+  </data>
+  <data name="Team_Create_Failure" xml:space="preserve">
+    <value>Tým s tímto jménem již existuje.</value>
+  </data>
+  <data name="Team_Create_Submit" xml:space="preserve">
+    <value>Uložit</value>
+  </data>
+  <data name="Team_Create_Success" xml:space="preserve">
+    <value>Tým byl úspěšně vytvořen.</value>
+  </data>
+  <data name="Team_Create_TeamInformations" xml:space="preserve">
+    <value>Informace o týmu</value>
+  </data>
+  <data name="Team_Create_Title" xml:space="preserve">
+    <value>Vytvořit nový tým</value>
+  </data>
+  <data name="Team_Delete_Success" xml:space="preserve">
+    <value>Tým byl smazán.</value>
+  </data>
+  <data name="Team_Detail_Back" xml:space="preserve">
+    <value>Zpět na seznam</value>
+  </data>
+  <data name="Team_Detail_Delete" xml:space="preserve">
+    <value>Smazat</value>
+  </data>
+  <data name="Team_Detail_Description" xml:space="preserve">
+    <value>Popis</value>
+  </data>
+  <data name="Team_Detail_Edit" xml:space="preserve">
+    <value>Upravit</value>
+  </data>
+  <data name="Team_Detail_Members" xml:space="preserve">
+    <value>Členové</value>
+  </data>
+  <data name="Team_Detail_Name" xml:space="preserve">
+    <value>Jméno</value>
+  </data>
+  <data name="Team_Detail_Repositories" xml:space="preserve">
+    <value>Repozitáře</value>
+  </data>
+  <data name="Team_Detail_Title" xml:space="preserve">
+    <value>Detail týmu</value>
+  </data>
+  <data name="Team_Edit_Back" xml:space="preserve">
+    <value>Zpět na seznam</value>
+  </data>
+  <data name="Team_Edit_Failure" xml:space="preserve">
+    <value>Aktualizace týmu se nezdařila. Opravte chyby a zkuste znovu.</value>
+  </data>
+  <data name="Team_Edit_Submit" xml:space="preserve">
+    <value>Uložit</value>
+  </data>
+  <data name="Team_Edit_Title" xml:space="preserve">
+    <value>Upravit tým</value>
+  </data>
+  <data name="Team_Edit_UpdateSuccess" xml:space="preserve">
+    <value>Tým byl úspěšně uložen.</value>
+  </data>
+  <data name="Team_Index_CreateNew" xml:space="preserve">
+    <value>Vytvořit nový tým</value>
+  </data>
+  <data name="Team_Index_Teams" xml:space="preserve">
+    <value>Týmy</value>
+  </data>
+  <data name="Team_Index_Title" xml:space="preserve">
+    <value>Správa týmů</value>
+  </data>
+  <data name="Validation_Compare" xml:space="preserve">
+    <value>"{0}" a "{1}" musí mít stejnou hodnotu.</value>
+  </data>
+  <data name="Validation_Email" xml:space="preserve">
+    <value>"{0}" není platná emailová adresa.</value>
+  </data>
+  <data name="Validation_FileName" xml:space="preserve">
+    <value>"{0}" obsahuje nepovolené znaky pro adresář nebo jméno souboru.</value>
+  </data>
+  <data name="Validation_Required" xml:space="preserve">
+    <value>"{0}" je povinné.</value>
+  </data>
+  <data name="Validation_StringLength" xml:space="preserve">
+    <value>"{0}" musí obsahove méně než {1} znaků.</value>
+  </data>
+</root>

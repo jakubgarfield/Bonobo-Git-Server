@@ -1,0 +1,91 @@
+﻿@model Bonobo.Git.Server.Models.UserEditModel
+@{
+    ViewBag.Title = Resources.Account_Edit_Title;
+}
+@if (Model == null)
+{    
+    @Html.Partial("~/Views/Shared/_ItemNotFound.cshtml") 
+}
+else
+{
+    <text>
+    <h2>@Resources.Account_Edit_Title</h2>    
+    @using (Html.BeginForm("Edit", "Account", FormMethod.Post, new { @class = "uniForm" }))
+    {
+        if (ViewBag.UpdateSuccess != null && ViewBag.UpdateSuccess)
+        {
+            <div id="okMsg">
+                <p>@Resources.Account_Edit_UpdateSuccess</p>
+            </div>
+        }
+        @Html.ValidationSummary(false, Resources.Account_Edit_Unsuccessfull, new { @id = "errorMsg" })
+        @Html.HiddenFor(m => m.Username)
+        <fieldset> 
+          <h3>@Model.Username</h3>    
+          <div class="ctrlHolder"> 
+            @Html.LabelFor(m => m.Name)
+            @Html.TextBoxFor(m => m.Name, new { @class = "textInput small" })<em>*</em>
+            <p class="formHint">
+              @Html.ValidationMessageFor(m => m.Name)
+            </p> 
+          </div> 
+          <div class="ctrlHolder"> 
+              @Html.LabelFor(m => m.Surname)
+              @Html.TextBoxFor(m => m.Surname, new { @class = "textInput small" })<em>*</em>     
+            <p class="formHint">
+              @Html.ValidationMessageFor(m => m.Surname)
+            </p> 
+          </div> 
+          <div class="ctrlHolder"> 
+              @Html.LabelFor(m => m.Email)
+              @Html.TextBoxFor(m => m.Email, new { @class = "textInput medium" })<em>*</em>     
+            <p class="formHint">
+              @Html.ValidationMessageFor(m => m.Email)
+            </p> 
+          </div> 
+          @if (!User.IsInRole(Definitions.Roles.Administrator))
+          {
+             <div class="ctrlHolder"> 
+                 @Html.LabelFor(m => m.OldPassword)
+                 @Html.PasswordFor(m => m.OldPassword, new { @class = "textInput small" })<em>*</em>     
+               <p class="formHint">
+                 @Html.ValidationMessageFor(m => m.OldPassword)
+               </p> 
+             </div>  
+          }
+          <div class="ctrlHolder"> 
+              @Html.LabelFor(m => m.NewPassword)
+              @Html.PasswordFor(m => m.NewPassword, new { @class = "textInput small" })<em>*</em>     
+            <p class="formHint">
+              @Html.ValidationMessageFor(m => m.NewPassword)
+            </p> 
+          </div>
+          <div class="ctrlHolder"> 
+              @Html.LabelFor(m => m.ConfirmPassword)
+              @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "textInput small" })<em>*</em>     
+            <p class="formHint">
+              @Html.ValidationMessageFor(m => m.ConfirmPassword)
+            </p> 
+          </div>
+          @if (User.IsInRole(Definitions.Roles.Administrator))
+          {
+              <div class="ctrlHolder"> 
+                  @Html.LabelFor(m => m.Roles)
+                  @Html.ListBoxFor(m => m.Roles, new MultiSelectList(ViewData["AvailableRoles"] as System.Collections.IEnumerable), new { @class = "selectInput medium" })  
+                <p class="formHint">    
+                    @Resources.Account_Edit_RolesHint              
+                </p> 
+              </div>
+          }
+          <div class="buttonHolder"> 
+            @if (User.IsInRole(Definitions.Roles.Administrator))
+            {
+                @Html.ActionLink("← " + Resources.Account_Edit_Back, "Index", null, new { @class = "secondaryAction" })
+            }
+            <button type="reset" class="secondaryAction">← @Resources.Reset</button> 
+            <input type="submit" value="@Resources.Account_Edit_Submit" class="primaryAction" />
+          </div>
+        </fieldset>
+    }
+    </text>
+} 

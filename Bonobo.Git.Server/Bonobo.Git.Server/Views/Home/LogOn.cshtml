@@ -1,0 +1,30 @@
+﻿@model Bonobo.Git.Server.Models.LogOnModel
+@{
+    ViewBag.Title = @Resources.Home_LogOn_Title;
+}
+<h2>@Resources.Home_LogOn_Title</h2>
+@using (Html.BeginForm("LogOn", "Home", FormMethod.Post, new { @class = "uniForm" }))
+{
+    @Html.ValidationSummary(false, Resources.Home_LogOn_Failed, new { @id = "errorMsg"})
+    <fieldset> 
+      <h3>@Resources.Home_LogOn_AccountInformation</h3>    
+      <div class="ctrlHolder"> 
+        @Html.LabelFor(m => m.Username)
+        @Html.TextBoxFor(m => m.Username, new { @class = "textInput small" })<em>*</em>
+        <p class="formHint">
+          @Html.ValidationMessageFor(m => m.Username)
+        </p> 
+      </div> 
+      <div class="ctrlHolder"> 
+          @Html.LabelFor(m => m.Password)
+          @Html.PasswordFor(m => m.Password, new { @class = "textInput small" })<em>*</em>     
+        <p class="formHint">
+          @Html.ValidationMessageFor(m => m.Password)
+        </p> 
+      </div> 
+      <div class="buttonHolder"> 
+        <button type="reset" class="secondaryAction">← @Resources.Reset</button> 
+        <input type="submit" value="@Resources.Home_LogOn_LogOn" class="primaryAction" />
+      </div>
+    </fieldset>
+}

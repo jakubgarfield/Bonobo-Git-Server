@@ -1,0 +1,83 @@
+﻿@model Bonobo.Git.Server.Models.RepositoryDetailModel
+@{
+    Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
+    ViewBag.Title = Resources.Repository_Detail_Title;
+    var serverAddress = Request.Url.ToString().Substring(0, Request.Url.ToString().IndexOf("Repository"));
+}
+@if (Model != null)
+{   
+    <div class="uniForm">
+        <fieldset class="inlineLabels detail">
+            <h3>@Model.Name</h3>
+            <div class="ctrlHolder">
+                <h5>@Html.LabelFor(m => m.Name)</h5>
+                <div class="content">@Model.Name</div>
+            </div>
+            <div class="ctrlHolder">
+                <h5>
+                    <label>@Resources.Repository_Detail_Location</label></h5>
+                <div class="content">
+                    @String.Concat(serverAddress, MvcApplication.GitRepositoryPrefix, Model.Name)
+                    @if (Model.AllowAnonymous)
+                    {
+                        <br />@String.Concat(serverAddress, MvcApplication.AnonymousGitRepositoryPrefix, Model.Name)
+                    }
+                </div>
+            </div>
+            <div class="ctrlHolder">
+                <h5>@Html.LabelFor(m => m.Description)</h5>
+                <div class="content">@Model.Description</div>
+            </div>
+            <div class="ctrlHolder">
+                <h5>@Html.LabelFor(m => m.AllowAnonymous)</h5>
+                <div class="content">
+                    @if (Model.AllowAnonymous)
+                    {
+                        @Resources.Repository_Detail_Yes
+                    }
+                    else
+                    {
+                        @Resources.Repository_Detail_No
+                    }
+                </div>
+            </div>
+            <div class="ctrlHolder">
+                <h5>@Html.LabelFor(m => m.Users)</h5>
+                <div class="content">
+                    @for (int i = 0; i < Model.Users.Length; i++)
+                    {
+                        @Html.ActionLink(@Model.Users[i], "Detail", "Account", new { id = @Model.Users[i] }, null)if (i + 1 != Model.Users.Length)
+                                                                                                                  {<text>, </text>}
+                    }
+                </div>
+            </div>
+            <div class="ctrlHolder">
+                <h5>@Html.LabelFor(m => m.Administrators)</h5>
+                <div class="content">
+                    @for (int i = 0; i < Model.Administrators.Length; i++)
+                    {
+                        @Html.ActionLink(@Model.Administrators[i], "Detail", "Account", new { id = @Model.Administrators[i] }, null)if (i + 1 != Model.Administrators.Length)
+                                                                                                                                    {<text>, </text>}
+                    }
+                </div>
+            </div>
+            <div class="ctrlHolder">
+                <h5>@Html.LabelFor(m => m.Teams)</h5>
+                <div class="content">
+                    @for (int i = 0; i < Model.Teams.Length; i++)
+                    {
+                        @Html.ActionLink(@Model.Teams[i], "Detail", "Team", new { id = @Model.Teams[i] }, null)if (i + 1 != Model.Teams.Length)
+                                                                                                               {<text>, </text>}
+                    }
+                </div>
+            </div>
+            <div class="buttonHolder">
+                @Html.ActionLink("←  " + Resources.Repository_Detail_Back, "Index", null, new { @class = "secondaryAction" })
+                @if (Model.IsCurrentUserAdministrator)
+                {
+                    @Html.ActionLink(Resources.Repository_Detail_Edit, "Edit", new { id = Model.Name }, new { @class = "primaryAction" })@Html.ActionLink(Resources.Repository_Detail_Delete, "Delete", new { id = Model.Name }, new { @class = "primaryAction" })
+                }
+            </div>
+        </fieldset>
+    </div>
+}

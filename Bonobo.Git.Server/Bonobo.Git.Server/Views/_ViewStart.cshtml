@@ -1,0 +1,11 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    var razorView = ViewContext.View as RazorView;
+    if (razorView != null)
+    {
+        var result = razorView.ViewPath.Split('/').Skip(2);
+        var concated = String.Concat(result);
+        ViewContext.ViewData["PageID"] = concated.Substring(0, concated.IndexOf(".cshtml"));        
+    }
+}

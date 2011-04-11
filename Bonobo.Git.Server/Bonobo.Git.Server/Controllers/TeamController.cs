@@ -1,0 +1,145 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using Microsoft.Practices.Unity;
+using Bonobo.Git.Server.Data;
+using Bonobo.Git.Server.Models;
+using Bonobo.Git.Server.Security;
+using Bonobo.Git.Server.App_GlobalResources;
+
+namespace Bonobo.Git.Server.Controllers
+{
+    public class TeamController : Controller
+    {
+        [Dependency]
+        public ITeamRepository TeamRepository { get; set; }
+
+        [Dependency]
+        public IMembershipService MembershipService { get; set; }
+
+        [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
+        public ActionResult Index()
+        {
+            return View(ConvertTeamModels(TeamRepository.GetAllTeams()));
+        }
+
+        [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
+        public ActionResult Edit(string id)
+        {
+            if (!String.IsNullOrEmpty(id))
+            {
+                var model = ConvertTeamModel(TeamRepository.GetTeam(id));
+                PopulateViewData();
+                return View(model);
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
+        public ActionResult Edit(TeamDetailModel model)
+        {           
+            if (ModelState.IsValid)
+            {
+                TeamRepository.Update(ConvertTeamDetailModel(model));
+                ViewBag.UpdateSuccess = true;
+            }
+            PopulateViewData();
+            return View(model);
+        }
+
+        [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
+        public ActionResult Create()
+        {
+            var model = new TeamDetailModel { };
+            PopulateViewData();
+            return View(model);
+        }
+
+        [HttpPost]
+        [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
+        public ActionResult Create(TeamDetailModel model)
+        {
+            while (!String.IsNullOrEmpty(model.Name) && model.Name.Last() == ' ')
+            {
+                model.Name = model.Name.Substring(0, model.Name.Length - 1);
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (TeamRepository.Create(ConvertTeamDetailModel(model)))
+                {
+                    ViewBag.CreateSuccess = true;
+                    return View("Index", ConvertTeamModels(TeamRepository.GetAllTeams()));
+                }
+                else
+                {
+                    ModelState.AddModelError("", Resources.Team_Create_Failure);
+                }
+            }
+
+            PopulateViewData();
+            return View(model);
+        }
+
+        [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
+        public ActionResult Delete(string id)
+        {
+            if (!String.IsNullOrEmpty(id))
+            {
+                TeamRepository.Delete(id);
+                ViewBag.DeleteSuccess = true;
+            }
+            return View("Index", ConvertTeamModels(TeamRepository.GetAllTeams()));
+
+        }
+
+        public ActionResult Detail(string id)
+        {
+            if (!String.IsNullOrEmpty(id))
+            {
+                return View(ConvertTeamModel(TeamRepository.GetTeam(id)));
+            }
+            return View();
+        }
+
+        private IEnumerable<TeamDetailModel> ConvertTeamModels(IEnumerable<TeamModel> models)
+        {
+            var result = new List<TeamDetailModel>();
+            foreach (var item in models)
+            {
+                result.Add(ConvertTeamModel(item));
+            }
+            return result;
+        }
+
+        private TeamDetailModel ConvertTeamModel(TeamModel model)
+        {
+            return model == null ? null : new TeamDetailModel
+            {
+                Name = model.Name,
+                Description = model.Description,
+                Members = model.Members,
+                Repositories = model.Repositories,
+            };
+        }
+
+        private TeamModel ConvertTeamDetailModel(TeamDetailModel model)
+        {
+            return new TeamModel
+            {
+                Name = model.Name,
+                Description = model.Description,
+                Members = model.Members,
+                Repositories = model.Repositories,
+            };
+        }
+
+        private void PopulateViewData()
+        {
+            ViewData["AvailableUsers"] = MembershipService.GetAllUsers().Select(i => i.Username).ToArray();
+        }
+    }
+}
