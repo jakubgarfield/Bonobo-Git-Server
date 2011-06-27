@@ -43,6 +43,31 @@ namespace Bonobo.Git.Server
             }
         }
 
+        public static bool AllowAnonymousRegistration
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public static bool AllowUserRepositoryCreation
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+
         public static string Repositories
         {
             get

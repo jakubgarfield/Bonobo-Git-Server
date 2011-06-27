@@ -75,7 +75,7 @@
                 @Html.ActionLink("←  " + Resources.Repository_Detail_Back, "Index", null, new { @class = "secondaryAction" })
                 @if (Model.IsCurrentUserAdministrator)
                 {
-                    @Html.ActionLink(Resources.Repository_Detail_Edit, "Edit", new { id = Model.Name }, new { @class = "primaryAction" })@Html.ActionLink(Resources.Repository_Detail_Delete, "Delete", new { id = Model.Name }, new { @class = "primaryAction" })
+                    @Html.ActionLink(Resources.Repository_Detail_Edit, "Edit", new { id = Model.Name }, new { @class = "primaryAction" })@Html.ActionLink(Resources.Repository_Detail_Delete, "Delete", new { id = Model.Name }, new { @class = "primaryAction deleteButton" })
                 }
             </div>
         </fieldset>

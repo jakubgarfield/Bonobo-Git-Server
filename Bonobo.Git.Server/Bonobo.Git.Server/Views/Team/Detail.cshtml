@@ -44,7 +44,7 @@ else
                 @Html.ActionLink("←  " + Resources.Team_Detail_Back, "Index", null, new { @class = "secondaryAction" })
                 @if (User.IsInRole(Definitions.Roles.Administrator))
                 {
-                    @Html.ActionLink(Resources.Team_Detail_Edit, "Edit", new { id = Model.Name }, new { @class = "primaryAction" })@Html.ActionLink(Resources.Team_Detail_Delete, "Delete", new { id = Model.Name }, new { @class = "primaryAction" })
+                    @Html.ActionLink(Resources.Team_Detail_Edit, "Edit", new { id = Model.Name }, new { @class = "primaryAction" })@Html.ActionLink(Resources.Team_Detail_Delete, "Delete", new { id = Model.Name }, new { @class = "primaryAction deleteButton" })
                 }
             </div>
         </fieldset>

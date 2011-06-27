@@ -20,7 +20,10 @@
         </div>
     </div>
 }
-<div class="create">@Html.ActionLink(Resources.Repository_Index_CreateNew, "Create")</div>
+@if (UserConfigurationManager.AllowUserRepositoryCreation)
+{
+    <div class="create">@Html.ActionLink(Resources.Repository_Index_CreateNew, "Create")</div>
+}
 <h3>@Resources.Repository_Index_Repositories</h3>
 <div class="w-grid">
     @{

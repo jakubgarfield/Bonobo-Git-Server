@@ -4,6 +4,14 @@
     ViewBag.Title = Resources.Account_Index_Title;
 }
 <h2>@Resources.Account_Index_Title</h2>
+@if (ViewBag.CreateSuccess != null && ViewBag.CreateSuccess)
+{
+    <div class="uniForm">    
+        <div id="okMsg">
+            <p>@Resources.Account_Create_Success</p>
+        </div>
+    </div>
+}
 @if (ViewBag.DeleteSuccess != null)
 {
     if (ViewBag.DeleteSuccess)
@@ -23,6 +31,8 @@
         </div>
     }
 }
+<div class="create">@Html.ActionLink(Resources.Account_Index_Create, "Create")</div>
+<h3>@Resources.Account_Index_Users</h3>
 @{
     var grid = new WebGrid(source: Model, defaultSort: "Username", rowsPerPage: 15);
 }
@@ -37,7 +47,7 @@
             grid.Column("Surname", typeof(UserDetailModel).GetDisplayValue("Surname")),
             grid.Column("Email", typeof(UserDetailModel).GetDisplayValue("Email")),
             grid.Column(format: (item) => Html.ActionLink(Resources.Grid_Edit, "Edit", new { id = item.Username }), style: "action"),
-            grid.Column(format: (item) => Html.ActionLink(Resources.Grid_Delete, "Delete", new { id = item.Username }), style: "action")
+            grid.Column(format: (item) => Html.ActionLink(Resources.Grid_Delete, "Delete", new { id = item.Username }, new { @class = "deleteButton" }), style: "action")
         )
     )
 </div>

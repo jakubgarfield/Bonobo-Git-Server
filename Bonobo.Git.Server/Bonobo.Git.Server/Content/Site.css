@@ -117,6 +117,8 @@ div.uniForm #errorMsg { text-align: center;}
 /* Repository */
 
 #RepositoryTree .fileImage { width: 100%;}
+#RepositoryTree .repositoryContent .controlPanel a { color: #343434;}
+#RepositoryTree .repositoryContent .controlPanel p { margin: 0 0 2em 0; padding: 1em 0 1em 2em; font-size: 90%; background:#f7f7f7;}
 
 #RepositoryCommit .changes img { vertical-align: text-top; margin: 0 0.75em;}
 #RepositoryCommit .changes .item { padding: 0.5em 0; border-bottom: 1px solid #b9b9b9}

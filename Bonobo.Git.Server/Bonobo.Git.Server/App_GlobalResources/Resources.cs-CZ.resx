@@ -267,39 +267,6 @@
   <data name="Home_PageNotFound_Title" xml:space="preserve">
     <value>404 Stránka nebyla nalezena</value>
   </data>
-  <data name="Home_Register_AccountAlreadyExists" xml:space="preserve">
-    <value>Uživatel s tímto uživatelským jménem již existuje.</value>
-  </data>
-  <data name="Home_Register_AccountInformation" xml:space="preserve">
-    <value>Informace o uživateli</value>
-  </data>
-  <data name="Home_Register_ConfirmPassword" xml:space="preserve">
-    <value>Potvrzení hesla</value>
-  </data>
-  <data name="Home_Register_Email" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="Home_Register_Name" xml:space="preserve">
-    <value>Jméno</value>
-  </data>
-  <data name="Home_Register_Password" xml:space="preserve">
-    <value>Heslo</value>
-  </data>
-  <data name="Home_Register_Submit" xml:space="preserve">
-    <value>Vytvořit nového uživatele</value>
-  </data>
-  <data name="Home_Register_Surname" xml:space="preserve">
-    <value>Příjmení</value>
-  </data>
-  <data name="Home_Register_Title" xml:space="preserve">
-    <value>Registrace</value>
-  </data>
-  <data name="Home_Register_Unsuccessfull" xml:space="preserve">
-    <value>Vytvoření uživatele se nezdařilo. Opravte chyby a zkuste znovu.</value>
-  </data>
-  <data name="Home_Register_Username" xml:space="preserve">
-    <value>Uživatelské jméno</value>
-  </data>
   <data name="Home_ServerError_Text" xml:space="preserve">
     <value>Při zpracování došlo k serverové chybě. Zkuste znovu, nebo kontaktujte administrátora, případně autora.</value>
   </data>

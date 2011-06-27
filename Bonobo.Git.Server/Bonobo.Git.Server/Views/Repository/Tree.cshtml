@@ -14,6 +14,12 @@
     <div class="repositoryContent">
         @Html.Partial("_BranchSwitcher")
         @Html.Partial("_AddressBar")
+        @if (!Model.IsTree)
+        {
+            <div class="controlPanel">
+                <p>@Html.ActionLink(@Resources.Repository_Tree_Download, "Tree", new { name = Model.File.Tree, path = Model.File.Path + ".download" })</p>
+            </div>
+        }
         @if (Model.IsTree)
         {
             var grid = new WebGrid(source: Model.Files, rowsPerPage: 15);

@@ -279,6 +279,7 @@
     <Content Include="Global.asax" />
     <Content Include="licence.txt" />
     <Content Include="readme.txt" />
+    <Content Include="Scripts\Global.js" />
     <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.4.js" />
     <Content Include="Scripts\jquery-1.4.4.min.js" />
@@ -311,6 +312,7 @@
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Views\Account\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GitSharp.Core\GitSharp.Core.csproj">
@@ -337,7 +339,6 @@
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Repository\Detail.cshtml" />
     <Content Include="Views\Home\Unauthorized.cshtml" />
-    <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\Detail.cshtml" />
     <Content Include="Views\Account\Edit.cshtml" />
@@ -361,6 +362,7 @@
     <Content Include="App_Data\Bonobo.Git.Server.Release.db" />
     <Content Include="Web.Update.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>

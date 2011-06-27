@@ -86,39 +86,10 @@ namespace Bonobo.Git.Server.Controllers
             return View();
         }
 
-        public ActionResult Register()
-        {
-            return View();
-        }
-
         public ActionResult ChangeCulture(string lang, string returnUrl)
         {
             Session["Culture"] = new CultureInfo(lang);
             return Redirect(returnUrl);
-        }
-
-        [HttpPost]
-        public ActionResult Register(RegisterModel model)
-        {
-            while (!String.IsNullOrEmpty(model.Username) && model.Username.Last() == ' ')
-            {
-                model.Username = model.Username.Substring(0, model.Username.Length - 1);
-            }
-
-            if (ModelState.IsValid)
-            {
-                if (MembershipService.CreateUser(model.Username, model.Password, model.Name, model.Surname, model.Email))
-                {
-                    FormsAuthenticationService.SignIn(model.Username, false);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError("Username", Resources.Home_Register_AccountAlreadyExists);
-                }
-            }
-
-            return View(model);
         }
     }
 }

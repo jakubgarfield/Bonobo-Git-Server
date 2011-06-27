@@ -67,6 +67,11 @@ namespace Bonobo.Git.Server.Controllers
 
         public ActionResult Create()
         {
+            if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfigurationManager.AllowUserRepositoryCreation)
+            {
+                return new RedirectResult("Unauthorized");
+            }
+
             var model = new RepositoryDetailModel
             {
                 Administrators = new string[] { User.Identity.Name },
@@ -80,7 +85,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (model != null && !String.IsNullOrEmpty(model.Name))
             {
-                model.Name = Regex.Replace(model.Name, @"\s", "");     
+                model.Name = Regex.Replace(model.Name, @"\s", "");
             }
 
             if (String.IsNullOrEmpty(model.Name))
@@ -154,13 +159,26 @@ namespace Bonobo.Git.Server.Controllers
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
             {
+                bool download = false;
+                if (path != null)
+                {
+                    if (path.EndsWith(".browse"))
+                    {
+                        path = path.Substring(0, path.Length - 7);
+                    }
+                    else if (path.EndsWith(".download"))
+                    {
+                        path = path.Substring(0, path.Length - 9);
+                        download = true;
+                    }
+                }
                 path = path != null ? path.Replace(".browse", "") : null;
                 var browser = new RepositoryBrowser(Path.Combine(UserConfigurationManager.Repositories, id));
                 string branchName;
                 var files = browser.Browse(name, path, out branchName);
                 PopulateBranchesData(browser, branchName);
                 PopulateAddressBarData(name, path);
-                return DisplayFiles(files, path, id);
+                return DisplayFiles(files, path, id, download);
             }
             return View();
         }
@@ -196,7 +214,7 @@ namespace Bonobo.Git.Server.Controllers
             return View();
         }
 
-        private ActionResult DisplayFiles(IEnumerable<RepositoryTreeDetailModel> files, string path, string id)
+        private ActionResult DisplayFiles(IEnumerable<RepositoryTreeDetailModel> files, string path, string id, bool returnAsBinary)
         {
             if (files != null)
             {
@@ -210,17 +228,20 @@ namespace Bonobo.Git.Server.Controllers
                 else
                 {
                     model.File = files.First();
-                    model.Text = FileDisplayHandler.GetText(model.File.Data);
-                    model.IsTextFile = model.Text != null;
-
-                    if (model.IsTextFile)
+                    if (!returnAsBinary)
                     {
-                        model.TextBrush = FileDisplayHandler.GetBrush(model.File.Name);
-                    }
+                        model.Text = FileDisplayHandler.GetText(model.File.Data);
+                        model.IsTextFile = model.Text != null;
 
-                    if (!model.IsTextFile)
-                    {
-                        model.IsImage = FileDisplayHandler.IsImage(model.File.Name);
+                        if (model.IsTextFile)
+                        {
+                            model.TextBrush = FileDisplayHandler.GetBrush(model.File.Name);
+                        }
+
+                        if (!model.IsTextFile)
+                        {
+                            model.IsImage = FileDisplayHandler.IsImage(model.File.Name);
+                        }
                     }
 
                     if (!model.IsImage && !model.IsTextFile)

@@ -62,7 +62,7 @@ namespace Bonobo.Git.Server.Controllers
         [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index()
         {
-            return View( GetDetailUsers());
+            return View(GetDetailUsers());
         }
 
         public ActionResult Edit(string id)
@@ -132,6 +132,48 @@ namespace Bonobo.Git.Server.Controllers
             }
 
             PopulateRoles();
+            return View(model);
+        }
+
+        public ActionResult Create()
+        {
+            if ((Request.IsAuthenticated && !User.IsInRole(Definitions.Roles.Administrator)) || (!Request.IsAuthenticated && !UserConfigurationManager.AllowAnonymousRegistration))
+            {
+                return new RedirectResult("Unauthorized");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Create(UserCreateModel model)
+        {           
+            while (!String.IsNullOrEmpty(model.Username) && model.Username.Last() == ' ')
+            {
+                model.Username = model.Username.Substring(0, model.Username.Length - 1);
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (MembershipService.CreateUser(model.Username, model.Password, model.Name, model.Surname, model.Email))
+                {
+                    if (User.IsInRole(Definitions.Roles.Administrator))
+                    {
+                        ViewBag.CreateSuccess = true;
+                        return View("Index", GetDetailUsers());
+                    }
+                    else
+                    {
+                        FormsAuthenticationService.SignIn(model.Username, false);
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("Username", Resources.Account_Create_AccountAlreadyExists);
+                }
+            }
+
             return View(model);
         }
 

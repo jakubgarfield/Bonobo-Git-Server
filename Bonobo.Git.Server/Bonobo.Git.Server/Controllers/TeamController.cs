@@ -93,7 +93,6 @@ namespace Bonobo.Git.Server.Controllers
                 ViewBag.DeleteSuccess = true;
             }
             return View("Index", ConvertTeamModels(TeamRepository.GetAllTeams()));
-
         }
 
         public ActionResult Detail(string id)

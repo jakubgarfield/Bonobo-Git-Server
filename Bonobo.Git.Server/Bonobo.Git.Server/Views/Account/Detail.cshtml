@@ -43,7 +43,7 @@ else
         {
             <div class="buttonHolder">
                 @Html.ActionLink("←  " + Resources.Account_Detail_Back, "Index", null, new { @class = "secondaryAction" })
-                @Html.ActionLink(Resources.Account_Detail_Edit, "Edit", new { id = Model.Username }, new { @class = "primaryAction" })@Html.ActionLink(Resources.Account_Detail_Delete, "Delete", new { id = Model.Username }, new { @class = "primaryAction" })
+                @Html.ActionLink(Resources.Account_Detail_Edit, "Edit", new { id = Model.Username }, new { @class = "primaryAction" })@Html.ActionLink(Resources.Account_Detail_Delete, "Delete", new { id = Model.Username }, new { @class = "primaryAction deleteButton" })
             </div>
         }
     </div>
