@@ -97,7 +97,10 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("a[class~='deleteButton']").click(function () {
-                return confirm('@Resources.Layout_DeleteConfirmation');
+                if (confirm('@Resources.Layout_DeleteConfirmation')) {
+                    $.post(this.href);
+                }
+                return false;
             });
         });
     </script>

@@ -113,10 +113,19 @@ namespace Bonobo.Git.Server.Controllers
                     {
                         pack.setBiDirectionalPipe(false);
                         pack.receive(GetInputStream(), Response.OutputStream, Response.OutputStream);
+                        pack.setPostReceiveHook(new MyHook());
                     }
                 }
             }
             return new EmptyResult();
+        }
+
+        public class MyHook : IPostReceiveHook
+        {
+            public void OnPostReceive(ReceivePack rp, ICollection<ReceiveCommand> commands)
+            {
+                // some work
+            }
         }
 
         private ActionResult ExecuteUploadPack(string project)

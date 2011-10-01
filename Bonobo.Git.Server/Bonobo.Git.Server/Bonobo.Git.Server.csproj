@@ -279,7 +279,6 @@
     <Content Include="Global.asax" />
     <Content Include="licence.txt" />
     <Content Include="readme.txt" />
-    <Content Include="Scripts\Global.js" />
     <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.4.js" />
     <Content Include="Scripts\jquery-1.4.4.min.js" />

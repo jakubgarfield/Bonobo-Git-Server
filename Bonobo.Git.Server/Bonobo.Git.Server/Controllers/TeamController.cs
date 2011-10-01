@@ -84,6 +84,7 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
+        [HttpPost]
         [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(string id)
         {
@@ -92,7 +93,8 @@ namespace Bonobo.Git.Server.Controllers
                 TeamRepository.Delete(id);
                 ViewBag.DeleteSuccess = true;
             }
-            return View("Index", ConvertTeamModels(TeamRepository.GetAllTeams()));
+            return RedirectToAction("Index");
+            //return View("Index", ConvertTeamModels(TeamRepository.GetAllTeams()));
         }
 
         public ActionResult Detail(string id)

@@ -59,7 +59,8 @@ namespace Bonobo.Git.Server
         {
             get
             {
-                throw new NotImplementedException();
+                //TODO: implement
+                return true;
             }
             set
             {
@@ -82,7 +83,7 @@ namespace Bonobo.Git.Server
 
         public static void Save()
         {
-            using (var file = new FileStream(_configPath, FileMode.OpenOrCreate))
+            using (var file = new FileStream(_configPath, FileMode.Create))
             {
                 _serializer.Serialize(file, Configuration);
             }
