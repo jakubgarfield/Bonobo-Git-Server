@@ -17,7 +17,7 @@
         @if (!Model.IsTree)
         {
             <div class="controlPanel">
-                <p>@Html.ActionLink(@Resources.Repository_Tree_Download, "Tree", new { name = Model.File.Tree, path = Model.File.Path + ".download" })</p>
+                <p>@Html.ActionLink(@Resources.Repository_Tree_Download, "Tree", new { name = Model.File.Tree, path = Model.File.Path + ".download" }, new { @class = "downloadLink" })</p>
             </div>
         }
         @if (Model.IsTree)

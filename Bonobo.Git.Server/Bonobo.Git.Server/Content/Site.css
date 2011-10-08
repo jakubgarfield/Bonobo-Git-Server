@@ -108,20 +108,21 @@ div.uniForm #errorMsg { text-align: center;}
 
 /* Icons */
  
-#RepositoryTree .image, #RepositoryTree .directory, #RepositoryTree .file, #RepositoryTree .image, #AccountIndex .user, #TeamIndex .team, #RepositoryIndex .repository { display:block; padding: 0 0 0 30px; height: 24px; line-height: 24px; Width: 310px;}
+#RepositoryTree .image, #RepositoryTree .directory, #RepositoryTree .file, #RepositoryTree .image, #AccountIndex .user, #TeamIndex .team, #RepositoryIndex .repository { display:block; padding: 0 0 0 25px; height: 20px; line-height: 20px; Width: 310px;}
 
-#RepositoryTree .directory { background: url('images/folder.png') no-repeat;}
-#RepositoryTree .file { background: url('images/file.png') no-repeat;}
-#RepositoryTree .image { background: url('images/image.png') no-repeat;}
-#AccountIndex .user {background: url('images/user.png') no-repeat;}
-#TeamIndex .team {background: url('images/team.png') no-repeat;}
-#RepositoryIndex .repository {background: url('images/repository.png') no-repeat;}
+#RepositoryTree .directory { background: url('images/folder.png') no-repeat 0px 2px;}
+#RepositoryTree .file { background: url('images/file.png') no-repeat 0px 2px;}
+#RepositoryTree .image { background: url('images/image.png') no-repeat 0px 2px;}
+#AccountIndex .user {background: url('images/user.png') no-repeat 0px 2px;}
+#TeamIndex .team {background: url('images/team.png') no-repeat 0px 2px;}
+#RepositoryIndex .repository {background: url('images/repository.png') no-repeat 0px 2px;}
 
 /* Repository */
 
 #RepositoryTree .fileImage { width: 100%;}
 #RepositoryTree .repositoryContent .controlPanel a { color: #343434;}
-#RepositoryTree .repositoryContent .controlPanel p { margin: 0 0 2em 0; padding: 1em 0 1em 2em; font-size: 90%; background:#f7f7f7;}
+#RepositoryTree .repositoryContent .controlPanel p { margin: 0 0 2em 0; padding: 1em 0 1em 2em; font-size: 90%; background:#f7f7f7; }
+#RepositoryTree .repositoryContent .controlPanel p .downloadLink { background: url('images/download_file.png') no-repeat; line-height: 16px; padding-left: 24px;}
 
 #RepositoryCommit .changes img { vertical-align: text-top; margin: 0 0.75em;}
 #RepositoryCommit .changes .item { padding: 0.5em 0; border-bottom: 1px solid #b9b9b9}
