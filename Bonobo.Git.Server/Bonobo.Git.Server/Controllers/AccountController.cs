@@ -61,14 +61,14 @@ namespace Bonobo.Git.Server.Controllers
                 if (model.Username != User.Identity.Name)
                 {
                     MembershipService.DeleteUser(model.Username);
-                    ViewBag.DeleteSuccess = true;
+                    TempData["DeleteSuccess"] = true;
                 }
                 else
                 {
-                    ViewBag.DeleteSuccess = false;
+                    TempData["DeleteSuccess"] = false;
                 }
             }
-            return View("Index", GetDetailUsers());
+            return RedirectToAction("Index");
         }
 
         [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
@@ -171,8 +171,8 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     if (User.IsInRole(Definitions.Roles.Administrator))
                     {
-                        ViewBag.CreateSuccess = true;
-                        return View("Index", GetDetailUsers());
+                        TempData["CreateSuccess"] = true;
+                        return RedirectToAction("Index");
                     }
                     else
                     {

@@ -12,9 +12,9 @@
         </div>
     </div>
 }
-@if (ViewBag.DeleteSuccess != null)
+@if (TempData["CreateSuccess"] != null)
 {
-    if (ViewBag.DeleteSuccess)
+    if ((bool)TempData["CreateSuccess"])
     {
         <div class="uniForm">    
         <div id="okMsg">

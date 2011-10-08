@@ -103,8 +103,8 @@ namespace Bonobo.Git.Server.Controllers
                         {
                             repository.Create(true);
                         }
-                        ViewBag.CreateSuccess = true;
-                        return View("Index", GetIndexModel());
+                        TempData["CreateSuccess"] = true;
+                        return RedirectToAction("Index");
                     }
                     else
                     {
@@ -143,9 +143,9 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     Directory.Delete(path, true);
                 }
-                ViewBag.DeleteSuccess = true;
+                TempData["DeleteSuccess"] = true;
             }
-            return View("Index", GetIndexModel());
+            return RedirectToAction("Index");
         }
 
         [RepositoryAuthorizeRedirect]

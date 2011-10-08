@@ -4,7 +4,7 @@
     ViewBag.Title = Resources.Repository_Index_Title;
 }
 <h2>@Resources.Repository_Index_Title</h2>
-@if (ViewBag.CreateSuccess != null && ViewBag.CreateSuccess)
+@if (TempData["CreateSuccess"] != null && (bool)TempData["CreateSuccess"])
 {
     <div class="uniForm">    
         <div id="okMsg">
@@ -12,7 +12,7 @@
         </div>
     </div>
 }
-@if (ViewBag.DeleteSuccess != null && ViewBag.DeleteSuccess)
+@if (TempData["DeleteSuccess"] != null && (bool)TempData["DeleteSuccess"])
 {
     <div class="uniForm">    
         <div id="okMsg">

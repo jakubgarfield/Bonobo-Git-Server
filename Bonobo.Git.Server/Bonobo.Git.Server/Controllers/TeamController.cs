@@ -71,8 +71,8 @@ namespace Bonobo.Git.Server.Controllers
             {
                 if (TeamRepository.Create(ConvertTeamDetailModel(model)))
                 {
-                    ViewBag.CreateSuccess = true;
-                    return View("Index", ConvertTeamModels(TeamRepository.GetAllTeams()));
+                    TempData["CreateSuccess"] = true;
+                    return RedirectToAction("Index");
                 }
                 else
                 {
@@ -102,8 +102,8 @@ namespace Bonobo.Git.Server.Controllers
             if (model != null && !String.IsNullOrEmpty(model.Name))
             {
                 TeamRepository.Delete(model.Name);
-                ViewBag.DeleteSuccess = true;
-                return View("Index", ConvertTeamModels(TeamRepository.GetAllTeams()));
+                TempData["DeleteSuccess"] = true;
+                return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
         }
