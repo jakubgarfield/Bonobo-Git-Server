@@ -73,10 +73,13 @@ namespace Bonobo.Git.Server
             routes.MapRoute("Team", "Team/{id}/{action}/",
                             new { controller = "Team", action = "Detail" });
 
+
             routes.MapRoute("Default", "{controller}/{action}/{id}",
                             new { controller = "Home", action = "Index", id = "" });
 
+            routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
         }
 
         protected void Application_AcquireRequestState(object sender, EventArgs e)

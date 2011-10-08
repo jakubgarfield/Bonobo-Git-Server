@@ -199,7 +199,6 @@
     <Content Include="Content\images\action_deleted.gif" />
     <Content Include="Content\images\action_modified.gif" />
     <Content Include="Content\images\action_typechanged.gif" />
-    <Content Include="Content\images\add.png" />
     <Content Include="Content\images\branch.png" />
     <Content Include="Content\images\background.gif" />
     <Content Include="Content\images\branch_active.png" />
@@ -208,7 +207,8 @@
     <Content Include="Content\images\create.png" />
     <Content Include="Content\images\cz.png" />
     <Content Include="Content\images\detail.png" />
-    <Content Include="Content\images\favicon.png" />
+    <Content Include="Content\images\download_file.png" />
+    <Content Include="favicon.ico" />
     <Content Include="Content\images\folder.png" />
     <Content Include="Content\images\address.png" />
     <Content Include="Content\images\gb.png" />
