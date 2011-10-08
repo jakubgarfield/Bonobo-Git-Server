@@ -28,7 +28,7 @@ namespace Bonobo.Git.Server.Controllers
             }
             else
             {
-                return new HttpUnauthorizedResult();
+                return UnauthorizedResult();
             }
         }
 
@@ -42,7 +42,7 @@ namespace Bonobo.Git.Server.Controllers
             }
             else
             {
-                return new HttpUnauthorizedResult();
+                return UnauthorizedResult();
             }
         }
 
@@ -56,7 +56,7 @@ namespace Bonobo.Git.Server.Controllers
             }
             else
             {
-                return new HttpUnauthorizedResult();
+                return UnauthorizedResult();
             }
         }
 
@@ -70,7 +70,7 @@ namespace Bonobo.Git.Server.Controllers
                 }
             }
 
-            return new HttpStatusCodeResult(403);
+            return UnauthorizedResult();
         }
 
         [HttpPost]
@@ -82,7 +82,7 @@ namespace Bonobo.Git.Server.Controllers
             }
             else
             {
-                return new HttpStatusCodeResult(403);
+                return UnauthorizedResult();
             }
         }
 
@@ -95,7 +95,7 @@ namespace Bonobo.Git.Server.Controllers
             }
             else
             {
-                return new HttpStatusCodeResult(403);
+                return UnauthorizedResult();
             }
         }
 
@@ -113,18 +113,13 @@ namespace Bonobo.Git.Server.Controllers
                     {
                         pack.setBiDirectionalPipe(false);
                         pack.receive(GetInputStream(), Response.OutputStream, Response.OutputStream);
-                        pack.setPostReceiveHook(new MyHook());
                     }
                 }
+                return new EmptyResult();
             }
-            return new EmptyResult();
-        }
-
-        public class MyHook : IPostReceiveHook
-        {
-            public void OnPostReceive(ReceivePack rp, ICollection<ReceiveCommand> commands)
+            else
             {
-                // some work
+                return new HttpNotFoundResult();
             }
         }
 
@@ -144,8 +139,12 @@ namespace Bonobo.Git.Server.Controllers
                         pack.Upload(GetInputStream(), Response.OutputStream, Response.OutputStream);
                     }
                 }
+                return new EmptyResult();
             }
-            return new EmptyResult();
+            else
+            {
+                return new HttpNotFoundResult();
+            }
         }
 
         private ActionResult GetInfoRefs(String project, String service)
@@ -178,9 +177,20 @@ namespace Bonobo.Git.Server.Controllers
                         }
                     }
                 }
-            }
 
-            return new EmptyResult();
+                return new EmptyResult();
+            }
+            else
+            {
+                return new HttpNotFoundResult();
+            }
+        }
+
+        private ActionResult UnauthorizedResult()
+        {
+            HttpContext.Response.StatusCode = 401;
+            HttpContext.Response.End();
+            return new HttpStatusCodeResult(401);
         }
 
         private static String FormatMessage(String input)

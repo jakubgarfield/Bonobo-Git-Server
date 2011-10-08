@@ -37,6 +37,8 @@ namespace Bonobo.Git.Server
                 }
                 else
                 {
+                    filterContext.HttpContext.Response.StatusCode = 401;
+                    filterContext.HttpContext.Response.End();
                     filterContext.Result = new HttpUnauthorizedResult();
                 }
             }
