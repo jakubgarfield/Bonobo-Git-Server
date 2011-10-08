@@ -105,6 +105,8 @@ div.uniForm #errorMsg { text-align: center;}
 /* Language Bar */
 #languageBar a { display: block; background-image: url('images/cz.png'); width: 16px; height: 11px; float: right; margin-left: 10px; text-decoration:none; font-size:0px;}
 #languageBar #en { background-image: url('images/gb.png');}
+#languageBar #zh { background-image: url('images/cn.png');}
+#languageBar #jp { background-image: url('images/jp.png');}
 
 /* Icons */
  

@@ -118,594 +118,594 @@
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
 	<data name="Account_Delete_DeleteCurrentUser" xml:space="preserve">
-    <value>Nemůžete smazat sám sebe.</value>
+    <value>你无法删除自己。</value>
   </data>
 	<data name="Account_Delete_Success" xml:space="preserve">
-    <value>Uživatel byl smazán.</value>
+    <value>用户已经被删除。</value>
   </data>
 	<data name="Account_Detail_Back" xml:space="preserve">
-    <value>Zpět na seznam</value>
+    <value>返回到列表</value>
   </data>
 	<data name="Account_Detail_Delete" xml:space="preserve">
-    <value>Smazat</value>
+    <value>删除</value>
   </data>
 	<data name="Account_Detail_Edit" xml:space="preserve">
-    <value>Upravit</value>
+    <value>编辑</value>
   </data>
 	<data name="Account_Detail_Email" xml:space="preserve">
-    <value>Email</value>
+    <value>邮件</value>
   </data>
 	<data name="Account_Detail_Name" xml:space="preserve">
-    <value>Jméno</value>
+    <value>名</value>
   </data>
 	<data name="Account_Detail_Roles" xml:space="preserve">
-    <value>Role</value>
+    <value>角色</value>
   </data>
 	<data name="Account_Detail_Surname" xml:space="preserve">
-    <value>Příjmení</value>
+    <value>姓</value>
   </data>
 	<data name="Account_Detail_Title" xml:space="preserve">
-    <value>Uživatelský profil</value>
+    <value>用户详细信息</value>
   </data>
 	<data name="Account_Detail_Username" xml:space="preserve">
-    <value>Uživatelské jméno</value>
+    <value>用户名</value>
   </data>
 	<data name="Account_Edit_AccountInformation" xml:space="preserve">
-    <value>Account information</value>
+    <value>帐户信息</value>
   </data>
 	<data name="Account_Edit_Back" xml:space="preserve">
-    <value>Zpět na seznam</value>
+    <value>返回到列表</value>
   </data>
 	<data name="Account_Edit_Cancel" xml:space="preserve">
-    <value>Zrušit</value>
+    <value>取消</value>
   </data>
 	<data name="Account_Edit_CannotRemoveYourselfFromAdminRole" xml:space="preserve">
-    <value>Nemůžete odebrat sám sebe z administrátorů.</value>
+    <value>不能把你自己从管理组中去除。</value>
   </data>
 	<data name="Account_Edit_ConfirmPassword" xml:space="preserve">
-    <value>Potvrdit heslo</value>
+    <value>确认密码</value>
   </data>
 	<data name="Account_Edit_CurrentPassword" xml:space="preserve">
-    <value>Stávající heslo</value>
+    <value>当前密码</value>
   </data>
 	<data name="Account_Edit_Email" xml:space="preserve">
-    <value>Email</value>
+    <value>电子邮件</value>
   </data>
 	<data name="Account_Edit_Name" xml:space="preserve">
-    <value>Jméno</value>
+    <value>名</value>
   </data>
 	<data name="Account_Edit_NewPassword" xml:space="preserve">
-    <value>Nové heslo</value>
+    <value>新密码</value>
   </data>
 	<data name="Account_Edit_OldPasswordEmpty" xml:space="preserve">
-    <value>Nove heslo nemůže být prázdné.</value>
+    <value>当前密码不可为空</value>
   </data>
 	<data name="Account_Edit_OldPasswordIncorrect" xml:space="preserve">
-    <value>Staré heslo je neplatné.</value>
+    <value>当前密码不匹配</value>
   </data>
 	<data name="Account_Edit_Roles" xml:space="preserve">
-    <value>Role</value>
+    <value>角色</value>
   </data>
 	<data name="Account_Edit_RolesHint" xml:space="preserve">
-    <value>Skupina administrátorů má přístup k všem repozitářům a má přístup ke všem operacím s uživateli, týmy a repozitáři.</value>
+    <value>管理组的成员可以访问所有的库，并可以对库、用户、团队作出任何操作。</value>
   </data>
 	<data name="Account_Edit_Submit" xml:space="preserve">
-    <value>Uložit</value>
+    <value>保存</value>
   </data>
 	<data name="Account_Edit_Surname" xml:space="preserve">
-    <value>Příjmení</value>
+    <value>姓</value>
   </data>
 	<data name="Account_Edit_Title" xml:space="preserve">
-    <value>Upravit uživatelský profil</value>
+    <value>编辑用户帐号</value>
   </data>
 	<data name="Account_Edit_Unsuccessfull" xml:space="preserve">
-    <value>Úprava uživatele se nezdařila. Opravte chyby a zkuste to znovu.</value>
+    <value>用户编辑失败，请修正错误，再重试。</value>
   </data>
 	<data name="Account_Edit_UpdateSuccess" xml:space="preserve">
-    <value>Úprava uživatele proběhla úspěšně.</value>
+    <value>用户已更新</value>
   </data>
 	<data name="Account_Index_Title" xml:space="preserve">
-    <value>Uživatelé</value>
+    <value>用户管理</value>
   </data>
 	<data name="DateTimeFormat" xml:space="preserve">
-    <value>dd.MM.yyyy hh:mm</value>
+    <value>yyyy-MM-dd hh:mm</value>
   </data>
 	<data name="GitAccess_ProjectForbidden" xml:space="preserve">
-    <value>Nemáte dostatečná oprávnění pro přístup k projektu.</value>
+    <value>对所请求的项目没有权限</value>
   </data>
 	<data name="Grid_Delete" xml:space="preserve">
-    <value>Smazat</value>
+    <value>删除</value>
   </data>
 	<data name="Grid_Edit" xml:space="preserve">
-    <value>Upravit</value>
+    <value>编辑</value>
   </data>
 	<data name="Home_About_Thanks" xml:space="preserve">
-    <value>Děkuji!</value>
+    <value>谢谢你！</value>
   </data>
 	<data name="Home_About_Thanks_p" xml:space="preserve">
-    <value>Bonobo Git Server využívá několik opensourcových a freewarových projektů. Děkuji všem jejich autorům za skvělou práci při jejich tvorbě.</value>
+    <value>Bonobo Git Server 使用了一些免费项目和开源项目，感谢所有的作者和贡献者，感谢他们的努力和付出。</value>
   </data>
 	<data name="Home_About_Title" xml:space="preserve">
-    <value>O projektu</value>
+    <value>关于</value>
   </data>
 	<data name="Home_Error_Text" xml:space="preserve">
-    <value>Při zpracování došlo k chybě. Zkuste znovu, nebo kontaktujte administrátora, případně autora.</value>
+    <value>处理您的请求的时候发生未指定的错误，请重试或联系系统管理员</value>
   </data>
 	<data name="Home_Error_Title" xml:space="preserve">
-    <value>Při zpracování došlo k chybě</value>
+    <value>发生错误</value>
   </data>
 	<data name="Home_LogOn_AccountInformation" xml:space="preserve">
-    <value>Informace o uživateli</value>
+    <value>帐号信息</value>
   </data>
 	<data name="Home_LogOn_Failed" xml:space="preserve">
-    <value>Přihlášení se nezdařilo. Opravte chyby a zkuste znovu.</value>
+    <value>登录失败，请更正错误并重试。</value>
   </data>
 	<data name="Home_LogOn_LogOn" xml:space="preserve">
-    <value>Přihlásit</value>
+    <value>登录</value>
   </data>
 	<data name="Home_LogOn_Password" xml:space="preserve">
-    <value>Heslo</value>
+    <value>密码</value>
   </data>
 	<data name="Home_LogOn_RememberMe" xml:space="preserve">
-    <value>Zapamatovat uživatele</value>
+    <value>记住我</value>
   </data>
 	<data name="Home_LogOn_Title" xml:space="preserve">
-    <value>Přihlášení</value>
+    <value>登录</value>
   </data>
 	<data name="Home_LogOn_Username" xml:space="preserve">
-    <value>Uživatelské jméno</value>
+    <value>用户名</value>
   </data>
 	<data name="Home_LogOn_UsernamePasswordIncorrect" xml:space="preserve">
-    <value>Zadané uživatelské jméno a heslo je nesprávné.</value>
+    <value>用户名或密码错误</value>
   </data>
 	<data name="Home_PageNotFound_Text" xml:space="preserve">
-    <value>Stránka nebyla nalezena. Zkuste to prosím znovy nebo konktaktujte administrátora, případně autora.</value>
+    <value>您试图查看的页面没有找到，请重试或联系系统管理员。</value>
   </data>
 	<data name="Home_PageNotFound_Title" xml:space="preserve">
-    <value>404 Stránka nebyla nalezena</value>
+    <value>404 页面未找到</value>
   </data>
 	<data name="Home_ServerError_Text" xml:space="preserve">
-    <value>Při zpracování došlo k serverové chybě. Zkuste znovu, nebo kontaktujte administrátora, případně autora.</value>
+    <value>处理您的请求时服务器发生错误，请重试或联系系统管理员</value>
   </data>
 	<data name="Home_ServerError_Title" xml:space="preserve">
-    <value>500 Serverová chyba</value>
+    <value>500 服务器错误</value>
   </data>
 	<data name="Home_Unauthorized_Text" xml:space="preserve">
-    <value>Nemáte požadovaná oprávnění k dané stránce nebo akci.</value>
+    <value>您没有权限操作对应的页面或功能。</value>
   </data>
 	<data name="Home_Unauthorized_Title" xml:space="preserve">
-    <value>Nedostatečná oprávnění</value>
+    <value>未授权</value>
   </data>
 	<data name="Item_NotFound" xml:space="preserve">
-    <value>Položka nebyla nalezena</value>
+    <value>项目未找到</value>
   </data>
 	<data name="Layout_About" xml:space="preserve">
-    <value>O projektu</value>
+    <value>关于</value>
   </data>
 	<data name="Layout_AccountSettings" xml:space="preserve">
-    <value>Nastavení účtu</value>
+    <value>帐户设置</value>
   </data>
 	<data name="Layout_Administration" xml:space="preserve">
-    <value>Administrace</value>
+    <value>管理</value>
   </data>
 	<data name="Layout_AdministrationGlobalSettings" xml:space="preserve">
-    <value>Nastavení</value>
+    <value>全局设置</value>
   </data>
 	<data name="Layout_AdministrationRepositories" xml:space="preserve">
-    <value>Repozitáře</value>
+    <value>库</value>
   </data>
 	<data name="Layout_AdministrationTeams" xml:space="preserve">
-    <value>Týmy</value>
+    <value>团队</value>
   </data>
 	<data name="Layout_AdministrationUsers" xml:space="preserve">
-    <value>Uživatelé</value>
+    <value>用户</value>
   </data>
 	<data name="Layout_Footer_Copyright" xml:space="preserve">
-    <value>Všechna práva vyhrazena.</value>
+    <value>保留所有版权</value>
   </data>
 	<data name="Layout_Home" xml:space="preserve">
-    <value>Domů</value>
+    <value>主页</value>
   </data>
 	<data name="Layout_LogOff" xml:space="preserve">
-    <value>Odhlásit</value>
+    <value>注销</value>
   </data>
 	<data name="Layout_LogOn" xml:space="preserve">
-    <value>Přihlásit</value>
+    <value>登录</value>
   </data>
 	<data name="Layout_Register" xml:space="preserve">
-    <value>Registrace</value>
+    <value>建立新账户</value>
   </data>
 	<data name="Layout_Repositories" xml:space="preserve">
-    <value>Repozitáře</value>
+    <value>库</value>
   </data>
 	<data name="Layout_Title" xml:space="preserve">
     <value>Bonobo Git Server</value>
   </data>
 	<data name="Repository_AddressBar_Root" xml:space="preserve">
-    <value>Domů</value>
+    <value>根</value>
   </data>
 	<data name="Repository_AdministratorsHint" xml:space="preserve">
-    <value>Administrátoři mají plný přístup k repozitářům. Mohou také upravovat jejich metadata nebo repozitář smazat.</value>
+    <value>管理员组对库具有完全访问权限，可以对数据做出任何修改。</value>
   </data>
 	<data name="Repository_AllowAnonymousHint" xml:space="preserve">
-    <value>Jestliže je umožněn anonymní přístup k repozitáři, mohou všichni provádět akce pull a clone. Push je možný pouze pokud je nastaven v nastavení serveru.</value>
+    <value>如果允许匿名访问，则未登录用户可以检出或更新库数据。提交操作需要在全局设置中允许匿名访问后才可操作。</value>
   </data>
 	<data name="Repository_Commits_Title" xml:space="preserve">
-    <value>Commity</value>
+    <value>提交信息</value>
   </data>
 	<data name="Repository_Commit_Added" xml:space="preserve">
-    <value>Přidáno</value>
+    <value>已增加</value>
   </data>
 	<data name="Repository_Commit_Author" xml:space="preserve">
-    <value>Autor</value>
+    <value>作者</value>
   </data>
 	<data name="Repository_Commit_AuthorEmail" xml:space="preserve">
-    <value>Email</value>
+    <value>电子邮件</value>
   </data>
 	<data name="Repository_Commit_Changes" xml:space="preserve">
-    <value>Změněné soubory</value>
+    <value>更改列表</value>
   </data>
 	<data name="Repository_Commit_Copied" xml:space="preserve">
-    <value>Zkopírováno</value>
+    <value>已复制</value>
   </data>
 	<data name="Repository_Commit_Date" xml:space="preserve">
-    <value>Datum</value>
+    <value>日期</value>
   </data>
 	<data name="Repository_Commit_Deleted" xml:space="preserve">
-    <value>Smazáno</value>
+    <value>已删除</value>
   </data>
 	<data name="Repository_Commit_Detail" xml:space="preserve">
-    <value>Detail commitu</value>
+    <value>提交详情</value>
   </data>
 	<data name="Repository_Commit_ID" xml:space="preserve">
-    <value>Commit</value>
+    <value>提交ID</value>
   </data>
 	<data name="Repository_Commit_Message" xml:space="preserve">
-    <value>Zpráva</value>
+    <value>信息</value>
   </data>
 	<data name="Repository_Commit_Modified" xml:space="preserve">
-    <value>Modified</value>
+    <value>已修改</value>
   </data>
 	<data name="Repository_Commit_Parents" xml:space="preserve">
-    <value>Parents</value>
+    <value>父对象</value>
   </data>
 	<data name="Repository_Commit_Renamed" xml:space="preserve">
-    <value>Přejmenováno</value>
+    <value>重命名</value>
   </data>
 	<data name="Repository_Commit_TreeID" xml:space="preserve">
-    <value>Tree</value>
+    <value>树ID</value>
   </data>
 	<data name="Repository_Commit_TypeChanged" xml:space="preserve">
-    <value>Typ změny</value>
+    <value>类型已改变</value>
   </data>
 	<data name="Repository_Create_Back" xml:space="preserve">
-    <value>Zpět na seznam</value>
+    <value>返回到列表</value>
   </data>
 	<data name="Repository_Create_DirectoryExists" xml:space="preserve">
-    <value>Adresář s tímto názvem již existuje. Vyberte jiné jméno, nebo daný adresář odstraňte.</value>
+    <value>同名目录已经存在。删除这个目录，或选择一个不同的目录名并重试。</value>
   </data>
 	<data name="Repository_Create_Fail" xml:space="preserve">
-    <value>Vytvoření repozitáře se nezdařilo. Opravte chyby a zkuste znovu.</value>
+    <value>创建库失败，请检查错误并重试。</value>
   </data>
 	<data name="Repository_Create_Failure" xml:space="preserve">
-    <value>Repozitář s tímto jménem již existuje.</value>
+    <value>同名的库已经存在</value>
   </data>
 	<data name="Repository_Create_Informations" xml:space="preserve">
-    <value>Informace o repozitáři</value>
+    <value>库信息</value>
   </data>
 	<data name="Repository_Create_NameFailure" xml:space="preserve">
-    <value>Jméno nesmí obsahovat pouze mezery</value>
+    <value>名称不能仅包含空白字符</value>
   </data>
 	<data name="Repository_Create_Submit" xml:space="preserve">
-    <value>Vytvořit</value>
+    <value>建立</value>
   </data>
 	<data name="Repository_Create_Success" xml:space="preserve">
-    <value>Repozitář byl úspěšně vytvořen.</value>
+    <value>成功创建库。</value>
   </data>
 	<data name="Repository_Create_Title" xml:space="preserve">
-    <value>Vytvořit nový repozitář</value>
+    <value>创建新库</value>
   </data>
 	<data name="Repository_Delete_Success" xml:space="preserve">
-    <value>Repozitář byl úspěšně smazán.</value>
+    <value>库已成功删除</value>
   </data>
 	<data name="Repository_Detail_Administrators" xml:space="preserve">
-    <value>Administrátoři</value>
+    <value>管理员</value>
   </data>
 	<data name="Repository_Detail_Anonymous" xml:space="preserve">
-    <value>Anonymní</value>
+    <value>匿名</value>
   </data>
 	<data name="Repository_Detail_Back" xml:space="preserve">
-    <value>Zpět na seznam</value>
+    <value>返回到列表</value>
   </data>
 	<data name="Repository_Detail_Delete" xml:space="preserve">
-    <value>Smazat</value>
+    <value>删除</value>
   </data>
 	<data name="Repository_Detail_Description" xml:space="preserve">
-    <value>Popis</value>
+    <value>描述</value>
   </data>
 	<data name="Repository_Detail_Detail" xml:space="preserve">
-    <value>Detail</value>
+    <value>详细信息</value>
   </data>
 	<data name="Repository_Detail_Edit" xml:space="preserve">
-    <value>Upravit</value>
+    <value>编辑</value>
   </data>
 	<data name="Repository_Detail_IsCurrentUserAdmin" xml:space="preserve">
-    <value>Admin</value>
+    <value>管理权限</value>
   </data>
 	<data name="Repository_Detail_Location" xml:space="preserve">
-    <value>Git adresa </value>
+    <value>Git库位置</value>
   </data>
 	<data name="Repository_Detail_Name" xml:space="preserve">
-    <value>Jméno</value>
+    <value>名称</value>
   </data>
 	<data name="Repository_Detail_No" xml:space="preserve">
-    <value>Ne</value>
+    <value>否</value>
   </data>
 	<data name="Repository_Detail_Teams" xml:space="preserve">
-    <value>Týmy</value>
+    <value>团队</value>
   </data>
 	<data name="Repository_Detail_Title" xml:space="preserve">
-    <value>Detail repozitáře</value>
+    <value>库详细信息</value>
   </data>
 	<data name="Repository_Detail_Users" xml:space="preserve">
-    <value>Přispěvovatelé</value>
+    <value>贡献者</value>
   </data>
 	<data name="Repository_Detail_Yes" xml:space="preserve">
-    <value>Ano</value>
+    <value>是</value>
   </data>
 	<data name="Repository_Edit_Back" xml:space="preserve">
-    <value>Zpět na seznam</value>
+    <value>返回到列表</value>
   </data>
 	<data name="Repository_Edit_CantRemoveYourself" xml:space="preserve">
-    <value>Nemůžete se odebrat z administrátorů.</value>
+    <value>你不能将自己从管理组中删除。</value>
   </data>
 	<data name="Repository_Edit_Fail" xml:space="preserve">
-    <value>Upráva repozitáře se nezdařila. Opravte chyby a zkuste znovu.</value>
+    <value>库更新失败，请更正错误并重试。</value>
   </data>
 	<data name="Repository_Edit_Submit" xml:space="preserve">
-    <value>Uložit</value>
+    <value>保存</value>
   </data>
 	<data name="Repository_Edit_Title" xml:space="preserve">
-    <value>Upravit repozitář</value>
+    <value>编辑库</value>
   </data>
 	<data name="Repository_Edit_UpdateSuccess" xml:space="preserve">
-    <value>Úprava repozitáře proběhla úspěšně.</value>
+    <value>库信息成功更新。</value>
   </data>
 	<data name="Repository_Index_AdministratedRepositories" xml:space="preserve">
-    <value>Administrované repozitáře</value>
+    <value>管理的库</value>
   </data>
 	<data name="Repository_Index_AllRepositories" xml:space="preserve">
-    <value>Všechny repozitáře</value>
+    <value>所有库</value>
   </data>
 	<data name="Repository_Index_CreateNew" xml:space="preserve">
-    <value>Vytvořit nový repozitář</value>
+    <value>创建新库</value>
   </data>
 	<data name="Repository_Index_No" xml:space="preserve">
-    <value>Ne</value>
+    <value>否</value>
   </data>
 	<data name="Repository_Index_Repositories" xml:space="preserve">
-    <value>Repozitáře</value>
+    <value>库</value>
   </data>
 	<data name="Repository_Index_Title" xml:space="preserve">
-    <value>Správa repozitářů</value>
+    <value>库管理</value>
   </data>
 	<data name="Repository_Index_Yes" xml:space="preserve">
-    <value>Ano</value>
+    <value>是</value>
   </data>
 	<data name="Repository_Layout_Browse" xml:space="preserve">
-    <value>Procházení repozitářem</value>
+    <value>浏览库</value>
   </data>
 	<data name="Repository_Layout_Commits" xml:space="preserve">
-    <value>Commity</value>
+    <value>提交</value>
   </data>
 	<data name="Repository_SwitchBranch" xml:space="preserve">
-    <value>Změnit větev</value>
+    <value>切换当前分支</value>
   </data>
 	<data name="Repository_TeamsHint" xml:space="preserve">
-    <value>Týmy mají přístup k repozitáři. Mohou provádět akce pull, push a clone a zobrazovat metadata. Všichni uživatelé z týmu mají toto právo.</value>
+    <value>团队成员可以访问当前库，可以更新、提交数据并查看元数据。团队中的所有成员都具有访问的权限。</value>
   </data>
 	<data name="Repository_Tree_Author" xml:space="preserve">
-    <value>Autor</value>
+    <value>提交人</value>
   </data>
 	<data name="Repository_Tree_CommitDate" xml:space="preserve">
-    <value>Datum</value>
+    <value>日期</value>
   </data>
 	<data name="Repository_Tree_CommitMessage" xml:space="preserve">
-    <value>Zpráva</value>
+    <value>信息</value>
   </data>
 	<data name="Repository_Tree_Name" xml:space="preserve">
-    <value>Jméno</value>
+    <value>名称</value>
   </data>
 	<data name="Repository_Tree_Title" xml:space="preserve">
-    <value>Procházet</value>
+    <value>浏览库</value>
   </data>
 	<data name="Repository_UsersHint" xml:space="preserve">
-    <value>Uživatelé mají přístup k repozitáři. Mohou provádět akce pull, push a clone a zobrazovat metadata.</value>
+    <value>库成员可以访问当前库，可以更新、提交数据并查看元数据。</value>
   </data>
 	<data name="Reset" xml:space="preserve">
-    <value>Reset</value>
+    <value>重置</value>
   </data>
 	<data name="Settings_Global_AllowAnonymousPush" xml:space="preserve">
-    <value>Umožnit anonymní push</value>
+    <value>允许匿名用户提交</value>
   </data>
 	<data name="Settings_Global_RepositoryPath" xml:space="preserve">
-    <value>Adresář s repozitáři</value>
+    <value>库目录</value>
   </data>
 	<data name="Settings_Index_Failed" xml:space="preserve">
-    <value>Uložení nastavení se nezdařilo. Opravte chyby a zkuste znovu.</value>
+    <value>配置更新失败，请更正错误并重试。</value>
   </data>
 	<data name="Settings_Index_Save" xml:space="preserve">
-    <value>Uložit</value>
+    <value>保存</value>
   </data>
 	<data name="Settings_Index_Title" xml:space="preserve">
-    <value>Nastavení</value>
+    <value>全局设置</value>
   </data>
 	<data name="Settings_Index_UpdateSuccess" xml:space="preserve">
-    <value>Nastavení bylo úspěšně uloženo.</value>
+    <value>全局设置更新成功</value>
   </data>
 	<data name="Settings_RepositoryPathNotExists" xml:space="preserve">
-    <value>Vybraná cesta neexistuje. Vytvořte adresář nebo vyberte jinou cestu.</value>
+    <value>选择的路径不存在，请更改目录或创建目录。</value>
   </data>
 	<data name="Settings_RepositoryPathUnauthorized" xml:space="preserve">
-    <value>Nemáte právo zápisu na daný adresář. Vyberte jinou cestu.</value>
+    <value>你没有对指定路径的写入权限，请选择不同的路径。</value>
   </data>
 	<data name="Team_Create_Back" xml:space="preserve">
-    <value>Zpět na seznam</value>
+    <value>返回列表。</value>
   </data>
 	<data name="Team_Create_Fail" xml:space="preserve">
-    <value>Vytvoření nového týmu se nezdařilo. Opravte chyby a zkuste znovu.</value>
+    <value>团队创建失败，请更正错误并重试。</value>
   </data>
 	<data name="Team_Create_Failure" xml:space="preserve">
-    <value>Tým s tímto jménem již existuje.</value>
+    <value>同名团队已存在，未进行创建操作。</value>
   </data>
 	<data name="Team_Create_Submit" xml:space="preserve">
-    <value>Uložit</value>
+    <value>保存</value>
   </data>
 	<data name="Team_Create_Success" xml:space="preserve">
-    <value>Tým byl úspěšně vytvořen.</value>
+    <value>团队已成功创建</value>
   </data>
 	<data name="Team_Create_TeamInformations" xml:space="preserve">
-    <value>Informace o týmu</value>
+    <value>团队信息</value>
   </data>
 	<data name="Team_Create_Title" xml:space="preserve">
-    <value>Vytvořit nový tým</value>
+    <value>创建团队</value>
   </data>
 	<data name="Team_Delete_Success" xml:space="preserve">
-    <value>Tým byl smazán.</value>
+    <value>团队已删除</value>
   </data>
 	<data name="Team_Detail_Back" xml:space="preserve">
-    <value>Zpět na seznam</value>
+    <value>返回到列表</value>
   </data>
 	<data name="Team_Detail_Delete" xml:space="preserve">
-    <value>Smazat</value>
+    <value>删除</value>
   </data>
 	<data name="Team_Detail_Description" xml:space="preserve">
-    <value>Popis</value>
+    <value>描述</value>
   </data>
 	<data name="Team_Detail_Edit" xml:space="preserve">
-    <value>Upravit</value>
+    <value>编辑</value>
   </data>
 	<data name="Team_Detail_Members" xml:space="preserve">
-    <value>Členové</value>
+    <value>成员</value>
   </data>
 	<data name="Team_Detail_Name" xml:space="preserve">
-    <value>Jméno</value>
+    <value>名称</value>
   </data>
 	<data name="Team_Detail_Repositories" xml:space="preserve">
-    <value>Repozitáře</value>
+    <value>库</value>
   </data>
 	<data name="Team_Detail_Title" xml:space="preserve">
-    <value>Detail týmu</value>
+    <value>团队信息</value>
   </data>
 	<data name="Team_Edit_Back" xml:space="preserve">
-    <value>Zpět na seznam</value>
+    <value>返回到列表</value>
   </data>
 	<data name="Team_Edit_Failure" xml:space="preserve">
-    <value>Aktualizace týmu se nezdařila. Opravte chyby a zkuste znovu.</value>
+    <value>团队更新失败，请更正错误并重试</value>
   </data>
 	<data name="Team_Edit_Submit" xml:space="preserve">
-    <value>Uložit</value>
+    <value>更新</value>
   </data>
 	<data name="Team_Edit_Title" xml:space="preserve">
-    <value>Upravit tým</value>
+    <value>编辑团队</value>
   </data>
 	<data name="Team_Edit_UpdateSuccess" xml:space="preserve">
-    <value>Tým byl úspěšně uložen.</value>
+    <value>团队更新成功</value>
   </data>
 	<data name="Team_Index_CreateNew" xml:space="preserve">
-    <value>Vytvořit nový tým</value>
+    <value>创建团队</value>
   </data>
 	<data name="Team_Index_Teams" xml:space="preserve">
-    <value>Týmy</value>
+    <value>团队</value>
   </data>
 	<data name="Team_Index_Title" xml:space="preserve">
-    <value>Správa týmů</value>
+    <value>团队管理</value>
   </data>
 	<data name="Validation_Compare" xml:space="preserve">
-    <value>"{0}" a "{1}" musí mít stejnou hodnotu.</value>
+    <value>"{0}" 和 "{1}" 必须有相同的值。</value>
   </data>
 	<data name="Validation_Email" xml:space="preserve">
-    <value>"{0}" není platná emailová adresa.</value>
+    <value>"{0}" 不是一个有效的电子邮件地址。</value>
   </data>
 	<data name="Validation_FileName" xml:space="preserve">
-    <value>"{0}" obsahuje nepovolené znaky pro adresář nebo jméno souboru.</value>
+    <value>"{0}" 包含不能用于文件路径的字符。</value>
   </data>
 	<data name="Validation_Required" xml:space="preserve">
-    <value>"{0}" je povinné.</value>
+    <value>"{0}" 是必填项。</value>
   </data>
 	<data name="Validation_StringLength" xml:space="preserve">
-    <value>"{0}" musí obsahove méně než {1} znaků.</value>
+    <value>"{0}" 长度不得超过 {1} 字符。</value>
   </data>
 	<data name="Settings_Global_DirectoryHint" xml:space="preserve">
-		<value>Adresář, kde jsou uloženy gitové repozitáře.</value>
-	</data>
-	<data name="Delete_ConfirmationText" xml:space="preserve">
-		<value>Opravdu chcete smazat {0}?</value>
-	</data>
-	<data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
-		<value>Pokud není zaškrtnuto, pouze administrátor může přidávat nové uživatele a možnost registrace anonymních uživatelů je zakázána.</value>
-	</data>
-	<data name="Settings_Global_AllowUserRepositoryCreation_Hint" xml:space="preserve">
-		<value>Pokud není zaškrtnuto, pouze administrátor může vytvářet nové repozitáře.</value>
-	</data>
-	<data name="Delete_Back" xml:space="preserve">
-		<value>Zpět</value>
-	</data>
-	<data name="Delete_Confirm" xml:space="preserve">
-		<value>Smazat</value>
-	</data>
-	<data name="Delete_Title" xml:space="preserve">
-		<value>Potvrzení smazání</value>
-	</data>
-	<data name="Account_Create_AccountInformation" xml:space="preserve">
-		<value>Informace o uživateli</value>
-	</data>
-	<data name="Account_Create_ConfirmPassword" xml:space="preserve">
-		<value>Potvrdit heslo</value>
-	</data>
-	<data name="Account_Create_Email" xml:space="preserve">
-		<value>Email</value>
-	</data>
-	<data name="Account_Create_Name" xml:space="preserve">
-		<value>Jméno</value>
-	</data>
-	<data name="Account_Create_Password" xml:space="preserve">
-		<value>Heslo</value>
-	</data>
-	<data name="Account_Create_Submit" xml:space="preserve">
-		<value>Vytvořit</value>
-	</data>
-	<data name="Account_Create_Surname" xml:space="preserve">
-		<value>Příjmení</value>
-	</data>
-	<data name="Account_Create_Title" xml:space="preserve">
-		<value>Vytvořit nového uživatele</value>
-	</data>
-	<data name="Account_Create_Unsuccessfull" xml:space="preserve">
-		<value>Vytvoření nového uživatele se nezdařilo, opravte prosím chyby a zkuste znovu.</value>
-	</data>
-	<data name="Account_Create_Username" xml:space="preserve">
-		<value>Uživatelské jméno</value>
-	</data>
-	<data name="Account_Index_Create" xml:space="preserve">
-		<value>Přidat nového uživatele</value>
-	</data>
-	<data name="Account_Index_Users" xml:space="preserve">
-		<value>Uživatelé</value>
-	</data>
-	<data name="Account_Create_Success" xml:space="preserve">
-		<value>Uživatel byl úspěšně vytvořen.</value>
-	</data>
-	<data name="Repository_Tree_Download" xml:space="preserve">
-		<value>Stáhnout soubor</value>
-	</data>
-	<data name="Settings_Global_AllowAnonymousRegistration" xml:space="preserve">
-		<value>Povolit registraci anonymních uživatelů</value>
-	</data>
-	<data name="Settings_Global_AllowUserRepositoryCreation" xml:space="preserve">
-		<value>Povolit tvorbu repozitářů uživatelům</value>
+		<value>指定库保存的目录位置</value>
 	</data>
 	<data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
-		<value>Uživatel s tímto uživatelským jménem již existuje.</value>
+		<value>用户名已经被使用</value>
+	</data>
+	<data name="Account_Create_AccountInformation" xml:space="preserve">
+		<value>帐户信息</value>
+	</data>
+	<data name="Account_Create_ConfirmPassword" xml:space="preserve">
+		<value>确认密码</value>
+	</data>
+	<data name="Account_Create_Email" xml:space="preserve">
+		<value>电子邮件</value>
+	</data>
+	<data name="Account_Create_Name" xml:space="preserve">
+		<value>名</value>
+	</data>
+	<data name="Account_Create_Password" xml:space="preserve">
+		<value>密码</value>
+	</data>
+	<data name="Account_Create_Submit" xml:space="preserve">
+		<value>建立新账户</value>
+	</data>
+	<data name="Account_Create_Surname" xml:space="preserve">
+		<value>姓</value>
+	</data>
+	<data name="Account_Create_Title" xml:space="preserve">
+		<value>注册</value>
+	</data>
+	<data name="Account_Create_Unsuccessfull" xml:space="preserve">
+		<value>创建用户失败，请更正错误并重试</value>
+	</data>
+	<data name="Account_Create_Username" xml:space="preserve">
+		<value>用户名</value>
+	</data>
+	<data name="Account_Index_Create" xml:space="preserve">
+		<value>创建新用户</value>
+	</data>
+	<data name="Account_Index_Users" xml:space="preserve">
+		<value>用户</value>
+	</data>
+	<data name="Delete_ConfirmationText" xml:space="preserve">
+		<value>你真的要删除{0}?</value>
+	</data>
+	<data name="Account_Create_Success" xml:space="preserve">
+		<value>用户已成功创建</value>
+	</data>
+	<data name="Repository_Tree_Download" xml:space="preserve">
+		<value>下载文件</value>
+	</data>
+	<data name="Settings_Global_AllowAnonymousRegistration" xml:space="preserve">
+		<value>允许匿名注册</value>
+	</data>
+	<data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
+		<value>如果复选框被选中，只有管理员可以添加新用户并禁用​​匿名用户注册</value>
+	</data>
+	<data name="Settings_Global_AllowUserRepositoryCreation" xml:space="preserve">
+		<value>允许使用者储存库的建立</value>
+	</data>
+	<data name="Settings_Global_AllowUserRepositoryCreation_Hint" xml:space="preserve">
+		<value>如果复选框被选中，只有管理员可以建立资料库</value>
+	</data>
+	<data name="Delete_Back" xml:space="preserve">
+		<value>返回</value>
+	</data>
+	<data name="Delete_Confirm" xml:space="preserve">
+		<value>删除</value>
+	</data>
+	<data name="Delete_Title" xml:space="preserve">
+		<value>删除确认</value>
 	</data>
 </root>

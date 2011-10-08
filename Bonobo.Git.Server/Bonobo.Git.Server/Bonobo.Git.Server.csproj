@@ -134,6 +134,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_GlobalResources\Resources.ja-JP.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.ja-JP.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Resources.zh-CN.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.zh-CN.resx</DependentUpon>
+    </Compile>
     <Compile Include="AuthorizeRedirectAttribute.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -203,11 +213,13 @@
     <Content Include="Content\images\background.gif" />
     <Content Include="Content\images\branch_active.png" />
     <Content Include="Content\images\browser.png" />
+    <Content Include="Content\images\cn.png" />
     <Content Include="Content\images\commits.png" />
     <Content Include="Content\images\create.png" />
     <Content Include="Content\images\cz.png" />
     <Content Include="Content\images\detail.png" />
     <Content Include="Content\images\download_file.png" />
+    <Content Include="Content\images\jp.png" />
     <Content Include="favicon.ico" />
     <Content Include="Content\images\folder.png" />
     <Content Include="Content\images\address.png" />
@@ -373,9 +385,17 @@
       <LastGenOutput>Resources.cs-CZ.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="App_GlobalResources\Resources.ja-JP.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.ja-JP.designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="App_GlobalResources\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_GlobalResources\Resources.zh-CN.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.zh-CN.designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
