@@ -19,7 +19,9 @@ namespace Bonobo.Git.Server.Controllers
             return View(new GlobalSettingsModel
             {              
                 AllowAnonymousPush = UserConfigurationManager.AllowAnonymousPush,
-                RepositoryPath = UserConfigurationManager.Repositories
+                RepositoryPath = UserConfigurationManager.Repositories,
+                AllowAnonymousRegistration = UserConfigurationManager.AllowAnonymousRegistration,
+                AllowUserRepositoryCreation = UserConfigurationManager.AllowUserRepositoryCreation,
             });
         }
 
@@ -37,6 +39,8 @@ namespace Bonobo.Git.Server.Controllers
 
                         UserConfigurationManager.AllowAnonymousPush = model.AllowAnonymousPush;
                         UserConfigurationManager.Repositories = model.RepositoryPath;
+                        UserConfigurationManager.AllowAnonymousRegistration = model.AllowAnonymousRegistration;
+                        UserConfigurationManager.AllowUserRepositoryCreation = model.AllowUserRepositoryCreation;
                         UserConfigurationManager.Save();
 
                         ViewBag.UpdateSuccess = true;

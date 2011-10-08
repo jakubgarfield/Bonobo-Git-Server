@@ -126,8 +126,19 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (!String.IsNullOrEmpty(id))
             {
-                RepositoryRepository.Delete(id);
-                string path = Path.Combine(UserConfigurationManager.Repositories, id);
+                return View(new RepositoryDetailModel { Name = id });
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult Delete(RepositoryDetailModel model)
+        {
+            if (model != null && !String.IsNullOrEmpty(model.Name))
+            {
+                RepositoryRepository.Delete(model.Name);
+                string path = Path.Combine(UserConfigurationManager.Repositories, model.Name);
                 if (Directory.Exists(path))
                 {
                     Directory.Delete(path, true);

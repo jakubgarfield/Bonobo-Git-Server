@@ -5,7 +5,7 @@
 <h2>@Resources.Account_Create_Title</h2>
 @using (Html.BeginForm("Create", "Account", FormMethod.Post, new { @class = "uniForm" }))
 {    
-    @Html.ValidationSummary(false, Resources.Account_Create_Fail, new { @id = "errorMsg" })
+    @Html.ValidationSummary(false, Resources.Account_Create_Unsuccessfull, new { @id = "errorMsg" })
     <fieldset> 
       <h3>@Resources.Account_Create_AccountInformation</h3>    
       <div class="ctrlHolder"> 

@@ -98,6 +98,9 @@ div.uniForm #errorMsg { text-align: center;}
 .uniForm .primaryAction { margin-left: 1em;}
 .uniForm .detail .ctrlHolder label { width: 20%;}
 .uniForm .detail .ctrlHolder .content { float: right; width: 78%;}
+.uniForm .deleteForm h3 {background-color: #ffffff; color: Red;}
+.uniForm .deleteForm {width: 50%;}
+.uniForm .deleteForm .buttonHolder {background-color: #ffffff;}
 
 /* Language Bar */
 #languageBar a { display: block; background-image: url('images/cz.png'); width: 16px; height: 11px; float: right; margin-left: 10px; text-decoration:none; font-size:0px;}
@@ -149,5 +152,4 @@ div.uniForm #errorMsg { text-align: center;}
 
 .repositoryContent { padding-left: 1em; padding-right: 1em;}
 .commitDate {margin-top: 1em;}
-
 

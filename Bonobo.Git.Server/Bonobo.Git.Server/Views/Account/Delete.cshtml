@@ -1,0 +1,15 @@
+﻿@model Bonobo.Git.Server.Models.UserDetailModel
+@{
+    ViewBag.Title = Resources.Delete_Title;
+}
+@using (Html.BeginForm("Delete", "Account", FormMethod.Post, new { @class = "uniForm" }))
+{
+    <fieldset class="deleteForm">
+        <h3>@String.Format(Resources.Delete_ConfirmationText, Model.Username)</h3>
+        @Html.HiddenFor(m => m.Username)
+        <div class="buttonHolder"> 
+            @Html.ActionLink("← " + Resources.Delete_Back, "Index", null, new { @class = "secondaryAction" })
+            <input type="submit" value="@Resources.Delete_Confirm" class="primaryAction" />
+       </div>
+    </fieldset> 
+}

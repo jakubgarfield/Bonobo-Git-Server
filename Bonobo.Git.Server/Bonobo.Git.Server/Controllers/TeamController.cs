@@ -84,17 +84,28 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        [HttpPost]
         [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(string id)
         {
             if (!String.IsNullOrEmpty(id))
             {
-                TeamRepository.Delete(id);
+                return View(new TeamDetailModel { Name = id });
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
+        public ActionResult Delete(TeamDetailModel model)
+        {
+            if (model != null && !String.IsNullOrEmpty(model.Name))
+            {
+                TeamRepository.Delete(model.Name);
                 ViewBag.DeleteSuccess = true;
+                return View("Index", ConvertTeamModels(TeamRepository.GetAllTeams()));
             }
             return RedirectToAction("Index");
-            //return View("Index", ConvertTeamModels(TeamRepository.GetAllTeams()));
         }
 
         public ActionResult Detail(string id)

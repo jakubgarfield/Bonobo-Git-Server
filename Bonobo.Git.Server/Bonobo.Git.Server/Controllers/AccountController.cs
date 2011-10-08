@@ -46,9 +46,21 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (!String.IsNullOrEmpty(id))
             {
-                if (id != User.Identity.Name)
+                return View(new UserDetailModel { Username = id });
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
+        public ActionResult Delete(UserDetailModel model)
+        {
+            if (model != null && !String.IsNullOrEmpty(model.Username))
+            {
+                if (model.Username != User.Identity.Name)
                 {
-                    MembershipService.DeleteUser(id);
+                    MembershipService.DeleteUser(model.Username);
                     ViewBag.DeleteSuccess = true;
                 }
                 else

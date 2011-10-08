@@ -123,7 +123,6 @@ namespace Bonobo.Git.Server
             AreaRegistration.RegisterAllAreas();
             RegisterRoutes(RouteTable.Routes);
             RegisterDependencyResolver();
-
         }
 
         protected void Application_Error(object sender, EventArgs e)

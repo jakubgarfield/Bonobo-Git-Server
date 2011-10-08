@@ -2,4 +2,6 @@
 <Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <AllowAnonymousPush>false</AllowAnonymousPush>
   <Repositories>D:\Git</Repositories>
+  <AllowUserRepositoryCreation>false</AllowUserRepositoryCreation>
+  <AllowAnonymousRegistration>false</AllowAnonymousRegistration>
 </Configuration>

@@ -25,7 +25,19 @@
             @Html.TextBoxFor(m => m.RepositoryPath, new { @class = "textInput" })<em>*</em>
             <p class="formHint">
               @Html.ValidationMessageFor(m => m.RepositoryPath)
-              @Resources.GlobalSettings_DirectoryHint
+              @Resources.Settings_Global_DirectoryHint
+            </p> 
+        </div> 
+        <div class="ctrlHolder noLabel"> 
+            <label for="AllowAnonymousRegistration">@Html.CheckBoxFor(m => m.AllowAnonymousRegistration) @Model.GetType().GetDisplayValue("AllowAnonymousRegistration")</label>
+            <p class="formHint">     
+                @Resources.Settings_Global_AllowUserRepositoryCreation_Hint                       
+            </p> 
+        </div> 
+        <div class="ctrlHolder noLabel"> 
+            <label for="AllowUserRepositoryCreation">@Html.CheckBoxFor(m => m.AllowUserRepositoryCreation) @Model.GetType().GetDisplayValue("AllowUserRepositoryCreation")</label>
+            <p class="formHint">   
+                @Resources.Settings_Global_AllowAnonymousRegistration_Hint
             </p> 
         </div> 
         <div class="buttonHolder"> 

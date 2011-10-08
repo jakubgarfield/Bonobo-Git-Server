@@ -47,11 +47,11 @@ namespace Bonobo.Git.Server
         {
             get
             {
-                throw new NotImplementedException();
+                return Configuration.AllowAnonymousRegistration;
             }
             set
             {
-                throw new NotImplementedException();
+                Configuration.AllowAnonymousRegistration = value;
             }
         }
 
@@ -59,12 +59,11 @@ namespace Bonobo.Git.Server
         {
             get
             {
-                //TODO: implement
-                return true;
+                return Configuration.AllowUserRepositoryCreation;
             }
             set
             {
-                throw new NotImplementedException();
+                Configuration.AllowUserRepositoryCreation = value;
             }
         }
 

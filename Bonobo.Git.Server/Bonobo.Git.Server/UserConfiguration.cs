@@ -11,5 +11,7 @@ namespace Bonobo.Git.Server
     {
         public bool AllowAnonymousPush { get; set; }
         public string Repositories { get; set; }
+        public bool AllowUserRepositoryCreation { get; set; }
+        public bool AllowAnonymousRegistration { get; set; }
     }
 }
