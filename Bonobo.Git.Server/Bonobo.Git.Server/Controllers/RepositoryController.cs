@@ -141,12 +141,12 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (model != null && !String.IsNullOrEmpty(model.Name))
             {
-                RepositoryRepository.Delete(model.Name);
                 string path = Path.Combine(UserConfigurationManager.Repositories, model.Name);
                 if (Directory.Exists(path))
                 {
-                    Directory.Delete(path, true);
+                    DeleteFileSystemInfo(new DirectoryInfo(path));
                 }
+                RepositoryRepository.Delete(model.Name);
                 TempData["DeleteSuccess"] = true;
             }
             return RedirectToAction("Index");
@@ -188,12 +188,14 @@ namespace Bonobo.Git.Server.Controllers
                     }
                 }
                 path = path != null ? path.Replace(".browse", "") : null;
-                var browser = new RepositoryBrowser(Path.Combine(UserConfigurationManager.Repositories, id));
-                string branchName;
-                var files = browser.Browse(name, path, out branchName);
-                PopulateBranchesData(browser, branchName);
-                PopulateAddressBarData(name, path);
-                return DisplayFiles(files, path, id, download);
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfigurationManager.Repositories, id)))
+                {
+                    string branchName;
+                    var files = browser.Browse(name, path, out branchName);
+                    PopulateBranchesData(browser, branchName);
+                    PopulateAddressBarData(name, path);
+                    return DisplayFiles(files, path, id, download);
+                }
             }
             return View();
         }
@@ -204,11 +206,13 @@ namespace Bonobo.Git.Server.Controllers
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
             {
-                var browser = new RepositoryBrowser(Path.Combine(UserConfigurationManager.Repositories, id));
-                string currentBranchName;
-                var commits = browser.GetCommits(name, out currentBranchName);
-                PopulateBranchesData(browser, currentBranchName);
-                return View(new RepositoryCommitsModel { Commits = commits, Name = id });
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfigurationManager.Repositories, id)))
+                {
+                    string currentBranchName;
+                    var commits = browser.GetCommits(name, out currentBranchName);
+                    PopulateBranchesData(browser, currentBranchName);
+                    return View(new RepositoryCommitsModel { Commits = commits, Name = id });
+                }
             }
 
             return View();
@@ -220,10 +224,12 @@ namespace Bonobo.Git.Server.Controllers
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
             {
-                var browser = new RepositoryBrowser(Path.Combine(UserConfigurationManager.Repositories, id));
-                var model = browser.GetCommitDetail(commit);
-                model.Name = id;
-                return View(model);
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfigurationManager.Repositories, id)))
+                {
+                    var model = browser.GetCommitDetail(commit);
+                    model.Name = id;
+                    return View(model);
+                }
             }
 
             return View();
@@ -261,7 +267,10 @@ namespace Bonobo.Git.Server.Controllers
 
                     if (!model.IsImage && !model.IsTextFile)
                     {
-                        return File(new MemoryStream(model.File.Data), "application/octet-stream", model.File.Name);
+                        using (var stream = new MemoryStream(model.File.Data))
+                        {
+                            return File(stream, "application/octet-stream", model.File.Name);
+                        }
                     }
                 }
 
@@ -340,6 +349,22 @@ namespace Bonobo.Git.Server.Controllers
                 Teams = model.Teams,
                 AnonymousAccess = model.AllowAnonymous,
             };
+        }
+
+        private static void DeleteFileSystemInfo(FileSystemInfo fsi)
+        {
+            fsi.Attributes = FileAttributes.Normal;
+            var di = fsi as DirectoryInfo;
+
+            if (di != null)
+            {
+                foreach (var dirInfo in di.GetFileSystemInfos())
+                {
+                    DeleteFileSystemInfo(dirInfo);
+                }
+            }
+
+            fsi.Delete();
         }
     }
 }

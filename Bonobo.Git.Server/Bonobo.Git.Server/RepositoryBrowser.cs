@@ -7,10 +7,11 @@ using GitSharp;
 
 namespace Bonobo.Git.Server
 {
-    public class RepositoryBrowser
+    public class RepositoryBrowser : IDisposable
     {
         private Repository _repository;
         private string _repositoryPath;
+        private bool IsDisposed { get; set; }
 
         public RepositoryBrowser(string repositoryPath)
         {
@@ -160,6 +161,33 @@ namespace Bonobo.Git.Server
                 result.Add(model);
             }
             return result;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool isDisposing)
+        {
+            try
+            {
+                if (!this.IsDisposed)
+                {
+                    if (isDisposing)
+                    {
+                        if (_repository != null)
+                        {
+                            _repository.Dispose();
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                this.IsDisposed = true;
+            }
         }
 
         protected bool EnsureRepository()

@@ -108,13 +108,12 @@ namespace Bonobo.Git.Server.Controllers
             if (GitSharp.Repository.IsValid(directory.FullName, true))
             {
                 using (var repository = new GitSharp.Repository(directory.FullName))
+                using (var pack = new ReceivePack(repository))
                 {
-                    using (var pack = new ReceivePack(repository))
-                    {
-                        pack.setBiDirectionalPipe(false);
-                        pack.receive(GetInputStream(), Response.OutputStream, Response.OutputStream);
-                    }
+                    pack.setBiDirectionalPipe(false);
+                    pack.receive(GetInputStream(), Response.OutputStream, Response.OutputStream);
                 }
+
                 return new EmptyResult();
             }
             else
@@ -132,13 +131,12 @@ namespace Bonobo.Git.Server.Controllers
             if (GitSharp.Repository.IsValid(directory.FullName, true))
             {
                 using (var repository = new GitSharp.Repository(directory.FullName))
+                using (var pack = new UploadPack(repository))
                 {
-                    using (var pack = new UploadPack(repository))
-                    {
-                        pack.setBiDirectionalPipe(false);
-                        pack.Upload(GetInputStream(), Response.OutputStream, Response.OutputStream);
-                    }
+                    pack.setBiDirectionalPipe(false);
+                    pack.Upload(GetInputStream(), Response.OutputStream, Response.OutputStream);
                 }
+
                 return new EmptyResult();
             }
             else
