@@ -13,6 +13,8 @@ using System.Threading;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Controllers;
 using System.Diagnostics;
+using System.Web.Security;
+using System.Security.Principal;
 
 namespace Bonobo.Git.Server
 {
@@ -131,40 +133,116 @@ namespace Bonobo.Git.Server
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception exception = Server.GetLastError();
-            Response.Clear();
-            HttpException httpException = exception as HttpException;
+            if (exception != null)
+            {
+                Response.Clear();
+                HttpException httpException = exception as HttpException;
 
-            RouteData routeData = new RouteData();
-            routeData.Values.Add("controller", "Home");
-            if (httpException == null)
-            {
-                routeData.Values.Add("action", "Error");
-                if (exception != null)
+                RouteData routeData = new RouteData();
+                routeData.Values.Add("controller", "Home");
+                if (httpException == null)
                 {
-                    Trace.TraceError("Error occured and caught in Global.asax - {0}", exception.ToString());
-                }
-            }
-            else
-            {
-                switch (httpException.GetHttpCode())
-                {
-                    case 404:
-                        routeData.Values.Add("action", "PageNotFound");
-                        break;
-                    case 500:
-                        routeData.Values.Add("action", "ServerError");
-                        Trace.TraceError("Server Error occured and caught in Global.asax - {0}", exception.ToString());
-                        break;
-                    default:
-                        routeData.Values.Add("action", "Error");
+                    routeData.Values.Add("action", "Error");
+                    if (exception != null)
+                    {
                         Trace.TraceError("Error occured and caught in Global.asax - {0}", exception.ToString());
-                        break;
+                    }
+                }
+                else
+                {
+                    switch (httpException.GetHttpCode())
+                    {
+                        case 404:
+                            routeData.Values.Add("action", "PageNotFound");
+                            break;
+                        case 500:
+                            routeData.Values.Add("action", "ServerError");
+                            Trace.TraceError("Server Error occured and caught in Global.asax - {0}", exception.ToString());
+                            break;
+                        default:
+                            routeData.Values.Add("action", "Error");
+                            Trace.TraceError("Error occured and caught in Global.asax - {0}", exception.ToString());
+                            break;
+                    }
+                }
+                Server.ClearError();
+                Response.TrySkipIisCustomErrors = true;
+                IController errorController = new HomeController();
+                errorController.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
+            }
+        }
+
+        protected void Application_AuthenticateRequest(object sender, EventArgs e)
+        {
+            if (Context.User == null)
+            {
+                var oldTicket = ExtractTicketFromCookie(Context, FormsAuthentication.FormsCookieName);
+                if (oldTicket != null && !oldTicket.Expired)
+                {
+                    var ticket = oldTicket;
+                    if (FormsAuthentication.SlidingExpiration)
+                    {
+                        ticket = FormsAuthentication.RenewTicketIfOld(oldTicket);
+                        if (ticket == null)
+                        {
+                            return;
+                        }
+                    }
+
+                    Context.User = new GenericPrincipal(new FormsIdentity(ticket), new string[0]);
+                    if (ticket != oldTicket)
+                    {
+                        string cookieValue = FormsAuthentication.Encrypt(ticket);
+                        var cookie = Context.Request.Cookies[FormsAuthentication.FormsCookieName] ?? new HttpCookie(FormsAuthentication.FormsCookieName, cookieValue) { Path = ticket.CookiePath };
+                        if (ticket.IsPersistent)
+                        {
+                            cookie.Expires = ticket.Expiration;
+                        }
+                        cookie.Value = cookieValue;
+                        cookie.Secure = FormsAuthentication.RequireSSL;
+                        cookie.HttpOnly = true;
+                        if (FormsAuthentication.CookieDomain != null)
+                        {
+                            cookie.Domain = FormsAuthentication.CookieDomain;
+                        }
+                        Context.Response.Cookies.Remove(cookie.Name);
+                        Context.Response.Cookies.Add(cookie);
+                    }
                 }
             }
-            Server.ClearError();
-            Response.TrySkipIisCustomErrors = true;
-            IController errorController = new HomeController();
-            errorController.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
+        }
+
+        private static FormsAuthenticationTicket ExtractTicketFromCookie(HttpContext context, string name)
+        {
+            FormsAuthenticationTicket ticket = null;
+            string encryptedTicket = null;
+
+            var cookie = context.Request.Cookies[name];
+            if (cookie != null)
+            {
+                encryptedTicket = cookie.Value;
+            }
+
+            if (!string.IsNullOrEmpty(encryptedTicket))
+            {
+                try
+                {
+                    ticket = FormsAuthentication.Decrypt(encryptedTicket);
+                }
+                catch
+                {
+                    context.Request.Cookies.Remove(name);
+                }
+
+                if (ticket != null && !ticket.Expired)
+                {
+                    return ticket;
+                }
+
+                context.Request.Cookies.Remove(name);
+            }
+
+            return null;
         }
     }
 }

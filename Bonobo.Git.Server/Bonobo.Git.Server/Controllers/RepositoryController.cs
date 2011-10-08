@@ -28,12 +28,13 @@ namespace Bonobo.Git.Server.Controllers
         [Dependency]
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
 
+        [FormsAuthorizeAttribute]
         public ActionResult Index()
         {
             return View(GetIndexModel());
         }
 
-        [RepositoryAuthorizeRedirect(RequiresRepositoryAdministrator = true)]
+        [FormsAuthorizeRepository(RequiresRepositoryAdministrator = true)]
         public ActionResult Edit(string id)
         {
             if (!String.IsNullOrEmpty(id))
@@ -46,7 +47,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        [RepositoryAuthorizeRedirect(RequiresRepositoryAdministrator = true)]
+        [FormsAuthorizeRepository(RequiresRepositoryAdministrator = true)]
         public ActionResult Edit(RepositoryDetailModel model)
         {
             if (ModelState.IsValid)
@@ -65,6 +66,7 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
+        [FormsAuthorizeAttribute]
         public ActionResult Create()
         {
             if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfigurationManager.AllowUserRepositoryCreation)
@@ -81,6 +83,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [FormsAuthorizeAttribute]
         public ActionResult Create(RepositoryDetailModel model)
         {
             if (model != null && !String.IsNullOrEmpty(model.Name))
@@ -121,7 +124,7 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        [RepositoryAuthorizeRedirect(RequiresRepositoryAdministrator = true)]
+        [FormsAuthorizeRepository(RequiresRepositoryAdministrator = true)]
         public ActionResult Delete(string id)
         {
             if (!String.IsNullOrEmpty(id))
@@ -133,6 +136,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [FormsAuthorizeRepository(RequiresRepositoryAdministrator = true)]
         public ActionResult Delete(RepositoryDetailModel model)
         {
             if (model != null && !String.IsNullOrEmpty(model.Name))
@@ -148,7 +152,7 @@ namespace Bonobo.Git.Server.Controllers
             return RedirectToAction("Index");
         }
 
-        [RepositoryAuthorizeRedirect]
+        [FormsAuthorizeRepository]
         public ActionResult Detail(string id)
         {
             ViewBag.ID = id;
@@ -164,7 +168,7 @@ namespace Bonobo.Git.Server.Controllers
             return View();
         }
 
-        [RepositoryAuthorizeRedirect]
+        [FormsAuthorizeRepository]
         public ActionResult Tree(string id, string name, string path)
         {
             ViewBag.ID = id;
@@ -194,7 +198,7 @@ namespace Bonobo.Git.Server.Controllers
             return View();
         }
 
-        [RepositoryAuthorizeRedirect]
+        [FormsAuthorizeRepository]
         public ActionResult Commits(string id, string name)
         {
             ViewBag.ID = id;
@@ -210,7 +214,7 @@ namespace Bonobo.Git.Server.Controllers
             return View();
         }
 
-        [RepositoryAuthorizeRedirect]
+        [FormsAuthorizeRepository]
         public ActionResult Commit(string id, string commit)
         {
             ViewBag.ID = id;

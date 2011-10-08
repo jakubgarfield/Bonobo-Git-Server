@@ -20,6 +20,7 @@ namespace Bonobo.Git.Server.Controllers
         [Dependency]
         public IFormsAuthenticationService FormsAuthenticationService { get; set; }
 
+        [FormsAuthorizeAttribute]
         public ActionResult Detail(string id)
         {
             if (!String.IsNullOrEmpty(id))
@@ -41,7 +42,7 @@ namespace Bonobo.Git.Server.Controllers
             return View();
         }
 
-        [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
+        [FormsAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(string id)
         {
             if (!String.IsNullOrEmpty(id))
@@ -53,7 +54,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
+        [FormsAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(UserDetailModel model)
         {
             if (model != null && !String.IsNullOrEmpty(model.Username))
@@ -71,17 +72,18 @@ namespace Bonobo.Git.Server.Controllers
             return RedirectToAction("Index");
         }
 
-        [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
+        [FormsAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index()
         {
             return View(GetDetailUsers());
         }
 
+        [FormsAuthorizeAttribute]
         public ActionResult Edit(string id)
         {
             if (User.Identity.Name != id && !User.IsInRole(Definitions.Roles.Administrator))
             {
-                return new RedirectResult("Unauthorized");
+                return RedirectToAction("Unauthorized", "Home");
             }
 
             if (!String.IsNullOrEmpty(id))
@@ -107,6 +109,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [FormsAuthorizeAttribute]
         public ActionResult Edit(UserEditModel model)
         {
             if (ModelState.IsValid)
@@ -151,7 +154,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if ((Request.IsAuthenticated && !User.IsInRole(Definitions.Roles.Administrator)) || (!Request.IsAuthenticated && !UserConfigurationManager.AllowAnonymousRegistration))
             {
-                return new RedirectResult("Unauthorized");
+                return RedirectToAction("Unauthorized", "Home");
             }
 
             return View();
@@ -159,7 +162,12 @@ namespace Bonobo.Git.Server.Controllers
 
         [HttpPost]
         public ActionResult Create(UserCreateModel model)
-        {           
+        {
+            if ((Request.IsAuthenticated && !User.IsInRole(Definitions.Roles.Administrator)) || (!Request.IsAuthenticated && !UserConfigurationManager.AllowAnonymousRegistration))
+            {
+                return RedirectToAction("Unauthorized", "Home");
+            }
+
             while (!String.IsNullOrEmpty(model.Username) && model.Username.Last() == ' ')
             {
                 model.Username = model.Username.Substring(0, model.Username.Length - 1);

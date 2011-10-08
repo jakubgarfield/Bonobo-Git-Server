@@ -8,7 +8,7 @@ using Bonobo.Git.Server.Security;
 
 namespace Bonobo.Git.Server
 {
-    public class RepositoryAuthorizeRedirectAttribute : AuthorizeRedirectAttribute
+    public class FormsAuthorizeRepositoryAttribute : FormsAuthorizeAttribute
     {
         [Dependency]
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }

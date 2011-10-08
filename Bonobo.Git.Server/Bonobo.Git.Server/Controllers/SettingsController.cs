@@ -13,7 +13,7 @@ namespace Bonobo.Git.Server.Controllers
 {
     public class SettingsController : Controller
     {
-        [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
+        [FormsAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index()
         {            
             return View(new GlobalSettingsModel
@@ -26,7 +26,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        [AuthorizeRedirect(Roles = Definitions.Roles.Administrator)]
+        [FormsAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index(GlobalSettingsModel model)
         {
             if (ModelState.IsValid)

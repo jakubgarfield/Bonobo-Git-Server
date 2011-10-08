@@ -188,8 +188,6 @@ namespace Bonobo.Git.Server.Controllers
 
         private ActionResult UnauthorizedResult()
         {
-            HttpContext.Response.StatusCode = 401;
-            HttpContext.Response.End();
             return new HttpStatusCodeResult(401);
         }
 

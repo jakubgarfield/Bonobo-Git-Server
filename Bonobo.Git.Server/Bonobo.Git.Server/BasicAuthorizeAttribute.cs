@@ -37,9 +37,7 @@ namespace Bonobo.Git.Server
                 }
                 else
                 {
-                    filterContext.HttpContext.Response.StatusCode = 401;
-                    filterContext.HttpContext.Response.End();
-                    filterContext.Result = new HttpUnauthorizedResult();
+                    filterContext.Result = new HttpStatusCodeResult(401);
                 }
             }
             else
@@ -53,12 +51,12 @@ namespace Bonobo.Git.Server
                 else
                 {
                     filterContext.HttpContext.Response.Clear();
-                    filterContext.HttpContext.Response.StatusCode = 401;
                     filterContext.HttpContext.Response.StatusDescription = "Unauthorized";
                     filterContext.HttpContext.Response.AddHeader("WWW-Authenticate", "Basic realm=\"Secure Area\"");
                     filterContext.HttpContext.Response.Write("401, please authenticate");
+                    filterContext.HttpContext.Response.StatusCode = 401;
+                    filterContext.Result = new EmptyResult();
                     filterContext.HttpContext.Response.End();
-                    filterContext.Result = new HttpUnauthorizedResult();
                 }
             }
         }

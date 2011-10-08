@@ -144,7 +144,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.zh-CN.resx</DependentUpon>
     </Compile>
-    <Compile Include="AuthorizeRedirectAttribute.cs" />
+    <Compile Include="BasicAuthorizeAttribute.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
@@ -164,18 +164,18 @@
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="FileActionResult.cs" />
     <Compile Include="FileNameAttribute.cs" />
+    <Compile Include="FormsAuthorizeAttribute.cs" />
     <Compile Include="Models\HomeModels.cs" />
     <Compile Include="Models\RepositoryModels.cs" />
     <Compile Include="Models\SettingsModels.cs" />
     <Compile Include="Models\TeamModels.cs" />
-    <Compile Include="BasicAuthorizeAttribute.cs" />
     <Compile Include="Definitions.cs" />
     <Compile Include="App_GlobalResources\Resources.cs-CZ.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.cs-CZ.resx</DependentUpon>
     </Compile>
-    <Compile Include="RepositoryAuthorizeRedirectAttribute.cs" />
+    <Compile Include="FormsAuthorizeRepositoryAttribute.cs" />
     <Compile Include="RepositoryBrowser.cs" />
     <Compile Include="Security\EFMembershipService.cs" />
     <Compile Include="Security\EFRepositoryPermissionService.cs" />

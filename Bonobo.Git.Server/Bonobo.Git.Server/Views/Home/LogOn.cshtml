@@ -22,6 +22,7 @@
           @Html.ValidationMessageFor(m => m.Password)
         </p> 
       </div> 
+      @Html.HiddenFor(m => m.ReturnUrl)
       <div class="buttonHolder"> 
         <button type="reset" class="secondaryAction">← @Resources.Reset</button> 
         <input type="submit" value="@Resources.Home_LogOn_LogOn" class="primaryAction" />

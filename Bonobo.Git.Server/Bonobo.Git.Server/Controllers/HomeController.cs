@@ -19,11 +19,13 @@ namespace Bonobo.Git.Server.Controllers
         [Dependency]
         public IFormsAuthenticationService FormsAuthenticationService { get; set; }
 
+        [FormsAuthorize]
         public ActionResult Index()
         {
             return RedirectToAction("Index", "Repository");
         }
 
+        [FormsAuthorize]
         public ActionResult About()
         {
             return View();
@@ -44,22 +46,22 @@ namespace Bonobo.Git.Server.Controllers
             return View();
         }
 
-        public ActionResult LogOn()
+        public ActionResult LogOn(string returnUrl)
         {
-            return View();
+            return View(new LogOnModel { ReturnUrl = returnUrl });
         }
 
         [HttpPost]
-        public ActionResult LogOn(LogOnModel model, string returnUrl)
+        public ActionResult LogOn(LogOnModel model)
         {
             if (ModelState.IsValid)
             {
                 if (MembershipService.ValidateUser(model.Username, model.Password))
                 {
                     FormsAuthenticationService.SignIn(model.Username, model.RememberMe);
-                    if (Url.IsLocalUrl(returnUrl))
+                    if (Url.IsLocalUrl(model.ReturnUrl))
                     {
-                        return Redirect(returnUrl);
+                        return Redirect(model.ReturnUrl);
                     }
                     else
                     {
@@ -75,6 +77,7 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
+        [FormsAuthorizeAttribute]
         public ActionResult LogOff()
         {
             FormsAuthenticationService.SignOut();
