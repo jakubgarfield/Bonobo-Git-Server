@@ -71,7 +71,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfigurationManager.AllowUserRepositoryCreation)
             {
-                return new RedirectResult("Unauthorized");
+                return RedirectToAction("Unauthorized", "Home");
             }
 
             var model = new RepositoryDetailModel
@@ -86,6 +86,11 @@ namespace Bonobo.Git.Server.Controllers
         [FormsAuthorizeAttribute]
         public ActionResult Create(RepositoryDetailModel model)
         {
+            if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfigurationManager.AllowUserRepositoryCreation)
+            {
+                return RedirectToAction("Unauthorized", "Home");
+            }
+
             if (model != null && !String.IsNullOrEmpty(model.Name))
             {
                 model.Name = Regex.Replace(model.Name, @"\s", "");

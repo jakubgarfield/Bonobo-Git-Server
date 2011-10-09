@@ -1,0 +1,27 @@
+﻿----------------------------------------------------------
+Version 1.1.0.0 
+----------------------------------------------------------
+9 October 2011
+
+FEATURES
+	•	Administrator can create new user accounts
+	•	Settings
+		o	Disable anonymous user registration (by default user registration is disabled and only administrator can create new users)
+		o	Disable creation repository by users (by default only administrator can create new repositories)
+	•	Confirmation for Team, User and Repository removals
+		o	Security hole with delete on GET removed
+	•	Download link for text based files in repository browser
+	•	Chinese translation added
+	•	Japanese translation added
+	•	Reasonable states returned to git client if authentication failed or if repository does not exists
+
+BUG FIXES
+	•	Fixed issue with UserConfiguration (config.xml) was invalid after overwriting  with custom values
+	•	MaxRequestLength extended to 100MB for large file upload
+	•	RequestLimit for IIS 7 extended to 100MB for large file upload
+	•	Fixed redirecting from Create actions
+	•	Fixed URL redirecting after Create and Delete actions
+	•	Favicon application error fixed
+	•	Fixed FormsAuthentication redirect call after basic authentication returns 401(and fire up runtime exception)
+	•	Fixed repository delete with read only files
+

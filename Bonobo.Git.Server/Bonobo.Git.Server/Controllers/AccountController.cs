@@ -112,6 +112,11 @@ namespace Bonobo.Git.Server.Controllers
         [FormsAuthorizeAttribute]
         public ActionResult Edit(UserEditModel model)
         {
+            if (User.Identity.Name != model.Name && !User.IsInRole(Definitions.Roles.Administrator))
+            {
+                return RedirectToAction("Unauthorized", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 bool valid = true;

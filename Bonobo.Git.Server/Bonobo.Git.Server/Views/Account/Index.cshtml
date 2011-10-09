@@ -4,7 +4,7 @@
     ViewBag.Title = Resources.Account_Index_Title;
 }
 <h2>@Resources.Account_Index_Title</h2>
-@if (ViewBag.CreateSuccess != null && ViewBag.CreateSuccess)
+@if (TempData["CreateSuccess"] != null && (bool)TempData["CreateSuccess"])
 {
     <div class="uniForm">    
         <div id="okMsg">
@@ -12,9 +12,9 @@
         </div>
     </div>
 }
-@if (TempData["CreateSuccess"] != null)
+@if (TempData["DeleteSuccess"] != null)
 {
-    if ((bool)TempData["CreateSuccess"])
+    if ((bool)TempData["DeleteSuccess"])
     {
         <div class="uniForm">    
         <div id="okMsg">

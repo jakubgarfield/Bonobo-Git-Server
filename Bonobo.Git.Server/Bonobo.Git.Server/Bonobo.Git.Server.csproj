@@ -204,6 +204,7 @@
   <ItemGroup>
     <Content Include="App_Data\config.xml" />
     <None Include="App_Data\config.Debug.xml" />
+    <Content Include="changelog.txt" />
     <Content Include="Content\images\action_added.gif" />
     <Content Include="Content\images\action_copied.gif" />
     <Content Include="Content\images\action_deleted.gif" />
