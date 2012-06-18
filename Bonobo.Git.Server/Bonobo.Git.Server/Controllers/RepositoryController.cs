@@ -269,13 +269,10 @@ namespace Bonobo.Git.Server.Controllers
                             model.IsImage = FileDisplayHandler.IsImage(model.File.Name);
                         }
                     }
-
+                    
                     if (!model.IsImage && !model.IsTextFile)
                     {
-                        using (var stream = new MemoryStream(model.File.Data))
-                        {
-                            return File(stream, "application/octet-stream", model.File.Name);
-                        }
+                        return File(model.File.Data, "application/octet-stream", model.File.Name);
                     }
                 }
 
