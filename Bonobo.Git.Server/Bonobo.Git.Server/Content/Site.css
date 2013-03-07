@@ -101,6 +101,22 @@ div.uniForm #errorMsg { text-align: center;}
 .uniForm .deleteForm h3 {background-color: #ffffff; color: Red;}
 .uniForm .deleteForm {width: 50%;}
 .uniForm .deleteForm .buttonHolder {background-color: #ffffff;}
+.uniForm ul.checkboxList
+{
+	height:12em;
+	overflow:auto;
+	border: 1px solid rgb(170, 170, 170);
+	padding: 3px;
+}
+.uniForm ul.checkboxList li
+{
+	margin-bottom:3px;
+}
+.uniForm ul.checkboxList li label
+{
+	display: inline;
+	font-size:1em;
+}
 
 /* Language Bar */
 #languageBar a { display: block; background-image: url('images/cz.png'); width: 16px; height: 11px; float: right; margin-left: 10px; text-decoration:none; font-size:0px;}
