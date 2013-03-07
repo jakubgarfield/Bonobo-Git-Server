@@ -6,22 +6,7 @@ Bonobo Git Server for Windows is a web application you can install on your IIS a
 Bonobo Git Server is a [open-source](http://bonobogitserver.codeplex.com/license) project and you can find the source on [github](https://github.com/jakubgarfield/Bonobo-Git-Server).
 
 #### Do you want me to continue supporting this project?
-If your company feels that it can benefit from Bonobo Git Server but is missing some features and is afraid of the future development, please, contact me <script type="text/javascript">
-//<![CDATA[
-<!--
-var x="function f(x){var i,o=\"\",ol=x.length,l=ol;while(x.charCodeAt(l/13)!" +
-"=79){try{x+=x;l+=l;}catch(e){}}for(i=l-1;i>=0;i--){o+=x.charAt(i);}return o" +
-".substr(0,ol);}f(\")33,\\\"710\\\\300\\\\t\\\\030\\\\220\\\\120\\\\O200\\\\" +
-"020\\\\RF]KBTL@530\\\\000\\\\}Ytmsit~vpT6waxs[0cglaN(U5bjqmw\\\"\\\\#\\\\\\" +
-"\\320\\\\220\\\\730\\\\U620\\\\020\\\\130\\\\230\\\\120\\\\5r\\\\030\\\\100" +
-"\\\\730\\\\500\\\\000\\\\n\\\\200\\\\400\\\\010\\\\D310\\\\530\\\\410\\\\70" +
-"0\\\\710\\\\^410\\\\620\\\\410\\\\7=7zn\\\\i45<$j)zfj.RYNQDC430\\\\D@IG]EKF" +
-"\\\"(f};o nruter};))++y(^)i(tAedoCrahc.x(edoCrahCmorf.gnirtS=+o;721=%y;++y)" +
-"33<i(fi{)++i;l<i;0=i(rof;htgnel.x=l,\\\"\\\"=o,i rav{)y,x(f noitcnuf\")"     ;
-while(x=eval(x));
-//-->
-//]]>
-</script>. Current status of the project is freezed but it can change with a proper support.
+If your company feels that it can benefit from Bonobo Git Server but is missing some features and is afraid of the future development, please, contact me with direct message. Current status of the project is freezed but it can change with a proper support.
 
 Downloads
 ----------------------------------------------
