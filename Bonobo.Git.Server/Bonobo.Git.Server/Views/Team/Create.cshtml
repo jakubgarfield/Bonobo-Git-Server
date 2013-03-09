@@ -23,7 +23,19 @@
         </div> 
         <div class="ctrlHolder"> 
             @Html.LabelFor(m => m.Members)
-            @Html.ListBoxFor(m => m.Members, new MultiSelectList(ViewData["AvailableUsers"] as System.Collections.IEnumerable), new { @class = "selectInput medium" })  
+            <ul class="checkboxList medium">
+                @{
+                    var users = ViewData["AvailableUsers"] as string[];
+                    Array.Sort<string>(users);
+                }
+                @foreach (string user in users)
+                {
+                    <li>
+                        <input type="checkbox" name="Members" id="Members_@(user)" value="@user" />
+                        <label for="Members_@(user)">@user</label>
+                    </li>
+                }                        
+            </ul>
             <p class="formHint">
             </p> 
         </div>
