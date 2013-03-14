@@ -30,19 +30,13 @@ else
             </div> 
             <div class="ctrlHolder"> 
                 @Html.LabelFor(m => m.Members)             
-                <ul class="checkboxList medium">
-                    @{
-                        var users = ViewData["AvailableUsers"] as string[];
-                        Array.Sort<string>(users);
-                    }
-                    @foreach (string user in users)
-                    {
-                        <li>
-                            <input type="checkbox" name="Members" id="Members_@(user)" @(Model.Members.Contains(user) ? "checked=\"checked\"" : "") value="@user" />
-                            <label for="Members_@(user)">@user</label>
-                        </li>
-                    }                        
-                </ul>
+                @{
+                    var users = (from u in ViewData["AvailableUsers"] as string[]
+                                 orderby u
+                                 select new SelectListItem() { Value = u, Text = u, Selected = Model.Members.Contains(u) }).ToArray();
+                }
+            
+                @Html.CheckboxList("Members", users, new { @class = "checkboxList medium" })                    
               <p class="formHint">                  
               </p> 
             </div>
