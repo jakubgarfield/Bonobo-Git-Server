@@ -40,8 +40,8 @@ namespace Bonobo.Git.Server.Helpers
 
                     input.Attributes.Add(new KeyValuePair<string, string>("type", "checkbox"));
                     input.Attributes.Add(new KeyValuePair<string, string>("name", name));
+                    input.Attributes.Add(new KeyValuePair<string, string>("value", listItem.Value));
                     input.Attributes.Add(new KeyValuePair<string, string>("id", name + "_" + listItem.Value));
-
                     if (listItem.Selected)
                     {
                         input.Attributes.Add(new KeyValuePair<string, string>("checked", "checked"));
