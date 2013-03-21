@@ -130,7 +130,7 @@ namespace Bonobo.Git.Server
             RegisterDependencyResolver();
         }
 
-        /*protected void Application_Error(object sender, EventArgs e)
+        protected void Application_Error(object sender, EventArgs e)
         {
             Exception exception = Server.GetLastError();
             if (exception != null)
@@ -170,7 +170,7 @@ namespace Bonobo.Git.Server
                 IController errorController = new HomeController();
                 errorController.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
             }
-        }*/
+        }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
         {

@@ -38,11 +38,11 @@ else
             <div class="ctrlHolder">
                 @Html.LabelFor(m => m.Users)
                 @{
-                    var Users = (from u in ViewData["AvailableUsers"] as string[] orderby u
+                    var users = (from u in ViewData["AvailableUsers"] as string[] orderby u
                                           select new SelectListItem() { Value = u, Text = u}).ToArray();
                  }
                 
-                  @Html.CheckboxListFor(m => m.Users, Users, new { @class = "checkboxList medium" }) 
+                  @Html.CheckboxListFor(m => m.Users, users, new { @class = "checkboxList medium" }) 
                 <p class="formHint">
                     @Resources.Repository_UsersHint
                 </p>
