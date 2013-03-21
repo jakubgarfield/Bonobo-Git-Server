@@ -1,0 +1,711 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
+    <value>Kullanıcı adı sistemde kayıtlı</value>
+  </data>
+  <data name="Account_Create_AccountInformation" xml:space="preserve">
+    <value>Hesap Bilgeleri</value>
+  </data>
+  <data name="Account_Create_ConfirmPassword" xml:space="preserve">
+    <value>Şifreyi Onayla</value>
+  </data>
+  <data name="Account_Create_Email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="Account_Create_Name" xml:space="preserve">
+    <value>Adı</value>
+  </data>
+  <data name="Account_Create_Password" xml:space="preserve">
+    <value>Şifre</value>
+  </data>
+  <data name="Account_Create_Submit" xml:space="preserve">
+    <value>Yeni Hesap Oluştur</value>
+  </data>
+  <data name="Account_Create_Success" xml:space="preserve">
+    <value>Kullanıcı başarıyla sisteme eklendi.</value>
+  </data>
+  <data name="Account_Create_Surname" xml:space="preserve">
+    <value>Soyadı</value>
+  </data>
+  <data name="Account_Create_Title" xml:space="preserve">
+    <value>Yeni Hesap Oluştur</value>
+  </data>
+  <data name="Account_Create_Unsuccessfull" xml:space="preserve">
+    <value>Hesap oluşturma başarısız oldu.Hataları düzeltin ve tekrar deneyin.</value>
+  </data>
+  <data name="Account_Create_Username" xml:space="preserve">
+    <value>Kullanıcı Adı</value>
+  </data>
+  <data name="Account_Delete_DeleteCurrentUser" xml:space="preserve">
+    <value>Kendinizi silemezsiniz</value>
+  </data>
+  <data name="Account_Delete_Success" xml:space="preserve">
+    <value>Kullanıcı silindi</value>
+  </data>
+  <data name="Account_Detail_Back" xml:space="preserve">
+    <value>Listeye dön</value>
+  </data>
+  <data name="Account_Detail_Delete" xml:space="preserve">
+    <value>Sil</value>
+  </data>
+  <data name="Account_Detail_Edit" xml:space="preserve">
+    <value>Düzenle</value>
+  </data>
+  <data name="Account_Detail_Email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="Account_Detail_Name" xml:space="preserve">
+    <value>Adı</value>
+  </data>
+  <data name="Account_Detail_Roles" xml:space="preserve">
+    <value>Rol</value>
+  </data>
+  <data name="Account_Detail_Surname" xml:space="preserve">
+    <value>Soyadı</value>
+  </data>
+  <data name="Account_Detail_Title" xml:space="preserve">
+    <value>Kullanıcı Detayı</value>
+  </data>
+  <data name="Account_Detail_Username" xml:space="preserve">
+    <value>Kullanıcı Adı</value>
+  </data>
+  <data name="Account_Edit_AccountInformation" xml:space="preserve">
+    <value>Hesap Bilgileri</value>
+  </data>
+  <data name="Account_Edit_Back" xml:space="preserve">
+    <value>Listeye dön</value>
+  </data>
+  <data name="Account_Edit_Cancel" xml:space="preserve">
+    <value>Vazgeç</value>
+  </data>
+  <data name="Account_Edit_CannotRemoveYourselfFromAdminRole" xml:space="preserve">
+    <value>Yöneticiler kendini silemez.</value>
+  </data>
+  <data name="Account_Edit_ConfirmPassword" xml:space="preserve">
+    <value>Şifreyi Onayla</value>
+  </data>
+  <data name="Account_Edit_CurrentPassword" xml:space="preserve">
+    <value>Geçerli Şifre</value>
+  </data>
+  <data name="Account_Edit_Email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="Account_Edit_Name" xml:space="preserve">
+    <value>Adı</value>
+  </data>
+  <data name="Account_Edit_NewPassword" xml:space="preserve">
+    <value>Yeni Şifre</value>
+  </data>
+  <data name="Account_Edit_OldPasswordEmpty" xml:space="preserve">
+    <value>Şifre boş olamaz</value>
+  </data>
+  <data name="Account_Edit_OldPasswordIncorrect" xml:space="preserve">
+    <value>Şifreniz eşleşmiyor</value>
+  </data>
+  <data name="Account_Edit_Roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="Account_Edit_RolesHint" xml:space="preserve">
+    <value>Administrators have access to all repositories and are allowed to do all operations with repositories, teams and users.</value>
+  </data>
+  <data name="Account_Edit_Submit" xml:space="preserve">
+    <value>Kaydet</value>
+  </data>
+  <data name="Account_Edit_Surname" xml:space="preserve">
+    <value>Soyadı</value>
+  </data>
+  <data name="Account_Edit_Title" xml:space="preserve">
+    <value>Kullanıcı Hesabı Düzenle</value>
+  </data>
+  <data name="Account_Edit_Unsuccessfull" xml:space="preserve">
+    <value>Hesap düzenleme başarısız oldu.Hataları düzeltin ve tekrar deneyin.</value>
+  </data>
+  <data name="Account_Edit_UpdateSuccess" xml:space="preserve">
+    <value>Hesap başarıyla güncellendi.</value>
+  </data>
+  <data name="Account_Index_Create" xml:space="preserve">
+    <value>Yeni kullanıcı oluştur</value>
+  </data>
+  <data name="Account_Index_Title" xml:space="preserve">
+    <value>Kullanıcı Yönetimi</value>
+  </data>
+  <data name="Account_Index_Users" xml:space="preserve">
+    <value>Kullanıcılar</value>
+  </data>
+  <data name="DateTimeFormat" xml:space="preserve">
+    <value>dd/MM/yyyy hh:mm</value>
+  </data>
+  <data name="Delete_Back" xml:space="preserve">
+    <value>Geri</value>
+  </data>
+  <data name="Delete_Confirm" xml:space="preserve">
+    <value>Sil</value>
+  </data>
+  <data name="Delete_ConfirmationText" xml:space="preserve">
+    <value>Gerçekten {0} silmek istediğinizden emin misiniz?</value>
+  </data>
+  <data name="Delete_Title" xml:space="preserve">
+    <value>Silme Onayı</value>
+  </data>
+  <data name="GitAccess_ProjectForbidden" xml:space="preserve">
+    <value>Doesn't have permission for requested project.</value>
+  </data>
+  <data name="Grid_Delete" xml:space="preserve">
+    <value>Sil</value>
+  </data>
+  <data name="Grid_Edit" xml:space="preserve">
+    <value>Düzenle</value>
+  </data>
+  <data name="Home_About_Thanks" xml:space="preserve">
+    <value>Teşekkürler!</value>
+  </data>
+  <data name="Home_About_Thanks_p" xml:space="preserve">
+    <value>Bonobo Git Server is using few opensource and freeware projects. Many thanks to all authors and contributors for their great work.</value>
+  </data>
+  <data name="Home_About_Title" xml:space="preserve">
+    <value>Hakkında</value>
+  </data>
+  <data name="Home_Error_Text" xml:space="preserve">
+    <value>İsteğinizi işleme esnasında tanımlanmamış bir hata oluştu. Tekrar deneyin veya sistem yöneticinize başvurun.</value>
+  </data>
+  <data name="Home_Error_Title" xml:space="preserve">
+    <value>Bir Hata Oluştu</value>
+  </data>
+  <data name="Home_LogOn_AccountInformation" xml:space="preserve">
+    <value>Giriş Bilgileri</value>
+  </data>
+  <data name="Home_LogOn_Failed" xml:space="preserve">
+    <value>Giriş başarısız oldu.Hataları düzeltin ve tekrar deneyin.</value>
+  </data>
+  <data name="Home_LogOn_LogOn" xml:space="preserve">
+    <value>Giriş</value>
+  </data>
+  <data name="Home_LogOn_Password" xml:space="preserve">
+    <value>Şifre</value>
+  </data>
+  <data name="Home_LogOn_RememberMe" xml:space="preserve">
+    <value>Beni hatırla?</value>
+  </data>
+  <data name="Home_LogOn_Title" xml:space="preserve">
+    <value>Giriş</value>
+  </data>
+  <data name="Home_LogOn_Username" xml:space="preserve">
+    <value>Kullanıcı Adı</value>
+  </data>
+  <data name="Home_LogOn_UsernamePasswordIncorrect" xml:space="preserve">
+    <value>Girilen kullanıcı adı veya şifre hatalı.</value>
+  </data>
+  <data name="Home_PageNotFound_Text" xml:space="preserve">
+    <value>Aradığınız sayfa bulunamadı. Tekrar deneyin veya sistem yöneticinize başvurun.</value>
+  </data>
+  <data name="Home_PageNotFound_Title" xml:space="preserve">
+    <value>404 Sayfa Bulunamadı</value>
+  </data>
+  <data name="Home_ServerError_Text" xml:space="preserve">
+    <value>İsteğinizi işleme esnasında bir sunucu hatası oluştu. Tekrar deneyin veya sistem yöneticinize başvurun.</value>
+  </data>
+  <data name="Home_ServerError_Title" xml:space="preserve">
+    <value>500 Sununcu Hatası</value>
+  </data>
+  <data name="Home_Unauthorized_Text" xml:space="preserve">
+    <value>Yapılacak eylem veya görüntülemek isteğiniz sayfa için yerekli yetkiniz yok.</value>
+  </data>
+  <data name="Home_Unauthorized_Title" xml:space="preserve">
+    <value>Yetkisiz</value>
+  </data>
+  <data name="Item_NotFound" xml:space="preserve">
+    <value>Öğe bulunamadı</value>
+  </data>
+  <data name="Layout_About" xml:space="preserve">
+    <value>Hakkında</value>
+  </data>
+  <data name="Layout_AccountSettings" xml:space="preserve">
+    <value>Hesap Ayarları</value>
+  </data>
+  <data name="Layout_Administration" xml:space="preserve">
+    <value>Administration</value>
+  </data>
+  <data name="Layout_AdministrationGlobalSettings" xml:space="preserve">
+    <value>Genel Ayarlar</value>
+  </data>
+  <data name="Layout_AdministrationRepositories" xml:space="preserve">
+    <value>Depolar</value>
+  </data>
+  <data name="Layout_AdministrationTeams" xml:space="preserve">
+    <value>Takımlar</value>
+  </data>
+  <data name="Layout_AdministrationUsers" xml:space="preserve">
+    <value>Kullanıcılar</value>
+  </data>
+  <data name="Layout_Footer_Copyright" xml:space="preserve">
+    <value>Tüm hakları saklıdır.</value>
+  </data>
+  <data name="Layout_Home" xml:space="preserve">
+    <value>Ana Sayfa</value>
+  </data>
+  <data name="Layout_LogOff" xml:space="preserve">
+    <value>Çıkış</value>
+  </data>
+  <data name="Layout_LogOn" xml:space="preserve">
+    <value>Giriş</value>
+  </data>
+  <data name="Layout_Register" xml:space="preserve">
+    <value>Yeni Hesap Aç</value>
+  </data>
+  <data name="Layout_Repositories" xml:space="preserve">
+    <value>Depolar</value>
+  </data>
+  <data name="Layout_Title" xml:space="preserve">
+    <value>Bonobo Git Server [TR]</value>
+  </data>
+  <data name="Repository_AddressBar_Root" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Repository_AdministratorsHint" xml:space="preserve">
+    <value>Administrators have full access to repository. They can also modify repository metadata or delete repository.</value>
+  </data>
+  <data name="Repository_AllowAnonymousHint" xml:space="preserve">
+    <value>If anonymous access is allowed everyone can pull or clone repository and view repository metadata. Push is available only if setted in Global Settings.</value>
+  </data>
+  <data name="Repository_Commits_Title" xml:space="preserve">
+    <value>Commits</value>
+  </data>
+  <data name="Repository_Commit_Added" xml:space="preserve">
+    <value>Eklendi</value>
+  </data>
+  <data name="Repository_Commit_Author" xml:space="preserve">
+    <value>Yazar</value>
+  </data>
+  <data name="Repository_Commit_AuthorEmail" xml:space="preserve">
+    <value>Eposta</value>
+  </data>
+  <data name="Repository_Commit_Changes" xml:space="preserve">
+    <value>Değiştirilen dosyalar</value>
+  </data>
+  <data name="Repository_Commit_Copied" xml:space="preserve">
+    <value>Kopyalanan</value>
+  </data>
+  <data name="Repository_Commit_Date" xml:space="preserve">
+    <value>Tarih</value>
+  </data>
+  <data name="Repository_Commit_Deleted" xml:space="preserve">
+    <value>Silindi</value>
+  </data>
+  <data name="Repository_Commit_Detail" xml:space="preserve">
+    <value>Gönderi Detayı</value>
+  </data>
+  <data name="Repository_Commit_ID" xml:space="preserve">
+    <value>Gönderi</value>
+  </data>
+  <data name="Repository_Commit_Message" xml:space="preserve">
+    <value>Mesaj</value>
+  </data>
+  <data name="Repository_Commit_Modified" xml:space="preserve">
+    <value>Modified</value>
+  </data>
+  <data name="Repository_Commit_Parents" xml:space="preserve">
+    <value>Parents</value>
+  </data>
+  <data name="Repository_Commit_Renamed" xml:space="preserve">
+    <value>Renamed</value>
+  </data>
+  <data name="Repository_Commit_TreeID" xml:space="preserve">
+    <value>Tree</value>
+  </data>
+  <data name="Repository_Commit_TypeChanged" xml:space="preserve">
+    <value>Tipi Değiştirildi</value>
+  </data>
+  <data name="Repository_Create_Back" xml:space="preserve">
+    <value>Listeye dön</value>
+  </data>
+  <data name="Repository_Create_DirectoryExists" xml:space="preserve">
+    <value>The directory with this name already exists in your repository folder. Delete this directory or choose another name and try it again.</value>
+  </data>
+  <data name="Repository_Create_Fail" xml:space="preserve">
+    <value>Depo oluşturma başarısız oldu.Hataları düzeltin ve tekrar deneyin.</value>
+  </data>
+  <data name="Repository_Create_Failure" xml:space="preserve">
+    <value>Seçilen isimde bir depo zaten var.</value>
+  </data>
+  <data name="Repository_Create_Informations" xml:space="preserve">
+    <value>Depo bilgileri</value>
+  </data>
+  <data name="Repository_Create_NameFailure" xml:space="preserve">
+    <value>Depo adı sadece boşluklardan oluşamaz</value>
+  </data>
+  <data name="Repository_Create_Submit" xml:space="preserve">
+    <value>Oluştur</value>
+  </data>
+  <data name="Repository_Create_Success" xml:space="preserve">
+    <value>Depo başarıyla oluşturuldu.</value>
+  </data>
+  <data name="Repository_Create_Title" xml:space="preserve">
+    <value>Yeni Depo Oluştur</value>
+  </data>
+  <data name="Repository_Delete_Success" xml:space="preserve">
+    <value>Depo başarıyla silindi.</value>
+  </data>
+  <data name="Repository_Detail_Administrators" xml:space="preserve">
+    <value>Administrators</value>
+  </data>
+  <data name="Repository_Detail_Anonymous" xml:space="preserve">
+    <value>Anonim</value>
+  </data>
+  <data name="Repository_Detail_Back" xml:space="preserve">
+    <value>Listeye dön</value>
+  </data>
+  <data name="Repository_Detail_Delete" xml:space="preserve">
+    <value>Sil</value>
+  </data>
+  <data name="Repository_Detail_Description" xml:space="preserve">
+    <value>Tanım</value>
+  </data>
+  <data name="Repository_Detail_Detail" xml:space="preserve">
+    <value>Detay Bilgileri</value>
+  </data>
+  <data name="Repository_Detail_Edit" xml:space="preserve">
+    <value>Düzenle</value>
+  </data>
+  <data name="Repository_Detail_IsCurrentUserAdmin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Repository_Detail_Location" xml:space="preserve">
+    <value>Git Depo Adresi</value>
+  </data>
+  <data name="Repository_Detail_Name" xml:space="preserve">
+    <value>Depo Adı</value>
+  </data>
+  <data name="Repository_Detail_No" xml:space="preserve">
+    <value>Hayır</value>
+  </data>
+  <data name="Repository_Detail_Teams" xml:space="preserve">
+    <value>Takımlar</value>
+  </data>
+  <data name="Repository_Detail_Title" xml:space="preserve">
+    <value>Depo Detayı</value>
+  </data>
+  <data name="Repository_Detail_Users" xml:space="preserve">
+    <value>Contributors</value>
+  </data>
+  <data name="Repository_Detail_Yes" xml:space="preserve">
+    <value>Evet</value>
+  </data>
+  <data name="Repository_Edit_Back" xml:space="preserve">
+    <value>Listeye dön</value>
+  </data>
+  <data name="Repository_Edit_CantRemoveYourself" xml:space="preserve">
+    <value>Yöneticiler grubundan kendinizi kaldıramazsınız.</value>
+  </data>
+  <data name="Repository_Edit_Fail" xml:space="preserve">
+    <value>Depo güncelleme başarısız oldu.Hataları düzeltin ve tekrar deneyin.</value>
+  </data>
+  <data name="Repository_Edit_Submit" xml:space="preserve">
+    <value>Kaydet</value>
+  </data>
+  <data name="Repository_Edit_Title" xml:space="preserve">
+    <value>Depo Düzenle</value>
+  </data>
+  <data name="Repository_Edit_UpdateSuccess" xml:space="preserve">
+    <value>Depo başarıyla güncellendi.</value>
+  </data>
+  <data name="Repository_Index_AdministratedRepositories" xml:space="preserve">
+    <value>Administrated Repositories</value>
+  </data>
+  <data name="Repository_Index_AllRepositories" xml:space="preserve">
+    <value>Tüm Depolar</value>
+  </data>
+  <data name="Repository_Index_CreateNew" xml:space="preserve">
+    <value>Yeni Depo Oluştur</value>
+  </data>
+  <data name="Repository_Index_No" xml:space="preserve">
+    <value>Hayır</value>
+  </data>
+  <data name="Repository_Index_Repositories" xml:space="preserve">
+    <value>Depolar</value>
+  </data>
+  <data name="Repository_Index_Title" xml:space="preserve">
+    <value>Depo Yönetimi</value>
+  </data>
+  <data name="Repository_Index_Yes" xml:space="preserve">
+    <value>Evet</value>
+  </data>
+  <data name="Repository_Layout_Browse" xml:space="preserve">
+    <value>Depo Tarayıcı</value>
+  </data>
+  <data name="Repository_Layout_Commits" xml:space="preserve">
+    <value>Commits</value>
+  </data>
+  <data name="Repository_SwitchBranch" xml:space="preserve">
+    <value>Geçerli dala geçin</value>
+  </data>
+  <data name="Repository_TeamsHint" xml:space="preserve">
+    <value>Teams have access to repository. They can clone, push or pull repository and view repository metadata. All users in team can access current repository.</value>
+  </data>
+  <data name="Repository_Tree_Author" xml:space="preserve">
+    <value>Yazar</value>
+  </data>
+  <data name="Repository_Tree_CommitDate" xml:space="preserve">
+    <value>Tarih</value>
+  </data>
+  <data name="Repository_Tree_CommitMessage" xml:space="preserve">
+    <value>Mesaj</value>
+  </data>
+  <data name="Repository_Tree_Download" xml:space="preserve">
+    <value>Dosyayı indir</value>
+  </data>
+  <data name="Repository_Tree_Name" xml:space="preserve">
+    <value>Adı</value>
+  </data>
+  <data name="Repository_Tree_Title" xml:space="preserve">
+    <value>Depoyu İncele</value>
+  </data>
+  <data name="Repository_UsersHint" xml:space="preserve">
+    <value>Users have access to repository. They can clone, push or pull repository and view repository metadata.</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Settings_Global_AllowAnonymousPush" xml:space="preserve">
+    <value>Anonim depoları için gönderilere izin ver</value>
+  </data>
+  <data name="Settings_Global_AllowAnonymousRegistration" xml:space="preserve">
+    <value>Anonim kayda izin ver</value>
+  </data>
+  <data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
+    <value>If checkbox is unchecked only administrator can add new users and anonymous user registration is disabled.</value>
+  </data>
+  <data name="Settings_Global_AllowUserRepositoryCreation" xml:space="preserve">
+    <value>Kullanıcıların depo oluşturmasına izin ver</value>
+  </data>
+  <data name="Settings_Global_AllowUserRepositoryCreation_Hint" xml:space="preserve">
+    <value>If checkbox is unchecked only administrator can create repositories.</value>
+  </data>
+  <data name="Settings_Global_DirectoryHint" xml:space="preserve">
+    <value>All the git repositories are stored in this directory.</value>
+  </data>
+  <data name="Settings_Global_RepositoryPath" xml:space="preserve">
+    <value>Depo Klasörü</value>
+  </data>
+  <data name="Settings_Index_Failed" xml:space="preserve">
+    <value>Settings update was unsuccessful. Please correct the errors and try again.</value>
+  </data>
+  <data name="Settings_Index_Save" xml:space="preserve">
+    <value>Kaydet</value>
+  </data>
+  <data name="Settings_Index_Title" xml:space="preserve">
+    <value>Genel Ayarlar</value>
+  </data>
+  <data name="Settings_Index_UpdateSuccess" xml:space="preserve">
+    <value>Genel ayarları başarıyla güncellendi.</value>
+  </data>
+  <data name="Settings_RepositoryPathNotExists" xml:space="preserve">
+    <value>Seçilen adres mevcut değil. Yeni bir klasör oluşturun veya farklı bir adres seçin.</value>
+  </data>
+  <data name="Settings_RepositoryPathUnauthorized" xml:space="preserve">
+    <value>You don't have enough privileges to write to selected folder. Please choose different path.</value>
+  </data>
+  <data name="Team_Create_Back" xml:space="preserve">
+    <value>Listeye dön</value>
+  </data>
+  <data name="Team_Create_Fail" xml:space="preserve">
+    <value>New team creation was unsuccessful. Please correct the errors and try again.</value>
+  </data>
+  <data name="Team_Create_Failure" xml:space="preserve">
+    <value>Team with selected name already exists. Team wasn't created.</value>
+  </data>
+  <data name="Team_Create_Submit" xml:space="preserve">
+    <value>Kaydet</value>
+  </data>
+  <data name="Team_Create_Success" xml:space="preserve">
+    <value>Ekip tanımı başarıyla oluşturuldu.</value>
+  </data>
+  <data name="Team_Create_TeamInformations" xml:space="preserve">
+    <value>Takım bilgisi</value>
+  </data>
+  <data name="Team_Create_Title" xml:space="preserve">
+    <value>Yeni Takım Oluştur</value>
+  </data>
+  <data name="Team_Delete_Success" xml:space="preserve">
+    <value>Takım silindi.</value>
+  </data>
+  <data name="Team_Detail_Back" xml:space="preserve">
+    <value>Listeye dön</value>
+  </data>
+  <data name="Team_Detail_Delete" xml:space="preserve">
+    <value>Sil</value>
+  </data>
+  <data name="Team_Detail_Description" xml:space="preserve">
+    <value>Tanım</value>
+  </data>
+  <data name="Team_Detail_Edit" xml:space="preserve">
+    <value>Düzenle</value>
+  </data>
+  <data name="Team_Detail_Members" xml:space="preserve">
+    <value>Üyeler</value>
+  </data>
+  <data name="Team_Detail_Name" xml:space="preserve">
+    <value>Adı</value>
+  </data>
+  <data name="Team_Detail_Repositories" xml:space="preserve">
+    <value>Depolar</value>
+  </data>
+  <data name="Team_Detail_Title" xml:space="preserve">
+    <value>Takım Detayı</value>
+  </data>
+  <data name="Team_Edit_Back" xml:space="preserve">
+    <value>Listeye dön</value>
+  </data>
+  <data name="Team_Edit_Failure" xml:space="preserve">
+    <value>Team update was unsuccessful. Please correct the errors and try again.</value>
+  </data>
+  <data name="Team_Edit_Submit" xml:space="preserve">
+    <value>Güncelle</value>
+  </data>
+  <data name="Team_Edit_Title" xml:space="preserve">
+    <value>Takımı Düzenle</value>
+  </data>
+  <data name="Team_Edit_UpdateSuccess" xml:space="preserve">
+    <value>Team was updated successfully.</value>
+  </data>
+  <data name="Team_Index_CreateNew" xml:space="preserve">
+    <value>Yeni Takım Oluştur</value>
+  </data>
+  <data name="Team_Index_Teams" xml:space="preserve">
+    <value>Takımlar</value>
+  </data>
+  <data name="Team_Index_Title" xml:space="preserve">
+    <value>Takım Yönetimi</value>
+  </data>
+  <data name="Validation_Compare" xml:space="preserve">
+    <value>"{0}" and "{1}" must have the same value.</value>
+  </data>
+  <data name="Validation_Email" xml:space="preserve">
+    <value>"{0}" is not a valid email address.</value>
+  </data>
+  <data name="Validation_FileName" xml:space="preserve">
+    <value>"{0}" contains characters that can't be in file or directory name.</value>
+  </data>
+  <data name="Validation_Required" xml:space="preserve">
+    <value>"{0}" is mandatory.</value>
+  </data>
+  <data name="Validation_StringLength" xml:space="preserve">
+    <value>"{0}" should be smaller than {1} chars.</value>
+  </data>
+</root>
