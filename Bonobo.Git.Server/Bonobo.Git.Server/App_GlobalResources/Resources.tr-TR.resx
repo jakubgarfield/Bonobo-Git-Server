@@ -373,7 +373,7 @@
     <value>Depolar</value>
   </data>
   <data name="Layout_Title" xml:space="preserve">
-    <value>Bonobo Git Server [TR]</value>
+    <value>Bonobo Git Sunucu [TR]</value>
   </data>
   <data name="Repository_AddressBar_Root" xml:space="preserve">
     <value>Home</value>
@@ -463,7 +463,7 @@
     <value>Depo başarıyla silindi.</value>
   </data>
   <data name="Repository_Detail_Administrators" xml:space="preserve">
-    <value>Administrators</value>
+    <value>Yöneticiler</value>
   </data>
   <data name="Repository_Detail_Anonymous" xml:space="preserve">
     <value>Anonim</value>
@@ -475,10 +475,10 @@
     <value>Sil</value>
   </data>
   <data name="Repository_Detail_Description" xml:space="preserve">
-    <value>Tanım</value>
+    <value>Açıklama</value>
   </data>
   <data name="Repository_Detail_Detail" xml:space="preserve">
-    <value>Detay Bilgileri</value>
+    <value>Depo Detayları</value>
   </data>
   <data name="Repository_Detail_Edit" xml:space="preserve">
     <value>Düzenle</value>
@@ -502,7 +502,7 @@
     <value>Depo Detayı</value>
   </data>
   <data name="Repository_Detail_Users" xml:space="preserve">
-    <value>Contributors</value>
+    <value>Destekçiler</value>
   </data>
   <data name="Repository_Detail_Yes" xml:space="preserve">
     <value>Evet</value>
@@ -652,7 +652,7 @@
     <value>Sil</value>
   </data>
   <data name="Team_Detail_Description" xml:space="preserve">
-    <value>Tanım</value>
+    <value>Açıklama</value>
   </data>
   <data name="Team_Detail_Edit" xml:space="preserve">
     <value>Düzenle</value>
