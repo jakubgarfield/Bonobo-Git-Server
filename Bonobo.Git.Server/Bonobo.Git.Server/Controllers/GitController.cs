@@ -22,7 +22,10 @@ namespace Bonobo.Git.Server.Controllers
         [BasicAuthorize]
         public ActionResult SecureGetInfoRefs(String project, String service)
         {
-            if (RepositoryPermissionService.HasPermission(HttpContext.User.Identity.Name, project))
+            if (RepositoryPermissionService.HasPermission(HttpContext.User.Identity.Name, project)
+                || (RepositoryPermissionService.AllowsAnonymous(project)
+                    && (String.Equals("git-upload-pack", service, StringComparison.InvariantCultureIgnoreCase) 
+                        || UserConfigurationManager.AllowAnonymousPush)))
             {
                 return GetInfoRefs(project, service);
             }
@@ -36,7 +39,8 @@ namespace Bonobo.Git.Server.Controllers
         [BasicAuthorize]
         public ActionResult SecureUploadPack(String project)
         {
-            if (RepositoryPermissionService.HasPermission(HttpContext.User.Identity.Name, project))
+            if (RepositoryPermissionService.HasPermission(HttpContext.User.Identity.Name, project)
+                || (RepositoryPermissionService.AllowsAnonymous(project) && UserConfigurationManager.AllowAnonymousPush))
             {
                 return ExecuteUploadPack(project);
             }
@@ -50,48 +54,10 @@ namespace Bonobo.Git.Server.Controllers
         [BasicAuthorize]
         public ActionResult SecureReceivePack(String project)
         {
-            if (RepositoryPermissionService.HasPermission(HttpContext.User.Identity.Name, project))
+            if (RepositoryPermissionService.HasPermission(HttpContext.User.Identity.Name, project)
+                || RepositoryPermissionService.AllowsAnonymous(project))
             {
                 return ExecuteReceivePack(project);
-            }
-            else
-            {
-                return UnauthorizedResult();
-            }
-        }
-
-        public ActionResult AnonymousGetInfoRefs(String project, String service)
-        {
-            if (RepositoryPermissionService.AllowsAnonymous(project))
-            {
-                if (String.Equals("git-upload-pack", service, StringComparison.InvariantCultureIgnoreCase) || UserConfigurationManager.AllowAnonymousPush)
-                {
-                    return GetInfoRefs(project, service);
-                }
-            }
-
-            return UnauthorizedResult();
-        }
-
-        [HttpPost]
-        public ActionResult AnonymousReceivePack(String project)
-        {
-            if (RepositoryPermissionService.AllowsAnonymous(project) && UserConfigurationManager.AllowAnonymousPush)
-            {
-                return ExecuteReceivePack(project);
-            }
-            else
-            {
-                return UnauthorizedResult();
-            }
-        }
-
-        [HttpPost]
-        public ActionResult AnonymousUploadPack(String project)
-        {
-            if (RepositoryPermissionService.AllowsAnonymous(project))
-            {
-                return ExecuteUploadPack(project);
             }
             else
             {
@@ -186,6 +152,8 @@ namespace Bonobo.Git.Server.Controllers
 
         private ActionResult UnauthorizedResult()
         {
+            Response.Clear();
+            Response.AddHeader("WWW-Authenticate", "Basic realm=\"Secure Area\"");
             return new HttpStatusCodeResult(401);
         }
 
