@@ -40,30 +40,6 @@ namespace Bonobo.Git.Server
                     filterContext.Result = new HttpStatusCodeResult(401);
                 }
             }
-            else
-            {
-                if (AuthorizeCore(filterContext.HttpContext))
-                {
-                    HttpCachePolicyBase cachePolicy = filterContext.HttpContext.Response.Cache;
-                    cachePolicy.SetProxyMaxAge(new TimeSpan(0));
-                    cachePolicy.AddValidationCallback(CacheValidateHandler, null);
-                }
-                else
-                {
-                    filterContext.HttpContext.Response.Clear();
-                    filterContext.HttpContext.Response.StatusDescription = "Unauthorized";
-                    filterContext.HttpContext.Response.AddHeader("WWW-Authenticate", "Basic realm=\"Secure Area\"");
-                    filterContext.HttpContext.Response.Write("401, please authenticate");
-                    filterContext.HttpContext.Response.StatusCode = 401;
-                    filterContext.Result = new EmptyResult();
-                    filterContext.HttpContext.Response.End();
-                }
-            }
-        }
-
-        private void CacheValidateHandler(HttpContext context, object data, ref HttpValidationStatus validationStatus)
-        {
-            validationStatus = OnCacheAuthorization(new HttpContextWrapper(context));
         }
     }
 }
