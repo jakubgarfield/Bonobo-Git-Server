@@ -40,7 +40,7 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult SecureUploadPack(String project)
         {
             if (RepositoryPermissionService.HasPermission(HttpContext.User.Identity.Name, project)
-                || (RepositoryPermissionService.AllowsAnonymous(project) && UserConfigurationManager.AllowAnonymousPush))
+                || RepositoryPermissionService.AllowsAnonymous(project))
             {
                 return ExecuteUploadPack(project);
             }
@@ -55,7 +55,7 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult SecureReceivePack(String project)
         {
             if (RepositoryPermissionService.HasPermission(HttpContext.User.Identity.Name, project)
-                || RepositoryPermissionService.AllowsAnonymous(project))
+                || (RepositoryPermissionService.AllowsAnonymous(project) && UserConfigurationManager.AllowAnonymousPush))
             {
                 return ExecuteReceivePack(project);
             }
