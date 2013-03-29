@@ -134,9 +134,9 @@ namespace Bonobo.Git.Server.Security
         private string EncryptPassword(string password)
         {
             System.Security.Cryptography.MD5CryptoServiceProvider x = new System.Security.Cryptography.MD5CryptoServiceProvider();
-            byte[] data = System.Text.Encoding.ASCII.GetBytes(password);
+            var data = System.Text.Encoding.UTF8.GetBytes(password);
             data = x.ComputeHash(data);
-            return System.Text.Encoding.ASCII.GetString(data);
+            return BitConverter.ToString(data).Replace("-", "");
         }
 
     }
