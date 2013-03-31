@@ -160,6 +160,8 @@
       <DependentUpon>Resources.zh-CN.resx</DependentUpon>
     </Compile>
     <Compile Include="BasicAuthorizeAttribute.cs" />
+    <Compile Include="Configs\ConfigEntry.cs" />
+    <Compile Include="Configs\UserConfiguration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
@@ -213,8 +215,6 @@
     <Compile Include="FileDisplayHandler.cs" />
     <Compile Include="UnityDependencyResolver.cs" />
     <Compile Include="UnityFilterAttributeFilterProvider.cs" />
-    <Compile Include="UserConfiguration.cs" />
-    <Compile Include="UserConfigurationManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\config.xml" />

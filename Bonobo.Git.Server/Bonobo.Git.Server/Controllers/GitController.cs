@@ -11,6 +11,7 @@ using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 using System.Configuration;
+using Bonobo.Git.Server.Configs;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -24,8 +25,8 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (RepositoryPermissionService.HasPermission(HttpContext.User.Identity.Name, project)
                 || (RepositoryPermissionService.AllowsAnonymous(project)
-                    && (String.Equals("git-upload-pack", service, StringComparison.InvariantCultureIgnoreCase) 
-                        || UserConfigurationManager.AllowAnonymousPush)))
+                    && (String.Equals("git-upload-pack", service, StringComparison.InvariantCultureIgnoreCase)
+                        || UserConfiguration.Current.AllowAnonymousPush)))
             {
                 return GetInfoRefs(project, service);
             }
@@ -55,7 +56,7 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult SecureReceivePack(String project)
         {
             if (RepositoryPermissionService.HasPermission(HttpContext.User.Identity.Name, project)
-                || (RepositoryPermissionService.AllowsAnonymous(project) && UserConfigurationManager.AllowAnonymousPush))
+                || (RepositoryPermissionService.AllowsAnonymous(project) && UserConfiguration.Current.AllowAnonymousPush))
             {
                 return ExecuteReceivePack(project);
             }
@@ -169,7 +170,7 @@ namespace Bonobo.Git.Server.Controllers
 
         private DirectoryInfo GetDirectoryInfo(String project)
         {
-            return new DirectoryInfo(Path.Combine(UserConfigurationManager.Repositories, project));
+            return new DirectoryInfo(Path.Combine(UserConfiguration.Current.Repositories, project));
         }
 
         private Stream GetInputStream()

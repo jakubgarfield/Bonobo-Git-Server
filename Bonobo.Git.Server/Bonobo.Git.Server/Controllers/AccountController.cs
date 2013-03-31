@@ -9,6 +9,7 @@ using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 using System.Globalization;
 using Bonobo.Git.Server.App_GlobalResources;
+using Bonobo.Git.Server.Configs;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -157,7 +158,7 @@ namespace Bonobo.Git.Server.Controllers
 
         public ActionResult Create()
         {
-            if ((Request.IsAuthenticated && !User.IsInRole(Definitions.Roles.Administrator)) || (!Request.IsAuthenticated && !UserConfigurationManager.AllowAnonymousRegistration))
+            if ((Request.IsAuthenticated && !User.IsInRole(Definitions.Roles.Administrator)) || (!Request.IsAuthenticated && !UserConfiguration.Current.AllowAnonymousRegistration))
             {
                 return RedirectToAction("Unauthorized", "Home");
             }
@@ -168,7 +169,7 @@ namespace Bonobo.Git.Server.Controllers
         [HttpPost]
         public ActionResult Create(UserCreateModel model)
         {
-            if ((Request.IsAuthenticated && !User.IsInRole(Definitions.Roles.Administrator)) || (!Request.IsAuthenticated && !UserConfigurationManager.AllowAnonymousRegistration))
+            if ((Request.IsAuthenticated && !User.IsInRole(Definitions.Roles.Administrator)) || (!Request.IsAuthenticated && !UserConfiguration.Current.AllowAnonymousRegistration))
             {
                 return RedirectToAction("Unauthorized", "Home");
             }
