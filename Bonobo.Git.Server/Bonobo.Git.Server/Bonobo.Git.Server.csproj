@@ -160,6 +160,8 @@
       <DependentUpon>Resources.zh-CN.resx</DependentUpon>
     </Compile>
     <Compile Include="BasicAuthorizeAttribute.cs" />
+    <Compile Include="Configs\ConfigEntry.cs" />
+    <Compile Include="Configs\UserConfiguration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
