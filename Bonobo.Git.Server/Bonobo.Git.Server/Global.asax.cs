@@ -116,6 +116,7 @@ namespace Bonobo.Git.Server
             RegisterDependencyResolver();
         }
 
+#if !DEBUG
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception exception = Server.GetLastError();
@@ -157,6 +158,7 @@ namespace Bonobo.Git.Server
                 errorController.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
             }
         }
+#endif
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
         {
