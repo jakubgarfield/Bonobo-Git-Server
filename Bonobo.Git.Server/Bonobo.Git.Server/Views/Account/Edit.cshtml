@@ -71,7 +71,12 @@ else
           {
               <div class="ctrlHolder"> 
                   @Html.LabelFor(m => m.Roles)
-                  @Html.ListBoxFor(m => m.Roles, new MultiSelectList(ViewData["AvailableRoles"] as System.Collections.IEnumerable), new { @class = "selectInput medium" })  
+                  @{
+                     var users = (from u in ViewData["AvailableRoles"] as string[] orderby u
+                                    select new SelectListItem() { Value = u, Text = u }).ToArray();
+                 }
+                
+                  @Html.CheckboxListFor(m => m.Roles, users, new { @class = "checkboxList medium" }) 
                 <p class="formHint">    
                     @Resources.Account_Edit_RolesHint              
                 </p> 
