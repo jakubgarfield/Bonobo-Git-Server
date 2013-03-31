@@ -8,6 +8,7 @@ using System.Configuration;
 using System.Web.Configuration;
 using System.IO;
 using Bonobo.Git.Server.App_GlobalResources;
+using Bonobo.Git.Server.Configs;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -17,11 +18,11 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult Index()
         {            
             return View(new GlobalSettingsModel
-            {              
-                AllowAnonymousPush = UserConfigurationManager.AllowAnonymousPush,
-                RepositoryPath = UserConfigurationManager.Repositories,
-                AllowAnonymousRegistration = UserConfigurationManager.AllowAnonymousRegistration,
-                AllowUserRepositoryCreation = UserConfigurationManager.AllowUserRepositoryCreation,
+            {
+                AllowAnonymousPush = UserConfiguration.Current.AllowAnonymousPush,
+                RepositoryPath = UserConfiguration.Current.Repositories,
+                AllowAnonymousRegistration = UserConfiguration.Current.AllowAnonymousRegistration,
+                AllowUserRepositoryCreation = UserConfiguration.Current.AllowUserRepositoryCreation,
             });
         }
 
@@ -37,11 +38,11 @@ namespace Bonobo.Git.Server.Controllers
                     {
                         System.Security.AccessControl.DirectorySecurity ds = Directory.GetAccessControl(model.RepositoryPath);
 
-                        UserConfigurationManager.AllowAnonymousPush = model.AllowAnonymousPush;
-                        UserConfigurationManager.Repositories = model.RepositoryPath;
-                        UserConfigurationManager.AllowAnonymousRegistration = model.AllowAnonymousRegistration;
-                        UserConfigurationManager.AllowUserRepositoryCreation = model.AllowUserRepositoryCreation;
-                        UserConfigurationManager.Save();
+                        UserConfiguration.Current.AllowAnonymousPush = model.AllowAnonymousPush;
+                        UserConfiguration.Current.Repositories = model.RepositoryPath;
+                        UserConfiguration.Current.AllowAnonymousRegistration = model.AllowAnonymousRegistration;
+                        UserConfiguration.Current.AllowUserRepositoryCreation = model.AllowUserRepositoryCreation;
+                        UserConfiguration.Current.Save();
 
                         ViewBag.UpdateSuccess = true;
                     }
