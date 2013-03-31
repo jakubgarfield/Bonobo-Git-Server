@@ -18,10 +18,6 @@
                     <label>@Resources.Repository_Detail_Location</label></h5>
                 <div class="content">
                     @String.Concat(serverAddress, MvcApplication.GitRepositoryPrefix, Model.Name)
-                    @if (Model.AllowAnonymous)
-                    {
-                        <br />@String.Concat(serverAddress, MvcApplication.AnonymousGitRepositoryPrefix, Model.Name) <strong>&nbsp;&nbsp; ## This url will using not longer</strong>
-                    }
                 </div>
             </div>
             <div class="ctrlHolder">
