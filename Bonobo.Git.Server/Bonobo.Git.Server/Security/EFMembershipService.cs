@@ -6,6 +6,7 @@ using System.Web.Security;
 using Bonobo.Git.Server.Data;
 using System.Data;
 using Bonobo.Git.Server.Models;
+using Bonobo.Git.Server.DAL;
 
 namespace Bonobo.Git.Server.Security
 {
@@ -16,9 +17,9 @@ namespace Bonobo.Git.Server.Security
             if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "userName");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
 
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
-                var user = database.User.FirstOrDefault(i => i.Username == username);
+                var user = database.Users.FirstOrDefault(i => i.Username == username);
                 return user != null && ComparePassword(password, user.Password);
             }
         }
@@ -31,7 +32,7 @@ namespace Bonobo.Git.Server.Security
             if (String.IsNullOrEmpty(surname)) throw new ArgumentException("Value cannot be null or empty.", "surname");
             if (String.IsNullOrEmpty(email)) throw new ArgumentException("Value cannot be null or empty.", "email");
 
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
                 var user = new User
                 {
@@ -41,7 +42,7 @@ namespace Bonobo.Git.Server.Security
                     Surname = surname,
                     Email = email,
                 };
-                database.AddToUser(user);
+                database.Users.Add(user);
                 try
                 {
                     database.SaveChanges();
@@ -57,10 +58,10 @@ namespace Bonobo.Git.Server.Security
 
         public IList<UserModel> GetAllUsers()
         {
-            using (var db = new DataEntities())
+            using (var db = new BonoboGitServerContext())
             {
                 var result = new List<UserModel>();
-                foreach (var item in db.User)
+                foreach (var item in db.Users)
                 {
                     result.Add(new UserModel
                     {
@@ -79,9 +80,9 @@ namespace Bonobo.Git.Server.Security
         {
             if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "userName");
 
-            using (var db = new DataEntities())
+            using (var db = new BonoboGitServerContext())
             {
-                var user = db.User.FirstOrDefault(i => i.Username == username);
+                var user = db.Users.FirstOrDefault(i => i.Username == username);
                 return user == null ? null : new UserModel
                 {
                     Username = user.Username,
@@ -95,9 +96,9 @@ namespace Bonobo.Git.Server.Security
 
         public void UpdateUser(string username, string name, string surname, string email, string password)
         {
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
-                var user = database.User.FirstOrDefault(i => i.Username == username);
+                var user = database.Users.FirstOrDefault(i => i.Username == username);
                 if (user != null)
                 {
                     user.Name = name ?? user.Name;
@@ -111,16 +112,16 @@ namespace Bonobo.Git.Server.Security
 
         public void DeleteUser(string username)
         {
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
-                var user = database.User.FirstOrDefault(i => i.Username == username);
+                var user = database.Users.FirstOrDefault(i => i.Username == username);
                 if (user != null)
                 {
                     user.AdministratedRepositories.Clear();
                     user.Roles.Clear();
                     user.Repositories.Clear();
                     user.Teams.Clear();
-                    database.DeleteObject(user);
+                    database.Users.Remove(user);
                     database.SaveChanges();
                 }
             }
