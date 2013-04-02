@@ -15,6 +15,7 @@ using Bonobo.Git.Server.Controllers;
 using System.Diagnostics;
 using System.Web.Security;
 using System.Security.Principal;
+using Bonobo.Git.Server.DAL;
 
 namespace Bonobo.Git.Server
 {
@@ -114,6 +115,8 @@ namespace Bonobo.Git.Server
             AreaRegistration.RegisterAllAreas();
             RegisterRoutes(RouteTable.Routes);
             RegisterDependencyResolver();
+
+            BonoboGitServerContext.CreateDatabaseInNotExists();
         }
 
 #if !DEBUG
