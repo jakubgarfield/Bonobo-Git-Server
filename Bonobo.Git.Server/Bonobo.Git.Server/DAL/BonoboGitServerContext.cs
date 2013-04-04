@@ -32,7 +32,7 @@ namespace Bonobo.Git.Server.DAL
         }
 
         //Not a good way, how improve it?
-        public static void CreateDatabaseInNotExists()
+        public static void CreateDatabaseIfNotExists()
         {
             using (var ctx = new BonoboGitServerContext())
             {
