@@ -1,7 +1,6 @@
 using Bonobo.Git.Server.DAL.Mapping;
 using System;
 using System.Data.Entity;
-using System.Data.SQLite;
 using System.IO;
 using System.Web;
 
@@ -35,12 +34,13 @@ namespace Bonobo.Git.Server.DAL
         //Not a good way, how improve it?
         public static void CreateDatabaseInNotExists()
         {
-            var sql = File.ReadAllText(HttpContext.Current.Server.MapPath(@"~\App_LocalResources\Create.sql"));
-
             using (var ctx = new BonoboGitServerContext())
             {
-                if (ctx.Database.Connection is SQLiteConnection)
+                // Don't use 'ctx.Database.Connection is SQLiteConnection', it make reference to SQLite assembly cause loading error in IIS.
+                if (ctx.Database.Connection.GetType().Name == "SQLiteConnection")
                 {
+                    var sql = File.ReadAllText(HttpContext.Current.Server.MapPath(@"~\App_LocalResources\Create.sql"));
+
                     /*
                      * After this, a SQLite db file to be created if not exists.
                      * Otherwish, nothing to do.
