@@ -39,8 +39,6 @@ namespace Bonobo.Git.Server.DAL
                 // Don't use 'ctx.Database.Connection is SQLiteConnection', it make reference to SQLite assembly cause loading error in IIS.
                 if (ctx.Database.Connection.GetType().Name == "SQLiteConnection")
                 {
-                    var sql = File.ReadAllText(HttpContext.Current.Server.MapPath(@"~\App_LocalResources\Create.sql"));
-
                     /*
                      * After this, a SQLite db file to be created if not exists.
                      * Otherwish, nothing to do.
@@ -57,6 +55,9 @@ namespace Bonobo.Git.Server.DAL
                         var ret = "" + cmd.ExecuteScalar();
                         if (ret != "9")
                         {
+                            //HttpRuntime.AppDomainAppPath is better than HttpContext.Current.Server.MapPath
+                            var sql = File.ReadAllText(Path.Combine(HttpRuntime.AppDomainAppPath, @"App_LocalResources\Create.sql"));
+
                             cmd.CommandText = sql;
                             cmd.ExecuteNonQuery();
                         }
