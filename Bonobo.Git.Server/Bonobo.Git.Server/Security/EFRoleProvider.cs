@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using Bonobo.Git.Server.Data;
+using Bonobo.Git.Server.DAL;
 
 namespace Bonobo.Git.Server.Security
 {
@@ -17,10 +18,10 @@ namespace Bonobo.Git.Server.Security
 
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)
         {
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
-                var roles = database.Role.Where(i => roleNames.Contains(i.Name));
-                var users = database.User.Where(i => usernames.Contains(i.Username));
+                var roles = database.Roles.Where(i => roleNames.Contains(i.Name));
+                var users = database.Users.Where(i => usernames.Contains(i.Username));
 
                 foreach (var role in roles)
                 {
@@ -36,9 +37,9 @@ namespace Bonobo.Git.Server.Security
 
         public override void CreateRole(string roleName)
         {
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
-                database.AddToRole(new Role
+                database.Roles.Add(new Role
                 {
                     Name = roleName,
                 });
@@ -47,9 +48,9 @@ namespace Bonobo.Git.Server.Security
 
         public override bool DeleteRole(string roleName, bool throwOnPopulatedRole)
         {
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
-                var role = database.Role.FirstOrDefault(i => i.Name == roleName);
+                var role = database.Roles.FirstOrDefault(i => i.Name == roleName);
                 if (role != null)
                 {
                     if (throwOnPopulatedRole)
@@ -60,7 +61,7 @@ namespace Bonobo.Git.Server.Security
                         }
                     }
 
-                    database.DeleteObject(role);
+                    database.Roles.Remove(role);
                     database.SaveChanges();
                     return true;
                 }
@@ -72,9 +73,9 @@ namespace Bonobo.Git.Server.Security
         public override string[] FindUsersInRole(string roleName, string usernameToMatch)
         {
             var result = new HashSet<string>();
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
-                var matchingRoles = database.Role.Where(i => i.Name == roleName && i.Users.Where(user => user.Username.Contains(usernameToMatch)).Count() > 0);
+                var matchingRoles = database.Roles.Where(i => i.Name == roleName && i.Users.Where(user => user.Username.Contains(usernameToMatch)).Count() > 0);
                 var usernames = matchingRoles.Select(i => i.Users.Select(u => u.Username));
                 foreach (var roleUsernames in usernames)
                 {
@@ -89,45 +90,45 @@ namespace Bonobo.Git.Server.Security
 
         public override string[] GetAllRoles()
         {
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
-                return database.Role.Select(i => i.Name).ToArray();
+                return database.Roles.Select(i => i.Name).ToArray();
             }
         }
 
         public override string[] GetRolesForUser(string username)
         {
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
-                var user = database.User.FirstOrDefault(i => i.Username == username);
+                var user = database.Users.FirstOrDefault(i => i.Username == username);
                 return (user != null) ? user.Roles.Select(i => i.Name).ToArray() : null;
             }
         }
 
         public override string[] GetUsersInRole(string roleName)
         {
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
-                var role = database.Role.FirstOrDefault(i => i.Name == roleName);
+                var role = database.Roles.FirstOrDefault(i => i.Name == roleName);
                 return (role != null) ? role.Users.Select(i => i.Username).ToArray() : null;
             }
         }
 
         public override bool IsUserInRole(string username, string roleName)
         {
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
-                var role = database.Role.FirstOrDefault(i => i.Name == roleName);
+                var role = database.Roles.FirstOrDefault(i => i.Name == roleName);
                 return (role != null) ? role.Users.Where(i => i.Username == username).Count() > 0 : false;
             }
         }
 
         public override void RemoveUsersFromRoles(string[] usernames, string[] roleNames)
         {
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
-                var roles = database.Role.Where(i => roleNames.Contains(i.Name));
-                var users = database.User.Where(i => usernames.Contains(i.Username));
+                var roles = database.Roles.Where(i => roleNames.Contains(i.Name));
+                var users = database.Users.Where(i => usernames.Contains(i.Username));
                 foreach (var role in roles)
                 {
                     foreach (var user in users)
@@ -141,9 +142,9 @@ namespace Bonobo.Git.Server.Security
 
         public override bool RoleExists(string roleName)
         {
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
-                return database.Role.FirstOrDefault(i => i.Name == roleName) != null;
+                return database.Roles.FirstOrDefault(i => i.Name == roleName) != null;
             }
         }
     }

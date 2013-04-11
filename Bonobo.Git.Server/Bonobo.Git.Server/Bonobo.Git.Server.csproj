@@ -16,7 +16,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <TargetFrameworkProfile />
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -69,6 +69,9 @@
     <PackageAsSingleFile>true</PackageAsSingleFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.4.369, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\Libraries\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
@@ -168,11 +171,15 @@
     <Compile Include="Controllers\RepositoryController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
-    <Compile Include="Data\DatabaseModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DatabaseModel.edmx</DependentUpon>
-    </Compile>
+    <Compile Include="DAL\BonoboGitServerContext.cs" />
+    <Compile Include="DAL\Mapping\RepositoryMap.cs" />
+    <Compile Include="DAL\Mapping\RoleMap.cs" />
+    <Compile Include="DAL\Mapping\TeamMap.cs" />
+    <Compile Include="DAL\Mapping\UserMap.cs" />
+    <Compile Include="DAL\Repository.cs" />
+    <Compile Include="DAL\Role.cs" />
+    <Compile Include="DAL\Team.cs" />
+    <Compile Include="DAL\User.cs" />
     <Compile Include="Data\EFRepositoryRepository.cs" />
     <Compile Include="Data\EFTeamRepository.cs" />
     <Compile Include="Data\IRepositoryRepository.cs" />
@@ -219,6 +226,7 @@
   <ItemGroup>
     <Content Include="App_Data\config.xml" />
     <None Include="App_Data\config.Debug.xml" />
+    <Content Include="App_LocalResources\Create.sql" />
     <Content Include="changelog.txt" />
     <Content Include="Content\images\action_added.gif" />
     <Content Include="Content\images\action_copied.gif" />
@@ -356,11 +364,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Data\Bonobo.Git.Server.Debug.db" />
-    <EntityDeploy Include="Data\DatabaseModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DatabaseModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\LogOn.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -390,7 +393,6 @@
     <Content Include="Views\Repository\Commit.cshtml" />
     <Content Include="Views\Shared\_ItemNotFound.cshtml" />
     <Content Include="Views\Repository\_Commit.cshtml" />
-    <Content Include="App_Data\Bonobo.Git.Server.Release.db" />
     <Content Include="Web.Update.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
@@ -438,12 +440,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50287</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost:50287/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
