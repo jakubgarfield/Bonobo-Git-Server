@@ -116,6 +116,7 @@ div.uniForm #errorMsg { text-align: center;}
 {
 	display: inline;
 	font-size:1em;
+	margin-left: 3px;
 }
 
 /* Language Bar */
