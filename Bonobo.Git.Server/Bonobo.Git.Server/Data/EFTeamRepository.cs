@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data;
 using Bonobo.Git.Server.Models;
+using Bonobo.Git.Server.Data;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -11,16 +12,16 @@ namespace Bonobo.Git.Server.Data
     {
         public IList<TeamModel> GetAllTeams()
         {
-            using (var db = new DataEntities())
+            using (var db = new BonoboGitServerContext())
             {
                 var result = new List<TeamModel>();
-                foreach (var item in db.Team)
+                foreach (var item in db.Teams)
                 {
                     result.Add(new TeamModel
                     {
                         Name = item.Name,
                         Description = item.Description,
-                        Members = item.Members.Select(i => i.Username).ToArray(),
+                        Members = item.Users.Select(i => i.Username).ToArray(),
                         Repositories = item.Repositories.Select(m => m.Name).ToArray(),
                     });
                 }
@@ -38,14 +39,14 @@ namespace Bonobo.Git.Server.Data
         {
             if (name == null) throw new ArgumentException("name");
 
-            using (var db = new DataEntities())
+            using (var db = new BonoboGitServerContext())
             {
-                var team = db.Team.FirstOrDefault(i => i.Name == name);
+                var team = db.Teams.FirstOrDefault(i => i.Name == name);
                 return team == null ? null : new TeamModel
                 {
                     Name = team.Name,
                     Description = team.Description,
-                    Members = team.Members.Select(m => m.Username).ToArray(),
+                    Members = team.Users.Select(m => m.Username).ToArray(),
                     Repositories = team.Repositories.Select(m => m.Name).ToArray(),
                 };
             }
@@ -55,14 +56,14 @@ namespace Bonobo.Git.Server.Data
         {
             if (name == null) throw new ArgumentException("name");
 
-            using (var db = new DataEntities())
+            using (var db = new BonoboGitServerContext())
             {
-                var team = db.Team.FirstOrDefault(i => i.Name == name);
+                var team = db.Teams.FirstOrDefault(i => i.Name == name);
                 if (team != null)
                 {
                     team.Repositories.Clear();
-                    team.Members.Clear();
-                    db.DeleteObject(team);
+                    team.Users.Clear();
+                    db.Teams.Remove(team);
                     db.SaveChanges();
                 }
             }
@@ -73,14 +74,14 @@ namespace Bonobo.Git.Server.Data
             if (model == null) throw new ArgumentException("team");
             if (model.Name == null) throw new ArgumentException("name");
 
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
                 var team = new Team
                 {
                     Name = model.Name,
                     Description = model.Description
                 };
-                database.AddToTeam(team);
+                database.Teams.Add(team);
                 if (model.Members != null)
                 {
                     AddMembers(model.Members, team, database);
@@ -103,13 +104,13 @@ namespace Bonobo.Git.Server.Data
             if (model == null) throw new ArgumentException("team");
             if (model.Name == null) throw new ArgumentException("name");
 
-            using (var db = new DataEntities())
+            using (var db = new BonoboGitServerContext())
             {
-                var team = db.Team.FirstOrDefault(i => i.Name == model.Name);
+                var team = db.Teams.FirstOrDefault(i => i.Name == model.Name);
                 if (team != null)
                 {
                     team.Description = model.Description;
-                    team.Members.Clear();
+                    team.Users.Clear();
                     if (model.Members != null)
                     {
                         AddMembers(model.Members, team, db);
@@ -119,12 +120,12 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        private void AddMembers(string[] members, Team team, DataEntities database)
+        private void AddMembers(string[] members, Team team, BonoboGitServerContext database)
         {
-            var users = database.User.Where(i => members.Contains(i.Username));
+            var users = database.Users.Where(i => members.Contains(i.Username));
             foreach (var item in users)
             {
-                team.Members.Add(item);
+                team.Users.Add(item);
             }
         }
     }

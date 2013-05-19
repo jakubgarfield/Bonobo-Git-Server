@@ -21,7 +21,6 @@ namespace Bonobo.Git.Server
     public class MvcApplication : System.Web.HttpApplication
     {
         public const string GitRepositoryPrefix = "Git.aspx/";
-        public const string AnonymousGitRepositoryPrefix = "Git.aspx/Anonymous/";
 
         public static void RegisterRoutes(RouteCollection routes)
         {
@@ -36,19 +35,6 @@ namespace Bonobo.Git.Server
             routes.MapRoute("SecureReceivePack", GitRepositoryPrefix + "{project}/git-receive-pack",
                             new { controller = "Git", action = "SecureReceivePack" },
                             new { method = new HttpMethodConstraint("POST") });
-
-            routes.MapRoute("AnonymousInfoRefs", AnonymousGitRepositoryPrefix + "{project}/info/refs",
-                            new { controller = "Git", action = "AnonymousGetInfoRefs" },
-                            new { method = new HttpMethodConstraint("GET") });
-
-            routes.MapRoute("AnonymousReceivePack", AnonymousGitRepositoryPrefix + "{project}/git-receive-pack",
-                            new { controller = "Git", action = "AnonymousReceivePack" },
-                            new { method = new HttpMethodConstraint("POST") });
-
-            routes.MapRoute("AnonymousUploadPack", AnonymousGitRepositoryPrefix + "{project}/git-upload-pack",
-                            new { controller = "Git", action = "AnonymousUploadPack" },
-                            new { method = new HttpMethodConstraint("POST") });
-
 
 
             routes.MapRoute("IndexRoute", "{controller}/Index/",
@@ -128,8 +114,11 @@ namespace Bonobo.Git.Server
             AreaRegistration.RegisterAllAreas();
             RegisterRoutes(RouteTable.Routes);
             RegisterDependencyResolver();
+
+            BonoboGitServerContext.CreateDatabaseIfNotExists();
         }
 
+#if !DEBUG
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception exception = Server.GetLastError();
@@ -171,6 +160,7 @@ namespace Bonobo.Git.Server
                 errorController.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
             }
         }
+#endif
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
         {

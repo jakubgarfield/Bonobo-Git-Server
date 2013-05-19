@@ -29,8 +29,13 @@ else
               </p> 
             </div> 
             <div class="ctrlHolder"> 
-                @Html.LabelFor(m => m.Members)
-                @Html.ListBoxFor(m => m.Members, new MultiSelectList(ViewData["AvailableUsers"] as System.Collections.IEnumerable), new { @class = "selectInput medium" })  
+                @Html.LabelFor(m => m.Members)             
+                @{
+                    var users = (from u in ViewData["AvailableUsers"] as string[] orderby u
+                                 select new SelectListItem() { Value = u, Text = u }).ToArray();
+                }
+            
+                @Html.CheckboxListFor(m => m.Members, users, new { @class = "checkboxList medium" });             
               <p class="formHint">                  
               </p> 
             </div>

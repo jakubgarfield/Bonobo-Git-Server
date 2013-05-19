@@ -11,6 +11,7 @@ using Bonobo.Git.Server.App_GlobalResources;
 using System.IO;
 using System.Configuration;
 using System.Text.RegularExpressions;
+using Bonobo.Git.Server.Configuration;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -69,7 +70,7 @@ namespace Bonobo.Git.Server.Controllers
         [FormsAuthorizeAttribute]
         public ActionResult Create()
         {
-            if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfigurationManager.AllowUserRepositoryCreation)
+            if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfiguration.Current.AllowUserRepositoryCreation)
             {
                 return RedirectToAction("Unauthorized", "Home");
             }
@@ -86,7 +87,7 @@ namespace Bonobo.Git.Server.Controllers
         [FormsAuthorizeAttribute]
         public ActionResult Create(RepositoryDetailModel model)
         {
-            if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfigurationManager.AllowUserRepositoryCreation)
+            if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfiguration.Current.AllowUserRepositoryCreation)
             {
                 return RedirectToAction("Unauthorized", "Home");
             }
@@ -104,7 +105,7 @@ namespace Bonobo.Git.Server.Controllers
             {
                 if (RepositoryRepository.Create(ConvertRepositoryDetailModel(model)))
                 {
-                    string path = Path.Combine(UserConfigurationManager.Repositories, model.Name);
+                    string path = Path.Combine(UserConfiguration.Current.Repositories, model.Name);
                     if (!Directory.Exists(path))
                     {
                         using (var repository = new GitSharp.Core.Repository(new DirectoryInfo(path)))
@@ -146,7 +147,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (model != null && !String.IsNullOrEmpty(model.Name))
             {
-                string path = Path.Combine(UserConfigurationManager.Repositories, model.Name);
+                string path = Path.Combine(UserConfiguration.Current.Repositories, model.Name);
                 if (Directory.Exists(path))
                 {
                     DeleteFileSystemInfo(new DirectoryInfo(path));
@@ -193,7 +194,7 @@ namespace Bonobo.Git.Server.Controllers
                     }
                 }
                 path = path != null ? path.Replace(".browse", "") : null;
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfigurationManager.Repositories, id)))
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
                 {
                     string branchName;
                     var files = browser.Browse(name, path, out branchName);
@@ -211,7 +212,7 @@ namespace Bonobo.Git.Server.Controllers
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
             {
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfigurationManager.Repositories, id)))
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
                 {
                     string currentBranchName;
                     var commits = browser.GetCommits(name, out currentBranchName);
@@ -229,7 +230,7 @@ namespace Bonobo.Git.Server.Controllers
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
             {
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfigurationManager.Repositories, id)))
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
                 {
                     var model = browser.GetCommitDetail(commit);
                     model.Name = id;
@@ -269,13 +270,10 @@ namespace Bonobo.Git.Server.Controllers
                             model.IsImage = FileDisplayHandler.IsImage(model.File.Name);
                         }
                     }
-
+                    
                     if (!model.IsImage && !model.IsTextFile)
                     {
-                        using (var stream = new MemoryStream(model.File.Data))
-                        {
-                            return File(stream, "application/octet-stream", model.File.Name);
-                        }
+                        return File(model.File.Data, "application/octet-stream", model.File.Name);
                     }
                 }
 

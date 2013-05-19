@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
-namespace Bonobo.Git.Server
+namespace Bonobo.Git.Server.Configuration
 {
     [XmlRootAttribute(ElementName = "Configuration", IsNullable = false)]
-    public class UserConfiguration
+    public class UserConfiguration : ConfigurationEntry<UserConfiguration>
     {
         public bool AllowAnonymousPush { get; set; }
         public string Repositories { get; set; }
