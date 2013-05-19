@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data;
 using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.DAL;
+using Bonobo.Git.Server.Data;
 
 namespace Bonobo.Git.Server.Data
 {

@@ -8,7 +8,7 @@ using System.Configuration;
 using System.Web.Configuration;
 using System.IO;
 using Bonobo.Git.Server.App_GlobalResources;
-using Bonobo.Git.Server.Configs;
+using Bonobo.Git.Server.Configuration;
 
 namespace Bonobo.Git.Server.Controllers
 {

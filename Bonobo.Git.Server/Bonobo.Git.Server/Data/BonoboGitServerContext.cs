@@ -1,13 +1,19 @@
-using Bonobo.Git.Server.DAL.Mapping;
+using Bonobo.Git.Server.Data.Mapping;
 using System;
 using System.Data.Entity;
 using System.IO;
 using System.Web;
 
-namespace Bonobo.Git.Server.DAL
+namespace Bonobo.Git.Server.Data
 {
     public partial class BonoboGitServerContext : DbContext
     {
+        public DbSet<Repository> Repositories { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Team> Teams { get; set; }
+        public DbSet<User> Users { get; set; }
+
+
         static BonoboGitServerContext()
         {
             Database.SetInitializer<BonoboGitServerContext>(null);
@@ -18,33 +24,13 @@ namespace Bonobo.Git.Server.DAL
         {
         }
 
-        public DbSet<Repository> Repositories { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<Team> Teams { get; set; }
-        public DbSet<User> Users { get; set; }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Configurations.Add(new RepositoryMap());
-            modelBuilder.Configurations.Add(new RoleMap());
-            modelBuilder.Configurations.Add(new TeamMap());
-            modelBuilder.Configurations.Add(new UserMap());
-        }
-
-        //Not a good way, how improve it?
+        
         public static void CreateDatabaseIfNotExists()
         {
             using (var ctx = new BonoboGitServerContext())
             {
-                // Don't use 'ctx.Database.Connection is SQLiteConnection', it make reference to SQLite assembly cause loading error in IIS.
-                if (ctx.Database.Connection.GetType().Name == "SQLiteConnection")
+                if (ctx.Database.Connection.GetType().Name == "SQLiteConnection") // Don't use 'ctx.Database.Connection is SQLiteConnection', it make reference to SQLite assembly cause loading error in IIS.                
                 {
-                    /*
-                     * After this, a SQLite db file to be created if not exists.
-                     * Otherwish, nothing to do.
-                     * Generally, this method is to check the database exists or not but to be not create a db file.
-                     * I'm not sure wheather there are bug or not. -- Aimeast
-                     */
                     ctx.Database.Exists();
 
                     using (var conn = ctx.Database.Connection)
@@ -55,7 +41,7 @@ namespace Bonobo.Git.Server.DAL
                         var ret = "" + cmd.ExecuteScalar();
                         if (ret != "9")
                         {
-                            //HttpRuntime.AppDomainAppPath is better than HttpContext.Current.Server.MapPath
+                            // HttpRuntime.AppDomainAppPath is better than HttpContext.Current.Server.MapPath
                             var sql = File.ReadAllText(Path.Combine(HttpRuntime.AppDomainAppPath, @"App_LocalResources\Create.sql"));
 
                             cmd.CommandText = sql;
@@ -65,6 +51,15 @@ namespace Bonobo.Git.Server.DAL
                     }
                 }
             }
+        }
+
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Configurations.Add(new RepositoryMap());
+            modelBuilder.Configurations.Add(new RoleMap());
+            modelBuilder.Configurations.Add(new TeamMap());
+            modelBuilder.Configurations.Add(new UserMap());
         }
     }
 }

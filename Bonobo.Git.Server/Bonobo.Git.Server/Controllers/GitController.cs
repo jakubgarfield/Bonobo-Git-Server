@@ -11,7 +11,7 @@ using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 using System.Configuration;
-using Bonobo.Git.Server.Configs;
+using Bonobo.Git.Server.Configuration;
 
 namespace Bonobo.Git.Server.Controllers
 {

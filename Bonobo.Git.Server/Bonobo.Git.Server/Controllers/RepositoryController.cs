@@ -11,7 +11,7 @@ using Bonobo.Git.Server.App_GlobalResources;
 using System.IO;
 using System.Configuration;
 using System.Text.RegularExpressions;
-using Bonobo.Git.Server.Configs;
+using Bonobo.Git.Server.Configuration;
 
 namespace Bonobo.Git.Server.Controllers
 {

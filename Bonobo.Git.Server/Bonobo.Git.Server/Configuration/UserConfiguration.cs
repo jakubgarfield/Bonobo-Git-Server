@@ -1,9 +1,9 @@
 ﻿using System.Xml.Serialization;
 
-namespace Bonobo.Git.Server.Configs
+namespace Bonobo.Git.Server.Configuration
 {
     [XmlRootAttribute(ElementName = "Configuration", IsNullable = false)]
-    public class UserConfiguration : ConfigEntry<UserConfiguration>
+    public class UserConfiguration : ConfigurationEntry<UserConfiguration>
     {
         public bool AllowAnonymousPush { get; set; }
         public string Repositories { get; set; }

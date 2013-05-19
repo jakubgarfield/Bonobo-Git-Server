@@ -9,7 +9,7 @@ using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 using System.Globalization;
 using Bonobo.Git.Server.App_GlobalResources;
-using Bonobo.Git.Server.Configs;
+using Bonobo.Git.Server.Configuration;
 
 namespace Bonobo.Git.Server.Controllers
 {

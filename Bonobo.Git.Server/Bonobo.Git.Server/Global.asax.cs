@@ -15,7 +15,6 @@ using Bonobo.Git.Server.Controllers;
 using System.Diagnostics;
 using System.Web.Security;
 using System.Security.Principal;
-using Bonobo.Git.Server.DAL;
 
 namespace Bonobo.Git.Server
 {

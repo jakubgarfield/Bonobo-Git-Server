@@ -6,7 +6,7 @@ using System.Web.Security;
 using Bonobo.Git.Server.Data;
 using System.Data;
 using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.DAL;
+
 
 namespace Bonobo.Git.Server.Security
 {

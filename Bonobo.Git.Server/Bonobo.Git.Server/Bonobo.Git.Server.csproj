@@ -163,23 +163,23 @@
       <DependentUpon>Resources.zh-CN.resx</DependentUpon>
     </Compile>
     <Compile Include="BasicAuthorizeAttribute.cs" />
-    <Compile Include="Configs\ConfigEntry.cs" />
-    <Compile Include="Configs\UserConfiguration.cs" />
+    <Compile Include="Configuration\ConfigurationEntry.cs" />
+    <Compile Include="Configuration\UserConfiguration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\RepositoryController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
-    <Compile Include="DAL\BonoboGitServerContext.cs" />
-    <Compile Include="DAL\Mapping\RepositoryMap.cs" />
-    <Compile Include="DAL\Mapping\RoleMap.cs" />
-    <Compile Include="DAL\Mapping\TeamMap.cs" />
-    <Compile Include="DAL\Mapping\UserMap.cs" />
-    <Compile Include="DAL\Repository.cs" />
-    <Compile Include="DAL\Role.cs" />
-    <Compile Include="DAL\Team.cs" />
-    <Compile Include="DAL\User.cs" />
+    <Compile Include="Data\BonoboGitServerContext.cs" />
+    <Compile Include="Data\Mapping\RepositoryMap.cs" />
+    <Compile Include="Data\Mapping\RoleMap.cs" />
+    <Compile Include="Data\Mapping\TeamMap.cs" />
+    <Compile Include="Data\Mapping\UserMap.cs" />
+    <Compile Include="Data\Repository.cs" />
+    <Compile Include="Data\Role.cs" />
+    <Compile Include="Data\Team.cs" />
+    <Compile Include="Data\User.cs" />
     <Compile Include="Data\EFRepositoryRepository.cs" />
     <Compile Include="Data\EFTeamRepository.cs" />
     <Compile Include="Data\IRepositoryRepository.cs" />

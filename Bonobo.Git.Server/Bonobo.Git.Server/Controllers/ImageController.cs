@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using System.Configuration;
 using System.IO;
 using System.Text;
-using Bonobo.Git.Server.Configs;
+using Bonobo.Git.Server.Configuration;
 
 namespace Bonobo.Git.Server.Controllers
 {

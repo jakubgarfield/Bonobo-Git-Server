@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using Bonobo.Git.Server.Data;
-using Bonobo.Git.Server.DAL;
+
 
 namespace Bonobo.Git.Server.Security
 {
