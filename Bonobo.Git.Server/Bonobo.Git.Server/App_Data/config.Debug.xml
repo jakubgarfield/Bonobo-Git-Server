@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <AllowAnonymousPush>true</AllowAnonymousPush>
-  <Repositories>D:\Projects\Bonobo Git Server\Other\Git Repositories</Repositories>
-  <AllowUserRepositoryCreation>true</AllowUserRepositoryCreation>
-  <AllowAnonymousRegistration>true</AllowAnonymousRegistration>
-</Configuration>

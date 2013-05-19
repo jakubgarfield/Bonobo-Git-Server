@@ -18,14 +18,14 @@ input, button, textarea, select { *font-size: 100%;}
   
 /* General */
 html        { font: 82%/1.5 Helvetica, Arial, Sans-Serif; color: #000; background-image: url('images/background.gif'); }
-.page       { width: 1180px; margin: 0 auto; color: #fff;}
+.page       { width: 980px; margin: 0 auto; color: #fff;}
 #main       { background-color: #fff; padding: 0em 2em 2em 2em; color: #2e2e2e;}
 #menu       { float: left; width: 150px; margin-top: 1em;}
-#content    { float: right; width: 950px;}
+#content    { float: right; width: 750px;}
 #content:after, #menu:after, .page:after, #main:after, #footer:after, #header:after, #languageBar:after { content: "."; display: block; height: 0; overflow:hidden; clear: both; visibility:hidden; }
 #footer     { text-align: center; width: 100%; clear: both; margin-top: 5em;}
 #title      { width: 300px; float:left; }
-#topMenu    { width: 800px; float: right; text-align: right; padding-right: 1em; margin-top: 1em;}
+#topMenu    { width: 600px; float: right; text-align: right; padding-right: 1em; margin-top: 1em;}
 
  
 dl dd,ol li, ul li    { margin-left: 2.5em; }
@@ -128,7 +128,7 @@ div.uniForm #errorMsg { text-align: center;}
 
 /* Icons */
  
-#RepositoryTree .image, #RepositoryTree .directory, #RepositoryTree .file, #RepositoryTree .image, #AccountIndex .user, #TeamIndex .team, #RepositoryIndex .repository { display:block; padding: 0 0 0 25px; height: 20px; line-height: 20px; Width: 310px;}
+#RepositoryTree .image, #RepositoryTree .directory, #RepositoryTree .file, #RepositoryTree .image, #AccountIndex .user, #TeamIndex .team, #RepositoryIndex .repository { display:block; padding: 0 0 0 25px; height: 20px; line-height: 20px; Width: 120px;}
 
 #RepositoryTree .directory { background: url('images/folder.png') no-repeat 0px 2px;}
 #RepositoryTree .file { background: url('images/file.png') no-repeat 0px 2px;}

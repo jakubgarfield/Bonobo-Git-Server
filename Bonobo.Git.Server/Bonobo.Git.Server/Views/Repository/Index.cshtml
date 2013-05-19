@@ -20,7 +20,7 @@
         </div>
     </div>
 }
-@if (User.IsInRole(Definitions.Roles.Administrator) || UserConfigurationManager.AllowUserRepositoryCreation)
+@if (User.IsInRole(Definitions.Roles.Administrator) || UserConfiguration.Current.AllowUserRepositoryCreation)
 {
     <div class="create">@Html.ActionLink(Resources.Repository_Index_CreateNew, "Create")</div>
 }

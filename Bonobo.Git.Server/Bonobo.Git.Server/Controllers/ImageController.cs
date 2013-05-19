@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Configuration;
 using System.IO;
 using System.Text;
+using Bonobo.Git.Server.Configs;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -13,7 +14,7 @@ namespace Bonobo.Git.Server.Controllers
     {
         public ActionResult Show(string repository, string tree, string path)
         {
-            using (var browser = new RepositoryBrowser(Path.Combine(UserConfigurationManager.Repositories, repository)))
+            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repository)))
             {
                 var leaf = browser.GetLeaf(tree, path);
                 if (leaf != null)

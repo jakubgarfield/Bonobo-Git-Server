@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Bonobo.Git.Server.Data;
+using Bonobo.Git.Server.DAL;
 
 namespace Bonobo.Git.Server.Security
 {
@@ -10,10 +11,10 @@ namespace Bonobo.Git.Server.Security
     {
         public bool HasPermission(string username, string project)
         {
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
-                var user = database.User.FirstOrDefault(i => i.Username == username);
-                var repository = database.Repository.FirstOrDefault(i => i.Name == project);
+                var user = database.Users.FirstOrDefault(i => i.Username == username);
+                var repository = database.Repositories.FirstOrDefault(i => i.Name == project);
                 if (user != null && project != null)
                 {
                     if (user.Roles.FirstOrDefault(i => i.Name == Definitions.Roles.Administrator) != null
@@ -30,18 +31,18 @@ namespace Bonobo.Git.Server.Security
 
         public bool AllowsAnonymous(string project)
         {
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
-                var repo = database.Repository.FirstOrDefault(i => i.Name == project);
+                var repo = database.Repositories.FirstOrDefault(i => i.Name == project);
                 return (repo != null && repo.Anonymous);
             }
         }
 
         public bool IsRepositoryAdministrator(string username, string project)
         {
-            using (var database = new DataEntities())
+            using (var database = new BonoboGitServerContext())
             {
-                var user = database.User.FirstOrDefault(i => i.Username == username);
+                var user = database.Users.FirstOrDefault(i => i.Username == username);
                 if (user != null)
                 {
                     if (user.Roles.FirstOrDefault(i => i.Name == Definitions.Roles.Administrator) != null

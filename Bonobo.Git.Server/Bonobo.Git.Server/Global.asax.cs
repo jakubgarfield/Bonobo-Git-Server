@@ -15,6 +15,7 @@ using Bonobo.Git.Server.Controllers;
 using System.Diagnostics;
 using System.Web.Security;
 using System.Security.Principal;
+using Bonobo.Git.Server.DAL;
 
 namespace Bonobo.Git.Server
 {
@@ -114,8 +115,11 @@ namespace Bonobo.Git.Server
             AreaRegistration.RegisterAllAreas();
             RegisterRoutes(RouteTable.Routes);
             RegisterDependencyResolver();
+
+            BonoboGitServerContext.CreateDatabaseIfNotExists();
         }
 
+#if !DEBUG
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception exception = Server.GetLastError();
@@ -157,6 +161,7 @@ namespace Bonobo.Git.Server
                 errorController.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
             }
         }
+#endif
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
         {
