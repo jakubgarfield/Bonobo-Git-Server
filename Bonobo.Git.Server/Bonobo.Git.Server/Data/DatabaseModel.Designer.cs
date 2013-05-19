@@ -8,12 +8,13 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
@@ -139,6 +140,7 @@ namespace Bonobo.Git.Server.Data
         private ObjectSet<User> _User;
 
         #endregion
+
         #region AddTo Methods
     
         /// <summary>
@@ -174,11 +176,11 @@ namespace Bonobo.Git.Server.Data
         }
 
         #endregion
+
     }
-    
 
     #endregion
-    
+
     #region Entities
     
     /// <summary>
@@ -205,6 +207,7 @@ namespace Bonobo.Git.Server.Data
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -283,6 +286,7 @@ namespace Bonobo.Git.Server.Data
         partial void OnAnonymousChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -353,6 +357,7 @@ namespace Bonobo.Git.Server.Data
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -377,6 +382,7 @@ namespace Bonobo.Git.Server.Data
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -431,6 +437,7 @@ namespace Bonobo.Git.Server.Data
         partial void OnDescriptionChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -457,6 +464,7 @@ namespace Bonobo.Git.Server.Data
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -481,6 +489,7 @@ namespace Bonobo.Git.Server.Data
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -535,6 +544,7 @@ namespace Bonobo.Git.Server.Data
         partial void OnDescriptionChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -583,6 +593,7 @@ namespace Bonobo.Git.Server.Data
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -615,6 +626,7 @@ namespace Bonobo.Git.Server.Data
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -741,6 +753,7 @@ namespace Bonobo.Git.Server.Data
         partial void OnEmailChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -833,8 +846,10 @@ namespace Bonobo.Git.Server.Data
         }
 
         #endregion
+
     }
 
     #endregion
+
     
 }
