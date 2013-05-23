@@ -115,7 +115,7 @@ namespace Bonobo.Git.Server
             RegisterRoutes(RouteTable.Routes);
             RegisterDependencyResolver();
 
-            BonoboGitServerContext.CreateDatabaseIfNotExists();
+            BonoboGitServerContext.RunAutomaticUpdate();
         }
 
 #if !DEBUG

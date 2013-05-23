@@ -3,6 +3,7 @@ using System;
 using System.Data.Entity;
 using System.IO;
 using System.Web;
+using Bonobo.Git.Server.Data.Update;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -24,33 +25,30 @@ namespace Bonobo.Git.Server.Data
         {
         }
 
-        
-        public static void CreateDatabaseIfNotExists()
+
+        public static void RunAutomaticUpdate()
         {
             using (var ctx = new BonoboGitServerContext())
+            using (var connection = ctx.Database.Connection)
+            using (var command = connection.CreateCommand())
             {
-                if (ctx.Database.Connection.GetType().Name == "SQLiteConnection") // Don't use 'ctx.Database.Connection is SQLiteConnection', it make reference to SQLite assembly cause loading error in IIS.                
+                connection.Open();
+
+                foreach (var item in new UpdateScriptRepository().Scripts)
                 {
-                    ctx.Database.Exists();
-
-                    using (var conn = ctx.Database.Connection)
+                    if (!String.IsNullOrEmpty(item.Precondition))
                     {
-                        conn.Open();
-                        var cmd = conn.CreateCommand();
-                        cmd.CommandText = "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name IN ('UserTeam_Member', 'UserRole_InRole', 'UserRepository_Permission', 'UserRepository_Administrator', 'TeamRepository_Permission', 'User', 'Team', 'Role', 'Repository')";
-                        var ret = "" + cmd.ExecuteScalar();
-                        if (ret != "9")
+                        command.CommandText = item.Precondition;
+                        if (Convert.ToInt32(command.ExecuteScalar()) == 0)
                         {
-                            // HttpRuntime.AppDomainAppPath is better than HttpContext.Current.Server.MapPath
-                            var sql = File.ReadAllText(Path.Combine(HttpRuntime.AppDomainAppPath, @"App_LocalResources\Create.sql"));
-
-                            cmd.CommandText = sql;
-                            cmd.ExecuteNonQuery();
+                            return;
                         }
-                        conn.Close();
                     }
-                }
-            }
+
+                    command.CommandText = item.Command;
+                    command.ExecuteNonQuery();
+                } 
+            }            
         }
 
 
