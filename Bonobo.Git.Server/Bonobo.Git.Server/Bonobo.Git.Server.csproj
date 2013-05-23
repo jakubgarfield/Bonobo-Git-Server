@@ -227,8 +227,6 @@
     <Compile Include="UnityFilterAttributeFilterProvider.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\config.xml" />
-    <None Include="App_Data\config.Debug.xml" />
     <Content Include="App_LocalResources\Create.sql" />
     <Content Include="changelog.txt" />
     <Content Include="Content\images\action_added.gif" />
@@ -355,6 +353,7 @@
     <Content Include="Views\Team\Delete.cshtml" />
     <Content Include="Views\Repository\Delete.cshtml" />
     <Content Include="Views\Account\Delete.cshtml" />
+    <None Include="Properties\PublishProfiles\Release.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
@@ -386,10 +385,6 @@
     <Content Include="Views\Repository\Commit.cshtml" />
     <Content Include="Views\Shared\_ItemNotFound.cshtml" />
     <Content Include="Views\Repository\_Commit.cshtml" />
-    <Content Include="Web.Update.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App_GlobalResources\Resources.cs-CZ.resx">
@@ -423,6 +418,9 @@
       <Project>{7311850f-619a-4241-b09f-157792c75fba}</Project>
       <Name>GitSharp</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
