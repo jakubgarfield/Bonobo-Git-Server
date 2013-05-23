@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Tamir.SharpSSH</id>
+    <version>1.1.1.13</version>
+    <title>Tamir.SharpSSH</title>
+    <authors>Tamir Gal</authors>
+    <owners>Tamir Gal</owners>
+    <licenseUrl>http://www.jcraft.com/jsch/LICENSE.txt</licenseUrl>
+    <projectUrl>http://www.tamirgal.com/blog/page/SharpSSH.aspx</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>SharpSSH - A Secure Shell (SSH) library for .NET</description>
+    <summary>SharpSSH - A Secure Shell (SSH) library for .NET</summary>
+    <releaseNotes />
+    <copyright />
+    <language />
+  </metadata>
+</package>

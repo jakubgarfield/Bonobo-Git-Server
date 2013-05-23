@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>UDE.CSharp</id>
+    <version>1.1.0</version>
+    <title>Mozilla Universal Charset Detector</title>
+    <authors>http://code.google.com/p/ude/</authors>
+    <owners>http://code.google.com/p/ude/</owners>
+    <projectUrl>http://code.google.com/p/ude/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Compiled version of "C# port of Mozilla Universal Charset Detector"</description>
+    <releaseNotes />
+    <copyright />
+    <language />
+  </metadata>
+</package>

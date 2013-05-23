@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Unity</id>
+    <version>2.1.505.2</version>
+    <title />
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>http://www.opensource.org/licenses/ms-pl</licenseUrl>
+    <projectUrl>http://msdn.microsoft.com/unity</projectUrl>
+    <iconUrl>http://nuget.org/Media/Default/Packages/Unity/2.0/entlib_new_icon_100x100.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>The Unity Application Block (Unity) is a lightweight extensible dependency injection container with support for constructor, property, and method call injection. It facilitates loosely-coupled design.</description>
+    <summary>The Unity Application Block (Unity) is a lightweight extensible dependency injection container with support for constructor, property, and method call injection.</summary>
+    <tags>Unity EntLib IoC DI container dependency injection inversion of control LOB</tags>
+    <dependencies>
+      <dependency id="CommonServiceLocator" version="1.0" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="mscorlib" targetFramework=".NETFramework3.5, .NETFramework4.0, Silverlight3.0" />
+    </frameworkAssemblies>
+  </metadata>
+</package>
