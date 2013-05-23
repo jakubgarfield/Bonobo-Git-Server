@@ -46,7 +46,7 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Account_Edit_NewPassword")]
         public string NewPassword { get; set; }
 
-        [Compare("NewPassword", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Compare")]
+        [System.ComponentModel.DataAnnotations.Compare("NewPassword", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Compare")]
         [Display(ResourceType = typeof(Resources), Name = "Account_Edit_ConfirmPassword")]
         public string ConfirmPassword { get; set; }
 
@@ -104,7 +104,7 @@ namespace Bonobo.Git.Server.Models
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
         [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
-        [Compare("Password", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Compare")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Compare")]
         [DataType(DataType.Password)]
         [Display(ResourceType = typeof(Resources), Name = "Account_Create_ConfirmPassword")]
         public string ConfirmPassword { get; set; }
