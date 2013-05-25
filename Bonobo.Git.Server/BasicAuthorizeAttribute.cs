@@ -30,8 +30,8 @@ namespace Bonobo.Git.Server
                 string value = Encoding.ASCII.GetString(encodedDataAsBytes);
                 string username = value.Substring(0, value.IndexOf(':'));
                 string password = value.Substring(value.IndexOf(':') + 1);
-
-                if (MembershipService.ValidateUser(username, password))
+                
+                if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password) && MembershipService.ValidateUser(username, password))
                 {
                     filterContext.HttpContext.User = new GenericPrincipal(new GenericIdentity(username), null);
                 }
