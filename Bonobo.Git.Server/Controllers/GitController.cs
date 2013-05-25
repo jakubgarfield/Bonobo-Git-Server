@@ -12,6 +12,7 @@ using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 using System.Configuration;
 using Bonobo.Git.Server.Configuration;
+using System.Text;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -118,8 +119,8 @@ namespace Bonobo.Git.Server.Controllers
 
             Response.ContentType = String.Format("application/x-{0}-advertisement", service);
             SetNoCache();
-            Response.Write(FormatMessage(String.Format("# service={0}\n", service)));
-            Response.Write(FlushMessage());
+            Response.BinaryWrite(FormatMessage(String.Format("# service={0}\n", service)));
+            Response.BinaryWrite(FlushMessage());
 
             var directory = GetDirectoryInfo(project);
             if (GitSharp.Repository.IsValid(directory.FullName, true))
@@ -158,14 +159,14 @@ namespace Bonobo.Git.Server.Controllers
             return new HttpStatusCodeResult(401);
         }
 
-        private static String FormatMessage(String input)
+        private static byte[] FormatMessage(String input)
         {
-            return (input.Length + 4).ToString("X").PadLeft(4, '0') + input;
+            return Encoding.GetEncoding(28591).GetBytes((input.Length + 4).ToString("X").ToLower().PadLeft(4, '0') + input);
         }
 
-        private static String FlushMessage()
+        private static byte[] FlushMessage()
         {
-            return "0000";
+            return new[] { (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
         }
 
         private DirectoryInfo GetDirectoryInfo(String project)
