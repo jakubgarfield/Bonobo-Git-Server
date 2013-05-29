@@ -17,7 +17,7 @@
                 <h5>
                     <label>@Resources.Repository_Detail_Location</label></h5>
                 <div class="content">
-                    @String.Concat(serverAddress, MvcApplication.GitRepositoryPrefix, Model.Name)
+                    @String.Concat(serverAddress, Model.Name, ".git")
                 </div>
             </div>
             <div class="ctrlHolder">
@@ -42,8 +42,11 @@
                 <div class="content">
                     @for (int i = 0; i < Model.Users.Length; i++)
                     {
-                        @Html.ActionLink(@Model.Users[i], "Detail", "Account", new { id = @Model.Users[i] }, null)if (i + 1 != Model.Users.Length)
-                                                                                                                  {<text>, </text>}
+                        @Html.ActionLink(@Model.Users[i], "Detail", "Account", new { id = @Model.Users[i] }, null)
+                        if (i + 1 != Model.Users.Length)
+                        {
+                            <text>, </text>
+                        }
                     }
                 </div>
             </div>
@@ -52,8 +55,11 @@
                 <div class="content">
                     @for (int i = 0; i < Model.Administrators.Length; i++)
                     {
-                        @Html.ActionLink(@Model.Administrators[i], "Detail", "Account", new { id = @Model.Administrators[i] }, null)if (i + 1 != Model.Administrators.Length)
-                                                                                                                                    {<text>, </text>}
+                        @Html.ActionLink(@Model.Administrators[i], "Detail", "Account", new { id = @Model.Administrators[i] }, null)
+                        if (i + 1 != Model.Administrators.Length)
+                        {
+                            <text>, </text>
+                        }
                     }
                 </div>
             </div>
@@ -62,8 +68,11 @@
                 <div class="content">
                     @for (int i = 0; i < Model.Teams.Length; i++)
                     {
-                        @Html.ActionLink(@Model.Teams[i], "Detail", "Team", new { id = @Model.Teams[i] }, null)if (i + 1 != Model.Teams.Length)
-                                                                                                               {<text>, </text>}
+                        @Html.ActionLink(@Model.Teams[i], "Detail", "Team", new { id = @Model.Teams[i] }, null)
+                        if (i + 1 != Model.Teams.Length)
+                        {
+                            <text>, </text>
+                        }
                     }
                 </div>
             </div>

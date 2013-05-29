@@ -20,19 +20,17 @@ namespace Bonobo.Git.Server
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        public const string GitRepositoryPrefix = "Git.aspx/";
-
         public static void RegisterRoutes(RouteCollection routes)
         {
-            routes.MapRoute("SecureInfoRefs", GitRepositoryPrefix + "{project}/info/refs",
+            routes.MapRoute("SecureInfoRefs", "{project}.git/info/refs",
                             new { controller = "Git", action = "SecureGetInfoRefs" },
                             new { method = new HttpMethodConstraint("GET") });
 
-            routes.MapRoute("SecureUploadPack", GitRepositoryPrefix + "{project}/git-upload-pack",
+            routes.MapRoute("SecureUploadPack", "{project}.git/git-upload-pack",
                             new { controller = "Git", action = "SecureUploadPack" },
                             new { method = new HttpMethodConstraint("POST") });
 
-            routes.MapRoute("SecureReceivePack", GitRepositoryPrefix + "{project}/git-receive-pack",
+            routes.MapRoute("SecureReceivePack", "{project}.git/git-receive-pack",
                             new { controller = "Git", action = "SecureReceivePack" },
                             new { method = new HttpMethodConstraint("POST") });
 
