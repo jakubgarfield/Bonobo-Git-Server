@@ -51,7 +51,8 @@ ul, ol, dl  { margin: 1.5em 0 1.5em 0; }
 p       { margin: 1.5em 0 1.5em 0; }
   
 h1, h2, h3, h4, h5, h6 { font-family: Helvetica, Verdana, Sans-Serif;font-weight: bold; font-variant:small-caps;}
-h1, h2      { margin: 1.5em 0 1.5em 0;}
+h1      { margin: 1.5em 0 1.0em 0;}
+h2      { margin: 1.5em 0 1.5em 0;}
 h3, h4, h5, h6 { margin: 1em 0 1em 0;}
 h1       { font-size: 1.8em; font-variant: normal;}
 h2       { font-size: 1.5em; }
@@ -66,7 +67,7 @@ a:hover  { color: #b76900; text-decoration: underline;}
 a.active { color: #b76900; text-decoration: none;}
 #header a, #header a:visited { color: #ffffb9; text-decoration: none;}
 #header a:hover {color: #fff; text-decoration: underline;}
-.page #header #title h1 a   { color: #fff; text-decoration: none;}
+.page #header #title h1 a   { color: #fff; text-decoration: none; background: url('images/git-logo.png') no-repeat 0 0; display: block; padding-left: 48px; height: 48px;}
 
 .window { margin: 0 auto; background: #B9B9B9; padding: 1px; border: 5px solid #D8D8D8;}
 .clearfix:after { content:'.'; display:block; height:0; overflow:hidden; clear:both; visibility:hidden; }
