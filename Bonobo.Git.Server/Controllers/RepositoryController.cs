@@ -15,6 +15,7 @@ using Bonobo.Git.Server.Configuration;
 
 namespace Bonobo.Git.Server.Controllers
 {
+    [UserConfigurationRequired]
     public class RepositoryController : Controller
     {
         [Dependency]
@@ -28,6 +29,7 @@ namespace Bonobo.Git.Server.Controllers
 
         [Dependency]
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
+
 
         [FormsAuthorizeAttribute]
         public ActionResult Index()
@@ -240,6 +242,7 @@ namespace Bonobo.Git.Server.Controllers
 
             return View();
         }
+
 
         private ActionResult DisplayFiles(IEnumerable<RepositoryTreeDetailModel> files, string path, string id, bool returnAsBinary)
         {

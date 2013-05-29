@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-	<!-- 
+  <!-- 
     Microsoft ResX Schema 
     
     Version 2.0
@@ -59,653 +59,656 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-		<xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-		<xsd:element name="root" msdata:IsDataSet="true">
-			<xsd:complexType>
-				<xsd:choice maxOccurs="unbounded">
-					<xsd:element name="metadata">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" />
-							</xsd:sequence>
-							<xsd:attribute name="name" use="required" type="xsd:string" />
-							<xsd:attribute name="type" type="xsd:string" />
-							<xsd:attribute name="mimetype" type="xsd:string" />
-							<xsd:attribute ref="xml:space" />
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="assembly">
-						<xsd:complexType>
-							<xsd:attribute name="alias" type="xsd:string" />
-							<xsd:attribute name="name" type="xsd:string" />
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="data">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-							<xsd:attribute ref="xml:space" />
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="resheader">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" use="required" />
-						</xsd:complexType>
-					</xsd:element>
-				</xsd:choice>
-			</xsd:complexType>
-		</xsd:element>
-	</xsd:schema>
-	<resheader name="resmimetype">
-		<value>text/microsoft-resx</value>
-	</resheader>
-	<resheader name="version">
-		<value>2.0</value>
-	</resheader>
-	<resheader name="reader">
-		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<resheader name="writer">
-		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<data name="Account_Delete_DeleteCurrentUser" xml:space="preserve">
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Account_Delete_DeleteCurrentUser" xml:space="preserve">
     <value>You can't delete yourself.</value>
   </data>
-	<data name="Account_Delete_Success" xml:space="preserve">
+  <data name="Account_Delete_Success" xml:space="preserve">
     <value>The user was deleted.</value>
   </data>
-	<data name="Account_Detail_Back" xml:space="preserve">
+  <data name="Account_Detail_Back" xml:space="preserve">
     <value>Back to the list</value>
   </data>
-	<data name="Account_Detail_Delete" xml:space="preserve">
+  <data name="Account_Detail_Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
-	<data name="Account_Detail_Edit" xml:space="preserve">
+  <data name="Account_Detail_Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
-	<data name="Account_Detail_Email" xml:space="preserve">
+  <data name="Account_Detail_Email" xml:space="preserve">
     <value>Email</value>
   </data>
-	<data name="Account_Detail_Name" xml:space="preserve">
+  <data name="Account_Detail_Name" xml:space="preserve">
     <value>Name</value>
   </data>
-	<data name="Account_Detail_Roles" xml:space="preserve">
+  <data name="Account_Detail_Roles" xml:space="preserve">
     <value>Roles</value>
   </data>
-	<data name="Account_Detail_Surname" xml:space="preserve">
+  <data name="Account_Detail_Surname" xml:space="preserve">
     <value>Surname</value>
   </data>
-	<data name="Account_Detail_Title" xml:space="preserve">
+  <data name="Account_Detail_Title" xml:space="preserve">
     <value>User Detail</value>
   </data>
-	<data name="Account_Detail_Username" xml:space="preserve">
+  <data name="Account_Detail_Username" xml:space="preserve">
     <value>Username</value>
   </data>
-	<data name="Account_Edit_AccountInformation" xml:space="preserve">
+  <data name="Account_Edit_AccountInformation" xml:space="preserve">
     <value>Account information</value>
   </data>
-	<data name="Account_Edit_Back" xml:space="preserve">
+  <data name="Account_Edit_Back" xml:space="preserve">
     <value>Back to list</value>
   </data>
-	<data name="Account_Edit_Cancel" xml:space="preserve">
+  <data name="Account_Edit_Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-	<data name="Account_Edit_CannotRemoveYourselfFromAdminRole" xml:space="preserve">
+  <data name="Account_Edit_CannotRemoveYourselfFromAdminRole" xml:space="preserve">
     <value>Can't remove yourself from administrators.</value>
   </data>
-	<data name="Account_Edit_ConfirmPassword" xml:space="preserve">
+  <data name="Account_Edit_ConfirmPassword" xml:space="preserve">
     <value>Confirm Password</value>
   </data>
-	<data name="Account_Edit_CurrentPassword" xml:space="preserve">
+  <data name="Account_Edit_CurrentPassword" xml:space="preserve">
     <value>Current Password</value>
   </data>
-	<data name="Account_Edit_Email" xml:space="preserve">
+  <data name="Account_Edit_Email" xml:space="preserve">
     <value>Email</value>
   </data>
-	<data name="Account_Edit_Name" xml:space="preserve">
+  <data name="Account_Edit_Name" xml:space="preserve">
     <value>Name</value>
   </data>
-	<data name="Account_Edit_NewPassword" xml:space="preserve">
+  <data name="Account_Edit_NewPassword" xml:space="preserve">
     <value>New Password</value>
   </data>
-	<data name="Account_Edit_OldPasswordEmpty" xml:space="preserve">
+  <data name="Account_Edit_OldPasswordEmpty" xml:space="preserve">
     <value>Current password should not be empty.</value>
   </data>
-	<data name="Account_Edit_OldPasswordIncorrect" xml:space="preserve">
+  <data name="Account_Edit_OldPasswordIncorrect" xml:space="preserve">
     <value>Password does not match to the current password.</value>
   </data>
-	<data name="Account_Edit_Roles" xml:space="preserve">
+  <data name="Account_Edit_Roles" xml:space="preserve">
     <value>Roles</value>
   </data>
-	<data name="Account_Edit_Submit" xml:space="preserve">
+  <data name="Account_Edit_Submit" xml:space="preserve">
     <value>Save</value>
   </data>
-	<data name="Account_Edit_Surname" xml:space="preserve">
+  <data name="Account_Edit_Surname" xml:space="preserve">
     <value>Surname</value>
   </data>
-	<data name="Account_Edit_Title" xml:space="preserve">
+  <data name="Account_Edit_Title" xml:space="preserve">
     <value>Edit User Account</value>
   </data>
-	<data name="Account_Edit_Unsuccessfull" xml:space="preserve">
+  <data name="Account_Edit_Unsuccessfull" xml:space="preserve">
     <value>Account edit was unsuccessful. Please correct the errors and try again.</value>
   </data>
-	<data name="Account_Edit_UpdateSuccess" xml:space="preserve">
+  <data name="Account_Edit_UpdateSuccess" xml:space="preserve">
     <value>The account was updated successfully.</value>
   </data>
-	<data name="Account_Index_Title" xml:space="preserve">
+  <data name="Account_Index_Title" xml:space="preserve">
     <value>User Management</value>
   </data>
-	<data name="GitAccess_ProjectForbidden" xml:space="preserve">
+  <data name="GitAccess_ProjectForbidden" xml:space="preserve">
     <value>Doesn't have permission for requested project.</value>
   </data>
-	<data name="Grid_Delete" xml:space="preserve">
+  <data name="Grid_Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
-	<data name="Grid_Edit" xml:space="preserve">
+  <data name="Grid_Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
-	<data name="Home_Error_Text" xml:space="preserve">
+  <data name="Home_Error_Text" xml:space="preserve">
     <value>Unspecific error occured during processing your request. Please, try it again or contact system administrator.</value>
   </data>
-	<data name="Home_Error_Title" xml:space="preserve">
+  <data name="Home_Error_Title" xml:space="preserve">
     <value>An Error Occured</value>
   </data>
-	<data name="Home_LogOn_AccountInformation" xml:space="preserve">
+  <data name="Home_LogOn_AccountInformation" xml:space="preserve">
     <value>Account Information</value>
   </data>
-	<data name="Home_LogOn_Failed" xml:space="preserve">
+  <data name="Home_LogOn_Failed" xml:space="preserve">
     <value>Login was unsuccessful. Please correct the errors and try again.</value>
   </data>
-	<data name="Home_LogOn_LogOn" xml:space="preserve">
+  <data name="Home_LogOn_LogOn" xml:space="preserve">
     <value>Log On</value>
   </data>
-	<data name="Home_LogOn_Password" xml:space="preserve">
+  <data name="Home_LogOn_Password" xml:space="preserve">
     <value>Password</value>
   </data>
-	<data name="Home_LogOn_RememberMe" xml:space="preserve">
+  <data name="Home_LogOn_RememberMe" xml:space="preserve">
     <value>Remember me?</value>
   </data>
-	<data name="Home_LogOn_Title" xml:space="preserve">
+  <data name="Home_LogOn_Title" xml:space="preserve">
     <value>Log On</value>
   </data>
-	<data name="Home_LogOn_Username" xml:space="preserve">
+  <data name="Home_LogOn_Username" xml:space="preserve">
     <value>Username</value>
   </data>
-	<data name="Home_LogOn_UsernamePasswordIncorrect" xml:space="preserve">
+  <data name="Home_LogOn_UsernamePasswordIncorrect" xml:space="preserve">
     <value>The username or password provided is incorrect.</value>
   </data>
-	<data name="Home_PageNotFound_Text" xml:space="preserve">
+  <data name="Home_PageNotFound_Text" xml:space="preserve">
     <value>The page you were looking wasn't found. Please, try it again or contact system administrator.</value>
   </data>
-	<data name="Home_PageNotFound_Title" xml:space="preserve">
+  <data name="Home_PageNotFound_Title" xml:space="preserve">
     <value>404 Page Not Found</value>
   </data>
-	<data name="Home_ServerError_Text" xml:space="preserve">
+  <data name="Home_ServerError_Text" xml:space="preserve">
     <value>Server error occured during processing your request. Please, try it again or contact system administrator.</value>
   </data>
-	<data name="Home_ServerError_Title" xml:space="preserve">
+  <data name="Home_ServerError_Title" xml:space="preserve">
     <value>500 Server Error</value>
   </data>
-	<data name="Home_Unauthorized_Text" xml:space="preserve">
+  <data name="Home_Unauthorized_Text" xml:space="preserve">
     <value>You don't have permission for selected action or page.</value>
   </data>
-	<data name="Home_Unauthorized_Title" xml:space="preserve">
+  <data name="Home_Unauthorized_Title" xml:space="preserve">
     <value>Unauthorized</value>
   </data>
-	<data name="Item_NotFound" xml:space="preserve">
+  <data name="Item_NotFound" xml:space="preserve">
     <value>Item wasn't found</value>
   </data>
-	<data name="Layout_About" xml:space="preserve">
+  <data name="Layout_About" xml:space="preserve">
     <value>About</value>
   </data>
-	<data name="Layout_AccountSettings" xml:space="preserve">
+  <data name="Layout_AccountSettings" xml:space="preserve">
     <value>Account Settings</value>
   </data>
-	<data name="Layout_Administration" xml:space="preserve">
+  <data name="Layout_Administration" xml:space="preserve">
     <value>Administration</value>
   </data>
-	<data name="Layout_AdministrationGlobalSettings" xml:space="preserve">
+  <data name="Layout_AdministrationGlobalSettings" xml:space="preserve">
     <value>Global Settings</value>
   </data>
-	<data name="Layout_AdministrationRepositories" xml:space="preserve">
+  <data name="Layout_AdministrationRepositories" xml:space="preserve">
     <value>Repositories</value>
   </data>
-	<data name="Layout_AdministrationTeams" xml:space="preserve">
+  <data name="Layout_AdministrationTeams" xml:space="preserve">
     <value>Teams</value>
   </data>
-	<data name="Layout_AdministrationUsers" xml:space="preserve">
+  <data name="Layout_AdministrationUsers" xml:space="preserve">
     <value>Users</value>
   </data>
-	<data name="Layout_Footer_Copyright" xml:space="preserve">
+  <data name="Layout_Footer_Copyright" xml:space="preserve">
     <value>All rights reserved.</value>
   </data>
-	<data name="Layout_Home" xml:space="preserve">
+  <data name="Layout_Home" xml:space="preserve">
     <value>Home</value>
   </data>
-	<data name="Layout_LogOff" xml:space="preserve">
+  <data name="Layout_LogOff" xml:space="preserve">
     <value>Log Off</value>
   </data>
-	<data name="Layout_LogOn" xml:space="preserve">
+  <data name="Layout_LogOn" xml:space="preserve">
     <value>Log On</value>
   </data>
-	<data name="Layout_Register" xml:space="preserve">
+  <data name="Layout_Register" xml:space="preserve">
     <value>Create new account</value>
   </data>
-	<data name="Layout_Repositories" xml:space="preserve">
+  <data name="Layout_Repositories" xml:space="preserve">
     <value>Repositories</value>
   </data>
-	<data name="Layout_Title" xml:space="preserve">
+  <data name="Layout_Title" xml:space="preserve">
     <value>Bonobo Git Server</value>
   </data>
-	<data name="Repository_AddressBar_Root" xml:space="preserve">
+  <data name="Repository_AddressBar_Root" xml:space="preserve">
     <value>Home</value>
   </data>
-	<data name="Repository_Commits_Title" xml:space="preserve">
+  <data name="Repository_Commits_Title" xml:space="preserve">
     <value>Commits</value>
   </data>
-	<data name="Repository_Commit_Added" xml:space="preserve">
+  <data name="Repository_Commit_Added" xml:space="preserve">
     <value>Added</value>
   </data>
-	<data name="Repository_Commit_Author" xml:space="preserve">
+  <data name="Repository_Commit_Author" xml:space="preserve">
     <value>Author</value>
   </data>
-	<data name="Repository_Commit_AuthorEmail" xml:space="preserve">
+  <data name="Repository_Commit_AuthorEmail" xml:space="preserve">
     <value>Email</value>
   </data>
-	<data name="Repository_Commit_Changes" xml:space="preserve">
+  <data name="Repository_Commit_Changes" xml:space="preserve">
     <value>Changed files</value>
   </data>
-	<data name="Repository_Commit_Copied" xml:space="preserve">
+  <data name="Repository_Commit_Copied" xml:space="preserve">
     <value>Copied</value>
   </data>
-	<data name="Repository_Commit_Date" xml:space="preserve">
+  <data name="Repository_Commit_Date" xml:space="preserve">
     <value>Date</value>
   </data>
-	<data name="Repository_Commit_Deleted" xml:space="preserve">
+  <data name="Repository_Commit_Deleted" xml:space="preserve">
     <value>Deleted</value>
   </data>
-	<data name="Repository_Commit_Detail" xml:space="preserve">
+  <data name="Repository_Commit_Detail" xml:space="preserve">
     <value>Commit Detail</value>
   </data>
-	<data name="Repository_Commit_ID" xml:space="preserve">
+  <data name="Repository_Commit_ID" xml:space="preserve">
     <value>Commit</value>
   </data>
-	<data name="Repository_Commit_Message" xml:space="preserve">
+  <data name="Repository_Commit_Message" xml:space="preserve">
     <value>Message</value>
   </data>
-	<data name="Repository_Commit_Modified" xml:space="preserve">
+  <data name="Repository_Commit_Modified" xml:space="preserve">
     <value>Modified</value>
   </data>
-	<data name="Repository_Commit_Parents" xml:space="preserve">
+  <data name="Repository_Commit_Parents" xml:space="preserve">
     <value>Parents</value>
   </data>
-	<data name="Repository_Commit_Renamed" xml:space="preserve">
+  <data name="Repository_Commit_Renamed" xml:space="preserve">
     <value>Renamed</value>
   </data>
-	<data name="Repository_Commit_TreeID" xml:space="preserve">
+  <data name="Repository_Commit_TreeID" xml:space="preserve">
     <value>Tree</value>
   </data>
-	<data name="Repository_Commit_TypeChanged" xml:space="preserve">
+  <data name="Repository_Commit_TypeChanged" xml:space="preserve">
     <value>Type Changed</value>
   </data>
-	<data name="Repository_Create_Back" xml:space="preserve">
+  <data name="Repository_Create_Back" xml:space="preserve">
     <value>Back to the list</value>
   </data>
-	<data name="Repository_Create_DirectoryExists" xml:space="preserve">
+  <data name="Repository_Create_DirectoryExists" xml:space="preserve">
     <value>The directory with this name already exists in your repository folder. Delete this directory or choose another name and try it again.</value>
   </data>
-	<data name="Repository_Create_Fail" xml:space="preserve">
+  <data name="Repository_Create_Fail" xml:space="preserve">
     <value>Repository creation was unsuccessful. Please correct the errors and try again.</value>
   </data>
-	<data name="Repository_Create_Failure" xml:space="preserve">
+  <data name="Repository_Create_Failure" xml:space="preserve">
     <value>Repository with selected name already exists.</value>
   </data>
-	<data name="Repository_Create_Informations" xml:space="preserve">
+  <data name="Repository_Create_Informations" xml:space="preserve">
     <value>Repository informations</value>
   </data>
-	<data name="Repository_Create_Submit" xml:space="preserve">
+  <data name="Repository_Create_Submit" xml:space="preserve">
     <value>Create</value>
   </data>
-	<data name="Repository_Create_Success" xml:space="preserve">
+  <data name="Repository_Create_Success" xml:space="preserve">
     <value>Repository was created successfully.</value>
   </data>
-	<data name="Repository_Create_Title" xml:space="preserve">
+  <data name="Repository_Create_Title" xml:space="preserve">
     <value>Create New Repository</value>
   </data>
-	<data name="Repository_Delete_Success" xml:space="preserve">
+  <data name="Repository_Delete_Success" xml:space="preserve">
     <value>Repository was deleted successfully.</value>
   </data>
-	<data name="Repository_Detail_Administrators" xml:space="preserve">
+  <data name="Repository_Detail_Administrators" xml:space="preserve">
     <value>Administrators</value>
   </data>
-	<data name="Repository_Detail_Anonymous" xml:space="preserve">
+  <data name="Repository_Detail_Anonymous" xml:space="preserve">
     <value>Anonymous</value>
   </data>
-	<data name="Repository_Detail_Back" xml:space="preserve">
+  <data name="Repository_Detail_Back" xml:space="preserve">
     <value>Back to the list</value>
   </data>
-	<data name="Repository_Detail_Delete" xml:space="preserve">
+  <data name="Repository_Detail_Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
-	<data name="Repository_Detail_Description" xml:space="preserve">
+  <data name="Repository_Detail_Description" xml:space="preserve">
     <value>Description</value>
   </data>
-	<data name="Repository_Detail_Detail" xml:space="preserve">
+  <data name="Repository_Detail_Detail" xml:space="preserve">
     <value>Detail Informations</value>
   </data>
-	<data name="Repository_Detail_Edit" xml:space="preserve">
+  <data name="Repository_Detail_Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
-	<data name="Repository_Detail_IsCurrentUserAdmin" xml:space="preserve">
+  <data name="Repository_Detail_IsCurrentUserAdmin" xml:space="preserve">
     <value>Admin</value>
   </data>
-	<data name="Repository_Detail_Location" xml:space="preserve">
+  <data name="Repository_Detail_Location" xml:space="preserve">
     <value>Git Repository Location</value>
   </data>
-	<data name="Repository_Detail_Name" xml:space="preserve">
+  <data name="Repository_Detail_Name" xml:space="preserve">
     <value>Name</value>
   </data>
-	<data name="Repository_Detail_No" xml:space="preserve">
+  <data name="Repository_Detail_No" xml:space="preserve">
     <value>No</value>
   </data>
-	<data name="Repository_Detail_Teams" xml:space="preserve">
+  <data name="Repository_Detail_Teams" xml:space="preserve">
     <value>Teams</value>
   </data>
-	<data name="Repository_Detail_Title" xml:space="preserve">
+  <data name="Repository_Detail_Title" xml:space="preserve">
     <value>Repository Detail</value>
   </data>
-	<data name="Repository_Detail_Users" xml:space="preserve">
+  <data name="Repository_Detail_Users" xml:space="preserve">
     <value>Contributors</value>
   </data>
-	<data name="Repository_Detail_Yes" xml:space="preserve">
+  <data name="Repository_Detail_Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
-	<data name="Repository_Edit_Back" xml:space="preserve">
+  <data name="Repository_Edit_Back" xml:space="preserve">
     <value>Back to the list</value>
   </data>
-	<data name="Repository_Edit_CantRemoveYourself" xml:space="preserve">
+  <data name="Repository_Edit_CantRemoveYourself" xml:space="preserve">
     <value>You can't remove yourself from administrators.</value>
   </data>
-	<data name="Repository_Edit_Fail" xml:space="preserve">
+  <data name="Repository_Edit_Fail" xml:space="preserve">
     <value>Repository update was unsuccessful. Please correct the errors and try again.</value>
   </data>
-	<data name="Repository_Edit_Submit" xml:space="preserve">
+  <data name="Repository_Edit_Submit" xml:space="preserve">
     <value>Save</value>
   </data>
-	<data name="Repository_Edit_Title" xml:space="preserve">
+  <data name="Repository_Edit_Title" xml:space="preserve">
     <value>Edit Repository</value>
   </data>
-	<data name="Repository_Edit_UpdateSuccess" xml:space="preserve">
+  <data name="Repository_Edit_UpdateSuccess" xml:space="preserve">
     <value>Repository was updated successfully.</value>
   </data>
-	<data name="Repository_Index_AdministratedRepositories" xml:space="preserve">
+  <data name="Repository_Index_AdministratedRepositories" xml:space="preserve">
     <value>Administrated Repositories</value>
   </data>
-	<data name="Repository_Index_AllRepositories" xml:space="preserve">
+  <data name="Repository_Index_AllRepositories" xml:space="preserve">
     <value>All Repositories</value>
   </data>
-	<data name="Repository_Index_CreateNew" xml:space="preserve">
+  <data name="Repository_Index_CreateNew" xml:space="preserve">
     <value>Create new repository</value>
   </data>
-	<data name="Repository_Index_No" xml:space="preserve">
+  <data name="Repository_Index_No" xml:space="preserve">
     <value>No</value>
   </data>
-	<data name="Repository_Index_Repositories" xml:space="preserve">
+  <data name="Repository_Index_Repositories" xml:space="preserve">
     <value>Repositories</value>
   </data>
-	<data name="Repository_Index_Title" xml:space="preserve">
+  <data name="Repository_Index_Title" xml:space="preserve">
     <value>Repository Management</value>
   </data>
-	<data name="Repository_Index_Yes" xml:space="preserve">
+  <data name="Repository_Index_Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
-	<data name="Repository_Layout_Browse" xml:space="preserve">
+  <data name="Repository_Layout_Browse" xml:space="preserve">
     <value>Repository Browser</value>
   </data>
-	<data name="Repository_Layout_Commits" xml:space="preserve">
+  <data name="Repository_Layout_Commits" xml:space="preserve">
     <value>Commits</value>
   </data>
-	<data name="Repository_SwitchBranch" xml:space="preserve">
+  <data name="Repository_SwitchBranch" xml:space="preserve">
     <value>Switch current branch</value>
   </data>
-	<data name="Repository_Tree_Author" xml:space="preserve">
+  <data name="Repository_Tree_Author" xml:space="preserve">
     <value>Author</value>
   </data>
-	<data name="Repository_Tree_CommitDate" xml:space="preserve">
+  <data name="Repository_Tree_CommitDate" xml:space="preserve">
     <value>Date</value>
   </data>
-	<data name="Repository_Tree_CommitMessage" xml:space="preserve">
+  <data name="Repository_Tree_CommitMessage" xml:space="preserve">
     <value>Message</value>
   </data>
-	<data name="Repository_Tree_Name" xml:space="preserve">
+  <data name="Repository_Tree_Name" xml:space="preserve">
     <value>Name</value>
   </data>
-	<data name="Repository_Tree_Title" xml:space="preserve">
+  <data name="Repository_Tree_Title" xml:space="preserve">
     <value>Browse Repository</value>
   </data>
-	<data name="Settings_Global_AllowAnonymousPush" xml:space="preserve">
+  <data name="Settings_Global_AllowAnonymousPush" xml:space="preserve">
     <value>Allow push for anonymous repositories</value>
   </data>
-	<data name="Settings_Global_RepositoryPath" xml:space="preserve">
+  <data name="Settings_Global_RepositoryPath" xml:space="preserve">
     <value>Repository Directory</value>
   </data>
-	<data name="Settings_Index_Save" xml:space="preserve">
+  <data name="Settings_Index_Save" xml:space="preserve">
     <value>Save</value>
   </data>
-	<data name="Settings_Index_Title" xml:space="preserve">
+  <data name="Settings_Index_Title" xml:space="preserve">
     <value>Global Settings</value>
   </data>
-	<data name="Settings_Index_UpdateSuccess" xml:space="preserve">
+  <data name="Settings_Index_UpdateSuccess" xml:space="preserve">
     <value>Global settings updated successfully.</value>
   </data>
-	<data name="Settings_RepositoryPathNotExists" xml:space="preserve">
+  <data name="Settings_RepositoryPathNotExists" xml:space="preserve">
     <value>Selected path does not exist. Please create the folder or choose different path.</value>
   </data>
-	<data name="Settings_RepositoryPathUnauthorized" xml:space="preserve">
+  <data name="Settings_RepositoryPathUnauthorized" xml:space="preserve">
     <value>You don't have enough privileges to write to selected folder. Please choose different path.</value>
   </data>
-	<data name="Team_Create_Back" xml:space="preserve">
+  <data name="Team_Create_Back" xml:space="preserve">
     <value>Back to the list</value>
   </data>
-	<data name="Team_Create_Fail" xml:space="preserve">
+  <data name="Team_Create_Fail" xml:space="preserve">
     <value>New team creation was unsuccessful. Please correct the errors and try again.</value>
   </data>
-	<data name="Team_Create_Failure" xml:space="preserve">
+  <data name="Team_Create_Failure" xml:space="preserve">
     <value>Team with selected name already exists. Team wasn't created.</value>
   </data>
-	<data name="Team_Create_Submit" xml:space="preserve">
+  <data name="Team_Create_Submit" xml:space="preserve">
     <value>Save</value>
   </data>
-	<data name="Team_Create_Success" xml:space="preserve">
+  <data name="Team_Create_Success" xml:space="preserve">
     <value>The team was created successfully.</value>
   </data>
-	<data name="Team_Create_TeamInformations" xml:space="preserve">
+  <data name="Team_Create_TeamInformations" xml:space="preserve">
     <value>Team informations</value>
   </data>
-	<data name="Team_Create_Title" xml:space="preserve">
+  <data name="Team_Create_Title" xml:space="preserve">
     <value>Create New Team</value>
   </data>
-	<data name="Team_Delete_Success" xml:space="preserve">
+  <data name="Team_Delete_Success" xml:space="preserve">
     <value>The team was deleted.</value>
   </data>
-	<data name="Team_Detail_Back" xml:space="preserve">
+  <data name="Team_Detail_Back" xml:space="preserve">
     <value>Back to the list</value>
   </data>
-	<data name="Team_Detail_Delete" xml:space="preserve">
+  <data name="Team_Detail_Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
-	<data name="Team_Detail_Description" xml:space="preserve">
+  <data name="Team_Detail_Description" xml:space="preserve">
     <value>Description</value>
   </data>
-	<data name="Team_Detail_Edit" xml:space="preserve">
+  <data name="Team_Detail_Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
-	<data name="Team_Detail_Members" xml:space="preserve">
+  <data name="Team_Detail_Members" xml:space="preserve">
     <value>Members</value>
   </data>
-	<data name="Team_Detail_Name" xml:space="preserve">
+  <data name="Team_Detail_Name" xml:space="preserve">
     <value>Name</value>
   </data>
-	<data name="Team_Detail_Repositories" xml:space="preserve">
+  <data name="Team_Detail_Repositories" xml:space="preserve">
     <value>Repositories</value>
   </data>
-	<data name="Team_Detail_Title" xml:space="preserve">
+  <data name="Team_Detail_Title" xml:space="preserve">
     <value>Team Detail</value>
   </data>
-	<data name="Team_Edit_Back" xml:space="preserve">
+  <data name="Team_Edit_Back" xml:space="preserve">
     <value>Back to the list</value>
   </data>
-	<data name="Team_Edit_Failure" xml:space="preserve">
+  <data name="Team_Edit_Failure" xml:space="preserve">
     <value>Team update was unsuccessful. Please correct the errors and try again.</value>
   </data>
-	<data name="Team_Edit_Submit" xml:space="preserve">
+  <data name="Team_Edit_Submit" xml:space="preserve">
     <value>Update</value>
   </data>
-	<data name="Team_Edit_Title" xml:space="preserve">
+  <data name="Team_Edit_Title" xml:space="preserve">
     <value>Edit Team</value>
   </data>
-	<data name="Team_Edit_UpdateSuccess" xml:space="preserve">
+  <data name="Team_Edit_UpdateSuccess" xml:space="preserve">
     <value>Team was updated successfully.</value>
   </data>
-	<data name="Team_Index_CreateNew" xml:space="preserve">
+  <data name="Team_Index_CreateNew" xml:space="preserve">
     <value>Create new team</value>
   </data>
-	<data name="Team_Index_Title" xml:space="preserve">
+  <data name="Team_Index_Title" xml:space="preserve">
     <value>Team Management</value>
   </data>
-	<data name="Validation_Compare" xml:space="preserve">
+  <data name="Validation_Compare" xml:space="preserve">
     <value>"{0}" and "{1}" must have the same value.</value>
   </data>
-	<data name="Validation_Email" xml:space="preserve">
+  <data name="Validation_Email" xml:space="preserve">
     <value>"{0}" is not a valid email address.</value>
   </data>
-	<data name="Validation_Required" xml:space="preserve">
+  <data name="Validation_Required" xml:space="preserve">
     <value>"{0}" is mandatory.</value>
   </data>
-	<data name="DateTimeFormat" xml:space="preserve">
+  <data name="DateTimeFormat" xml:space="preserve">
     <value>MM/dd/yyyy hh:mm</value>
   </data>
-	<data name="Reset" xml:space="preserve">
+  <data name="Reset" xml:space="preserve">
     <value>Reset</value>
   </data>
-	<data name="Settings_Index_Failed" xml:space="preserve">
+  <data name="Settings_Index_Failed" xml:space="preserve">
     <value>Settings update was unsuccessful. Please correct the errors and try again.</value>
   </data>
-	<data name="Team_Index_Teams" xml:space="preserve">
+  <data name="Team_Index_Teams" xml:space="preserve">
     <value>Teams</value>
   </data>
-	<data name="Account_Edit_RolesHint" xml:space="preserve">
+  <data name="Account_Edit_RolesHint" xml:space="preserve">
     <value>Administrators have access to all repositories and are allowed to do all operations with repositories, teams and users.</value>
   </data>
-	<data name="Settings_Global_DirectoryHint" xml:space="preserve">
+  <data name="Settings_Global_DirectoryHint" xml:space="preserve">
     <value>All the git repositories are stored in this directory.</value>
   </data>
-	<data name="Home_About_Thanks" xml:space="preserve">
+  <data name="Home_About_Thanks" xml:space="preserve">
     <value>Thank you!</value>
   </data>
-	<data name="Home_About_Thanks_p" xml:space="preserve">
+  <data name="Home_About_Thanks_p" xml:space="preserve">
     <value>Bonobo Git Server is using few opensource and freeware projects. Many thanks to all authors and contributors for their great work.</value>
   </data>
-	<data name="Home_About_Title" xml:space="preserve">
+  <data name="Home_About_Title" xml:space="preserve">
     <value>About</value>
   </data>
-	<data name="Repository_AdministratorsHint" xml:space="preserve">
+  <data name="Repository_AdministratorsHint" xml:space="preserve">
     <value>Administrators have full access to repository. They can also modify repository metadata or delete repository.</value>
   </data>
-	<data name="Repository_AllowAnonymousHint" xml:space="preserve">
+  <data name="Repository_AllowAnonymousHint" xml:space="preserve">
     <value>If anonymous access is allowed everyone can pull or clone repository and view repository metadata. Push is available only if setted in Global Settings.</value>
   </data>
-	<data name="Repository_Create_NameFailure" xml:space="preserve">
+  <data name="Repository_Create_NameFailure" xml:space="preserve">
     <value>Name shouldn't contain only whitespaces.</value>
   </data>
-	<data name="Repository_TeamsHint" xml:space="preserve">
+  <data name="Repository_TeamsHint" xml:space="preserve">
     <value>Teams have access to repository. They can clone, push or pull repository and view repository metadata. All users in team can access current repository.</value>
   </data>
-	<data name="Repository_UsersHint" xml:space="preserve">
+  <data name="Repository_UsersHint" xml:space="preserve">
     <value>Users have access to repository. They can clone, push or pull repository and view repository metadata.</value>
   </data>
-	<data name="Validation_FileName" xml:space="preserve">
+  <data name="Validation_FileName" xml:space="preserve">
     <value>"{0}" contains characters that can't be in file or directory name.</value>
   </data>
-	<data name="Validation_StringLength" xml:space="preserve">
+  <data name="Validation_StringLength" xml:space="preserve">
     <value>"{0}" should be smaller than {1} chars.</value>
   </data>
-	<data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
+  <data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
     <value>Account with this username already exists.</value>
   </data>
-	<data name="Account_Create_AccountInformation" xml:space="preserve">
+  <data name="Account_Create_AccountInformation" xml:space="preserve">
     <value>Account information</value>
   </data>
-	<data name="Account_Create_ConfirmPassword" xml:space="preserve">
+  <data name="Account_Create_ConfirmPassword" xml:space="preserve">
     <value>Confirm Password</value>
   </data>
-	<data name="Account_Create_Email" xml:space="preserve">
+  <data name="Account_Create_Email" xml:space="preserve">
     <value>Email</value>
   </data>
-	<data name="Account_Create_Name" xml:space="preserve">
+  <data name="Account_Create_Name" xml:space="preserve">
     <value>Name</value>
   </data>
-	<data name="Account_Create_Password" xml:space="preserve">
+  <data name="Account_Create_Password" xml:space="preserve">
     <value>Password</value>
   </data>
-	<data name="Account_Create_Submit" xml:space="preserve">
+  <data name="Account_Create_Submit" xml:space="preserve">
     <value>Create new account</value>
   </data>
-	<data name="Account_Create_Surname" xml:space="preserve">
+  <data name="Account_Create_Surname" xml:space="preserve">
     <value>Surname</value>
   </data>
-	<data name="Account_Create_Title" xml:space="preserve">
+  <data name="Account_Create_Title" xml:space="preserve">
     <value>Create New Account</value>
   </data>
-	<data name="Account_Create_Unsuccessfull" xml:space="preserve">
+  <data name="Account_Create_Unsuccessfull" xml:space="preserve">
     <value>Account creation was unsuccessful. Please correct the errors and try again.</value>
   </data>
-	<data name="Account_Create_Username" xml:space="preserve">
+  <data name="Account_Create_Username" xml:space="preserve">
     <value>Username</value>
   </data>
-	<data name="Account_Index_Create" xml:space="preserve">
+  <data name="Account_Index_Create" xml:space="preserve">
     <value>Create new user</value>
   </data>
-	<data name="Account_Index_Users" xml:space="preserve">
+  <data name="Account_Index_Users" xml:space="preserve">
     <value>Users</value>
   </data>
-	<data name="Delete_ConfirmationText" xml:space="preserve">
+  <data name="Delete_ConfirmationText" xml:space="preserve">
     <value>Do you really want to delete {0}?</value>
   </data>
-	<data name="Account_Create_Success" xml:space="preserve">
+  <data name="Account_Create_Success" xml:space="preserve">
     <value>The user was created successfully.</value>
   </data>
-	<data name="Repository_Tree_Download" xml:space="preserve">
+  <data name="Repository_Tree_Download" xml:space="preserve">
     <value>Download file</value>
   </data>
-	<data name="Settings_Global_AllowAnonymousRegistration" xml:space="preserve">
+  <data name="Settings_Global_AllowAnonymousRegistration" xml:space="preserve">
     <value>Allow anonymous registration</value>
   </data>
-	<data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
+  <data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
     <value>If checkbox is unchecked only administrator can add new users and anonymous user registration is disabled.</value>
   </data>
-	<data name="Settings_Global_AllowUserRepositoryCreation" xml:space="preserve">
+  <data name="Settings_Global_AllowUserRepositoryCreation" xml:space="preserve">
     <value>Allow user repository creation</value>
   </data>
-	<data name="Settings_Global_AllowUserRepositoryCreation_Hint" xml:space="preserve">
+  <data name="Settings_Global_AllowUserRepositoryCreation_Hint" xml:space="preserve">
     <value>If checkbox is unchecked only administrator can create repositories.</value>
   </data>
-	<data name="Delete_Back" xml:space="preserve">
+  <data name="Delete_Back" xml:space="preserve">
     <value>Back</value>
   </data>
-	<data name="Delete_Confirm" xml:space="preserve">
+  <data name="Delete_Confirm" xml:space="preserve">
     <value>Delete</value>
   </data>
-	<data name="Delete_Title" xml:space="preserve">
+  <data name="Delete_Title" xml:space="preserve">
     <value>Delete Confirmation</value>
+  </data>
+  <data name="Settings_Index_Initialization" xml:space="preserve">
+    <value>Please initialize global settings here before the first use.</value>
   </data>
 </root>

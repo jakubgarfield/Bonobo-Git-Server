@@ -246,6 +246,7 @@
     <Compile Include="FileDisplayHandler.cs" />
     <Compile Include="UnityDependencyResolver.cs" />
     <Compile Include="UnityFilterAttributeFilterProvider.cs" />
+    <Compile Include="UserConfigurationRequiredAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\images\action_added.gif" />

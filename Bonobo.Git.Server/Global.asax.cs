@@ -15,6 +15,7 @@ using Bonobo.Git.Server.Controllers;
 using System.Diagnostics;
 using System.Web.Security;
 using System.Security.Principal;
+using Bonobo.Git.Server.Configuration;
 
 namespace Bonobo.Git.Server
 {
@@ -159,7 +160,7 @@ namespace Bonobo.Git.Server
             }
         }
 #endif
-
+        
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
         {
             if (Context.User == null)

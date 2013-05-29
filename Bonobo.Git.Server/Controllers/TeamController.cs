@@ -19,6 +19,7 @@ namespace Bonobo.Git.Server.Controllers
         [Dependency]
         public IMembershipService MembershipService { get; set; }
 
+
         [FormsAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index()
         {
@@ -117,6 +118,7 @@ namespace Bonobo.Git.Server.Controllers
             }
             return View();
         }
+
 
         private IEnumerable<TeamDetailModel> ConvertTeamModels(IEnumerable<TeamModel> models)
         {

@@ -16,12 +16,14 @@ using System.Text;
 
 namespace Bonobo.Git.Server.Controllers
 {
+    [BasicAuthorize]
+    [UserConfigurationRequired]
     public class GitController : Controller
     {
         [Dependency]
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
 
-        [BasicAuthorize]
+        
         public ActionResult SecureGetInfoRefs(String project, String service)
         {
             if (RepositoryPermissionService.HasPermission(HttpContext.User.Identity.Name, project)
@@ -38,7 +40,6 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        [BasicAuthorize]
         public ActionResult SecureUploadPack(String project)
         {
             if (RepositoryPermissionService.HasPermission(HttpContext.User.Identity.Name, project)
@@ -53,7 +54,6 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        [BasicAuthorize]
         public ActionResult SecureReceivePack(String project)
         {
             if (RepositoryPermissionService.HasPermission(HttpContext.User.Identity.Name, project)
@@ -66,6 +66,7 @@ namespace Bonobo.Git.Server.Controllers
                 return UnauthorizedResult();
             }
         }
+
 
         private ActionResult ExecuteReceivePack(string project)
         {

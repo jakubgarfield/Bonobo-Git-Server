@@ -19,6 +19,7 @@ namespace Bonobo.Git.Server.Controllers
         [Dependency]
         public IFormsAuthenticationService FormsAuthenticationService { get; set; }
 
+
         [FormsAuthorize]
         public ActionResult Index()
         {

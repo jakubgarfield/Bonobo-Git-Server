@@ -16,7 +16,9 @@ namespace Bonobo.Git.Server.Controllers
     {
         [FormsAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index()
-        {            
+        {
+            ViewBag.IsInitialized = UserConfiguration.IsInitialized;
+
             return View(new GlobalSettingsModel
             {
                 AllowAnonymousPush = UserConfiguration.Current.AllowAnonymousPush,
@@ -36,8 +38,6 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     if (Directory.Exists(model.RepositoryPath))
                     {
-                        System.Security.AccessControl.DirectorySecurity ds = Directory.GetAccessControl(model.RepositoryPath);
-
                         UserConfiguration.Current.AllowAnonymousPush = model.AllowAnonymousPush;
                         UserConfiguration.Current.Repositories = model.RepositoryPath;
                         UserConfiguration.Current.AllowAnonymousRegistration = model.AllowAnonymousRegistration;
@@ -53,7 +53,7 @@ namespace Bonobo.Git.Server.Controllers
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    ModelState.AddModelError("RepositoryPath", Resources.Settings_RepositoryPathNotExists);
+                    ModelState.AddModelError("RepositoryPath", Resources.Settings_RepositoryPathUnauthorized);
                 }
             }
 

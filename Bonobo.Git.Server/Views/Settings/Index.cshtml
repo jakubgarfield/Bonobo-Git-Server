@@ -12,6 +12,15 @@
             <p>@Resources.Settings_Index_UpdateSuccess</p>
         </div>
     }
+
+
+    if (ViewBag.IsInitialized != null && !ViewBag.IsInitialized)
+    {
+        <div id="errorMsg">
+            <p>@Resources.Settings_Index_Initialization</p>
+        </div>
+    }
+    
     @Html.ValidationSummary(false, Resources.Settings_Index_Failed, new { @id = "errorMsg" })
     <fieldset>
         <h3>@Resources.Settings_Index_Title</h3>

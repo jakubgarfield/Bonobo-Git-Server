@@ -15,26 +15,23 @@ namespace Bonobo.Git.Server.Configuration
 
         public static Entry Current { get { return _current ?? Load(); } }
 
-                
+
         private static Entry Load()
         {
-            if (_current == null)
+            lock (_sync)
             {
-                lock (_sync)
+                if (_current == null)
                 {
-                    if (_current == null)
+                    try
                     {
-                        try
+                        using (var stream = File.Open(_configPath, FileMode.Open))
                         {
-                            using (var stream = File.Open(_configPath, FileMode.Open))
-                            {
-                                _current = _serializer.Deserialize(stream) as Entry;
-                            }
+                            _current = _serializer.Deserialize(stream) as Entry;
                         }
-                        catch
-                        {
-                            _current = new Entry();
-                        }
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        _current = new Entry();
                     }
                 }
             }
@@ -44,16 +41,13 @@ namespace Bonobo.Git.Server.Configuration
 
         public void Save()
         {
-            if (_current != null)
+            lock (_sync)
             {
-                lock (_sync)
+                if (_current != null)
                 {
-                    if (_current != null)
+                    using (var stream = File.Open(_configPath, FileMode.Create))
                     {
-                        using (var stream = File.Open(_configPath, FileMode.Create))
-                        {
-                            _serializer.Serialize(stream, _current);
-                        }
+                        _serializer.Serialize(stream, _current);
                     }
                 }
             }
