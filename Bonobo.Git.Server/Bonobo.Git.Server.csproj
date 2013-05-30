@@ -378,7 +378,10 @@
     <Content Include="x86\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="changelog.md" />
+    <Content Include="license.md" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
+    <Content Include="readme.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
