@@ -17,8 +17,6 @@ namespace Bonobo.Git.Server.Controllers
         [FormsAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index()
         {
-            ViewBag.IsInitialized = UserConfiguration.IsInitialized;
-
             return View(new GlobalSettingsModel
             {
                 AllowAnonymousPush = UserConfiguration.Current.AllowAnonymousPush,

@@ -15,7 +15,6 @@ using Bonobo.Git.Server.Configuration;
 
 namespace Bonobo.Git.Server.Controllers
 {
-    [UserConfigurationRequired]
     public class RepositoryController : Controller
     {
         [Dependency]

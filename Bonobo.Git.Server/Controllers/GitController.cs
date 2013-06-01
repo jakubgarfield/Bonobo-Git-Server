@@ -17,7 +17,6 @@ using System.Text;
 namespace Bonobo.Git.Server.Controllers
 {
     [BasicAuthorize]
-    [UserConfigurationRequired]
     public class GitController : Controller
     {
         [Dependency]

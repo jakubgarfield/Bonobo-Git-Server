@@ -1528,15 +1528,6 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please initialize global settings here before the first use..
-        /// </summary>
-        public static string Settings_Index_Initialization {
-            get {
-                return ResourceManager.GetString("Settings_Index_Initialization", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Settings_Index_Save {

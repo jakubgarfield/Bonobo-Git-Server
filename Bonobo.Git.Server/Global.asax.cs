@@ -115,6 +115,7 @@ namespace Bonobo.Git.Server
             RegisterDependencyResolver();
 
             BonoboGitServerContext.RunAutomaticUpdate();
+            UserConfiguration.Initialize();
         }
 
 #if !DEBUG

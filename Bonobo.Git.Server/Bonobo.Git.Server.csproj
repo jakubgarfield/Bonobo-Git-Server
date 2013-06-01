@@ -246,9 +246,10 @@
     <Compile Include="FileDisplayHandler.cs" />
     <Compile Include="UnityDependencyResolver.cs" />
     <Compile Include="UnityFilterAttributeFilterProvider.cs" />
-    <Compile Include="UserConfigurationRequiredAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\note.txt" />
+    <Content Include="App_Data\Repositories\note.txt" />
     <Content Include="Content\images\action_added.gif" />
     <Content Include="Content\images\action_copied.gif" />
     <Content Include="Content\images\action_deleted.gif" />
@@ -453,9 +454,7 @@
       <Name>GitSharp</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
