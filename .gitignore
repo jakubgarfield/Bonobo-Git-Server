@@ -46,4 +46,6 @@ obj/
 #Project files
 [Bb]uild/
 
-[Aa]pp_[Dd]ata
+Bonobo.Git.Server/App_Data/Bonobo.Git.Server.db
+Bonobo.Git.Server/App_Data/config.xml
+Bonobo.Git.Server/App_Data/Repositories/*/
