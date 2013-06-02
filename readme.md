@@ -42,7 +42,7 @@ Before each update please read carefully the information about **compatibility i
 Installation
 -----------------------------------------------
 
-These steps ilustrates simple installation with Windows 2008 Server and IIS 7.5. They can be applied on other compatible platforms.
+These steps ilustrates simple installation with Windows 2008 Server and IIS 7. They are exactly the same for higher platforms (Windows Server 2012 and IIS 8.0).
 
 * **Extract the files** from the installation archive to `C:\inetpub\wwwroot`
 
