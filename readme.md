@@ -1,79 +1,111 @@
 Bonobo Git Server
 ==============================================
 
-Bonobo Git Server for Windows is a web application you can install on your IIS and easily manage and connect to your git repositories.
-
-Bonobo Git Server is a [open-source](http://bonobogitserver.codeplex.com/license) project and you can find the source on [github](https://github.com/jakubgarfield/Bonobo-Git-Server).
-
-#### Do you want me to continue supporting this project?
-If your company feels that it can benefit from Bonobo Git Server but is missing some features and is afraid of the future development, please, contact me with direct message. Current status of the project is freezed but it can change with a proper support.
-
-Downloads
-----------------------------------------------
-
-### Installation Package
-Download this package if you are installing Bonobo Git Server for the first time and then follow installation [instructions](http://wiki.chodounsky.net/index.php?title=Bonobo_Git_Server_Installation).
-
-<p><a class="btn btn-large" href="http://chodounsky.net/resources/bin/Install_Bonobo.Git_.Server.v1.1.0.0.zip" alt="Download installation package for Bonobo Git Server"><i class="icon-download"></i> Install version 1.1.0.0</a></p>
-
-### Update Package
-Download this package if you have already installed previous version of Bonobo Git Server and then follow update [instructions](http://wiki.chodounsky.net/index.php?title=Bonobo_Git_Server_Update).
-
-<p><a class="btn btn-large" href="http://chodounsky.net/resources/bin/Update_Bonobo.Git_.Server.v1.1.0.0.zip" alt="Download update package for already installed Bonobo Git Server"><i class="icon-download"></i> Update version 1.1.0.0</a></p>
+Thank you for downloading Bonobo Git Server. For more information please visit [http://bonobogitserver.com](http://bonobogitserver.com).
 
 
-
-Features
-------------------------------------------------
-For detailed informations about changes between versions please check [changelog](http://chodounsky.net/bonobo-git-server/changelog/).
-
-* Secure and anonymous access to your git repositories
-* User friendly web interface for management
-* User and team based repository access management
-* Repository file browser
-* Commit browser
-* Localization
-
-
-How to install?
+Prerequisites
 -----------------------------------------------
-You can find detailed manual on the project [knowledge base](http://wiki.chodounsky.net/index.php?title=Bonobo_Git_Server).
 
-* [Installation](http://wiki.chodounsky.net/index.php?title=Bonobo_Git_Server_Installation)
-* [Update](http://wiki.chodounsky.net/index.php?title=Bonobo_Git_Server_Update)
-* [Backup your data](http://wiki.chodounsky.net/index.php?title=Bonobo_Git_Server_Backup)
+* Internet Information Services 7 and higher
+    * [How to Install IIS 8 on Windows 8](http://www.howtogeek.com/112455/how-to-install-iis-8-on-windows-8/)
+    * [Installing IIS 8 on Windows Server 2012](http://www.iis.net/learn/get-started/whats-new-in-iis-8/installing-iis-8-on-windows-server-2012)
+    * [Installing IIS 7 on Windows Server 2008 or Windows Server 2008 R2](http://www.iis.net/learn/install/installing-iis-7/installing-iis-7-and-above-on-windows-server-2008-or-windows-server-2008-r2)
+    * [Installing IIS 7 on Windows Vista and Windows 7](http://www.iis.net/learn/install/installing-iis-7/installing-iis-on-windows-vista-and-windows-7)
+* [.NET Framework 4.5](http://www.microsoft.com/en-us/download/details.aspx?id=30653)
+    * Windows Vista SP2, Windows 7, Windows 8 and higher
+    * Windows Server 2008 R2, Windows Server 2008 SP2, Windows Server 2012 and higher
+* [ASP.NET MVC 4](http://www.asp.net/mvc/mvc4)
+    * You can use the [standalone installer](http://www.microsoft.com/en-us/download/details.aspx?id=30683) even though it says it requires VS 2010 and higher.
+    * Don't forget to register MVC framework with your IIS
+        * Run `%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_regiis.exe -ir` with administrator privileges
 
 
-Links
+<hr />
+
+
+
+Update
 -----------------------------------------------
-* [Knowledge Base](http://wiki.chodounsky.net/index.php?title=Bonobo_Git_Server)
-* [Forum](http://forum.chodounsky.net/viewforum.php?f=7)
-* [Screenshots](http://chodounsky.net/bonobo-git-server/screenshots/)
-* [Source](https://github.com/jakubgarfield/Bonobo-Git-Server)
+
+Before each update please read carefully the information about **compatibility issues** between your version and the latest one in [changelog](/changelog/).
+
+* Delete all the files in the installation folder **except App_Data**.
+    * Default location is `C:\inetpub\wwwroot\Bonobo.Git.Server`.
+* Copy the files from the downloaded archive to the server location.
 
 
-Compatibility
-------------------------------------------------
-Compatible with following operatings systems and IIS:
-
-* Microsoft Windows 7 & IIS 7.0 (and higher)
-* Microsoft Windows 2008 Server & IIS 7.0
-* Microsoft Windows 2003 Server & IIS 6.0
-* Microsoft Windows XP & IIS 6.0
-
-Tested on following browsers:
-
-* Internet Explorer 9.0
-* Internet Explorer 8.0
-* Internet Explorer 7.0, Internet Explorer 6.0 (minor viewing issues)
-* Chrome
-* Firefox 4.0
+<hr />
 
 
-Support Project
-------------------------------------------------
-Any comment from you on forum, blog or anywhere else would be a great boost for my morale. Please feel free to express anything.
 
-If you would like to contribute to this project (language localization, …) contact me via project [forum](http://forum.chodounsky.net/viewforum.php?f=7).
+Installation
+-----------------------------------------------
 
-Thank you very much for your interest in Bonobo Git Server for Windows.
+These steps ilustrates simple installation with Windows 2008 Server and IIS 7.5. They can be applied on other compatible platforms.
+
+* **Extract the files** from the installation archive to `C:\inetpub\wwwroot`
+
+* **Allow IIS User to modify** `C:\inetpub\wwwroot\Bonobo.Git.Server\App_Data` folder. To do so
+    * select Properties of App_Data folder,
+    * go to Security tab, 
+    * click edit, 
+    * select IIS user (in my case IIS_IUSRS) and add Modify and Write permission,
+    * confirm these settings with Apply button.
+
+* **Convert Bonobo.Git.Server to Application** in IIS
+    * Run IIS Manager and navigate to Sites -> Default Web Site. You should see Bonobo.Git.Server.
+    * Right click on Bonobo Git Server and convert to application.
+    * Check if the selected application pool runs on .NET 4.0 and convert the site.
+
+* **Launch your browser** and go to [http://localhost/Bonobo.Git.Server](http://localhost/Bonobo.Git.Server). Now you can see the initial page of Bonobo Git Server and everything is working.
+    * Default credentials are username: **admin** password: **admin**
+
+
+<hr />
+
+
+Frequently Asked Questions
+-----------------------------------------------
+
+#### How to clone a repository?
+
+* Go to the **Repository Detail**.
+* Copy the value in the **Git Repository Location**.
+    * It should look like `http://servername/projectname.git`.
+* Go to your command line and run `git clone http://servername/projectname.git`.
+
+#### How do I change my password?
+
+* Click on the **account settings** in the top right corner.
+* Enter new password and confirmation.
+* Save.
+
+#### How to backup data?
+
+* Go to the installation folder of Bonobo Git Server on the server.
+    * Default location is `C:\inetpub\wwwroot\Bonobo.Git.Server`.
+* Copy the content of App_Data folder to your backup directory.
+* If you changed the location of your repositories, backup them as well.
+
+#### How to change repositories folder?
+
+* Log in as an administrator.
+* Go to **Global Settings**.
+* Set the desired value for the **Repository Directory**.
+    * Directory must exist on the hard drive.
+    * IIS User must have proper permissions to modify the folder.
+* Save changes.    
+
+#### Can I allow anonymous access to a repository?
+
+* Edit the desired repository (or do this when creating the repository).
+* Check **Anonymous** check box.
+* Save.
+
+For allowing anonymous push you have to modify global settings.
+
+* Log in as an administrator.
+* Go to **Global Settings**.
+* Check the value **Allow push for anonymous repositories**
+* Save changes.
