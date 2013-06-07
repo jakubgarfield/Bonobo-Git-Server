@@ -629,6 +629,11 @@ namespace GitSharp.Core
             object oref = null;
             ObjectId refId = null;
 
+            if (revision == null)
+            {
+                return null;
+            }
+
             // [ammachado] Avoid the loop if the reference is not a special one.
             if (revision.IndexOfAny(new[] { '^', '~', '@' }) == -1)
             {
