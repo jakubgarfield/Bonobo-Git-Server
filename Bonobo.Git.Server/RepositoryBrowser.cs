@@ -286,8 +286,20 @@ namespace Bonobo.Git.Server
         {
             if (string.IsNullOrEmpty(branchName))
             {
-                branch = _repository.Branches.Where(i => i.Value.Target.Hash == _repository.Head.Target.Hash).FirstOrDefault().Value;
-                return true;
+                if (_repository.Head.Target == null)
+                {
+                    // make the first branch as the default branch
+                    if (_repository.Branches.Count() > 0)
+                    {
+                        branch = _repository.Branches.First().Value;
+                        return true;
+                    }
+                }
+                else
+                {
+                    branch = _repository.Branches.Where(i => i.Value.Target.Hash == _repository.Head.Target.Hash).FirstOrDefault().Value;
+                    return true;
+                }
             }
             else
             {
