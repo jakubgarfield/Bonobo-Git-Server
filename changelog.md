@@ -4,6 +4,22 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Unreleased 
+
+** Unknown Date **
+
+### Features
+
+
+### Bug Fixes
+
+* Fix a crash issue if there is not master branch [Yubo Xie](https://github.com/xieyubo)
+* Fix a crash if user browses an empty repository [Yubo Xie](https://github.com/xieyubo)
+* Fixing incorrect hint place [TheBlueSky](https://github.com/TheBlueSky)
+
+<hr />
+
+
 ## Version 1.2.0
 
 **30 May 2013**
