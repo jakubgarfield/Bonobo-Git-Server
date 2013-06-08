@@ -13,9 +13,9 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 ### Bug Fixes
 
-* Fix a crash issue if there is not master branch [Yubo Xie](https://github.com/xieyubo)
-* Fix a crash if user browses an empty repository [Yubo Xie](https://github.com/xieyubo)
-* Fixing incorrect hint place [TheBlueSky](https://github.com/TheBlueSky)
+* Fix a crash issue if there is not master branch - [Yubo Xie](https://github.com/xieyubo)
+* Fix a crash if user browses an empty repository - [Yubo Xie](https://github.com/xieyubo)
+* Fixing incorrect hint place - [TheBlueSky](https://github.com/TheBlueSky)
 
 <hr />
 
