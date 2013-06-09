@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>LibGit2Sharp</id>
+    <version>0.12.0.0</version>
+    <title>LibGit2Sharp</title>
+    <authors>LibGit2Sharp contributors</authors>
+    <owners>LibGit2Sharp contributors</owners>
+    <licenseUrl>https://github.com/libgit2/libgit2sharp/raw/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/libgit2/libgit2sharp/</projectUrl>
+    <iconUrl>https://github.com/libgit2/libgit2sharp/raw/master/square-logo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>LibGit2Sharp brings all the might and speed of libgit2, a native Git implementation, to the managed world of .Net and Mono.</description>
+    <releaseNotes />
+    <copyright />
+    <language />
+    <tags>libgit2 git wrapper bindings API dvcs vcs</tags>
+  </metadata>
+</package>
