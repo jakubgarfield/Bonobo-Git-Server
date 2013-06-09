@@ -444,16 +444,6 @@
       <LastGenOutput>Resources.zh-CN.designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GitSharp.Core\GitSharp.Core.csproj">
-      <Project>{c46edd61-c202-465a-93f1-ade20a83bb59}</Project>
-      <Name>GitSharp.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GitSharp\GitSharp.csproj">
-      <Project>{7311850f-619a-4241-b09f-157792c75fba}</Project>
-      <Name>GitSharp</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
