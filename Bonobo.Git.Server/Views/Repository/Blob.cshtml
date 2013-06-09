@@ -1,0 +1,35 @@
+﻿@using Bonobo.Git.Server.Extensions
+@model RepositoryTreeDetailModel
+@{
+    Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
+    ViewBag.Title = Resources.Repository_Tree_Title;
+}
+@if (Model != null)
+{
+    <div class="uniForm">
+        <fieldset class="inlineLabels detail">
+            <h3>@Model.Name</h3>
+        </fieldset>
+    </div>
+    <div class="repositoryContent">
+        @Html.Partial("_BranchSwitcher")
+        @Html.Partial("_AddressBar")
+        @{
+            <div class="controlPanel">
+                <p>@Html.ActionLink(@Resources.Repository_Tree_Download, "Raw", new { name = Model.TreeName, path = Model.Path }, new { @class = "downloadLink" })</p>
+            </div>
+        }
+        @if (Model.IsImage)
+        {
+            <img class="fileImage" alt="@Model.Name" src="@Url.Action("Raw", new { name = Model.TreeName, path = Model.Path })" />
+        }
+        else if (Model.IsText)
+        {
+            <pre class="brush: @Model.TextBrush;">@Model.Text</pre>
+        }
+        else
+        {
+            <span>@Resources.Repository_Tree_PreviewNotSupported</span>
+        }
+    </div>
+}

@@ -1429,6 +1429,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preview of this file is not supported..
+        /// </summary>
+        public static string Repository_Tree_PreviewNotSupported {
+            get {
+                return ResourceManager.GetString("Repository_Tree_PreviewNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Browse Repository.
         /// </summary>
         public static string Repository_Tree_Title {

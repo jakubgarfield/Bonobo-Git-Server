@@ -708,4 +708,7 @@
   <data name="Delete_Title" xml:space="preserve">
     <value>Delete Confirmation</value>
   </data>
+  <data name="Repository_Tree_PreviewNotSupported" xml:space="preserve">
+    <value>Preview of this file is not supported.</value>
+  </data>
 </root>

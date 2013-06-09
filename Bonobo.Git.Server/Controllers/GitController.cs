@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using GitSharp;
-using GitSharp.Core.Transport;
 using System.IO;
-using ICSharpCode.SharpZipLib.GZip;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
@@ -73,9 +70,9 @@ namespace Bonobo.Git.Server.Controllers
             SetNoCache();
 
             var directory = GetDirectoryInfo(project);
-            if (GitSharp.Repository.IsValid(directory.FullName, true))
+            if (LibGit2Sharp.Repository.IsValid(directory.FullName))
             {
-                using (var repository = new GitSharp.Repository(directory.FullName))
+                using (var repository = new LibGit2Sharp.Repository(directory.FullName))
                 using (var pack = new ReceivePack(repository))
                 {
                     pack.setBiDirectionalPipe(false);
@@ -96,9 +93,9 @@ namespace Bonobo.Git.Server.Controllers
             SetNoCache();
 
             var directory = GetDirectoryInfo(project);
-            if (GitSharp.Repository.IsValid(directory.FullName, true))
+            if (LibGit2Sharp.Repository.IsValid(directory.FullName))
             {
-                using (var repository = new GitSharp.Repository(directory.FullName))
+                using (var repository = new LibGit2Sharp.Repository(directory.FullName))
                 using (var pack = new UploadPack(repository))
                 {
                     pack.setBiDirectionalPipe(false);
@@ -123,9 +120,9 @@ namespace Bonobo.Git.Server.Controllers
             Response.BinaryWrite(FlushMessage());
 
             var directory = GetDirectoryInfo(project);
-            if (GitSharp.Repository.IsValid(directory.FullName, true))
+            if (LibGit2Sharp.Repository.IsValid(directory.FullName))
             {
-                using (var repository = new GitSharp.Repository(directory.FullName))
+                using (var repository = new LibGit2Sharp.Repository(directory.FullName))
                 {
                     if (String.Equals("git-receive-pack", service, StringComparison.InvariantCultureIgnoreCase))
                     {

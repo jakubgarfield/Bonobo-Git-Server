@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.ServiceModel.Activation;
-using GitSharp;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 using System.Globalization;
@@ -44,6 +43,12 @@ namespace Bonobo.Git.Server
 
             routes.MapRoute("RepositoryTree", "Repository/{id}/Tree/{name}/{*path}",
                             new { controller = "Repository", action = "Tree" });
+            
+            routes.MapRoute("RepositoryBlob", "Repository/{id}/Blob/{name}/{*path}",
+                            new { controller = "Repository", action = "Blob" });
+            
+            routes.MapRoute("RepositoryRaw", "Repository/{id}/Raw/{name}/{*path}",
+                            new { controller = "Repository", action = "Raw" });          
 
             routes.MapRoute("RepositoryCommits", "Repository/{id}/Commits/{name}/",
                             new { controller = "Repository", action = "Commits" });

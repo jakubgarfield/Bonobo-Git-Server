@@ -186,7 +186,6 @@
     <Compile Include="Configuration\UserConfiguration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ImageController.cs" />
     <Compile Include="Controllers\RepositoryController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
@@ -266,6 +265,8 @@
     <Content Include="Content\images\detail.png" />
     <Content Include="Content\images\download_file.png" />
     <Content Include="Content\images\jp.png" />
+    <Content Include="Content\images\tag.png" />
+    <Content Include="Content\images\tag_active.png" />
     <Content Include="Content\images\tr.png" />
     <Content Include="favicon.ico" />
     <Content Include="Content\images\folder.png" />
@@ -389,6 +390,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\PublishProfiles\Release.pubxml" />
+    <Content Include="Views\Repository\Blob.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />

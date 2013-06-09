@@ -161,7 +161,10 @@ div.uniForm #errorMsg { text-align: center;}
 .branchSwitcher ul { margin: 0 0 2em 0;}
 .branchSwitcher li { display: inline-block; float: left;  margin: 0 1.5em 0 0em; }
 .branchSwitcher li a { background: url('images/branch.png') no-repeat; padding-left: 23px;}
-.branchSwitcher li.active a { font-weight: bold; background: url('images/branch_active.png') no-repeat;}
+.branchSwitcher li.branchactive a { font-weight: bold; background: url('images/branch_active.png') no-repeat;}
+.branchSwitcher li.branchinactive a { background: url('images/branch.png') no-repeat;}
+.branchSwitcher li.tagactive a { font-weight: bold; background: url('images/tag_active.png') no-repeat;}
+.branchSwitcher li.taginactive a { background: url('images/tag.png') no-repeat;}
 
 #repositoryAddress { font-size: 1.2em; background: url('images/address.png') no-repeat 0 4px; padding-left: 23px; display: inline-block; margin-top: 0em;}
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using Bonobo.Git.Server.App_GlobalResources;
+using LibGit2Sharp;
 
 namespace Bonobo.Git.Server.Models
 {
@@ -59,23 +60,19 @@ namespace Bonobo.Git.Server.Models
         public string Author { get; set; }
 
         public bool IsTree { get; set; }
-        public string Tree { get; set; }
-        public bool IsImage { get { return FileDisplayHandler.IsImage(Path); } }
+        public string TreeName { get; set; }
+        public bool IsImage { get; set; }
+        public bool IsText { get; set; }
         public string Path { get; set; }
         public byte[] Data { get; set; }
-        public string Hash { get; set; }
+        public string Text { get; set; }
+        public string TextBrush { get; set; }
     }
 
     public class RepositoryTreeModel
     {
         public string Name { get; set; }
         public IEnumerable<RepositoryTreeDetailModel> Files { get; set; }
-        public RepositoryTreeDetailModel File { get; set; }
-        public bool IsTree { get; set; }
-        public bool IsImage { get; set; }
-        public bool IsTextFile { get; set; }
-        public string Text { get; set; }
-        public string TextBrush { get; set; }
     }
 
     public class RepositoryCommitsModel
@@ -88,7 +85,7 @@ namespace Bonobo.Git.Server.Models
     {
         public string Name { get; set; }
         public string Path { get; set; }
-        public GitSharp.ChangeType Type { get; set; }        
+        public ChangeKind Type { get; set; }        
     }
 
     public class RepositoryCommitModel

@@ -14,36 +14,21 @@
     <div class="repositoryContent">
         @Html.Partial("_BranchSwitcher")
         @Html.Partial("_AddressBar")
-        @if (!Model.IsTree)
-        {
-            <div class="controlPanel">
-                <p>@Html.ActionLink(@Resources.Repository_Tree_Download, "Tree", new { name = Model.File.Tree, path = Model.File.Path + ".download" }, new { @class = "downloadLink" })</p>
-            </div>
-        }
-        @if (Model.IsTree)
-        {
-            var grid = new WebGrid(source: Model.Files, rowsPerPage: 15);
+        @{
+            var grid = new WebGrid(source: Model.Files, rowsPerPage: 100);
             <div class="w-grid">
                 @grid.GetHtml(
                     tableStyle: "grid",
                     headerStyle: "head",
                     alternatingRowStyle: "even",
                     columns: grid.Columns(
-                     grid.Column("Name", header: typeof(RepositoryTreeDetailModel).GetDisplayValue("Name"), format: (item) => @Html.ActionLink((string)item.Name, "Tree", new { name = item.Tree, path = item.Path + ".browse" }, new { @class = item.IsTree ? "directory" : item.IsImage ? "image" : "file" })),
+                     grid.Column("Name", header: typeof(RepositoryTreeDetailModel).GetDisplayValue("Name"), format: (item) => @Html.ActionLink((string)item.Name, item.IsTree ? "Tree" : "Blob", new { name = item.TreeName, path = item.Path }, new { @class = item.IsTree ? "directory" : item.IsImage ? "image" : "file" })),
                         grid.Column("CommitMessage", header: typeof(RepositoryTreeDetailModel).GetDisplayValue("CommitMessage")),
                         grid.Column("CommitDate", header: typeof(RepositoryTreeDetailModel).GetDisplayValue("CommitDate"), format: item => ((DateTime)item.CommitDate).ToString(Resources.DateTimeFormat)),
                         grid.Column("Author", header: typeof(RepositoryTreeDetailModel).GetDisplayValue("Author"))
                     )
                 )
             </div>
-        }
-        else if (Model.IsImage)
-        {
-            <img class="fileImage" alt="@Model.File.Name" src="@Url.Action("Show", "Image", new { repository = ViewBag.ID, tree = Model.File.Tree, path = Model.File.Path })" />
-        }
-        else if (Model.IsTextFile)
-        {
-            <pre class="brush: @Model.TextBrush;">@Model.Text</pre>   
         }
     </div>
 }

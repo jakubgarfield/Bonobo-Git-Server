@@ -12,6 +12,7 @@ using System.IO;
 using System.Configuration;
 using System.Text.RegularExpressions;
 using Bonobo.Git.Server.Configuration;
+using LibGit2Sharp;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -109,9 +110,8 @@ namespace Bonobo.Git.Server.Controllers
                     string path = Path.Combine(UserConfiguration.Current.Repositories, model.Name);
                     if (!Directory.Exists(path))
                     {
-                        using (var repository = new GitSharp.Core.Repository(new DirectoryInfo(path)))
+                        using (var repository = LibGit2Sharp.Repository.Init(path, true))
                         {
-                            repository.Create(true);
                         }
                         TempData["CreateSuccess"] = true;
                         return RedirectToAction("Index");
@@ -181,27 +181,61 @@ namespace Bonobo.Git.Server.Controllers
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
             {
-                bool download = false;
-                if (path != null)
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))                 
                 {
-                    if (path.EndsWith(".browse"))
-                    {
-                        path = path.Substring(0, path.Length - 7);
-                    }
-                    else if (path.EndsWith(".download"))
-                    {
-                        path = path.Substring(0, path.Length - 9);
-                        download = true;
-                    }
+                    string referenceName;
+                    var files = browser.BrowseTree(name, path, out referenceName);
+                    PopulateBranchesData(browser, referenceName);
+                    PopulateAddressBarData(name, path);
+
+                    var model = new RepositoryTreeModel();
+                    model.Name = id;
+                    model.Files = files.OrderByDescending(i => i.IsTree).ThenBy(i => i.Name);
+                    return View(model);
                 }
-                path = path != null ? path.Replace(".browse", "") : null;
+            }
+
+            return View();
+        }
+
+        [FormsAuthorizeRepository]
+        public ActionResult Blob(string id, string name, string path)
+        {
+            ViewBag.ID = id;
+            if (!String.IsNullOrEmpty(id))
+            {
                 using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
                 {
-                    string branchName;
-                    var files = browser.Browse(name, path, out branchName);
-                    PopulateBranchesData(browser, branchName);
+                    string referenceName;
+                    var model = browser.BrowseBlob(name, path, out referenceName);
+                    PopulateBranchesData(browser, referenceName);
                     PopulateAddressBarData(name, path);
-                    return DisplayFiles(files, path, id, download);
+
+                    model.Text = FileDisplayHandler.GetText(model.Data);
+                    model.IsText = model.Text != null;
+                    if (model.IsText)
+                        model.TextBrush = FileDisplayHandler.GetBrush(path);
+                    else
+                        model.IsImage = FileDisplayHandler.IsImage(path);
+
+                    return View(model);
+                }
+            }
+            return View();
+        }
+
+        [FormsAuthorizeRepository]
+        public ActionResult Raw(string id, string name, string path)
+        {
+            ViewBag.ID = id;
+            if (!String.IsNullOrEmpty(id))
+            {
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+                {
+                    string referenceName;
+                    var model = browser.BrowseBlob(name, path, out referenceName);
+
+                    return File(model.Data, "application/octet-stream", model.Name);
                 }
             }
             return View();
@@ -215,9 +249,9 @@ namespace Bonobo.Git.Server.Controllers
             {
                 using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
                 {
-                    string currentBranchName;
-                    var commits = browser.GetCommits(name, out currentBranchName);
-                    PopulateBranchesData(browser, currentBranchName);
+                    string referenceName;
+                    var commits = browser.GetCommits(name, out referenceName);
+                    PopulateBranchesData(browser, referenceName);
                     return View(new RepositoryCommitsModel { Commits = commits, Name = id });
                 }
             }
@@ -243,59 +277,17 @@ namespace Bonobo.Git.Server.Controllers
         }
 
 
-        private ActionResult DisplayFiles(IEnumerable<RepositoryTreeDetailModel> files, string path, string id, bool returnAsBinary)
-        {
-            if (files != null)
-            {
-                var model = new RepositoryTreeModel();
-                model.Name = id;
-                model.IsTree = !(files.Count() == 1 && !files.First().IsTree && files.First().Path == path);
-                if (model.IsTree)
-                {
-                    model.Files = files.OrderByDescending(i => i.IsTree).ThenBy(i => i.Name);
-                }
-                else
-                {
-                    model.File = files.First();
-                    if (!returnAsBinary)
-                    {
-                        model.Text = FileDisplayHandler.GetText(model.File.Data);
-                        model.IsTextFile = model.Text != null;
-
-                        if (model.IsTextFile)
-                        {
-                            model.TextBrush = FileDisplayHandler.GetBrush(model.File.Name);
-                        }
-
-                        if (!model.IsTextFile)
-                        {
-                            model.IsImage = FileDisplayHandler.IsImage(model.File.Name);
-                        }
-                    }
-                    
-                    if (!model.IsImage && !model.IsTextFile)
-                    {
-                        return File(model.File.Data, "application/octet-stream", model.File.Name);
-                    }
-                }
-
-                return View(model);
-            }
-
-            return View();
-        }
-
-
         private void PopulateAddressBarData(string name, string path)
         {
             ViewData["path"] = path;
             ViewData["name"] = name;
         }
 
-        private void PopulateBranchesData(RepositoryBrowser browser, string branchName)
+        private void PopulateBranchesData(RepositoryBrowser browser, string referenceName)
         {
-            ViewData["currentBranch"] = branchName;
+            ViewData["referenceName"] = referenceName;
             ViewData["branches"] = browser.GetBranches();
+            ViewData["tags"] = browser.GetTags();
         }
 
         private void PopulateEditData()
