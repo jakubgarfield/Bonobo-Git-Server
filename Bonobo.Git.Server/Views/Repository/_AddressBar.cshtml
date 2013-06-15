@@ -7,8 +7,7 @@
         {
             <text>/</text>
             var dirs = path.Split('/');
-            var length = ViewContext.RouteData.Values["Action"] == "Blob" ? dirs.Length - 1 : dirs.Length;
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < dirs.Length; i++)
             {
                 string currentPath = string.Empty;
                 for (int j = 0; j < i; j++)
@@ -16,7 +15,16 @@
                     currentPath += dirs[j] + "/";
                 }
                 currentPath += dirs[i];
-                @Html.ActionLink(dirs[i], "Tree", new { path = currentPath, id = ViewBag.ID })
+
+                if (ViewContext.RouteData.Values["Action"] == "Blob" && i + 1 == dirs.Length)
+                {
+                    @dirs[i]
+                }
+                else
+                {
+                    @Html.ActionLink(dirs[i], "Tree", new { path = currentPath, id = ViewBag.ID })                    
+                }
+
                 if (i + 1 != dirs.Length)
                 {
                         <text>/</text>
