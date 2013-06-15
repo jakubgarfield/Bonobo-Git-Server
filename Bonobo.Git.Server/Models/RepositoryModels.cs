@@ -85,7 +85,7 @@ namespace Bonobo.Git.Server.Models
     {
         public string Name { get; set; }
         public string Path { get; set; }
-        public ChangeKind Type { get; set; }        
+        public ChangeKind Status { get; set; }        
     }
 
     public class RepositoryCommitModel

@@ -19,31 +19,31 @@
             {
                 <div class="item">
                     <p>
-                        @if (item.Type == LibGit2Sharp.ChangeKind.Added)
+                        @if (item.Status == LibGit2Sharp.ChangeKind.Added)
                         {
                             <text><img src="@Url.Content("~/Content/Images/action_added.gif")" alt="@Resources.Repository_Commit_Added" /></text>
                         }
-                        else if (item.Type == LibGit2Sharp.ChangeKind.Modified)
+                        else if (item.Status == LibGit2Sharp.ChangeKind.Modified)
                         {
                             <text><img src="@Url.Content("~/Content/Images/action_modified.gif")" alt="@Resources.Repository_Commit_Modified" /></text>
                         }
-                        else if (item.Type == LibGit2Sharp.ChangeKind.Deleted)
+                        else if (item.Status == LibGit2Sharp.ChangeKind.Deleted)
                         {
                             <text><img src="@Url.Content("~/Content/Images/action_deleted.gif")" alt="@Resources.Repository_Commit_Deleted" /></text>
                         }
-                        else if (item.Type == LibGit2Sharp.ChangeKind.Renamed)
+                        else if (item.Status == LibGit2Sharp.ChangeKind.Renamed)
                         {
                             <text><img src="@Url.Content("~/Content/Images/action_renamed.gif")" alt="@Resources.Repository_Commit_Renamed" /></text>
                         }
-                        else if (item.Type == LibGit2Sharp.ChangeKind.Copied)
+                        else if (item.Status == LibGit2Sharp.ChangeKind.Copied)
                         {
                             <text><img src="@Url.Content("~/Content/Images/action_copied.gif")" alt="@Resources.Repository_Commit_Copied" /></text>
                         }
-                        else if (item.Type == LibGit2Sharp.ChangeKind.TypeChanged)
+                        else if (item.Status == LibGit2Sharp.ChangeKind.TypeChanged)
                         {
                             <text><img src="@Url.Content("~/Content/Images/action_typechanged.gif")" alt="@Resources.Repository_Commit_TypeChanged" /></text>
                         }
-                        @if (item.Type != LibGit2Sharp.ChangeKind.Deleted)
+                        @if (item.Status != LibGit2Sharp.ChangeKind.Deleted)
                         {
                             @Html.ActionLink(item.Path, "Tree", new { id = ViewBag.ID, path = item.Path, name = Model.ID })
                         }

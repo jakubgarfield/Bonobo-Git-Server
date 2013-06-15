@@ -247,6 +247,10 @@
     <Compile Include="UnityFilterAttributeFilterProvider.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Git\git-receive-pack.exe" />
+    <Content Include="App_Data\Git\git-upload-archive.exe" />
+    <Content Include="App_Data\Git\git-upload-pack.exe" />
+    <Content Include="App_Data\Git\git.exe" />
     <Content Include="App_Data\note.txt" />
     <Content Include="App_Data\Repositories\note.txt" />
     <Content Include="Content\images\action_added.gif" />
