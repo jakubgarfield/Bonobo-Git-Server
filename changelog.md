@@ -10,9 +10,14 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 ### Features
 
+* Gitsharp removed
+* Switched to libgit2sharp
+* Tag support
 
 ### Bug Fixes
 
+* Enable repository browser view  of ASP.NET special folders
+* Enable repository browser view of any extension
 * Fix a crash issue if there is not master branch - [Yubo Xie](https://github.com/xieyubo)
 * Fix a crash if user browses an empty repository - [Yubo Xie](https://github.com/xieyubo)
 * Fixing incorrect hint place - [TheBlueSky](https://github.com/TheBlueSky)
