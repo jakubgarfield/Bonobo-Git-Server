@@ -3,13 +3,16 @@
     <div class="branchSwitcher">
         <h4>@Resources.Repository_SwitchBranch</h4>
         <ul class="clearfix">
-            @foreach (var item in ViewData["branches"] as IEnumerable<string>)
-            {
-                <li class="@(String.Equals(ViewData["referenceName"], item) ? "branchactive" : "branchinactive")">@Html.ActionLink(item as string, "Tree", new { name = item, id = ViewBag.ID })</li>
-            }
-            @foreach (var item in ViewData["tags"] as IEnumerable<string>)
-            {
-                <li class="@(String.Equals(ViewData["referenceName"], item) ? "tagactive" : "taginactive")">@Html.ActionLink(item as string, "Tree", new { name = item, id = ViewBag.ID })</li>
+            @{ 
+                var action = ViewContext.RouteData.Values["Action"].ToString() == "Blob" ? "Tree" : ViewContext.RouteData.Values["Action"].ToString();
+                foreach (var item in ViewData["branches"] as IEnumerable<string>)
+                {
+                    <li class="@(String.Equals(ViewData["referenceName"], item) ? "branchactive" : "branchinactive")">@Html.ActionLink(item as string, action, new { name = item, id = ViewBag.ID })</li>
+                }
+                foreach (var item in ViewData["tags"] as IEnumerable<string>)
+                {
+                    <li class="@(String.Equals(ViewData["referenceName"], item) ? "tagactive" : "taginactive")">@Html.ActionLink(item as string, action, new { name = item, id = ViewBag.ID })</li>
+                }
             }
         </ul>
     </div>
