@@ -7,11 +7,11 @@
                 var action = ViewContext.RouteData.Values["Action"].ToString() == "Blob" ? "Tree" : ViewContext.RouteData.Values["Action"].ToString();
                 foreach (var item in ViewData["branches"] as IEnumerable<string>)
                 {
-                    <li class="@(String.Equals(ViewData["referenceName"], item) ? "branchactive" : "branchinactive")">@Html.ActionLink(item as string, action, new { name = item, id = ViewBag.ID })</li>
+                    <li class="@(String.Equals(ViewData["referenceName"], item) ? "branchactive" : "branchinactive")">@Html.ActionLink(item as string, action, new { name = item, path = String.Empty })</li>
                 }
                 foreach (var item in ViewData["tags"] as IEnumerable<string>)
                 {
-                    <li class="@(String.Equals(ViewData["referenceName"], item) ? "tagactive" : "taginactive")">@Html.ActionLink(item as string, action, new { name = item, id = ViewBag.ID })</li>
+                    <li class="@(String.Equals(ViewData["referenceName"], item) ? "tagactive" : "taginactive")">@Html.ActionLink(item as string, action, new { name = item, path = String.Empty })</li>
                 }
             }
         </ul>
