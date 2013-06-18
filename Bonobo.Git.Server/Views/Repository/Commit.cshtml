@@ -45,7 +45,7 @@
                         }
                         @if (item.Status != LibGit2Sharp.ChangeKind.Deleted)
                         {
-                            @Html.ActionLink(item.Path, "Tree", new { id = ViewBag.ID, path = item.Path, name = Model.ID })
+                            @Html.ActionLink(item.Path, "Blob", new { id = ViewBag.ID, path = item.Path, name = Model.ID })
                         }
                         else
                         {
