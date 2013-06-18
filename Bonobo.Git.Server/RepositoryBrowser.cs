@@ -32,62 +32,49 @@ namespace Bonobo.Git.Server
 
         public IEnumerable<RepositoryCommitModel> GetCommits(string name, out string referenceName)
         {
-            var result = new List<RepositoryCommitModel>();
             var commit = GetCommitByName(name, out referenceName);
-
             if (commit == null)
-                return result;
+                return new List<RepositoryCommitModel>();
 
-            var ancestors = _repository.Commits.QueryBy(new Filter { Since = commit, SortBy = GitSortOptions.Topological });
-            result.AddRange(ancestors.Select(s => ConvertToRepositoryCommitModel(s)));
-
-            return result;
+            return _repository.Commits
+                .QueryBy(new Filter { Since = commit, SortBy = GitSortOptions.Topological })
+                .Select(s => ToModel(s))
+                .ToList();
         }
 
         public RepositoryCommitModel GetCommitDetail(string name)
         {
             string referenceName;
             var commit = GetCommitByName(name, out referenceName);
-
-            return commit == null ? null : ConvertToRepositoryCommitModel(commit, true);
+            return commit == null ? null : ToModel(commit, true);
         }
 
         public IEnumerable<RepositoryTreeDetailModel> BrowseTree(string name, string path, out string referenceName)
         {
-            if (path == null)
-            {
-                path = String.Empty;
-            }
-
-            var result = new List<RepositoryTreeDetailModel>();
             var commit = GetCommitByName(name, out referenceName);
-
             if (commit == null)
-            {
-                return result;
-            }
+                return new List<RepositoryTreeDetailModel>();
 
             var branchNameTemp = referenceName;
             var ancestors = _repository.Commits.QueryBy(new Filter { Since = commit, SortBy = GitSortOptions.Topological | GitSortOptions.Reverse });
             var tree = String.IsNullOrEmpty(path) ? commit.Tree : (Tree)commit[path].Target;
 
-            var q = from item in tree
-                    let lastCommit = ancestors.First(c =>
-                    {
-                        var entry = c[item.Path];
-                        return entry != null && entry.Target == item.Target;
-                    })
-                    select new RepositoryTreeDetailModel
-                    {
-                        Name = item.Name,
-                        IsTree = item.TargetType == TreeEntryTargetType.Tree,
-                        CommitDate = lastCommit.Author.When.LocalDateTime,
-                        CommitMessage = lastCommit.MessageShort,
-                        Author = lastCommit.Author.Name,
-                        TreeName = branchNameTemp ?? name,
-                        Path = item.Path.Replace('\\', '/'),
-                    };
-            return q.ToList();
+            return (from item in tree
+            let lastCommit = ancestors.First(c =>
+            {
+                var entry = c[item.Path];
+                return entry != null && entry.Target == item.Target;
+            })
+            select new RepositoryTreeDetailModel
+            {
+                Name = item.Name,
+                IsTree = item.TargetType == TreeEntryTargetType.Tree,
+                CommitDate = lastCommit.Author.When.LocalDateTime,
+                CommitMessage = lastCommit.MessageShort,
+                Author = lastCommit.Author.Name,
+                TreeName = branchNameTemp ?? name,
+                Path = item.Path.Replace('\\', '/'),
+            }).ToList();
         }
 
         public RepositoryTreeDetailModel BrowseBlob(string name, string path, out string referenceName)
@@ -98,42 +85,27 @@ namespace Bonobo.Git.Server
             }
 
             var commit = GetCommitByName(name, out referenceName);
-
             if (commit == null)
             {
                 return null;
             }
-
-            var tree = commit.Tree;
-            var dirs = path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-            TreeEntry entry;
-            foreach (var dir in dirs.Take(dirs.Length - 1))
-            {
-                entry = tree.FirstOrDefault(s => s.TargetType == TreeEntryTargetType.Tree && s.Name == dir);
-
-                if (entry == null)
-                {
-                    return null;
-                }
-                tree = (Tree)entry.Target;
-            }
-            entry = tree.FirstOrDefault(s => s.TargetType == TreeEntryTargetType.Blob && s.Name == dirs.Last());
+            
+            var entry = commit[path];
             if (entry == null)
             {
                 return null;
             }
 
-            var blob = (Blob)entry.Target;
             return new RepositoryTreeDetailModel
             {
-                Name = dirs.Last(),
+                Name = entry.Name,
                 IsTree = false,
                 CommitDate = commit.Author.When.LocalDateTime,
                 CommitMessage = commit.Message,
                 Author = commit.Author.Name,
                 TreeName = referenceName ?? name,
                 Path = path,
-                Data = blob.Content,
+                Data = ((Blob)entry.Target).Content,
             };
         }
 
@@ -173,7 +145,7 @@ namespace Bonobo.Git.Server
             return _repository.Lookup(name) as Commit;
         }
 
-        private RepositoryCommitModel ConvertToRepositoryCommitModel(Commit commit, bool withDiff = false)
+        private RepositoryCommitModel ToModel(Commit commit, bool withDiff = false)
         {
             var model = new RepositoryCommitModel
             {
