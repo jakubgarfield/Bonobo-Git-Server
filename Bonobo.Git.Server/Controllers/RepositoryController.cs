@@ -31,7 +31,7 @@ namespace Bonobo.Git.Server.Controllers
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
 
 
-        [FormsAuthorizeAttribute]
+        [FormsAuthorize]
         public ActionResult Index()
         {
             return View(GetIndexModel());
@@ -69,7 +69,7 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        [FormsAuthorizeAttribute]
+        [FormsAuthorize]
         public ActionResult Create()
         {
             if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfiguration.Current.AllowUserRepositoryCreation)
@@ -86,7 +86,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        [FormsAuthorizeAttribute]
+        [FormsAuthorize]
         public ActionResult Create(RepositoryDetailModel model)
         {
             if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfiguration.Current.AllowUserRepositoryCreation)
