@@ -373,6 +373,8 @@
     <Content Include="App_Data\Git\xargs.exe" />
     <Content Include="App_Data\note.txt" />
     <Content Include="App_Data\Repositories\note.txt" />
+    <Content Include="bin\NativeBinaries\amd64\git2-9d9fff3.dll" />
+    <Content Include="bin\NativeBinaries\x86\git2-9d9fff3.dll" />
     <Content Include="Content\images\action_added.gif" />
     <Content Include="Content\images\action_copied.gif" />
     <Content Include="Content\images\action_deleted.gif" />
