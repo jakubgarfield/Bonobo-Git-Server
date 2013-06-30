@@ -6,7 +6,7 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 ## Version 1.3.0 
 
-** 30 June 2013 **
+**30 June 2013**
 
 ### Features
 
