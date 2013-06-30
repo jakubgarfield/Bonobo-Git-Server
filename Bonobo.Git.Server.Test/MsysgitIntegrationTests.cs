@@ -5,6 +5,10 @@ using System.Diagnostics;
 
 namespace Bonobo.Git.Server.Test
 {
+    /// <summary>
+    /// This is a regression test for msysgit clients. It can be run against installed version of Bonobo Git Server.
+    /// It requires empty Integration repository created on the server before first run. It backups and restores the data when the test is finished. Therefore can be run multiple times.
+    /// </summary>
     [TestClass]
     public class MsysgitIntegrationTests
     {
@@ -15,8 +19,10 @@ namespace Bonobo.Git.Server.Test
         private readonly static string ServerRepositoryPath = Path.Combine(@"D:\Projects\Bonobo Git Server\Source\Bonobo.Git.Server\App_Data\Repositories", RepositoryName);
         private readonly static string ServerRepositoryBackupPath = Path.Combine(@"D:\Desktop\Test\", RepositoryName, "Backup");
         private readonly static string[] GitVersions = { "1.7.4" };
-        private readonly static string Credentials = "admin:admin";
-        private readonly static string RepositoryUrl = String.Format("http://{0}@localhost:50287/Integration.git", Credentials);
+        private readonly static string Credentials = "admin:admin@";
+        private readonly static string RepositoryUrl = "http://{0}localhost:50287/Integration{1}";
+        private readonly static string RepositoryUrlWithoutCredentials = String.Format(RepositoryUrl, String.Empty, String.Empty);
+        private readonly static string RepositoryUrlWithCredentials = String.Format(RepositoryUrl, Credentials, ".git");
 
 
         [TestInitialize]
@@ -58,18 +64,40 @@ namespace Bonobo.Git.Server.Test
 
         private void PullBranch(string git)
         {
+            var result = RunGit(git, "pull origin TestBranch");
+
+            Assert.AreEqual("Already up-to-date.\n", result.Item1);
+            Assert.AreEqual(String.Format("From {0}\n * branch            TestBranch -> FETCH_HEAD\n", RepositoryUrlWithoutCredentials), result.Item2);
         }
 
         private void PullTag(string git)
         {
+            var result = RunGit(git, "fetch");
+
+            Assert.AreEqual(String.Empty, result.Item1);
+            Assert.AreEqual(String.Format("From {0}\n * [new branch]      TestBranch -> origin/TestBranch\n * [new branch]      master     -> origin/master\n * [new tag]         v1.4       -> v1.4\n", RepositoryUrlWithoutCredentials), result.Item2);
         }
 
         private void PullRepository(string git)
         {
+            DeleteDirectory(RepositoryDirectory);
+            Directory.CreateDirectory(RepositoryDirectory);
+
+            RunGit(git, "init");
+            RunGit(git, String.Format("remote add origin {0}", RepositoryUrlWithCredentials));
+            var result = RunGit(git, "pull origin master");
+
+            Assert.AreEqual(String.Empty, result.Item1);
+            Assert.AreEqual(String.Format("From {0}\n * branch            master     -> FETCH_HEAD\n", RepositoryUrlWithoutCredentials), result.Item2);
         }
 
         private void CloneRepository(string git)
         {
+            DeleteDirectory(RepositoryDirectory);
+            var result = RunGit(git, String.Format(String.Format("clone {0}", RepositoryUrlWithCredentials), RepositoryName), WorkingDirectory);
+
+            Assert.AreEqual("Cloning into Integration...\n", result.Item1);
+            Assert.AreEqual(String.Empty, result.Item2);
         }
 
         private void PushBranch(string git)
@@ -77,7 +105,7 @@ namespace Bonobo.Git.Server.Test
             RunGit(git, "checkout -b \"TestBranch\"");
             var result = RunGit(git, "push origin TestBranch");
             
-            Assert.AreEqual(String.Format("To {0}\n * [new branch]      TestBranch -> TestBranch\n", RepositoryUrl), result.Item2);
+            Assert.AreEqual(String.Format("To {0}\n * [new branch]      TestBranch -> TestBranch\n", RepositoryUrlWithCredentials), result.Item2);
         }
 
         private void PushTag(string git)
@@ -86,7 +114,7 @@ namespace Bonobo.Git.Server.Test
             var result = RunGit(git, "push --tags origin");
             
             Assert.AreEqual(String.Empty, result.Item1);
-            Assert.AreEqual(String.Format("To {0}\n * [new tag]         v1.4 -> v1.4\n", RepositoryUrl), result.Item2);
+            Assert.AreEqual(String.Format("To {0}\n * [new tag]         v1.4 -> v1.4\n", RepositoryUrlWithCredentials), result.Item2);
         }
 
         private void PushFiles(string git)
@@ -101,12 +129,12 @@ namespace Bonobo.Git.Server.Test
             RunGit(git, "commit -m \"Test Files Added\"");
             var result = RunGit(git, "push origin master");
             
-            Assert.AreEqual(String.Format("To {0}\n * [new branch]      master -> master\n", RepositoryUrl), result.Item2);
+            Assert.AreEqual(String.Format("To {0}\n * [new branch]      master -> master\n", RepositoryUrlWithCredentials), result.Item2);
         }
 
         private void CloneEmptyRepository(string git)
         {
-            var result = RunGit(git, String.Format(String.Format("clone {0}", RepositoryUrl), RepositoryName), WorkingDirectory);
+            var result = RunGit(git, String.Format(String.Format("clone {0}", RepositoryUrlWithCredentials), RepositoryName), WorkingDirectory);
             
             Assert.AreEqual("Cloning into Integration...\n", result.Item1);
             Assert.AreEqual("warning: You appear to have cloned an empty repository.\n", result.Item2);
