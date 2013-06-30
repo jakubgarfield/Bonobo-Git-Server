@@ -4,15 +4,16 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
-## Unreleased 
+## Version 1.3.0 
 
-** Unknown Date **
+** 30 June 2013 **
 
 ### Features
 
 * Gitsharp removed
-* Switched to libgit2sharp
-* Tag support
+* Switched to libgit2
+* Tag support added
+* Improved repository browser - blog support and faster navigation
 
 ### Bug Fixes
 
