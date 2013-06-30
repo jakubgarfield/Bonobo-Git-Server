@@ -15,6 +15,8 @@ namespace Bonobo.Git.Server.Test
         private readonly static string ServerRepositoryPath = Path.Combine(@"D:\Projects\Bonobo Git Server\Source\Bonobo.Git.Server\App_Data\Repositories", RepositoryName);
         private readonly static string ServerRepositoryBackupPath = Path.Combine(@"D:\Desktop\Test\", RepositoryName, "Backup");
         private readonly static string[] GitVersions = { "1.7.4" };
+        private readonly static string Credentials = "admin:admin";
+        private readonly static string RepositoryUrl = String.Format("http://{0}@localhost:50287/Integration.git", Credentials);
 
 
         [TestInitialize]
@@ -72,10 +74,19 @@ namespace Bonobo.Git.Server.Test
 
         private void PushBranch(string git)
         {
+            RunGit(git, "checkout -b \"TestBranch\"");
+            var result = RunGit(git, "push origin TestBranch");
+            
+            Assert.AreEqual(String.Format("To {0}\n * [new branch]      TestBranch -> TestBranch\n", RepositoryUrl), result.Item2);
         }
 
         private void PushTag(string git)
         {
+            RunGit(git, "tag -a v1.4 -m \"my version 1.4\"");
+            var result = RunGit(git, "push --tags origin");
+            
+            Assert.AreEqual(String.Empty, result.Item1);
+            Assert.AreEqual(String.Format("To {0}\n * [new tag]         v1.4 -> v1.4\n", RepositoryUrl), result.Item2);
         }
 
         private void PushFiles(string git)
@@ -88,16 +99,17 @@ namespace Bonobo.Git.Server.Test
 
             RunGit(git, "add .");
             RunGit(git, "commit -m \"Test Files Added\"");
-
             var result = RunGit(git, "push origin master");
-            Assert.AreEqual(result.Item2, "To http://admin:admin@localhost:50287/Integration.git\n * [new branch]      master -> master\n");
+            
+            Assert.AreEqual(String.Format("To {0}\n * [new branch]      master -> master\n", RepositoryUrl), result.Item2);
         }
 
         private void CloneEmptyRepository(string git)
         {
-            var result = RunGit(git, String.Format("clone http://admin:admin@localhost:50287/{0}.git", RepositoryName), WorkingDirectory);
-            Assert.AreEqual(result.Item1, "Cloning into Integration...\n");
-            Assert.AreEqual(result.Item2, "warning: You appear to have cloned an empty repository.\n");
+            var result = RunGit(git, String.Format(String.Format("clone {0}", RepositoryUrl), RepositoryName), WorkingDirectory);
+            
+            Assert.AreEqual("Cloning into Integration...\n", result.Item1);
+            Assert.AreEqual("warning: You appear to have cloned an empty repository.\n", result.Item2);
         }
 
 
