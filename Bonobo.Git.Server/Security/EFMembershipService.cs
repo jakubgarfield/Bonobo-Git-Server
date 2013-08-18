@@ -17,6 +17,7 @@ namespace Bonobo.Git.Server.Security
             if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "userName");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
 
+            username = username.ToLowerInvariant();
             using (var database = new BonoboGitServerContext())
             {
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
@@ -32,6 +33,7 @@ namespace Bonobo.Git.Server.Security
             if (String.IsNullOrEmpty(surname)) throw new ArgumentException("Value cannot be null or empty.", "surname");
             if (String.IsNullOrEmpty(email)) throw new ArgumentException("Value cannot be null or empty.", "email");
 
+            username = username.ToLowerInvariant();
             using (var database = new BonoboGitServerContext())
             {
                 var user = new User
@@ -80,6 +82,7 @@ namespace Bonobo.Git.Server.Security
         {
             if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "userName");
 
+            username = username.ToLowerInvariant();
             using (var db = new BonoboGitServerContext())
             {
                 var user = db.Users.FirstOrDefault(i => i.Username == username);
@@ -98,6 +101,7 @@ namespace Bonobo.Git.Server.Security
         {
             using (var database = new BonoboGitServerContext())
             {
+                username = username.ToLowerInvariant();
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
                 if (user != null)
                 {
@@ -114,6 +118,7 @@ namespace Bonobo.Git.Server.Security
         {
             using (var database = new BonoboGitServerContext())
             {
+                username = username.ToLowerInvariant();
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
                 if (user != null)
                 {

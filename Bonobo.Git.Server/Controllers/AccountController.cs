@@ -62,7 +62,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (model != null && !String.IsNullOrEmpty(model.Username))
             {
-                if (model.Username != User.GetUsername())
+                if (model.Username != User.Identity.Name)
                 {
                     MembershipService.DeleteUser(model.Username);
                     TempData["DeleteSuccess"] = true;
@@ -84,7 +84,7 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorizeAttribute]
         public ActionResult Edit(string id)
         {
-            if (User.GetUsername() != id && !User.IsInRole(Definitions.Roles.Administrator))
+            if (User.Identity.Name != id && !User.IsInRole(Definitions.Roles.Administrator))
             {
                 return RedirectToAction("Unauthorized", "Home");
             }
@@ -115,7 +115,7 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorizeAttribute]
         public ActionResult Edit(UserEditModel model)
         {
-            if (User.GetUsername() != model.Username && !User.IsInRole(Definitions.Roles.Administrator))
+            if (User.Identity.Name != model.Username && !User.IsInRole(Definitions.Roles.Administrator))
             {
                 return RedirectToAction("Unauthorized", "Home");
             }
@@ -136,7 +136,7 @@ namespace Bonobo.Git.Server.Controllers
                     valid = false;
                 }
 
-                if (User.IsInRole(Definitions.Roles.Administrator) && model.Username == User.GetUsername() && !(model.Roles != null && model.Roles.Contains(Definitions.Roles.Administrator)))
+                if (User.IsInRole(Definitions.Roles.Administrator) && model.Username == User.Identity.Name && !(model.Roles != null && model.Roles.Contains(Definitions.Roles.Administrator)))
                 {
                     ModelState.AddModelError("Roles", Resources.Account_Edit_CannotRemoveYourselfFromAdminRole);
                     valid = false;

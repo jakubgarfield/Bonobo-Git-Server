@@ -20,6 +20,8 @@ namespace Bonobo.Git.Server.Security
         {
             using (var database = new BonoboGitServerContext())
             {
+                usernames = usernames.Select(i => i.ToLowerInvariant()).ToArray();
+
                 var roles = database.Roles.Where(i => roleNames.Contains(i.Name));
                 var users = database.Users.Where(i => usernames.Contains(i.Username));
 
@@ -100,6 +102,7 @@ namespace Bonobo.Git.Server.Security
         {
             using (var database = new BonoboGitServerContext())
             {
+                username = username.ToLowerInvariant();
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
                 return (user != null) ? user.Roles.Select(i => i.Name).ToArray() : null;
             }
@@ -118,6 +121,7 @@ namespace Bonobo.Git.Server.Security
         {
             using (var database = new BonoboGitServerContext())
             {
+                username = username.ToLowerInvariant();
                 var role = database.Roles.FirstOrDefault(i => i.Name == roleName);
                 return (role != null) ? role.Users.Where(i => i.Username == username).Count() > 0 : false;
             }
@@ -127,6 +131,8 @@ namespace Bonobo.Git.Server.Security
         {
             using (var database = new BonoboGitServerContext())
             {
+                usernames = usernames.Select(i => i.ToLowerInvariant()).ToArray();
+
                 var roles = database.Roles.Where(i => roleNames.Contains(i.Name));
                 var users = database.Users.Where(i => usernames.Contains(i.Username));
                 foreach (var role in roles)

@@ -21,7 +21,7 @@ namespace Bonobo.Git.Server
             base.OnAuthorization(filterContext);
 
             var repository = filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString();
-            var user = filterContext.HttpContext.User.GetUsername();
+            var user = filterContext.HttpContext.User.Identity.Name;
             if (RequiresRepositoryAdministrator)
             {
                 if (!RepositoryPermissionService.IsRepositoryAdministrator(user, repository))

@@ -13,6 +13,7 @@ namespace Bonobo.Git.Server.Security
         {
             using (var database = new BonoboGitServerContext())
             {
+                username = username.ToLowerInvariant();
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
                 var repository = database.Repositories.FirstOrDefault(i => i.Name == project);
                 if (user != null && project != null)
@@ -42,6 +43,7 @@ namespace Bonobo.Git.Server.Security
         {
             using (var database = new BonoboGitServerContext())
             {
+                username = username.ToLowerInvariant();
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
                 if (user != null)
                 {

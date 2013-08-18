@@ -56,7 +56,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (model.Administrators.Contains(User.GetUsername()))
+                if (model.Administrators.Contains(User.Identity.Name))
                 {
                     RepositoryRepository.Update(ConvertRepositoryDetailModel(model));
                     ViewBag.UpdateSuccess = true;
@@ -80,7 +80,7 @@ namespace Bonobo.Git.Server.Controllers
 
             var model = new RepositoryDetailModel
             {
-                Administrators = new string[] { User.GetUsername() },
+                Administrators = new string[] { User.Identity.Name },
             };
             PopulateEditData();
             return View(model);
@@ -169,7 +169,7 @@ namespace Bonobo.Git.Server.Controllers
                 var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id));
                 if (model != null)
                 {
-                    model.IsCurrentUserAdministrator = RepositoryPermissionService.IsRepositoryAdministrator(User.GetUsername(), id);
+                    model.IsCurrentUserAdministrator = RepositoryPermissionService.IsRepositoryAdministrator(User.Identity.Name, id);
                 }
                 return View(model);
             }
@@ -306,8 +306,8 @@ namespace Bonobo.Git.Server.Controllers
             }
             else
             {
-                var userTeams = TeamRepository.GetTeams(User.GetUsername()).Select(i => i.Name).ToArray();
-                var repositories = ConvertRepositoryModels(RepositoryRepository.GetPermittedRepositories(User.GetUsername(), userTeams));
+                var userTeams = TeamRepository.GetTeams(User.Identity.Name).Select(i => i.Name).ToArray();
+                var repositories = ConvertRepositoryModels(RepositoryRepository.GetPermittedRepositories(User.Identity.Name, userTeams));
                 return repositories;
             }
         }
@@ -331,7 +331,7 @@ namespace Bonobo.Git.Server.Controllers
                 Users = model.Users,
                 Administrators = model.Administrators,
                 Teams = model.Teams,
-                IsCurrentUserAdministrator = model.Administrators.Contains(User.GetUsername()),
+                IsCurrentUserAdministrator = model.Administrators.Contains(User.Identity.Name),
                 AllowAnonymous = model.AnonymousAccess
             };
         }
