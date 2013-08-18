@@ -16,7 +16,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <TargetFrameworkProfile />
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
@@ -180,7 +180,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.zh-CN.resx</DependentUpon>
     </Compile>
-    <Compile Include="BasicAuthorizeAttribute.cs" />
+    <Compile Include="CustomAuthorizeAttribute.cs" />
+    <Compile Include="GitAuthorizeAttribute.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Configuration\ConfigurationEntry.cs" />
     <Compile Include="Configuration\UserConfiguration.cs" />
@@ -210,7 +211,7 @@
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="FileActionResult.cs" />
     <Compile Include="FileNameAttribute.cs" />
-    <Compile Include="FormsAuthorizeAttribute.cs" />
+    <Compile Include="WebAuthorizeAttribute.cs" />
     <Compile Include="Helpers\CustomHtmlHelpers.cs" />
     <Compile Include="Models\HomeModels.cs" />
     <Compile Include="Models\RepositoryModels.cs" />
@@ -222,7 +223,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.cs-CZ.resx</DependentUpon>
     </Compile>
-    <Compile Include="FormsAuthorizeRepositoryAttribute.cs" />
+    <Compile Include="WebAuthorizeRepositoryAttribute.cs" />
     <Compile Include="RepositoryBrowser.cs" />
     <Compile Include="Security\EFMembershipService.cs" />
     <Compile Include="Security\EFRepositoryPermissionService.cs" />
@@ -245,6 +246,7 @@
     <Compile Include="FileDisplayHandler.cs" />
     <Compile Include="UnityDependencyResolver.cs" />
     <Compile Include="UnityFilterAttributeFilterProvider.cs" />
+    <Compile Include="WindowsIdentityImporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Git\antiword.exe" />
@@ -616,7 +618,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50287</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50287/</IISUrl>
+          <IISUrl>http://localhost/Bonobo.Git.Server</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

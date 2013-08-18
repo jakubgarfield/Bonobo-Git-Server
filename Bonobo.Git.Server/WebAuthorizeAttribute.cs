@@ -5,13 +5,22 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.Routing;
+using System.Security.Principal;
+using Bonobo.Git.Server.Security;
+using System.Configuration;
 
 namespace Bonobo.Git.Server
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class FormsAuthorizeAttribute : AuthorizeAttribute
+    public class WebAuthorizeAttribute : CustomAuthorizeAttribute
     {
-        public override void OnAuthorization(AuthorizationContext filterContext)
+        protected override void CustomAuthenticate(AuthorizationContext filterContext)
+        {
+            FormsAuthenticate(filterContext);
+        }
+
+
+        private void FormsAuthenticate(AuthorizationContext filterContext)
         {
             if (filterContext.HttpContext.User == null || !(filterContext.HttpContext.User.Identity is FormsIdentity) || !filterContext.HttpContext.User.Identity.IsAuthenticated)
             {

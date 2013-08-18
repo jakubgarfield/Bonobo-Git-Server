@@ -9,8 +9,10 @@ namespace Bonobo.Git.Server.Configuration
     {
         private static Entry _current = null;
         private static readonly object _sync = new object();
-        private static readonly string _configPath = HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["UserConfiguration"]);
         private static readonly XmlSerializer _serializer = new XmlSerializer(typeof(Entry));
+        private static readonly string _configPath = Path.IsPathRooted(ConfigurationManager.AppSettings["UserConfiguration"])
+                                                    ? ConfigurationManager.AppSettings["UserConfiguration"]
+                                                    : HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["UserConfiguration"]);
 
 
         public static Entry Current { get { return _current ?? Load(); } }

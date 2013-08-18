@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Configuration;
+using System.IO;
 using System.Web;
 using System.Xml.Serialization;
 
@@ -18,7 +20,9 @@ namespace Bonobo.Git.Server.Configuration
             if (IsInitialized())
                 return;
 
-            Current.Repositories = HttpContext.Current.Server.MapPath("~/App_Data/Repositories");
+            Current.Repositories = Path.IsPathRooted(ConfigurationManager.AppSettings["DefaultRepositoriesDirectory"]) 
+                ? ConfigurationManager.AppSettings["DefaultRepositoriesDirectory"] 
+                : HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["DefaultRepositoriesDirectory"]);
             Current.Save();
         }
 

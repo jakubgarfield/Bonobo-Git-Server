@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace Bonobo.Git.Server.Controllers
 {
-    [BasicAuthorize]
+    [GitAuthorize]
     public class GitController : Controller
     {
         [Dependency]
@@ -175,7 +175,10 @@ namespace Bonobo.Git.Server.Controllers
                 args += " --advertise-refs";
             args += " \"" + workingDir + "\"";
 
-            var info = new System.Diagnostics.ProcessStartInfo(System.Web.HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["GitPath"]), args)
+            var gitPath = Path.IsPathRooted(ConfigurationManager.AppSettings["GitPath"]) 
+                ? ConfigurationManager.AppSettings["GitPath"] 
+                : System.Web.HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["GitPath"]);
+            var info = new System.Diagnostics.ProcessStartInfo(gitPath, args)
             {
                 CreateNoWindow = true,
                 RedirectStandardError = true,

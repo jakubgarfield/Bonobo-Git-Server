@@ -22,7 +22,7 @@ namespace Bonobo.Git.Server.Controllers
         public IFormsAuthenticationService FormsAuthenticationService { get; set; }
 
 
-        [FormsAuthorizeAttribute]
+        [WebAuthorizeAttribute]
         public ActionResult Detail(string id)
         {
             if (!String.IsNullOrEmpty(id))
@@ -44,7 +44,7 @@ namespace Bonobo.Git.Server.Controllers
             return View();
         }
 
-        [FormsAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(string id)
         {
             if (!String.IsNullOrEmpty(id))
@@ -56,7 +56,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        [FormsAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(UserDetailModel model)
         {
             if (model != null && !String.IsNullOrEmpty(model.Username))
@@ -74,13 +74,13 @@ namespace Bonobo.Git.Server.Controllers
             return RedirectToAction("Index");
         }
 
-        [FormsAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index()
         {
             return View(GetDetailUsers());
         }
 
-        [FormsAuthorizeAttribute]
+        [WebAuthorizeAttribute]
         public ActionResult Edit(string id)
         {
             if (User.Identity.Name != id && !User.IsInRole(Definitions.Roles.Administrator))
@@ -111,7 +111,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        [FormsAuthorizeAttribute]
+        [WebAuthorizeAttribute]
         public ActionResult Edit(UserEditModel model)
         {
             if (User.Identity.Name != model.Username && !User.IsInRole(Definitions.Roles.Administrator))

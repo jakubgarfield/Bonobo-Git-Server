@@ -20,13 +20,13 @@ namespace Bonobo.Git.Server.Controllers
         public IFormsAuthenticationService FormsAuthenticationService { get; set; }
 
 
-        [FormsAuthorize]
+        [WebAuthorize]
         public ActionResult Index()
         {
             return RedirectToAction("Index", "Repository");
         }
 
-        [FormsAuthorize]
+        [WebAuthorize]
         public ActionResult About()
         {
             return View();
@@ -78,7 +78,7 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        [FormsAuthorizeAttribute]
+        [WebAuthorizeAttribute]
         public ActionResult LogOff()
         {
             FormsAuthenticationService.SignOut();
