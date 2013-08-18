@@ -248,6 +248,7 @@
     <Compile Include="UnityFilterAttributeFilterProvider.cs" />
     <Compile Include="WindowsActionFilterAttribute.cs" />
     <Compile Include="WindowsIdentityImporter.cs" />
+    <Compile Include="UsernameUrl.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Git\antiword.exe" />

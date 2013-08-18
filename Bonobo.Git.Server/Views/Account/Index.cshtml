@@ -48,12 +48,12 @@
         headerStyle: "head",
         alternatingRowStyle: "even",
         columns: grid.Columns(
-        grid.Column("Username", header: typeof(UserDetailModel).GetDisplayValue("Username"), format: (item) => Html.ActionLink((string)item.Username, "Detail", new { id = Url.Encode(item.Username) }, new { @class = "user" })),
+        grid.Column("Username", header: typeof(UserDetailModel).GetDisplayValue("Username"), format: (item) => Html.ActionLink((string)item.Username, "Detail", new { id = UsernameUrl.Encode(item.Username) }, new { @class = "user" })),
             grid.Column("Name", typeof(UserDetailModel).GetDisplayValue("Name")),
             grid.Column("Surname", typeof(UserDetailModel).GetDisplayValue("Surname")),
             grid.Column("Email", typeof(UserDetailModel).GetDisplayValue("Email")),
-            grid.Column(format: (item) => Html.ActionLink(Resources.Grid_Edit, "Edit", new { id = item.Username }), style: "action"),
-            grid.Column(format: (item) => Html.ActionLink(Resources.Grid_Delete, "Delete", new { id = item.Username }, new { @class = "deleteButton" }), style: "action")
+            grid.Column(format: (item) => Html.ActionLink(Resources.Grid_Edit, "Edit", new { id = UsernameUrl.Encode(item.Username) }), style: "action"),
+            grid.Column(format: (item) => Html.ActionLink(Resources.Grid_Delete, "Delete", new { id = UsernameUrl.Encode(item.Username) }, new { @class = "deleteButton" }), style: "action")
         )
     )
 </div>
