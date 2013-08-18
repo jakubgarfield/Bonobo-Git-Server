@@ -18,8 +18,10 @@
                 <h1>@Html.ActionLink(Resources.Layout_Title, "", "")</h1>
             </div>
             <div id="topMenu">
+                @if (!WindowsActionFilterAttribute.IsWindowsModeActive)
+                {
                 <div id="accountInfo">
-                    @if (Request.IsAuthenticated)
+                    if (Request.IsAuthenticated)
                     {
                         <p><strong>@Context.User.Identity.Name</strong> [ @Html.ActionLink(Resources.Layout_AccountSettings, "Edit", "Account", new { id = User.Identity.Name }, null) | @Html.ActionLink(Resources.Layout_LogOff, "LogOff", "Home") ]</p>
                     }
@@ -35,6 +37,7 @@
                         }
                     }
                 </div>
+                }
                 <div id="languageBar">
                     <p>@Html.ActionLink("Čeština", "ChangeCulture", "Home", new { lang = "cs-CZ", returnUrl = this.Request.RawUrl }, null)  
                        @Html.ActionLink("Japanse", "ChangeCulture", "Home", new { lang = "ja-JP", returnUrl = this.Request.RawUrl }, new { @id = "jp" }) 

@@ -5,9 +5,11 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.IO.Compression;
+using System.Security.Principal;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using Bonobo.Git.Server.Extensions;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -20,7 +22,7 @@ namespace Bonobo.Git.Server.Controllers
 
         public ActionResult SecureGetInfoRefs(String project, String service)
         {
-            if (RepositoryPermissionService.HasPermission(HttpContext.User.Identity.Name, project)
+            if (RepositoryPermissionService.HasPermission(User.GetUsername(), project)
                 || (RepositoryPermissionService.AllowsAnonymous(project)
                     && (String.Equals("git-upload-pack", service, StringComparison.InvariantCultureIgnoreCase)
                         || UserConfiguration.Current.AllowAnonymousPush)))
@@ -36,7 +38,7 @@ namespace Bonobo.Git.Server.Controllers
         [HttpPost]
         public ActionResult SecureUploadPack(String project)
         {
-            if (RepositoryPermissionService.HasPermission(HttpContext.User.Identity.Name, project)
+            if (RepositoryPermissionService.HasPermission(User.GetUsername(), project)
                 || RepositoryPermissionService.AllowsAnonymous(project))
             {
                 return ExecuteUploadPack(project);
@@ -50,7 +52,7 @@ namespace Bonobo.Git.Server.Controllers
         [HttpPost]
         public ActionResult SecureReceivePack(String project)
         {
-            if (RepositoryPermissionService.HasPermission(HttpContext.User.Identity.Name, project)
+            if (RepositoryPermissionService.HasPermission(User.GetUsername(), project)
                 || (RepositoryPermissionService.AllowsAnonymous(project) && UserConfiguration.Current.AllowAnonymousPush))
             {
                 return ExecuteReceivePack(project);
@@ -60,6 +62,7 @@ namespace Bonobo.Git.Server.Controllers
                 return UnauthorizedResult();
             }
         }
+
 
         private ActionResult ExecuteReceivePack(string project)
         {

@@ -31,7 +31,13 @@
         </div>
     }
 }
+
+@if (!WindowsActionFilterAttribute.IsWindowsModeActive)
+{
 <div class="create">@Html.ActionLink(Resources.Account_Index_Create, "Create")</div>
+}
+
+
 <h3>@Resources.Account_Index_Users</h3>
 @{
     var grid = new WebGrid(source: Model, defaultSort: "Username", rowsPerPage: 15);
@@ -42,7 +48,7 @@
         headerStyle: "head",
         alternatingRowStyle: "even",
         columns: grid.Columns(
-            grid.Column("Username", header: typeof(UserDetailModel).GetDisplayValue("Username"), format: (item) => Html.ActionLink((string)item.Username, "Detail", new { id = item.Username }, new { @class = "user" })),
+        grid.Column("Username", header: typeof(UserDetailModel).GetDisplayValue("Username"), format: (item) => Html.ActionLink(((string)item.Username).Length < 15 ? (string)item.Username : (string)item.Username.Substring(0, 15) + "...", "Detail", new { id = item.Username }, new { @class = "user" })),
             grid.Column("Name", typeof(UserDetailModel).GetDisplayValue("Name")),
             grid.Column("Surname", typeof(UserDetailModel).GetDisplayValue("Surname")),
             grid.Column("Email", typeof(UserDetailModel).GetDisplayValue("Email")),

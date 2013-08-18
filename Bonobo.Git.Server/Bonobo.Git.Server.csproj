@@ -181,6 +181,7 @@
       <DependentUpon>Resources.zh-CN.resx</DependentUpon>
     </Compile>
     <Compile Include="CustomAuthorizeAttribute.cs" />
+    <Compile Include="Extensions\UserExtensions.cs" />
     <Compile Include="GitAuthorizeAttribute.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Configuration\ConfigurationEntry.cs" />
@@ -246,6 +247,7 @@
     <Compile Include="FileDisplayHandler.cs" />
     <Compile Include="UnityDependencyResolver.cs" />
     <Compile Include="UnityFilterAttributeFilterProvider.cs" />
+    <Compile Include="WindowsActionFilterAttribute.cs" />
     <Compile Include="WindowsIdentityImporter.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -618,7 +620,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50287</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Bonobo.Git.Server</IISUrl>
+          <IISUrl>http://localhost/Bonobo.Git.Server.Interface</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

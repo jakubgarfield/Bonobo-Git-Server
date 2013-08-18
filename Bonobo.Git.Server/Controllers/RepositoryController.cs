@@ -13,6 +13,7 @@ using System.Configuration;
 using System.Text.RegularExpressions;
 using Bonobo.Git.Server.Configuration;
 using LibGit2Sharp;
+using Bonobo.Git.Server.Extensions;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -55,7 +56,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (model.Administrators.Contains(User.Identity.Name))
+                if (model.Administrators.Contains(User.GetUsername()))
                 {
                     RepositoryRepository.Update(ConvertRepositoryDetailModel(model));
                     ViewBag.UpdateSuccess = true;
@@ -79,7 +80,7 @@ namespace Bonobo.Git.Server.Controllers
 
             var model = new RepositoryDetailModel
             {
-                Administrators = new string[] { User.Identity.Name },
+                Administrators = new string[] { User.GetUsername() },
             };
             PopulateEditData();
             return View(model);
@@ -168,7 +169,7 @@ namespace Bonobo.Git.Server.Controllers
                 var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id));
                 if (model != null)
                 {
-                    model.IsCurrentUserAdministrator = RepositoryPermissionService.IsRepositoryAdministrator(User.Identity.Name, id);
+                    model.IsCurrentUserAdministrator = RepositoryPermissionService.IsRepositoryAdministrator(User.GetUsername(), id);
                 }
                 return View(model);
             }
@@ -305,8 +306,8 @@ namespace Bonobo.Git.Server.Controllers
             }
             else
             {
-                var userTeams = TeamRepository.GetTeams(User.Identity.Name).Select(i => i.Name).ToArray();
-                var repositories = ConvertRepositoryModels(RepositoryRepository.GetPermittedRepositories(User.Identity.Name, userTeams));
+                var userTeams = TeamRepository.GetTeams(User.GetUsername()).Select(i => i.Name).ToArray();
+                var repositories = ConvertRepositoryModels(RepositoryRepository.GetPermittedRepositories(User.GetUsername(), userTeams));
                 return repositories;
             }
         }
@@ -330,7 +331,7 @@ namespace Bonobo.Git.Server.Controllers
                 Users = model.Users,
                 Administrators = model.Administrators,
                 Teams = model.Teams,
-                IsCurrentUserAdministrator = model.Administrators.Contains(User.Identity.Name),
+                IsCurrentUserAdministrator = model.Administrators.Contains(User.GetUsername()),
                 AllowAnonymous = model.AnonymousAccess
             };
         }

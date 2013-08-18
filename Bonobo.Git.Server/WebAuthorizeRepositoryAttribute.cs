@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.Practices.Unity;
 using Bonobo.Git.Server.Security;
+using Bonobo.Git.Server.Extensions;
 
 namespace Bonobo.Git.Server
 {
@@ -20,7 +21,7 @@ namespace Bonobo.Git.Server
             base.OnAuthorization(filterContext);
 
             var repository = filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString();
-            var user = filterContext.HttpContext.User.Identity.Name;
+            var user = filterContext.HttpContext.User.GetUsername();
             if (RequiresRepositoryAdministrator)
             {
                 if (!RepositoryPermissionService.IsRepositoryAdministrator(user, repository))

@@ -10,18 +10,18 @@ namespace Bonobo.Git.Server
 {
     public class WindowsIdentityImporter
     {
-        public void Import(WindowsIdentity indentity)
+        public void Import(WindowsIdentity identity)
         {
             var service = new EFMembershipService();
-            if (service.GetUser(indentity.Name) == null)
+            if (service.GetUser(identity.User.Value) == null)
             {
-                service.CreateUser(indentity.Name, "imported", "None", "None", "None");
+                service.CreateUser(identity.User.Value, "imported", identity.Name, "None", "None");
 
                 if (!String.Equals(ConfigurationManager.AppSettings["ShouldImportWindowsUserAsAdministrator"], "true", StringComparison.InvariantCultureIgnoreCase))
                     return;
 
                 var roleProvider = new EFRoleProvider();
-                roleProvider.AddUsersToRoles(new[] { indentity.Name }, new[] { Definitions.Roles.Administrator });
+                roleProvider.AddUsersToRoles(new[] { identity.User.Value }, new[] { Definitions.Roles.Administrator });
             }
         }
     }
