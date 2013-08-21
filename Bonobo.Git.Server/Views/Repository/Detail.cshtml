@@ -2,7 +2,7 @@
 @{
     Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
     ViewBag.Title = Resources.Repository_Detail_Title;
-    var serverAddress = Request.Url.ToString().Substring(0, Request.Url.ToString().IndexOf("Repository"));
+    var serverAddress = System.Configuration.ConfigurationManager.AppSettings["GitServerPath"] ?? Request.Url.ToString().Substring(0, Request.Url.ToString().IndexOf("Repository"));
 }
 @if (Model != null)
 {   
