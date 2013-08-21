@@ -10,20 +10,17 @@ using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server
 {
-    public class GitAuthorizeAttribute : CustomAuthorizeAttribute
+    public class GitAuthorizeAttribute : AuthorizeAttribute
     {
         [Dependency]
         public IMembershipService MembershipService { get; set; }
 
 
-        protected override void CustomAuthenticate(AuthorizationContext filterContext)
+        public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            BasicAuthenticate(filterContext);
-        }
+            if (IsWindowsUserAuthenticated(filterContext))
+                return;
 
-
-        private void BasicAuthenticate(AuthorizationContext filterContext)
-        {
             if (filterContext == null)
             {
                 throw new ArgumentNullException("filterContext");
@@ -47,6 +44,13 @@ namespace Bonobo.Git.Server
                     filterContext.Result = new HttpStatusCodeResult(401);
                 }
             }
+        }
+
+
+        private bool IsWindowsUserAuthenticated(AuthorizationContext context)
+        {
+            var windowsIdentity = context.HttpContext.User.Identity as WindowsIdentity;
+            return windowsIdentity != null && windowsIdentity.IsAuthenticated;
         }
     }
 }

@@ -5,11 +5,24 @@ using System.Configuration;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Bonobo.Git.Server
 {
     public class WindowsIdentityImporter
     {
+        public void Import(AuthorizationContext context)
+        {
+            var windowsIdentity = context.HttpContext.User.Identity as WindowsIdentity;
+            if (windowsIdentity == null)
+                return;
+
+            else if (windowsIdentity.IsAuthenticated)
+            {
+                Import(windowsIdentity);
+            }
+        }
+
         public void Import(WindowsIdentity identity)
         {
             var service = new EFMembershipService();

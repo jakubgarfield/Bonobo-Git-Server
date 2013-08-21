@@ -180,7 +180,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.zh-CN.resx</DependentUpon>
     </Compile>
-    <Compile Include="CustomAuthorizeAttribute.cs" />
     <Compile Include="GitAuthorizeAttribute.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Configuration\ConfigurationEntry.cs" />

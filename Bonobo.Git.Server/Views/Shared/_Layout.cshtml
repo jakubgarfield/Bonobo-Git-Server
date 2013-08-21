@@ -21,7 +21,7 @@
                 @if (!WindowsActionFilterAttribute.IsWindowsModeActive)
                 {
                 <div id="accountInfo">
-                    if (Request.IsAuthenticated)
+                    @if (Request.IsAuthenticated)
                     {
                         <p><strong>@Context.User.Identity.Name</strong> [ @Html.ActionLink(Resources.Layout_AccountSettings, "Edit", "Account", new { id = UsernameUrl.Encode(User.Identity.Name) }, null) | @Html.ActionLink(Resources.Layout_LogOff, "LogOff", "Home") ]</p>
                     }

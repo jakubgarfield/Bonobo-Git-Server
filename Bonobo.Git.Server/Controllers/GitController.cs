@@ -130,16 +130,6 @@ namespace Bonobo.Git.Server.Controllers
             return new HttpStatusCodeResult(401);
         }
 
-        //private static byte[] FormatMessage(String input)
-        //{
-        //    return _encoding.GetBytes((input.Length + 4).ToString("X").ToLower().PadLeft(4, '0') + input);
-        //}
-
-        //private static byte[] FlushMessage()
-        //{
-        //    return new[] { (byte)'0', (byte)'0', (byte)'0', (byte)'0' };
-        //}
-
         private static String FormatMessage(String input)
         {
             return (input.Length + 4).ToString("X").PadLeft(4, '0') + input;

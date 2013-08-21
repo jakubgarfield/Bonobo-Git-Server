@@ -80,7 +80,7 @@ namespace Bonobo.Git.Server.Controllers
 
             var model = new RepositoryDetailModel
             {
-                Administrators = new string[] { User.Identity.Name },
+                Administrators = new string[] { User.Identity.Name.ToLowerInvariant() },
             };
             PopulateEditData();
             return View(model);
@@ -331,7 +331,7 @@ namespace Bonobo.Git.Server.Controllers
                 Users = model.Users,
                 Administrators = model.Administrators,
                 Teams = model.Teams,
-                IsCurrentUserAdministrator = model.Administrators.Contains(User.Identity.Name),
+                IsCurrentUserAdministrator = model.Administrators.Contains(User.Identity.Name.ToLowerInvariant()),
                 AllowAnonymous = model.AnonymousAccess
             };
         }
