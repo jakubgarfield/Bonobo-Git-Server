@@ -56,7 +56,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (model.Administrators.Contains(User.Identity.Name))
+                if (model.Administrators.Contains(User.Identity.Name.ToLowerInvariant()))
                 {
                     RepositoryRepository.Update(ConvertRepositoryDetailModel(model));
                     ViewBag.UpdateSuccess = true;
