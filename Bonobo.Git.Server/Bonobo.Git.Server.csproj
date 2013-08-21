@@ -16,7 +16,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <TargetFrameworkProfile />
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
@@ -393,6 +393,7 @@
     <Content Include="Content\images\cz.png" />
     <Content Include="Content\images\detail.png" />
     <Content Include="Content\images\download_file.png" />
+    <Content Include="Content\images\git-logo.png" />
     <Content Include="Content\images\jp.png" />
     <Content Include="Content\images\tag.png" />
     <Content Include="Content\images\tag_active.png" />
@@ -615,11 +616,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50287</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Bonobo.Git.Server.Interface</IISUrl>
+          <IISUrl>http://localhost:50287/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
