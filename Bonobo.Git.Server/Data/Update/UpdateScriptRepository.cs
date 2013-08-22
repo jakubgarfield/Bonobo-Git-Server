@@ -18,6 +18,7 @@ namespace Bonobo.Git.Server.Data.Update
             {
                 new InitialCreateScript(),
                 new InsertDefaultData(),
+                new UsernamesToLower(),
             };
         }
     }

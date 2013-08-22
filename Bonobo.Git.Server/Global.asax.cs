@@ -15,6 +15,7 @@ using System.Diagnostics;
 using System.Web.Security;
 using System.Security.Principal;
 using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Data.Update;
 
 namespace Bonobo.Git.Server
 {
@@ -118,8 +119,8 @@ namespace Bonobo.Git.Server
             AreaRegistration.RegisterAllAreas();
             RegisterRoutes(RouteTable.Routes);
             RegisterDependencyResolver();
-
-            BonoboGitServerContext.RunAutomaticUpdate();
+                        
+            new AutomaticUpdater().Run();
             UserConfiguration.Initialize();
         }
 
