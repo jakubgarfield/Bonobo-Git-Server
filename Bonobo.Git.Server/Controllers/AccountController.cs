@@ -51,7 +51,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (!String.IsNullOrEmpty(id))
             {
-                id = UsernameUrl.Decode(id);
+                id = UsernameUrl.Decode(id).ToLowerInvariant();
                 return View(new UserDetailModel { Username = id });
             }
 
@@ -86,7 +86,7 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorizeAttribute]
         public ActionResult Edit(string id)
         {
-            id = UsernameUrl.Decode(id);
+            id = UsernameUrl.Decode(id).ToLowerInvariant();
 
             if (User.Identity.Name.ToLowerInvariant() != id && !User.IsInRole(Definitions.Roles.Administrator))
             {
