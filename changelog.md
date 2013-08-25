@@ -4,6 +4,29 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 2.0
+
+**25 August 2013**
+
+### Features
+
+* Windows Authentication Support
+
+### Bug Fixes
+
+* Usernames are normalized to invariant lowercase.
+
+
+### Compatibility Issues
+
+* Converts all the usernames to lowercase. 
+	* Keep that in mind while logging
+	* Only ASCII chars are supported even for existing usernames, if you have other characters in your username it is recommended to create a new user.
+
+
+<hr />
+
+
 ## Version 1.3.0 
 
 **30 June 2013**
