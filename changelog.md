@@ -11,10 +11,12 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 ### Features
 
 * Windows Authentication Support
+* Spanish Translation
 
 ### Bug Fixes
 
 * Usernames are normalized to invariant lowercase.
+* Fix text in Chinese translation
 
 
 ### Compatibility Issues
