@@ -165,6 +165,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_GlobalResources\Resources.es-ES.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.es-ES.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\Resources.ja-JP.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -395,6 +400,7 @@
     <Content Include="Content\images\cz.png" />
     <Content Include="Content\images\detail.png" />
     <Content Include="Content\images\download_file.png" />
+    <Content Include="Content\images\es.png" />
     <Content Include="Content\images\git-logo.png" />
     <Content Include="Content\images\jp.png" />
     <Content Include="Content\images\tag.png" />
@@ -581,6 +587,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.cs-CZ.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_GlobalResources\Resources.es-ES.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Resources.es-ES.designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="App_GlobalResources\Resources.ja-JP.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

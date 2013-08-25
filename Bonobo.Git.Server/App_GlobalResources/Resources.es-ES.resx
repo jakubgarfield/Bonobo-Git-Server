@@ -1,0 +1,717 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
+    <value>Account with this username already exists.</value>
+  </data>
+  <data name="Account_Create_AccountInformation" xml:space="preserve">
+    <value>Información de la cuenta</value>
+  </data>
+  <data name="Account_Create_ConfirmPassword" xml:space="preserve">
+    <value>Confirmar Contraseña</value>
+  </data>
+  <data name="Account_Create_Email" xml:space="preserve">
+    <value>Correo electrónico</value>
+  </data>
+  <data name="Account_Create_Name" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="Account_Create_Password" xml:space="preserve">
+    <value>Contraseña</value>
+  </data>
+  <data name="Account_Create_Submit" xml:space="preserve">
+    <value>Crear nueva cuenta</value>
+  </data>
+  <data name="Account_Create_Success" xml:space="preserve">
+    <value>El usuario ha sido creado exitosamente.</value>
+  </data>
+  <data name="Account_Create_Surname" xml:space="preserve">
+    <value>Apellido</value>
+  </data>
+  <data name="Account_Create_Title" xml:space="preserve">
+    <value>Crear Nueva Cuenta</value>
+  </data>
+  <data name="Account_Create_Unsuccessfull" xml:space="preserve">
+    <value>La cuenta no ha sido creada. Por favor corrija los errores e intente de nuevo.</value>
+  </data>
+  <data name="Account_Create_Username" xml:space="preserve">
+    <value>Nombre de Usuario</value>
+  </data>
+  <data name="Account_Delete_DeleteCurrentUser" xml:space="preserve">
+    <value>No puede eliminarse a sí mismo.</value>
+  </data>
+  <data name="Account_Delete_Success" xml:space="preserve">
+    <value>El usuario no puede ser borrado.</value>
+  </data>
+  <data name="Account_Detail_Back" xml:space="preserve">
+    <value>Volver a la lista</value>
+  </data>
+  <data name="Account_Detail_Delete" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="Account_Detail_Edit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="Account_Detail_Email" xml:space="preserve">
+    <value>Correo electrónico</value>
+  </data>
+  <data name="Account_Detail_Name" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="Account_Detail_Roles" xml:space="preserve">
+    <value>Funciones</value>
+  </data>
+  <data name="Account_Detail_Surname" xml:space="preserve">
+    <value>Apellido</value>
+  </data>
+  <data name="Account_Detail_Title" xml:space="preserve">
+    <value>Detalles de Usuario</value>
+  </data>
+  <data name="Account_Detail_Username" xml:space="preserve">
+    <value>Nombre de usuario</value>
+  </data>
+  <data name="Account_Edit_AccountInformation" xml:space="preserve">
+    <value>Información de la Cuenta</value>
+  </data>
+  <data name="Account_Edit_Back" xml:space="preserve">
+    <value>Volver a la lista</value>
+  </data>
+  <data name="Account_Edit_Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Account_Edit_CannotRemoveYourselfFromAdminRole" xml:space="preserve">
+    <value>No se puede eliminar a sí mismo de adiministradores.</value>
+  </data>
+  <data name="Account_Edit_ConfirmPassword" xml:space="preserve">
+    <value>Confirmar Contraseña</value>
+  </data>
+  <data name="Account_Edit_CurrentPassword" xml:space="preserve">
+    <value>Contraseña Actual</value>
+  </data>
+  <data name="Account_Edit_Email" xml:space="preserve">
+    <value>Correo electrónico</value>
+  </data>
+  <data name="Account_Edit_Name" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="Account_Edit_NewPassword" xml:space="preserve">
+    <value>Nueva Contraseña</value>
+  </data>
+  <data name="Account_Edit_OldPasswordEmpty" xml:space="preserve">
+    <value>La contraseña actual no debe estar vacía.</value>
+  </data>
+  <data name="Account_Edit_OldPasswordIncorrect" xml:space="preserve">
+    <value>La contraseña no coincide con la contraseña actual.</value>
+  </data>
+  <data name="Account_Edit_Roles" xml:space="preserve">
+    <value>Funciones</value>
+  </data>
+  <data name="Account_Edit_RolesHint" xml:space="preserve">
+    <value>Los administradores tienen acceso a todos los repositorios y se les permite hacer todas las operaciones con los repositorios, los equipos y los usuarios.</value>
+  </data>
+  <data name="Account_Edit_Submit" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="Account_Edit_Surname" xml:space="preserve">
+    <value>Apellido</value>
+  </data>
+  <data name="Account_Edit_Title" xml:space="preserve">
+    <value>Editar Cuenta de Usuario</value>
+  </data>
+  <data name="Account_Edit_Unsuccessfull" xml:space="preserve">
+    <value>La edición de la cuenta fue incorrecta. Por favor corrija los errores e inténtelo de nuevo.</value>
+  </data>
+  <data name="Account_Edit_UpdateSuccess" xml:space="preserve">
+    <value>La cuenta fue actualizada correctamente.</value>
+  </data>
+  <data name="Account_Index_Create" xml:space="preserve">
+    <value>Crear nuevo usuario</value>
+  </data>
+  <data name="Account_Index_Title" xml:space="preserve">
+    <value>Administración de usuario</value>
+  </data>
+  <data name="Account_Index_Users" xml:space="preserve">
+    <value>Usuarios</value>
+  </data>
+  <data name="DateTimeFormat" xml:space="preserve">
+    <value>dd/MM/yyyy hh:mm</value>
+  </data>
+  <data name="Delete_Back" xml:space="preserve">
+    <value>Atrás</value>
+  </data>
+  <data name="Delete_Confirm" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="Delete_ConfirmationText" xml:space="preserve">
+    <value>¿Esta seguro de querer eliminar {0}?</value>
+  </data>
+  <data name="Delete_Title" xml:space="preserve">
+    <value>Confirmación de Eliminación</value>
+  </data>
+  <data name="GitAccess_ProjectForbidden" xml:space="preserve">
+    <value>No tienes los permisos para el proyecto solicitado.</value>
+  </data>
+  <data name="Grid_Delete" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="Grid_Edit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="Home_About_Thanks" xml:space="preserve">
+    <value>¡Gracias!</value>
+  </data>
+  <data name="Home_About_Thanks_p" xml:space="preserve">
+    <value>Bonobo Git Server utiliza algunos proyectos de código abierto y freeware. Muchas gracias a todos los autores y colaboradores por su gran trabajo.</value>
+  </data>
+  <data name="Home_About_Title" xml:space="preserve">
+    <value>Accerca de</value>
+  </data>
+  <data name="Home_Error_Text" xml:space="preserve">
+    <value>Un error desconocido ocurrió durante el proceso de su solicitud. Por favor, inténtelo de nuevo o contacte con el administrador del sistema.</value>
+  </data>
+  <data name="Home_Error_Title" xml:space="preserve">
+    <value>Ocurrio un Error</value>
+  </data>
+  <data name="Home_LogOn_AccountInformation" xml:space="preserve">
+    <value>Información de la Cuenta</value>
+  </data>
+  <data name="Home_LogOn_Failed" xml:space="preserve">
+    <value>El Inicio de Sesión fue incorrecto. Por favor corrija los errores e inténtelo de nuevo.</value>
+  </data>
+  <data name="Home_LogOn_LogOn" xml:space="preserve">
+    <value>Iniciar Sesión</value>
+  </data>
+  <data name="Home_LogOn_Password" xml:space="preserve">
+    <value>Contraseña</value>
+  </data>
+  <data name="Home_LogOn_RememberMe" xml:space="preserve">
+    <value>¿Recordarme?</value>
+  </data>
+  <data name="Home_LogOn_Title" xml:space="preserve">
+    <value>Iniciar Sesión</value>
+  </data>
+  <data name="Home_LogOn_Username" xml:space="preserve">
+    <value>Nombre de Usuario</value>
+  </data>
+  <data name="Home_LogOn_UsernamePasswordIncorrect" xml:space="preserve">
+    <value>El Nombre de Usuario o Contraseña son incorrectos.</value>
+  </data>
+  <data name="Home_PageNotFound_Text" xml:space="preserve">
+    <value>La página que buscas no ha podido ser encontrada. Por favor, inténtelo de nuevo o contacte con el administrador del sistema.</value>
+  </data>
+  <data name="Home_PageNotFound_Title" xml:space="preserve">
+    <value>404 Página No Encontrada</value>
+  </data>
+  <data name="Home_ServerError_Text" xml:space="preserve">
+    <value>Ocurrió un error en el servidor durante el proceso de su solicitud. Por favor, inténtelo de nuevo o contacte con el administrador del sistema.</value>
+  </data>
+  <data name="Home_ServerError_Title" xml:space="preserve">
+    <value>500 Error en el Servidor</value>
+  </data>
+  <data name="Home_Unauthorized_Text" xml:space="preserve">
+    <value>Usted no tiene permisos para realizar esta acción o ver la página seleccionada.</value>
+  </data>
+  <data name="Home_Unauthorized_Title" xml:space="preserve">
+    <value>No Autorizado</value>
+  </data>
+  <data name="Item_NotFound" xml:space="preserve">
+    <value>El Artículo no fue encontrado</value>
+  </data>
+  <data name="Layout_About" xml:space="preserve">
+    <value>Acerca de</value>
+  </data>
+  <data name="Layout_AccountSettings" xml:space="preserve">
+    <value>Información de la cuenta</value>
+  </data>
+  <data name="Layout_Administration" xml:space="preserve">
+    <value>Administración</value>
+  </data>
+  <data name="Layout_AdministrationGlobalSettings" xml:space="preserve">
+    <value>Configuración global</value>
+  </data>
+  <data name="Layout_AdministrationRepositories" xml:space="preserve">
+    <value>Repositorios</value>
+  </data>
+  <data name="Layout_AdministrationTeams" xml:space="preserve">
+    <value>Equipos</value>
+  </data>
+  <data name="Layout_AdministrationUsers" xml:space="preserve">
+    <value>Usuarios</value>
+  </data>
+  <data name="Layout_Footer_Copyright" xml:space="preserve">
+    <value>Todos los derechos reservados.</value>
+  </data>
+  <data name="Layout_Home" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
+  <data name="Layout_LogOff" xml:space="preserve">
+    <value>Cerrar Sesión</value>
+  </data>
+  <data name="Layout_LogOn" xml:space="preserve">
+    <value>Iniciar Sesión</value>
+  </data>
+  <data name="Layout_Register" xml:space="preserve">
+    <value>Crear nueva cuenta</value>
+  </data>
+  <data name="Layout_Repositories" xml:space="preserve">
+    <value>Repositorios</value>
+  </data>
+  <data name="Layout_Title" xml:space="preserve">
+    <value>Bonobo Git Server</value>
+    <comment>Bonobo Servidor Git (Se conserva igual por que es el nombre del proyecto).</comment>
+  </data>
+  <data name="Repository_AddressBar_Root" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
+  <data name="Repository_AdministratorsHint" xml:space="preserve">
+    <value>Los administradores tienen acceso completo al repositorio. También pueden modificar o eliminar metadatos repositorio repositorio.</value>
+  </data>
+  <data name="Repository_AllowAnonymousHint" xml:space="preserve">
+    <value>Si se permite el acceso anónimo a todo el mundo puede tirar o clonar el repositorio y ver los metadatos del repositorio. El empuje sólo está disponible si es especificado en la Configuración global.</value>
+  </data>
+  <data name="Repository_Commits_Title" xml:space="preserve">
+    <value>Cambios</value>
+    <comment>(Commits, Se refiere a los cambios realizados)</comment>
+  </data>
+  <data name="Repository_Commit_Added" xml:space="preserve">
+    <value>Agregar</value>
+  </data>
+  <data name="Repository_Commit_Author" xml:space="preserve">
+    <value>Autor</value>
+  </data>
+  <data name="Repository_Commit_AuthorEmail" xml:space="preserve">
+    <value>Correo electrónico</value>
+  </data>
+  <data name="Repository_Commit_Changes" xml:space="preserve">
+    <value>Archivos cambiados</value>
+  </data>
+  <data name="Repository_Commit_Copied" xml:space="preserve">
+    <value>Copiado</value>
+  </data>
+  <data name="Repository_Commit_Date" xml:space="preserve">
+    <value>Fecha</value>
+  </data>
+  <data name="Repository_Commit_Deleted" xml:space="preserve">
+    <value>Eliminado</value>
+  </data>
+  <data name="Repository_Commit_Detail" xml:space="preserve">
+    <value>Aplicar Detalles</value>
+    <comment>(Aplicar es la traducción más adecuada al español para Commit)</comment>
+  </data>
+  <data name="Repository_Commit_ID" xml:space="preserve">
+    <value>Aplicar</value>
+  </data>
+  <data name="Repository_Commit_Message" xml:space="preserve">
+    <value>Mensaje</value>
+  </data>
+  <data name="Repository_Commit_Modified" xml:space="preserve">
+    <value>Modificado</value>
+  </data>
+  <data name="Repository_Commit_Parents" xml:space="preserve">
+    <value>Padres</value>
+  </data>
+  <data name="Repository_Commit_Renamed" xml:space="preserve">
+    <value>Renombrado</value>
+  </data>
+  <data name="Repository_Commit_TreeID" xml:space="preserve">
+    <value>Arbol</value>
+  </data>
+  <data name="Repository_Commit_TypeChanged" xml:space="preserve">
+    <value>Tipo de Cambio</value>
+  </data>
+  <data name="Repository_Create_Back" xml:space="preserve">
+    <value>Volver a la lista</value>
+  </data>
+  <data name="Repository_Create_DirectoryExists" xml:space="preserve">
+    <value>El directorio con este nombre ya existe en la carpeta del repositorio. Elimine este directorio o elija otro nombre y vuelva a intentarlo.</value>
+  </data>
+  <data name="Repository_Create_Fail" xml:space="preserve">
+    <value>No se pudo crear el repositorio. Por favor corrija los errores e inténtelo de nuevo.</value>
+  </data>
+  <data name="Repository_Create_Failure" xml:space="preserve">
+    <value>El repositorio con el nombre seleccionado ya existe.</value>
+  </data>
+  <data name="Repository_Create_Informations" xml:space="preserve">
+    <value>Información del Repositorio</value>
+  </data>
+  <data name="Repository_Create_NameFailure" xml:space="preserve">
+    <value>El nombre no puede contener solo espacios en blanco.</value>
+  </data>
+  <data name="Repository_Create_Submit" xml:space="preserve">
+    <value>Crear</value>
+  </data>
+  <data name="Repository_Create_Success" xml:space="preserve">
+    <value>El Repositorio fue creado exitosamente.</value>
+  </data>
+  <data name="Repository_Create_Title" xml:space="preserve">
+    <value>Crear Nuevo Repositorio</value>
+  </data>
+  <data name="Repository_Delete_Success" xml:space="preserve">
+    <value>El Repositorio fue borrado exitosamente.</value>
+  </data>
+  <data name="Repository_Detail_Administrators" xml:space="preserve">
+    <value>Administradores</value>
+  </data>
+  <data name="Repository_Detail_Anonymous" xml:space="preserve">
+    <value>Anonimo</value>
+  </data>
+  <data name="Repository_Detail_Back" xml:space="preserve">
+    <value>Volver a la lista</value>
+  </data>
+  <data name="Repository_Detail_Delete" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="Repository_Detail_Description" xml:space="preserve">
+    <value>Descripción</value>
+  </data>
+  <data name="Repository_Detail_Detail" xml:space="preserve">
+    <value>Informacción detallada</value>
+  </data>
+  <data name="Repository_Detail_Edit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="Repository_Detail_IsCurrentUserAdmin" xml:space="preserve">
+    <value>Administrador</value>
+  </data>
+  <data name="Repository_Detail_Location" xml:space="preserve">
+    <value>Localización del Repositorio GIT</value>
+  </data>
+  <data name="Repository_Detail_Name" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="Repository_Detail_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Repository_Detail_Teams" xml:space="preserve">
+    <value>Equipos</value>
+  </data>
+  <data name="Repository_Detail_Title" xml:space="preserve">
+    <value>Detalles del Repositorio</value>
+  </data>
+  <data name="Repository_Detail_Users" xml:space="preserve">
+    <value>Colaboradores</value>
+  </data>
+  <data name="Repository_Detail_Yes" xml:space="preserve">
+    <value>Si</value>
+  </data>
+  <data name="Repository_Edit_Back" xml:space="preserve">
+    <value>Volver a la lista</value>
+  </data>
+  <data name="Repository_Edit_CantRemoveYourself" xml:space="preserve">
+    <value>No puede darse de baja de los administradores.</value>
+  </data>
+  <data name="Repository_Edit_Fail" xml:space="preserve">
+    <value>La actualización del repositorio no tuvo éxito. Por favor, corrija los errores e inténtelo de nuevo.</value>
+  </data>
+  <data name="Repository_Edit_Submit" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="Repository_Edit_Title" xml:space="preserve">
+    <value>Editar Repositorio</value>
+  </data>
+  <data name="Repository_Edit_UpdateSuccess" xml:space="preserve">
+    <value>El Repositorio fue actualizado correctamente.</value>
+  </data>
+  <data name="Repository_Index_AdministratedRepositories" xml:space="preserve">
+    <value>Repositorios administrados</value>
+  </data>
+  <data name="Repository_Index_AllRepositories" xml:space="preserve">
+    <value>Todos los Repositorios</value>
+  </data>
+  <data name="Repository_Index_CreateNew" xml:space="preserve">
+    <value>Crear nuevo repositorio</value>
+  </data>
+  <data name="Repository_Index_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Repository_Index_Repositories" xml:space="preserve">
+    <value>Repositorios</value>
+  </data>
+  <data name="Repository_Index_Title" xml:space="preserve">
+    <value>Administración de Repositorios</value>
+  </data>
+  <data name="Repository_Index_Yes" xml:space="preserve">
+    <value>Si</value>
+  </data>
+  <data name="Repository_Layout_Browse" xml:space="preserve">
+    <value>Explorador de Repositorios</value>
+  </data>
+  <data name="Repository_Layout_Commits" xml:space="preserve">
+    <value>Cambios</value>
+  </data>
+  <data name="Repository_SwitchBranch" xml:space="preserve">
+    <value>Cambiar a la rama actual</value>
+  </data>
+  <data name="Repository_TeamsHint" xml:space="preserve">
+    <value>Los equipos tienen acceso al repositorio. Pueden clonar, empujar o obtener el repositorio y ver los metadatosTodos los usuarios de equipo pueden tener acceso a repositorio actual.</value>
+  </data>
+  <data name="Repository_Tree_Author" xml:space="preserve">
+    <value>Autor</value>
+  </data>
+  <data name="Repository_Tree_CommitDate" xml:space="preserve">
+    <value>Fecha</value>
+  </data>
+  <data name="Repository_Tree_CommitMessage" xml:space="preserve">
+    <value>Mensaje</value>
+  </data>
+  <data name="Repository_Tree_Download" xml:space="preserve">
+    <value>Descargar archivo</value>
+  </data>
+  <data name="Repository_Tree_Name" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="Repository_Tree_PreviewNotSupported" xml:space="preserve">
+    <value>La vista previa de este archivo no esta soportada.</value>
+  </data>
+  <data name="Repository_Tree_Title" xml:space="preserve">
+    <value>Explorador de Repositorios</value>
+  </data>
+  <data name="Repository_UsersHint" xml:space="preserve">
+    <value>Los usuarios tienen acceso al repositorio. Pueden clonar, empujar o obtener el repositorio y ver los metadatos del repositorio.</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reinicializar</value>
+  </data>
+  <data name="Settings_Global_AllowAnonymousPush" xml:space="preserve">
+    <value>Permitir a los usuarios anonimos empujar este repositorio.</value>
+  </data>
+  <data name="Settings_Global_AllowAnonymousRegistration" xml:space="preserve">
+    <value>Permitir registro anonimo.</value>
+  </data>
+  <data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
+    <value>Si la casilla no está marcada sólo administrador puede agregar nuevos usuarios y el registro de usuario anónimo está desactivado.</value>
+  </data>
+  <data name="Settings_Global_AllowUserRepositoryCreation" xml:space="preserve">
+    <value>Permitir la creación repositorios al usuarios</value>
+  </data>
+  <data name="Settings_Global_AllowUserRepositoryCreation_Hint" xml:space="preserve">
+    <value>Si la casilla está marcada sólo el administrador puede crear repositorios.</value>
+  </data>
+  <data name="Settings_Global_DirectoryHint" xml:space="preserve">
+    <value>Todos los repositorios git se almacenan en este directorio.</value>
+  </data>
+  <data name="Settings_Global_RepositoryPath" xml:space="preserve">
+    <value>Directorio de Repositorio</value>
+  </data>
+  <data name="Settings_Index_Failed" xml:space="preserve">
+    <value>La configuración no pudo ser actualizada. Por favor corrija los errores e inténtelo de nuevo.</value>
+  </data>
+  <data name="Settings_Index_Save" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="Settings_Index_Title" xml:space="preserve">
+    <value>Configuración Global</value>
+  </data>
+  <data name="Settings_Index_UpdateSuccess" xml:space="preserve">
+    <value>La configuración global fue actualizada exitosamente.</value>
+  </data>
+  <data name="Settings_RepositoryPathNotExists" xml:space="preserve">
+    <value>La carpeta seleccionada no existe. Por favor crea la carpeta o selecciona otra distinta.</value>
+  </data>
+  <data name="Settings_RepositoryPathUnauthorized" xml:space="preserve">
+    <value>Tú no tienes privilegios suficientes para escribir en esta carpeta. Por favor selecciona otra carpeta.</value>
+  </data>
+  <data name="Team_Create_Back" xml:space="preserve">
+    <value>Volver a la lista</value>
+  </data>
+  <data name="Team_Create_Fail" xml:space="preserve">
+    <value>El nuevo equipo no pudo ser creado. Por favor corrija los errores e inténtelo de nuevo.</value>
+  </data>
+  <data name="Team_Create_Failure" xml:space="preserve">
+    <value>Ya existe un equipo con ese nombre. El equipo no pudo ser creado.</value>
+  </data>
+  <data name="Team_Create_Submit" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="Team_Create_Success" xml:space="preserve">
+    <value>El equipo fue creado exitosamente.</value>
+  </data>
+  <data name="Team_Create_TeamInformations" xml:space="preserve">
+    <value>Información de Equipos</value>
+  </data>
+  <data name="Team_Create_Title" xml:space="preserve">
+    <value>Crear Nuevo Equipo</value>
+  </data>
+  <data name="Team_Delete_Success" xml:space="preserve">
+    <value>El equipo fue eliminado.</value>
+  </data>
+  <data name="Team_Detail_Back" xml:space="preserve">
+    <value>Volver a la lista</value>
+  </data>
+  <data name="Team_Detail_Delete" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="Team_Detail_Description" xml:space="preserve">
+    <value>Descripción</value>
+  </data>
+  <data name="Team_Detail_Edit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="Team_Detail_Members" xml:space="preserve">
+    <value>Miembros</value>
+  </data>
+  <data name="Team_Detail_Name" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="Team_Detail_Repositories" xml:space="preserve">
+    <value>Repositorios</value>
+  </data>
+  <data name="Team_Detail_Title" xml:space="preserve">
+    <value>Detalles de Equipo</value>
+  </data>
+  <data name="Team_Edit_Back" xml:space="preserve">
+    <value>Volver a la lista</value>
+  </data>
+  <data name="Team_Edit_Failure" xml:space="preserve">
+    <value>No se pudo actualizar el equipo. Por favor corrija los errores e inténtelo de nuevo.</value>
+  </data>
+  <data name="Team_Edit_Submit" xml:space="preserve">
+    <value>Actualizar</value>
+  </data>
+  <data name="Team_Edit_Title" xml:space="preserve">
+    <value>Editar Equipo</value>
+  </data>
+  <data name="Team_Edit_UpdateSuccess" xml:space="preserve">
+    <value>El equipo fue actualizado correctamente.</value>
+  </data>
+  <data name="Team_Index_CreateNew" xml:space="preserve">
+    <value>Crear nuevo equipo</value>
+  </data>
+  <data name="Team_Index_Teams" xml:space="preserve">
+    <value>Equipos</value>
+  </data>
+  <data name="Team_Index_Title" xml:space="preserve">
+    <value>Administración de Equipos</value>
+  </data>
+  <data name="Validation_Compare" xml:space="preserve">
+    <value>"{0}" y "{1}" deben tener el mismo valor</value>
+  </data>
+  <data name="Validation_Email" xml:space="preserve">
+    <value>"{0}" no es una dirección de correo electrónico valida.</value>
+  </data>
+  <data name="Validation_FileName" xml:space="preserve">
+    <value>"{0}" contiene caracteres que no pueden estar en el nombre de un directorio.</value>
+  </data>
+  <data name="Validation_Required" xml:space="preserve">
+    <value>"{0}" es obligatorio.</value>
+  </data>
+  <data name="Validation_StringLength" xml:space="preserve">
+    <value>"{0}" debe ser mas pequeño de {1} caracteres.</value>
+  </data>
+</root>
