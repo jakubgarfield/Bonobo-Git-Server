@@ -4,6 +4,23 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 2.0.1
+
+**30 August 2013**
+
+### Features
+
+* Displaying current username in Windows Authentication mode
+
+### Bug Fixes
+
+* Fixed the problem with repository view for normal users in Windows Authentication mode
+
+
+<hr />
+
+
+
 ## Version 2.0
 
 **25 August 2013**
