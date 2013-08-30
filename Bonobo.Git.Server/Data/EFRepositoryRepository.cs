@@ -27,6 +27,7 @@ namespace Bonobo.Git.Server.Data
         {
             if (username == null) throw new ArgumentException("username");
 
+            username = username.ToLowerInvariant();
             return GetAllRepositories().Where(i => i.Administrators.Contains(username)
                 || i.Users.Contains(username)
                 || i.Teams.FirstOrDefault(t => teams.Contains(t)) != null
@@ -36,7 +37,8 @@ namespace Bonobo.Git.Server.Data
         public IList<RepositoryModel> GetAdministratedRepositories(string username)
         {
             if (username == null) throw new ArgumentException("username");
-
+            
+            username = username.ToLowerInvariant();
             return GetAllRepositories().Where(i => i.Administrators.Contains(username)).ToList();
         }
 

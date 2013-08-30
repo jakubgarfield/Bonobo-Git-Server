@@ -32,6 +32,7 @@ namespace Bonobo.Git.Server.Data
 
         public IList<TeamModel> GetTeams(string username)
         {
+            username = username.ToLowerInvariant(); 
             return GetAllTeams().Where(i => i.Members.Contains(username)).ToList();
         }
 
