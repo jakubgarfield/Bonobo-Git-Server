@@ -1,0 +1,714 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Account_Delete_DeleteCurrentUser" xml:space="preserve">
+    <value>Du kan inte ta bort dig själv.</value>
+  </data>
+  <data name="Account_Delete_Success" xml:space="preserve">
+    <value>Användaren har tagits bort.</value>
+  </data>
+  <data name="Account_Detail_Back" xml:space="preserve">
+    <value>Tillbaka till listan</value>
+  </data>
+  <data name="Account_Detail_Delete" xml:space="preserve">
+    <value>Ta bort</value>
+  </data>
+  <data name="Account_Detail_Edit" xml:space="preserve">
+    <value>Redigera</value>
+  </data>
+  <data name="Account_Detail_Email" xml:space="preserve">
+    <value>E-post</value>
+  </data>
+  <data name="Account_Detail_Name" xml:space="preserve">
+    <value>Namn</value>
+  </data>
+  <data name="Account_Detail_Roles" xml:space="preserve">
+    <value>Roller</value>
+  </data>
+  <data name="Account_Detail_Surname" xml:space="preserve">
+    <value>Efternamn</value>
+  </data>
+  <data name="Account_Detail_Title" xml:space="preserve">
+    <value>Kontodetaljer</value>
+  </data>
+  <data name="Account_Detail_Username" xml:space="preserve">
+    <value>Användarnamn</value>
+  </data>
+  <data name="Account_Edit_AccountInformation" xml:space="preserve">
+    <value>Kontoinformation</value>
+  </data>
+  <data name="Account_Edit_Back" xml:space="preserve">
+    <value>Tillbaka till listan</value>
+  </data>
+  <data name="Account_Edit_Cancel" xml:space="preserve">
+    <value>Avbryt</value>
+  </data>
+  <data name="Account_Edit_CannotRemoveYourselfFromAdminRole" xml:space="preserve">
+    <value>Kan inte ta bort dig själv från administratörer.</value>
+  </data>
+  <data name="Account_Edit_ConfirmPassword" xml:space="preserve">
+    <value>Bekräfta lösenord</value>
+  </data>
+  <data name="Account_Edit_CurrentPassword" xml:space="preserve">
+    <value>Nuvarande lösenord</value>
+  </data>
+  <data name="Account_Edit_Email" xml:space="preserve">
+    <value>E-post</value>
+  </data>
+  <data name="Account_Edit_Name" xml:space="preserve">
+    <value>Namn</value>
+  </data>
+  <data name="Account_Edit_NewPassword" xml:space="preserve">
+    <value>Nytt lösenord</value>
+  </data>
+  <data name="Account_Edit_OldPasswordEmpty" xml:space="preserve">
+    <value>Du måste fylla i ditt nuvarande lösenord</value>
+  </data>
+  <data name="Account_Edit_OldPasswordIncorrect" xml:space="preserve">
+    <value>Lösenordet stämmer inte överens med det nuvarande.</value>
+  </data>
+  <data name="Account_Edit_Roles" xml:space="preserve">
+    <value>Roller</value>
+  </data>
+  <data name="Account_Edit_Submit" xml:space="preserve">
+    <value>Spara</value>
+  </data>
+  <data name="Account_Edit_Surname" xml:space="preserve">
+    <value>Efternamn</value>
+  </data>
+  <data name="Account_Edit_Title" xml:space="preserve">
+    <value>Redigera användarkonto</value>
+  </data>
+  <data name="Account_Edit_Unsuccessfull" xml:space="preserve">
+    <value>Kunde inte redigera konto. Vänligen rätta till felen och försök igen.</value>
+  </data>
+  <data name="Account_Edit_UpdateSuccess" xml:space="preserve">
+    <value>Kontot har uppdaterats.</value>
+  </data>
+  <data name="Account_Index_Title" xml:space="preserve">
+    <value>Användarhantering</value>
+  </data>
+  <data name="GitAccess_ProjectForbidden" xml:space="preserve">
+    <value>Saknar behörighet för det projektet.</value>
+  </data>
+  <data name="Grid_Delete" xml:space="preserve">
+    <value>Ta bort</value>
+  </data>
+  <data name="Grid_Edit" xml:space="preserve">
+    <value>Redigera</value>
+  </data>
+  <data name="Home_Error_Text" xml:space="preserve">
+    <value>Ett oväntat fel inträffade. Vänligen försök igen eller kontakta din systemadministratör.</value>
+  </data>
+  <data name="Home_Error_Title" xml:space="preserve">
+    <value>Ett fel inträffade</value>
+  </data>
+  <data name="Home_LogOn_AccountInformation" xml:space="preserve">
+    <value>Kontoinformation</value>
+  </data>
+  <data name="Home_LogOn_Failed" xml:space="preserve">
+    <value>Kunde inte logga in. Vänligen rätta till felen och försök igen.</value>
+  </data>
+  <data name="Home_LogOn_LogOn" xml:space="preserve">
+    <value>Logga in</value>
+  </data>
+  <data name="Home_LogOn_Password" xml:space="preserve">
+    <value>Lösenord</value>
+  </data>
+  <data name="Home_LogOn_RememberMe" xml:space="preserve">
+    <value>Kom ihåg mig</value>
+  </data>
+  <data name="Home_LogOn_Title" xml:space="preserve">
+    <value>Logga in</value>
+  </data>
+  <data name="Home_LogOn_Username" xml:space="preserve">
+    <value>Användarnamn</value>
+  </data>
+  <data name="Home_LogOn_UsernamePasswordIncorrect" xml:space="preserve">
+    <value>Användarnamnet eller lösenordet är felaktigt.</value>
+  </data>
+  <data name="Home_PageNotFound_Text" xml:space="preserve">
+    <value>Sidan du letade efter kan inte hittas.Vänligen försök igen eller kontakta din systemadministratör.</value>
+  </data>
+  <data name="Home_PageNotFound_Title" xml:space="preserve">
+    <value>404 Sidan kunde inte hittas</value>
+  </data>
+  <data name="Home_ServerError_Text" xml:space="preserve">
+    <value>Ett serverfel inträffade när din begäran skulle hanteras. Vänligen försök igen eller kontakta din systemadministratör.</value>
+  </data>
+  <data name="Home_ServerError_Title" xml:space="preserve">
+    <value>500 Serverfel</value>
+  </data>
+  <data name="Home_Unauthorized_Text" xml:space="preserve">
+    <value>Du har inte behörighet för sidan eller åtgärden.</value>
+  </data>
+  <data name="Home_Unauthorized_Title" xml:space="preserve">
+    <value>Obehörig</value>
+  </data>
+  <data name="Item_NotFound" xml:space="preserve">
+    <value>Vi kunde inte hitta det vi letade efter</value>
+  </data>
+  <data name="Layout_About" xml:space="preserve">
+    <value>Om</value>
+  </data>
+  <data name="Layout_AccountSettings" xml:space="preserve">
+    <value>Kontoinställningar</value>
+  </data>
+  <data name="Layout_Administration" xml:space="preserve">
+    <value>Administration</value>
+  </data>
+  <data name="Layout_AdministrationGlobalSettings" xml:space="preserve">
+    <value>Globala inställningar</value>
+  </data>
+  <data name="Layout_AdministrationRepositories" xml:space="preserve">
+    <value>Repositorier</value>
+  </data>
+  <data name="Layout_AdministrationTeams" xml:space="preserve">
+    <value>Grupper</value>
+  </data>
+  <data name="Layout_AdministrationUsers" xml:space="preserve">
+    <value>Användare</value>
+  </data>
+  <data name="Layout_Footer_Copyright" xml:space="preserve">
+    <value>Alla rättigheter reserverade.</value>
+  </data>
+  <data name="Layout_Home" xml:space="preserve">
+    <value>Hem</value>
+  </data>
+  <data name="Layout_LogOff" xml:space="preserve">
+    <value>Logga ut</value>
+  </data>
+  <data name="Layout_LogOn" xml:space="preserve">
+    <value>Logga in</value>
+  </data>
+  <data name="Layout_Register" xml:space="preserve">
+    <value>Skapa nytt konto</value>
+  </data>
+  <data name="Layout_Repositories" xml:space="preserve">
+    <value>Repositorier</value>
+  </data>
+  <data name="Layout_Title" xml:space="preserve">
+    <value>Bonobo Gitserver</value>
+  </data>
+  <data name="Repository_AddressBar_Root" xml:space="preserve">
+    <value>Hem</value>
+  </data>
+  <data name="Repository_Commits_Title" xml:space="preserve">
+    <value>Incheckningar</value>
+  </data>
+  <data name="Repository_Commit_Added" xml:space="preserve">
+    <value>Tillagd</value>
+  </data>
+  <data name="Repository_Commit_Author" xml:space="preserve">
+    <value>Upphovsman</value>
+  </data>
+  <data name="Repository_Commit_AuthorEmail" xml:space="preserve">
+    <value>E-post</value>
+  </data>
+  <data name="Repository_Commit_Changes" xml:space="preserve">
+    <value>Förändrade filer</value>
+  </data>
+  <data name="Repository_Commit_Copied" xml:space="preserve">
+    <value>Kopierad</value>
+  </data>
+  <data name="Repository_Commit_Date" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="Repository_Commit_Deleted" xml:space="preserve">
+    <value>Borttagen</value>
+  </data>
+  <data name="Repository_Commit_Detail" xml:space="preserve">
+    <value>Detaljer för incheckning</value>
+  </data>
+  <data name="Repository_Commit_ID" xml:space="preserve">
+    <value>Incheckning</value>
+  </data>
+  <data name="Repository_Commit_Message" xml:space="preserve">
+    <value>Kommentar</value>
+  </data>
+  <data name="Repository_Commit_Modified" xml:space="preserve">
+    <value>Ändrad</value>
+  </data>
+  <data name="Repository_Commit_Parents" xml:space="preserve">
+    <value>Föräldrar</value>
+  </data>
+  <data name="Repository_Commit_Renamed" xml:space="preserve">
+    <value>Bytt namn</value>
+  </data>
+  <data name="Repository_Commit_TreeID" xml:space="preserve">
+    <value>Träd</value>
+  </data>
+  <data name="Repository_Commit_TypeChanged" xml:space="preserve">
+    <value>Ändrad typ</value>
+  </data>
+  <data name="Repository_Create_Back" xml:space="preserve">
+    <value>Tillbaka till listan</value>
+  </data>
+  <data name="Repository_Create_DirectoryExists" xml:space="preserve">
+    <value>En mapp med det här namnet finns redan i mappen för repositorier. Ta bort mappen eller välj ett annat namn och försök igen.</value>
+  </data>
+  <data name="Repository_Create_Fail" xml:space="preserve">
+    <value>Kunde inte skapa repositorium. Vänligen rätta till felen och försök igen.</value>
+  </data>
+  <data name="Repository_Create_Failure" xml:space="preserve">
+    <value>Ett repositorium med det namnet finns redan.</value>
+  </data>
+  <data name="Repository_Create_Informations" xml:space="preserve">
+    <value>Uppgiter för repositorium</value>
+  </data>
+  <data name="Repository_Create_Submit" xml:space="preserve">
+    <value>Skapa</value>
+  </data>
+  <data name="Repository_Create_Success" xml:space="preserve">
+    <value>Repositoriet har skapats.</value>
+  </data>
+  <data name="Repository_Create_Title" xml:space="preserve">
+    <value>Skapa nytt repositorium</value>
+  </data>
+  <data name="Repository_Delete_Success" xml:space="preserve">
+    <value>Repositoriet har tagits bort.</value>
+  </data>
+  <data name="Repository_Detail_Administrators" xml:space="preserve">
+    <value>Administratörer</value>
+  </data>
+  <data name="Repository_Detail_Anonymous" xml:space="preserve">
+    <value>Anynom åtkomst</value>
+  </data>
+  <data name="Repository_Detail_Back" xml:space="preserve">
+    <value>Tillbaka till listan</value>
+  </data>
+  <data name="Repository_Detail_Delete" xml:space="preserve">
+    <value>Ta bort</value>
+  </data>
+  <data name="Repository_Detail_Description" xml:space="preserve">
+    <value>Beskrivning</value>
+  </data>
+  <data name="Repository_Detail_Detail" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="Repository_Detail_Edit" xml:space="preserve">
+    <value>Redigera</value>
+  </data>
+  <data name="Repository_Detail_IsCurrentUserAdmin" xml:space="preserve">
+    <value>Administratör</value>
+  </data>
+  <data name="Repository_Detail_Location" xml:space="preserve">
+    <value>Plats för gitrepositorium</value>
+  </data>
+  <data name="Repository_Detail_Name" xml:space="preserve">
+    <value>Namn</value>
+  </data>
+  <data name="Repository_Detail_No" xml:space="preserve">
+    <value>Nej</value>
+  </data>
+  <data name="Repository_Detail_Teams" xml:space="preserve">
+    <value>Grupper</value>
+  </data>
+  <data name="Repository_Detail_Title" xml:space="preserve">
+    <value>Detaljer för repositorium</value>
+  </data>
+  <data name="Repository_Detail_Users" xml:space="preserve">
+    <value>Användare</value>
+  </data>
+  <data name="Repository_Detail_Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="Repository_Edit_Back" xml:space="preserve">
+    <value>Tillbaka till listan</value>
+  </data>
+  <data name="Repository_Edit_CantRemoveYourself" xml:space="preserve">
+    <value>Du kan inte ta bort dig själv från administratörer.</value>
+  </data>
+  <data name="Repository_Edit_Fail" xml:space="preserve">
+    <value>Kunde inte uppdatera repositorium. Vänligen rätta till felen och försök igen.</value>
+  </data>
+  <data name="Repository_Edit_Submit" xml:space="preserve">
+    <value>Spara</value>
+  </data>
+  <data name="Repository_Edit_Title" xml:space="preserve">
+    <value>Redigera repositorium</value>
+  </data>
+  <data name="Repository_Edit_UpdateSuccess" xml:space="preserve">
+    <value>Repositoriet har uppdaterats.</value>
+  </data>
+  <data name="Repository_Index_AdministratedRepositories" xml:space="preserve">
+    <value>Administrerade repositorier</value>
+  </data>
+  <data name="Repository_Index_AllRepositories" xml:space="preserve">
+    <value>Alla repositorier</value>
+  </data>
+  <data name="Repository_Index_CreateNew" xml:space="preserve">
+    <value>Skapa nytt repositorium</value>
+  </data>
+  <data name="Repository_Index_No" xml:space="preserve">
+    <value>Nej</value>
+  </data>
+  <data name="Repository_Index_Repositories" xml:space="preserve">
+    <value>Repositorier</value>
+  </data>
+  <data name="Repository_Index_Title" xml:space="preserve">
+    <value>Hantera repositorier</value>
+  </data>
+  <data name="Repository_Index_Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="Repository_Layout_Browse" xml:space="preserve">
+    <value>Bläddra i repositorium</value>
+  </data>
+  <data name="Repository_Layout_Commits" xml:space="preserve">
+    <value>Incheckningar</value>
+  </data>
+  <data name="Repository_SwitchBranch" xml:space="preserve">
+    <value>Byt nuvarande gren</value>
+  </data>
+  <data name="Repository_Tree_Author" xml:space="preserve">
+    <value>Upphovsman</value>
+  </data>
+  <data name="Repository_Tree_CommitDate" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="Repository_Tree_CommitMessage" xml:space="preserve">
+    <value>Kommentar</value>
+  </data>
+  <data name="Repository_Tree_Name" xml:space="preserve">
+    <value>Namn</value>
+  </data>
+  <data name="Repository_Tree_Title" xml:space="preserve">
+    <value>Bläddra i repositorium</value>
+  </data>
+  <data name="Settings_Global_AllowAnonymousPush" xml:space="preserve">
+    <value>Tillåt anonyma användare att pusha till repositorier.</value>
+  </data>
+  <data name="Settings_Global_RepositoryPath" xml:space="preserve">
+    <value>Sökväg för repositorier</value>
+  </data>
+  <data name="Settings_Index_Save" xml:space="preserve">
+    <value>Spara</value>
+  </data>
+  <data name="Settings_Index_Title" xml:space="preserve">
+    <value>Globala inställningar</value>
+  </data>
+  <data name="Settings_Index_UpdateSuccess" xml:space="preserve">
+    <value>De gloaba inställningarna har uppdaterats.</value>
+  </data>
+  <data name="Settings_RepositoryPathNotExists" xml:space="preserve">
+    <value>Angiven sökväg finns inte. Vänligen skapa mappen eller välj en annan sökväg.</value>
+  </data>
+  <data name="Settings_RepositoryPathUnauthorized" xml:space="preserve">
+    <value>Du saknar behörighet att skriva till den mappen. Vänligen välj en annan sökväg.</value>
+  </data>
+  <data name="Team_Create_Back" xml:space="preserve">
+    <value>Tillbaka till listan</value>
+  </data>
+  <data name="Team_Create_Fail" xml:space="preserve">
+    <value>Kunde inte skapa grupp. Vänliga rätta till felen och försök igen.</value>
+  </data>
+  <data name="Team_Create_Failure" xml:space="preserve">
+    <value>En grupp med samma namn finns redan. Gruppen skapades därför inte.</value>
+  </data>
+  <data name="Team_Create_Submit" xml:space="preserve">
+    <value>Spara</value>
+  </data>
+  <data name="Team_Create_Success" xml:space="preserve">
+    <value>Gruppen har skapats.</value>
+  </data>
+  <data name="Team_Create_TeamInformations" xml:space="preserve">
+    <value>Gruppinställningar</value>
+  </data>
+  <data name="Team_Create_Title" xml:space="preserve">
+    <value>Skapa ny grupp</value>
+  </data>
+  <data name="Team_Delete_Success" xml:space="preserve">
+    <value>Gruppen har tagits bort.</value>
+  </data>
+  <data name="Team_Detail_Back" xml:space="preserve">
+    <value>Tillbaka till listan</value>
+  </data>
+  <data name="Team_Detail_Delete" xml:space="preserve">
+    <value>Ta bort</value>
+  </data>
+  <data name="Team_Detail_Description" xml:space="preserve">
+    <value>Beskrivning</value>
+  </data>
+  <data name="Team_Detail_Edit" xml:space="preserve">
+    <value>Redigera</value>
+  </data>
+  <data name="Team_Detail_Members" xml:space="preserve">
+    <value>Medlemmar</value>
+  </data>
+  <data name="Team_Detail_Name" xml:space="preserve">
+    <value>Namn</value>
+  </data>
+  <data name="Team_Detail_Repositories" xml:space="preserve">
+    <value>Repositorier</value>
+  </data>
+  <data name="Team_Detail_Title" xml:space="preserve">
+    <value>Gruppinformation</value>
+  </data>
+  <data name="Team_Edit_Back" xml:space="preserve">
+    <value>Tillbaka till listan</value>
+  </data>
+  <data name="Team_Edit_Failure" xml:space="preserve">
+    <value>Kunde inte uppdatera grupp. Vänligen rätta till felen och försök igen.</value>
+  </data>
+  <data name="Team_Edit_Submit" xml:space="preserve">
+    <value>Uppdatera</value>
+  </data>
+  <data name="Team_Edit_Title" xml:space="preserve">
+    <value>Redigera grupp</value>
+  </data>
+  <data name="Team_Edit_UpdateSuccess" xml:space="preserve">
+    <value>Gruppen har uppdaterats.</value>
+  </data>
+  <data name="Team_Index_CreateNew" xml:space="preserve">
+    <value>Skapa ny grupp</value>
+  </data>
+  <data name="Team_Index_Title" xml:space="preserve">
+    <value>Grupphantering</value>
+  </data>
+  <data name="Validation_Compare" xml:space="preserve">
+    <value>"{0}" och "{1}" måste vara lika.</value>
+  </data>
+  <data name="Validation_Email" xml:space="preserve">
+    <value>"{0}" är inte en korrekt e-postadress.</value>
+  </data>
+  <data name="Validation_Required" xml:space="preserve">
+    <value>"{0}" är obligatoriskt.</value>
+  </data>
+  <data name="DateTimeFormat" xml:space="preserve">
+    <value>dd/MM/yyyy hh:mm</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Återställ</value>
+  </data>
+  <data name="Settings_Index_Failed" xml:space="preserve">
+    <value>Kunde inte uppdatera inställningar. Vänligen rätta till felen och försök igen.</value>
+  </data>
+  <data name="Team_Index_Teams" xml:space="preserve">
+    <value>Grupper</value>
+  </data>
+  <data name="Account_Edit_RolesHint" xml:space="preserve">
+    <value>Administratörer har tillgång till alla repositorier och kan hantera alla repositorier, grupper och användare.</value>
+  </data>
+  <data name="Settings_Global_DirectoryHint" xml:space="preserve">
+    <value>Alla Gitrepositorierer sparas i den här mappen.</value>
+  </data>
+  <data name="Home_About_Thanks" xml:space="preserve">
+    <value>Tack!</value>
+  </data>
+  <data name="Home_About_Thanks_p" xml:space="preserve">
+    <value>Bonobo Gitserver använder sig av några projekt baserade på öppen källkod och några gratisprojekt.  Stort tack till alla upphovsmän och bidragsgivare för deras utmärkta arbete.</value>
+  </data>
+  <data name="Home_About_Title" xml:space="preserve">
+    <value>Om</value>
+  </data>
+  <data name="Repository_AdministratorsHint" xml:space="preserve">
+    <value>Administratörer har full tillgång till repositoriet. De kan också ändra dess metadata eller ta bort det helt.</value>
+  </data>
+  <data name="Repository_AllowAnonymousHint" xml:space="preserve">
+    <value>Om anonym åtkomst är aktiverad kan ej inloggade användare se och klona repositoriet samt se dess metadata. De kan bara pusha om det är tillåtet under globala inställningar.</value>
+  </data>
+  <data name="Repository_Create_NameFailure" xml:space="preserve">
+    <value>Namnet kan inte endast innehålla blanksteg.</value>
+  </data>
+  <data name="Repository_TeamsHint" xml:space="preserve">
+    <value>Grupper som har tillgång till repositoriet. De kan klona, pusha eller hämta repositoriet och se dess metadata. Alla användare i gruppen får tillgång till repositoriet.</value>
+  </data>
+  <data name="Repository_UsersHint" xml:space="preserve">
+    <value>Användare som har tillgång till repositoriet. De kan klona, pusha eller hämta repositoriet och se dess metadata.</value>
+  </data>
+  <data name="Validation_FileName" xml:space="preserve">
+    <value>"{0}" innehåller tecken som inte är tillåtna i fil- och mappnamn.</value>
+  </data>
+  <data name="Validation_StringLength" xml:space="preserve">
+    <value>"{0}" ska vara kortare än {1} tecken.</value>
+  </data>
+  <data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
+    <value>Ett konto med det användarnamnet finns redan.</value>
+  </data>
+  <data name="Account_Create_AccountInformation" xml:space="preserve">
+    <value>Kontoinformation</value>
+  </data>
+  <data name="Account_Create_ConfirmPassword" xml:space="preserve">
+    <value>Bekräfta lösenord</value>
+  </data>
+  <data name="Account_Create_Email" xml:space="preserve">
+    <value>E-post</value>
+  </data>
+  <data name="Account_Create_Name" xml:space="preserve">
+    <value>Namn</value>
+  </data>
+  <data name="Account_Create_Password" xml:space="preserve">
+    <value>Lösenord</value>
+  </data>
+  <data name="Account_Create_Submit" xml:space="preserve">
+    <value>Skapa nytt konto</value>
+  </data>
+  <data name="Account_Create_Surname" xml:space="preserve">
+    <value>Efternamn</value>
+  </data>
+  <data name="Account_Create_Title" xml:space="preserve">
+    <value>Skapa nytt konto</value>
+  </data>
+  <data name="Account_Create_Unsuccessfull" xml:space="preserve">
+    <value>Användarkontot kunde inte skapas. Vänliga rätta till felen och försök igen.</value>
+  </data>
+  <data name="Account_Create_Username" xml:space="preserve">
+    <value>Användarnamn</value>
+  </data>
+  <data name="Account_Index_Create" xml:space="preserve">
+    <value>Skapa ny användare</value>
+  </data>
+  <data name="Account_Index_Users" xml:space="preserve">
+    <value>Användare</value>
+  </data>
+  <data name="Delete_ConfirmationText" xml:space="preserve">
+    <value>Vill du verkligen ta bort {0}?</value>
+  </data>
+  <data name="Account_Create_Success" xml:space="preserve">
+    <value>Användarkontot har skapats.</value>
+  </data>
+  <data name="Repository_Tree_Download" xml:space="preserve">
+    <value>Ladda ned fil</value>
+  </data>
+  <data name="Settings_Global_AllowAnonymousRegistration" xml:space="preserve">
+    <value>Tillåt användarregistrering</value>
+  </data>
+  <data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
+    <value>Om kryssrutan är urbockad kan bara administratörer skapa nya användarkonton, och användare kan därmed inte registrera sig själva.</value>
+  </data>
+  <data name="Settings_Global_AllowUserRepositoryCreation" xml:space="preserve">
+    <value>Tillåt användare att skapa repositorier</value>
+  </data>
+  <data name="Settings_Global_AllowUserRepositoryCreation_Hint" xml:space="preserve">
+    <value>Om kryssrutan är urbockad kan bara administratörer skapa nya repositorier.</value>
+  </data>
+  <data name="Delete_Back" xml:space="preserve">
+    <value>Tillbaka</value>
+  </data>
+  <data name="Delete_Confirm" xml:space="preserve">
+    <value>Ta bort</value>
+  </data>
+  <data name="Delete_Title" xml:space="preserve">
+    <value>Bekräfta borttagning</value>
+  </data>
+  <data name="Repository_Tree_PreviewNotSupported" xml:space="preserve">
+    <value>Förhandsgranskning av den här filen stöds inte.</value>
+  </data>
+</root>
