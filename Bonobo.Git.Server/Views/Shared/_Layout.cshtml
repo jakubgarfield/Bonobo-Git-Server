@@ -27,7 +27,7 @@
                         }
                         else
                         {
-                            <p><strong>@Context.User.Identity.Name</strong> [ @Html.ActionLink(Resources.Layout_AccountSettings, "Edit", "Account", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) }, null)</p>
+                            <p><strong>@Context.User.Identity.Name</strong> [ @Html.ActionLink(Resources.Layout_AccountSettings, "Edit", "Account", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) }, null) ]</p>
                         }
                     }
                     else
