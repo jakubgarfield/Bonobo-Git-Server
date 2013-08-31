@@ -10,7 +10,7 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 ### Features
 
-* Swedish localization
+* Swedish localization - [JLedel](https://github.com/JLedel)
 
 ### Bug Fixes
 
