@@ -4,6 +4,20 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Unknown
+
+**Unknown**
+
+### Features
+
+* Swedish localization
+
+### Bug Fixes
+
+
+<hr />
+
+
 ## Version 2.0.1
 
 **30 August 2013**
