@@ -27,6 +27,7 @@
                                 select new SelectListItem() { Value = u, Text = u }).ToArray();
             }
             
+			@Html.LabelFor(m => m.Members)
             @Html.CheckboxListFor(m => m.Members, users, new { @class = "checkboxList medium" })            
             <p class="formHint">
             </p> 
