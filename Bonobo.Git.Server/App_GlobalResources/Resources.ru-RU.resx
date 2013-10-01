@@ -518,7 +518,7 @@
     <value>Обратно к списку</value>
   </data>
   <data name="Team_Create_Fail" xml:space="preserve">
-    <value>Создать новую команду не удалось. Исправьте ошибки и попробуйте еще раз.</value>
+    <value>Добавить команду не удалось. Исправьте ошибки и попробуйте еще раз.</value>
   </data>
   <data name="Team_Create_Failure" xml:space="preserve">
     <value>Команда с таким именем уже существует, поэтому создать еще одну не удалось.</value>
@@ -533,7 +533,7 @@
     <value>Информация о команде</value>
   </data>
   <data name="Team_Create_Title" xml:space="preserve">
-    <value>Создать новую команду</value>
+    <value>Добавить команду</value>
   </data>
   <data name="Team_Delete_Success" xml:space="preserve">
     <value>Команда была удалена.</value>
@@ -578,7 +578,7 @@
     <value>Команда была обновлена</value>
   </data>
   <data name="Team_Index_CreateNew" xml:space="preserve">
-    <value>Создать новую команду</value>
+    <value>Добавить команду</value>
   </data>
   <data name="Team_Index_Title" xml:space="preserve">
     <value>Управление командами</value>
@@ -676,7 +676,7 @@
     <value>Логин</value>
   </data>
   <data name="Account_Index_Create" xml:space="preserve">
-    <value>Создать нового пользователя</value>
+    <value>Добавить пользователя</value>
   </data>
   <data name="Account_Index_Users" xml:space="preserve">
     <value>Пользователи</value>
