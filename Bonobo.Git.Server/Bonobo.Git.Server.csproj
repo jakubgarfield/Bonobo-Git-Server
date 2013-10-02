@@ -170,6 +170,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="App_GlobalResources\Resources.ru-RU.designer.cs">
+      <DependentUpon>Resources.ru-RU.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="App_GlobalResources\Resources.es-ES.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -400,6 +405,7 @@
     <Content Include="Content\images\branch_active.png" />
     <Content Include="Content\images\browser.png" />
     <Content Include="Content\images\cn.png" />
+    <Content Include="Content\images\ru.png" />
     <Content Include="Content\images\commits.png" />
     <Content Include="Content\images\create.png" />
     <Content Include="Content\images\cz.png" />
@@ -597,6 +603,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.cs-CZ.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="App_GlobalResources\Resources.ru-RU.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Resources.ru-RU.designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="App_GlobalResources\Resources.es-ES.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
