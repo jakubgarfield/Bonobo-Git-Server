@@ -714,4 +714,7 @@
   <data name="Validation_StringLength" xml:space="preserve">
     <value>"{0}" debe ser mas pequeño de {1} caracteres.</value>
   </data>
+  <data name="Settings_Global_DefaultLanguage" xml:space="preserve">
+    <value>Idioma por defecto</value>
+  </data>
 </root>
