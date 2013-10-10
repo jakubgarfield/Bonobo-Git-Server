@@ -598,7 +598,7 @@
     <value>Si la casilla no está marcada sólo administrador puede agregar nuevos usuarios y el registro de usuario anónimo está desactivado.</value>
   </data>
   <data name="Settings_Global_AllowUserRepositoryCreation" xml:space="preserve">
-    <value>Permitir la creación repositorios al usuarios</value>
+    <value>Permitir la creación de repositorios a los usuarios.</value>
   </data>
   <data name="Settings_Global_AllowUserRepositoryCreation_Hint" xml:space="preserve">
     <value>Si la casilla está marcada sólo el administrador puede crear repositorios.</value>
