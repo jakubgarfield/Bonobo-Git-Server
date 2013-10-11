@@ -54,10 +54,10 @@
                 <option @((Model.DefaultLanguage == "es-ES") ? "Selected" : "") value="es-ES">es-ES</option>
                 <option @((Model.DefaultLanguage == "sv-SE") ? "Selected" : "") value="sv-SE">sv-SE</option>
                 <option @((Model.DefaultLanguage == "ru-RU") ? "Selected" : "") value="ru-RU">ru-RU</option>
-            </select><em>*</em>
+            </select>
             <p class="formHint">
               @Html.ValidationMessageFor(m => m.DefaultLanguage)
-              @Resources.Settings_Global_DirectoryHint
+              @Resources.Settings_Global_DefaultLanguage_Hint
             </p>
         </div>
         <div class="buttonHolder">

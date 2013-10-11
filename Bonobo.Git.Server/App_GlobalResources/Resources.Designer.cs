@@ -1510,11 +1510,20 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Default language.
+        ///   Looks up a localized string similar to Language.
         /// </summary>
         public static string Settings_Global_DefaultLanguage {
             get {
                 return ResourceManager.GetString("Settings_Global_DefaultLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language set by default in the application..
+        /// </summary>
+        public static string Settings_Global_DefaultLanguage_Hint {
+            get {
+                return ResourceManager.GetString("Settings_Global_DefaultLanguage_Hint", resourceCulture);
             }
         }
         

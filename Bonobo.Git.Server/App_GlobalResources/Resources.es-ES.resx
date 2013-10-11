@@ -715,6 +715,9 @@
     <value>"{0}" debe ser mas pequeño de {1} caracteres.</value>
   </data>
   <data name="Settings_Global_DefaultLanguage" xml:space="preserve">
-    <value>Idioma por defecto</value>
+    <value>Idioma</value>
+  </data>
+  <data name="Settings_Global_DefaultLanguage_Hint" xml:space="preserve">
+    <value>Idioma configurado por defecto en la aplicación.</value>
   </data>
 </root>
