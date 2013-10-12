@@ -711,4 +711,10 @@
   <data name="Repository_Tree_PreviewNotSupported" xml:space="preserve">
     <value>Preview of this file is not supported.</value>
   </data>
+  <data name="Settings_Global_DefaultLanguage" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Settings_Global_DefaultLanguage_Hint" xml:space="preserve">
+    <value>Language set by default in the application.</value>
+  </data>
 </root>
