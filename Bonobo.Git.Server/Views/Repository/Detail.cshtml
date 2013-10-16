@@ -11,7 +11,21 @@
             <h3>@Model.Name</h3>
             <div class="ctrlHolder">
                 <h5>@Html.LabelFor(m => m.Name)</h5>
-                <div class="content">@Model.Name</div>
+                <div class="content">
+                    @Model.Name
+                    @switch (Model.Status)
+                    {
+                        case RepositoryDetailStatus.Valid:
+                            break;
+                        case RepositoryDetailStatus.Missing:
+                            <span class="status">(Missing)</span>
+                            break;
+                        case RepositoryDetailStatus.Unknown:
+                        default:
+                            <span class="status">(Status Unknown)</span>
+                            break;
+                    }
+                </div>
             </div>
             <div class="ctrlHolder">
                 <h5>

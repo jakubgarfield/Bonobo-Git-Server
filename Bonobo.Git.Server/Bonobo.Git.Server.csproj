@@ -196,6 +196,7 @@
       <DependentUpon>Resources.zh-CN.resx</DependentUpon>
     </Compile>
     <Compile Include="Data\Update\AutomaticUpdater.cs" />
+    <Compile Include="Data\Update\RepositorySynchronizer.cs" />
     <Compile Include="Data\Update\UsernamesToLower.cs" />
     <Compile Include="GitAuthorizeAttribute.cs" />
     <Compile Include="Bootstrapper.cs" />

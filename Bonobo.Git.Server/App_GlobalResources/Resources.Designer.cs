@@ -1195,6 +1195,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string Repository_Detail_Status {
+            get {
+                return ResourceManager.GetString("Repository_Detail_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Teams.
         /// </summary>
         public static string Repository_Detail_Teams {
