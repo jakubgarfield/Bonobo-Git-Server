@@ -43,6 +43,17 @@ namespace Bonobo.Git.Server.Models
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Anonymous")]
         public bool AllowAnonymous { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Status")]
+        public RepositoryDetailStatus Status { get; set; }
+
+    }
+
+    public enum RepositoryDetailStatus
+    {
+        Unknown = 0,
+        Valid,
+        Missing
     }
 
     public class RepositoryTreeDetailModel

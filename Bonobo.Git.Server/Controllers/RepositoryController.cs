@@ -332,8 +332,18 @@ namespace Bonobo.Git.Server.Controllers
                 Administrators = model.Administrators,
                 Teams = model.Teams,
                 IsCurrentUserAdministrator = model.Administrators.Contains(User.Identity.Name.ToLowerInvariant()),
-                AllowAnonymous = model.AnonymousAccess
+                AllowAnonymous = model.AnonymousAccess,
+                Status = GetRepositoryStatus(model)
             };
+        }
+
+        private RepositoryDetailStatus GetRepositoryStatus(RepositoryModel model)
+        {
+            string path = Path.Combine(UserConfiguration.Current.Repositories, model.Name);
+            if (!Directory.Exists(path))
+                return RepositoryDetailStatus.Missing;
+            else
+                return RepositoryDetailStatus.Valid;
         }
 
         private RepositoryModel ConvertRepositoryDetailModel(RepositoryDetailModel model)

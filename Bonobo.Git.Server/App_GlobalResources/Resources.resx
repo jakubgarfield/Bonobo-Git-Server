@@ -717,4 +717,7 @@
   <data name="Settings_Global_DefaultLanguage_Hint" xml:space="preserve">
     <value>Language set by default in the application.</value>
   </data>
+  <data name="Repository_Detail_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
 </root>
