@@ -3,6 +3,26 @@
 @{
     ViewBag.Title = Resources.Repository_Index_Title;
 }
+
+@functions
+{
+    string GetNameToDisplay(string name, RepositoryDetailStatus status)
+    {
+        switch (status)
+        {
+            case RepositoryDetailStatus.Valid:
+                return name;
+                
+            case RepositoryDetailStatus.Missing:
+                return name + " (Missing)";
+              
+            case RepositoryDetailStatus.Unknown:  
+            default:
+                return name + " (Status Unknown)";
+        }
+    }
+}
+
 <h2>@Resources.Repository_Index_Title</h2>
 @if (TempData["CreateSuccess"] != null && (bool)TempData["CreateSuccess"])
 {
@@ -33,7 +53,7 @@
         headerStyle: "head",
         alternatingRowStyle: "even",
                     columns: permitted.Columns(
-                             permitted.Column("Name", header: typeof(RepositoryDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink((string)item.Name, "Detail", new { id = item.Name }, new { @class = "repository" })),
+                             permitted.Column("Name", header: typeof(RepositoryDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink(GetNameToDisplay((string)item.Name, (RepositoryDetailStatus)item.Status), "Detail", new { id = item.Name }, new { @class = "repository" })),
                              permitted.Column("Description", typeof(RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string)item.Description).Length > 100)) ? ((string)item.Description).Substring(0, 100) + " ... " : item.Description),
                              permitted.Column("IsCurrentUserAdministrator", header: typeof(RepositoryDetailModel).GetDisplayValue("IsCurrentUserAdministrator"), format: (item) => item.Value.IsCurrentUserAdministrator ? Resources.Repository_Index_Yes : Resources.Repository_Index_No, style: "bool"),
                              permitted.Column("AllowAnonymous", header: typeof(RepositoryDetailModel).GetDisplayValue("AllowAnonymous"), format: (item) => item.Value.AllowAnonymous ? Resources.Repository_Index_Yes : Resources.Repository_Index_No, style: "bool")

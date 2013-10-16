@@ -711,4 +711,7 @@
   <data name="Repository_Tree_PreviewNotSupported" xml:space="preserve">
     <value>Preview of this file is not supported.</value>
   </data>
+  <data name="Repository_Detail_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
 </root>
