@@ -82,7 +82,7 @@ namespace Bonobo.Git.Server
                 var culture = (CultureInfo)this.Session["Culture"];
                 if (culture == null)
                 {
-                    culture = new CultureInfo(UserConfiguration.Current.DefaultLanguage);
+                    culture = !String.IsNullOrEmpty(UserConfiguration.Current.DefaultLanguage) ? new CultureInfo(UserConfiguration.Current.DefaultLanguage) : null;
 
                     if (culture == null)
                     {
