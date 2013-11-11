@@ -16,7 +16,7 @@
                 }
                 currentPath += dirs[i];
 
-                if (ViewContext.RouteData.Values["Action"] == "Blob" && i + 1 == dirs.Length)
+                if ((string)ViewContext.RouteData.Values["Action"] == "Blob" && i + 1 == dirs.Length)
                 {
                     @dirs[i]
                 }
