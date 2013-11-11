@@ -13,8 +13,6 @@ namespace Bonobo.Git.Server.Data
 
         public Team()
         {
-            Repositories = new List<Repository>();
-            Users = new List<User>();
         }
     }
 }

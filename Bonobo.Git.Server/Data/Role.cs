@@ -12,7 +12,6 @@ namespace Bonobo.Git.Server.Data
 
         public Role()
         {
-            Users = new List<User>();
         }
     }
 }

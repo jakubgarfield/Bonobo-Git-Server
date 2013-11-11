@@ -18,10 +18,6 @@ namespace Bonobo.Git.Server.Data
         
         public User()
         {
-            AdministratedRepositories = new List<Repository>();
-            Repositories = new List<Repository>();
-            Roles = new List<Role>();
-            Teams = new List<Team>();
         }
     }
 }
