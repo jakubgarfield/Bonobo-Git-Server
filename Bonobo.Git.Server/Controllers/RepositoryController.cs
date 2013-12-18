@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using Bonobo.Git.Server.Configuration;
 using LibGit2Sharp;
 using Bonobo.Git.Server.Extensions;
+using Bonobo.Git.Server.Helpers;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -177,13 +178,14 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Tree(string id, string name, string path)
+        public ActionResult Tree(string id, string name, string encodedPath)
         {
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
             {
                 using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))                 
                 {
+                    var path = PathEncoder.Decode(encodedPath);
                     string referenceName;
                     var files = browser.BrowseTree(name, path, out referenceName);
                     PopulateBranchesData(browser, referenceName);
@@ -200,13 +202,14 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Blob(string id, string name, string path)
+        public ActionResult Blob(string id, string name, string encodedPath)
         {
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
             {
                 using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
                 {
+                    var path = PathEncoder.Decode(encodedPath);
                     string referenceName;
                     var model = browser.BrowseBlob(name, path, out referenceName);
                     PopulateBranchesData(browser, referenceName);
@@ -226,13 +229,14 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Raw(string id, string name, string path)
+        public ActionResult Raw(string id, string name, string encodedPath)
         {
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
             {
                 using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
                 {
+                    var path = PathEncoder.Decode(encodedPath);
                     string referenceName;
                     var model = browser.BrowseBlob(name, path, out referenceName);
 

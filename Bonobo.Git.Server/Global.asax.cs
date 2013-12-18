@@ -42,14 +42,14 @@ namespace Bonobo.Git.Server
             routes.MapRoute("CreateRoute", "{controller}/Create/",
                             new { action = "Create" });
 
-            routes.MapRoute("RepositoryTree", "Repository/{id}/Tree/{name}/{*path}",
+            routes.MapRoute("RepositoryTree", "Repository/{id}/Tree/{name}/{*encodedPath}",
                             new { controller = "Repository", action = "Tree" });
             
-            routes.MapRoute("RepositoryBlob", "Repository/{id}/Blob/{name}/{*path}",
+            routes.MapRoute("RepositoryBlob", "Repository/{id}/Blob/{name}/{*encodedPath}",
                             new { controller = "Repository", action = "Blob" });
             
-            routes.MapRoute("RepositoryRaw", "Repository/{id}/Raw/{name}/{*path}",
-                            new { controller = "Repository", action = "Raw" });          
+            routes.MapRoute("RepositoryRaw", "Repository/{id}/Raw/{name}/{*encodedPath}",
+                            new { controller = "Repository", action = "Raw" });
 
             routes.MapRoute("RepositoryCommits", "Repository/{id}/Commits/{name}/",
                             new { controller = "Repository", action = "Commits" });

@@ -231,6 +231,7 @@
     <Compile Include="FileNameAttribute.cs" />
     <Compile Include="WebAuthorizeAttribute.cs" />
     <Compile Include="Helpers\CustomHtmlHelpers.cs" />
+    <Compile Include="Helpers\PathEncoder.cs" />
     <Compile Include="Models\HomeModels.cs" />
     <Compile Include="Models\RepositoryModels.cs" />
     <Compile Include="Models\SettingsModels.cs" />
