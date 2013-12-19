@@ -1,5 +1,6 @@
 ﻿@model RepositoryCommitModel
 @using Bonobo.Git.Server.Extensions
+@using Bonobo.Git.Server.Helpers
 @{
     ViewBag.Title = Resources.Repository_Commit_Detail;
     Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
@@ -45,7 +46,7 @@
                         }
                         @if (item.Status != LibGit2Sharp.ChangeKind.Deleted)
                         {
-                            @Html.ActionLink(item.Path, "Blob", new { id = ViewBag.ID, path = item.Path, name = Model.ID })
+                            @Html.ActionLink(item.Path, "Blob", new { id = ViewBag.ID, encodedPath = PathEncoder.Encode(item.Path), name = Model.ID })
                         }
                         else
                         {

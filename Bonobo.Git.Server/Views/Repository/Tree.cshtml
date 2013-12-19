@@ -1,4 +1,5 @@
 ﻿@using Bonobo.Git.Server.Extensions
+@using Bonobo.Git.Server.Helpers
 @model RepositoryTreeModel
 @{
     Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
@@ -22,7 +23,7 @@
                     headerStyle: "head",
                     alternatingRowStyle: "even",
                     columns: grid.Columns(
-                     grid.Column("Name", header: typeof(RepositoryTreeDetailModel).GetDisplayValue("Name"), format: (item) => @Html.ActionLink((string)item.Name, item.IsTree ? "Tree" : "Blob", new { name = item.TreeName, path = item.Path }, new { @class = item.IsTree ? "directory" : item.IsImage ? "image" : "file" })),
+                     grid.Column("Name", header: typeof(RepositoryTreeDetailModel).GetDisplayValue("Name"), format: (item) => @Html.ActionLink((string)item.Name, item.IsTree ? "Tree" : "Blob", new { name = item.TreeName, encodedPath = PathEncoder.Encode(item.Path) }, new { @class = item.IsTree ? "directory" : item.IsImage ? "image" : "file" })),
                         grid.Column("CommitMessage", header: typeof(RepositoryTreeDetailModel).GetDisplayValue("CommitMessage")),
                         grid.Column("CommitDate", header: typeof(RepositoryTreeDetailModel).GetDisplayValue("CommitDate"), format: item => ((DateTime)item.CommitDate).ToString(Resources.DateTimeFormat)),
                         grid.Column("Author", header: typeof(RepositoryTreeDetailModel).GetDisplayValue("Author"))

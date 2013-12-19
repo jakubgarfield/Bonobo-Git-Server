@@ -14,6 +14,8 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 ### Bug Fixes
 
+* Fixed a crash viewing files with a '+' in the path
+
 
 <hr />
 
