@@ -16,12 +16,12 @@
         @Html.Partial("_AddressBar")
         @{
             <div class="controlPanel">
-                <p>@Html.ActionLink(@Resources.Repository_Tree_Download, "Raw", new { name = Model.TreeName, encodedPath = PathEncoder.Encode(Model.Path) }, new { @class = "downloadLink" })</p>
+                <p>@Html.ActionLink(@Resources.Repository_Tree_Download, "Raw", new { encodedName = PathEncoder.Encode(Model.TreeName), encodedPath = PathEncoder.Encode(Model.Path) }, new { @class = "downloadLink" })</p>
             </div>
         }
         @if (Model.IsImage)
         {
-            <img class="fileImage" alt="@Model.Name" src="@Url.Action("Raw", new { name = Model.TreeName, encodedPath = PathEncoder.Encode(Model.Path) })" />
+            <img class="fileImage" alt="@Model.Name" src="@Url.Action("Raw", new { encodedName = PathEncoder.Encode(Model.TreeName), encodedPath = PathEncoder.Encode(Model.Path) })" />
         }
         else if (Model.IsText)
         {

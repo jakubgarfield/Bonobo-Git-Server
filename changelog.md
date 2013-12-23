@@ -14,7 +14,8 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 ### Bug Fixes
 
-* Fixed a crash viewing files with a '+' or '&' in the path
+* Fixed a problem viewing files with '+' or '&' in the path
+* Fixed a problem viewing branches and tags with '/' in the name
 
 
 <hr />

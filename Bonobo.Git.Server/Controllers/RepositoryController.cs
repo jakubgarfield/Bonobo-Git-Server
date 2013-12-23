@@ -178,13 +178,14 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Tree(string id, string name, string encodedPath)
+        public ActionResult Tree(string id, string encodedName, string encodedPath)
         {
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
             {
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))                 
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
                 {
+                    var name = PathEncoder.Decode(encodedName);
                     var path = PathEncoder.Decode(encodedPath);
                     string referenceName;
                     var files = browser.BrowseTree(name, path, out referenceName);
@@ -202,13 +203,14 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Blob(string id, string name, string encodedPath)
+        public ActionResult Blob(string id, string encodedName, string encodedPath)
         {
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
             {
                 using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
                 {
+                    var name = PathEncoder.Decode(encodedName);
                     var path = PathEncoder.Decode(encodedPath);
                     string referenceName;
                     var model = browser.BrowseBlob(name, path, out referenceName);
@@ -229,13 +231,14 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Raw(string id, string name, string encodedPath)
+        public ActionResult Raw(string id, string encodedName, string encodedPath)
         {
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
             {
                 using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
                 {
+                    var name = PathEncoder.Decode(encodedName);
                     var path = PathEncoder.Decode(encodedPath);
                     string referenceName;
                     var model = browser.BrowseBlob(name, path, out referenceName);
@@ -247,13 +250,14 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Commits(string id, string name)
+        public ActionResult Commits(string id, string encodedName)
         {
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
             {
                 using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
                 {
+                    var name = PathEncoder.Decode(encodedName);
                     string referenceName;
                     var commits = browser.GetCommits(name, out referenceName);
                     PopulateBranchesData(browser, referenceName);
