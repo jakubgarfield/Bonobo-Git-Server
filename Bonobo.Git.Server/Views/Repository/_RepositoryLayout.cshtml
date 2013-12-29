@@ -11,8 +11,8 @@ else
     <h2>@Resources.Repository_Detail_Title</h2>
     <ul id="repositoryMenu" class="clearfix">
         <li>@Html.ActionLink(Resources.Repository_Detail_Detail, "Detail", new { id = ViewBag.ID }, new { @class = "detail"})</li>
-        <li>@Html.ActionLink(Resources.Repository_Layout_Browse, "Tree", new { id = ViewBag.ID, name = UrlParameter.Optional }, new { @class = "browser" })</li>
-        <li>@Html.ActionLink(Resources.Repository_Layout_Commits, "Commits", new { id = ViewBag.ID, name = UrlParameter.Optional }, new { @class = "commits" })</li>     
+        <li>@Html.ActionLink(Resources.Repository_Layout_Browse, "Tree", new { id = ViewBag.ID, encodedName = UrlParameter.Optional }, new { @class = "browser" })</li>
+        <li>@Html.ActionLink(Resources.Repository_Layout_Commits, "Commits", new { id = ViewBag.ID, encodedName = UrlParameter.Optional }, new { @class = "commits" })</li>
     </ul> 
     </text>
 }
