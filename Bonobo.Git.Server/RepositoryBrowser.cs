@@ -153,7 +153,7 @@ namespace Bonobo.Git.Server
                 AuthorEmail = commit.Author.Email,
                 Date = commit.Author.When.LocalDateTime,
                 ID = commit.Sha,
-                Message = commit.MessageShort,
+                Message = commit.Message,
                 TreeID = commit.Tree.Sha,
                 Parents = commit.Parents.Select(i => i.Sha).ToArray(),
             };
