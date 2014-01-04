@@ -45,7 +45,7 @@
                         }
                         @if (item.Status != LibGit2Sharp.ChangeKind.Deleted)
                         {
-                            @Html.ActionLink(item.Path, "Blob", new { id = ViewBag.ID, encodedPath = PathEncoder.Encode(item.Path), encodedName = PathEncoder.Encode(Model.ID) })
+                            @Html.ActionLink(item.Path, "Blob", new { id = ViewBag.ID, encodedPath = PathEncoder.Encode(item.Path, allowSlash: true), encodedName = PathEncoder.Encode(Model.ID) })
                         }
                         else
                         {

@@ -24,8 +24,9 @@ namespace Bonobo.Git.Server.Helpers
         /// Encodes a path fragment.
         /// </summary>
         /// <param name="path">Path fragment.</param>
+        /// <param name="allowSlash">True if '/' should be allowed (i.e., not encoded).</param>
         /// <returns>Encoded path fragment.</returns>
-        public static string Encode(string path)
+        public static string Encode(string path, bool allowSlash = false)
         {
             // Check for trivial input
             if (string.IsNullOrEmpty(path))
@@ -45,7 +46,8 @@ namespace Bonobo.Git.Server.Helpers
                 if ((('a' <= b) && (b <= 'z')) || // a-z
                     (('A' <= b) && (b <= 'Z')) || // A-Z
                     (('0' <= b) && (b <= '9')) || // 0-9
-                    ('-' == b) || ('.' == b) || ('_' == b)) // - . _
+                    ('-' == b) || ('.' == b) || ('_' == b) || // - . _
+                    (allowSlash && ('/' == b))) // Allow /
                 {
                     // Unreserved characters don't need encoding
                     sb.Append((char)b);

@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace Bonobo.Git.Server.Test
@@ -9,6 +10,9 @@ namespace Bonobo.Git.Server.Test
     [TestClass]
     public class PathEncoderTest
     {
+        private static readonly Regex Rfc3986UnreservedCharacters = new Regex(@"^[A-Za-z0-9\-\._~]*$");
+        private static readonly Regex Rfc3986UnreservedCharactersAndSlash = new Regex(@"^[A-Za-z0-9\-\._~/]*$");
+
         [TestMethod]
         public void NullInput()
         {
@@ -66,6 +70,24 @@ namespace Bonobo.Git.Server.Test
         }
 
         [TestMethod]
+        public void SlashEncodedByDefault()
+        {
+            Assert.AreEqual(0, PathEncoder.Encode("abc/def/ghi").Where(c => '/' == c).Count());
+        }
+
+        [TestMethod]
+        public void AllowSlashTrue()
+        {
+            Assert.AreEqual(2, PathEncoder.Encode("abc/def/ghi", allowSlash: true).Where(c => '/' == c).Count());
+        }
+
+        [TestMethod]
+        public void AllowSlashFalse()
+        {
+            Assert.AreEqual(0, PathEncoder.Encode("abc/def/ghi", allowSlash: false).Where(c => '/' == c).Count());
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(FormatException))]
         public void NonByteCharacterInput()
         {
@@ -102,6 +124,7 @@ namespace Bonobo.Git.Server.Test
         private static void AssertAllRequirements(string input)
         {
             AssertDecodeOfEncodeMatches(input);
+            AssertEncodeUsesOnlyIntendedCharacters(input);
             AssertUrlDecodeDoesNotChange(input);
         }
 
@@ -109,12 +132,32 @@ namespace Bonobo.Git.Server.Test
         {
             var encodedInput = PathEncoder.Encode(input);
             Assert.AreEqual(input, PathEncoder.Decode(encodedInput));
+            encodedInput = PathEncoder.Encode(input, allowSlash: true);
+            Assert.AreEqual(input, PathEncoder.Decode(encodedInput));
+            encodedInput = PathEncoder.Encode(input, allowSlash: false);
+            Assert.AreEqual(input, PathEncoder.Decode(encodedInput));
+        }
+
+        private static void AssertEncodeUsesOnlyIntendedCharacters(string input)
+        {
+            var encodedInput = PathEncoder.Encode(input);
+            Assert.IsTrue(Rfc3986UnreservedCharacters.IsMatch(encodedInput ?? ""));
+            encodedInput = PathEncoder.Encode(input, allowSlash: true);
+            Assert.IsTrue(Rfc3986UnreservedCharactersAndSlash.IsMatch(encodedInput ?? ""));
+            encodedInput = PathEncoder.Encode(input, allowSlash: false);
+            Assert.IsTrue(Rfc3986UnreservedCharacters.IsMatch(encodedInput ?? ""));
         }
 
         private static void AssertUrlDecodeDoesNotChange(string input)
         {
             var encodedInput = PathEncoder.Encode(input);
             var urlString = "http://localhost/" + encodedInput;
+            Assert.AreEqual(urlString, HttpUtility.UrlDecode(urlString));
+            encodedInput = PathEncoder.Encode(input, allowSlash: true);
+            urlString = "http://localhost/" + encodedInput;
+            Assert.AreEqual(urlString, HttpUtility.UrlDecode(urlString));
+            encodedInput = PathEncoder.Encode(input, allowSlash: false);
+            urlString = "http://localhost/" + encodedInput;
             Assert.AreEqual(urlString, HttpUtility.UrlDecode(urlString));
         }
 
