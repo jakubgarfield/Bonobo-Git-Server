@@ -141,6 +141,15 @@ div.uniForm #errorMsg { text-align: center;}
 #TeamIndex .team {background: url('images/team.png') no-repeat 0px 2px;}
 #RepositoryIndex .repository {background: url('images/repository.png') no-repeat 0px 2px;}
 
+/* Table Layout for Tree */
+
+#RepositoryTree table { table-layout: fixed; }
+#RepositoryTree th:nth-child(1) { width: 30%; }
+#RepositoryTree th:nth-child(2) { width: 30%; }
+#RepositoryTree th:nth-child(3) { width: 20%; }
+#RepositoryTree th:nth-child(4) { width: 20%; }
+#RepositoryTree .file, #RepositoryTree .image, #RepositoryTree .directory { width: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
 /* Repository */
 
 #RepositoryTree .fileImage { width: 100%;}
