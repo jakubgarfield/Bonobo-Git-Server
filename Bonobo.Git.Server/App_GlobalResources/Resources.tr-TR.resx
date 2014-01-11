@@ -186,9 +186,6 @@
   <data name="Account_Detail_Username" xml:space="preserve">
     <value>Kullanıcı Adı</value>
   </data>
-  <data name="Account_Edit_AccountInformation" xml:space="preserve">
-    <value>Hesap Bilgileri</value>
-  </data>
   <data name="Account_Edit_Back" xml:space="preserve">
     <value>Listeye dön</value>
   </data>
@@ -263,9 +260,6 @@
   </data>
   <data name="Delete_Title" xml:space="preserve">
     <value>Silme Onayı</value>
-  </data>
-  <data name="GitAccess_ProjectForbidden" xml:space="preserve">
-    <value>Doesn't have permission for requested project.</value>
   </data>
   <data name="Grid_Delete" xml:space="preserve">
     <value>Sil</value>

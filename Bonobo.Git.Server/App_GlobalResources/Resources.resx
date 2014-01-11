@@ -150,9 +150,6 @@
   <data name="Account_Detail_Username" xml:space="preserve">
     <value>Username</value>
   </data>
-  <data name="Account_Edit_AccountInformation" xml:space="preserve">
-    <value>Account information</value>
-  </data>
   <data name="Account_Edit_Back" xml:space="preserve">
     <value>Back to list</value>
   </data>
@@ -181,7 +178,7 @@
     <value>Current password should not be empty.</value>
   </data>
   <data name="Account_Edit_OldPasswordIncorrect" xml:space="preserve">
-    <value>Password does not match to the current password.</value>
+    <value>Password does not match the current password.</value>
   </data>
   <data name="Account_Edit_Roles" xml:space="preserve">
     <value>Roles</value>
@@ -204,9 +201,6 @@
   <data name="Account_Index_Title" xml:space="preserve">
     <value>User Management</value>
   </data>
-  <data name="GitAccess_ProjectForbidden" xml:space="preserve">
-    <value>Doesn't have permission for requested project.</value>
-  </data>
   <data name="Grid_Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
@@ -214,10 +208,10 @@
     <value>Edit</value>
   </data>
   <data name="Home_Error_Text" xml:space="preserve">
-    <value>Unspecific error occured during processing your request. Please, try it again or contact system administrator.</value>
+    <value>An error occurred when processing your request. Please try again or contact the system administrator.</value>
   </data>
   <data name="Home_Error_Title" xml:space="preserve">
-    <value>An Error Occured</value>
+    <value>An Error Occurred</value>
   </data>
   <data name="Home_LogOn_AccountInformation" xml:space="preserve">
     <value>Account Information</value>
@@ -244,19 +238,19 @@
     <value>The username or password provided is incorrect.</value>
   </data>
   <data name="Home_PageNotFound_Text" xml:space="preserve">
-    <value>The page you were looking wasn't found. Please, try it again or contact system administrator.</value>
+    <value>The page you were looking for wasn't found. Please try again or contact the system administrator.</value>
   </data>
   <data name="Home_PageNotFound_Title" xml:space="preserve">
     <value>404 Page Not Found</value>
   </data>
   <data name="Home_ServerError_Text" xml:space="preserve">
-    <value>Server error occured during processing your request. Please, try it again or contact system administrator.</value>
+    <value>A server error occurred when processing your request. Please try again or contact the system administrator.</value>
   </data>
   <data name="Home_ServerError_Title" xml:space="preserve">
     <value>500 Server Error</value>
   </data>
   <data name="Home_Unauthorized_Text" xml:space="preserve">
-    <value>You don't have permission for selected action or page.</value>
+    <value>You don't have permission for the selected action or page.</value>
   </data>
   <data name="Home_Unauthorized_Title" xml:space="preserve">
     <value>Unauthorized</value>
@@ -361,7 +355,7 @@
     <value>Back to the list</value>
   </data>
   <data name="Repository_Create_DirectoryExists" xml:space="preserve">
-    <value>The directory with this name already exists in your repository folder. Delete this directory or choose another name and try it again.</value>
+    <value>A directory with this name already exists in your repository folder. Delete this directory or choose another name and try again.</value>
   </data>
   <data name="Repository_Create_Fail" xml:space="preserve">
     <value>Repository creation was unsuccessful. Please correct the errors and try again.</value>
@@ -370,7 +364,7 @@
     <value>Repository with selected name already exists.</value>
   </data>
   <data name="Repository_Create_Informations" xml:space="preserve">
-    <value>Repository informations</value>
+    <value>Repository information</value>
   </data>
   <data name="Repository_Create_Submit" xml:space="preserve">
     <value>Create</value>
@@ -400,7 +394,7 @@
     <value>Description</value>
   </data>
   <data name="Repository_Detail_Detail" xml:space="preserve">
-    <value>Detail Informations</value>
+    <value>Details</value>
   </data>
   <data name="Repository_Detail_Edit" xml:space="preserve">
     <value>Edit</value>
@@ -448,7 +442,7 @@
     <value>Repository was updated successfully.</value>
   </data>
   <data name="Repository_Index_AdministratedRepositories" xml:space="preserve">
-    <value>Administrated Repositories</value>
+    <value>Administered Repositories</value>
   </data>
   <data name="Repository_Index_AllRepositories" xml:space="preserve">
     <value>All Repositories</value>
@@ -508,10 +502,10 @@
     <value>Global settings updated successfully.</value>
   </data>
   <data name="Settings_RepositoryPathNotExists" xml:space="preserve">
-    <value>Selected path does not exist. Please create the folder or choose different path.</value>
+    <value>Selected path does not exist. Please create the folder or choose a different path.</value>
   </data>
   <data name="Settings_RepositoryPathUnauthorized" xml:space="preserve">
-    <value>You don't have enough privileges to write to selected folder. Please choose different path.</value>
+    <value>You don't have privileges to write to the selected folder. Please choose a different path.</value>
   </data>
   <data name="Team_Create_Back" xml:space="preserve">
     <value>Back to the list</value>
@@ -529,7 +523,7 @@
     <value>The team was created successfully.</value>
   </data>
   <data name="Team_Create_TeamInformations" xml:space="preserve">
-    <value>Team informations</value>
+    <value>Team information</value>
   </data>
   <data name="Team_Create_Title" xml:space="preserve">
     <value>Create New Team</value>
@@ -607,37 +601,37 @@
     <value>Administrators have access to all repositories and are allowed to do all operations with repositories, teams and users.</value>
   </data>
   <data name="Settings_Global_DirectoryHint" xml:space="preserve">
-    <value>All the git repositories are stored in this directory.</value>
+    <value>All repositories are stored in this directory.</value>
   </data>
   <data name="Home_About_Thanks" xml:space="preserve">
     <value>Thank you!</value>
   </data>
   <data name="Home_About_Thanks_p" xml:space="preserve">
-    <value>Bonobo Git Server is using few opensource and freeware projects. Many thanks to all authors and contributors for their great work.</value>
+    <value>Bonobo Git Server is using a few open source and freeware projects. Many thanks to all authors and contributors for their great work.</value>
   </data>
   <data name="Home_About_Title" xml:space="preserve">
     <value>About</value>
   </data>
   <data name="Repository_AdministratorsHint" xml:space="preserve">
-    <value>Administrators have full access to repository. They can also modify repository metadata or delete repository.</value>
+    <value>Administrators have full access to the repository. They can modify repository metadata or delete the repository.</value>
   </data>
   <data name="Repository_AllowAnonymousHint" xml:space="preserve">
-    <value>If anonymous access is allowed everyone can pull or clone repository and view repository metadata. Push is available only if setted in Global Settings.</value>
+    <value>If anonymous access is allowed, everyone can pull or clone the repository and view repository metadata. Push is available only if set in Global Settings.</value>
   </data>
   <data name="Repository_Create_NameFailure" xml:space="preserve">
-    <value>Name shouldn't contain only whitespaces.</value>
+    <value>Name shouldn't contain only whitespace.</value>
   </data>
   <data name="Repository_TeamsHint" xml:space="preserve">
-    <value>Teams have access to repository. They can clone, push or pull repository and view repository metadata. All users in team can access current repository.</value>
+    <value>Teams have access to the repository. They can clone, push or pull and view repository metadata. All users in the team can access this repository.</value>
   </data>
   <data name="Repository_UsersHint" xml:space="preserve">
-    <value>Users have access to repository. They can clone, push or pull repository and view repository metadata.</value>
+    <value>Users have access to the repository. They can clone, push or pull and view repository metadata.</value>
   </data>
   <data name="Validation_FileName" xml:space="preserve">
-    <value>"{0}" contains characters that can't be in file or directory name.</value>
+    <value>"{0}" contains characters that can't be in a file or directory name.</value>
   </data>
   <data name="Validation_StringLength" xml:space="preserve">
-    <value>"{0}" should be smaller than {1} chars.</value>
+    <value>"{0}" should be shorter than {1} characters.</value>
   </data>
   <data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
     <value>Account with this username already exists.</value>
@@ -691,13 +685,13 @@
     <value>Allow anonymous registration</value>
   </data>
   <data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
-    <value>If checkbox is unchecked only administrator can add new users and anonymous user registration is disabled.</value>
+    <value>If checkbox is unchecked, only administrators can add new users and anonymous user registration is disabled.</value>
   </data>
   <data name="Settings_Global_AllowUserRepositoryCreation" xml:space="preserve">
     <value>Allow user repository creation</value>
   </data>
   <data name="Settings_Global_AllowUserRepositoryCreation_Hint" xml:space="preserve">
-    <value>If checkbox is unchecked only administrator can create repositories.</value>
+    <value>If checkbox is unchecked, only administrators can create repositories.</value>
   </data>
   <data name="Delete_Back" xml:space="preserve">
     <value>Back</value>

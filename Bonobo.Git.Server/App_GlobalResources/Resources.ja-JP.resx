@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-	<!-- 
+  <!-- 
     Microsoft ResX Schema 
     
     Version 2.0
@@ -59,653 +59,647 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-		<xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-		<xsd:element name="root" msdata:IsDataSet="true">
-			<xsd:complexType>
-				<xsd:choice maxOccurs="unbounded">
-					<xsd:element name="metadata">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" />
-							</xsd:sequence>
-							<xsd:attribute name="name" use="required" type="xsd:string" />
-							<xsd:attribute name="type" type="xsd:string" />
-							<xsd:attribute name="mimetype" type="xsd:string" />
-							<xsd:attribute ref="xml:space" />
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="assembly">
-						<xsd:complexType>
-							<xsd:attribute name="alias" type="xsd:string" />
-							<xsd:attribute name="name" type="xsd:string" />
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="data">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-							<xsd:attribute ref="xml:space" />
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="resheader">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" use="required" />
-						</xsd:complexType>
-					</xsd:element>
-				</xsd:choice>
-			</xsd:complexType>
-		</xsd:element>
-	</xsd:schema>
-	<resheader name="resmimetype">
-		<value>text/microsoft-resx</value>
-	</resheader>
-	<resheader name="version">
-		<value>2.0</value>
-	</resheader>
-	<resheader name="reader">
-		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<resheader name="writer">
-		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<data name="Account_Delete_DeleteCurrentUser" xml:space="preserve">
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Account_Delete_DeleteCurrentUser" xml:space="preserve">
     <value>自分の事は削除できないよ。</value>
   </data>
-	<data name="Account_Delete_Success" xml:space="preserve">
+  <data name="Account_Delete_Success" xml:space="preserve">
     <value>ユーザーを削除したよ。</value>
   </data>
-	<data name="Account_Detail_Back" xml:space="preserve">
+  <data name="Account_Detail_Back" xml:space="preserve">
     <value>リストに戻る</value>
   </data>
-	<data name="Account_Detail_Delete" xml:space="preserve">
+  <data name="Account_Detail_Delete" xml:space="preserve">
     <value>削除</value>
   </data>
-	<data name="Account_Detail_Edit" xml:space="preserve">
+  <data name="Account_Detail_Edit" xml:space="preserve">
     <value>編集</value>
   </data>
-	<data name="Account_Detail_Email" xml:space="preserve">
+  <data name="Account_Detail_Email" xml:space="preserve">
     <value>電子メール</value>
   </data>
-	<data name="Account_Detail_Name" xml:space="preserve">
+  <data name="Account_Detail_Name" xml:space="preserve">
     <value>お名前</value>
   </data>
-	<data name="Account_Detail_Roles" xml:space="preserve">
+  <data name="Account_Detail_Roles" xml:space="preserve">
     <value>権限</value>
   </data>
-	<data name="Account_Detail_Surname" xml:space="preserve">
+  <data name="Account_Detail_Surname" xml:space="preserve">
     <value>姓</value>
   </data>
-	<data name="Account_Detail_Title" xml:space="preserve">
+  <data name="Account_Detail_Title" xml:space="preserve">
     <value>使用者の詳細</value>
   </data>
-	<data name="Account_Detail_Username" xml:space="preserve">
+  <data name="Account_Detail_Username" xml:space="preserve">
     <value>使用者名</value>
   </data>
-	<data name="Account_Edit_AccountInformation" xml:space="preserve">
-    <value>アカウント情報</value>
-  </data>
-	<data name="Account_Edit_Back" xml:space="preserve">
+  <data name="Account_Edit_Back" xml:space="preserve">
     <value>リストに戻る</value>
   </data>
-	<data name="Account_Edit_Cancel" xml:space="preserve">
+  <data name="Account_Edit_Cancel" xml:space="preserve">
     <value>やめとく</value>
   </data>
-	<data name="Account_Edit_CannotRemoveYourselfFromAdminRole" xml:space="preserve">
+  <data name="Account_Edit_CannotRemoveYourselfFromAdminRole" xml:space="preserve">
     <value>管理権限は自分じゃ削除できないよ。</value>
   </data>
-	<data name="Account_Edit_ConfirmPassword" xml:space="preserve">
+  <data name="Account_Edit_ConfirmPassword" xml:space="preserve">
     <value>パスワード（念の為にもう一度）</value>
   </data>
-	<data name="Account_Edit_CurrentPassword" xml:space="preserve">
+  <data name="Account_Edit_CurrentPassword" xml:space="preserve">
     <value>現在のパスワード</value>
   </data>
-	<data name="Account_Edit_Email" xml:space="preserve">
+  <data name="Account_Edit_Email" xml:space="preserve">
     <value>電子メール</value>
   </data>
-	<data name="Account_Edit_Name" xml:space="preserve">
+  <data name="Account_Edit_Name" xml:space="preserve">
     <value>お名前</value>
   </data>
-	<data name="Account_Edit_NewPassword" xml:space="preserve">
+  <data name="Account_Edit_NewPassword" xml:space="preserve">
     <value>新しいパスワード</value>
   </data>
-	<data name="Account_Edit_OldPasswordEmpty" xml:space="preserve">
+  <data name="Account_Edit_OldPasswordEmpty" xml:space="preserve">
     <value>現在のパスワードを入力してね。</value>
   </data>
-	<data name="Account_Edit_OldPasswordIncorrect" xml:space="preserve">
+  <data name="Account_Edit_OldPasswordIncorrect" xml:space="preserve">
     <value>パスワードが違うよ。</value>
   </data>
-	<data name="Account_Edit_Roles" xml:space="preserve">
+  <data name="Account_Edit_Roles" xml:space="preserve">
     <value>権限</value>
   </data>
-	<data name="Account_Edit_Submit" xml:space="preserve">
+  <data name="Account_Edit_Submit" xml:space="preserve">
     <value>保存</value>
   </data>
-	<data name="Account_Edit_Surname" xml:space="preserve">
+  <data name="Account_Edit_Surname" xml:space="preserve">
     <value>姓</value>
   </data>
-	<data name="Account_Edit_Title" xml:space="preserve">
+  <data name="Account_Edit_Title" xml:space="preserve">
     <value>使用者アカウントの編集</value>
   </data>
-	<data name="Account_Edit_Unsuccessfull" xml:space="preserve">
+  <data name="Account_Edit_Unsuccessfull" xml:space="preserve">
     <value>アカウントの編集は失敗したよ。誤りを修正して再挑戦してね。</value>
   </data>
-	<data name="Account_Edit_UpdateSuccess" xml:space="preserve">
+  <data name="Account_Edit_UpdateSuccess" xml:space="preserve">
     <value>アカウントの編集に成功したよ。</value>
   </data>
-	<data name="Account_Index_Title" xml:space="preserve">
+  <data name="Account_Index_Title" xml:space="preserve">
     <value>使用者の管理</value>
   </data>
-	<data name="GitAccess_ProjectForbidden" xml:space="preserve">
-    <value>要求したプロジェクトへの権限がありません。</value>
-  </data>
-	<data name="Grid_Delete" xml:space="preserve">
+  <data name="Grid_Delete" xml:space="preserve">
     <value>削除</value>
   </data>
-	<data name="Grid_Edit" xml:space="preserve">
+  <data name="Grid_Edit" xml:space="preserve">
     <value>編集</value>
   </data>
-	<data name="Home_Error_Text" xml:space="preserve">
+  <data name="Home_Error_Text" xml:space="preserve">
     <value>あなたの要求により謎のエラーが発生しましたよ。もう一度試してみるか、システムの管理者さんへ連絡してみてはどうかな。</value>
   </data>
-	<data name="Home_Error_Title" xml:space="preserve">
+  <data name="Home_Error_Title" xml:space="preserve">
     <value>エラーですよ</value>
   </data>
-	<data name="Home_LogOn_AccountInformation" xml:space="preserve">
+  <data name="Home_LogOn_AccountInformation" xml:space="preserve">
     <value>アカウント情報</value>
   </data>
-	<data name="Home_LogOn_Failed" xml:space="preserve">
+  <data name="Home_LogOn_Failed" xml:space="preserve">
     <value>ログインに失敗しました。誤りを正してやり直してね。</value>
   </data>
-	<data name="Home_LogOn_LogOn" xml:space="preserve">
+  <data name="Home_LogOn_LogOn" xml:space="preserve">
     <value>ログオン</value>
   </data>
-	<data name="Home_LogOn_Password" xml:space="preserve">
+  <data name="Home_LogOn_Password" xml:space="preserve">
     <value>パスワード</value>
   </data>
-	<data name="Home_LogOn_RememberMe" xml:space="preserve">
+  <data name="Home_LogOn_RememberMe" xml:space="preserve">
     <value>あたしを覚えちゃう？</value>
   </data>
-	<data name="Home_LogOn_Title" xml:space="preserve">
+  <data name="Home_LogOn_Title" xml:space="preserve">
     <value>ログオン</value>
   </data>
-	<data name="Home_LogOn_Username" xml:space="preserve">
+  <data name="Home_LogOn_Username" xml:space="preserve">
     <value>使用者名</value>
   </data>
-	<data name="Home_LogOn_UsernamePasswordIncorrect" xml:space="preserve">
+  <data name="Home_LogOn_UsernamePasswordIncorrect" xml:space="preserve">
     <value>使用者名またはパスワードが違います。</value>
   </data>
-	<data name="Home_PageNotFound_Text" xml:space="preserve">
+  <data name="Home_PageNotFound_Text" xml:space="preserve">
     <value>あなたが見ようとしたページは存在しないわ。もう一度試してみるか、システムの管理者さんへ連絡してみてはどうかな。</value>
   </data>
-	<data name="Home_PageNotFound_Title" xml:space="preserve">
+  <data name="Home_PageNotFound_Title" xml:space="preserve">
     <value>404 そんなページ無いし</value>
   </data>
-	<data name="Home_ServerError_Text" xml:space="preserve">
+  <data name="Home_ServerError_Text" xml:space="preserve">
     <value>あなたの要求により謎のエラーが発生しましたよ。もう一度試してみるか、システムの管理者さんへ連絡してみてはどうかな。</value>
   </data>
-	<data name="Home_ServerError_Title" xml:space="preserve">
+  <data name="Home_ServerError_Title" xml:space="preserve">
     <value>500 サーバー＼(^o^)／オワタ</value>
   </data>
-	<data name="Home_Unauthorized_Text" xml:space="preserve">
+  <data name="Home_Unauthorized_Text" xml:space="preserve">
     <value>選択した操作またはページへの権限をお持ちではないようです。</value>
   </data>
-	<data name="Home_Unauthorized_Title" xml:space="preserve">
+  <data name="Home_Unauthorized_Title" xml:space="preserve">
     <value>承認拒否</value>
   </data>
-	<data name="Item_NotFound" xml:space="preserve">
+  <data name="Item_NotFound" xml:space="preserve">
     <value>そんなの無いし</value>
   </data>
-	<data name="Layout_About" xml:space="preserve">
+  <data name="Layout_About" xml:space="preserve">
     <value>このソフトウェアについて</value>
   </data>
-	<data name="Layout_AccountSettings" xml:space="preserve">
+  <data name="Layout_AccountSettings" xml:space="preserve">
     <value>アカウントの設定</value>
   </data>
-	<data name="Layout_Administration" xml:space="preserve">
+  <data name="Layout_Administration" xml:space="preserve">
     <value>管理</value>
   </data>
-	<data name="Layout_AdministrationGlobalSettings" xml:space="preserve">
+  <data name="Layout_AdministrationGlobalSettings" xml:space="preserve">
     <value>全体の設定</value>
   </data>
-	<data name="Layout_AdministrationRepositories" xml:space="preserve">
+  <data name="Layout_AdministrationRepositories" xml:space="preserve">
     <value>リポジトリーたち</value>
   </data>
-	<data name="Layout_AdministrationTeams" xml:space="preserve">
+  <data name="Layout_AdministrationTeams" xml:space="preserve">
     <value>チームら</value>
   </data>
-	<data name="Layout_AdministrationUsers" xml:space="preserve">
+  <data name="Layout_AdministrationUsers" xml:space="preserve">
     <value>使用者ら</value>
   </data>
-	<data name="Layout_Footer_Copyright" xml:space="preserve">
+  <data name="Layout_Footer_Copyright" xml:space="preserve">
     <value>権利所有。</value>
   </data>
-	<data name="Layout_Home" xml:space="preserve">
+  <data name="Layout_Home" xml:space="preserve">
     <value>はじまり</value>
   </data>
-	<data name="Layout_LogOff" xml:space="preserve">
+  <data name="Layout_LogOff" xml:space="preserve">
     <value>ログオフ</value>
   </data>
-	<data name="Layout_LogOn" xml:space="preserve">
+  <data name="Layout_LogOn" xml:space="preserve">
     <value>ログオン</value>
   </data>
-	<data name="Layout_Register" xml:space="preserve">
+  <data name="Layout_Register" xml:space="preserve">
     <value>新しいアカウントを作成</value>
   </data>
-	<data name="Layout_Repositories" xml:space="preserve">
+  <data name="Layout_Repositories" xml:space="preserve">
     <value>リポジトリーたち</value>
   </data>
-	<data name="Layout_Title" xml:space="preserve">
+  <data name="Layout_Title" xml:space="preserve">
     <value>Bonobo Git Server</value>
   </data>
-	<data name="Repository_AddressBar_Root" xml:space="preserve">
+  <data name="Repository_AddressBar_Root" xml:space="preserve">
     <value>はじまり</value>
   </data>
-	<data name="Repository_Commits_Title" xml:space="preserve">
+  <data name="Repository_Commits_Title" xml:space="preserve">
     <value>コミットたち</value>
   </data>
-	<data name="Repository_Commit_Added" xml:space="preserve">
+  <data name="Repository_Commit_Added" xml:space="preserve">
     <value>追加したよ</value>
   </data>
-	<data name="Repository_Commit_Author" xml:space="preserve">
+  <data name="Repository_Commit_Author" xml:space="preserve">
     <value>作者</value>
   </data>
-	<data name="Repository_Commit_AuthorEmail" xml:space="preserve">
+  <data name="Repository_Commit_AuthorEmail" xml:space="preserve">
     <value>電子メール</value>
   </data>
-	<data name="Repository_Commit_Changes" xml:space="preserve">
+  <data name="Repository_Commit_Changes" xml:space="preserve">
     <value>変更されたファイルたち</value>
   </data>
-	<data name="Repository_Commit_Copied" xml:space="preserve">
+  <data name="Repository_Commit_Copied" xml:space="preserve">
     <value>複製したよ</value>
   </data>
-	<data name="Repository_Commit_Date" xml:space="preserve">
+  <data name="Repository_Commit_Date" xml:space="preserve">
     <value>日付</value>
   </data>
-	<data name="Repository_Commit_Deleted" xml:space="preserve">
+  <data name="Repository_Commit_Deleted" xml:space="preserve">
     <value>削除したよ</value>
   </data>
-	<data name="Repository_Commit_Detail" xml:space="preserve">
+  <data name="Repository_Commit_Detail" xml:space="preserve">
     <value>コミットの詳細</value>
   </data>
-	<data name="Repository_Commit_ID" xml:space="preserve">
+  <data name="Repository_Commit_ID" xml:space="preserve">
     <value>コミット</value>
   </data>
-	<data name="Repository_Commit_Message" xml:space="preserve">
+  <data name="Repository_Commit_Message" xml:space="preserve">
     <value>メッセージ</value>
   </data>
-	<data name="Repository_Commit_Modified" xml:space="preserve">
+  <data name="Repository_Commit_Modified" xml:space="preserve">
     <value>変更したよ</value>
   </data>
-	<data name="Repository_Commit_Parents" xml:space="preserve">
+  <data name="Repository_Commit_Parents" xml:space="preserve">
     <value>親たち</value>
   </data>
-	<data name="Repository_Commit_Renamed" xml:space="preserve">
+  <data name="Repository_Commit_Renamed" xml:space="preserve">
     <value>名前を変えたよ</value>
   </data>
-	<data name="Repository_Commit_TreeID" xml:space="preserve">
+  <data name="Repository_Commit_TreeID" xml:space="preserve">
     <value>木</value>
   </data>
-	<data name="Repository_Commit_TypeChanged" xml:space="preserve">
+  <data name="Repository_Commit_TypeChanged" xml:space="preserve">
     <value>型を変えたよ</value>
   </data>
-	<data name="Repository_Create_Back" xml:space="preserve">
+  <data name="Repository_Create_Back" xml:space="preserve">
     <value>リストへ戻る</value>
   </data>
-	<data name="Repository_Create_DirectoryExists" xml:space="preserve">
+  <data name="Repository_Create_DirectoryExists" xml:space="preserve">
     <value>あなたのリポジトリーフォルダーにはすでにその名前のディレクトリーがあるわ。そのディレクトリーを削除するか作者の名前を選んで再挑戦してね。</value>
   </data>
-	<data name="Repository_Create_Fail" xml:space="preserve">
+  <data name="Repository_Create_Fail" xml:space="preserve">
     <value>リポジトリの作成に失敗しました。誤りを正してやり直してね。</value>
   </data>
-	<data name="Repository_Create_Failure" xml:space="preserve">
+  <data name="Repository_Create_Failure" xml:space="preserve">
     <value>選択された名前のリポジトリーはすでに存在します。</value>
   </data>
-	<data name="Repository_Create_Informations" xml:space="preserve">
+  <data name="Repository_Create_Informations" xml:space="preserve">
     <value>リポジトリーの情報</value>
   </data>
-	<data name="Repository_Create_Submit" xml:space="preserve">
+  <data name="Repository_Create_Submit" xml:space="preserve">
     <value>作成</value>
   </data>
-	<data name="Repository_Create_Success" xml:space="preserve">
+  <data name="Repository_Create_Success" xml:space="preserve">
     <value>リポジトリーの作成に成功しました。</value>
   </data>
-	<data name="Repository_Create_Title" xml:space="preserve">
+  <data name="Repository_Create_Title" xml:space="preserve">
     <value>新しいリポジトリーの作成</value>
   </data>
-	<data name="Repository_Delete_Success" xml:space="preserve">
+  <data name="Repository_Delete_Success" xml:space="preserve">
     <value>リポジトリーの削除に成功しました。</value>
   </data>
-	<data name="Repository_Detail_Administrators" xml:space="preserve">
+  <data name="Repository_Detail_Administrators" xml:space="preserve">
     <value>管理者たち</value>
   </data>
-	<data name="Repository_Detail_Anonymous" xml:space="preserve">
+  <data name="Repository_Detail_Anonymous" xml:space="preserve">
     <value>匿名さん</value>
   </data>
-	<data name="Repository_Detail_Back" xml:space="preserve">
+  <data name="Repository_Detail_Back" xml:space="preserve">
     <value>リストへ戻る</value>
   </data>
-	<data name="Repository_Detail_Delete" xml:space="preserve">
+  <data name="Repository_Detail_Delete" xml:space="preserve">
     <value>削除</value>
   </data>
-	<data name="Repository_Detail_Description" xml:space="preserve">
+  <data name="Repository_Detail_Description" xml:space="preserve">
     <value>詳細</value>
   </data>
-	<data name="Repository_Detail_Detail" xml:space="preserve">
+  <data name="Repository_Detail_Detail" xml:space="preserve">
     <value>詳細情報</value>
   </data>
-	<data name="Repository_Detail_Edit" xml:space="preserve">
+  <data name="Repository_Detail_Edit" xml:space="preserve">
     <value>編集</value>
   </data>
-	<data name="Repository_Detail_IsCurrentUserAdmin" xml:space="preserve">
+  <data name="Repository_Detail_IsCurrentUserAdmin" xml:space="preserve">
     <value>管理者</value>
   </data>
-	<data name="Repository_Detail_Location" xml:space="preserve">
+  <data name="Repository_Detail_Location" xml:space="preserve">
     <value>Git リポジトリーの在り処</value>
   </data>
-	<data name="Repository_Detail_Name" xml:space="preserve">
+  <data name="Repository_Detail_Name" xml:space="preserve">
     <value>お名前</value>
   </data>
-	<data name="Repository_Detail_No" xml:space="preserve">
+  <data name="Repository_Detail_No" xml:space="preserve">
     <value>いいえ</value>
   </data>
-	<data name="Repository_Detail_Teams" xml:space="preserve">
+  <data name="Repository_Detail_Teams" xml:space="preserve">
     <value>チームら</value>
   </data>
-	<data name="Repository_Detail_Title" xml:space="preserve">
+  <data name="Repository_Detail_Title" xml:space="preserve">
     <value>リポジトリーの詳細</value>
   </data>
-	<data name="Repository_Detail_Users" xml:space="preserve">
+  <data name="Repository_Detail_Users" xml:space="preserve">
     <value>貢献者たち</value>
   </data>
-	<data name="Repository_Detail_Yes" xml:space="preserve">
+  <data name="Repository_Detail_Yes" xml:space="preserve">
     <value>はい</value>
   </data>
-	<data name="Repository_Edit_Back" xml:space="preserve">
+  <data name="Repository_Edit_Back" xml:space="preserve">
     <value>リストへ戻る</value>
   </data>
-	<data name="Repository_Edit_CantRemoveYourself" xml:space="preserve">
+  <data name="Repository_Edit_CantRemoveYourself" xml:space="preserve">
     <value>管理者から自分で削除はできないよ。</value>
   </data>
-	<data name="Repository_Edit_Fail" xml:space="preserve">
+  <data name="Repository_Edit_Fail" xml:space="preserve">
     <value>リポジトリーの更新に失敗しました。誤りを正してやり直してね。</value>
   </data>
-	<data name="Repository_Edit_Submit" xml:space="preserve">
+  <data name="Repository_Edit_Submit" xml:space="preserve">
     <value>保存</value>
   </data>
-	<data name="Repository_Edit_Title" xml:space="preserve">
+  <data name="Repository_Edit_Title" xml:space="preserve">
     <value>リポジトリーを編集</value>
   </data>
-	<data name="Repository_Edit_UpdateSuccess" xml:space="preserve">
+  <data name="Repository_Edit_UpdateSuccess" xml:space="preserve">
     <value>リポジトリーの更新に成功しました。</value>
   </data>
-	<data name="Repository_Index_AdministratedRepositories" xml:space="preserve">
+  <data name="Repository_Index_AdministratedRepositories" xml:space="preserve">
     <value>リポジトリーを管理しました</value>
   </data>
-	<data name="Repository_Index_AllRepositories" xml:space="preserve">
+  <data name="Repository_Index_AllRepositories" xml:space="preserve">
     <value>全てのリポジトリーたち</value>
   </data>
-	<data name="Repository_Index_CreateNew" xml:space="preserve">
+  <data name="Repository_Index_CreateNew" xml:space="preserve">
     <value>新しいリポジリーを作る</value>
   </data>
-	<data name="Repository_Index_No" xml:space="preserve">
+  <data name="Repository_Index_No" xml:space="preserve">
     <value>いいえ</value>
   </data>
-	<data name="Repository_Index_Repositories" xml:space="preserve">
+  <data name="Repository_Index_Repositories" xml:space="preserve">
     <value>リポジトリーたち</value>
   </data>
-	<data name="Repository_Index_Title" xml:space="preserve">
+  <data name="Repository_Index_Title" xml:space="preserve">
     <value>リポジトリーの管理</value>
   </data>
-	<data name="Repository_Index_Yes" xml:space="preserve">
+  <data name="Repository_Index_Yes" xml:space="preserve">
     <value>はい</value>
   </data>
-	<data name="Repository_Layout_Browse" xml:space="preserve">
+  <data name="Repository_Layout_Browse" xml:space="preserve">
     <value>リポジトリーブラウザー</value>
   </data>
-	<data name="Repository_Layout_Commits" xml:space="preserve">
+  <data name="Repository_Layout_Commits" xml:space="preserve">
     <value>コミットたち</value>
   </data>
-	<data name="Repository_SwitchBranch" xml:space="preserve">
+  <data name="Repository_SwitchBranch" xml:space="preserve">
     <value>現在のブランチを切り替える</value>
   </data>
-	<data name="Repository_Tree_Author" xml:space="preserve">
+  <data name="Repository_Tree_Author" xml:space="preserve">
     <value>作者</value>
   </data>
-	<data name="Repository_Tree_CommitDate" xml:space="preserve">
+  <data name="Repository_Tree_CommitDate" xml:space="preserve">
     <value>日付</value>
   </data>
-	<data name="Repository_Tree_CommitMessage" xml:space="preserve">
+  <data name="Repository_Tree_CommitMessage" xml:space="preserve">
     <value>メッセージ</value>
   </data>
-	<data name="Repository_Tree_Name" xml:space="preserve">
+  <data name="Repository_Tree_Name" xml:space="preserve">
     <value>お名前</value>
   </data>
-	<data name="Repository_Tree_Title" xml:space="preserve">
+  <data name="Repository_Tree_Title" xml:space="preserve">
     <value>リポジトリーをブラウズ</value>
   </data>
-	<data name="Settings_Global_AllowAnonymousPush" xml:space="preserve">
+  <data name="Settings_Global_AllowAnonymousPush" xml:space="preserve">
     <value>匿名さんにリポジトリーへの push を認めちゃう</value>
   </data>
-	<data name="Settings_Global_RepositoryPath" xml:space="preserve">
+  <data name="Settings_Global_RepositoryPath" xml:space="preserve">
     <value>リポジトリーディレクトリー</value>
   </data>
-	<data name="Settings_Index_Save" xml:space="preserve">
+  <data name="Settings_Index_Save" xml:space="preserve">
     <value>保存</value>
   </data>
-	<data name="Settings_Index_Title" xml:space="preserve">
+  <data name="Settings_Index_Title" xml:space="preserve">
     <value>全体の設定</value>
   </data>
-	<data name="Settings_Index_UpdateSuccess" xml:space="preserve">
+  <data name="Settings_Index_UpdateSuccess" xml:space="preserve">
     <value>全体の設定の更新に成功したよ。</value>
   </data>
-	<data name="Settings_RepositoryPathNotExists" xml:space="preserve">
+  <data name="Settings_RepositoryPathNotExists" xml:space="preserve">
     <value>選択されたパスは存在しません。フォルダーを作成するか別のパスを選びましょう。</value>
   </data>
-	<data name="Settings_RepositoryPathUnauthorized" xml:space="preserve">
+  <data name="Settings_RepositoryPathUnauthorized" xml:space="preserve">
     <value>あなたは選択されたフォルダーへ書きこむ権限をお持ちではありません。別のパスを選びましょう。</value>
   </data>
-	<data name="Team_Create_Back" xml:space="preserve">
+  <data name="Team_Create_Back" xml:space="preserve">
     <value>リストへ戻る</value>
   </data>
-	<data name="Team_Create_Fail" xml:space="preserve">
+  <data name="Team_Create_Fail" xml:space="preserve">
     <value>新しいチームの作成に失敗しました。誤りを正してやり直してね。</value>
   </data>
-	<data name="Team_Create_Failure" xml:space="preserve">
+  <data name="Team_Create_Failure" xml:space="preserve">
     <value>選択されたお名前のチームはすでに存在しています。チームを作成できませんでした。</value>
   </data>
-	<data name="Team_Create_Submit" xml:space="preserve">
+  <data name="Team_Create_Submit" xml:space="preserve">
     <value>保存</value>
   </data>
-	<data name="Team_Create_Success" xml:space="preserve">
+  <data name="Team_Create_Success" xml:space="preserve">
     <value>チームの作成に成功しました。</value>
   </data>
-	<data name="Team_Create_TeamInformations" xml:space="preserve">
+  <data name="Team_Create_TeamInformations" xml:space="preserve">
     <value>チームの情報</value>
   </data>
-	<data name="Team_Create_Title" xml:space="preserve">
+  <data name="Team_Create_Title" xml:space="preserve">
     <value>新しいチームを作成する</value>
   </data>
-	<data name="Team_Delete_Success" xml:space="preserve">
+  <data name="Team_Delete_Success" xml:space="preserve">
     <value>チームは削除されました。</value>
   </data>
-	<data name="Team_Detail_Back" xml:space="preserve">
+  <data name="Team_Detail_Back" xml:space="preserve">
     <value>リストへ戻る</value>
   </data>
-	<data name="Team_Detail_Delete" xml:space="preserve">
+  <data name="Team_Detail_Delete" xml:space="preserve">
     <value>削除</value>
   </data>
-	<data name="Team_Detail_Description" xml:space="preserve">
+  <data name="Team_Detail_Description" xml:space="preserve">
     <value>詳細</value>
   </data>
-	<data name="Team_Detail_Edit" xml:space="preserve">
+  <data name="Team_Detail_Edit" xml:space="preserve">
     <value>編集</value>
   </data>
-	<data name="Team_Detail_Members" xml:space="preserve">
+  <data name="Team_Detail_Members" xml:space="preserve">
     <value>構成員たち</value>
   </data>
-	<data name="Team_Detail_Name" xml:space="preserve">
+  <data name="Team_Detail_Name" xml:space="preserve">
     <value>お名前</value>
   </data>
-	<data name="Team_Detail_Repositories" xml:space="preserve">
+  <data name="Team_Detail_Repositories" xml:space="preserve">
     <value>リポジトリーたち</value>
   </data>
-	<data name="Team_Detail_Title" xml:space="preserve">
+  <data name="Team_Detail_Title" xml:space="preserve">
     <value>チームの詳細</value>
   </data>
-	<data name="Team_Edit_Back" xml:space="preserve">
+  <data name="Team_Edit_Back" xml:space="preserve">
     <value>リストへ戻る</value>
   </data>
-	<data name="Team_Edit_Failure" xml:space="preserve">
+  <data name="Team_Edit_Failure" xml:space="preserve">
     <value>チームの更新に失敗しました。誤りを正してやり直してね。</value>
   </data>
-	<data name="Team_Edit_Submit" xml:space="preserve">
+  <data name="Team_Edit_Submit" xml:space="preserve">
     <value>更新</value>
   </data>
-	<data name="Team_Edit_Title" xml:space="preserve">
+  <data name="Team_Edit_Title" xml:space="preserve">
     <value>チームを編集</value>
   </data>
-	<data name="Team_Edit_UpdateSuccess" xml:space="preserve">
+  <data name="Team_Edit_UpdateSuccess" xml:space="preserve">
     <value>チームの更新に成功しました。</value>
   </data>
-	<data name="Team_Index_CreateNew" xml:space="preserve">
+  <data name="Team_Index_CreateNew" xml:space="preserve">
     <value>新しいチームの作成</value>
   </data>
-	<data name="Team_Index_Title" xml:space="preserve">
+  <data name="Team_Index_Title" xml:space="preserve">
     <value>チームの管理</value>
   </data>
-	<data name="Validation_Compare" xml:space="preserve">
+  <data name="Validation_Compare" xml:space="preserve">
     <value>"{0}" と "{1}" は同じ値じゃないと。</value>
   </data>
-	<data name="Validation_Email" xml:space="preserve">
+  <data name="Validation_Email" xml:space="preserve">
     <value>"{0}" は受け入れがたい電子メールアドレスですね。</value>
   </data>
-	<data name="Validation_Required" xml:space="preserve">
+  <data name="Validation_Required" xml:space="preserve">
     <value>"{0}" して下さいです。</value>
   </data>
-	<data name="DateTimeFormat" xml:space="preserve">
+  <data name="DateTimeFormat" xml:space="preserve">
     <value>yyyy/MM/dd hh:mm</value>
   </data>
-	<data name="Reset" xml:space="preserve">
+  <data name="Reset" xml:space="preserve">
     <value>リセットちゃん</value>
   </data>
-	<data name="Settings_Index_Failed" xml:space="preserve">
+  <data name="Settings_Index_Failed" xml:space="preserve">
     <value>設定の更新に失敗しました。誤りを正してやり直してね。</value>
   </data>
-	<data name="Team_Index_Teams" xml:space="preserve">
+  <data name="Team_Index_Teams" xml:space="preserve">
     <value>チームたち</value>
   </data>
-	<data name="Account_Edit_RolesHint" xml:space="preserve">
+  <data name="Account_Edit_RolesHint" xml:space="preserve">
     <value>管理者は全てのリポジトリにアクセスしたり、あらゆる操作をリポジトリ、チーム、使用者へ適用できるよ。</value>
   </data>
-	<data name="Home_About_Thanks" xml:space="preserve">
+  <data name="Home_About_Thanks" xml:space="preserve">
     <value>ありがとう！</value>
   </data>
-	<data name="Home_About_Thanks_p" xml:space="preserve">
+  <data name="Home_About_Thanks_p" xml:space="preserve">
     <value>Bonobo Git Server はね、ちょっとのオープンソースやフリーウェアプロジェクトを使っているよ。全ての作者さんや貢献者さんたちへありがとうの意を表します。</value>
   </data>
-	<data name="Home_About_Title" xml:space="preserve">
+  <data name="Home_About_Title" xml:space="preserve">
     <value>このソフトウェアについて</value>
   </data>
-	<data name="Repository_AdministratorsHint" xml:space="preserve">
+  <data name="Repository_AdministratorsHint" xml:space="preserve">
     <value>管理者たちはリポジトリーのメタデータをいじったり、削除したり、何でもできるよ。</value>
   </data>
-	<data name="Repository_AllowAnonymousHint" xml:space="preserve">
+  <data name="Repository_AllowAnonymousHint" xml:space="preserve">
     <value>匿名アカウントを許可にすると誰でも pull ったり clone ったり、リポジトリのメタデータを見られるようになるよ。 push については全体の設定によるけどね。</value>
   </data>
-	<data name="Repository_Create_NameFailure" xml:space="preserve">
+  <data name="Repository_Create_NameFailure" xml:space="preserve">
     <value>ホワイトスペースを入れたらダメです。</value>
   </data>
-	<data name="Repository_TeamsHint" xml:space="preserve">
+  <data name="Repository_TeamsHint" xml:space="preserve">
     <value>チームでリポジトリーへアクセスできると、 そのチームの全ての使用者たちが push と pull と メタデータの表示をできるよ。</value>
   </data>
-	<data name="Repository_UsersHint" xml:space="preserve">
+  <data name="Repository_UsersHint" xml:space="preserve">
     <value>Users have access to repository. They can clone, push or pull repository and view repository metadata.使用者としてリポジトリーへアクセスできると、 clone と push と pull とメタデータの表示をできるよ。</value>
   </data>
-	<data name="Validation_FileName" xml:space="preserve">
+  <data name="Validation_FileName" xml:space="preserve">
     <value>"{0}" にはディレクトリに使用できない文字が含まれていますね。</value>
   </data>
-	<data name="Validation_StringLength" xml:space="preserve">
+  <data name="Validation_StringLength" xml:space="preserve">
     <value>"{0}" は少なくとも {1} 文字必要です。</value>
   </data>
-	<data name="Settings_Global_DirectoryHint" xml:space="preserve">
-		<value>全てのGitリポジトリを収めるディレクトリだよ。</value>
-	</data>
-	<data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
-		<value>この使用者名はすでに使われています。</value>
-	</data>
-	<data name="Account_Create_AccountInformation" xml:space="preserve">
-		<value>アカウント情報</value>
-	</data>
-	<data name="Account_Create_ConfirmPassword" xml:space="preserve">
-		<value>パスワード（念の為にもう一度）</value>
-	</data>
-	<data name="Account_Create_Email" xml:space="preserve">
-		<value>電子メール</value>
-	</data>
-	<data name="Account_Create_Name" xml:space="preserve">
-		<value>お名前</value>
-	</data>
-	<data name="Account_Create_Password" xml:space="preserve">
-		<value>パスワード</value>
-	</data>
-	<data name="Account_Create_Submit" xml:space="preserve">
-		<value>新しいアカウントを作成</value>
-	</data>
-	<data name="Account_Create_Surname" xml:space="preserve">
-		<value>姓</value>
-	</data>
-	<data name="Account_Create_Title" xml:space="preserve">
-		<value>登録</value>
-	</data>
-	<data name="Account_Create_Unsuccessfull" xml:space="preserve">
-		<value>アカウントの作成に失敗しました。もう一度試してみるか、システムの管理者さんへ連絡してみてはどうかな。</value>
-	</data>
-	<data name="Account_Create_Username" xml:space="preserve">
-		<value>使用者名</value>
-	</data>
-	<data name="Account_Index_Create" xml:space="preserve">
-		<value></value>
-	</data>
-	<data name="Account_Index_Users" xml:space="preserve">
-		<value>ユーザー</value>
-	</data>
-	<data name="Delete_ConfirmationText" xml:space="preserve">
-		<value>あなたが本当に削除しますか{0}?</value>
-	</data>
-	<data name="Account_Create_Success" xml:space="preserve">
-		<value>ユーザーが正常に作成されました</value>
-	</data>
-	<data name="Repository_Tree_Download" xml:space="preserve">
-		<value>ファイルをダウンロード</value>
-	</data>
-	<data name="Settings_Global_AllowAnonymousRegistration" xml:space="preserve">
-		<value>匿名の登録を許可する</value>
-	</data>
-	<data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
-		<value>チェックボックスがオフになっている場合のみ、管理者は新しいユーザーを追加することもできますし、匿名ユーザー登録が無効になっている</value>
-	</data>
-	<data name="Settings_Global_AllowUserRepositoryCreation" xml:space="preserve">
-		<value>ユーザーリポジトリの作成を許可する</value>
-	</data>
-	<data name="Settings_Global_AllowUserRepositoryCreation_Hint" xml:space="preserve">
-		<value>チェックボックスがオフになっている場合のみ、管理者は、リポジトリを作成できます</value>
-	</data>
-	<data name="Delete_Back" xml:space="preserve">
-		<value>戻る</value>
-	</data>
-	<data name="Delete_Confirm" xml:space="preserve">
-		<value>削除</value>
-	</data>
-	<data name="Delete_Title" xml:space="preserve">
-		<value>確認を削除する</value>
-	</data>
+  <data name="Settings_Global_DirectoryHint" xml:space="preserve">
+    <value>全てのGitリポジトリを収めるディレクトリだよ。</value>
+  </data>
+  <data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
+    <value>この使用者名はすでに使われています。</value>
+  </data>
+  <data name="Account_Create_AccountInformation" xml:space="preserve">
+    <value>アカウント情報</value>
+  </data>
+  <data name="Account_Create_ConfirmPassword" xml:space="preserve">
+    <value>パスワード（念の為にもう一度）</value>
+  </data>
+  <data name="Account_Create_Email" xml:space="preserve">
+    <value>電子メール</value>
+  </data>
+  <data name="Account_Create_Name" xml:space="preserve">
+    <value>お名前</value>
+  </data>
+  <data name="Account_Create_Password" xml:space="preserve">
+    <value>パスワード</value>
+  </data>
+  <data name="Account_Create_Submit" xml:space="preserve">
+    <value>新しいアカウントを作成</value>
+  </data>
+  <data name="Account_Create_Surname" xml:space="preserve">
+    <value>姓</value>
+  </data>
+  <data name="Account_Create_Title" xml:space="preserve">
+    <value>登録</value>
+  </data>
+  <data name="Account_Create_Unsuccessfull" xml:space="preserve">
+    <value>アカウントの作成に失敗しました。もう一度試してみるか、システムの管理者さんへ連絡してみてはどうかな。</value>
+  </data>
+  <data name="Account_Create_Username" xml:space="preserve">
+    <value>使用者名</value>
+  </data>
+  <data name="Account_Index_Create" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Account_Index_Users" xml:space="preserve">
+    <value>ユーザー</value>
+  </data>
+  <data name="Delete_ConfirmationText" xml:space="preserve">
+    <value>あなたが本当に削除しますか{0}?</value>
+  </data>
+  <data name="Account_Create_Success" xml:space="preserve">
+    <value>ユーザーが正常に作成されました</value>
+  </data>
+  <data name="Repository_Tree_Download" xml:space="preserve">
+    <value>ファイルをダウンロード</value>
+  </data>
+  <data name="Settings_Global_AllowAnonymousRegistration" xml:space="preserve">
+    <value>匿名の登録を許可する</value>
+  </data>
+  <data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
+    <value>チェックボックスがオフになっている場合のみ、管理者は新しいユーザーを追加することもできますし、匿名ユーザー登録が無効になっている</value>
+  </data>
+  <data name="Settings_Global_AllowUserRepositoryCreation" xml:space="preserve">
+    <value>ユーザーリポジトリの作成を許可する</value>
+  </data>
+  <data name="Settings_Global_AllowUserRepositoryCreation_Hint" xml:space="preserve">
+    <value>チェックボックスがオフになっている場合のみ、管理者は、リポジトリを作成できます</value>
+  </data>
+  <data name="Delete_Back" xml:space="preserve">
+    <value>戻る</value>
+  </data>
+  <data name="Delete_Confirm" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="Delete_Title" xml:space="preserve">
+    <value>確認を削除する</value>
+  </data>
 </root>

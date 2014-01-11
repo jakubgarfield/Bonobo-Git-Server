@@ -150,9 +150,6 @@
   <data name="Account_Detail_Username" xml:space="preserve">
     <value>Användarnamn</value>
   </data>
-  <data name="Account_Edit_AccountInformation" xml:space="preserve">
-    <value>Kontoinformation</value>
-  </data>
   <data name="Account_Edit_Back" xml:space="preserve">
     <value>Tillbaka till listan</value>
   </data>
@@ -203,9 +200,6 @@
   </data>
   <data name="Account_Index_Title" xml:space="preserve">
     <value>Användarhantering</value>
-  </data>
-  <data name="GitAccess_ProjectForbidden" xml:space="preserve">
-    <value>Saknar behörighet för det projektet.</value>
   </data>
   <data name="Grid_Delete" xml:space="preserve">
     <value>Ta bort</value>
