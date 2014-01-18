@@ -66,6 +66,7 @@ namespace Bonobo.Git.Server.Controllers
 
         private ActionResult ExecuteReceivePack(string project)
         {
+            Response.BufferOutput = false;
             Response.Charset = "";
             Response.ContentType = "application/x-git-receive-pack-result";
             SetNoCache();
@@ -84,6 +85,7 @@ namespace Bonobo.Git.Server.Controllers
 
         private ActionResult ExecuteUploadPack(string project)
         {
+            Response.BufferOutput = false;
             Response.Charset = "";
             Response.ContentType = "application/x-git-upload-pack-result";
             SetNoCache();
@@ -102,6 +104,7 @@ namespace Bonobo.Git.Server.Controllers
 
         private ActionResult GetInfoRefs(String project, String service)
         {
+            Response.BufferOutput = false;
             Response.StatusCode = 200;
             Response.Charset = "";
 
@@ -185,7 +188,14 @@ namespace Bonobo.Git.Server.Controllers
             {
                 inStream.CopyTo(process.StandardInput.BaseStream);
                 process.StandardInput.Write('\0');
-                process.StandardOutput.BaseStream.CopyTo(outStream);
+
+                var buffer = new byte[16*1024];
+                int read;
+                while ((read = process.StandardOutput.BaseStream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    outStream.Write(buffer, 0, read);
+                    outStream.Flush();
+                }
 
                 process.WaitForExit();
             }
