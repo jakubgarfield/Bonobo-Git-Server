@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
-using Bonobo.Git.Server.Models;
-using System.Configuration;
 using System.Web.Configuration;
-using System.IO;
+using System.Web.Mvc;
 using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Models;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -23,6 +24,7 @@ namespace Bonobo.Git.Server.Controllers
                 RepositoryPath = UserConfiguration.Current.Repositories,
                 AllowAnonymousRegistration = UserConfiguration.Current.AllowAnonymousRegistration,
                 AllowUserRepositoryCreation = UserConfiguration.Current.AllowUserRepositoryCreation,
+                DefaultLanguage = UserConfiguration.Current.DefaultLanguage,
             });
         }
 
@@ -40,7 +42,10 @@ namespace Bonobo.Git.Server.Controllers
                         UserConfiguration.Current.Repositories = model.RepositoryPath;
                         UserConfiguration.Current.AllowAnonymousRegistration = model.AllowAnonymousRegistration;
                         UserConfiguration.Current.AllowUserRepositoryCreation = model.AllowUserRepositoryCreation;
+                        UserConfiguration.Current.DefaultLanguage = model.DefaultLanguage;
                         UserConfiguration.Current.Save();
+
+                        this.Session["Culture"] = new CultureInfo(model.DefaultLanguage);
 
                         ViewBag.UpdateSuccess = true;
                     }

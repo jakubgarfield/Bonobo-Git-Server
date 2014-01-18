@@ -41,6 +41,25 @@
                 @Resources.Settings_Global_AllowUserRepositoryCreation_Hint
             </p>
         </div>
+        <div class="ctrlHolder">
+            <label for="DefaultLanguage">@Model.GetType().GetDisplayValue("DefaultLanguage")</label>
+            @*@Html.TextBoxFor(m => m.DefaultLanguage, new { @class = "textInput" })*@
+            
+            <select id="DefaultLanguage" name="DefaultLanguage">
+                <option @((Model.DefaultLanguage == "cs-CZ") ? "Selected" : "") value="cs-CZ">cs-CZ</option>
+                <option @((Model.DefaultLanguage == "ja-JP") ? "Selected" : "") value="ja-JP">ja-JP</option>
+                <option @((Model.DefaultLanguage == "zh-CN") ? "Selected" : "") value="zh-CN">zh-CN</option>
+                <option @((Model.DefaultLanguage == "en")    ? "Selected" : "") value="en">en</option>
+                <option @((Model.DefaultLanguage == "tr-TR") ? "Selected" : "") value="tr-TR">tr-TR</option>
+                <option @((Model.DefaultLanguage == "es-ES") ? "Selected" : "") value="es-ES">es-ES</option>
+                <option @((Model.DefaultLanguage == "sv-SE") ? "Selected" : "") value="sv-SE">sv-SE</option>
+                <option @((Model.DefaultLanguage == "ru-RU") ? "Selected" : "") value="ru-RU">ru-RU</option>
+            </select>
+            <p class="formHint">
+              @Html.ValidationMessageFor(m => m.DefaultLanguage)
+              @Resources.Settings_Global_DefaultLanguage_Hint
+            </p>
+        </div>
         <div class="buttonHolder">
             <button type="reset" class="secondaryAction">← @Resources.Reset</button>
             <input type="submit" value="@Resources.Settings_Index_Save" class="primaryAction" />
