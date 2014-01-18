@@ -150,9 +150,6 @@
   <data name="Account_Detail_Username" xml:space="preserve">
     <value>Логин</value>
   </data>
-  <data name="Account_Edit_AccountInformation" xml:space="preserve">
-    <value>Свойства учетной записи</value>
-  </data>
   <data name="Account_Edit_Back" xml:space="preserve">
     <value>Обратно к списку</value>
   </data>
@@ -203,9 +200,6 @@
   </data>
   <data name="Account_Index_Title" xml:space="preserve">
     <value>Управление пользователями</value>
-  </data>
-  <data name="GitAccess_ProjectForbidden" xml:space="preserve">
-    <value>Недостаточно прав для запрашиваемого проекта</value>
   </data>
   <data name="Grid_Delete" xml:space="preserve">
     <value>Удалить</value>

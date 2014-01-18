@@ -150,9 +150,6 @@
   <data name="Account_Detail_Username" xml:space="preserve">
     <value>用户名</value>
   </data>
-  <data name="Account_Edit_AccountInformation" xml:space="preserve">
-    <value>帐户信息</value>
-  </data>
   <data name="Account_Edit_Back" xml:space="preserve">
     <value>返回到列表</value>
   </data>
@@ -209,9 +206,6 @@
   </data>
   <data name="DateTimeFormat" xml:space="preserve">
     <value>yyyy-MM-dd hh:mm</value>
-  </data>
-  <data name="GitAccess_ProjectForbidden" xml:space="preserve">
-    <value>对所请求的项目没有权限</value>
   </data>
   <data name="Grid_Delete" xml:space="preserve">
     <value>删除</value>
