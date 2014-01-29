@@ -40,6 +40,7 @@ namespace Bonobo.Git.Server
                 }
             }
 
+			return;
         }
     }
 }

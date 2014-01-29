@@ -273,7 +273,7 @@ namespace Bonobo.Git.Server.Controllers
 					var model = browser.BrowseBlob(name, path, out referenceName);
 
 					string raw_text = System.Text.Encoding.UTF8.GetString(model.Data);
-					return Content(raw_text);
+					return Content(raw_text, "text/plain");
 				}
 			}
 			return View();
