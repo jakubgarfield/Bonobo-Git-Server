@@ -16,7 +16,7 @@
         @Html.Partial("_AddressBar")
         @{
             <div class="controlPanel">
-                <p>@Html.ActionLink(@Resources.Repository_Tree_Download, "Raw", new { encodedName = PathEncoder.Encode(Model.TreeName), encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true) }, new { @class = "downloadLink" })</p>
+                <p>@Html.ActionLink(@Resources.Repository_Tree_Download, "Raw", new { encodedName = PathEncoder.Encode(Model.TreeName), encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true) }, new { @class = "downloadLink" }) | @Html.ActionLink(@Resources.Repository_Tree_RawDisplay, "Raw", new { encodedName = PathEncoder.Encode(Model.TreeName), encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true), display = true }, new { @class = "downloadLink" })</p>
             </div>
         }
         @if (Model.IsImage)

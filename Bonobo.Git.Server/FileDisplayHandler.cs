@@ -582,7 +582,7 @@ namespace Bonobo.Git.Server
             }
         }
 
-        private static Encoding GetEncoding(byte[] data)
+        public static Encoding GetEncoding(byte[] data)
         {
             ICharsetDetector cdet = new CharsetDetector();
             cdet.Feed(data, 0, data.Length);

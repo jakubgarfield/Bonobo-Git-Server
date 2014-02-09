@@ -15,6 +15,7 @@ using Bonobo.Git.Server.Configuration;
 using LibGit2Sharp;
 using Bonobo.Git.Server.Extensions;
 using Bonobo.Git.Server.Helpers;
+using System.Text;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -217,13 +218,6 @@ namespace Bonobo.Git.Server.Controllers
                     PopulateBranchesData(browser, referenceName);
                     PopulateAddressBarData(name, path);
 
-                    model.Text = FileDisplayHandler.GetText(model.Data);
-                    model.IsText = model.Text != null;
-                    if (model.IsText)
-                        model.TextBrush = FileDisplayHandler.GetBrush(path);
-                    else
-                        model.IsImage = FileDisplayHandler.IsImage(path);
-
                     return View(model);
                 }
             }
@@ -231,7 +225,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Raw(string id, string encodedName, string encodedPath)
+        public ActionResult Raw(string id, string encodedName, string encodedPath, bool display = false)
         {
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
@@ -243,7 +237,21 @@ namespace Bonobo.Git.Server.Controllers
                     string referenceName;
                     var model = browser.BrowseBlob(name, path, out referenceName);
 
-                    return File(model.Data, "application/octet-stream", model.Name);
+                    if (display)
+                    {
+                        if (model.IsText)
+                        {
+                            return Content(model.Text, "text/plain", model.Encoding);
+                        }
+                        else if (model.IsImage)
+                        {
+                            return File(model.Data, FileDisplayHandler.GetMimeType(model.Name));
+                        }
+                    }
+                    else
+                    {
+                        return File(model.Data, "application/octet-stream", model.Name);
+                    }
                 }
             }
             return View();

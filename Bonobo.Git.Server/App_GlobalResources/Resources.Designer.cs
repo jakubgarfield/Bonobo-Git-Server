@@ -1402,7 +1402,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download file.
+        ///   Looks up a localized string similar to Download.
         /// </summary>
         public static string Repository_Tree_Download {
             get {
@@ -1425,6 +1425,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Repository_Tree_PreviewNotSupported {
             get {
                 return ResourceManager.GetString("Repository_Tree_PreviewNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Raw.
+        /// </summary>
+        public static string Repository_Tree_RawDisplay {
+            get {
+                return ResourceManager.GetString("Repository_Tree_RawDisplay", resourceCulture);
             }
         }
         

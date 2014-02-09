@@ -679,7 +679,7 @@
     <value>The user was created successfully.</value>
   </data>
   <data name="Repository_Tree_Download" xml:space="preserve">
-    <value>Download file</value>
+    <value>Download</value>
   </data>
   <data name="Settings_Global_AllowAnonymousRegistration" xml:space="preserve">
     <value>Allow anonymous registration</value>
@@ -713,5 +713,8 @@
   </data>
   <data name="Repository_Detail_Status" xml:space="preserve">
     <value>Status</value>
+  </data>
+  <data name="Repository_Tree_RawDisplay" xml:space="preserve">
+    <value>Raw</value>
   </data>
 </root>

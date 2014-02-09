@@ -5,6 +5,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using Bonobo.Git.Server.App_GlobalResources;
 using LibGit2Sharp;
+using System.Text;
 
 namespace Bonobo.Git.Server.Models
 {
@@ -78,6 +79,7 @@ namespace Bonobo.Git.Server.Models
         public byte[] Data { get; set; }
         public string Text { get; set; }
         public string TextBrush { get; set; }
+        public Encoding Encoding { get; set; }
     }
 
     public class RepositoryTreeModel

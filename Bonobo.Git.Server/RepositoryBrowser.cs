@@ -95,8 +95,8 @@ namespace Bonobo.Git.Server
             {
                 return null;
             }
-
-            return new RepositoryTreeDetailModel
+            
+            var model = new RepositoryTreeDetailModel
             {
                 Name = entry.Name,
                 IsTree = false,
@@ -107,6 +107,16 @@ namespace Bonobo.Git.Server
                 Path = path,
                 Data = ((Blob)entry.Target).Content,
             };
+
+            model.Text = FileDisplayHandler.GetText(model.Data);
+            model.Encoding = FileDisplayHandler.GetEncoding(model.Data);
+            model.IsText = model.Text != null;
+            if (model.IsText)
+                model.TextBrush = FileDisplayHandler.GetBrush(path);
+            else
+                model.IsImage = FileDisplayHandler.IsImage(path);
+
+            return model;
         }
 
         public void Dispose()
