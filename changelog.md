@@ -10,12 +10,20 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 ### Features
 
+* RAW file display
+* Scanning for existing repositories
+* Select a default language in settings section
+* Efficient working with streams
 * Swedish localization - [JLedel](https://github.com/JLedel)
+* Russian localization - grigoryev
+* Spanish localization - [AHTA](https://github.com/AHTA)
 
 ### Bug Fixes
 
 * Fixed a problem viewing files with '+' or '&' in the path
 * Fixed a problem viewing branches and tags with '/' in the name
+* Fixed missing label for team members when creating team
+* Tweaked English strings
 
 
 <hr />
