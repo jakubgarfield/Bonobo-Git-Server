@@ -28,7 +28,7 @@ Prerequisites
 Update
 -----------------------------------------------
 
-Before each update please read carefully the information about **compatibility issues** between your version and the latest one in [changelog](/changelog/).
+Before each update please read carefully the information about **compatibility issues** between your version and the latest one in [changelog](/changelog.md).
 
 * Delete all the files in the installation folder **except App_Data**.
     * Default location is `C:\inetpub\wwwroot\Bonobo.Git.Server`.
@@ -42,7 +42,7 @@ Before each update please read carefully the information about **compatibility i
 Installation
 -----------------------------------------------
 
-These steps ilustrates simple installation with Windows 2008 Server and IIS 7. They are exactly the same for higher platforms (Windows Server 2012 and IIS 8.0).
+These steps illustrate simple installation with Windows 2008 Server and IIS 7. They are exactly the same for higher platforms (Windows Server 2012 and IIS 8.0).
 
 * **Extract the files** from the installation archive to `C:\inetpub\wwwroot`
 
