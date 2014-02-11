@@ -12,7 +12,7 @@ namespace Bonobo.Git.Server
         public override void OnAuthorization(AuthorizationContext filterContext)
         {           
             var importer = new WindowsIdentityImporter();
-            importer.Import(filterContext);
+            WindowsIdentityImporter.Import(filterContext);
 
             if (IsWindowsUserAuthenticated(filterContext))
             {

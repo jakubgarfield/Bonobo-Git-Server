@@ -8,8 +8,8 @@ namespace Bonobo.Git.Server
 {
     public class FileResult : ActionResult
     {
-        private string _data;
-        private string _name;
+        private readonly string _data;
+        private readonly string _name;
 
         public FileResult(string data, string name)
         {
@@ -22,7 +22,7 @@ namespace Bonobo.Git.Server
         {
             if (!String.IsNullOrEmpty(_name))
             {
-                context.HttpContext.Response.AddHeader("content-disposition", "attachment; filename=" + this._name);
+                context.HttpContext.Response.AddHeader("content-disposition", "attachment; filename=" + _name);
             }
 
             context.HttpContext.Response.Write(_data);

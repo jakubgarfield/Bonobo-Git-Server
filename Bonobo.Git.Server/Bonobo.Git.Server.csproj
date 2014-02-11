@@ -277,8 +277,8 @@
     <Compile Include="Security\IMembershipService.cs" />
     <Compile Include="Security\IRepositoryPermissionService.cs" />
     <Compile Include="FileDisplayHandler.cs" />
-    <Compile Include="UnityDependencyResolver.cs" />
-    <Compile Include="UnityFilterAttributeFilterProvider.cs" />
+    <Compile Include="DependencyResolvers\UnityDependencyResolver.cs" />
+    <Compile Include="FilterProviders\UnityFilterAttributeFilterProvider.cs" />
     <Compile Include="Attributes\WindowsActionFilterAttribute.cs" />
     <Compile Include="WindowsIdentityImporter.cs" />
     <Compile Include="UsernameUrl.cs" />
