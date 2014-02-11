@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Optimization;
 using System.Web.Routing;
 using System.ServiceModel.Activation;
+using Bonobo.Git.Server.App_Start;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 using System.Globalization;
@@ -73,6 +75,7 @@ namespace Bonobo.Git.Server
             routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
 
         protected void Application_AcquireRequestState(object sender, EventArgs e)
