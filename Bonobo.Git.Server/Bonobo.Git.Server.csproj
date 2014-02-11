@@ -209,10 +209,11 @@
       <DependentUpon>Resources.zh-CN.resx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Data\Update\AutomaticUpdater.cs" />
     <Compile Include="Data\Update\RepositorySynchronizer.cs" />
     <Compile Include="Data\Update\UsernamesToLower.cs" />
-    <Compile Include="GitAuthorizeAttribute.cs" />
+    <Compile Include="Attributes\GitAuthorizeAttribute.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Configuration\ConfigurationEntry.cs" />
     <Compile Include="Configuration\UserConfiguration.cs" />
@@ -238,11 +239,11 @@
     <Compile Include="Data\EFTeamRepository.cs" />
     <Compile Include="Data\IRepositoryRepository.cs" />
     <Compile Include="Data\ITeamRepository.cs" />
-    <Compile Include="EmailAttribute.cs" />
+    <Compile Include="Attributes\EmailAttribute.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="FileActionResult.cs" />
-    <Compile Include="FileNameAttribute.cs" />
-    <Compile Include="WebAuthorizeAttribute.cs" />
+    <Compile Include="Attributes\FileNameAttribute.cs" />
+    <Compile Include="Attributes\WebAuthorizeAttribute.cs" />
     <Compile Include="Helpers\CustomHtmlHelpers.cs" />
     <Compile Include="Helpers\PathEncoder.cs" />
     <Compile Include="Models\HomeModels.cs" />
@@ -255,7 +256,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.cs-CZ.resx</DependentUpon>
     </Compile>
-    <Compile Include="WebAuthorizeRepositoryAttribute.cs" />
+    <Compile Include="Attributes\WebAuthorizeRepositoryAttribute.cs" />
     <Compile Include="RepositoryBrowser.cs" />
     <Compile Include="Security\EFMembershipService.cs" />
     <Compile Include="Security\EFRepositoryPermissionService.cs" />
@@ -278,7 +279,7 @@
     <Compile Include="FileDisplayHandler.cs" />
     <Compile Include="UnityDependencyResolver.cs" />
     <Compile Include="UnityFilterAttributeFilterProvider.cs" />
-    <Compile Include="WindowsActionFilterAttribute.cs" />
+    <Compile Include="Attributes\WindowsActionFilterAttribute.cs" />
     <Compile Include="WindowsIdentityImporter.cs" />
     <Compile Include="UsernameUrl.cs" />
   </ItemGroup>
