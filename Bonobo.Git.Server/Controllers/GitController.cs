@@ -1,15 +1,10 @@
-﻿using Bonobo.Git.Server.Configuration;
+﻿using System.Configuration;
+using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 using System;
-using System.Configuration;
 using System.IO;
-using System.IO.Compression;
-using System.Security.Principal;
-using System.Text;
-using System.Web;
 using System.Web.Mvc;
-using Bonobo.Git.Server.Extensions;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -66,16 +61,10 @@ namespace Bonobo.Git.Server.Controllers
 
         private ActionResult ExecuteReceivePack(string project)
         {
-            Response.BufferOutput = false;
-            Response.Charset = "";
-            Response.ContentType = "application/x-git-receive-pack-result";
-            SetNoCache();
-
             var directory = GetDirectoryInfo(project);
             if (LibGit2Sharp.Repository.IsValid(directory.FullName))
             {
-                RunGitCmd("receive-pack", false, directory.FullName, GetInputStream(), Response.OutputStream);
-                return new EmptyResult();
+                return new GitCmdResult("application/x-git-receive-pack-result", "receive-pack", false, directory.FullName, GetGitPath());
             }
             else
             {
@@ -85,16 +74,10 @@ namespace Bonobo.Git.Server.Controllers
 
         private ActionResult ExecuteUploadPack(string project)
         {
-            Response.BufferOutput = false;
-            Response.Charset = "";
-            Response.ContentType = "application/x-git-upload-pack-result";
-            SetNoCache();
-
             var directory = GetDirectoryInfo(project);
             if (LibGit2Sharp.Repository.IsValid(directory.FullName))
             {
-                RunGitCmd("upload-pack", false, directory.FullName, GetInputStream(), Response.OutputStream);
-                return new EmptyResult();
+                return new GitCmdResult("application/x-git-upload-pack-result", "upload-pack", false, directory.FullName, GetGitPath());
             }
             else
             {
@@ -104,21 +87,16 @@ namespace Bonobo.Git.Server.Controllers
 
         private ActionResult GetInfoRefs(String project, String service)
         {
-            Response.BufferOutput = false;
-            Response.StatusCode = 200;
-            Response.Charset = "";
-
-            Response.ContentType = String.Format("application/x-{0}-advertisement", service);
-            SetNoCache();
-            Response.Write(FormatMessage(String.Format("# service={0}\n", service)));
-            Response.Write(FlushMessage());
-
             var directory = GetDirectoryInfo(project);
-
             if (LibGit2Sharp.Repository.IsValid(directory.FullName))
             {
-                RunGitCmd(service.Substring(4), true, directory.FullName, GetInputStream(), Response.OutputStream);
-                return new EmptyResult();
+                Response.StatusCode = 200;
+
+                string contentType = String.Format("application/x-{0}-advertisement", service);
+                return new GitCmdResult(contentType, service.Substring(4), true, directory.FullName, GetGitPath())
+                {
+                    AdvertiseRefsContent = FormatMessage(String.Format("# service={0}\n", service)) + FlushMessage()
+                };
             }
             else
             {
@@ -143,62 +121,17 @@ namespace Bonobo.Git.Server.Controllers
             return "0000";
         }
 
-        private DirectoryInfo GetDirectoryInfo(String project)
+        private static DirectoryInfo GetDirectoryInfo(String project)
         {
             return new DirectoryInfo(Path.Combine(UserConfiguration.Current.Repositories, project));
         }
 
-        private Stream GetInputStream()
+        private string GetGitPath()
         {
-            if (Request.Headers["Content-Encoding"] == "gzip")
-            {
-                return new GZipStream(Request.InputStream, CompressionMode.Decompress);
-            }
-            return Request.InputStream;
-        }
-
-        private void SetNoCache()
-        {
-            Response.AddHeader("Expires", "Fri, 01 Jan 1980 00:00:00 GMT");
-            Response.AddHeader("Pragma", "no-cache");
-            Response.AddHeader("Cache-Control", "no-cache, max-age=0, must-revalidate");
-        }
-
-        public void RunGitCmd(string serviceName, bool advertiseRefs, string workingDir, Stream inStream, Stream outStream)
-        {
-            var args = serviceName + " --stateless-rpc";
-            if (advertiseRefs)
-                args += " --advertise-refs";
-            args += " \"" + workingDir + "\"";
-
-            var gitPath = Path.IsPathRooted(ConfigurationManager.AppSettings["GitPath"]) 
-                ? ConfigurationManager.AppSettings["GitPath"] 
-                : System.Web.HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["GitPath"]);
-            var info = new System.Diagnostics.ProcessStartInfo(gitPath, args)
-            {
-                CreateNoWindow = true,
-                RedirectStandardError = true,
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                WorkingDirectory = Path.GetDirectoryName(UserConfiguration.Current.Repositories),
-            };
-
-            using (var process = System.Diagnostics.Process.Start(info))
-            {
-                inStream.CopyTo(process.StandardInput.BaseStream);
-                process.StandardInput.Write('\0');
-
-                var buffer = new byte[16*1024];
-                int read;
-                while ((read = process.StandardOutput.BaseStream.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    outStream.Write(buffer, 0, read);
-                    outStream.Flush();
-                }
-
-                process.WaitForExit();
-            }
+            var gitPath = Path.IsPathRooted(ConfigurationManager.AppSettings["GitPath"])
+                ? ConfigurationManager.AppSettings["GitPath"]
+                : HttpContext.Server.MapPath(ConfigurationManager.AppSettings["GitPath"]);
+            return gitPath;
         }
     }
 }
