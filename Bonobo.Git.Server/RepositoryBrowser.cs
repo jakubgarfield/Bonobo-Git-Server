@@ -22,12 +22,12 @@ namespace Bonobo.Git.Server
 
         public IEnumerable<string> GetBranches()
         {
-            return _repository.Branches.Select(s => s.Name);
+            return _repository.Branches.Select(s => s.Name).ToList();
         }
 
         public IEnumerable<string> GetTags()
         {
-            return _repository.Tags.Select(s => s.Name);
+            return _repository.Tags.Select(s => s.Name).ToList();
         }
 
         public IEnumerable<RepositoryCommitModel> GetCommits(string name, out string referenceName)
