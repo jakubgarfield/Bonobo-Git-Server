@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
@@ -10,6 +11,7 @@ using System.Web.Routing;
 using System.Web.Security;
 using Bonobo.Git.Server.App_Start;
 using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Security;
