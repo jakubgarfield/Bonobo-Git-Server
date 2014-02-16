@@ -16,7 +16,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <TargetFrameworkProfile />
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
@@ -277,7 +277,7 @@
     <Compile Include="Security\IMembershipService.cs" />
     <Compile Include="Security\IRepositoryPermissionService.cs" />
     <Compile Include="FileDisplayHandler.cs" />
-    <Compile Include="DependencyResolvers\UnityDependencyResolver.cs" />
+    <Compile Include="UnityDependencyResolver.cs" />
     <Compile Include="FilterProviders\UnityFilterAttributeFilterProvider.cs" />
     <Compile Include="Attributes\WindowsActionFilterAttribute.cs" />
     <Compile Include="WindowsIdentityImporter.cs" />
@@ -669,9 +669,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50287</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Bonobo.Git.Server</IISUrl>
-          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
-          <IISAppRootUrl>http://localhost:50287/</IISAppRootUrl>
+          <IISUrl>http://localhost:50287/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
