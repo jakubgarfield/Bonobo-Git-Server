@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Security;
-using System.Web.Routing;
 using System.Security.Principal;
-using Bonobo.Git.Server.Security;
-using System.Configuration;
+using System.Web.Mvc;
+using System.Web.Routing;
+using System.Web.Security;
 
 namespace Bonobo.Git.Server
 {
@@ -17,14 +12,22 @@ namespace Bonobo.Git.Server
         public override void OnAuthorization(AuthorizationContext filterContext)
         {           
             var importer = new WindowsIdentityImporter();
-            importer.Import(filterContext);
+            WindowsIdentityImporter.Import(filterContext);
 
             if (IsWindowsUserAuthenticated(filterContext))
+            {
                 return;
+            }
 
             if (filterContext.HttpContext.User == null || !(filterContext.HttpContext.User.Identity is FormsIdentity) || !filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
-                filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary { { "controller", "Home" }, { "action", "LogOn" }, { "returnUrl", filterContext.HttpContext.Request.Url.PathAndQuery } });
+                filterContext.Result =
+                    new RedirectToRouteResult(new RouteValueDictionary
+                    {
+                        { "controller", "Home" },
+                        { "action", "LogOn" },
+                        { "returnUrl", filterContext.HttpContext.Request.Url.PathAndQuery }
+                    });
             }
             else
             {
@@ -36,8 +39,7 @@ namespace Bonobo.Git.Server
             }
         }
 
-
-        private bool IsWindowsUserAuthenticated(AuthorizationContext context)
+        private static bool IsWindowsUserAuthenticated(ControllerContext context)
         {
             var windowsIdentity = context.HttpContext.User.Identity as WindowsIdentity;
             return windowsIdentity != null && windowsIdentity.IsAuthenticated;

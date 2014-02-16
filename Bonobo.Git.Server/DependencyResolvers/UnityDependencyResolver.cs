@@ -9,7 +9,7 @@ namespace Bonobo.Git.Server
 {
     public class UnityDependencyResolver : IDependencyResolver
     {
-        private IUnityContainer _container;
+        private readonly IUnityContainer _container;
 
         public UnityDependencyResolver(IUnityContainer container)
         {
@@ -36,7 +36,7 @@ namespace Bonobo.Git.Server
             }
             catch (Exception)
             {
-                return new List<object>();
+                return Enumerable.Empty<object>();
             }
         }
     }

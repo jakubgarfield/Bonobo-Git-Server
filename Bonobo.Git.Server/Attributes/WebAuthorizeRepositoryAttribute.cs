@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.Practices.Unity;
+﻿using System.Web.Mvc;
 using Bonobo.Git.Server.Security;
-using Bonobo.Git.Server.Extensions;
+using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server
 {
@@ -31,15 +26,16 @@ namespace Bonobo.Git.Server
             }
             else
             {
-                if (!RepositoryPermissionService.HasPermission(user, repository))
+                if (RepositoryPermissionService.HasPermission(user, repository))
                 {
-                    if (!RepositoryPermissionService.AllowsAnonymous(repository))
-                    {
-                        filterContext.Result = new HttpUnauthorizedResult();
-                    }
+                    return;
+                }
+
+                if (!RepositoryPermissionService.AllowsAnonymous(repository))
+                {
+                    filterContext.Result = new HttpUnauthorizedResult();
                 }
             }
-
         }
     }
 }

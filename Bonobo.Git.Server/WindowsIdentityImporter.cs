@@ -11,31 +11,40 @@ namespace Bonobo.Git.Server
 {
     public class WindowsIdentityImporter
     {
-        public void Import(AuthorizationContext context)
+        public static void Import(AuthorizationContext context)
         {
             var windowsIdentity = context.HttpContext.User.Identity as WindowsIdentity;
             if (windowsIdentity == null)
+            {
                 return;
+            }
 
-            else if (windowsIdentity.IsAuthenticated)
+            if (windowsIdentity.IsAuthenticated)
             {
                 Import(windowsIdentity);
             }
         }
 
-        public void Import(WindowsIdentity identity)
+        private static void Import(IIdentity identity)
         {
             var service = new EFMembershipService();
-            if (service.GetUser(identity.Name) == null)
+            if (service.GetUser(identity.Name) != null)
             {
-                service.CreateUser(identity.Name, "imported", identity.Name, "None", "None");
-
-                if (!String.Equals(ConfigurationManager.AppSettings["ShouldImportWindowsUserAsAdministrator"], "true", StringComparison.InvariantCultureIgnoreCase))
-                    return;
-
-                var roleProvider = new EFRoleProvider();
-                roleProvider.AddUsersToRoles(new[] { identity.Name }, new[] { Definitions.Roles.Administrator });
+                return;
             }
+
+            service.CreateUser(identity.Name, "imported", identity.Name, "None", "None");
+
+            if (
+                !String.Equals(ConfigurationManager.AppSettings["ShouldImportWindowsUserAsAdministrator"],
+                               "true",
+                               StringComparison.InvariantCultureIgnoreCase))
+            {
+                return;
+            }
+
+            var roleProvider = new EFRoleProvider();
+            roleProvider.AddUsersToRoles(new[] { identity.Name }, new[] { Definitions.Roles.Administrator });
         }
     }
 }

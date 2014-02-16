@@ -19,6 +19,11 @@ namespace Bonobo.Git.Server
 
         public static string GetBrush(string fileName)
         {
+            if (String.IsNullOrWhiteSpace(fileName))
+            {
+                throw new ArgumentNullException("fileName");
+            }
+
             var extension = Path.GetExtension(fileName).ToLower();
             switch (extension)
             {
@@ -120,15 +125,16 @@ namespace Bonobo.Git.Server
             }
 
             Encoding encoding = GetEncoding(data);
-            if (encoding != null)
-            {
-                return encoding.GetString(data);
-            }
-            return null;
+            return encoding != null ? encoding.GetString(data) : null;
         }
 
         public static string GetMimeType(string fileName)
         {
+            if (String.IsNullOrWhiteSpace(fileName))
+            {
+                throw new ArgumentNullException("fileName");
+            }
+
             switch (Path.GetExtension(fileName).ToLower())
             {
                 case ".3dm": return "x-world/x-3dmf";
@@ -591,6 +597,7 @@ namespace Bonobo.Git.Server
             {
                 return Encoding.GetEncoding(cdet.Charset);
             }
+
             return null;
         }
     }
