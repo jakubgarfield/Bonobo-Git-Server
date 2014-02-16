@@ -182,3 +182,12 @@ Desktop.ini
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
+
+*/[Aa]pp_[Dd]ata/*
+!*/[Aa]pp_[Dd]ata/[Ww]eb.config
+!*/[Aa]pp_[Dd]ata/Git/
+!*/[Aa]pp_[Dd]ata/note.txt
+!*/[Aa]pp_[Dd]ata/Repositories/note.txt
+
+*/[Bb]in/*
+!*/[Bb]in/[Ww]eb.config
