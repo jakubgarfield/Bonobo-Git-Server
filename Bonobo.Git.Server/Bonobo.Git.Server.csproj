@@ -210,6 +210,11 @@
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_GlobalResources\Resources.de-DE.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.de-DE.resx</DependentUpon>
+    </Compile>
     <Compile Include="Data\Update\AutomaticUpdater.cs" />
     <Compile Include="Data\Update\RepositorySynchronizer.cs" />
     <Compile Include="Data\Update\UsernamesToLower.cs" />
@@ -422,6 +427,7 @@
     <Content Include="Content\images\branch_active.png" />
     <Content Include="Content\images\browser.png" />
     <Content Include="Content\images\cn.png" />
+    <Content Include="Content\images\de.png" />
     <Content Include="Content\images\ru.png" />
     <Content Include="Content\images\commits.png" />
     <Content Include="Content\images\create.png" />
@@ -577,6 +583,11 @@
     <Content Include="App_Data\Git\vim" />
     <Content Include="App_Data\Git\which" />
     <Content Include="App_Data\Git\yacc" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.de-DE.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.de-DE.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <Content Include="Views\Repository\Blob.cshtml" />
   </ItemGroup>
