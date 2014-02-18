@@ -1,25 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Bonobo.Git.Server.Data.Update
 {
-    public class UpdateScriptRepository
+    public static class UpdateScriptRepository
     {
-        public IEnumerable<IUpdateScript> Scripts { get; private set; }
-
         /// <summary>
         /// Creates the list of scripts that should be executed on app start. Ordering matters!
         /// </summary>
-        public UpdateScriptRepository()
-        {            
-            Scripts = new List<IUpdateScript>
+        public static IEnumerable<IUpdateScript> GetScriptsBySqlProviderName(string sqlProvider)
+        {
+            switch (sqlProvider)
             {
-                new InitialCreateScript(),
-                new InsertDefaultData(),
-                new UsernamesToLower(),
-            };
+                case "SQLiteConnection":
+                    return new List<IUpdateScript>
+                    {
+                        new InitialCreateScript(),
+                        new InsertDefaultData(),
+                        new UsernamesToLower(),
+                    };
+                case "SqlConnection":
+                    return new List<IUpdateScript>
+                    {
+                        new SqlServer.InitialCreateScript(),
+                        new SqlServer.InsertDefaultData(),
+                        new UsernamesToLower(),
+                    };
+                default:
+                    throw new NotImplementedException(string.Format("The provider '{0}' is not supported yet", sqlProvider));
+            }
         }
     }
 }

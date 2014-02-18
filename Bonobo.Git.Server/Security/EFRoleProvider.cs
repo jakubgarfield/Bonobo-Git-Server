@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Security;
 using Bonobo.Git.Server.Data;
-
 
 namespace Bonobo.Git.Server.Security
 {
@@ -22,8 +19,8 @@ namespace Bonobo.Git.Server.Security
             {
                 usernames = usernames.Select(i => i.ToLowerInvariant()).ToArray();
 
-                var roles = database.Roles.Where(i => roleNames.Contains(i.Name));
-                var users = database.Users.Where(i => usernames.Contains(i.Username));
+                var roles = database.Roles.Where(i => roleNames.Contains(i.Name)).ToList();
+                var users = database.Users.Where(i => usernames.Contains(i.Username)).ToList();
 
                 foreach (var role in roles)
                 {
@@ -74,20 +71,14 @@ namespace Bonobo.Git.Server.Security
 
         public override string[] FindUsersInRole(string roleName, string usernameToMatch)
         {
-            var result = new HashSet<string>();
             using (var database = new BonoboGitServerContext())
             {
-                var matchingRoles = database.Roles.Where(i => i.Name == roleName && i.Users.Where(user => user.Username.Contains(usernameToMatch)).Count() > 0);
-                var usernames = matchingRoles.Select(i => i.Users.Select(u => u.Username));
-                foreach (var roleUsernames in usernames)
-                {
-                    foreach (var username in roleUsernames)
-                    {
-                        result.Add(username);
-                    }
-                }
+                var users = database.Users
+                    .Where(us => us.Username.Contains(usernameToMatch) && us.Roles.Any(role => role.Name == roleName))
+                    .Select(us => us.Username)
+                    .ToArray();
+                return users;
             }
-            return result.ToArray();
         }
 
         public override string[] GetAllRoles()
@@ -103,8 +94,11 @@ namespace Bonobo.Git.Server.Security
             using (var database = new BonoboGitServerContext())
             {
                 username = username.ToLowerInvariant();
-                var user = database.Users.FirstOrDefault(i => i.Username == username);
-                return (user != null) ? user.Roles.Select(i => i.Name).ToArray() : null;
+                var roles = database.Roles
+                    .Where(role => role.Users.Any(us => us.Username == username))
+                    .Select(role => role.Name)
+                    .ToArray();
+                return roles;
             }
         }
 
@@ -112,8 +106,11 @@ namespace Bonobo.Git.Server.Security
         {
             using (var database = new BonoboGitServerContext())
             {
-                var role = database.Roles.FirstOrDefault(i => i.Name == roleName);
-                return (role != null) ? role.Users.Select(i => i.Username).ToArray() : null;
+                var users = database.Users
+                    .Where(us => us.Roles.Any(role => role.Name == roleName))
+                    .Select(us => us.Username)
+                    .ToArray();
+                return users;
             }
         }
 
@@ -122,8 +119,8 @@ namespace Bonobo.Git.Server.Security
             using (var database = new BonoboGitServerContext())
             {
                 username = username.ToLowerInvariant();
-                var role = database.Roles.FirstOrDefault(i => i.Name == roleName);
-                return (role != null) ? role.Users.Where(i => i.Username == username).Count() > 0 : false;
+                bool isInRole = database.Roles.Any(role => role.Name == roleName && role.Users.Any(us => us.Username == username));
+                return isInRole;
             }
         }
 
@@ -133,8 +130,8 @@ namespace Bonobo.Git.Server.Security
             {
                 usernames = usernames.Select(i => i.ToLowerInvariant()).ToArray();
 
-                var roles = database.Roles.Where(i => roleNames.Contains(i.Name));
-                var users = database.Users.Where(i => usernames.Contains(i.Username));
+                var roles = database.Roles.Where(i => roleNames.Contains(i.Name)).ToList();
+                var users = database.Users.Where(i => usernames.Contains(i.Username)).ToList();
                 foreach (var role in roles)
                 {
                     foreach (var user in users)
@@ -150,7 +147,7 @@ namespace Bonobo.Git.Server.Security
         {
             using (var database = new BonoboGitServerContext())
             {
-                return database.Roles.FirstOrDefault(i => i.Name == roleName) != null;
+                return database.Roles.Any(i => i.Name == roleName);
             }
         }
     }

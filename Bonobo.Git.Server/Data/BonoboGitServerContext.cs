@@ -1,9 +1,5 @@
 using Bonobo.Git.Server.Data.Mapping;
-using System;
 using System.Data.Entity;
-using System.IO;
-using System.Web;
-using Bonobo.Git.Server.Data.Update;
 
 namespace Bonobo.Git.Server.Data
 {
