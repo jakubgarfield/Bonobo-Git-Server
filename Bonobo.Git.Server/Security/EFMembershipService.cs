@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Security;
 using Bonobo.Git.Server.Data;
 using System.Data;
 using Bonobo.Git.Server.Models;
-
 
 namespace Bonobo.Git.Server.Security
 {
@@ -62,25 +59,20 @@ namespace Bonobo.Git.Server.Security
         {
             using (var db = new BonoboGitServerContext())
             {
-                var result = new List<UserModel>();
-                foreach (var item in db.Users)
+                return db.Users.Include("Roles").ToList().Select(item => new UserModel
                 {
-                    result.Add(new UserModel
-                    {
-                        Username = item.Username,
-                        Name = item.Name,
-                        Surname = item.Surname,
-                        Email = item.Email,
-                        Roles = item.Roles.Select(i => i.Name).ToArray(),
-                    });
-                }
-                return result;
+                    Username = item.Username,
+                    Name = item.Name,
+                    Surname = item.Surname,
+                    Email = item.Email,
+                    Roles = item.Roles.Select(i => i.Name).ToArray(),
+                }).ToList();
             }
         }
 
         public UserModel GetUser(string username)
         {
-            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "userName");
+            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
 
             username = username.ToLowerInvariant();
             using (var db = new BonoboGitServerContext())
@@ -139,11 +131,12 @@ namespace Bonobo.Git.Server.Security
 
         private string EncryptPassword(string password)
         {
-            System.Security.Cryptography.MD5CryptoServiceProvider x = new System.Security.Cryptography.MD5CryptoServiceProvider();
-            var data = System.Text.Encoding.UTF8.GetBytes(password);
-            data = x.ComputeHash(data);
-            return BitConverter.ToString(data).Replace("-", "");
+            using (System.Security.Cryptography.MD5CryptoServiceProvider x = new System.Security.Cryptography.MD5CryptoServiceProvider())
+            {
+                var data = System.Text.Encoding.UTF8.GetBytes(password);
+                data = x.ComputeHash(data);
+                return BitConverter.ToString(data).Replace("-", ""); 
+            }
         }
-
     }
 }

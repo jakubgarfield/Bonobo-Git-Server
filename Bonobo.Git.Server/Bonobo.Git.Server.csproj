@@ -217,6 +217,8 @@
     </Compile>
     <Compile Include="Data\Update\AutomaticUpdater.cs" />
     <Compile Include="Data\Update\RepositorySynchronizer.cs" />
+    <Compile Include="Data\Update\SqlServer\InitialCreateScript.cs" />
+    <Compile Include="Data\Update\SqlServer\InsertDefaultData.cs" />
     <Compile Include="Data\Update\UsernamesToLower.cs" />
     <Compile Include="Attributes\GitAuthorizeAttribute.cs" />
     <Compile Include="Bootstrapper.cs" />

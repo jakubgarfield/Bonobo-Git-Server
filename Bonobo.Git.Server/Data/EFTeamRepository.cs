@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Data;
 using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.Data;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -14,19 +12,14 @@ namespace Bonobo.Git.Server.Data
         {
             using (var db = new BonoboGitServerContext())
             {
-                var result = new List<TeamModel>();
-                foreach (var item in db.Teams)
-                {
-                    result.Add(new TeamModel
+                return db.Teams.Include("Users").Include("Repositories").ToList()
+                    .Select(item => new TeamModel
                     {
                         Name = item.Name,
                         Description = item.Description,
                         Members = item.Users.Select(i => i.Username).ToArray(),
                         Repositories = item.Repositories.Select(m => m.Name).ToArray(),
-                    });
-                }
-
-                return result;
+                    }).ToList();
             }
         }
 
@@ -121,7 +114,7 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        private void AddMembers(string[] members, Team team, BonoboGitServerContext database)
+        private void AddMembers(IEnumerable<string> members, Team team, BonoboGitServerContext database)
         {
             var users = database.Users.Where(i => members.Contains(i.Username));
             foreach (var item in users)

@@ -1,25 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Bonobo.Git.Server.Models;
 using System.Data;
-using Bonobo.Git.Server.Data;
 
 namespace Bonobo.Git.Server.Data
 {
     public class EFRepositoryRepository : IRepositoryRepository
     {
-        public IList<Models.RepositoryModel> GetAllRepositories()
+        public IList<RepositoryModel> GetAllRepositories()
         {
             using (var db = new BonoboGitServerContext())
             {
-                var result = new List<RepositoryModel>();
-                foreach (var item in db.Repositories)
-                {
-                    result.Add(ConvertToModel(item));
-                }
-                return result;
+                return db.Repositories
+                    .Include("Users").Include("Teams").Include("Administrators").ToList()
+                    .Select(item => ConvertToModel(item)).ToList();
             }
         }
 
@@ -124,23 +119,23 @@ namespace Bonobo.Git.Server.Data
 
         private RepositoryModel ConvertToModel(Repository item)
         {
-            if (item != null)
+            if (item == null)
             {
-                return new RepositoryModel
-                        {
-                            Name = item.Name,
-                            Description = item.Description,
-                            AnonymousAccess = item.Anonymous,
-                            Users = item.Users.Select(i => i.Username).ToArray(),
-                            Teams = item.Teams.Select(i => i.Name).ToArray(),
-                            Administrators = item.Administrators.Select(i => i.Username).ToArray(),
-                        };
+                return null;
             }
 
-            return null;
+            return new RepositoryModel
+            {
+                Name = item.Name,
+                Description = item.Description,
+                AnonymousAccess = item.Anonymous,
+                Users = item.Users.Select(i => i.Username).ToArray(),
+                Teams = item.Teams.Select(i => i.Name).ToArray(),
+                Administrators = item.Administrators.Select(i => i.Username).ToArray(),
+            };
         }
 
-        private void AddMembers(string[] users, string[] admins, string[] teams, Repository repo, BonoboGitServerContext database)
+        private void AddMembers(IEnumerable<string> users, IEnumerable<string> admins, IEnumerable<string> teams, Repository repo, BonoboGitServerContext database)
         {
             if (admins != null)
             {

@@ -1,18 +1,10 @@
-﻿using Bonobo.Git.Server.Security;
-using Microsoft.Practices.Unity;
-using System;
-using System.Collections.Generic;
+﻿using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 
 namespace Bonobo.Git.Server.Data.Update
 {
     public class AutomaticUpdater
     {
-        private readonly IMembershipService _membershipService = DependencyResolver.Current.GetService<IMembershipService>();
-
-
         public void Run()
         {
             UpdateDatabase();
@@ -21,24 +13,20 @@ namespace Bonobo.Git.Server.Data.Update
         private void UpdateDatabase()
         {
             using (var ctx = new BonoboGitServerContext())
-            using (var connection = ctx.Database.Connection)
-            using (var command = connection.CreateCommand())
             {
-                connection.Open();
+                IObjectContextAdapter ctxAdapter = ctx;
 
-                foreach (var item in new UpdateScriptRepository().Scripts)
+                foreach (var item in UpdateScriptRepository.GetScriptsBySqlProviderName(ctx.Database.Connection.GetType().Name))
                 {
-                    if (!String.IsNullOrEmpty(item.Precondition))
+                    if (!string.IsNullOrEmpty(item.Precondition))
                     {
-                        command.CommandText = item.Precondition;
-                        if (Convert.ToInt32(command.ExecuteScalar()) == 0)
+                        var preConditionResult = ctxAdapter.ObjectContext.ExecuteStoreQuery<int>(item.Precondition).Single();
+                        if (preConditionResult == 0)
                         {
                             continue;
                         }
                     }
-
-                    command.CommandText = item.Command;
-                    command.ExecuteNonQuery();
+                    ctxAdapter.ObjectContext.ExecuteStoreCommand(item.Command);
                 }
             }
         }
