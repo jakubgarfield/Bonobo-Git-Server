@@ -22,12 +22,12 @@ namespace Bonobo.Git.Server
 
         public IEnumerable<string> GetBranches()
         {
-            return _repository.Branches.Select(s => s.Name);
+            return _repository.Branches.Select(s => s.Name).ToList();
         }
 
         public IEnumerable<string> GetTags()
         {
-            return _repository.Tags.Select(s => s.Name);
+            return _repository.Tags.Select(s => s.Name).ToList();
         }
 
         public IEnumerable<RepositoryCommitModel> GetCommits(string name, out string referenceName)
@@ -40,7 +40,7 @@ namespace Bonobo.Git.Server
 
             return _repository.Commits
                               .QueryBy(new Filter { Since = commit, SortBy = GitSortOptions.Topological })
-                              .Select(s => ToModel(s));
+                              .Select(s => ToModel(s)).ToList();
         }
 
         public RepositoryCommitModel GetCommitDetail(string name)
@@ -67,7 +67,7 @@ namespace Bonobo.Git.Server
                 });
             var tree = String.IsNullOrEmpty(path) ? commit.Tree : (Tree)commit[path].Target;
 
-            return from item in tree
+            var query = from item in tree
                    let lastCommit = ancestors.First(c =>
                    {
                        var entry = c[item.Path];
@@ -83,6 +83,7 @@ namespace Bonobo.Git.Server
                        TreeName = branchNameTemp ?? name,
                        Path = item.Path.Replace('\\', '/'),
                    };
+            return query.ToList();
         }
 
         public RepositoryTreeDetailModel BrowseBlob(string name, string path, out string referenceName)
