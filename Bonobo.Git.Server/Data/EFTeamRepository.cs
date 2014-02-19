@@ -12,14 +12,21 @@ namespace Bonobo.Git.Server.Data
         {
             using (var db = new BonoboGitServerContext())
             {
-                return db.Teams.Include("Users").Include("Repositories").ToList()
-                    .Select(item => new TeamModel
-                    {
-                        Name = item.Name,
-                        Description = item.Description,
-                        Members = item.Users.Select(i => i.Username).ToArray(),
-                        Repositories = item.Repositories.Select(m => m.Name).ToArray(),
-                    }).ToList();
+                var dbTeams = db.Teams.Select(team => new
+                {
+                    Name = team.Name,
+                    Description = team.Description,
+                    Members = team.Users.Select(i => i.Username),
+                    Repositories = team.Repositories.Select(m => m.Name),
+                }).ToList();
+
+                return dbTeams.Select(item => new TeamModel
+                {
+                    Name = item.Name,
+                    Description = item.Description,
+                    Members = item.Members.ToArray(),
+                    Repositories = item.Repositories.ToArray(),
+                }).ToList();
             }
         }
 

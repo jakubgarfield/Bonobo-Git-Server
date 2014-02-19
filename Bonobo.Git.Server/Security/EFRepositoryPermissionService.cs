@@ -43,11 +43,11 @@ namespace Bonobo.Git.Server.Security
                 username = username.ToLowerInvariant();
 
                 var isRepoAdmin =
-                    database.Users.Any(
-                        us =>
-                            us.Username == username &&
-                            (us.Roles.Any(role => role.Name == Definitions.Roles.Administrator) ||
-                             us.AdministratedRepositories.Any(ar => ar.Name == project)));
+                    database.Users.Where(us => us.Username == username)
+                        .Any(
+                            us =>
+                                (us.Roles.Any(role => role.Name == Definitions.Roles.Administrator) ||
+                                 us.AdministratedRepositories.Any(ar => ar.Name == project)));
                 return isRepoAdmin;
             }
         }
