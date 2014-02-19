@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using Bonobo.Git.Server.Data;
 
 
@@ -34,8 +31,8 @@ namespace Bonobo.Git.Server.Security
         {
             using (var database = new BonoboGitServerContext())
             {
-                var repo = database.Repositories.FirstOrDefault(i => i.Name == project);
-                return (repo != null && repo.Anonymous);
+                var isAllowsAnonymous = database.Repositories.Any(repo => repo.Name == project && repo.Anonymous);
+                return isAllowsAnonymous;
             }
         }
 
@@ -44,17 +41,15 @@ namespace Bonobo.Git.Server.Security
             using (var database = new BonoboGitServerContext())
             {
                 username = username.ToLowerInvariant();
-                var user = database.Users.FirstOrDefault(i => i.Username == username);
-                if (user != null)
-                {
-                    if (user.Roles.FirstOrDefault(i => i.Name == Definitions.Roles.Administrator) != null
-                     || user.AdministratedRepositories.FirstOrDefault(i => i.Name == project) != null)
-                    {
-                        return true;
-                    }
-                }
+
+                var isRepoAdmin =
+                    database.Users.Where(us => us.Username == username)
+                        .Any(
+                            us =>
+                                (us.Roles.Any(role => role.Name == Definitions.Roles.Administrator) ||
+                                 us.AdministratedRepositories.Any(ar => ar.Name == project)));
+                return isRepoAdmin;
             }
-            return false;
         }
     }
 }
