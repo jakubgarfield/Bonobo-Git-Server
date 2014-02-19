@@ -178,6 +178,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_GlobalResources\Resources.fr-FR.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.fr-FR.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\Resources.sv-SE.designer.cs">
       <DependentUpon>Resources.sv-SE.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -418,6 +423,10 @@
     <Content Include="App_Data\Git\xargs.exe" />
     <Content Include="App_Data\note.txt" />
     <Content Include="App_Data\Repositories\note.txt" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.fr-FR.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Resources.fr-FR.designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <Content Include="bin\NativeBinaries\amd64\git2-9d9fff3.dll" />
     <Content Include="bin\NativeBinaries\x86\git2-9d9fff3.dll" />
     <Content Include="Content\images\action_added.gif" />
@@ -431,6 +440,7 @@
     <Content Include="Content\images\browser.png" />
     <Content Include="Content\images\cn.png" />
     <Content Include="Content\images\de.png" />
+    <Content Include="Content\images\fr.png" />
     <Content Include="Content\images\ru.png" />
     <Content Include="Content\images\commits.png" />
     <Content Include="Content\images\create.png" />

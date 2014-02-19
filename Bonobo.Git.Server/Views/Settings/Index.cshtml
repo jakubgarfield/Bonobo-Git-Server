@@ -55,6 +55,7 @@
                 <option @((Model.DefaultLanguage == "sv-SE") ? "Selected" : "") value="sv-SE">sv-SE</option>
                 <option @((Model.DefaultLanguage == "ru-RU") ? "Selected" : "") value="ru-RU">ru-RU</option>
                 <option @((Model.DefaultLanguage == "de-DE") ? "Selected" : "") value="de-DE">de-DE</option>
+                <option @((Model.DefaultLanguage == "fr-FR") ? "Selected" : "") value="fr-FR">fr-FR</option>
             </select>
             <p class="formHint">
               @Html.ValidationMessageFor(m => m.DefaultLanguage)
