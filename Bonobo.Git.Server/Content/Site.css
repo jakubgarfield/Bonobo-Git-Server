@@ -182,12 +182,16 @@ div.uniForm #errorMsg { text-align: center;}
 
 #repositoryAddress { font-size: 1.2em; background: url('images/address.png') no-repeat 0 4px; padding-left: 23px; display: inline-block; margin-top: 0em;}
 
+#repositoryDownload { font-size: 1.2em; }
+#repositoryDownload a.zip { padding-left: 23px; background: url('images/zip.png') no-repeat;}
+
 #repositoryMenu { padding-left: 0em; font-weight: bold; }
 #repositoryMenu li { display: inline-block; float: left;  margin: 0 2em 0 0;}
 #repositoryMenu li a { padding-left: 23px;}
 #repositoryMenu li a.commits { background: url('images/commits.png') no-repeat;}
 #repositoryMenu li a.detail { background: url('images/detail.png') no-repeat;}
 #repositoryMenu li a.browser { background: url('images/browser.png') no-repeat;}
+#repositoryMenu li a.zip { background: url('images/zip.png') no-repeat;}
 
 .repositoryContent { padding-left: 1em; padding-right: 1em;}
 .commitDate {margin-top: 1em;}

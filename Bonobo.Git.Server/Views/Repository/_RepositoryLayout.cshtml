@@ -13,6 +13,7 @@ else
         <li>@Html.ActionLink(Resources.Repository_Detail_Detail, "Detail", new { id = ViewBag.ID }, new { @class = "detail"})</li>
         <li>@Html.ActionLink(Resources.Repository_Layout_Browse, "Tree", new { id = ViewBag.ID, encodedName = UrlParameter.Optional }, new { @class = "browser" })</li>
         <li>@Html.ActionLink(Resources.Repository_Layout_Commits, "Commits", new { id = ViewBag.ID, encodedName = UrlParameter.Optional }, new { @class = "commits" })</li>
+        <li>@Html.ActionLink(Resources.Repository_Tree_Zip, "Download", new { id = ViewBag.ID, encodedName = UrlParameter.Optional }, new { @class = "zip" })</li>
     </ul> 
     </text>
 }

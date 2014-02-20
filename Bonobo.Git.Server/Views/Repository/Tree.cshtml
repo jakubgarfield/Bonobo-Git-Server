@@ -30,5 +30,8 @@
                 )
             </div>
         }
+        <p id="repositoryDownload">
+            @Html.ActionLink(Resources.Repository_Tree_Zip, "Download", new { encodedName = PathEncoder.Encode(Model.Branch), encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true) }, new { @class = "zip" })
+        </p>
     </div>
 }
