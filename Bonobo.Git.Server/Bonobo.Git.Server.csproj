@@ -83,6 +83,9 @@
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\packages\DotNetZip.1.9.2\lib\net20\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="LibGit2Sharp">
       <HintPath>..\packages\LibGit2Sharp.0.12.0.0\lib\net35\LibGit2Sharp.dll</HintPath>
     </Reference>
@@ -118,6 +121,8 @@
     <Reference Include="System.ComponentModel.DataAnnotations">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
@@ -257,6 +262,7 @@
     <Compile Include="Attributes\FileNameAttribute.cs" />
     <Compile Include="Attributes\WebAuthorizeAttribute.cs" />
     <Compile Include="GitCmdResult.cs" />
+    <Compile Include="Helpers\ContentDispositionUtil.cs" />
     <Compile Include="Helpers\CustomHtmlHelpers.cs" />
     <Compile Include="Helpers\PathEncoder.cs" />
     <Compile Include="Models\HomeModels.cs" />
@@ -454,6 +460,7 @@
     <Content Include="Content\images\tag.png" />
     <Content Include="Content\images\tag_active.png" />
     <Content Include="Content\images\tr.png" />
+    <Content Include="Content\images\zip.png" />
     <Content Include="favicon.ico" />
     <Content Include="Content\images\folder.png" />
     <Content Include="Content\images\address.png" />
@@ -660,6 +667,7 @@
     <EmbeddedResource Include="App_GlobalResources\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="App_GlobalResources\Resources.tr-TR.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

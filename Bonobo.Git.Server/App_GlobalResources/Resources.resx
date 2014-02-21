@@ -717,4 +717,7 @@
   <data name="Repository_Tree_RawDisplay" xml:space="preserve">
     <value>Raw</value>
   </data>
+  <data name="Repository_Tree_Zip" xml:space="preserve">
+    <value>Download ZIP</value>
+  </data>
 </root>

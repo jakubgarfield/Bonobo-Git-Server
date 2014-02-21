@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.Practices.Unity;
-using Bonobo.Git.Server.Data;
-using Bonobo.Git.Server.Security;
-using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.App_GlobalResources;
 using System.IO;
-using System.Configuration;
-using System.Text.RegularExpressions;
-using Bonobo.Git.Server.Configuration;
-using LibGit2Sharp;
-using Bonobo.Git.Server.Extensions;
-using Bonobo.Git.Server.Helpers;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Web.Mvc;
+using Bonobo.Git.Server.App_GlobalResources;
+using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Data;
+using Bonobo.Git.Server.Helpers;
+using Bonobo.Git.Server.Models;
+using Bonobo.Git.Server.Security;
+using Ionic.Zip;
+using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -195,6 +192,8 @@ namespace Bonobo.Git.Server.Controllers
 
                     var model = new RepositoryTreeModel();
                     model.Name = id;
+                    model.Branch = name;
+                    model.Path = path;
                     model.Files = files.OrderByDescending(i => i.IsTree).ThenBy(i => i.Name);
                     return View(model);
                 }
@@ -228,33 +227,85 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult Raw(string id, string encodedName, string encodedPath, bool display = false)
         {
             ViewBag.ID = id;
-            if (!String.IsNullOrEmpty(id))
-            {
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
-                {
-                    var name = PathEncoder.Decode(encodedName);
-                    var path = PathEncoder.Decode(encodedPath);
-                    string referenceName;
-                    var model = browser.BrowseBlob(name, path, out referenceName);
+            if (String.IsNullOrEmpty(id))
+                return HttpNotFound();
 
-                    if (display)
-                    {
-                        if (model.IsText)
-                        {
-                            return Content(model.Text, "text/plain", model.Encoding);
-                        }
-                        else if (model.IsImage)
-                        {
-                            return File(model.Data, FileDisplayHandler.GetMimeType(model.Name));
-                        }
-                    }
-                    else
-                    {
-                        return File(model.Data, "application/octet-stream", model.Name);
-                    }
+            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+            {
+                var name = PathEncoder.Decode(encodedName);
+                var path = PathEncoder.Decode(encodedPath);
+                string referenceName;
+                var model = browser.BrowseBlob(name, path, out referenceName);
+
+                if (!display)
+                {
+                    return File(model.Data, "application/octet-stream", model.Name);
+                }
+                if (model.IsText)
+                {
+                    return Content(model.Text, "text/plain", model.Encoding);
+                }
+                if (model.IsImage)
+                {
+                    return File(model.Data, FileDisplayHandler.GetMimeType(model.Name), model.Name);
                 }
             }
-            return View();
+
+            return HttpNotFound();
+        }
+
+        [WebAuthorizeRepository]
+        public ActionResult Download(string id, string encodedName, string encodedPath)
+        {
+            if (String.IsNullOrEmpty(id))
+                return HttpNotFound();
+
+            var name = PathEncoder.Decode(encodedName);
+            var path = PathEncoder.Decode(encodedPath);
+
+            Response.BufferOutput = false;
+            Response.Charset = "";
+            Response.ContentType = "application/zip";
+
+            string headerValue = ContentDispositionUtil.GetHeaderValue((name ?? id) + ".zip");
+            Response.AddHeader("Content-Disposition", headerValue);
+
+            using (var outputZip = new ZipFile())
+            {
+                outputZip.UseZip64WhenSaving = Zip64Option.Always;
+                outputZip.AlternateEncodingUsage = ZipOption.AsNecessary;
+                outputZip.AlternateEncoding = Encoding.Unicode;
+
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+                {
+                    AddTreeToZip(browser, name, path, outputZip);
+                }
+
+                outputZip.Save(Response.OutputStream);
+
+                return new EmptyResult();
+            }
+        }
+
+        private static void AddTreeToZip(RepositoryBrowser browser, string name, string path, ZipFile outputZip)
+        {
+            string referenceName;
+            var treeNode = browser.BrowseTree(name, path, out referenceName);
+
+            foreach (var item in treeNode)
+            {
+                if (!item.IsTree)
+                {
+                    string blobReferenceName;
+                    var model = browser.BrowseBlob(item.TreeName, item.Path, out blobReferenceName);
+                    outputZip.AddEntry(Path.Combine(item.TreeName, item.Path), model.Data);
+                }
+                else
+                {
+                    // recursive call
+                    AddTreeToZip(browser, item.TreeName, item.Path, outputZip);
+                }
+            }
         }
 
         [WebAuthorizeRepository]
