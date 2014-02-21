@@ -227,7 +227,7 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult Raw(string id, string encodedName, string encodedPath, bool display = false)
         {
             ViewBag.ID = id;
-            if (String.IsNullOrEmpty(id)) 
+            if (String.IsNullOrEmpty(id))
                 return HttpNotFound();
 
             using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
@@ -237,39 +237,37 @@ namespace Bonobo.Git.Server.Controllers
                 string referenceName;
                 var model = browser.BrowseBlob(name, path, out referenceName);
 
-                if (display)
-                {
-                    if (model.IsText)
-                    {
-                        return Content(model.Text, "text/plain", model.Encoding);
-                    }
-                    if (model.IsImage)
-                    {
-                        return File(model.Data, FileDisplayHandler.GetMimeType(model.Name), model.Name);
-                    }
-                }
-                else
+                if (!display)
                 {
                     return File(model.Data, "application/octet-stream", model.Name);
+                }
+                if (model.IsText)
+                {
+                    return Content(model.Text, "text/plain", model.Encoding);
+                }
+                if (model.IsImage)
+                {
+                    return File(model.Data, FileDisplayHandler.GetMimeType(model.Name), model.Name);
                 }
             }
 
             return HttpNotFound();
         }
 
+        [WebAuthorizeRepository]
         public ActionResult Download(string id, string encodedName, string encodedPath)
         {
             if (String.IsNullOrEmpty(id))
                 return HttpNotFound();
 
-                    var name = PathEncoder.Decode(encodedName);
-                    var path = PathEncoder.Decode(encodedPath);
+            var name = PathEncoder.Decode(encodedName);
+            var path = PathEncoder.Decode(encodedPath);
 
             Response.BufferOutput = false;
             Response.Charset = "";
             Response.ContentType = "application/zip";
 
-            string headerValue = ContentDispositionUtil.GetHeaderValue((name ?? id)+ ".zip");
+            string headerValue = ContentDispositionUtil.GetHeaderValue((name ?? id) + ".zip");
             Response.AddHeader("Content-Disposition", headerValue);
 
             using (var outputZip = new ZipFile())
