@@ -4,9 +4,9 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
-## Unknown
+## Version 2.1
 
-**Unknown**
+**3 March 2014**
 
 ### Features
 
@@ -17,6 +17,7 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 * Swedish localization - [JLedel](https://github.com/JLedel)
 * Russian localization - grigoryev
 * Spanish localization - [AHTA](https://github.com/AHTA)
+* Download repository as ZIP - [Rémy de Sérésin](https://github.com/latop2604)
 
 ### Bug Fixes
 
