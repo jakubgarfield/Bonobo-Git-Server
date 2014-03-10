@@ -204,9 +204,6 @@
   <data name="Account_Index_Title" xml:space="preserve">
     <value>Uživatelé</value>
   </data>
-  <data name="DateTimeFormat" xml:space="preserve">
-    <value>dd.MM.yyyy hh:mm</value>
-  </data>
   <data name="Grid_Delete" xml:space="preserve">
     <value>Smazat</value>
   </data>

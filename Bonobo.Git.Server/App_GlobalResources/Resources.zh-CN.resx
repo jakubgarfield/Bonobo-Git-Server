@@ -204,9 +204,6 @@
   <data name="Account_Index_Title" xml:space="preserve">
     <value>用户管理</value>
   </data>
-  <data name="DateTimeFormat" xml:space="preserve">
-    <value>yyyy-MM-dd hh:mm</value>
-  </data>
   <data name="Grid_Delete" xml:space="preserve">
     <value>删除</value>
   </data>

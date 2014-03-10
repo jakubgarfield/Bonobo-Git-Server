@@ -585,9 +585,6 @@
   <data name="Validation_Required" xml:space="preserve">
     <value>"{0}" är obligatoriskt.</value>
   </data>
-  <data name="DateTimeFormat" xml:space="preserve">
-    <value>dd/MM/yyyy hh:mm</value>
-  </data>
   <data name="Reset" xml:space="preserve">
     <value>Återställ</value>
   </data>

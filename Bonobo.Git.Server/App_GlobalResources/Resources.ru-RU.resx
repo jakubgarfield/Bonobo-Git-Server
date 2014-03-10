@@ -586,9 +586,6 @@
   <data name="Validation_Required" xml:space="preserve">
     <value>"{0}" является обязательным.</value>
   </data>
-  <data name="DateTimeFormat" xml:space="preserve">
-    <value>dd.MM.yyyy hh:mm</value>
-  </data>
   <data name="Reset" xml:space="preserve">
     <value>Сбросить</value>
   </data>

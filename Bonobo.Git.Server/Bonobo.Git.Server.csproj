@@ -16,7 +16,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <TargetFrameworkProfile />
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
@@ -444,27 +444,17 @@
     <Content Include="Content\images\background.gif" />
     <Content Include="Content\images\branch_active.png" />
     <Content Include="Content\images\browser.png" />
-    <Content Include="Content\images\cn.png" />
-    <Content Include="Content\images\de.png" />
-    <Content Include="Content\images\fr.png" />
-    <Content Include="Content\images\ru.png" />
     <Content Include="Content\images\commits.png" />
     <Content Include="Content\images\create.png" />
-    <Content Include="Content\images\cz.png" />
     <Content Include="Content\images\detail.png" />
     <Content Include="Content\images\download_file.png" />
-    <Content Include="Content\images\es.png" />
     <Content Include="Content\images\git-logo.png" />
-    <Content Include="Content\images\jp.png" />
-    <Content Include="Content\images\se.png" />
     <Content Include="Content\images\tag.png" />
     <Content Include="Content\images\tag_active.png" />
-    <Content Include="Content\images\tr.png" />
     <Content Include="Content\images\zip.png" />
     <Content Include="favicon.ico" />
     <Content Include="Content\images\folder.png" />
     <Content Include="Content\images\address.png" />
-    <Content Include="Content\images\gb.png" />
     <Content Include="Content\images\file.png" />
     <Content Include="Content\images\image.png" />
     <Content Include="Content\images\action_renamed.gif" />
@@ -701,7 +691,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50287</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Bonobo.Git.Server</IISUrl>
+          <IISUrl>http://localhost:50287/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

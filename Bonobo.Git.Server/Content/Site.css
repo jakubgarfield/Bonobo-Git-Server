@@ -120,17 +120,6 @@ div.uniForm #errorMsg { text-align: center;}
 	margin-left: 3px;
 }
 
-/* Language Bar */
-#languageBar a { display: block; background-image: url('images/cz.png'); width: 16px; height: 11px; float: right; margin-left: 10px; text-decoration:none; font-size:0px;}
-#languageBar #en { background-image: url('images/gb.png');}
-#languageBar #zh { background-image: url('images/cn.png');}
-#languageBar #jp { background-image: url('images/jp.png');}
-#languageBar #tr { background-image: url('images/tr.png');}
-#languageBar #es { background-image: url('images/es.png');}
-#languageBar #sv { background-image: url('images/se.png');}
-#languageBar #ru { background-image: url('images/ru.png');}
-#languageBar #de { background-image: url('images/de.png');}
-#languageBar #fr { background-image: url('images/fr.png');}
 
 /* Icons */
  
@@ -148,8 +137,8 @@ div.uniForm #errorMsg { text-align: center;}
 #RepositoryTree table { table-layout: fixed; }
 #RepositoryTree th:nth-child(1) { width: 30%; }
 #RepositoryTree th:nth-child(2) { width: 30%; }
-#RepositoryTree th:nth-child(3) { width: 20%; }
-#RepositoryTree th:nth-child(4) { width: 20%; }
+#RepositoryTree th:nth-child(3) { width: 23%; }
+#RepositoryTree th:nth-child(4) { width: 17%; }
 #RepositoryTree .file, #RepositoryTree .image, #RepositoryTree .directory { width: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* Repository */

@@ -246,9 +246,6 @@
   <data name="Account_Index_Users" xml:space="preserve">
     <value>Usuarios</value>
   </data>
-  <data name="DateTimeFormat" xml:space="preserve">
-    <value>dd/MM/yyyy hh:mm</value>
-  </data>
   <data name="Delete_Back" xml:space="preserve">
     <value>Atrás</value>
   </data>
