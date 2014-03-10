@@ -88,6 +88,13 @@ namespace Bonobo.Git.Server.Test
         }
 
         [TestMethod]
+        public void HandlesCshtmlExtension()
+        {
+            Assert.AreEqual(PathEncoder.Encode("index.cshtml"), "index.cshtml.view");
+            Assert.AreEqual(PathEncoder.Decode("index.cshtml.view"), "index.cshtml");
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(FormatException))]
         public void NonByteCharacterInput()
         {
