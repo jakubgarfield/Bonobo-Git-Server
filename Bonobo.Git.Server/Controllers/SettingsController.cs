@@ -47,7 +47,8 @@ namespace Bonobo.Git.Server.Controllers
 
                         this.Session["Culture"] = new CultureInfo(model.DefaultLanguage);
 
-                        ViewBag.UpdateSuccess = true;
+                        TempData["UpdateSuccess"] = true;
+                        return RedirectToAction("Index");
                     }
                     else
                     {

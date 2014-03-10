@@ -6,7 +6,7 @@
 <h2>@Resources.Settings_Index_Title</h2>
 @using (Html.BeginForm("Index", "Settings", FormMethod.Post, new { @class = "uniForm" }))
 {
-    if (ViewBag.UpdateSuccess != null && ViewBag.UpdateSuccess)
+    if (TempData["UpdateSuccess"] != null && (bool)TempData["UpdateSuccess"])
     {
         <div id="okMsg">
             <p>@Resources.Settings_Index_UpdateSuccess</p>
