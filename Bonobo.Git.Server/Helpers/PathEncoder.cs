@@ -60,7 +60,7 @@ namespace Bonobo.Git.Server.Helpers
                 }
             }
             // Return encoded string
-            return EncodeExtension(sb.ToString());
+            return sb.ToString();
         }
 
         /// <summary>
@@ -76,8 +76,6 @@ namespace Bonobo.Git.Server.Helpers
                 // No need to decode; return as-is
                 return encodedPath;
             }
-
-            encodedPath = DecodeExtension(encodedPath);
 
             // Capture length
             var encodedPathLength = encodedPath.Length;
@@ -116,16 +114,6 @@ namespace Bonobo.Git.Server.Helpers
             }
             // Return decoded string
             return Encoding.UTF8.GetString(bytes.ToArray());
-        }
-
-        private static string DecodeExtension(string encodedPath)
-        {
-            return encodedPath.EndsWith(".cshtml.view") ? encodedPath.Substring(0, encodedPath.Length - 5) : encodedPath;
-        }
-
-        private static string EncodeExtension(string path)
-        {
-            return path.EndsWith(".cshtml") ? path + ".view" : path;
         }
     }
 }
