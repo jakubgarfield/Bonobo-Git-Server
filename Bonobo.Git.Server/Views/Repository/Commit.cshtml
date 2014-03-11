@@ -4,6 +4,47 @@
     ViewBag.Title = Resources.Repository_Commit_Detail;
     Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
 }
+@helper HeaderForDiff(RepositoryCommitChangeModel item)
+{
+    <div class="item">
+        <p>
+            @if (item.Status == LibGit2Sharp.ChangeKind.Added)
+            {
+                <text><img src="@Url.Content("~/Content/Images/action_added.gif")" alt="@Resources.Repository_Commit_Added" /></text>
+            }
+            else if (item.Status == LibGit2Sharp.ChangeKind.Modified)
+            {
+                <text><img src="@Url.Content("~/Content/Images/action_modified.gif")" alt="@Resources.Repository_Commit_Modified" /></text>
+            }
+            else if (item.Status == LibGit2Sharp.ChangeKind.Deleted)
+            {
+                <text><img src="@Url.Content("~/Content/Images/action_deleted.gif")" alt="@Resources.Repository_Commit_Deleted" /></text>
+            }
+            else if (item.Status == LibGit2Sharp.ChangeKind.Renamed)
+            {
+                <text><img src="@Url.Content("~/Content/Images/action_renamed.gif")" alt="@Resources.Repository_Commit_Renamed" /></text>
+            }
+            else if (item.Status == LibGit2Sharp.ChangeKind.Copied)
+            {
+                <text><img src="@Url.Content("~/Content/Images/action_copied.gif")" alt="@Resources.Repository_Commit_Copied" /></text>
+            }
+            else if (item.Status == LibGit2Sharp.ChangeKind.TypeChanged)
+            {
+                <text><img src="@Url.Content("~/Content/Images/action_typechanged.gif")" alt="@Resources.Repository_Commit_TypeChanged" /></text>
+            }
+            @if (item.Status != LibGit2Sharp.ChangeKind.Deleted)
+            {
+                @Html.ActionLink(item.Path, "Blob", new { id = ViewBag.ID, encodedPath = PathEncoder.Encode(item.Path, allowSlash: true), encodedName = PathEncoder.Encode(Model.ID) })
+            }
+            else
+            {
+                @item.Path
+            }
+            <span class="diff">@item.LinesChanged (+@item.LinesAdded -@item.LinesDeleted)</span>
+        </p>
+    </div>
+}
+
 @if (Model != null)
 {
     <div class="uniForm">
@@ -17,49 +58,14 @@
             <h3>@Model.GetType().GetDisplayValue("Changes")</h3>
             @foreach (var item in Model.Changes)
             {
-                <div class="item">
-                    <p>
-                        @if (item.Status == LibGit2Sharp.ChangeKind.Added)
-                        {
-                            <text><img src="@Url.Content("~/Content/Images/action_added.gif")" alt="@Resources.Repository_Commit_Added" /></text>
-                        }
-                        else if (item.Status == LibGit2Sharp.ChangeKind.Modified)
-                        {
-                            <text><img src="@Url.Content("~/Content/Images/action_modified.gif")" alt="@Resources.Repository_Commit_Modified" /></text>
-                        }
-                        else if (item.Status == LibGit2Sharp.ChangeKind.Deleted)
-                        {
-                            <text><img src="@Url.Content("~/Content/Images/action_deleted.gif")" alt="@Resources.Repository_Commit_Deleted" /></text>
-                        }
-                        else if (item.Status == LibGit2Sharp.ChangeKind.Renamed)
-                        {
-                            <text><img src="@Url.Content("~/Content/Images/action_renamed.gif")" alt="@Resources.Repository_Commit_Renamed" /></text>
-                        }
-                        else if (item.Status == LibGit2Sharp.ChangeKind.Copied)
-                        {
-                            <text><img src="@Url.Content("~/Content/Images/action_copied.gif")" alt="@Resources.Repository_Commit_Copied" /></text>
-                        }
-                        else if (item.Status == LibGit2Sharp.ChangeKind.TypeChanged)
-                        {
-                            <text><img src="@Url.Content("~/Content/Images/action_typechanged.gif")" alt="@Resources.Repository_Commit_TypeChanged" /></text>
-                        }
-                        @if (item.Status != LibGit2Sharp.ChangeKind.Deleted)
-                        {
-                            @Html.ActionLink(item.Path, "Blob", new { id = ViewBag.ID, encodedPath = PathEncoder.Encode(item.Path, allowSlash: true), encodedName = PathEncoder.Encode(Model.ID) })
-                        }
-                        else
-                        {
-                            @item.Path
-                        }
-                        <span class="diff">@item.LinesChanged (+@item.LinesAdded -@item.LinesDeleted)</span>
-                    </p>
-                </div>
+                @HeaderForDiff(item)
             }
             <div class="details">
                 <h3>@Resources.Repository_Commit_Details</h3>
-                @foreach (var item in Model.Changes)
+                @foreach (var item in Model.Changes.Where(i => i.Status == LibGit2Sharp.ChangeKind.Modified || i.Status == LibGit2Sharp.ChangeKind.Added))
                 {
-                    
+                    @HeaderForDiff(item)
+                    <pre class="brush: diff; gutter: false;">@item.Patch</pre>
                 }
             </div>
         </div>

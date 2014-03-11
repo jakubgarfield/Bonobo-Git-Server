@@ -110,9 +110,7 @@ namespace Bonobo.Git.Server.Controllers
                     string path = Path.Combine(UserConfiguration.Current.Repositories, model.Name);
                     if (!Directory.Exists(path))
                     {
-                        using (var repository = LibGit2Sharp.Repository.Init(path, true))
-                        {
-                        }
+                        LibGit2Sharp.Repository.Init(path, true);
                         TempData["CreateSuccess"] = true;
                         return RedirectToAction("Index");
                     }

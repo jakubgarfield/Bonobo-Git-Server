@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Bonobo.Git.Server.Models;
 using LibGit2Sharp;
+using System.IO;
 
 namespace Bonobo.Git.Server
 {
@@ -39,7 +40,7 @@ namespace Bonobo.Git.Server
             }
 
             return _repository.Commits
-                              .QueryBy(new Filter { Since = commit, SortBy = GitSortOptions.Topological })
+                              .QueryBy(new CommitFilter { Since = commit, SortBy = CommitSortStrategies.Topological })
                               .Select(s => ToModel(s)).ToList();
         }
 
@@ -60,29 +61,29 @@ namespace Bonobo.Git.Server
 
             var branchNameTemp = referenceName;
             var ancestors =
-                _repository.Commits.QueryBy(new Filter
+                _repository.Commits.QueryBy(new CommitFilter
                 {
                     Since = commit,
-                    SortBy = GitSortOptions.Topological | GitSortOptions.Reverse
+                    SortBy = CommitSortStrategies.Topological | CommitSortStrategies.Reverse
                 });
             var tree = String.IsNullOrEmpty(path) ? commit.Tree : (Tree)commit[path].Target;
 
             var query = from item in tree
-                   let lastCommit = ancestors.First(c =>
-                   {
-                       var entry = c[item.Path];
-                       return entry != null && entry.Target == item.Target;
-                   })
-                   select new RepositoryTreeDetailModel
-                   {
-                       Name = item.Name,
-                       IsTree = item.TargetType == TreeEntryTargetType.Tree,
-                       CommitDate = lastCommit.Author.When.LocalDateTime,
-                       CommitMessage = lastCommit.MessageShort,
-                       Author = lastCommit.Author.Name,
-                       TreeName = branchNameTemp ?? name,
-                       Path = item.Path.Replace('\\', '/'),
-                   };
+                        let lastCommit = ancestors.First(c =>
+                        {
+                            var entry = c[item.Path];
+                            return entry != null && entry.Target == item.Target;
+                        })
+                        select new RepositoryTreeDetailModel
+                        {
+                            Name = item.Name,
+                            IsTree = item.TargetType == TreeEntryTargetType.Tree,
+                            CommitDate = lastCommit.Author.When.LocalDateTime,
+                            CommitMessage = lastCommit.MessageShort,
+                            Author = lastCommit.Author.Name,
+                            TreeName = branchNameTemp ?? name,
+                            Path = item.Path.Replace('\\', '/'),
+                        };
             return query.ToList();
         }
 
@@ -98,13 +99,13 @@ namespace Bonobo.Git.Server
             {
                 return null;
             }
-            
+
             var entry = commit[path];
             if (entry == null)
             {
                 return null;
             }
-            
+
             var model = new RepositoryTreeDetailModel
             {
                 Name = entry.Name,
@@ -114,8 +115,13 @@ namespace Bonobo.Git.Server
                 Author = commit.Author.Name,
                 TreeName = referenceName ?? name,
                 Path = path,
-                Data = ((Blob)entry.Target).Content,
             };
+
+            using (var memoryStream = new MemoryStream())
+            {
+                ((Blob)entry.Target).GetContentStream().CopyTo(memoryStream);
+                model.Data = memoryStream.ToArray();
+            }
 
             model.Text = FileDisplayHandler.GetText(model.Data);
             model.Encoding = FileDisplayHandler.GetEncoding(model.Data);
@@ -185,13 +191,20 @@ namespace Bonobo.Git.Server
                 return model;
             }
 
-            TreeChanges changes = !commit.Parents.Any() ? _repository.Diff.Compare(null, commit.Tree) : _repository.Diff.Compare(commit.Parents.First().Tree, commit.Tree);
-            model.Changes = changes.OrderBy(s => s.Path).Select(i => new RepositoryCommitChangeModel
+            TreeChanges changes = !commit.Parents.Any() ? _repository.Diff.Compare<TreeChanges>(null, commit.Tree) : _repository.Diff.Compare<TreeChanges>(commit.Parents.First().Tree, commit.Tree);
+            Patch patches = !commit.Parents.Any() ? _repository.Diff.Compare<Patch>(null, commit.Tree) : _repository.Diff.Compare<Patch>(commit.Parents.First().Tree, commit.Tree);
+
+            model.Changes = changes.OrderBy(s => s.Path).Select(i =>
             {
-                Path = i.Path.Replace('\\', '/'),
-                Status = i.Status,
-                LinesAdded = i.LinesAdded,
-                LinesDeleted = i.LinesDeleted,
+                var patch = patches[i.Path];
+                return new RepositoryCommitChangeModel
+                {
+                    Path = i.Path.Replace('\\', '/'),
+                    Status = i.Status,
+                    LinesAdded = patch.LinesAdded,
+                    LinesDeleted = patch.LinesDeleted,
+                    Patch = patch.Patch,
+                };
             });
 
             return model;

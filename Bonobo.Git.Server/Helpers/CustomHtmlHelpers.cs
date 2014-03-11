@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Web.Routing;
 using System.Linq.Expressions;
+using Bonobo.Git.Server.Models;
 
 namespace Bonobo.Git.Server.Helpers
 {
@@ -63,6 +64,5 @@ namespace Bonobo.Git.Server.Helpers
         {
             return CheckboxListFor<TModel, TValue>(helper, expression, selectList, null);
         }
-
     }
 }

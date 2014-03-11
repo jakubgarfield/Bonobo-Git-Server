@@ -104,6 +104,7 @@ namespace Bonobo.Git.Server.Models
         public int LinesAdded { get; set; }
         public int LinesDeleted { get; set; }
         public int LinesChanged { get { return LinesAdded + LinesDeleted; } }
+        public string Patch { get; set; }
     }
 
     public class RepositoryCommitModel
