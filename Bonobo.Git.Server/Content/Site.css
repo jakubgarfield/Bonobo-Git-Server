@@ -158,8 +158,10 @@ div.uniForm #errorMsg { text-align: center;}
 .commit p { margin: 0.5em 0;}
 .commit .content { background-color: #eeeeee; padding: 0.5em 1.5em; color: #2e2e2e;}
 .commit .content strong {font-weight: bold; color: Gray;}
-.commit .content .fr { font-size: 85%; color: Gray; font-family: Monospace, Courier;}
+.commit .content .fl { width: 550px; }
+.commit .content .fr { font-size: 85%; color: Gray; font-family: Monospace, Courier; width: 120px;}
 .commit .content .fr em { width: 5em; display: inline-block; text-align: left;}
+.commit .content .fr a { display: block; width: 5em; float: right;}
 
 .brancheSwitcher h4 { margin: 1em 0 0 0;}
 .branchSwitcher ul { margin: 0 0 2em 0;}

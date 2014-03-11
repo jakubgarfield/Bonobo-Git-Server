@@ -9,15 +9,15 @@
         <p><strong>@Model.Author</strong></p>
     </div>
     <div class="fr">
-        <p><em>@Model.GetType().GetDisplayValue("ID"):</em> @Html.ActionLink(Model.ID, "Commit", new { id = ViewBag.ID, commit = Model.ID })</p>
-        <p><em>@Model.GetType().GetDisplayValue("TreeID"):</em> @Html.ActionLink(Model.TreeID, "Tree", new { id = ViewBag.ID, encodedName = PathEncoder.Encode(Model.ID) })</p>
+        <p><em>@Model.GetType().GetDisplayValue("ID"):</em> @Html.ActionLink(Model.ID.Substring(0, 7), "Commit", new { id = ViewBag.ID, commit = Model.ID })</p>
+        <p><em>@Model.GetType().GetDisplayValue("TreeID"):</em> @Html.ActionLink(Model.TreeID.Substring(0, 7), "Tree", new { id = ViewBag.ID, encodedName = PathEncoder.Encode(Model.ID) })</p>
         @if (Model.Parents != null && Model.Parents.Count() > 0)
         {
             <p>
                 <em>@Model.GetType().GetDisplayValue("Parents"):</em>
                 @foreach (var parent in Model.Parents)
                 {
-                    @Html.ActionLink(parent, "Commit", new { id = ViewBag.ID, commit = parent })<br />
+                    @Html.ActionLink(parent.Substring(0, 7), "Commit", new { id = ViewBag.ID, commit = parent })<br />
                 }
             </p>
         }
