@@ -100,7 +100,10 @@ namespace Bonobo.Git.Server.Models
     {
         public string Name { get; set; }
         public string Path { get; set; }
-        public ChangeKind Status { get; set; }        
+        public ChangeKind Status { get; set; }
+        public int LinesAdded { get; set; }
+        public int LinesDeleted { get; set; }
+        public int LinesChanged { get { return LinesAdded + LinesDeleted; } }
     }
 
     public class RepositoryCommitModel

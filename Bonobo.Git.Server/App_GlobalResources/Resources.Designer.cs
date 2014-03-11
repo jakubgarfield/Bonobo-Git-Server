@@ -862,7 +862,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Changed files.
+        ///   Looks up a localized string similar to Changes.
         /// </summary>
         public static string Repository_Commit_Changes {
             get {
@@ -903,6 +903,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Repository_Commit_Detail {
             get {
                 return ResourceManager.GetString("Repository_Commit_Detail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        public static string Repository_Commit_Details {
+            get {
+                return ResourceManager.GetString("Repository_Commit_Details", resourceCulture);
             }
         }
         

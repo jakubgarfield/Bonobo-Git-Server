@@ -151,6 +151,7 @@ div.uniForm #errorMsg { text-align: center;}
 #RepositoryCommit .changes img { vertical-align: text-top; margin: 0 0.75em;}
 #RepositoryCommit .changes .item { padding: 0.5em 0; border-bottom: 1px solid #b9b9b9}
 #RepositoryCommit .changes .item p { margin: 0; }
+#RepositoryCommit .changes .item .diff { float: right; font-size: 85%; font-weight: bold;}
 
 .commitDate { margin: 0;}
 .commit    { border: 1px solid #b9b9b9; margin: 1em 0 2em 0;}

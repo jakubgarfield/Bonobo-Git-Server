@@ -316,7 +316,7 @@
     <value>Email</value>
   </data>
   <data name="Repository_Commit_Changes" xml:space="preserve">
-    <value>Changed files</value>
+    <value>Changes</value>
   </data>
   <data name="Repository_Commit_Copied" xml:space="preserve">
     <value>Copied</value>
@@ -716,5 +716,8 @@
   </data>
   <data name="Repository_Tree_Zip" xml:space="preserve">
     <value>Download ZIP</value>
+  </data>
+  <data name="Repository_Commit_Details" xml:space="preserve">
+    <value>Details</value>
   </data>
 </root>

@@ -51,9 +51,17 @@
                         {
                             @item.Path
                         }
+                        <span class="diff">@item.LinesChanged (+@item.LinesAdded -@item.LinesDeleted)</span>
                     </p>
                 </div>
             }
+            <div class="details">
+                <h3>@Resources.Repository_Commit_Details</h3>
+                @foreach (var item in Model.Changes)
+                {
+                    
+                }
+            </div>
         </div>
     </div>
 }

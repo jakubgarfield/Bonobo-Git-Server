@@ -179,6 +179,7 @@ namespace Bonobo.Git.Server
                 TreeID = commit.Tree.Sha,
                 Parents = commit.Parents.Select(i => i.Sha).ToArray(),
             };
+
             if (!withDiff)
             {
                 return model;
@@ -189,6 +190,8 @@ namespace Bonobo.Git.Server
             {
                 Path = i.Path.Replace('\\', '/'),
                 Status = i.Status,
+                LinesAdded = i.LinesAdded,
+                LinesDeleted = i.LinesDeleted,
             });
 
             return model;
