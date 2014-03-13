@@ -599,6 +599,8 @@
       <LastGenOutput>Resources.de-DE.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Content Include=".bowerrc" />
+    <Content Include="bower.json" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <Content Include="Views\Repository\Blob.cshtml" />
   </ItemGroup>
