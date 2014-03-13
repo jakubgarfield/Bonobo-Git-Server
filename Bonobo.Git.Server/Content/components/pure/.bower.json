@@ -1,0 +1,18 @@
+{
+  "name": "pure",
+  "version": "0.4.2",
+  "main": "pure.css",
+  "devDependencies": {
+    "normalize-css": "1.1.3"
+  },
+  "homepage": "https://github.com/yui/pure-release",
+  "_release": "0.4.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.4.2",
+    "commit": "44d9854a95308877382b4055652a3393ab335453"
+  },
+  "_source": "git://github.com/yui/pure-release.git",
+  "_target": "0.4.2",
+  "_originalSource": "pure"
+}
