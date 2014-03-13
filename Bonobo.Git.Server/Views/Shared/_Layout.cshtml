@@ -2,17 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="~/favicon.ico?v=2" type="image/x-icon" />
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
-    <!--[if lte IE 7]><link rel="stylesheet" href="~/Content/Msie.css" type="text/css" media="screen,projection" /><![endif]-->
 </head>
 <body>
-    <div class="page" id="@ViewContext.ViewData["PageID"]">
-        <div id="header">
-            <div id="title">
-                <h1>@Html.ActionLink(Resources.Layout_Title, "", "")</h1>
+    <div class="main">
+        <div class="header">
+            <div class="home-menu pure-menu pure-menu-open pure-menu-horizontal">
+                @Html.ActionLink(Resources.Layout_Title, "", "", null, new { @class = "pure-menu-heading" })
+
+                <ul>
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink(Resources.Layout_Repositories, "Index", "Repository")</li>
+                    }
+                    @if (User.IsInRole(Definitions.Roles.Administrator))
+                    {
+                        <li>@Html.ActionLink(Resources.Layout_AdministrationUsers, "Index", "Account")</li>
+                        <li>@Html.ActionLink(Resources.Layout_AdministrationTeams, "Index", "Team")</li>
+                        <li>@Html.ActionLink(Resources.Layout_AdministrationGlobalSettings, "Index", "Settings")</li>
+                    }
+                </ul>
             </div>
+        </div>
+
+        <div class="content" id="@ViewContext.ViewData["PageID"]">
+            @RenderBody()
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2014 <a href="http://www.chodounsky.net">Jakub Chodounský</a> &middot; @Html.ActionLink(Resources.Layout_About, "About", "Home")</p>
+        </div>
+    </div>
+
+    @*<div id="header">
             <div id="topMenu">
                 <div id="accountInfo">
                     @if (Request.IsAuthenticated)
@@ -39,42 +63,12 @@
                     }
                 </div>
             </div>
-        </div>
-        <div class="window">
-            <div id="main">
-                <div class="clearfix">
-                    <div id="menu">
-                        @if (Request.IsAuthenticated)
-                        {
-                            <ul>
-                                <li>@Html.ActionLink(Resources.Layout_Repositories, "Index", "Repository")</li>
-                                <li>@Html.ActionLink(Resources.Layout_About, "About", "Home")</li>
-                            </ul>
-                        }
-                        @if (User.IsInRole(Definitions.Roles.Administrator))
-                        {
-                            <h3>@Resources.Layout_Administration</h3>
-                            <ul>
-                                <li>@Html.ActionLink(Resources.Layout_AdministrationUsers, "Index", "Account")</li>
-                                <li>@Html.ActionLink(Resources.Layout_AdministrationTeams, "Index", "Team")</li>
-                                <li>@Html.ActionLink(Resources.Layout_AdministrationGlobalSettings, "Index", "Settings")</li>
-                            </ul>
-                        }
-                    </div>
-                    <div id="content">
-                        @RenderBody()
-                    </div>
-                </div>
-                <div id="footer">
-                    <p>&copy; 2013 <a href="http://www.chodounsky.net">Jakub Chodounský</a>. @Resources.Layout_Footer_Copyright</p>
-                </div>
-            </div>
-        </div>
-    </div>
+        </div>*@
+
     @Scripts.Render(
         "~/bundles/syntaxhighlighter",
         "~/bundles/jquery",
         "~/bundles/jqueryval")
-    <script>SyntaxHighlighter.all();$('form.uniForm').uniform();</script>
+    <script>SyntaxHighlighter.all(); $('form.uniForm').uniform();</script>
 </body>
 </html>

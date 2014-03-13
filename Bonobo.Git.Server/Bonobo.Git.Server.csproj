@@ -436,52 +436,17 @@
     </EmbeddedResource>
     <Content Include="bin\NativeBinaries\amd64\git2-9d9fff3.dll" />
     <Content Include="bin\NativeBinaries\x86\git2-9d9fff3.dll" />
-    <Content Include="Content\components\pure\.bower.json" />
-    <Content Include="Content\components\pure\base-context-min.css" />
-    <Content Include="Content\components\pure\base-context.css" />
-    <Content Include="Content\components\pure\base-min.css" />
-    <Content Include="Content\components\pure\base.css" />
-    <Content Include="Content\components\pure\bower.json" />
-    <Content Include="Content\components\pure\buttons-core-min.css" />
-    <Content Include="Content\components\pure\buttons-core.css" />
-    <Content Include="Content\components\pure\buttons-min.css" />
-    <Content Include="Content\components\pure\buttons.css" />
-    <Content Include="Content\components\pure\forms-min.css" />
-    <Content Include="Content\components\pure\forms-nr-min.css" />
-    <Content Include="Content\components\pure\forms-nr.css" />
-    <Content Include="Content\components\pure\forms.css" />
-    <Content Include="Content\components\pure\grids-core-min.css" />
-    <Content Include="Content\components\pure\grids-core.css" />
-    <Content Include="Content\components\pure\grids-min.css" />
-    <Content Include="Content\components\pure\grids-nr-min.css" />
-    <Content Include="Content\components\pure\grids-nr.css" />
-    <Content Include="Content\components\pure\grids-units-min.css" />
-    <Content Include="Content\components\pure\grids-units.css" />
-    <Content Include="Content\components\pure\grids.css" />
-    <Content Include="Content\components\pure\HISTORY.md" />
-    <Content Include="Content\components\pure\LICENSE.md" />
-    <Content Include="Content\components\pure\menus-core-min.css" />
-    <Content Include="Content\components\pure\menus-core.css" />
-    <Content Include="Content\components\pure\menus-min.css" />
-    <Content Include="Content\components\pure\menus-nr-min.css" />
-    <Content Include="Content\components\pure\menus-nr.css" />
-    <Content Include="Content\components\pure\menus-paginator-min.css" />
-    <Content Include="Content\components\pure\menus-paginator.css" />
-    <Content Include="Content\components\pure\menus.css" />
     <Content Include="Content\components\pure\pure-min.css" />
-    <Content Include="Content\components\pure\pure-nr-min.css" />
-    <Content Include="Content\components\pure\pure-nr.css" />
-    <Content Include="Content\components\pure\pure.css" />
-    <Content Include="Content\components\pure\README.md" />
-    <Content Include="Content\components\pure\tables-min.css" />
-    <Content Include="Content\components\pure\tables.css" />
+    <Content Include="Content\fonts.css" />
+    <Content Include="Content\fonts\opensans-bold.svg" />
+    <Content Include="Content\fonts\opensans-light.svg" />
+    <Content Include="Content\fonts\opensans-regular.svg" />
     <Content Include="Content\images\action_added.gif" />
     <Content Include="Content\images\action_copied.gif" />
     <Content Include="Content\images\action_deleted.gif" />
     <Content Include="Content\images\action_modified.gif" />
     <Content Include="Content\images\action_typechanged.gif" />
     <Content Include="Content\images\branch.png" />
-    <Content Include="Content\images\background.gif" />
     <Content Include="Content\images\branch_active.png" />
     <Content Include="Content\images\browser.png" />
     <Content Include="Content\images\commits.png" />
@@ -501,7 +466,7 @@
     <Content Include="Content\images\repository.png" />
     <Content Include="Content\images\team.png" />
     <Content Include="Content\images\user.png" />
-    <Content Include="Content\Msie.css" />
+    <Content Include="Content\msie.css" />
     <Content Include="Content\syntaxhighlighter\scripts\shAutoloader.js" />
     <Content Include="Content\syntaxhighlighter\scripts\shBrushAppleScript.js" />
     <Content Include="Content\syntaxhighlighter\scripts\shBrushAS3.js" />
@@ -588,7 +553,7 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\site.css" />
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -640,6 +605,15 @@
     </EmbeddedResource>
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
+    <Content Include="Content\fonts\opensans-bold.eot" />
+    <Content Include="Content\fonts\opensans-bold.ttf" />
+    <Content Include="Content\fonts\opensans-bold.woff" />
+    <Content Include="Content\fonts\opensans-light.eot" />
+    <Content Include="Content\fonts\opensans-light.ttf" />
+    <Content Include="Content\fonts\opensans-light.woff" />
+    <Content Include="Content\fonts\opensans-regular.eot" />
+    <Content Include="Content\fonts\opensans-regular.ttf" />
+    <Content Include="Content\fonts\opensans-regular.woff" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <Content Include="Views\Repository\Blob.cshtml" />
   </ItemGroup>

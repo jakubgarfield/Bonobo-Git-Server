@@ -38,7 +38,9 @@ namespace Bonobo.Git.Server.App_Start
                         "~/Content/syntaxhighlighter/scripts/shBrushPlain.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                        "~/Content/Site.css",
+                        "~/Content/components/pure/pure-min.css",
+                        "~/Content/fonts.css",
+                        "~/Content/site.css",
                         "~/Content/uni/css/uni-form.css",
                         "~/Content/uni/css/default.uni-form.css",
                         "~/Content/syntaxhighlighter/styles/shCoreDefault.css"));
