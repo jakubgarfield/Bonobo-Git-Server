@@ -57,18 +57,12 @@
     </div>
 }
 
-<div class="w-grid">
-    @{
-        var permitted = new WebGrid(source: Model, defaultSort: "Name", rowsPerPage: 15);
-        @permitted.GetHtml(
-        tableStyle: "pure-table",
-        alternatingRowStyle: "pure-table-odd",
-                    columns: permitted.Columns(
-                             permitted.Column("Name", header: typeof(RepositoryDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink(GetNameToDisplay((string)item.Name, (RepositoryDetailStatus)item.Status), "Detail", new { id = item.Name }, new { @class = "repository" })),
-                             permitted.Column("Description", typeof(RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string)item.Description).Length > 100)) ? ((string)item.Description).Substring(0, 100) + " ... " : item.Description),
-                             permitted.Column("IsCurrentUserAdministrator", header: typeof(RepositoryDetailModel).GetDisplayValue("IsCurrentUserAdministrator"), format: (item) => item.Value.IsCurrentUserAdministrator ? Resources.Repository_Index_Yes : Resources.Repository_Index_No, style: "bool"),
-                             permitted.Column("AllowAnonymous", header: typeof(RepositoryDetailModel).GetDisplayValue("AllowAnonymous"), format: (item) => item.Value.AllowAnonymous ? Resources.Repository_Index_Yes : Resources.Repository_Index_No, style: "bool")
-        )
-    )
-    }
-</div>
+@{
+    var permitted = new WebGrid(source: Model, defaultSort: "Name", rowsPerPage: 15);
+    @permitted.GetHtml(
+    tableStyle: "pure-table repositories",
+    columns: permitted.Columns(
+             permitted.Column("Name", header: typeof(RepositoryDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink(GetNameToDisplay((string)item.Name, (RepositoryDetailStatus)item.Status), "Detail", new { id = item.Name }, new { @class = "repository" })),
+             permitted.Column("Description", typeof(RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string)item.Description).Length > 100)) ? ((string)item.Description).Substring(0, 100) + " ... " : item.Description)
+    ))
+}

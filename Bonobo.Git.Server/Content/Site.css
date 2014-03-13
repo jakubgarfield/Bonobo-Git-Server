@@ -1,13 +1,20 @@
 ﻿html, button, input, select, textarea, .pure-g [class *= "pure-u"], .pure-g-r [class *= "pure-u"] { font-family: OpenSans, sans-serif; }
 
-html { font-size: 16px; color: #000; text-rendering: optimizeLegibility; }
+html { font-size: 16px; color: #333; text-rendering: optimizeLegibility; }
 html, body { margin: 0; padding: 0; height: 100%; }
 
 h1, h2, h3, h4, h5, h6 { font-weight: 300; }
+a { color: #4183c4; text-decoration: none;}
+a:hover { text-decoration: underline;}
+.pure-button:hover { text-decoration: none;}
 
 table { width: 100%; margin: 2em 0; }
-.pure-table, .pure-table td, .pure-table th { border: none; }
-
+th a { color: #333;}
+th a:hover { text-decoration: none; color: #4183c4;}
+.pure-table td, .pure-table th { padding: 0.8em;}
+.pure-table { border: none;}
+.pure-table td, .pure-table th { border: none; border-bottom: 1px solid #ddd; text-align: left;}
+.pure-table thead { background: none; }
 
 
 .home-menu { padding: 0.5em; text-align: left; box-shadow: 0 1px 1px rgba(0,0,0, 0.10); }
@@ -28,6 +35,10 @@ table { width: 100%; margin: 2em 0; }
 .footer a:hover { color: #fff; }
 
 .add { text-align: right; margin-top: 1.6em;}
+
+.repositories tbody td a:before { font-family: FontAwesome; top: 0; padding-right: 0.5em; content: "\f0a0";}
+.repositories tfoot td { text-align: center; border-bottom: none !important;}
+ 
 /*
 
 #main { background-color: #fff; padding: 0em 2em 2em 2em; color: #2e2e2e; }
