@@ -23,7 +23,23 @@
     }
 }
 
-<h2>@Resources.Repository_Index_Title</h2>
+<div class="pure-g">
+    <div class="pure-u-3-5">
+        <h1>@Resources.Repository_Index_Title</h1>
+    </div>
+    <div class="pure-u-2-5 add">
+        @if (User.IsInRole(Definitions.Roles.Administrator) || UserConfiguration.Current.AllowUserRepositoryCreation)
+        {
+            <a class="pure-button pure-button-primary" href="@Url.Action("Create")"><i class="fa fa-plus-circle"></i> @Resources.Repository_Index_CreateNew</a>
+        }
+    </div>
+</div>
+
+
+
+
+
+
 @if (TempData["CreateSuccess"] != null && (bool)TempData["CreateSuccess"])
 {
     <div class="uniForm">    
@@ -40,18 +56,13 @@
         </div>
     </div>
 }
-@if (User.IsInRole(Definitions.Roles.Administrator) || UserConfiguration.Current.AllowUserRepositoryCreation)
-{
-    <div class="create">@Html.ActionLink(Resources.Repository_Index_CreateNew, "Create")</div>
-}
-<h3>@Resources.Repository_Index_Repositories</h3>
+
 <div class="w-grid">
     @{
         var permitted = new WebGrid(source: Model, defaultSort: "Name", rowsPerPage: 15);
         @permitted.GetHtml(
-        tableStyle: "grid",
-        headerStyle: "head",
-        alternatingRowStyle: "even",
+        tableStyle: "pure-table",
+        alternatingRowStyle: "pure-table-odd",
                     columns: permitted.Columns(
                              permitted.Column("Name", header: typeof(RepositoryDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink(GetNameToDisplay((string)item.Name, (RepositoryDetailStatus)item.Status), "Detail", new { id = item.Name }, new { @class = "repository" })),
                              permitted.Column("Description", typeof(RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string)item.Description).Length > 100)) ? ((string)item.Description).Substring(0, 100) + " ... " : item.Description),

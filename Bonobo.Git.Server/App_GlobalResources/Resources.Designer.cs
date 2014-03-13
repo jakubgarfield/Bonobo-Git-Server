@@ -709,7 +709,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Global Settings.
+        ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string Layout_AdministrationGlobalSettings {
             get {
@@ -1321,7 +1321,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Repository Management.
+        ///   Looks up a localized string similar to Repositories.
         /// </summary>
         public static string Repository_Index_Title {
             get {

@@ -268,7 +268,7 @@
     <value>Administration</value>
   </data>
   <data name="Layout_AdministrationGlobalSettings" xml:space="preserve">
-    <value>Global Settings</value>
+    <value>Settings</value>
   </data>
   <data name="Layout_AdministrationRepositories" xml:space="preserve">
     <value>Repositories</value>
@@ -457,7 +457,7 @@
     <value>Repositories</value>
   </data>
   <data name="Repository_Index_Title" xml:space="preserve">
-    <value>Repository Management</value>
+    <value>Repositories</value>
   </data>
   <data name="Repository_Index_Yes" xml:space="preserve">
     <value>Yes</value>
