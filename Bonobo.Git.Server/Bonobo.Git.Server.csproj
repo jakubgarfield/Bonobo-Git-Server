@@ -436,10 +436,12 @@
     </EmbeddedResource>
     <Content Include="bin\NativeBinaries\amd64\git2-9d9fff3.dll" />
     <Content Include="bin\NativeBinaries\x86\git2-9d9fff3.dll" />
+    <Content Include="Content\components\pure\.bower.json" />
     <Content Include="Content\components\pure\base-context-min.css" />
     <Content Include="Content\components\pure\base-context.css" />
     <Content Include="Content\components\pure\base-min.css" />
     <Content Include="Content\components\pure\base.css" />
+    <Content Include="Content\components\pure\bower.json" />
     <Content Include="Content\components\pure\buttons-core-min.css" />
     <Content Include="Content\components\pure\buttons-core.css" />
     <Content Include="Content\components\pure\buttons-min.css" />
@@ -456,6 +458,8 @@
     <Content Include="Content\components\pure\grids-units-min.css" />
     <Content Include="Content\components\pure\grids-units.css" />
     <Content Include="Content\components\pure\grids.css" />
+    <Content Include="Content\components\pure\HISTORY.md" />
+    <Content Include="Content\components\pure\LICENSE.md" />
     <Content Include="Content\components\pure\menus-core-min.css" />
     <Content Include="Content\components\pure\menus-core.css" />
     <Content Include="Content\components\pure\menus-min.css" />
@@ -468,6 +472,7 @@
     <Content Include="Content\components\pure\pure-nr-min.css" />
     <Content Include="Content\components\pure\pure-nr.css" />
     <Content Include="Content\components\pure\pure.css" />
+    <Content Include="Content\components\pure\README.md" />
     <Content Include="Content\components\pure\tables-min.css" />
     <Content Include="Content\components\pure\tables.css" />
     <Content Include="Content\images\action_added.gif" />
@@ -635,11 +640,6 @@
     </EmbeddedResource>
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
-    <Content Include="Content\components\pure\.bower.json" />
-    <Content Include="Content\components\pure\bower.json" />
-    <Content Include="Content\components\pure\HISTORY.md" />
-    <Content Include="Content\components\pure\LICENSE.md" />
-    <Content Include="Content\components\pure\README.md" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <Content Include="Views\Repository\Blob.cshtml" />
   </ItemGroup>
