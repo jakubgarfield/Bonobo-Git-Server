@@ -565,7 +565,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log On.
+        ///   Looks up a localized string similar to Sign In.
         /// </summary>
         public static string Home_LogOn_LogOn {
             get {
@@ -592,7 +592,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log On.
+        ///   Looks up a localized string similar to Sign In.
         /// </summary>
         public static string Home_LogOn_Title {
             get {

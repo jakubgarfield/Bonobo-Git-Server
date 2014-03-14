@@ -2,30 +2,27 @@
 @{
     ViewBag.Title = @Resources.Home_LogOn_Title;
 }
-<h2>@Resources.Home_LogOn_Title</h2>
-@using (Html.BeginForm("LogOn", "Home", FormMethod.Post, new { @class = "uniForm" }))
+
+<h1>@Resources.Home_LogOn_Title</h1>
+
+@using (Html.BeginForm("LogOn", "Home", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
 {
     @Html.ValidationSummary(false, Resources.Home_LogOn_Failed, new { @id = "errorMsg"})
+    
     <fieldset> 
-      <h3>@Resources.Home_LogOn_AccountInformation</h3>    
-      <div class="ctrlHolder"> 
-        @Html.LabelFor(m => m.Username)
-        @Html.TextBoxFor(m => m.Username, new { @class = "textInput small" })<em>*</em>
-        <p class="formHint">
-          @Html.ValidationMessageFor(m => m.Username)
-        </p> 
-      </div> 
-      <div class="ctrlHolder"> 
-          @Html.LabelFor(m => m.Password)
-          @Html.PasswordFor(m => m.Password, new { @class = "textInput small" })<em>*</em>     
-        <p class="formHint">
-          @Html.ValidationMessageFor(m => m.Password)
-        </p> 
-      </div> 
+        <div class="pure-control-group">
+            @Html.LabelFor(m => m.Username)
+            @Html.TextBoxFor(m => m.Username, new { autofocus = ""})<em>*</em>
+            @Html.ValidationMessageFor(m => m.Username)
+        </div> 
+        <div class="pure-control-group">
+            @Html.LabelFor(m => m.Password, new { accesskey = "p" })
+            @Html.PasswordFor(m => m.Password, new { @class = "textInput small" })<em>*</em>
+            @Html.ValidationMessageFor(m => m.Password)
+        </div> 
       @Html.HiddenFor(m => m.ReturnUrl)
-      <div class="buttonHolder"> 
-        <button type="reset" class="secondaryAction">← @Resources.Reset</button> 
-        <input type="submit" value="@Resources.Home_LogOn_LogOn" class="primaryAction" />
-      </div>
+        <div class="pure-controls">
+            <input type="submit" value="@Resources.Home_LogOn_LogOn" class="pure-button pure-button-primary" />
+        </div>
     </fieldset>
 }

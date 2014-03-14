@@ -16,6 +16,13 @@ th a:hover { text-decoration: none; color: #4183c4;}
 .pure-table td, .pure-table th { border: none; border-bottom: 1px solid #ddd; text-align: left;}
 .pure-table thead { background: none; }
 
+.field-validation-error { color: #a94442; margin-left: 0.7em; }
+.field-validation-valid { display: none; }
+.input-validation-error { border: 1px solid #a94442 !important; background-color: #fdf7f7; }
+.validation-summary-errors { border-left: 3px solid #d9534f; background: #fdf7f7; padding: 1em; margin-bottom: 2em;}
+.validation-summary-errors ul { margin: 0.75em 1em; }
+.validation-summary-valid { display: none; }
+
 
 .home-menu { padding: 0.5em; text-align: left; box-shadow: 0 1px 1px rgba(0,0,0, 0.10); }
 .home-menu .pure-menu-heading { color: white; font-weight: 300; font-size: 1.2em; background: url('images/git-logo.png') no-repeat 0 4px; display: block; padding-left: 40px; }
