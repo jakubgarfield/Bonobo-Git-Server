@@ -3,70 +3,72 @@
 @{
     ViewBag.Title = Resources.Repository_Create_Title;
 }
-<h2>@Resources.Repository_Create_Title</h2>
-@using (Html.BeginForm("Create", "Repository", FormMethod.Post, new { @class = "uniForm" }))
+<h1>@Resources.Repository_Create_Title</h1>
+
+@using (Html.BeginForm("Create", "Repository", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
 {    
-    @Html.ValidationSummary(false, Resources.Repository_Create_Fail, new { @id = "errorMsg" })
+    @Html.ValidationSummary(false, Resources.Repository_Create_Fail)
+    
     <fieldset>
-        <h3>@Resources.Repository_Create_Informations</h3>
-        <div class="ctrlHolder">
+        <div class="pure-control-group">
             @Html.LabelFor(m => m.Name)
-            @Html.TextBoxFor(m => m.Name, new { @class = "textInput small" })<em>*</em>
-            <p class="formHint">@Html.ValidationMessageFor(m => m.Name)</p>
+            @Html.TextBoxFor(m => m.Name, new { autofocus = "" })<em>*</em>
+            @Html.ValidationMessageFor(m => m.Name)
         </div>
-        <div class="ctrlHolder">
+
+        <div class="pure-control-group">
             @Html.LabelFor(m => m.Description)
-            @Html.TextAreaFor(m => m.Description, new { @class = "textInput medium" })
-            <p class="formHint"></p>
+            @Html.TextAreaFor(m => m.Description, new { @class = "medium" })
         </div>
-        <div class="ctrlHolder noLabel">
+
+        <div class="pure-control-group">
             @Html.LabelFor(m => m.AllowAnonymous)
             @Html.CheckBoxFor(m => m.AllowAnonymous)
-            <p class="formHint">
-                @Resources.Repository_AllowAnonymousHint
-            </p>
+            <i class="fa fa-info-circle" title="@Resources.Repository_AllowAnonymousHint"></i>
         </div>
-        <div class="ctrlHolder">
+        <div class="pure-control-group checkboxlist">
             @Html.LabelFor(m => m.Users)
             @{
-                 var users = (from u in ViewData["AvailableUsers"] as string[] orderby u
-                                 select new SelectListItem() { Value = u, Text = u }).ToArray();
+                var users = (from u in ViewData["AvailableUsers"] as string[]
+                             orderby u
+                             select new SelectListItem() { Value = u, Text = u }).ToArray();
             }
-                
-            @Html.CheckboxListFor(m => m.Users, users, new { @class = "checkboxList medium" }) 
-            <p class="formHint">
-                @Resources.Repository_UsersHint
-            </p>
+
+            @Html.CheckboxListFor(m => m.Users, users)
+            <i class="fa fa-info-circle" title="@Resources.Repository_UsersHint"></i>
         </div>
-        <div class="ctrlHolder">
+
+        <div class="pure-control-group checkboxlist">
             @Html.LabelFor(m => m.Administrators)
-             @{
-                var administrators = (from u in ViewData["AvailableAdministrators"] as string[] orderby u
-                                        select new SelectListItem() {Value = u, Text = u}).ToArray();
+            @{
+                var administrators = (from u in ViewData["AvailableAdministrators"] as string[]
+                                      orderby u
+                                      select new SelectListItem() { Value = u, Text = u }).ToArray();
             }
-                
-            @Html.CheckboxListFor(m => m.Administrators, administrators, new { @class = "checkboxList medium" }) 
-            <p class="formHint">
-                @Html.ValidationMessageFor(m => m.Administrators)
-                @Resources.Repository_AdministratorsHint
-            </p>
+
+            @Html.CheckboxListFor(m => m.Administrators, administrators)
+            @Html.ValidationMessageFor(m => m.Administrators)
+            <i class="fa fa-info-circle" title="@Resources.Repository_AdministratorsHint"></i>
         </div>
-        <div class="ctrlHolder">
+
+
+
+        <div class="pure-control-group checkboxlist">
             @Html.LabelFor(m => m.Teams)
             @{
-                var teams = (from u in ViewData["AvailableTeams"] as string[] orderby u
-                                select new SelectListItem() {Value = u,Text = u}).ToArray();
+                var teams = (from u in ViewData["AvailableTeams"] as string[]
+                             orderby u
+                             select new SelectListItem() { Value = u, Text = u }).ToArray();
             }
-                
-            @Html.CheckboxListFor(m => m.Teams, teams, new { @class = "checkboxList medium" }) 
-            <p class="formHint">
-                @Resources.Repository_TeamsHint                
-            </p>
+
+            @Html.CheckboxListFor(m => m.Teams, teams)
+            <i class="fa fa-info-circle" title="@Resources.Repository_TeamsHint"></i>
         </div>
-        <div class="buttonHolder">
-            @Html.ActionLink("← " + Resources.Repository_Create_Back, "Index", null, new { @class = "secondaryAction" })
-            <button type="reset" class="secondaryAction">← @Resources.Reset</button>
-            <input type="submit" value="@Resources.Repository_Create_Submit" class="primaryAction" />
+
+
+
+        <div class="pure-controls">
+            <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-save"></i> @Resources.Repository_Create_Submit</button>
         </div>
     </fieldset>
 }

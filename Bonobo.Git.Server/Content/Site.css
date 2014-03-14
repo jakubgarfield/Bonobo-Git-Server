@@ -7,6 +7,7 @@ h1, h2, h3, h4, h5, h6 { font-weight: 300; }
 a { color: #4183c4; text-decoration: none;}
 a:hover { text-decoration: underline;}
 .pure-button:hover { text-decoration: none;}
+i.fa { margin-right: 0.25em;}
 
 table { width: 100%; margin: 2em 0; }
 th a { color: #333;}
@@ -22,6 +23,14 @@ th a:hover { text-decoration: none; color: #4183c4;}
 .validation-summary-errors { border-left: 3px solid #d9534f; background: #fdf7f7; padding: 1em; margin-bottom: 2em;}
 .validation-summary-errors ul { margin: 0.75em 1em; }
 .validation-summary-valid { display: none; }
+.pure-form .checkboxlist > label, .pure-form .checkboxlist > .field-validation-error, .pure-form .checkboxlist > i.fa-info-circle { vertical-align: top !important;}
+.pure-form .checkboxlist ul { max-height: 8.5em; overflow: auto; width: 17em; display: inline-block; padding: 0; margin: 0 0 1em 0;}
+.pure-form .checkboxlist ul li { margin-bottom: 3px; list-style: none;}
+.pure-form .checkboxlist ul li label { width: 14em;}
+.pure-form em, .pure-form i.fa-info-circle { color: silver; padding-left: 0.3em;}
+
+textarea.medium, input.medium { width: 30em;}
+
 
 
 .home-menu { padding: 0.5em; text-align: left; box-shadow: 0 1px 1px rgba(0,0,0, 0.10); }
@@ -31,7 +40,7 @@ th a:hover { text-decoration: none; color: #4183c4;}
 .home-menu a { color: #fff; }
 .home-menu ul { float: right; }
 .home-menu li a:hover,
-.home-menu li a:focus { background: none; border: none; color: #AECFE5; }
+.home-menu li a:focus { background: none; border: none; color: #AECFE5; text-decoration: none; }
 
 .main { min-height: 100%; position: relative; }
 

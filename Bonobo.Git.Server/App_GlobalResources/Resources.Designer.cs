@@ -1033,7 +1033,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name shouldn&apos;t contain only whitespace..
+        ///   Looks up a localized string similar to &quot;Name&quot; shouldn&apos;t contain only whitespace characters..
         /// </summary>
         public static string Repository_Create_NameFailure {
             get {

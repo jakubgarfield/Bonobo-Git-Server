@@ -616,7 +616,7 @@
     <value>If anonymous access is allowed, everyone can pull or clone the repository and view repository metadata. Push is available only if set in Global Settings.</value>
   </data>
   <data name="Repository_Create_NameFailure" xml:space="preserve">
-    <value>Name shouldn't contain only whitespace.</value>
+    <value>"Name" shouldn't contain only whitespace characters.</value>
   </data>
   <data name="Repository_TeamsHint" xml:space="preserve">
     <value>Teams have access to the repository. They can clone, push or pull and view repository metadata. All users in the team can access this repository.</value>

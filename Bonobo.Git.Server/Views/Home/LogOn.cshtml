@@ -7,7 +7,7 @@
 
 @using (Html.BeginForm("LogOn", "Home", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
 {
-    @Html.ValidationSummary(false, Resources.Home_LogOn_Failed, new { @id = "errorMsg"})
+    @Html.ValidationSummary(false, Resources.Home_LogOn_Failed)
     
     <fieldset> 
         <div class="pure-control-group">
@@ -22,7 +22,7 @@
         </div> 
       @Html.HiddenFor(m => m.ReturnUrl)
         <div class="pure-controls">
-            <input type="submit" value="@Resources.Home_LogOn_LogOn" class="pure-button pure-button-primary" />
+            <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-sign-in"></i> @Resources.Home_LogOn_LogOn</button>
         </div>
     </fieldset>
 }
