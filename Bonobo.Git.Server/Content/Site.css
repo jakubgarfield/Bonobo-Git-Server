@@ -20,7 +20,8 @@ th a:hover { text-decoration: none; color: #4183c4;}
 .field-validation-error { color: #a94442; margin-left: 0.7em; }
 .field-validation-valid { display: none; }
 .input-validation-error { border: 1px solid #a94442 !important; background-color: #fdf7f7; }
-.validation-summary-errors { border-left: 3px solid #d9534f; background: #fdf7f7; padding: 1em; margin-bottom: 2em;}
+.validation-summary-errors, .summary-error { border-left: 3px solid #d9534f; background: #fdf7f7; padding: 1em; margin-bottom: 2em;}
+.summary-success { border-left: 3px solid #009900; background: #F2F9EF; padding: 1em; margin-bottom: 2em;}
 .validation-summary-errors ul { margin: 0.75em 1em; }
 .validation-summary-valid { display: none; }
 .pure-form .checkboxlist > label, .pure-form .checkboxlist > .field-validation-error, .pure-form .checkboxlist > i.fa-info-circle { vertical-align: top !important;}

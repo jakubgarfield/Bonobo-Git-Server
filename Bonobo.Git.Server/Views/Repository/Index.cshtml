@@ -12,11 +12,11 @@
         {
             case RepositoryDetailStatus.Valid:
                 return name;
-                
+
             case RepositoryDetailStatus.Missing:
                 return name + " (Missing)";
-              
-            case RepositoryDetailStatus.Unknown:  
+
+            case RepositoryDetailStatus.Unknown:
             default:
                 return name + " (Status Unknown)";
         }
@@ -36,26 +36,19 @@
 </div>
 
 
-
-
-
-
 @if (TempData["CreateSuccess"] != null && (bool)TempData["CreateSuccess"])
 {
-    <div class="uniForm">    
-        <div id="okMsg">
-            <p>@Resources.Repository_Create_Success</p>
-        </div>
+    <div class="summary-success">
+        <p>@Resources.Repository_Create_Success</p>
     </div>
 }
 @if (TempData["DeleteSuccess"] != null && (bool)TempData["DeleteSuccess"])
 {
-    <div class="uniForm">    
-        <div id="okMsg">
-            <p>@Resources.Repository_Delete_Success</p>
-        </div>
+    <div class="summary-success">
+        <p>@Resources.Repository_Delete_Success</p>
     </div>
 }
+
 
 @{
     var permitted = new WebGrid(source: Model, defaultSort: "Name", rowsPerPage: 15);
