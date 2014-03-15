@@ -56,9 +56,14 @@ textarea.medium, input.medium { width: 30em;}
 
 .add { text-align: right; margin-top: 1.6em;}
 
-.repositories tbody td a:before { font-family: FontAwesome; top: 0; padding-right: 0.5em; content: "\f0a0";}
-.repositories tfoot td { text-align: center; border-bottom: none !important;}
+.repositories tbody td a:before, .users tbody td a.detail:before { font-family: FontAwesome; top: 0; padding-right: 0.5em;} 
+.repositories tbody td a:before { content: "\f0a0";}
+.users tbody td a.detail:before { content: "\f007";}
+tbody td a.edit:before { font-family: FontAwesome; top: 0; content: "\f044";}
+tbody td a.delete:before { font-family: FontAwesome; top: 0; content: "\f014";}
+tfoot td { text-align: center; border-bottom: none !important;}
  
+
 /*
 
 #main { background-color: #fff; padding: 0em 2em 2em 2em; color: #2e2e2e; }

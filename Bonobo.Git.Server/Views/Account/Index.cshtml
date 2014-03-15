@@ -3,57 +3,54 @@
 @{
     ViewBag.Title = Resources.Account_Index_Title;
 }
-<h2>@Resources.Account_Index_Title</h2>
+
+<div class="pure-g">
+    <div class="pure-u-3-5">
+        <h1>@Resources.Account_Index_Title</h1>
+    </div>
+    <div class="pure-u-2-5 add">
+        @if (!WindowsActionFilterAttribute.IsWindowsModeActive)
+        {
+            <a class="pure-button pure-button-primary" href="@Url.Action("Create")"><i class="fa fa-plus-circle"></i> @Resources.Account_Index_Create</a>
+        }
+    </div>
+</div>
+
+
 @if (TempData["CreateSuccess"] != null && (bool)TempData["CreateSuccess"])
 {
-    <div class="uniForm">    
-        <div id="okMsg">
-            <p>@Resources.Account_Create_Success</p>
-        </div>
+    <div class="summary-success">
+        <p>@Resources.Account_Create_Success</p>
     </div>
 }
 @if (TempData["DeleteSuccess"] != null)
 {
     if ((bool)TempData["DeleteSuccess"])
     {
-        <div class="uniForm">    
-        <div id="okMsg">
+        <div class="summary-success">
             <p>@Resources.Account_Delete_Success</p>
-        </div>
         </div>
     }
     else
     {
-        <div class="uniForm">    
-        <div id="errorMsg">
+        <div class="summary-error">    
             <p>@Resources.Account_Delete_DeleteCurrentUser</p>
-        </div>
         </div>
     }
 }
 
-@if (!WindowsActionFilterAttribute.IsWindowsModeActive)
-{
-<div class="create">@Html.ActionLink(Resources.Account_Index_Create, "Create")</div>
-}
 
-
-<h3>@Resources.Account_Index_Users</h3>
 @{
     var grid = new WebGrid(source: Model, defaultSort: "Username", rowsPerPage: 15);
-}
-<div class="w-grid">
     @grid.GetHtml(
-        tableStyle: "grid",
-        headerStyle: "head",
-        alternatingRowStyle: "even",
+        tableStyle: "pure-table  users",
         columns: grid.Columns(
-        grid.Column("Username", header: typeof(UserDetailModel).GetDisplayValue("Username"), format: (item) => Html.ActionLink((string)item.Username, "Detail", new { id = UsernameUrl.Encode(item.Username) }, new { @class = "user" })),
+        grid.Column("Username", header: typeof(UserDetailModel).GetDisplayValue("Username"), format: (item) => Html.ActionLink((string)item.Username, "Detail", new { id = UsernameUrl.Encode(item.Username) }, new { @class = "detail" })),
             grid.Column("Name", typeof(UserDetailModel).GetDisplayValue("Name")),
             grid.Column("Surname", typeof(UserDetailModel).GetDisplayValue("Surname")),
             grid.Column("Email", typeof(UserDetailModel).GetDisplayValue("Email")),
-            grid.Column(format: (item) => Html.ActionLink(Resources.Grid_Edit, "Edit", new { id = UsernameUrl.Encode(item.Username) }), style: "action"),
-            grid.Column(format: (item) => Html.ActionLink(Resources.Grid_Delete, "Delete", new { id = UsernameUrl.Encode(item.Username) }, new { @class = "deleteButton" }), style: "action")
+            grid.Column(format: (item) => Html.ActionLink(" ", "Edit", new { id = UsernameUrl.Encode(item.Username) }, new { @class = "edit", title = Resources.Account_Detail_Edit }), style: "action"),
+            grid.Column(format: (item) => Html.ActionLink(" ", "Delete", new { id = UsernameUrl.Encode(item.Username) }, new { @class = "delete", title = Resources.Account_Detail_Delete }), style: "action")
         )
     )
-</div>
+}
