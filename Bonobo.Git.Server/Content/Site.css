@@ -42,6 +42,8 @@ textarea.medium, input.medium { width: 30em;}
 .home-menu ul { float: right; }
 .home-menu li a:hover,
 .home-menu li a:focus { background: none; border: none; color: #AECFE5; text-decoration: none; }
+.Repository .home-menu .repository, .Account .home-menu .users, .Team .home-menu .teams, .Settings .home-menu .settings { color: #AECFE5;}
+
 
 .main { min-height: 100%; position: relative; }
 

@@ -6,7 +6,7 @@
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
 </head>
-<body>
+<body class="@HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString()">
     <div class="main">
         <div class="header">
             <div class="home-menu pure-menu pure-menu-open pure-menu-horizontal">
@@ -15,13 +15,13 @@
                 <ul>
                     @if (Request.IsAuthenticated)
                     {
-                        <li><a href="@Url.Action("Index", "Repository")"><i class="fa fa-hdd-o"></i> @Resources.Layout_Repositories</a></li>
+                        <li><a href="@Url.Action("Index", "Repository")" class="repository"><i class="fa fa-hdd-o"></i> @Resources.Layout_Repositories</a></li>
                     }
                     @if (User.IsInRole(Definitions.Roles.Administrator))
                     {
-                        <li><a href="@Url.Action("Index", "Account")"><i class="fa fa-user"></i> @Resources.Layout_AdministrationUsers</a></li>
-                        <li><a href="@Url.Action("Index", "Team")"><i class="fa fa-group"></i> @Resources.Layout_AdministrationTeams</a></li>
-                        <li><a href="@Url.Action("Index", "Settings")"><i class="fa fa-gears"></i> @Resources.Layout_AdministrationGlobalSettings</a></li>
+                        <li><a href="@Url.Action("Index", "Account")" class="users"><i class="fa fa-user"></i> @Resources.Layout_AdministrationUsers</a></li>
+                        <li><a href="@Url.Action("Index", "Team")" class="teams"><i class="fa fa-group"></i> @Resources.Layout_AdministrationTeams</a></li>
+                        <li><a href="@Url.Action("Index", "Settings")" class="settings"><i class="fa fa-gears"></i> @Resources.Layout_AdministrationGlobalSettings</a></li>
                     }
                 </ul>
             </div>
