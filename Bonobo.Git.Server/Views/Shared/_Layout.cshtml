@@ -15,13 +15,13 @@
                 <ul>
                     @if (Request.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink(Resources.Layout_Repositories, "Index", "Repository")</li>
+                        <li><a href="@Url.Action("Index", "Repository")"><i class="fa fa-hdd-o"></i> @Resources.Layout_Repositories</a></li>
                     }
                     @if (User.IsInRole(Definitions.Roles.Administrator))
                     {
-                        <li>@Html.ActionLink(Resources.Layout_AdministrationUsers, "Index", "Account")</li>
-                        <li>@Html.ActionLink(Resources.Layout_AdministrationTeams, "Index", "Team")</li>
-                        <li>@Html.ActionLink(Resources.Layout_AdministrationGlobalSettings, "Index", "Settings")</li>
+                        <li><a href="@Url.Action("Index", "Account")"><i class="fa fa-user"></i> @Resources.Layout_AdministrationUsers</a></li>
+                        <li><a href="@Url.Action("Index", "Team")"><i class="fa fa-group"></i> @Resources.Layout_AdministrationTeams</a></li>
+                        <li><a href="@Url.Action("Index", "Settings")"><i class="fa fa-gears"></i> @Resources.Layout_AdministrationGlobalSettings</a></li>
                     }
                 </ul>
             </div>
