@@ -41,7 +41,8 @@ textarea.medium, input.medium { width: 30em;}
 .home-menu a { color: #fff; }
 .home-menu ul { float: right; }
 .home-menu li a:hover,
-.home-menu li a:focus { background: none; border: none; color: #AECFE5; text-decoration: none; }
+.home-menu li a:focus { background: none; color: #AECFE5; text-decoration: none; }
+.home-menu .separator { border-left: 1px solid #86909A;}
 .Repository .home-menu .repository, .Account .home-menu .users, .Team .home-menu .teams, .Settings .home-menu .settings { color: #AECFE5;}
 
 

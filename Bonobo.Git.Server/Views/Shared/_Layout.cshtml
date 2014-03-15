@@ -23,6 +23,30 @@
                         <li><a href="@Url.Action("Index", "Team")" class="teams"><i class="fa fa-group"></i> @Resources.Layout_AdministrationTeams</a></li>
                         <li><a href="@Url.Action("Index", "Settings")" class="settings"><i class="fa fa-gears"></i> @Resources.Layout_AdministrationGlobalSettings</a></li>
                     }
+                    @if (Request.IsAuthenticated)
+                    {
+                        if (!WindowsActionFilterAttribute.IsWindowsModeActive)
+                        {
+                            <li class="separator"><a href="@Url.Action("Edit", "Account", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) })"><i class="fa fa-male"></i> @Context.User.Identity.Name</a></li>
+                            <li><a href="@Url.Action("LogOff", "Home")"><i class="fa fa-sign-out"></i> @Resources.Layout_LogOff</a></li>
+                        }
+                        else
+                        {
+                            <li class="separator"><a href="@Url.Action("Edit", "Account", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) })"><i class="fa fa-male"></i> @Context.User.Identity.Name</a></li>
+                        }
+                    }
+                    else
+                    {
+                        if (UserConfiguration.Current.AllowAnonymousRegistration)
+                        {
+                            <li><a href="@Url.Action("LogOn", "Home", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) })"><i class="fa fa-sign-in"></i> @Resources.Layout_LogOn</a></li>
+                            <li><a href="@Url.Action("Create", "Account", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) })"><i class="fa fa-pencil"></i> @Resources.Layout_Register</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="@Url.Action("LogOn", "Home", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) })"><i class="fa fa-sign-in"></i> @Resources.Layout_LogOn</a></li>
+                        }
+                    }
                 </ul>
             </div>
         </div>
@@ -35,35 +59,6 @@
             <p>&copy; 2014 <a href="http://www.chodounsky.net">Jakub Chodounský</a> &middot; @Html.ActionLink(Resources.Layout_About, "About", "Home")</p>
         </div>
     </div>
-
-    @*<div id="header">
-            <div id="topMenu">
-                <div id="accountInfo">
-                    @if (Request.IsAuthenticated)
-                    {
-                        if (!WindowsActionFilterAttribute.IsWindowsModeActive)
-                        {
-                            <p><strong>@Context.User.Identity.Name</strong> [ @Html.ActionLink(Resources.Layout_AccountSettings, "Edit", "Account", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) }, null) | @Html.ActionLink(Resources.Layout_LogOff, "LogOff", "Home") ]</p>
-                        }
-                        else
-                        {
-                            <p><strong>@Context.User.Identity.Name</strong> [ @Html.ActionLink(Resources.Layout_AccountSettings, "Edit", "Account", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) }, null) ]</p>
-                        }
-                    }
-                    else
-                    {
-                        if (UserConfiguration.Current.AllowAnonymousRegistration)
-                        {
-                            <p>[ @Html.ActionLink(Resources.Layout_LogOn, "LogOn", "Home") | @Html.ActionLink(Resources.Layout_Register, "Create", "Account")]</p>
-                        }
-                        else
-                        {
-                            <p>[ @Html.ActionLink(Resources.Layout_LogOn, "LogOn", "Home") ]</p>
-                        }
-                    }
-                </div>
-            </div>
-        </div>*@
 
     @Scripts.Render(
         "~/bundles/jquery",

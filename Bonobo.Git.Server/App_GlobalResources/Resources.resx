@@ -286,13 +286,13 @@
     <value>Home</value>
   </data>
   <data name="Layout_LogOff" xml:space="preserve">
-    <value>Log Off</value>
+    <value>Sign Out</value>
   </data>
   <data name="Layout_LogOn" xml:space="preserve">
-    <value>Log On</value>
+    <value>Sign In</value>
   </data>
   <data name="Layout_Register" xml:space="preserve">
-    <value>Create new account</value>
+    <value>Register</value>
   </data>
   <data name="Layout_Repositories" xml:space="preserve">
     <value>Repositories</value>

@@ -763,7 +763,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log Off.
+        ///   Looks up a localized string similar to Sign Out.
         /// </summary>
         public static string Layout_LogOff {
             get {
@@ -772,7 +772,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log On.
+        ///   Looks up a localized string similar to Sign In.
         /// </summary>
         public static string Layout_LogOn {
             get {
@@ -781,7 +781,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create new account.
+        ///   Looks up a localized string similar to Register.
         /// </summary>
         public static string Layout_Register {
             get {
