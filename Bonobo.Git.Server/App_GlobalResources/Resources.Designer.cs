@@ -835,6 +835,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back.
+        /// </summary>
+        public static string Repository_Back {
+            get {
+                return ResourceManager.GetString("Repository_Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Added.
         /// </summary>
         public static string Repository_Commit_Added {
@@ -984,15 +993,6 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Repository_Commits_Title {
             get {
                 return ResourceManager.GetString("Repository_Commits_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Back to the list.
-        /// </summary>
-        public static string Repository_Create_Back {
-            get {
-                return ResourceManager.GetString("Repository_Create_Back", resourceCulture);
             }
         }
         

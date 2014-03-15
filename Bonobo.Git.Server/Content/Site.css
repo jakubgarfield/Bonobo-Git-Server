@@ -29,6 +29,7 @@ th a:hover { text-decoration: none; color: #4183c4;}
 .pure-form .checkboxlist ul li { margin-bottom: 3px; list-style: none;}
 .pure-form .checkboxlist ul li label { width: 14em;}
 .pure-form em, .pure-form i.fa-info-circle { color: silver; padding-left: 0.3em;}
+.pure-form .pure-button { margin-left: 1em;}
 
 textarea.medium, input.medium { width: 30em;}
 

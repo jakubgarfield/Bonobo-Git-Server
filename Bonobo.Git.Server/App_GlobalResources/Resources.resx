@@ -351,8 +351,8 @@
   <data name="Repository_Commit_TypeChanged" xml:space="preserve">
     <value>Type Changed</value>
   </data>
-  <data name="Repository_Create_Back" xml:space="preserve">
-    <value>Back to the list</value>
+  <data name="Repository_Back" xml:space="preserve">
+    <value>Back</value>
   </data>
   <data name="Repository_Create_DirectoryExists" xml:space="preserve">
     <value>A directory with this name already exists in your repository folder. Delete this directory or choose another name and try again.</value>
