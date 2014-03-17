@@ -3,48 +3,29 @@
 @{
     ViewBag.Title = Resources.Settings_Index_Title;
 }
-<h2>@Resources.Settings_Index_Title</h2>
-@using (Html.BeginForm("Index", "Settings", FormMethod.Post, new { @class = "uniForm" }))
-{
-    if (TempData["UpdateSuccess"] != null && (bool)TempData["UpdateSuccess"])
-    {
-        <div id="okMsg">
-            <p>@Resources.Settings_Index_UpdateSuccess</p>
-        </div>
-    }
 
-    @Html.ValidationSummary(false, Resources.Settings_Index_Failed, new { @id = "errorMsg" })
+<h1>@Resources.Settings_Index_Title</h1>
+
+@if (TempData["UpdateSuccess"] != null && (bool)TempData["UpdateSuccess"])
+{
+    <div class="summary-success">
+        <p>@Resources.Settings_Index_UpdateSuccess</p>
+    </div>
+}
+
+@using (Html.BeginForm("Index", "Settings", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
+{
+    @Html.ValidationSummary(false, Resources.Settings_Index_Failed)
+    
     <fieldset>
-        <h3>@Resources.Settings_Index_Title</h3>
-        <div class="ctrlHolder noLabel">
-            <label for="AllowAnonymousPush">@Html.CheckBoxFor(m => m.AllowAnonymousPush) @Model.GetType().GetDisplayValue("AllowAnonymousPush")</label>
-            <p class="formHint">
-            </p>
-        </div>
-        <div class="ctrlHolder">
+
+        <div class="pure-control-group">
             @Html.LabelFor(m => m.RepositoryPath)
-            @Html.TextBoxFor(m => m.RepositoryPath, new { @class = "textInput" })<em>*</em>
-            <p class="formHint">
-              @Html.ValidationMessageFor(m => m.RepositoryPath)
-              @Resources.Settings_Global_DirectoryHint
-            </p>
+            @Html.TextBoxFor(m => m.RepositoryPath, new { @class = "medium" })<em>*</em>
+            <i class="fa fa-info-circle" title="@Resources.Settings_Global_DirectoryHint"></i>
         </div>
-        <div class="ctrlHolder noLabel">
-            <label for="AllowAnonymousRegistration">@Html.CheckBoxFor(m => m.AllowAnonymousRegistration) @Model.GetType().GetDisplayValue("AllowAnonymousRegistration")</label>
-            <p class="formHint">
-                @Resources.Settings_Global_AllowAnonymousRegistration_Hint
-            </p>
-        </div>
-        <div class="ctrlHolder noLabel">
-            <label for="AllowUserRepositoryCreation">@Html.CheckBoxFor(m => m.AllowUserRepositoryCreation) @Model.GetType().GetDisplayValue("AllowUserRepositoryCreation")</label>
-            <p class="formHint">
-                @Resources.Settings_Global_AllowUserRepositoryCreation_Hint
-            </p>
-        </div>
-        <div class="ctrlHolder">
-            <label for="DefaultLanguage">@Model.GetType().GetDisplayValue("DefaultLanguage")</label>
-            @*@Html.TextBoxFor(m => m.DefaultLanguage, new { @class = "textInput" })*@
-            
+        <div class="pure-control-group">
+            @Html.LabelFor(m => m.DefaultLanguage)
             <select id="DefaultLanguage" name="DefaultLanguage">
                 <option @((Model.DefaultLanguage == "cs-CZ") ? "Selected" : "") value="cs-CZ">cs-CZ</option>
                 <option @((Model.DefaultLanguage == "ja-JP") ? "Selected" : "") value="ja-JP">ja-JP</option>
@@ -61,14 +42,15 @@
                 <option @((Model.DefaultLanguage == "de-DE") ? "Selected" : "") value="de-DE">de-DE</option>
                 <option @((Model.DefaultLanguage == "fr-FR") ? "Selected" : "") value="fr-FR">fr-FR</option>
             </select>
-            <p class="formHint">
-              @Html.ValidationMessageFor(m => m.DefaultLanguage)
-              @Resources.Settings_Global_DefaultLanguage_Hint
-            </p>
+            <i class="fa fa-info-circle" title="@Resources.Settings_Global_DefaultLanguage_Hint"></i>
         </div>
-        <div class="buttonHolder">
-            <button type="reset" class="secondaryAction">← @Resources.Reset</button>
-            <input type="submit" value="@Resources.Settings_Index_Save" class="primaryAction" />
+        <div class="pure-controls">
+            <label for="AllowAnonymousRegistration" class="pure-checkbox">@Html.CheckBoxFor(m => m.AllowAnonymousRegistration) @Model.GetType().GetDisplayValue("AllowAnonymousRegistration") <i class="fa fa-info-circle" title="@Resources.Settings_Global_AllowAnonymousRegistration_Hint"></i></label>  
+            <label for="AllowUserRepositoryCreation" class="pure-checkbox">@Html.CheckBoxFor(m => m.AllowUserRepositoryCreation) @Model.GetType().GetDisplayValue("AllowUserRepositoryCreation") <i class="fa fa-info-circle" title="@Resources.Settings_Global_AllowUserRepositoryCreation_Hint"></i></label>            
+            <label for="AllowAnonymousPush" class="pure-checkbox">@Html.CheckBoxFor(m => m.AllowAnonymousPush) @Model.GetType().GetDisplayValue("AllowAnonymousPush")</label>
+        </div>
+        <div class="pure-controls">
+            <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-save"></i> @Resources.Settings_Index_Save</button>
         </div>
     </fieldset>
 }

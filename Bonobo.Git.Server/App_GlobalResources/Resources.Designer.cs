@@ -1591,7 +1591,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selected path does not exist. Please create the folder or choose a different path..
+        ///   Looks up a localized string similar to Selected path does not exist. Please create the folder or choose a different one..
         /// </summary>
         public static string Settings_RepositoryPathNotExists {
             get {
@@ -1600,7 +1600,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You don&apos;t have privileges to write to the selected folder. Please choose a different path..
+        ///   Looks up a localized string similar to You don&apos;t have privileges to write to the folder. Please choose a different one..
         /// </summary>
         public static string Settings_RepositoryPathUnauthorized {
             get {

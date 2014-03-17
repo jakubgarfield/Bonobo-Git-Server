@@ -502,10 +502,10 @@
     <value>Settings updated successfully.</value>
   </data>
   <data name="Settings_RepositoryPathNotExists" xml:space="preserve">
-    <value>Selected path does not exist. Please create the folder or choose a different path.</value>
+    <value>Selected path does not exist. Please create the folder or choose a different one.</value>
   </data>
   <data name="Settings_RepositoryPathUnauthorized" xml:space="preserve">
-    <value>You don't have privileges to write to the selected folder. Please choose a different path.</value>
+    <value>You don't have privileges to write to the folder. Please choose a different one.</value>
   </data>
   <data name="Team_Create_Back" xml:space="preserve">
     <value>Back</value>
