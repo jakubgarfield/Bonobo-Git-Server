@@ -1150,7 +1150,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Git Repository Location.
+        ///   Looks up a localized string similar to Url.
         /// </summary>
         public static string Repository_Detail_Location {
             get {
@@ -1447,7 +1447,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download ZIP.
+        ///   Looks up a localized string similar to Download.
         /// </summary>
         public static string Repository_Tree_Zip {
             get {

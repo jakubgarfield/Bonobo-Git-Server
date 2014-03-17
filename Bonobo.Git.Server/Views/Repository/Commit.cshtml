@@ -47,11 +47,6 @@
 
 @if (Model != null)
 {
-    <div class="uniForm">
-        <fieldset class="inlineLabels detail">
-            <h3>@Model.Name</h3>
-        </fieldset>
-    </div>
     <div class="repositoryContent">
         @Html.Partial("_Commit", Model)
         <div class="changes">

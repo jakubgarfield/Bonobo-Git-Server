@@ -21,7 +21,7 @@
 
         <div class="pure-control-group">
             @Html.LabelFor(m => m.RepositoryPath)
-            @Html.TextBoxFor(m => m.RepositoryPath, new { @class = "medium" })<em>*</em>
+            @Html.TextBoxFor(m => m.RepositoryPath, new { @class = "medium", autofocus = "" })<em>*</em>
             <i class="fa fa-info-circle" title="@Resources.Settings_Global_DirectoryHint"></i>
         </div>
         <div class="pure-control-group">

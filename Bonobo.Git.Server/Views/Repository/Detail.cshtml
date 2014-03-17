@@ -5,96 +5,83 @@
     var serverAddress = System.Configuration.ConfigurationManager.AppSettings["GitServerPath"] ?? Request.Url.ToString().Substring(0, Request.Url.ToString().IndexOf("Repository"));
 }
 @if (Model != null)
-{   
-    <div class="uniForm">
-        <fieldset class="inlineLabels detail">
-            <h3>@Model.Name</h3>
-            <div class="ctrlHolder">
-                <h5>@Html.LabelFor(m => m.Name)</h5>
-                <div class="content">
-                    @Model.Name
-                    @switch (Model.Status)
-                    {
-                        case RepositoryDetailStatus.Valid:
-                            break;
-                        case RepositoryDetailStatus.Missing:
-                            <span class="status">(Missing)</span>
-                            break;
-                        case RepositoryDetailStatus.Unknown:
-                        default:
-                            <span class="status">(Status Unknown)</span>
-                            break;
-                    }
-                </div>
+{
+    <div class="pure-form pure-form-aligned detail">
+        <fieldset>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Name)
+                @Model.Name
+                @switch (Model.Status)
+                {
+                    case RepositoryDetailStatus.Valid:
+                        break;
+                    case RepositoryDetailStatus.Missing:
+                        <span class="status">(Missing)</span>
+                        break;
+                    case RepositoryDetailStatus.Unknown:
+                    default:
+                    <span class="status">(Status Unknown)</span>
+                        break;
+                }
             </div>
-            <div class="ctrlHolder">
-                <h5>
-                    <label>@Resources.Repository_Detail_Location</label></h5>
-                <div class="content">
-                    @String.Concat(serverAddress, Model.Name, ".git")
-                </div>
+            <div class="pure-control-group">
+                <label>@Resources.Repository_Detail_Location</label>
+                @String.Concat(serverAddress, Model.Name, ".git")
             </div>
-            <div class="ctrlHolder">
-                <h5>@Html.LabelFor(m => m.Description)</h5>
-                <div class="content">@Model.Description</div>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Description)
+                @Model.Description
             </div>
-            <div class="ctrlHolder">
-                <h5>@Html.LabelFor(m => m.AllowAnonymous)</h5>
-                <div class="content">
-                    @if (Model.AllowAnonymous)
-                    {
-                        @Resources.Repository_Detail_Yes
-                    }
-                    else
-                    {
-                        @Resources.Repository_Detail_No
-                    }
-                </div>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.AllowAnonymous)
+                @if (Model.AllowAnonymous)
+                {
+                    @Resources.Repository_Detail_Yes
+                }
+                else
+                {
+                    @Resources.Repository_Detail_No
+                }
             </div>
-            <div class="ctrlHolder">
-                <h5>@Html.LabelFor(m => m.Users)</h5>
-                <div class="content">
-                    @for (int i = 0; i < Model.Users.Length; i++)
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Users)
+                @for (int i = 0; i < Model.Users.Length; i++)
+                {
+                    @Html.ActionLink(@Model.Users[i], "Detail", "Account", new { id = UsernameUrl.Encode(@Model.Users[i]) }, null)
+                    if (i + 1 != Model.Users.Length)
                     {
-                        @Html.ActionLink(@Model.Users[i], "Detail", "Account", new { id = UsernameUrl.Encode(@Model.Users[i]) }, null)
-                        if (i + 1 != Model.Users.Length)
-                        {
                         <text>, </text>
-                        }
                     }
-                </div>
+                }
             </div>
-            <div class="ctrlHolder">
-                <h5>@Html.LabelFor(m => m.Administrators)</h5>
-                <div class="content">
-                    @for (int i = 0; i < Model.Administrators.Length; i++)
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Administrators)
+                @for (int i = 0; i < Model.Administrators.Length; i++)
+                {
+                    @Html.ActionLink(@Model.Administrators[i], "Detail", "Account", new { id = UsernameUrl.Encode(@Model.Administrators[i]) }, null)
+                    if (i + 1 != Model.Administrators.Length)
                     {
-                        @Html.ActionLink(@Model.Administrators[i], "Detail", "Account", new { id = UsernameUrl.Encode(@Model.Administrators[i]) }, null)
-                        if (i + 1 != Model.Administrators.Length)
-                        {
                         <text>, </text>
-                        }
                     }
-                </div>
+                }
             </div>
-            <div class="ctrlHolder">
-                <h5>@Html.LabelFor(m => m.Teams)</h5>
-                <div class="content">
-                    @for (int i = 0; i < Model.Teams.Length; i++)
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Teams)
+                @for (int i = 0; i < Model.Teams.Length; i++)
+                {
+                    @Html.ActionLink(@Model.Teams[i], "Detail", "Team", new { id = @Model.Teams[i] }, null)
+                    if (i + 1 != Model.Teams.Length)
                     {
-                        @Html.ActionLink(@Model.Teams[i], "Detail", "Team", new { id = @Model.Teams[i] }, null)
-                        if (i + 1 != Model.Teams.Length)
-                        {
                         <text>, </text>
-                        }
                     }
-                </div>
+                }
             </div>
-            <div class="buttonHolder">
-                @Html.ActionLink("←  " + Resources.Repository_Detail_Back, "Index", null, new { @class = "secondaryAction" })
+            <div class="pure-controls">
+                <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Repository_Detail_Back</a>
                 @if (Model.IsCurrentUserAdministrator)
                 {
-                    @Html.ActionLink(Resources.Repository_Detail_Edit, "Edit", new { id = Model.Name }, new { @class = "primaryAction" })@Html.ActionLink(Resources.Repository_Detail_Delete, "Delete", new { id = Model.Name }, new { @class = "primaryAction deleteButton" })
+                    <a class="pure-button" href="@Url.Action("Edit", new { id = Model.Name })"><i class="fa fa-pencil-square-o"></i> @Resources.Repository_Detail_Edit</a>
+                    <a class="pure-button" href="@Url.Action("Delete", new { id = Model.Name })"><i class="fa fa-trash-o"></i> @Resources.Repository_Detail_Delete</a>
                 }
             </div>
         </fieldset>

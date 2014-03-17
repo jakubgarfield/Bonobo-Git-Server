@@ -8,13 +8,15 @@
 else
 {  
     <text>
-    <h2>@Resources.Repository_Detail_Title</h2>
-    <ul id="repositoryMenu" class="clearfix">
-        <li>@Html.ActionLink(Resources.Repository_Detail_Detail, "Detail", new { id = ViewBag.ID }, new { @class = "detail"})</li>
-        <li>@Html.ActionLink(Resources.Repository_Layout_Browse, "Tree", new { id = ViewBag.ID, encodedName = UrlParameter.Optional }, new { @class = "browser" })</li>
-        <li>@Html.ActionLink(Resources.Repository_Layout_Commits, "Commits", new { id = ViewBag.ID, encodedName = UrlParameter.Optional }, new { @class = "commits" })</li>
-        <li>@Html.ActionLink(Resources.Repository_Tree_Zip, "Download", new { id = ViewBag.ID, encodedName = UrlParameter.Optional }, new { @class = "zip" })</li>
-    </ul> 
+    <h1>@Model.Name</h1>
+    <div class="pure-menu pure-menu-open pure-menu-horizontal repository-menu">
+        <ul>
+            <li><a href="@Url.Action("Detail", new { id = ViewBag.ID })" class="detail"><i class="fa fa-hdd-o"></i> @Resources.Repository_Detail_Detail</a></li>
+            <li><a href="@Url.Action("Tree", new { id = ViewBag.ID, encodedName = UrlParameter.Optional })" class="browser"><i class="fa fa-files-o"></i> @Resources.Repository_Layout_Browse</a></li>
+            <li><a href="@Url.Action("Commits", new { id = ViewBag.ID, encodedName = UrlParameter.Optional })" class="commits"><i class="fa fa-random"></i> @Resources.Repository_Layout_Commits</a></li>
+            <li><a href="@Url.Action("Download", new { id = ViewBag.ID, encodedName = UrlParameter.Optional })" class="download"><i class="fa fa-download"></i> @Resources.Repository_Tree_Zip</a></li>
+        </ul> 
+    </div>
     </text>
 }
 @RenderBody()

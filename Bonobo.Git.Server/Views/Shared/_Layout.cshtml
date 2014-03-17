@@ -6,7 +6,7 @@
     <title>@ViewBag.Title :: Bonobo Git Server</title>
     @Styles.Render("~/Content/css")
 </head>
-<body class="@HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString()">
+<body class="@HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString() @HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString()">
     <div class="main">
         <div class="header">
             <div class="home-menu pure-menu pure-menu-open pure-menu-horizontal">

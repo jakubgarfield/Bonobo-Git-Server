@@ -403,7 +403,7 @@
     <value>Admin</value>
   </data>
   <data name="Repository_Detail_Location" xml:space="preserve">
-    <value>Git Repository Location</value>
+    <value>Url</value>
   </data>
   <data name="Repository_Detail_Name" xml:space="preserve">
     <value>Name</value>
@@ -706,7 +706,7 @@
     <value>Raw</value>
   </data>
   <data name="Repository_Tree_Zip" xml:space="preserve">
-    <value>Download ZIP</value>
+    <value>Download</value>
   </data>
   <data name="Repository_Commit_Details" xml:space="preserve">
     <value>Details</value>

@@ -1,19 +1,34 @@
-﻿@if (ViewData["branches"] != null)
-{
-    <div class="branchSwitcher">
-        <h4>@Resources.Repository_SwitchBranch</h4>
-        <ul class="clearfix">
-            @{ 
-                var action = ViewContext.RouteData.Values["Action"].ToString() == "Blob" ? "Tree" : ViewContext.RouteData.Values["Action"].ToString();
-                foreach (var item in ViewData["branches"] as IEnumerable<string>)
-                {
-                    <li class="@(String.Equals(ViewData["referenceName"], item) ? "branchactive" : "branchinactive")">@Html.ActionLink(item as string, action, new { encodedName = PathEncoder.Encode(item), encodedPath = String.Empty })</li>
-                }
-                foreach (var item in ViewData["tags"] as IEnumerable<string>)
-                {
-                    <li class="@(String.Equals(ViewData["referenceName"], item) ? "tagactive" : "taginactive")">@Html.ActionLink(item as string, action, new { encodedName = PathEncoder.Encode(item), encodedPath = String.Empty })</li>
-                }
-            }
-        </ul>
-    </div>
+﻿@{
+    var branches = ViewData["branches"] as IEnumerable<string>;
+    var tags = ViewData["tags"] as IEnumerable<string>;
+    var isTag = tags.Contains(ViewData["referenceName"]);
 }
+
+@if (ViewData["branches"] != null)
+{
+    <nav class="branches">
+        <ul>
+            <li>
+                <a href="#" class="@(isTag ? "tag" : "branch")">@ViewData["referenceName"]</a>
+                @if (tags.Any() || branches.Any())
+                {
+                    <ul>
+                        @{
+                    var action = ViewContext.RouteData.Values["Action"].ToString() == "Blob" ? "Tree" : ViewContext.RouteData.Values["Action"].ToString();
+                    foreach (var item in branches)
+                    {
+                        <li class="@(String.Equals(ViewData["referenceName"], item) ? "branch active" : "branch")">@Html.ActionLink(item as string, action, new { encodedName = PathEncoder.Encode(item), encodedPath = String.Empty })</li>
+                    }
+                    foreach (var item in tags)
+                    {
+                        <li class="@(String.Equals(ViewData["referenceName"], item) ? "tag active" : "tag")">@Html.ActionLink(item as string, action, new { encodedName = PathEncoder.Encode(item), encodedPath = String.Empty })</li>
+                    }
+                        }
+                    </ul>
+                }
+            </li>
+        </ul>
+    </nav>
+}
+
+
