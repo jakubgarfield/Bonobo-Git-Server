@@ -9,40 +9,38 @@
 else
 {
     <text>
-    <h2>@Resources.Team_Edit_Title</h2>
-    @using (Html.BeginForm("Edit", "Team", FormMethod.Post, new { @class = "uniForm" }))
+    <h1>@Model.Name</h1>
+
+    @if (ViewBag.UpdateSuccess != null && ViewBag.UpdateSuccess)
     {
-        if (ViewBag.UpdateSuccess != null && ViewBag.UpdateSuccess)
-        {
-        <div id="okMsg">
+        <div class="summary-success">
             <p>@Resources.Team_Edit_UpdateSuccess</p>
         </div>
-        }
-        @Html.ValidationSummary(false, Resources.Team_Edit_Failure, new { @id = "errorMsg" })
-        @Html.HiddenFor(m => m.Name);
+    }
+
+    @using (Html.BeginForm("Edit", "Team", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
+    {
+        @Html.ValidationSummary(false, Resources.Team_Edit_Failure)
+        @Html.HiddenFor(m => m.Name)
+        
         <fieldset>
-            <h3>@Model.Name</h3>
-            <div class="ctrlHolder"> 
-              @Html.LabelFor(m => m.Description)
-              @Html.TextAreaFor(m => m.Description, new { @class = "textInput medium" })
-              <p class="formHint">
-              </p> 
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Description)
+                @Html.TextAreaFor(m => m.Description, new { @class = "textInput medium" })
             </div> 
-            <div class="ctrlHolder"> 
-                @Html.LabelFor(m => m.Members)             
+            <div class="pure-control-group checkboxlist">
+                @Html.LabelFor(m => m.Members)
                 @{
-                    var users = (from u in ViewData["AvailableUsers"] as string[] orderby u
+                    var users = (from u in ViewData["AvailableUsers"] as string[]
+                                 orderby u
                                  select new SelectListItem() { Value = u, Text = u }).ToArray();
                 }
-            
-                @Html.CheckboxListFor(m => m.Members, users, new { @class = "checkboxList medium" });             
-              <p class="formHint">                  
-              </p> 
+
+                @Html.CheckboxListFor(m => m.Members, users, new { @class = "checkboxList medium" })
             </div>
-            <div class="buttonHolder"> 
-                @Html.ActionLink("← " + Resources.Team_Edit_Back, "Index", null, new { @class = "secondaryAction" })
-                <button type="reset" class="secondaryAction">← @Resources.Reset</button> 
-                <input type="submit" value="@Resources.Account_Edit_Submit" class="primaryAction" />
+            <div class="pure-controls">
+                <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Team_Edit_Back</a>
+                <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-save"></i> @Resources.Team_Edit_Submit</button>
             </div>
         </fieldset>
     }

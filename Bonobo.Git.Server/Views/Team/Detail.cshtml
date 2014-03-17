@@ -3,50 +3,52 @@
     ViewBag.Title = Resources.Team_Detail_Title;
 }
 @if (Model == null)
-{    
-    @Html.Partial("~/Views/Shared/_ItemNotFound.cshtml") 
+{
+    @Html.Partial("~/Views/Shared/_ItemNotFound.cshtml")
 }
 else
-{  
-    <div class="uniForm">
-        <h2>@Resources.Team_Detail_Title</h2>
-        <fieldset class="inlineLabels detail">
-            <h3>@Model.Name</h3>
-            <div class="ctrlHolder">
-                <h5>@Html.LabelFor(m => m.Name)</h5>
-                <div class="content">@Model.Name</div>
+{
+    <h1>@Model.Name</h1>
+
+    <div class="pure-form pure-form-aligned detail">
+        <fieldset>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Name)
+                <span>@Model.Name</span>
             </div>
-            <div class="ctrlHolder">
-                <h5>@Html.LabelFor(m => m.Description)</h5>
-                <div class="content">@Model.Description</div>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Description)
+                <span>@Model.Description</span>
             </div>
-            <div class="ctrlHolder">
-                <h5>@Html.LabelFor(m => m.Members)</h5>
-                <div class="content">
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Members)
+                <span>
                     @for (int i = 0; i < Model.Members.Length; i++)
                     {
                         @Html.ActionLink(@Model.Members[i], "Detail", "Account", new { id = UsernameUrl.Encode(@Model.Members[i]) }, null)if (i + 1 != Model.Members.Length)
-                                                                                                                      {<text>, </text>}
+                                                                                                                                          {<text>, </text>}
                     }
-                </div>
+                </span>
             </div>
-            <div class="ctrlHolder">
-                <h5>@Html.LabelFor(m => m.Repositories)</h5>
-                <div class="content">
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Repositories)
+                <span>
                     @for (int i = 0; i < Model.Repositories.Length; i++)
                     {
                         @Html.ActionLink(@Model.Repositories[i], "Detail", "Repository", new { id = @Model.Repositories[i] }, null)if (i + 1 != Model.Repositories.Length)
                                                                                                                                    {<text>, </text>}
                     }
-                </div>
+                </span>
             </div>
-            <div class="buttonHolder">
-                @Html.ActionLink("←  " + Resources.Team_Detail_Back, "Index", null, new { @class = "secondaryAction" })
+            <div class="pure-controls">
+                <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Team_Detail_Back</a>
                 @if (User.IsInRole(Definitions.Roles.Administrator))
                 {
-                    @Html.ActionLink(Resources.Team_Detail_Edit, "Edit", new { id = Model.Name }, new { @class = "primaryAction" })@Html.ActionLink(Resources.Team_Detail_Delete, "Delete", new { id = Model.Name }, new { @class = "primaryAction deleteButton" })
+                    <a class="pure-button" href="@Url.Action("Edit", new { id = Model.Name })"><i class="fa fa-pencil-square-o"></i> @Resources.Team_Detail_Edit</a>
+                    <a class="pure-button" href="@Url.Action("Delete", new { id = Model.Name })"><i class="fa fa-trash-o"></i> @Resources.Team_Detail_Delete</a>
                 }
             </div>
+
         </fieldset>
     </div>
 }

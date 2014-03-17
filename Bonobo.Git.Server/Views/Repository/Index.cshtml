@@ -55,9 +55,9 @@
     @permitted.GetHtml(
     tableStyle: "pure-table repositories",
     columns: permitted.Columns(
-             permitted.Column("Name", header: typeof(RepositoryDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink(GetNameToDisplay((string)item.Name, (RepositoryDetailStatus)item.Status), "Detail", new { id = item.Name }, new { @class = "repository" })),
+             permitted.Column("Name", header: typeof(RepositoryDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink(GetNameToDisplay((string)item.Name, (RepositoryDetailStatus)item.Status), "Detail", new { id = item.Name }, new { @class = "detail" })),
              permitted.Column("Description", typeof(RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string)item.Description).Length > 100)) ? ((string)item.Description).Substring(0, 100) + " ... " : item.Description),
-             permitted.Column(format: (item) => Html.ActionLink(" ", "Edit", new { id = item.Name }, new { @class = "edit", title = Resources.Account_Detail_Edit }), style: "action"),
-             permitted.Column(format: (item) => Html.ActionLink(" ", "Delete", new { id = item.Name }, new { @class = "delete", title = Resources.Account_Detail_Delete }), style: "action")
+             permitted.Column(format: (item) => Html.ActionLink(" ", "Edit", new { id = item.Name }, new { @class = "edit", title = Resources.Grid_Edit }), style: "action"),
+             permitted.Column(format: (item) => Html.ActionLink(" ", "Delete", new { id = item.Name }, new { @class = "delete", title = Resources.Grid_Delete }), style: "action")
     ))
 }

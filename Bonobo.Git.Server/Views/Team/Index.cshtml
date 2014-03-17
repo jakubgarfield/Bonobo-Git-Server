@@ -3,38 +3,44 @@
 @{
     ViewBag.Title = Resources.Team_Index_Title;
 }
-<h2>@Resources.Team_Index_Title</h2>
+
+<div class="pure-g">
+    <div class="pure-u-3-5">
+        <h1>@Resources.Team_Index_Title</h1>
+    </div>
+    <div class="pure-u-2-5 add">
+        @if (!WindowsActionFilterAttribute.IsWindowsModeActive)
+        {
+            <a class="pure-button pure-button-primary" href="@Url.Action("Create")"><i class="fa fa-plus-circle"></i> @Resources.Team_Index_CreateNew</a>
+        }
+    </div>
+</div>
+
 @if (TempData["CreateSuccess"] != null && (bool)TempData["CreateSuccess"])
 {
-    <div class="uniForm">    
-        <div id="okMsg">
-            <p>@Resources.Team_Create_Success</p>
-        </div>
+    <div class="summary-success">
+        <p>@Resources.Team_Create_Success</p>
     </div>
 }
 @if (TempData["DeleteSuccess"] != null && (bool)TempData["DeleteSuccess"])
 {
-    <div class="uniForm">    
-        <div id="okMsg">
-            <p>@Resources.Team_Delete_Success</p>
-        </div>
-    </div> 
+    <div class="summary-success">
+        <p>@Resources.Team_Delete_Success</p>
+    </div>
 }
+
 @{
     var grid = new WebGrid(source: Model, defaultSort: "Name", rowsPerPage: 15);
 }
-<div class="create">@Html.ActionLink(Resources.Team_Index_CreateNew, "Create")</div>
-<h3>@Resources.Team_Index_Teams</h3>
+
 <div class="w-grid">
     @grid.GetHtml(
-        tableStyle: "grid",
-        headerStyle: "head",
-        alternatingRowStyle: "even",
+        tableStyle: "pure-table teams",
         columns: grid.Columns(
-            grid.Column(header: typeof(TeamDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink((string)item.Name, "Detail", new { id = item.Name }, new { @class = "team" })),
+            grid.Column(header: typeof(TeamDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink((string)item.Name, "Detail", new { id = item.Name }, new { @class = "detail" })),
             grid.Column("Description", typeof(TeamDetailModel).GetDisplayValue("Description"), format: (item) => item.Description != null && ((string)item.Description).Length > 100 ? ((string)item.Description).Substring(0, 100) + " (...) " : item.Description),
-            grid.Column(format: (item) => Html.ActionLink(Resources.Grid_Edit, "Edit", new { id = item.Name }), style: "action"),
-            grid.Column(format: (item) => Html.ActionLink(Resources.Grid_Delete, "Delete", new { id = item.Name }, new { @class = "deleteButton" }), style: "action")
+            grid.Column(format: (item) => Html.ActionLink(" ", "Edit", new { id = item.Name }, new { @class = "edit", title = Resources.Grid_Edit }), style: "action"),
+            grid.Column(format: (item) => Html.ActionLink(" ", "Delete", new { id = item.Name }, new { @class = "delete", title = Resources.Grid_Delete }), style: "action")
         )
     )
 </div>

@@ -40,7 +40,7 @@
                         if (UserConfiguration.Current.AllowAnonymousRegistration)
                         {
                             <li><a href="@Url.Action("LogOn", "Home", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) })"><i class="fa fa-sign-in"></i> @Resources.Layout_LogOn</a></li>
-                            <li><a href="@Url.Action("Create", "Account", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) })"><i class="fa fa-pencil"></i> @Resources.Layout_Register</a></li>
+                            <li><a href="@Url.Action("Create", "Account")"><i class="fa fa-pencil"></i> @Resources.Layout_Register</a></li>
                         }
                         else
                         {

@@ -1096,7 +1096,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Back to the list.
+        ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string Repository_Detail_Back {
             get {
@@ -1222,7 +1222,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Back to the list.
+        ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string Repository_Edit_Back {
             get {
@@ -1618,7 +1618,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Back to the list.
+        ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string Team_Create_Back {
             get {
@@ -1690,7 +1690,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Back to the list.
+        ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string Team_Detail_Back {
             get {
@@ -1762,7 +1762,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Back to the list.
+        ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string Team_Edit_Back {
             get {

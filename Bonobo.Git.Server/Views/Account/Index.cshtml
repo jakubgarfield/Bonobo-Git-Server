@@ -43,14 +43,14 @@
 @{
     var grid = new WebGrid(source: Model, defaultSort: "Username", rowsPerPage: 15);
     @grid.GetHtml(
-        tableStyle: "pure-table  users",
+        tableStyle: "pure-table users",
         columns: grid.Columns(
         grid.Column("Username", header: typeof(UserDetailModel).GetDisplayValue("Username"), format: (item) => Html.ActionLink((string)item.Username, "Detail", new { id = UsernameUrl.Encode(item.Username) }, new { @class = "detail" })),
             grid.Column("Name", typeof(UserDetailModel).GetDisplayValue("Name")),
             grid.Column("Surname", typeof(UserDetailModel).GetDisplayValue("Surname")),
             grid.Column("Email", typeof(UserDetailModel).GetDisplayValue("Email")),
-            grid.Column(format: (item) => Html.ActionLink(" ", "Edit", new { id = UsernameUrl.Encode(item.Username) }, new { @class = "edit", title = Resources.Account_Detail_Edit }), style: "action"),
-            grid.Column(format: (item) => Html.ActionLink(" ", "Delete", new { id = UsernameUrl.Encode(item.Username) }, new { @class = "delete", title = Resources.Account_Detail_Delete }), style: "action")
+            grid.Column(format: (item) => Html.ActionLink(" ", "Edit", new { id = UsernameUrl.Encode(item.Username) }, new { @class = "edit", title = Resources.Grid_Edit }), style: "action"),
+            grid.Column(format: (item) => Html.ActionLink(" ", "Delete", new { id = UsernameUrl.Encode(item.Username) }, new { @class = "delete", title = Resources.Grid_Delete }), style: "action")
         )
     )
 }

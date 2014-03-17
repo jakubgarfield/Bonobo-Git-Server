@@ -385,7 +385,7 @@
     <value>Anonymous</value>
   </data>
   <data name="Repository_Detail_Back" xml:space="preserve">
-    <value>Back to the list</value>
+    <value>Back</value>
   </data>
   <data name="Repository_Detail_Delete" xml:space="preserve">
     <value>Delete</value>
@@ -424,7 +424,7 @@
     <value>Yes</value>
   </data>
   <data name="Repository_Edit_Back" xml:space="preserve">
-    <value>Back to the list</value>
+    <value>Back</value>
   </data>
   <data name="Repository_Edit_CantRemoveYourself" xml:space="preserve">
     <value>You can't remove yourself from administrators.</value>
@@ -508,7 +508,7 @@
     <value>You don't have privileges to write to the selected folder. Please choose a different path.</value>
   </data>
   <data name="Team_Create_Back" xml:space="preserve">
-    <value>Back to the list</value>
+    <value>Back</value>
   </data>
   <data name="Team_Create_Fail" xml:space="preserve">
     <value>New team creation was unsuccessful. Please correct the errors and try again.</value>
@@ -532,7 +532,7 @@
     <value>The team was deleted.</value>
   </data>
   <data name="Team_Detail_Back" xml:space="preserve">
-    <value>Back to the list</value>
+    <value>Back</value>
   </data>
   <data name="Team_Detail_Delete" xml:space="preserve">
     <value>Delete</value>
@@ -556,7 +556,7 @@
     <value>Team Detail</value>
   </data>
   <data name="Team_Edit_Back" xml:space="preserve">
-    <value>Back to the list</value>
+    <value>Back</value>
   </data>
   <data name="Team_Edit_Failure" xml:space="preserve">
     <value>Team update was unsuccessful. Please correct the errors and try again.</value>

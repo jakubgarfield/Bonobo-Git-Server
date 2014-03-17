@@ -3,8 +3,9 @@
     ViewBag.Title = Resources.Delete_Title;
 }
 <h1>@Resources.Confirm</h1>
-<p>@String.Format(Resources.Delete_ConfirmationText, Model.Username)</p>
-
+<div>
+    <p class="summary-error">@String.Format(Resources.Delete_ConfirmationText, Model.Username)</p>
+</div>
 
 @using (Html.BeginForm("Delete", "Account", FormMethod.Post, new { @class = "pure-form" }))
 {

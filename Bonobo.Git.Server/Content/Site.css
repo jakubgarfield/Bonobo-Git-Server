@@ -57,11 +57,13 @@ textarea.medium, input.medium { width: 30em;}
 
 .add { text-align: right; margin-top: 1.6em;}
 
-.repositories tbody td a:before, .users tbody td a.detail:before { font-family: FontAwesome; top: 0; padding-right: 0.5em;} 
-.repositories tbody td a:before { content: "\f0a0";}
+.repositories tbody td a.detail:before, .users tbody td a.detail:before, .teams tbody td a.detail:before { font-family: FontAwesome; top: 0; padding-right: 0.5em;} 
+.repositories tbody td a.detail:before { content: "\f0a0";}
 .users tbody td a.detail:before { content: "\f007";}
+.teams tbody td a.detail:before { content: "\f0c0";}
 tbody td a.edit:before { font-family: FontAwesome; top: 0; content: "\f044";}
 tbody td a.delete:before { font-family: FontAwesome; top: 0; content: "\f014";}
+tbody td.action { width: 1em;}
 tfoot td { text-align: center; border-bottom: none !important;}
  
 
