@@ -199,7 +199,7 @@
     <value>The account was updated successfully.</value>
   </data>
   <data name="Account_Index_Title" xml:space="preserve">
-    <value>User Management</value>
+    <value>Users</value>
   </data>
   <data name="Grid_Delete" xml:space="preserve">
     <value>Delete</value>
@@ -496,10 +496,10 @@
     <value>Save</value>
   </data>
   <data name="Settings_Index_Title" xml:space="preserve">
-    <value>Global Settings</value>
+    <value>Settings</value>
   </data>
   <data name="Settings_Index_UpdateSuccess" xml:space="preserve">
-    <value>Global settings updated successfully.</value>
+    <value>Settings updated successfully.</value>
   </data>
   <data name="Settings_RepositoryPathNotExists" xml:space="preserve">
     <value>Selected path does not exist. Please create the folder or choose a different path.</value>
@@ -574,7 +574,7 @@
     <value>Create new team</value>
   </data>
   <data name="Team_Index_Title" xml:space="preserve">
-    <value>Team Management</value>
+    <value>Teams</value>
   </data>
   <data name="Validation_Compare" xml:space="preserve">
     <value>"{0}" and "{1}" must have the same value.</value>
@@ -599,15 +599,6 @@
   </data>
   <data name="Settings_Global_DirectoryHint" xml:space="preserve">
     <value>All repositories are stored in this directory.</value>
-  </data>
-  <data name="Home_About_Thanks" xml:space="preserve">
-    <value>Thank you!</value>
-  </data>
-  <data name="Home_About_Thanks_p" xml:space="preserve">
-    <value>Bonobo Git Server is using a few open source and freeware projects. Many thanks to all authors and contributors for their great work.</value>
-  </data>
-  <data name="Home_About_Title" xml:space="preserve">
-    <value>About</value>
   </data>
   <data name="Repository_AdministratorsHint" xml:space="preserve">
     <value>Administrators have full access to the repository. They can modify repository metadata or delete the repository.</value>
@@ -725,5 +716,11 @@
   </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Official Page</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>Github</value>
   </data>
 </root>

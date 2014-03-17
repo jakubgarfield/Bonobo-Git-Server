@@ -26,12 +26,6 @@ namespace Bonobo.Git.Server.Controllers
             return RedirectToAction("Index", "Repository");
         }
 
-        [WebAuthorize]
-        public ActionResult About()
-        {
-            return View();
-        }
-
         public ActionResult PageNotFound()
         {
             return View();

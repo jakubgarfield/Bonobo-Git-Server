@@ -430,7 +430,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User Management.
+        ///   Looks up a localized string similar to Users.
         /// </summary>
         public static string Account_Index_Title {
             get {
@@ -511,29 +511,11 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thank you!.
+        ///   Looks up a localized string similar to Official Page.
         /// </summary>
-        public static string Home_About_Thanks {
+        public static string Home {
             get {
-                return ResourceManager.GetString("Home_About_Thanks", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Bonobo Git Server is using a few open source and freeware projects. Many thanks to all authors and contributors for their great work..
-        /// </summary>
-        public static string Home_About_Thanks_p {
-            get {
-                return ResourceManager.GetString("Home_About_Thanks_p", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to About.
-        /// </summary>
-        public static string Home_About_Title {
-            get {
-                return ResourceManager.GetString("Home_About_Title", resourceCulture);
+                return ResourceManager.GetString("Home", resourceCulture);
             }
         }
         
@@ -1591,7 +1573,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Global Settings.
+        ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string Settings_Index_Title {
             get {
@@ -1600,7 +1582,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Global settings updated successfully..
+        ///   Looks up a localized string similar to Settings updated successfully..
         /// </summary>
         public static string Settings_Index_UpdateSuccess {
             get {
@@ -1623,6 +1605,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Settings_RepositoryPathUnauthorized {
             get {
                 return ResourceManager.GetString("Settings_RepositoryPathUnauthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Github.
+        /// </summary>
+        public static string Source {
+            get {
+                return ResourceManager.GetString("Source", resourceCulture);
             }
         }
         
@@ -1834,7 +1825,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Team Management.
+        ///   Looks up a localized string similar to Teams.
         /// </summary>
         public static string Team_Index_Title {
             get {
