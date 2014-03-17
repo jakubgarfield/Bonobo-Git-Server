@@ -2,14 +2,17 @@
 @{
     ViewBag.Title = Resources.Delete_Title;
 }
-@using (Html.BeginForm("Delete", "Account", FormMethod.Post, new { @class = "uniForm" }))
+<h1>@Resources.Confirm</h1>
+<p>@String.Format(Resources.Delete_ConfirmationText, Model.Username)</p>
+
+
+@using (Html.BeginForm("Delete", "Account", FormMethod.Post, new { @class = "pure-form" }))
 {
     <fieldset class="deleteForm">
-        <h3>@String.Format(Resources.Delete_ConfirmationText, Model.Username)</h3>
         @Html.HiddenFor(m => m.Username)
-        <div class="buttonHolder"> 
-            @Html.ActionLink("← " + Resources.Delete_Back, "Index", null, new { @class = "secondaryAction" })
-            <input type="submit" value="@Resources.Delete_Confirm" class="primaryAction" />
-       </div>
+        <div class="pure-controls">
+            <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Delete_Back</a>
+            <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-trash-o"></i> @Resources.Delete_Confirm</button>
+        </div>
     </fieldset> 
 }

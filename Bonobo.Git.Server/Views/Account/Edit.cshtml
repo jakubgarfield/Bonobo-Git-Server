@@ -9,90 +9,77 @@
 else
 {
     <text>
-    <h2>@Resources.Account_Edit_Title</h2>
-    @using (Html.BeginForm("Edit", "Account", FormMethod.Post, new { @class = "uniForm" }))
+    <h1>@Model.Username</h1>
+
+    @if (ViewBag.UpdateSuccess != null && ViewBag.UpdateSuccess)
     {
-        if (ViewBag.UpdateSuccess != null && ViewBag.UpdateSuccess)
-        {
-        <div id="okMsg">
+        <div class="summary-success">
             <p>@Resources.Account_Edit_UpdateSuccess</p>
         </div>
-        }
-        @Html.ValidationSummary(false, Resources.Account_Edit_Unsuccessfull, new { @id = "errorMsg" })
+    }
+
+    @using (Html.BeginForm("Edit", "Account", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
+    {   
+        @Html.ValidationSummary(false, Resources.Account_Edit_Unsuccessfull)
         @Html.HiddenFor(m => m.Username)
+        
         <fieldset>
-            <h3>@Model.Username</h3>
-            <div class="ctrlHolder">
+            <div class="pure-control-group">
                 @Html.LabelFor(m => m.Name)
-                @Html.TextBoxFor(m => m.Name, new { @class = "textInput small" })<em>*</em>
-                <p class="formHint">
-                    @Html.ValidationMessageFor(m => m.Name)
-                </p>
+                @Html.TextBoxFor(m => m.Name)<em>*</em>
+                @Html.ValidationMessageFor(m => m.Name)
             </div>
-            <div class="ctrlHolder">
+            <div class="pure-control-group">
                 @Html.LabelFor(m => m.Surname)
-                @Html.TextBoxFor(m => m.Surname, new { @class = "textInput small" })<em>*</em>
-                <p class="formHint">
-                    @Html.ValidationMessageFor(m => m.Surname)
-                </p>
+                @Html.TextBoxFor(m => m.Surname)<em>*</em>
+                @Html.ValidationMessageFor(m => m.Surname)
             </div>
-            <div class="ctrlHolder">
+            <div class="pure-control-group">
                 @Html.LabelFor(m => m.Email)
-                @Html.TextBoxFor(m => m.Email, new { @class = "textInput medium" })<em>*</em>
-                <p class="formHint">
-                    @Html.ValidationMessageFor(m => m.Email)
-                </p>
+                @Html.TextBoxFor(m => m.Email, new { @class = "medium" })<em>*</em>
+                @Html.ValidationMessageFor(m => m.Email)
             </div>
             @if (!WindowsActionFilterAttribute.IsWindowsModeActive)
             {
                 if (!User.IsInRole(Definitions.Roles.Administrator))
                 {
-                <div class="ctrlHolder">
-                    @Html.LabelFor(m => m.OldPassword)
-                    @Html.PasswordFor(m => m.OldPassword, new { @class = "textInput small" })<em>*</em>
-                    <p class="formHint">
+                    <div class="pure-control-group">
+                        @Html.LabelFor(m => m.OldPassword)
+                        @Html.PasswordFor(m => m.OldPassword)<em>*</em>
                         @Html.ValidationMessageFor(m => m.OldPassword)
-                    </p>
-                </div>  
+                    </div>
                 }
-                <div class="ctrlHolder">
+                <div class="pure-control-group">
                     @Html.LabelFor(m => m.NewPassword)
-                    @Html.PasswordFor(m => m.NewPassword, new { @class = "textInput small" })<em>*</em>
-                    <p class="formHint">
-                        @Html.ValidationMessageFor(m => m.NewPassword)
-                    </p>
+                    @Html.PasswordFor(m => m.NewPassword)<em>*</em>
+                    @Html.ValidationMessageFor(m => m.NewPassword)
                 </div>
-                <div class="ctrlHolder">
+                <div class="pure-control-group">
                     @Html.LabelFor(m => m.ConfirmPassword)
-                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "textInput small" })<em>*</em>
-                    <p class="formHint">
-                        @Html.ValidationMessageFor(m => m.ConfirmPassword)
-                    </p>
+                    @Html.PasswordFor(m => m.ConfirmPassword)<em>*</em>
+                    @Html.ValidationMessageFor(m => m.ConfirmPassword)
                 </div>
             }
             @if (User.IsInRole(Definitions.Roles.Administrator))
             {
-                <div class="ctrlHolder">
+                <div class="pure-control-group checkboxlist">
                     @Html.LabelFor(m => m.Roles)
                     @{
-                var users = (from u in ViewData["AvailableRoles"] as string[]
-                             orderby u
-                             select new SelectListItem() { Value = u, Text = u }).ToArray();
+                        var users = (from u in ViewData["AvailableRoles"] as string[]
+                                     orderby u
+                                     select new SelectListItem() { Value = u, Text = u }).ToArray();
                     }
 
-                    @Html.CheckboxListFor(m => m.Roles, users, new { @class = "checkboxList medium" })
-                    <p class="formHint">
-                        @Resources.Account_Edit_RolesHint
-                    </p>
+                    @Html.CheckboxListFor(m => m.Roles, users)
+                    <i class="fa fa-info-circle" title="@Resources.Account_Edit_RolesHint"></i>
                 </div>
             }
-            <div class="buttonHolder">
+            <div class="pure-controls">
                 @if (User.IsInRole(Definitions.Roles.Administrator))
                 {
-                    @Html.ActionLink("← " + Resources.Account_Edit_Back, "Index", null, new { @class = "secondaryAction" })
+                    <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Account_Edit_Back</a>
                 }
-                <button type="reset" class="secondaryAction">← @Resources.Reset</button>
-                <input type="submit" value="@Resources.Account_Edit_Submit" class="primaryAction" />
+                <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-save"></i> @Resources.Account_Edit_Submit</button>
             </div>
         </fieldset>
     }

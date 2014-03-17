@@ -115,7 +115,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create new account.
+        ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string Account_Create_Submit {
             get {
@@ -187,7 +187,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Back to the list.
+        ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string Account_Detail_Back {
             get {
@@ -268,7 +268,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Back to list.
+        ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string Account_Edit_Back {
             get {
@@ -444,6 +444,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Account_Index_Users {
             get {
                 return ResourceManager.GetString("Account_Index_Users", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string Confirm {
+            get {
+                return ResourceManager.GetString("Confirm", resourceCulture);
             }
         }
         
@@ -678,6 +687,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Item_NotFound {
             get {
                 return ResourceManager.GetString("Item_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The item you were looking for wasn&apos;t found..
+        /// </summary>
+        public static string Item_NotFound_Text {
+            get {
+                return ResourceManager.GetString("Item_NotFound_Text", resourceCulture);
             }
         }
         

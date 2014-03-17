@@ -4,46 +4,47 @@
 }
 @if (Model == null)
 {   
-    <h2 class="error">@Resources.Item_NotFound</h2>
+    @Html.Partial("~/Views/Shared/_ItemNotFound.cshtml") 
 }
 else
 {  
-    <h2>@Resources.Account_Detail_Title</h2>
-    <div class="uniForm">
-        <fieldset class="inlineLabels detail">
-            <h3>@Model.Username</h3>
-            <div class="ctrlHolder">
-                <h5>@Html.LabelFor(m => m.Username)</h5>
-                <div class="content">@Model.Username</div>
+    <h1>@Model.Username</h1>
+
+    <div class="pure-form pure-form-aligned detail">
+        <fieldset>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Username)
+                <span>@Model.Username</span>
             </div>
-            <div class="ctrlHolder">
-                <h5>@Html.LabelFor(m => m.Name)</h5>
-                <div class="content">@Model.Name</div>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Name)
+                <span>@Model.Name</span>
             </div>
-            <div class="ctrlHolder">
-                <h5>@Html.LabelFor(m => m.Surname)</h5>
-                <div class="content">@Model.Surname</div>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Surname)
+                <span>@Model.Surname</span>
             </div>
-            <div class="ctrlHolder">
-                <h5>@Html.LabelFor(m => m.Email)</h5>
-                <div class="content">@Model.Email</div>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Email)
+                <span>@Model.Email</span>
             </div>
-            <div class="ctrlHolder">
-                <h5>@Html.LabelFor(m => m.Roles)</h5>
-                <div class="content">
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Roles)
+                <span>
                     @for (int i = 0; i < Model.Roles.Length; i++)
                     {
                         @Model.Roles[i]if (i + 1 != Model.Roles.Length)
                                        {<text>, </text>}
                     }
-                </div>
+                </span>
             </div>
         </fieldset>
         @if (User.IsInRole(Definitions.Roles.Administrator))
         {
-            <div class="buttonHolder">
-                @Html.ActionLink("←  " + Resources.Account_Detail_Back, "Index", null, new { @class = "secondaryAction" })
-                @Html.ActionLink(Resources.Account_Detail_Edit, "Edit", new { id = UsernameUrl.Encode(Model.Username) }, new { @class = "primaryAction" })@Html.ActionLink(Resources.Account_Detail_Delete, "Delete", new { id = UsernameUrl.Encode(Model.Username) }, new { @class = "primaryAction deleteButton" })
+            <div class="pure-controls">
+                <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Account_Detail_Back</a>
+                <a class="pure-button" href="@Url.Action("Edit", new { id = UsernameUrl.Encode(Model.Username) })"><i class="fa fa-pencil-square-o"></i> @Resources.Account_Detail_Edit</a>
+                <a class="pure-button" href="@Url.Action("Delete", new { id = UsernameUrl.Encode(Model.Username) })"><i class="fa fa-trash-o"></i> @Resources.Account_Detail_Delete</a>       
             </div>
         }
     </div>

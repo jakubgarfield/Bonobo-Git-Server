@@ -2,57 +2,48 @@
 @{
     ViewBag.Title = Resources.Account_Create_Title;
 }
-<h2>@Resources.Account_Create_Title</h2>
-@using (Html.BeginForm("Create", "Account", FormMethod.Post, new { @class = "uniForm" }))
+
+<h1>@Resources.Account_Create_Title</h1>
+
+@using (Html.BeginForm("Create", "Account", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
 {    
-    @Html.ValidationSummary(false, Resources.Account_Create_Unsuccessfull, new { @id = "errorMsg" })
+    @Html.ValidationSummary(false, Resources.Account_Create_Unsuccessfull)
+    
     <fieldset> 
-      <h3>@Resources.Account_Create_AccountInformation</h3>    
-      <div class="ctrlHolder"> 
-        @Html.LabelFor(m => m.Username)
-        @Html.TextBoxFor(m => m.Username, new { @class = "textInput small" })<em>*</em>
-        <p class="formHint">
-          @Html.ValidationMessageFor(m => m.Username)
-        </p> 
-      </div> 
-      <div class="ctrlHolder"> 
-        @Html.LabelFor(m => m.Name)
-        @Html.TextBoxFor(m => m.Name, new { @class = "textInput small" })<em>*</em>
-        <p class="formHint">
-          @Html.ValidationMessageFor(m => m.Name)
-        </p> 
-      </div> 
-      <div class="ctrlHolder"> 
-        @Html.LabelFor(m => m.Surname)
-        @Html.TextBoxFor(m => m.Surname, new { @class = "textInput small" })<em>*</em>
-        <p class="formHint">
-          @Html.ValidationMessageFor(m => m.Surname)
-        </p> 
-      </div> 
-      <div class="ctrlHolder"> 
-        @Html.LabelFor(m => m.Email)
-        @Html.TextBoxFor(m => m.Email, new { @class = "textInput medium" })<em>*</em>
-        <p class="formHint">
-          @Html.ValidationMessageFor(m => m.Email)
-        </p> 
-      </div> 
-      <div class="ctrlHolder"> 
-          @Html.LabelFor(m => m.Password)
-          @Html.PasswordFor(m => m.Password, new { @class = "textInput small" })<em>*</em>     
-        <p class="formHint">
-          @Html.ValidationMessageFor(m => m.Password)
-        </p> 
-      </div> 
-      <div class="ctrlHolder"> 
-          @Html.LabelFor(m => m.ConfirmPassword)
-          @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "textInput small" })<em>*</em>     
-        <p class="formHint">
-          @Html.ValidationMessageFor(m => m.ConfirmPassword)
-        </p> 
-      </div> 
-      <div class="buttonHolder"> 
-        <button type="reset" class="secondaryAction">← @Resources.Reset</button> 
-        <input type="submit" value="@Resources.Account_Create_Submit" class="primaryAction" />
-      </div>
+        <div class="pure-control-group">
+            @Html.LabelFor(m => m.Username)
+            @Html.TextBoxFor(m => m.Username, new { autofocus = "" })<em>*</em>
+            @Html.ValidationMessageFor(m => m.Username)
+        </div> 
+        <div class="pure-control-group">
+            @Html.LabelFor(m => m.Name)
+            @Html.TextBoxFor(m => m.Name)<em>*</em>
+            @Html.ValidationMessageFor(m => m.Name)
+        </div> 
+        <div class="pure-control-group">
+            @Html.LabelFor(m => m.Surname)
+            @Html.TextBoxFor(m => m.Surname)<em>*</em>
+            @Html.ValidationMessageFor(m => m.Surname)
+        </div> 
+        <div class="pure-control-group">
+            @Html.LabelFor(m => m.Email)
+            @Html.TextBoxFor(m => m.Email, new { @class = "medium" })<em>*</em>
+            @Html.ValidationMessageFor(m => m.Email)
+        </div> 
+        <div class="pure-control-group">
+            @Html.LabelFor(m => m.Password)
+            @Html.PasswordFor(m => m.Password)<em>*</em>
+            @Html.ValidationMessageFor(m => m.Password)
+        </div> 
+        <div class="pure-control-group">
+            @Html.LabelFor(m => m.ConfirmPassword)
+            @Html.PasswordFor(m => m.ConfirmPassword)<em>*</em>
+            @Html.ValidationMessageFor(m => m.ConfirmPassword)
+        </div> 
+
+        <div class="pure-controls">
+            <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Account_Detail_Back</a>
+            <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-save"></i> @Resources.Account_Create_Submit</button>
+        </div>
     </fieldset>
 }

@@ -124,7 +124,7 @@
     <value>The user was deleted.</value>
   </data>
   <data name="Account_Detail_Back" xml:space="preserve">
-    <value>Back to the list</value>
+    <value>Back</value>
   </data>
   <data name="Account_Detail_Delete" xml:space="preserve">
     <value>Delete</value>
@@ -151,7 +151,7 @@
     <value>Username</value>
   </data>
   <data name="Account_Edit_Back" xml:space="preserve">
-    <value>Back to list</value>
+    <value>Back</value>
   </data>
   <data name="Account_Edit_Cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -649,7 +649,7 @@
     <value>Password</value>
   </data>
   <data name="Account_Create_Submit" xml:space="preserve">
-    <value>Create new account</value>
+    <value>Create</value>
   </data>
   <data name="Account_Create_Surname" xml:space="preserve">
     <value>Surname</value>
@@ -719,5 +719,11 @@
   </data>
   <data name="Repository_Commit_Details" xml:space="preserve">
     <value>Details</value>
+  </data>
+  <data name="Item_NotFound_Text" xml:space="preserve">
+    <value>The item you were looking for wasn't found.</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
   </data>
 </root>
