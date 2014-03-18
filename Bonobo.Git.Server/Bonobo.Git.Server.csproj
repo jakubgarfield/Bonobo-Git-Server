@@ -434,8 +434,8 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Resources.fr-FR.designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="bin\NativeBinaries\amd64\git2-9d9fff3.dll" />
-    <Content Include="bin\NativeBinaries\x86\git2-9d9fff3.dll" />
+    <Content Include="bin\NativeBinaries\amd64\git2-65e9dc6.dll" />
+    <Content Include="bin\NativeBinaries\x86\git2-65e9dc6.dll" />
     <Content Include="Content\components\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.svg" />

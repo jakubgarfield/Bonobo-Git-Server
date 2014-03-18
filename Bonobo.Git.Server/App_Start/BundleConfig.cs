@@ -8,22 +8,16 @@ namespace Bonobo.Git.Server.App_Start
         public static void RegisterBundles(BundleCollection bundles)
         {
            
-            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                         "~/Scripts/jquery-{version}.js"));
+            bundles.Add(new ScriptBundle("~/bundled.js")
+                .Include("~/Scripts/jquery-{version}.js")
+                .Include("~/Scripts/jquery.validate*", "~/Content/uni/js/uni-form-validation.jquery.js", "~/Scripts/MicrosoftAjax.js")
+                .Include("~/Content/components/highlight/build/lib/highlight.pack.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate*",
-                        "~/Content/uni/js/uni-form-validation.jquery.js",
-                        "~/Scripts/MicrosoftAjax.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/highlight").Include("~/Content/components/highlight/build/lib/highlight.pack.js"));
-
-            bundles.Add(new StyleBundle("~/Content/css").Include(
-                        "~/Content/components/pure/pure-min.css",
-                        "~/Content/components/font-awesome/css/font-awesome.min.css",
-                        "~/Content/components/highlight/src/styles/github.css",
-                        "~/Content/fonts.css",
-                        "~/Content/site.css"));
+            bundles.Add(new StyleBundle("~/Content/bundled.css")
+                .Include("~/Content/components/pure/pure-min.css", new CssRewriteUrlTransform())
+                .Include("~/Content/components/font-awesome/css/font-awesome.min.css", new CssRewriteUrlTransform())
+                .Include("~/Content/components/highlight/src/styles/github.css")
+                .Include("~/Content/fonts.css", "~/Content/site.css"));
         }
     }
 }

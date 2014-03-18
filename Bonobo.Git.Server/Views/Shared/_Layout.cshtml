@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="~/favicon.ico?v=2" type="image/x-icon" />
     <title>@ViewBag.Title :: Bonobo Git Server</title>
-    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/bundled.css")
 </head>
 <body class="@HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString() @HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString()">
     <div class="main">
@@ -60,10 +60,7 @@
         </div>
     </div>
 
-    @Scripts.Render(
-        "~/bundles/jquery",
-        "~/bundles/jqueryval",
-        "~/bundles/highlight")
+    @Scripts.Render("~/bundled.js")
     <script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>

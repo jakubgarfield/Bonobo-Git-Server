@@ -1,7 +1,7 @@
 ﻿html, button, input, select, textarea, .pure-g [class *= "pure-u"], .pure-g-r [class *= "pure-u"] { font-family: OpenSans, sans-serif; }
 
 html { font-size: 16px; color: #333; text-rendering: optimizeLegibility; }
-html, body { margin: 0; padding: 0; height: 100%; }
+html, body { margin: 0; padding: 0; height: 100%; min-width: 1100px;}
 
 h1, h2, h3, h4, h5, h6 { font-weight: 300; }
 a { color: #4183c4; text-decoration: none; }
