@@ -10,10 +10,12 @@
         @Html.Partial("_BranchSwitcher")
         @if (Model.Commits != null)
         {
-            foreach (var item in Model.Commits)
-            {
-                @Html.Partial("_Commit", item)
-            }
+            var grid = new WebGrid(source: Model.Commits, rowsPerPage: 10, canPage:true, canSort:false);
+            @grid.GetHtml(displayHeader: false, mode: WebGridPagerModes.All, 
+                columns: grid.Columns(
+                    grid.Column(format: item => Html.Partial("_Commit", (RepositoryCommitModel)item.Value))
+                    )
+                )
         }
     </div>
 }

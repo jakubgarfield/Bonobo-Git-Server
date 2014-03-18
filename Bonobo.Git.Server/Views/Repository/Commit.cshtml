@@ -10,27 +10,27 @@
         <p>
             @if (item.Status == LibGit2Sharp.ChangeKind.Added)
             {
-                <text><img src="@Url.Content("~/Content/Images/action_added.gif")" alt="@Resources.Repository_Commit_Added" /></text>
+                <text><i class="fa fa-plus-square-o" title="@Resources.Repository_Commit_Added"></i></text>
             }
             else if (item.Status == LibGit2Sharp.ChangeKind.Modified)
             {
-                <text><img src="@Url.Content("~/Content/Images/action_modified.gif")" alt="@Resources.Repository_Commit_Modified" /></text>
+                <text><i class="fa fa-edit" title="@Resources.Repository_Commit_Modified"></i></text>
             }
             else if (item.Status == LibGit2Sharp.ChangeKind.Deleted)
             {
-                <text><img src="@Url.Content("~/Content/Images/action_deleted.gif")" alt="@Resources.Repository_Commit_Deleted" /></text>
+                <text><i class="fa fa-minus-square-o" title="@Resources.Repository_Commit_Deleted"></i></text>
             }
             else if (item.Status == LibGit2Sharp.ChangeKind.Renamed)
             {
-                <text><img src="@Url.Content("~/Content/Images/action_renamed.gif")" alt="@Resources.Repository_Commit_Renamed" /></text>
+                <text><i class="fa fa-share-square-o" title="@Resources.Repository_Commit_Renamed"></i></text>
             }
             else if (item.Status == LibGit2Sharp.ChangeKind.Copied)
             {
-                <text><img src="@Url.Content("~/Content/Images/action_copied.gif")" alt="@Resources.Repository_Commit_Copied" /></text>
+                <text><i class="fa fa-copy" title="@Resources.Repository_Commit_Copied"></i></text>
             }
             else if (item.Status == LibGit2Sharp.ChangeKind.TypeChanged)
             {
-                <text><img src="@Url.Content("~/Content/Images/action_typechanged.gif")" alt="@Resources.Repository_Commit_TypeChanged" /></text>
+                <text><i class="fa fa-caret-square-o-right" title="@Resources.Repository_Commit_TypeChanged"></i></text>
             }
             @if (item.Status != LibGit2Sharp.ChangeKind.Deleted)
             {
@@ -40,7 +40,7 @@
             {
                 @item.Path
             }
-            <span class="diff">@item.LinesChanged (+@item.LinesAdded -@item.LinesDeleted)</span>
+            <span class="count">@item.LinesChanged<em>(+@item.LinesAdded -@item.LinesDeleted)</em></span>
         </p>
     </div>
 }
@@ -49,20 +49,26 @@
 {
     <div>
         @Html.Partial("_Commit", Model)
+
         <div class="changes">
             <h3>@Model.GetType().GetDisplayValue("Changes")</h3>
             @foreach (var item in Model.Changes)
             {
                 @HeaderForDiff(item)
             }
-            <div class="diff">
-                <h3>@Resources.Repository_Commit_Details</h3>
-                @foreach (var item in Model.Changes.Where(i => i.Status == LibGit2Sharp.ChangeKind.Modified || i.Status == LibGit2Sharp.ChangeKind.Added))
-                {
-                    @HeaderForDiff(item)
+        </div>
+
+        <div class="diff">
+            <h3>@Resources.Repository_Commit_Details</h3>
+            @foreach (var item in Model.Changes.Where(i => i.Status == LibGit2Sharp.ChangeKind.Modified || i.Status == LibGit2Sharp.ChangeKind.Added))
+            {
+                <div class="blob">
+                    <div class="controls">
+                        @HeaderForDiff(item)
+                    </div>
                     <pre><code class="language diff">@item.Patch</code></pre>
-                }
-            </div>
+                </div>
+            }
         </div>
     </div>
 }

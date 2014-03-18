@@ -14,7 +14,7 @@ th a { color: #333; }
 th a:hover { text-decoration: none; color: #4183c4; }
 .pure-table td, .pure-table th { padding: 0.8em; }
 .pure-table { border: none; }
-.pure-table td, .pure-table th { border: none; border-bottom: 1px solid #ddd; text-align: left; }
+.pure-table td, .pure-table th { border: none; border-bottom: 1px solid #f6f6f6; text-align: left; }
 .pure-table thead { background: none; }
 .pure-table th { font-weight: 300; }
 
@@ -86,17 +86,17 @@ nav.branches .tag a:before, .branches a.tag:before { content: '\f02b'; font-fami
 nav.branches .branch a:before, .branches a.branch:before { content: '\f0e8'; font-family: FontAwesome; margin-right: 0.5em; display: inline-block; -webkit-transform: rotate(180deg); -moz-transform: rotate(180deg); -o-transform: rotate(180deg); -ms-transform: rotate(180deg); transform: rotate(180deg); }
 nav.branches li:hover { background-color: #eee; }
 nav.branches ul { padding: 0; margin: 0; }
-nav.branches ul li { list-style: none; background-color: #fff; /*display: inline-block;*/ float: left; }
+nav.branches ul li { list-style: none; background-color: #fff; float: left; }
 nav.branches ul li a { color: #777; padding: 7px 20px; display: inline-block; }
-nav.branches ul li ul { display: none; border: 1px solid #ddd; }
+nav.branches ul li ul { display: none; border: 1px solid #f6f6f6; }
 nav.branches ul li:hover ul { z-index: 99999; display: list-item; position: absolute; }
-nav.branches ul li:hover ul li { /*display: list-item;*/ float: none; }
+nav.branches ul li:hover ul li { float: none; }
+.Commits nav.branches ul li { display: inline-block; float: none;}
+.Commits nav.branches ul li:hover ul li { display: block; float: none;}
 
 .Tree .pure-table tbody { font-size: 0.8em; }
 .breadcrumbs { padding: 7px; margin: 0; }
 .breadcrumbs em { font-weight: bold; font-style: normal; }
-
-
 
 .blob { border: 1px solid #ddd; margin: 2em 0; }
 .blob .controls { border-bottom: 1px solid #ddd; text-align: right; text-shadow: 0 1px 0 #fff; background-image: linear-gradient(#fafafa, #eaeaea); background-repeat: repeat-x; padding-right: 1em;}
@@ -106,3 +106,15 @@ nav.branches ul li:hover ul li { /*display: list-item;*/ float: none; }
 .blob pre code, .diff pre code { white-space: pre; background: transparent; margin: 0.5em;}
 .blob img {margin: 1em auto; display: block;}
 
+.commit .metadata p { margin: 0; font-size: 0.8em; font-family: monospace, sans-serif;}
+.commit .metadata h4 { margin-bottom: 0.5em;}
+.commit .metadata { text-align: right;}
+.commit h2 a:hover { text-decoration: none; color: #777;}
+.commit { border-bottom: 1px solid #f6f6f6; }
+
+.Commit em { font-style: normal;}
+.Commit .item { font-family: monospace, sans-serif; font-size: 0.8em;}
+.Commit .item .count { text-align: right;}
+.Commit .blob .controls { text-align: left;}
+.Commit .blob .controls p { margin: 0; padding: 0.5em 1em;}
+.Commit .diff h3 { margin-top: 1.5em; }

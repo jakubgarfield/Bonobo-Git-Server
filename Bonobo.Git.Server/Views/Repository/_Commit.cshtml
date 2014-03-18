@@ -1,20 +1,18 @@
 ﻿@model RepositoryCommitModel
 @using Bonobo.Git.Server.Extensions
-<h4 class="commitDate">@Model.Date.ToString()</h4>
-<div class="commit">      
-<div class="window">
-<div class="content clearfix">
-    <div class="fl">
-        <p>@Model.Message</p>
-        <p><strong>@Model.Author</strong></p>
+<div class="commit pure-g">
+    <div class="pure-u-4-5">
+        <h4>@Model.Date.ToString()</h4>
+        <h2>@Html.ActionLink(Model.Message, "Commit", new { id = ViewBag.ID, commit = Model.ID })</h2>
     </div>
-    <div class="fr">
-        <p><em>@Model.GetType().GetDisplayValue("ID"):</em> @Html.ActionLink(Model.ID.Substring(0, 7), "Commit", new { id = ViewBag.ID, commit = Model.ID })</p>
-        <p><em>@Model.GetType().GetDisplayValue("TreeID"):</em> @Html.ActionLink(Model.TreeID.Substring(0, 7), "Tree", new { id = ViewBag.ID, encodedName = PathEncoder.Encode(Model.ID) })</p>
+    <div class="pure-u-1-5 metadata">
+        <h4>@Model.Author</h4>
+        <p>@Model.GetType().GetDisplayValue("ID"): @Html.ActionLink(Model.ID.Substring(0, 7), "Commit", new { id = ViewBag.ID, commit = Model.ID })</p>
+        <p>@Model.GetType().GetDisplayValue("TreeID"): @Html.ActionLink(Model.TreeID.Substring(0, 7), "Tree", new { id = ViewBag.ID, encodedName = PathEncoder.Encode(Model.ID) })</p>
         @if (Model.Parents != null && Model.Parents.Count() > 0)
         {
             <p>
-                <em>@Model.GetType().GetDisplayValue("Parents"):</em>
+                @Model.GetType().GetDisplayValue("Parents"):
                 @foreach (var parent in Model.Parents)
                 {
                     @Html.ActionLink(parent.Substring(0, 7), "Commit", new { id = ViewBag.ID, commit = parent })<br />
@@ -22,7 +20,5 @@
             </p>
         }
     </div>
-</div>
-</div>
 </div>
 
