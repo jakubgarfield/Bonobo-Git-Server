@@ -1,8 +1,8 @@
 ﻿@{
     var path = ViewData["path"] as string;
 
-    <p id="repositoryAddress">
-        @Html.ActionLink(Resources.Repository_AddressBar_Root, "Tree", new { id = ViewBag.ID, encodedName = PathEncoder.Encode((string)(ViewData["currentBranch"] ?? ViewData["name"])), encodedPath = ""})
+    <p class="breadcrumbs">
+        <em>@Html.ActionLink(Resources.Repository_AddressBar_Root, "Tree", new { id = ViewBag.ID, encodedName = PathEncoder.Encode((string)(ViewData["currentBranch"] ?? ViewData["name"])), encodedPath = "" })</em>
         @if (path != null)
         {
             <text>/</text>
@@ -18,7 +18,7 @@
 
                 if ((string)ViewContext.RouteData.Values["Action"] == "Blob" && i + 1 == dirs.Length)
                 {
-                    @dirs[i]
+                    <em>@dirs[i]</em>
                 }
                 else
                 {

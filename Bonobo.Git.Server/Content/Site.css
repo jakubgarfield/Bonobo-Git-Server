@@ -16,6 +16,7 @@ th a:hover { text-decoration: none; color: #4183c4; }
 .pure-table { border: none; }
 .pure-table td, .pure-table th { border: none; border-bottom: 1px solid #ddd; text-align: left; }
 .pure-table thead { background: none; }
+.pure-table th { font-weight: 300; }
 
 .field-validation-error { color: #a94442; margin-left: 0.7em; }
 .field-validation-valid { display: none; }
@@ -58,10 +59,14 @@ textarea.medium, input.medium { width: 30em; }
 
 .add { text-align: right; margin-top: 1.6em; }
 
-.repositories tbody td a.detail:before, .users tbody td a.detail:before, .teams tbody td a.detail:before { font-family: FontAwesome; top: 0; padding-right: 0.5em; }
+.repositories tbody td a.detail:before, .users tbody td a.detail:before, .teams tbody td a.detail:before,
+.Tree .content .directory:before, .Tree .content .image:before, .Tree .content .file:before { font-family: FontAwesome; top: 0; padding-right: 0.5em; }
 .repositories tbody td a.detail:before { content: "\f0a0"; }
 .users tbody td a.detail:before { content: "\f007"; }
 .teams tbody td a.detail:before { content: "\f0c0"; }
+.Tree .content .directory:before { content: "\f115"; }
+.Tree .content .image:before { content: "\f030"; }
+.Tree .content .file:before { content: "\f0f6"; }
 tbody td a.edit:before { font-family: FontAwesome; top: 0; content: "\f044"; }
 tbody td a.delete:before { font-family: FontAwesome; top: 0; content: "\f014"; }
 tbody td.action { width: 1em; }
@@ -75,14 +80,29 @@ tfoot td { text-align: center; border-bottom: none !important; }
 
 nav.branches a:hover { text-decoration: none; }
 nav.branches li.active a { color: #4183c4; }
-nav.branches li > a:after { content: '\f107'; font-family: FontAwesome; margin-left: 0.5em;}
+nav.branches li > a:after { content: '\f107'; font-family: FontAwesome; margin-left: 0.5em; }
 nav.branches li > a:only-child:after { content: ''; }
 nav.branches .tag a:before, .branches a.tag:before { content: '\f02b'; font-family: FontAwesome; margin-right: 0.5em; }
 nav.branches .branch a:before, .branches a.branch:before { content: '\f0e8'; font-family: FontAwesome; margin-right: 0.5em; display: inline-block; -webkit-transform: rotate(180deg); -moz-transform: rotate(180deg); -o-transform: rotate(180deg); -ms-transform: rotate(180deg); transform: rotate(180deg); }
 nav.branches li:hover { background-color: #eee; }
 nav.branches ul { padding: 0; margin: 0; }
-nav.branches ul li { list-style: none; background-color: #fff; display: inline-block; }
+nav.branches ul li { list-style: none; background-color: #fff; /*display: inline-block;*/ float: left; }
 nav.branches ul li a { color: #777; padding: 7px 20px; display: inline-block; }
 nav.branches ul li ul { display: none; border: 1px solid #ddd; }
 nav.branches ul li:hover ul { z-index: 99999; display: list-item; position: absolute; }
-nav.branches ul li:hover ul li { display: list-item; }
+nav.branches ul li:hover ul li { /*display: list-item;*/ float: none; }
+
+.Tree .pure-table tbody { font-size: 0.8em; }
+.breadcrumbs { padding: 7px; margin: 0; }
+.breadcrumbs em { font-weight: bold; font-style: normal; }
+
+
+
+.blob { border: 1px solid #ddd; margin: 2em 0; }
+.blob .controls { border-bottom: 1px solid #ddd; text-align: right; text-shadow: 0 1px 0 #fff; background-image: linear-gradient(#fafafa, #eaeaea); background-repeat: repeat-x; padding-right: 1em;}
+.blob .controls a { color: #777; display: inline-block; padding: 0.5em;}
+.blob .controls a:hover { color: #4183c4; text-decoration: none;}
+.blob pre, .diff pre { font-size: 0.8em; word-wrap:normal; overflow: auto; margin: 0; padding: 0;}
+.blob pre code, .diff pre code { white-space: pre; background: transparent; margin: 0.5em;}
+.blob img {margin: 1em auto; display: block;}
+

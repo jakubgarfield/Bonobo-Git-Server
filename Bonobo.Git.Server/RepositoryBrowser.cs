@@ -83,6 +83,7 @@ namespace Bonobo.Git.Server
                             Author = lastCommit.Author.Name,
                             TreeName = branchNameTemp ?? name,
                             Path = item.Path.Replace('\\', '/'),
+                            IsImage = FileDisplayHandler.IsImage(item.Name),
                         };
             return query.ToList();
         }

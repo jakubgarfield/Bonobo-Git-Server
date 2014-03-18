@@ -16,9 +16,12 @@ namespace Bonobo.Git.Server.App_Start
                         "~/Content/uni/js/uni-form-validation.jquery.js",
                         "~/Scripts/MicrosoftAjax.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/highlight").Include("~/Content/components/highlight/build/lib/highlight.pack.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/components/pure/pure-min.css",
                         "~/Content/components/font-awesome/css/font-awesome.min.css",
+                        "~/Content/components/highlight/src/styles/github.css",
                         "~/Content/fonts.css",
                         "~/Content/site.css"));
         }

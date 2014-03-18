@@ -47,7 +47,7 @@
 
 @if (Model != null)
 {
-    <div class="repositoryContent">
+    <div>
         @Html.Partial("_Commit", Model)
         <div class="changes">
             <h3>@Model.GetType().GetDisplayValue("Changes")</h3>
@@ -55,12 +55,12 @@
             {
                 @HeaderForDiff(item)
             }
-            <div class="details">
+            <div class="diff">
                 <h3>@Resources.Repository_Commit_Details</h3>
                 @foreach (var item in Model.Changes.Where(i => i.Status == LibGit2Sharp.ChangeKind.Modified || i.Status == LibGit2Sharp.ChangeKind.Added))
                 {
                     @HeaderForDiff(item)
-                    <pre class="brush: diff; gutter: false;">@item.Patch</pre>
+                    <pre><code class="language diff">@item.Patch</code></pre>
                 }
             </div>
         </div>

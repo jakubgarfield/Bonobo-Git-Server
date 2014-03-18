@@ -1,0 +1,98 @@
+Подсветка синтаксиса с автоопределением языка.
+
+URL:   http://highlightjs.org/
+
+Ключевые разработчики (в порядке появления):
+
+- Иван Сагалаев (первоначальный автор) <maniac@softwaremaniacs.org>
+- Джереми Халл <sourdrums@gmail.com>
+- Олег Ефимов <efimovov@gmail.com>
+
+Внесли свой вклад:
+
+- Петр Леонов <gojpeg@gmail.com>
+- Виктор Карамзин <Victor.Karamzin@enterra-inc.com>
+- Всеволод Соловьёв <vsevolod.solovyov@gmail.com>
+- Антон Ковалёв <anton@kovalyov.net>
+- Никита Ледяев <lenikita@yandex.ru>
+- Константин Евдокименко <qewerty@gmail.com>
+- Дмитрий Рудаков <dmitri@roudakov.ru>
+- Юрий Иванов <ivanov@supersoft.ru>
+- Владимир Ермаков <vooon341@mail.ru>
+- Владимир Губарьков <xonixx@gmail.com>
+- Брайан Бек <exogen@gmail.com>
+- MajestiC <majestic2k@gmail.com>
+- Василий Половнёв <vast@whiteants.net>
+- Владимир Епифанов <voldmar@voldmar.ru>
+- Александр Макаров <sam@rmcreative.ru>
+- Vah <vahtenberg@gmail.com>
+- Шуэн-Хуэй Гуан <drake.guan@gmail.com>
+- Джейсон Даймонд <jason@diamond.name>
+- Михал Габрукевич <mgabru@gmail.com>
+- Руслан Кеба <rukeba@gmail.com>
+- Сергей Баранов <segyrn@yandex.ru>
+- Зарипов Юра <yur4ik7@ukr.net>
+- Олег Волчков <oleg@volchkov.net>
+- Василий Михайличенко <vaskas@programica.ru>
+- Ян Беркель <jan.berkel@gmail.com>
+- Владимир Москва <vladmos@gmail.com>
+- Лорен Сегал <lsegal@soen.ca>
+- Андрей Фёдоров <dmmdrs@mail.ru>
+- Игорь Кальницкий <igor@kalnitsky.org>
+- Валерий Хиора <valerii.hiora@gmail.com>
+- Николай Захаров <nikolay.desh@gmail.com>
+- Дмитрий Ковега <arhibot@gmail.com>
+- Сергей Игнатов <sergey@ignatov.spb.su>
+- Антоно Васильев <self@antono.info>
+- Степан Кунцьо <steplg@gmail.com>
+- pumbur <pumbur@pumbur.net>
+- Джон Крепецци <john.crepezzi@gmail.com>
+- Андрей Власовских <andrey.vlasovskikh@gmail.com>
+- Александр Мядзель <myadzel@gmail.com>
+- Евгений Степанищев <imbolk@gmail.com>
+- Дмитрий Нагирняк <dnagir@gmail.com>
+- Луиджи Мазелли <grigio.org@gmail.com>
+- Денис Бардадым <bardadymchik@gmail.com>
+- Аахан Криш <geekpanth3r@gmail.com>
+- Илья Барышев <baryshev@gmail.com>
+- Александр Ружичич <aleksandar@ruzicic.info>
+- Джо Ченг <joe@rstudio.org>
+- Анхель Ойоки <angelgarcia.mail@gmail.com>
+- Джейсон Тейт <adminz@web-cms-designs.com>
+- Сергей Тихомиров <me@stikhomirov.com>
+- Марк Форнос <marc.fornos@gmail.com>
+- Йошихиде Джимбо <yjimbo@gmail.com>
+- Кейси Данкан <casey.duncan@gmail.com>
+- Евгений Нижибицкий <nizhibitsky@gmail.com>
+- Альберто Гимено <gimenete@gmail.com>
+- Кирк Киммель <kimmel.k.programmer@gmail.com>
+- Натан Григг <nathan@nathanamy.org>
+- Dr. Drang <drdrang@gmail.com>
+- Робин Ворд <robin.ward@gmail.com>
+- Дмитрий Медвинский <me@dmedvinsky.name>
+- Джейсон Джейкобсон <jason.a.jacobson@gmail.com>
+- Йонас Фоллесо <jonas@follesoe.no>
+- Ден Аллен <dan.j.allen@gmail.com>
+- noformnocontent <i@noformnocontent.com>
+- Дамиен Вайт <damien.white@visoftinc.com>
+- Александр Маренин <great_muchacho@mail.ru>
+- Седрик Нееми <cedric.nehemie@gmail.com>
+- Саймон Мадин <simon@angryrobotzombie.com>
+- Бенджамин Паннел <contact@sierrasoftworks.com>
+- Эрик Книббе <eric@lassosoft.com>
+- Порен Чянь <ren.chiang@gmail.com>
+- Келли ван Эверт <kelleyvanevert@gmail.com>
+- Курт Эмч <kurt@kurtemch.com>
+- Мейди Догги <mehdi@dogguy.org>
+- Николя Бро-Сантони <nicolas.braud-santoni@ens-cachan.fr>
+- Ральф Биттер <rabit@revigniter.com>
+- Сильвестр Ледру <sylvestre.ledru@scilab-enterprises.com>
+- Трой Кершоу <hello@troykershaw.com>
+- Зена Трип <zena.treep@gmail.com>
+- Даниэль Квасничка <dkvasnicka@vendavo.com>
+- Карло Кок <ck@remobjects.com>
+- Брэм де Хаан <info@atelierbramdehaan.nl>
+- Сенгвон Ли <dlimpid@gmail.com>
+- Завен Мурадян <megalivoithos@gmail.com>
+- Ян Т. Сотт <jan@idleberg.com>
+- Брент Брэдбери <brent@brentium.com>

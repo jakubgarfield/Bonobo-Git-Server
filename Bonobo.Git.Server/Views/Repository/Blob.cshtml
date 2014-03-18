@@ -6,12 +6,14 @@
 }
 @if (Model != null)
 {
-    <div class="repositoryContent">
-        @Html.Partial("_BranchSwitcher")
-        @Html.Partial("_AddressBar")
+    @Html.Partial("_BranchSwitcher")
+    @Html.Partial("_AddressBar")
+
+    <div class="blob">
         @{
-            <div class="controlPanel">
-                <p>@Html.ActionLink(@Resources.Repository_Tree_Download, "Raw", new { encodedName = PathEncoder.Encode(Model.TreeName), encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true) }, new { @class = "downloadLink" }) | @Html.ActionLink(@Resources.Repository_Tree_RawDisplay, "Raw", new { encodedName = PathEncoder.Encode(Model.TreeName), encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true), display = true }, new { @class = "downloadLink" })</p>
+            <div class="controls">
+                <a href="@Url.Action("Raw", new { encodedName = PathEncoder.Encode(Model.TreeName), encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true) })"><i class="fa fa-download"></i> @Resources.Repository_Tree_Download</a>
+                <a href="@Url.Action("Raw", new { encodedName = PathEncoder.Encode(Model.TreeName), encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true), display = true })"><i class="fa fa-file-text"></i> @Resources.Repository_Tree_RawDisplay</a>
             </div>
         }
         @if (Model.IsImage)
@@ -20,7 +22,7 @@
         }
         else if (Model.IsText)
         {
-            <pre class="brush: @Model.TextBrush;">@Model.Text</pre>
+            <pre><code>@Model.Text</code></pre>
         }
         else
         {

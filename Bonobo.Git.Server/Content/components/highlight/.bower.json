@@ -1,0 +1,13 @@
+{
+  "name": "highlight",
+  "homepage": "https://github.com/isagalaev/highlight.js",
+  "_release": "8.0",
+  "_resolution": {
+    "type": "tag",
+    "tag": "8.0",
+    "commit": "f08dbfd8c33d7d5c30d736b5a4ef4d1f361e93ae"
+  },
+  "_source": "git://github.com/isagalaev/highlight.js.git",
+  "_target": "8.0",
+  "_originalSource": "highlight"
+}
