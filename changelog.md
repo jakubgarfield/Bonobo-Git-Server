@@ -4,6 +4,26 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 3.0
+
+**18 March 2014**
+
+### Features
+
+* Major redesign
+* Diff view for files
+* Short SHA in commit view
+* Changed lines added to commits
+
+### Bug Fixes
+
+* Fix #93 Browsing cshtml extensions 
+* Fix #94 Wrong date display for different locale
+
+
+
+<hr />
+
 ## Version 2.1
 
 **3 March 2014**
