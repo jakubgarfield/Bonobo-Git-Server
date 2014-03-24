@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string"/>
-              <xsd:attribute name="type" type="xsd:string"/>
-              <xsd:attribute name="mimetype" type="xsd:string"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string"/>
-              <xsd:attribute name="name" type="xsd:string"/>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -124,7 +124,7 @@
     <value>Der Benutzer wurde gelöscht</value>
   </data>
   <data name="Account_Detail_Back" xml:space="preserve">
-    <value>Zurück zu der Liste</value>
+    <value>Zurück zur Liste</value>
   </data>
   <data name="Account_Detail_Delete" xml:space="preserve">
     <value>Löschen</value>
@@ -133,7 +133,7 @@
     <value>Bearbeiten</value>
   </data>
   <data name="Account_Detail_Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-Mail</value>
   </data>
   <data name="Account_Detail_Name" xml:space="preserve">
     <value>Name</value>
@@ -145,13 +145,13 @@
     <value>Nachname</value>
   </data>
   <data name="Account_Detail_Title" xml:space="preserve">
-    <value>Benutzer Detail</value>
+    <value>Benutzerinformationen</value>
   </data>
   <data name="Account_Detail_Username" xml:space="preserve">
     <value>Benutzername</value>
   </data>
   <data name="Account_Edit_Back" xml:space="preserve">
-    <value>Zurück zu der Liste</value>
+    <value>Zurück zur Liste</value>
   </data>
   <data name="Account_Edit_Cancel" xml:space="preserve">
     <value>Abbrechen</value>
@@ -166,13 +166,13 @@
     <value>Aktuelles Passwort</value>
   </data>
   <data name="Account_Edit_Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-Mail</value>
   </data>
   <data name="Account_Edit_Name" xml:space="preserve">
     <value>Name</value>
   </data>
   <data name="Account_Edit_NewPassword" xml:space="preserve">
-    <value>Neues Password</value>
+    <value>Neues Passwort</value>
   </data>
   <data name="Account_Edit_OldPasswordEmpty" xml:space="preserve">
     <value>Passwort darf nicht leer sein</value>
@@ -193,7 +193,7 @@
     <value>Benutzer Konto Editieren</value>
   </data>
   <data name="Account_Edit_Unsuccessfull" xml:space="preserve">
-    <value>Benutzerkonto konnte nicht editiert werden. Bitte korrigieren sie die Fehler und probieren es erneut. </value>
+    <value>Benutzerkonto konnte nicht editiert werden. Bitte korrigieren Sie die Fehler und probieren es erneut. </value>
   </data>
   <data name="Account_Edit_UpdateSuccess" xml:space="preserve">
     <value>Das Benutzerkonto wurde erfolgreich aktualisiert</value>
@@ -208,7 +208,7 @@
     <value>Bearbeiten</value>
   </data>
   <data name="Home_Error_Text" xml:space="preserve">
-    <value>Ein Fehler ist aufgetreten während der Request verarbeitet wurde. Bitte versuchen sie es erneut, oder kontaktieren sie den Administrator.</value>
+    <value>Ein Fehler ist aufgetreten während die Anfrage verarbeitet wurde. Bitte versuchen Sie es später erneut, oder kontaktieren Sie den Administrator.</value>
   </data>
   <data name="Home_Error_Title" xml:space="preserve">
     <value>Ein Fehler ist aufgetreten</value>
@@ -217,7 +217,7 @@
     <value>Benutzerkonto Informationen</value>
   </data>
   <data name="Home_LogOn_Failed" xml:space="preserve">
-    <value>Anmelden war nicht erfolgreich. Bitte versuchen sie es erneut</value>
+    <value>Anmelden war nicht erfolgreich. Bitte versuchen Sie es erneut</value>
   </data>
   <data name="Home_LogOn_LogOn" xml:space="preserve">
     <value>Anmelden</value>
@@ -235,13 +235,13 @@
     <value>Der Benutzername oder das Passwort ist nicht korrekt </value>
   </data>
   <data name="Home_PageNotFound_Text" xml:space="preserve">
-    <value>Die Seite wurde nicht gefunden. Bitte versuchen sie es erneut oder informieren sie den Administrator</value>
+    <value>Die Seite wurde nicht gefunden. Bitte versuchen Sie es erneut oder informieren Sie den Administrator</value>
   </data>
   <data name="Home_ServerError_Text" xml:space="preserve">
-    <value>En Server Fehler trat auf während der Request verarbeitet wurde. Bitte versuchen sie es erneut oder kontaktieren sie dem System Administrator</value>
+    <value>En Server Fehler trat auf während die Anfrage Request verarbeitet wurde. Bitte versuchen Sie es später erneut oder kontaktieren Sie den System Administrator</value>
   </data>
   <data name="Home_Unauthorized_Text" xml:space="preserve">
-    <value>Sie haben keine Berechtigung für die selektierte Aktion oder Seite</value>
+    <value>Sie sind nicht berechtigt diese Aktion auszuführen oder diese Seite aufzurufen</value>
   </data>
   <data name="Home_Unauthorized_Title" xml:space="preserve">
     <value>Nicht autorisiert</value>
@@ -256,7 +256,7 @@
     <value>Benutzerkonto Einstellungen</value>
   </data>
   <data name="Layout_AdministrationGlobalSettings" xml:space="preserve">
-    <value>Globale Eiinstellungen</value>
+    <value>Globale Einstellungen</value>
   </data>
   <data name="Layout_AdministrationUsers" xml:space="preserve">
     <value>Benutzer</value>
@@ -283,7 +283,7 @@
     <value>Hinzugefügt</value>
   </data>
   <data name="Repository_Commit_AuthorEmail" xml:space="preserve">
-    <value>Email</value>
+    <value>E-Mail</value>
   </data>
   <data name="Repository_Commit_Changes" xml:space="preserve">
     <value>Geänderte Dateien</value>
@@ -313,13 +313,13 @@
     <value>Zurück zu der Liste</value>
   </data>
   <data name="Repository_Create_DirectoryExists" xml:space="preserve">
-    <value>Ein Verzeichnis mit diesem Namen existiert bereits in ihrem Repository Ordner. Bitte löschen sie diesen Ordner or wählen sie einen anderen Namen. </value>
+    <value>Ein Verzeichnis mit diesem Namen existiert bereits im Repository Ordner. Bitte löschen Sie diesen Ordner oder wählen Sie einen anderen Namen. </value>
   </data>
   <data name="Repository_Create_Fail" xml:space="preserve">
-    <value>Repository erstellung war nicht erfolgreich. Bitte korrigieren sie es und versuchen es erneut. </value>
+    <value>Das Repository konnte nicht erstellt werden. Bitte korrigieren und versuchen Sie es erneut. </value>
   </data>
   <data name="Repository_Create_Failure" xml:space="preserve">
-    <value>Repository mit gewählten Namen existiert bereits</value>
+    <value>Repository mit gewähltem Namen existiert bereits</value>
   </data>
   <data name="Repository_Create_Submit" xml:space="preserve">
     <value>Erstellt</value>
@@ -337,7 +337,7 @@
     <value>Administratoren</value>
   </data>
   <data name="Repository_Detail_Back" xml:space="preserve">
-    <value>Zurück zu der Liste</value>
+    <value>Zurück zur Liste</value>
   </data>
   <data name="Repository_Detail_Delete" xml:space="preserve">
     <value>Löschen</value>
@@ -349,7 +349,7 @@
     <value>Bearbeiten</value>
   </data>
   <data name="Repository_Detail_Location" xml:space="preserve">
-    <value>Git Repository Lokation</value>
+    <value>Git Repository Pfad</value>
   </data>
   <data name="Repository_Detail_Name" xml:space="preserve">
     <value>Name</value>
@@ -364,13 +364,13 @@
     <value>Ja</value>
   </data>
   <data name="Repository_Edit_Back" xml:space="preserve">
-    <value>Zurück zu der Liste</value>
+    <value>Zurück zur Liste</value>
   </data>
   <data name="Repository_Edit_CantRemoveYourself" xml:space="preserve">
     <value>Sie können sich nicht selbst von der Administratoren-Gruppe entfernen. </value>
   </data>
   <data name="Repository_Edit_Fail" xml:space="preserve">
-    <value>Repository aktuallisierung war nicht erfolgreich. Bitte korrigieren sie es und versuchen es erneut. </value>
+    <value>Repository Aktualisierung war nicht erfolgreich. Bitte korrigieren und versuchen Sie es erneut. </value>
   </data>
   <data name="Repository_Edit_Submit" xml:space="preserve">
     <value>Speichern</value>
@@ -379,7 +379,7 @@
     <value>Repository bearbeiten</value>
   </data>
   <data name="Repository_Edit_UpdateSuccess" xml:space="preserve">
-    <value>Repository wurde erfolgreich aktuallisiert</value>
+    <value>Repository wurde erfolgreich aktualisiert</value>
   </data>
   <data name="Repository_Index_AdministratedRepositories" xml:space="preserve">
     <value>Administriertes Repository</value>
@@ -418,31 +418,31 @@
     <value>Push für anonyme Repositories erlauben</value>
   </data>
   <data name="Settings_Global_RepositoryPath" xml:space="preserve">
-    <value>Repository Verzeichniss</value>
+    <value>Repository Verzeichnis</value>
   </data>
   <data name="Settings_Index_Save" xml:space="preserve">
     <value>Speichern</value>
   </data>
   <data name="Settings_Index_Title" xml:space="preserve">
-    <value>Globale Eiinstellungen</value>
+    <value>Globale Einstellungen</value>
   </data>
   <data name="Settings_Index_UpdateSuccess" xml:space="preserve">
-    <value>Globale Eiinstellungen erfolgreich aktualisiert</value>
+    <value>Globale Einstellungen erfolgreich aktualisiert</value>
   </data>
   <data name="Settings_RepositoryPathNotExists" xml:space="preserve">
-    <value>Ausgewählter Pfad existiert nicht. Bitte erstellen sie den Ordner oder wählen einen anderen Pfad.</value>
+    <value>Der ausgewählte Pfad existiert nicht. Bitte erstellen Sie den Ordner oder wählen einen anderen Pfad.</value>
   </data>
   <data name="Settings_RepositoryPathUnauthorized" xml:space="preserve">
-    <value>Sie haben keine Berechtigung in den Selektierten Ordner zu schreiben. Bitte selektieren sie einen anderen Ordner. </value>
+    <value>Sie haben keine Berechtigung in den ausgewählten Ordner zu schreiben. Bitte wählen Sie einen anderen Ordner aus.</value>
   </data>
   <data name="Team_Create_Back" xml:space="preserve">
-    <value>Zurück zu der Liste</value>
+    <value>Zurück zur Liste</value>
   </data>
   <data name="Team_Create_Fail" xml:space="preserve">
-    <value>Neues Team erstellen war nicht erfolgreich. Bitte korrigieren sie es und versuchen es erneut. </value>
+    <value>Neues Team erstellen war nicht erfolgreich. Bitte korrigieren und versuchen Sie es erneut. </value>
   </data>
   <data name="Team_Create_Failure" xml:space="preserve">
-    <value>Team mit ausgewählten Namen existiert bereits. Team wurde nicht erstellt.</value>
+    <value>Team mit ausgewähltem Namen existiert bereits. Team wurde nicht erstellt.</value>
   </data>
   <data name="Team_Create_Submit" xml:space="preserve">
     <value>Speichern</value>
@@ -460,7 +460,7 @@
     <value>Das Team wurde gelöscht</value>
   </data>
   <data name="Team_Detail_Back" xml:space="preserve">
-    <value>Zurück zu der Liste</value>
+    <value>Zurück zur Liste</value>
   </data>
   <data name="Team_Detail_Delete" xml:space="preserve">
     <value>Löschen</value>
@@ -478,10 +478,10 @@
     <value>Name</value>
   </data>
   <data name="Team_Edit_Back" xml:space="preserve">
-    <value>Zurück zu der Liste</value>
+    <value>Zurück zur Liste</value>
   </data>
   <data name="Team_Edit_Failure" xml:space="preserve">
-    <value>Team konnte nicht aktualisiert werden. Bitte korrigieren sie die Fehler und versuchen es erneut</value>
+    <value>Team konnte nicht aktualisiert werden. Bitte korrigieren Sie die Fehler und versuchen es erneut</value>
   </data>
   <data name="Team_Edit_Submit" xml:space="preserve">
     <value>Aktualisieren</value>
@@ -502,25 +502,25 @@
     <value>"{0}" ist keine gültige Email Adresse</value>
   </data>
   <data name="Validation_Required" xml:space="preserve">
-    <value>"{0}" ist zwingend</value>
+    <value>"{0}" ist obligatorisch.</value>
   </data>
   <data name="Reset" xml:space="preserve">
     <value>Zurücksetzen</value>
   </data>
   <data name="Settings_Index_Failed" xml:space="preserve">
-    <value>Einstellungen konnten nicht aktualisiert werden. Bitte korrigieren sie die Fehler und versuchen es erneut</value>
+    <value>Einstellungen konnten nicht aktualisiert werden. Bitte korrigieren Sie die Fehler und versuchen es erneut.</value>
   </data>
   <data name="Account_Edit_RolesHint" xml:space="preserve">
-    <value>Administratoren haben zugriff zu allen Repositories und haben die Berechtigung auf alle Operationen auf Repositories, Teams und Benutzer. </value>
+    <value>Administratoren haben Zugriff auf alle Repositories und die Berechtigung auf alle Operationen auf Repositories, Teams und Benutzer. </value>
   </data>
   <data name="Settings_Global_DirectoryHint" xml:space="preserve">
-    <value>Alle Repositories sind in diesem Verzeichniss gespeichert. </value>
+    <value>Alle Repositories sind in diesem Verzeichnis gespeichert. </value>
   </data>
   <data name="Home_About_Thanks" xml:space="preserve">
     <value>Danke</value>
   </data>
   <data name="Home_About_Thanks_p" xml:space="preserve">
-    <value>Bonobo Git Server benutzt einige open source und freeware Projekte. Vielen Dank an alle Authoren für ihre grossartige Arbeit. </value>
+    <value>Bonobo Git Server benutzt einige Open Source und Freeware Projekte. Vielen Dank an alle Autoren für ihre großartige Arbeit. </value>
   </data>
   <data name="Home_About_Title" xml:space="preserve">
     <value>Über</value>
@@ -529,34 +529,34 @@
     <value>Administratoren haben vollen Zugriff auf das Repository. Sie können Repositories modifizieren oder löschen.</value>
   </data>
   <data name="Repository_AllowAnonymousHint" xml:space="preserve">
-    <value>Wenn anonymer Zugang erlaubt ist, kann jeder pull und clone auf ein Repository anwenden. Push ist nur verfügbar wenn es in den Global Optionen konfiguriert ist. </value>
+    <value>Wenn der anonyme Zugriff erlaubt ist, kann jedes Repository geklont und heruntergeladen werden. Push ist nur anonym verfügbar, wenn dies global eingestellt wurde.</value>
   </data>
   <data name="Repository_Create_NameFailure" xml:space="preserve">
     <value>Name sollte nicht nur Leerzeichen beinhalten</value>
   </data>
   <data name="Repository_TeamsHint" xml:space="preserve">
-    <value>Teams haben zugriff zu dem Repository. Sie können clone, push und pull ausführen. Alle Benutzer in dem Team haben zugriff auf das Repository. </value>
+    <value>Teams haben Zugriff auf das Repository. Sie können clone, push und pull ausführen. Alle Benutzer des Teams haben Zugriff auf das Repository. </value>
   </data>
   <data name="Repository_UsersHint" xml:space="preserve">
-    <value>Benutzer haben zugriff auf das Repository. Sie können clone, push und pull ausführen. </value>
+    <value>Benutzer haben Zugriff auf das Repository. Sie können clone, push und pull ausführen. </value>
   </data>
   <data name="Validation_FileName" xml:space="preserve">
-    <value>"{0}" beinhaltet Zeichen die nicht in einer Datei oder einem Ordner vorkommen können. </value>
+    <value>"{0}" beinhaltet Zeichen die nicht in einer Datei oder einem Ordner vorkommen dürfen. </value>
   </data>
   <data name="Validation_StringLength" xml:space="preserve">
-    <value>"{0}" sollte kürzer sein als "{1}" Zeichen</value>
+    <value>"{0}" sollte kürzer als "{1}" Zeichen sein</value>
   </data>
   <data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
     <value>Benutzerkonto mit diesem Benutzernamen existiert bereits</value>
   </data>
   <data name="Account_Create_AccountInformation" xml:space="preserve">
-    <value>Benutzerkonto Informationen</value>
+    <value>Kontoinformationen</value>
   </data>
   <data name="Account_Create_ConfirmPassword" xml:space="preserve">
     <value>Passwort bestätigen</value>
   </data>
   <data name="Account_Create_Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-Mail</value>
   </data>
   <data name="Account_Create_Name" xml:space="preserve">
     <value>Name</value>
@@ -574,7 +574,7 @@
     <value>Neues Benutzerkonto erstellen</value>
   </data>
   <data name="Account_Create_Unsuccessfull" xml:space="preserve">
-    <value>Benutzerkonto konnte nicht erstellt werden. Bitte korrigieren sie die Fehler und probieren es erneut. </value>
+    <value>Benutzerkonto konnte nicht erstellt werden. Bitte korrigieren Sie die Fehler und probieren es erneut. </value>
   </data>
   <data name="Account_Create_Username" xml:space="preserve">
     <value>Benutzername</value>
@@ -586,7 +586,7 @@
     <value>Benutzer</value>
   </data>
   <data name="Delete_ConfirmationText" xml:space="preserve">
-    <value>Wollen sie wirklich löschen: {0}?</value>
+    <value>Wollen Sie "{0}" wirklich löschen?</value>
   </data>
   <data name="Account_Create_Success" xml:space="preserve">
     <value>Der Benutzer wurde erfolgreich erstellt</value>
@@ -595,7 +595,7 @@
     <value>Erlaube anonyme Registrierung</value>
   </data>
   <data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
-    <value>Wenn die Checkbox nicht aktiv ist, können nur Administratoren neue Benutzer hinzufügen und anonyme registration ist deaktiviert. </value>
+    <value>Wenn die Checkbox nicht aktiv ist, können nur Administratoren neue Benutzer hinzufügen und die anonyme Registrierung ist deaktiviert. </value>
   </data>
   <data name="Settings_Global_AllowUserRepositoryCreation" xml:space="preserve">
     <value>Erlaubt Benutzern Repositories zu erstellen</value>
@@ -619,6 +619,6 @@
     <value>Sprache</value>
   </data>
   <data name="Settings_Global_DefaultLanguage_Hint" xml:space="preserve">
-    <value>Standartsprache der Applikation</value>
+    <value>Standardsprache der Anwendung</value>
   </data>
 </root>
