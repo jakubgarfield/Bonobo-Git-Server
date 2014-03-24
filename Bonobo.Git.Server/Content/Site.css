@@ -37,16 +37,16 @@ textarea.medium, input.medium { width: 30em; }
 
 
 
-.home-menu { padding: 0.5em; text-align: left; box-shadow: 0 1px 1px rgba(0,0,0, 0.10); }
-.home-menu .pure-menu-heading { color: white; font-weight: 300; font-size: 1.2em; background: url('images/git-logo.png') no-repeat 0 4px; display: block; padding-left: 40px; }
-.home-menu.pure-menu-open { background: #2d3e50; width: auto; }
-.home-menu .pure-menu-selected a { color: white; }
-.home-menu a { color: #fff; }
-.home-menu ul { float: right; }
-.home-menu li a:hover,
-.home-menu li a:focus { background: none; color: #AECFE5; text-decoration: none; }
-.home-menu .separator { border-left: 1px solid #86909A; }
-.Repository .home-menu .repository, .Account .home-menu .users, .Team .home-menu .teams, .Settings .home-menu .settings { color: #AECFE5; }
+.navigation { padding: 0.5em 0; text-align: right;}
+.navigation.pure-menu a.pure-menu-heading { color: white; font-weight: 300; font-size: 1.2em; background: url('images/git-logo.png') no-repeat 0 4px; padding-left: 40px; float: left; margin-left: 0.5em;}
+.navigation.pure-menu-open { background: #2d3e50; }
+.navigation .pure-menu-selected a { color: white; }
+.navigation a { color: #fff; }
+.navigation ul { display: inline-block; font-size: 0.9em; padding-right: 0.5em;}
+.navigation ul a { padding: 7px 10px;}
+.navigation li a:hover,
+.navigation li a:focus { background: none; color: #AECFE5; text-decoration: none; }
+.Repository .navigation .repository, .Account .navigation .users, .Team .navigation .teams, .Settings .navigation .settings { color: #AECFE5; }
 
 
 .main { min-height: 100%; position: relative; }
