@@ -4,6 +4,21 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 3.1
+
+**27 March 2014**
+
+### Features
+
+* zh-TW Traditional Chinese Translation added - [doggy8088](https://github.com/doggy8088)
+
+### Bug Fixes
+
+* Fix German Localization - [AliveDevil](https://github.com/AliveDevil)
+* Fixed dissapearing menu
+* Fixed CSS Virtual Path (#99 and #100) - [kfarnung](https://github.com/kfarnung)
+
+
 ## Version 3.0
 
 **18 March 2014**
