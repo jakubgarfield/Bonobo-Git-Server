@@ -27,6 +27,7 @@
         <div class="pure-control-group">
             @Html.LabelFor(m => m.DefaultLanguage)
             <select id="DefaultLanguage" name="DefaultLanguage">
+                <option @((Model.DefaultLanguage == "zh-TW") ? "Selected" : "") value="zh-TW">zh-TW</option>
                 <option @((Model.DefaultLanguage == "cs-CZ") ? "Selected" : "") value="cs-CZ">cs-CZ</option>
                 <option @((Model.DefaultLanguage == "ja-JP") ? "Selected" : "") value="ja-JP">ja-JP</option>
                 <option @((Model.DefaultLanguage == "zh-CN") ? "Selected" : "") value="zh-CN">zh-CN</option>
