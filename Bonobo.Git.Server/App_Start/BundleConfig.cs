@@ -1,4 +1,5 @@
-﻿using System.Web.Optimization;
+﻿using Bonobo.Git.Server.Helpers;
+using System.Web.Optimization;
 
 namespace Bonobo.Git.Server.App_Start
 {
@@ -14,8 +15,8 @@ namespace Bonobo.Git.Server.App_Start
                 .Include("~/Content/components/highlight/build/lib/highlight.pack.js"));
 
             bundles.Add(new StyleBundle("~/Content/bundled.css")
-                .Include("~/Content/components/pure/pure-min.css", new CssRewriteUrlTransform())
-                .Include("~/Content/components/font-awesome/css/font-awesome.min.css", new CssRewriteUrlTransform())
+                .Include("~/Content/components/pure/pure-min.css", new CssRewriteUrlTransformWrapper())
+                .Include("~/Content/components/font-awesome/css/font-awesome.min.css", new CssRewriteUrlTransformWrapper())
                 .Include("~/Content/components/highlight/src/styles/github.css")
                 .Include("~/Content/fonts.css", "~/Content/site.css"));
         }

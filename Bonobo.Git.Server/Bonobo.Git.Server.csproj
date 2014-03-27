@@ -264,6 +264,7 @@
     <Compile Include="Attributes\WebAuthorizeAttribute.cs" />
     <Compile Include="GitCmdResult.cs" />
     <Compile Include="Helpers\ContentDispositionUtil.cs" />
+    <Compile Include="Helpers\CssRewriteUrlTransformWrapper.cs" />
     <Compile Include="Helpers\CustomHtmlHelpers.cs" />
     <Compile Include="Helpers\PathEncoder.cs" />
     <Compile Include="Models\HomeModels.cs" />
