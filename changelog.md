@@ -4,6 +4,20 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version X.XX.X
+
+**Unknown**
+
+### Features
+
+
+### Bug Fixes
+
+* #102 Create Team button is missing for Windows Authentication mode
+
+
+<hr />
+
 ## Version 3.1
 
 **27 March 2014**
@@ -18,6 +32,8 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 * Fixed dissapearing menu
 * Fixed CSS Virtual Path (#99 and #100) - [kfarnung](https://github.com/kfarnung)
 
+
+<hr />
 
 ## Version 3.0
 
