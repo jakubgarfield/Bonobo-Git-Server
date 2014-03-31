@@ -9,10 +9,7 @@
         <h1>@Resources.Team_Index_Title</h1>
     </div>
     <div class="pure-u-2-5 add">
-        @if (!WindowsActionFilterAttribute.IsWindowsModeActive)
-        {
-            <a class="pure-button pure-button-primary" href="@Url.Action("Create")"><i class="fa fa-plus-circle"></i> @Resources.Team_Index_CreateNew</a>
-        }
+        <a class="pure-button pure-button-primary" href="@Url.Action("Create")"><i class="fa fa-plus-circle"></i> @Resources.Team_Index_CreateNew</a>
     </div>
 </div>
 
