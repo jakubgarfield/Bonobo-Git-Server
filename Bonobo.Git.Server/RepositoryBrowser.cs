@@ -65,7 +65,7 @@ namespace Bonobo.Git.Server
                 {
                     Since = commit,
                     SortBy = CommitSortStrategies.Topological | CommitSortStrategies.Reverse
-                });
+                }).ToList();
             var tree = String.IsNullOrEmpty(path) ? commit.Tree : (Tree)commit[path].Target;
 
             var query = from item in tree
