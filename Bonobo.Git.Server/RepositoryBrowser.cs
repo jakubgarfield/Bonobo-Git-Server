@@ -59,33 +59,46 @@ namespace Bonobo.Git.Server
                 return Enumerable.Empty<RepositoryTreeDetailModel>();
             }
 
-            var branchNameTemp = referenceName;
-            var ancestors =
-                _repository.Commits.QueryBy(new CommitFilter
-                {
-                    Since = commit,
-                    SortBy = CommitSortStrategies.Topological | CommitSortStrategies.Reverse
-                }).ToList();
-            var tree = String.IsNullOrEmpty(path) ? commit.Tree : (Tree)commit[path].Target;
+            var ancestors =_repository.Commits.QueryBy(new CommitFilter
+            {
+                Since = commit,
+                SortBy = CommitSortStrategies.Topological | CommitSortStrategies.Reverse
+            }).ToList();
 
-            var query = from item in tree
-                        let lastCommit = ancestors.First(c =>
+            var tree = new List<TreeEntry>(String.IsNullOrEmpty(path) ? commit.Tree : (Tree)commit[path].Target);
+            var result = new List<RepositoryTreeDetailModel>();
+            
+            for (int i = 0; i < ancestors.Count && tree.Any(); i++)
+            {
+                var ancestor = ancestors[i];
+
+                for (int j = 0; j < tree.Count; j++)
+                {
+                    var entry = tree[j];
+
+                    var ancestorEntry = ancestor[entry.Path];
+                    if (ancestorEntry != null && entry.Target.Sha == ancestorEntry.Target.Sha)
+                    {
+                        result.Add(new RepositoryTreeDetailModel
                         {
-                            var entry = c[item.Path];
-                            return entry != null && entry.Target == item.Target;
-                        })
-                        select new RepositoryTreeDetailModel
-                        {
-                            Name = item.Name,
-                            IsTree = item.TargetType == TreeEntryTargetType.Tree,
-                            CommitDate = lastCommit.Author.When.LocalDateTime,
-                            CommitMessage = lastCommit.MessageShort,
-                            Author = lastCommit.Author.Name,
-                            TreeName = branchNameTemp ?? name,
-                            Path = item.Path.Replace('\\', '/'),
-                            IsImage = FileDisplayHandler.IsImage(item.Name),
-                        };
-            return query.ToList();
+                            Name = entry.Name,
+                            IsTree = entry.TargetType == TreeEntryTargetType.Tree,
+                            CommitDate = ancestor.Author.When.LocalDateTime,
+                            CommitMessage = ancestor.MessageShort,
+                            Author = ancestor.Author.Name,
+                            TreeName = referenceName ?? name,
+                            Path = entry.Path.Replace('\\', '/'),
+                            IsImage = FileDisplayHandler.IsImage(entry.Name),
+                        });
+
+                        tree[j] = null;
+                    }
+                }
+
+                tree.RemoveAll(entry => entry == null);
+            }
+
+            return result;
         }
 
         public RepositoryTreeDetailModel BrowseBlob(string name, string path, out string referenceName)
