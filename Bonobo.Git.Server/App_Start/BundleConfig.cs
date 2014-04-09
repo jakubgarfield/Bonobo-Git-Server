@@ -12,7 +12,7 @@ namespace Bonobo.Git.Server.App_Start
             bundles.Add(new ScriptBundle("~/bundled.js")
                 .Include("~/Scripts/jquery-{version}.js")
                 .Include("~/Scripts/jquery.validate*", "~/Content/uni/js/uni-form-validation.jquery.js", "~/Scripts/MicrosoftAjax.js")
-                .Include("~/Content/components/highlight/build/lib/highlight.pack.js"));
+                .Include("~/Scripts/highlight.pack.js"));
 
             bundles.Add(new StyleBundle("~/Content/bundled.css")
                 .Include("~/Content/components/pure/pure-min.css", new CssRewriteUrlTransformWrapper())
