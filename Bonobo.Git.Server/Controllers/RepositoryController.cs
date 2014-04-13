@@ -176,28 +176,39 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorizeRepository]
         public ActionResult Tree(string id, string encodedName, string encodedPath)
         {
+            bool includeDetails = Request.IsAjaxRequest(); 
+
+            if (String.IsNullOrEmpty(id))
+                return View();
+
             ViewBag.ID = id;
-            if (!String.IsNullOrEmpty(id))
+            var name = PathEncoder.Decode(encodedName);
+            var path = PathEncoder.Decode(encodedPath);
+
+            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
             {
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+                string referenceName;
+                var files = includeDetails ? browser.BrowseTreeDetails(name, path, out referenceName) : browser.BrowseTree(name, path, out referenceName);
+
+                var model = new RepositoryTreeModel
                 {
-                    var name = PathEncoder.Decode(encodedName);
-                    var path = PathEncoder.Decode(encodedPath);
-                    string referenceName;
-                    var files = browser.BrowseTree(name, path, out referenceName);
+                    Name = id,
+                    Branch = name,
+                    Path = path,
+                    Files = files.OrderByDescending(i => i.IsTree).ThenBy(i => i.Name),
+                };
+
+                if (includeDetails)
+                {
+                    return Json(model, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
                     PopulateBranchesData(browser, referenceName);
                     PopulateAddressBarData(name, path);
-
-                    var model = new RepositoryTreeModel();
-                    model.Name = id;
-                    model.Branch = name;
-                    model.Path = path;
-                    model.Files = files.OrderByDescending(i => i.IsTree).ThenBy(i => i.Name);
                     return View(model);
                 }
             }
-
-            return View();
         }
 
         [WebAuthorizeRepository]

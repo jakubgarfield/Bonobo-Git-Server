@@ -70,7 +70,6 @@ namespace Bonobo.Git.Server.Models
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Tree_Author")]
         public string Author { get; set; }
-
         public bool IsTree { get; set; }
         public string TreeName { get; set; }
         public bool IsImage { get; set; }

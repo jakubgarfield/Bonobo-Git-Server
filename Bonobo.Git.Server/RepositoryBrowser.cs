@@ -59,43 +59,58 @@ namespace Bonobo.Git.Server
                 return Enumerable.Empty<RepositoryTreeDetailModel>();
             }
 
-            var ancestors =_repository.Commits.QueryBy(new CommitFilter
-            {
-                Since = commit,
-                SortBy = CommitSortStrategies.Topological | CommitSortStrategies.Reverse
-            }).ToList();
-
-            var tree = new List<TreeEntry>(String.IsNullOrEmpty(path) ? commit.Tree : (Tree)commit[path].Target);
-            var result = new List<RepositoryTreeDetailModel>();
+            var tree = String.IsNullOrEmpty(path) ? commit.Tree : (Tree)commit[path].Target;
+            var tmpReferenceName = referenceName;
             
-            for (int i = 0; i < ancestors.Count && tree.Any(); i++)
+            return tree.Select(i => new RepositoryTreeDetailModel
+            {
+                Name = i.Name,
+                IsTree = i.TargetType == TreeEntryTargetType.Tree,
+                TreeName = tmpReferenceName ?? name,
+                Path = i.Path.Replace('\\', '/'),
+                IsImage = FileDisplayHandler.IsImage(i.Name),
+            }).ToList();
+        }
+
+        public IEnumerable<RepositoryTreeDetailModel> BrowseTreeDetails(string name, string path, out string referenceName)
+        {
+            var commit = GetCommitByName(name, out referenceName);
+            if (commit == null)
+            {
+                return Enumerable.Empty<RepositoryTreeDetailModel>();
+            }
+
+            var ancestors = _repository.Commits.QueryBy(new CommitFilter { Since = commit, SortBy = CommitSortStrategies.Topological | CommitSortStrategies.Reverse }).ToList();
+            var entries = (String.IsNullOrEmpty(path) ? commit.Tree : (Tree)commit[path].Target).ToList();
+            var result = new List<RepositoryTreeDetailModel>();
+
+            for (int i = 0; i < ancestors.Count && entries.Any(); i++)
             {
                 var ancestor = ancestors[i];
 
-                for (int j = 0; j < tree.Count; j++)
+                for (int j = 0; j < entries.Count; j++)
                 {
-                    var entry = tree[j];
-
+                    var entry = entries[j];
                     var ancestorEntry = ancestor[entry.Path];
                     if (ancestorEntry != null && entry.Target.Sha == ancestorEntry.Target.Sha)
                     {
                         result.Add(new RepositoryTreeDetailModel
                         {
                             Name = entry.Name,
-                            IsTree = entry.TargetType == TreeEntryTargetType.Tree,
                             CommitDate = ancestor.Author.When.LocalDateTime,
                             CommitMessage = ancestor.MessageShort,
                             Author = ancestor.Author.Name,
+                            IsTree = entry.TargetType == TreeEntryTargetType.Tree,
                             TreeName = referenceName ?? name,
                             Path = entry.Path.Replace('\\', '/'),
                             IsImage = FileDisplayHandler.IsImage(entry.Name),
                         });
 
-                        tree[j] = null;
+                        entries[j] = null;
                     }
                 }
 
-                tree.RemoveAll(entry => entry == null);
+                entries.RemoveAll(entry => entry == null);
             }
 
             return result;

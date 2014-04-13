@@ -61,6 +61,6 @@
     </div>
 
     @Scripts.Render("~/bundled.js")
-    <script>hljs.initHighlightingOnLoad();</script>
+    @RenderSection("scripts", required: false)
 </body>
 </html>
