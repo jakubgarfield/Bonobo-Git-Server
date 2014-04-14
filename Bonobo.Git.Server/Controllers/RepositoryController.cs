@@ -188,7 +188,7 @@ namespace Bonobo.Git.Server.Controllers
             using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
             {
                 string referenceName;
-                var files = includeDetails ? browser.BrowseTreeDetails(name, path, out referenceName) : browser.BrowseTree(name, path, out referenceName);
+                var files = browser.BrowseTree(name, path, out referenceName, includeDetails);
 
                 var model = new RepositoryTreeModel
                 {
