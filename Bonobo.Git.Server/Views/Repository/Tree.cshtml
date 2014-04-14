@@ -49,7 +49,7 @@
             function detailsLoaded(model) {
                 $("#files tbody > tr").each(function (index) {
                     $(this).find(".message").html(model.Files[index].CommitMessage);
-                    $(this).find(".date").html(model.Files[index].CommitDate);
+                    $(this).find(".date").html(model.Files[index].CommitDateString);
                 });
             }
         });

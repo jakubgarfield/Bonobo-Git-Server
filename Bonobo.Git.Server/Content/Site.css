@@ -95,6 +95,8 @@ nav.branches ul li:hover ul li { float: none; }
 .Commits nav.branches ul li:hover ul li { display: block; float: none;}
 
 .Tree .pure-table tbody { font-size: 0.8em; }
+.Tree #files .path { width: 230px;}
+.Tree #files .date { width: 150px;}
 .breadcrumbs { padding: 7px; margin: 0; }
 .breadcrumbs em { font-weight: bold; font-style: normal; }
 
