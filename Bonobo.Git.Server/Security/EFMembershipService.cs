@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using Bonobo.Git.Server.Data;
 using System.Data;
 using Bonobo.Git.Server.Models;
@@ -18,7 +19,7 @@ namespace Bonobo.Git.Server.Security
             using (var database = new BonoboGitServerContext())
             {
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
-                return user != null && ComparePassword(password, user.Password);
+                return user != null && ComparePassword(password, username, user.Password);
             }
         }
 
@@ -36,7 +37,7 @@ namespace Bonobo.Git.Server.Security
                 var user = new User
                 {
                     Username = username,
-                    Password = EncryptPassword(password),
+                    Password = GetSaltedHash(password, username),
                     Name = name,
                     Surname = surname,
                     Email = email,
@@ -100,7 +101,7 @@ namespace Bonobo.Git.Server.Security
                     user.Name = name ?? user.Name;
                     user.Surname = surname ?? user.Surname;
                     user.Email = email ?? user.Email;
-                    user.Password = password != null ? EncryptPassword(password) : user.Password;
+                    user.Password = password != null ? GetSaltedHash(password, username) : user.Password;
                     database.SaveChanges();
                 }
             }
@@ -124,19 +125,30 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        private bool ComparePassword(string password, string hash)
+        private bool ComparePassword(string password, string salt, string hash)
         {
-            return EncryptPassword(password) == hash;
+            return GetSaltedHash(password, salt) == hash;
         }
 
-        private string EncryptPassword(string password)
+        // todo embix: hash related stuff should be injected
+        private readonly Func<HashAlgorithm> _getHashProvider = ()=>new SHA512CryptoServiceProvider();
+
+        private string GetHash(string content)
         {
-            using (System.Security.Cryptography.MD5CryptoServiceProvider x = new System.Security.Cryptography.MD5CryptoServiceProvider())
+            using (var hashProvider = _getHashProvider())
             {
-                var data = System.Text.Encoding.UTF8.GetBytes(password);
-                data = x.ComputeHash(data);
+                var data = System.Text.Encoding.UTF8.GetBytes(content);
+                data = hashProvider.ComputeHash(data);
                 return BitConverter.ToString(data).Replace("-", ""); 
             }
+        }
+
+        // as the username is fixed and unique for each user
+        // it seams the least bad salt without breaking the db abstraction
+        internal string GetSaltedHash(string password, string salt)
+        {
+            var hashedSalt = GetHash(salt);
+            return GetHash(GetHash(hashedSalt + password + hashedSalt));
         }
     }
 }
