@@ -42,5 +42,7 @@ namespace Bonobo.Git.Server.Test
         {
             Assert.IsTrue(updateScript.Command.Contains(DefaultAdminHash));
         }
+
+        // todo: test backwards compatibility
     }
 }

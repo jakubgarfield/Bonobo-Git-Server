@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using Bonobo.Git.Server.Data;
 using System.Data;
 using Bonobo.Git.Server.Models;
@@ -127,20 +128,26 @@ namespace Bonobo.Git.Server.Security
 
         private bool ComparePassword(string password, string salt, string hash)
         {
-            return GetSaltedHash(password, salt) == hash;
+            if (IsOfCurrentHashFormat(hash))
+            {
+                return GetSaltedHash(password, salt) == hash;
+            }
+
+            // to not break backwards compatibility: use old and update
+            if(GetDeprecatedHash(password) == hash)
+            {
+                // modify if we use something other than username as salt
+                var username = salt;
+                UpdateToCurrentHashMethod(username, password);
+                return true;
+            }
+            return false;
         }
 
-        // todo embix: hash related stuff should be injected
-        private readonly Func<HashAlgorithm> _getHashProvider = ()=>new SHA512CryptoServiceProvider();
-
-        private string GetHash(string content)
+        private bool IsOfCurrentHashFormat(string hash)
         {
-            using (var hashProvider = _getHashProvider())
-            {
-                var data = System.Text.Encoding.UTF8.GetBytes(content);
-                data = hashProvider.ComputeHash(data);
-                return BitConverter.ToString(data).Replace("-", ""); 
-            }
+            //sha512-hex, md5-hex would be 32
+            return Regex.IsMatch(hash, "^[0-9A-F]{128}$");
         }
 
         // as the username is fixed and unique for each user
@@ -149,6 +156,44 @@ namespace Bonobo.Git.Server.Security
         {
             var hashedSalt = GetHash(salt);
             return GetHash(GetHash(hashedSalt + password + hashedSalt));
+        }
+
+        // todo: refactor
+        private readonly Func<HashAlgorithm> _getCurrentHashProvider = ()=>new SHA512CryptoServiceProvider();
+        private readonly Func<HashAlgorithm> _getDeprecatedHashProvider = ()=>new MD5CryptoServiceProvider();
+
+        private string GetDeprecatedHash(string password)
+        {
+            return GetHash(password, _getDeprecatedHashProvider);
+        }
+
+        private string GetHash(string content)
+        {
+            return GetHash(content, _getCurrentHashProvider);
+        }
+
+        private string GetHash(string content, Func<HashAlgorithm> getHashProvider)
+        {
+            using (var hashProvider = getHashProvider())
+            {
+                var data = System.Text.Encoding.UTF8.GetBytes(content);
+                data = hashProvider.ComputeHash(data);
+                return BitConverter.ToString(data).Replace("-", ""); 
+            }
+        }
+
+        private void UpdateToCurrentHashMethod(string username, string password)
+        {
+            var saltedHash = GetSaltedHash(password, username);
+            using (var database = new BonoboGitServerContext())
+            {
+                var user = database.Users.FirstOrDefault(i => i.Username == username);
+                if (user != null)
+                {
+                    user.Password = saltedHash;
+                    database.SaveChanges();
+                }
+            }
         }
     }
 }
