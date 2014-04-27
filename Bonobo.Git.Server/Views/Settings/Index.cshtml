@@ -1,4 +1,5 @@
-﻿@using Bonobo.Git.Server.Extensions
+﻿@using System.Globalization
+@using Bonobo.Git.Server.Extensions
 @model Bonobo.Git.Server.Models.GlobalSettingsModel
 @{
     ViewBag.Title = Resources.Settings_Index_Title;
@@ -26,23 +27,7 @@
         </div>
         <div class="pure-control-group">
             @Html.LabelFor(m => m.DefaultLanguage)
-            <select id="DefaultLanguage" name="DefaultLanguage">
-                <option @((Model.DefaultLanguage == "cs-CZ") ? "Selected" : "") value="cs-CZ">cs-CZ</option>
-                <option @((Model.DefaultLanguage == "de-DE") ? "Selected" : "") value="de-DE">de-DE</option>
-                <option @((Model.DefaultLanguage == "en") ? "Selected" : "") value="en">en</option>
-                <option @((Model.DefaultLanguage == "en-AU") ? "Selected" : "") value="en-AU">en-AU</option>
-                <option @((Model.DefaultLanguage == "en-CA") ? "Selected" : "") value="en-CA">en-CA</option>
-                <option @((Model.DefaultLanguage == "en-GB") ? "Selected" : "") value="en-GB">en-GB</option>
-                <option @((Model.DefaultLanguage == "en-US") ? "Selected" : "") value="en-US">en-US</option>
-                <option @((Model.DefaultLanguage == "es-ES") ? "Selected" : "") value="es-ES">es-ES</option>
-                <option @((Model.DefaultLanguage == "fr-FR") ? "Selected" : "") value="fr-FR">fr-FR</option>
-                <option @((Model.DefaultLanguage == "ja-JP") ? "Selected" : "") value="ja-JP">ja-JP</option>
-                <option @((Model.DefaultLanguage == "ru-RU") ? "Selected" : "") value="ru-RU">ru-RU</option>
-                <option @((Model.DefaultLanguage == "sv-SE") ? "Selected" : "") value="sv-SE">sv-SE</option>
-                <option @((Model.DefaultLanguage == "tr-TR") ? "Selected" : "") value="tr-TR">tr-TR</option>
-                <option @((Model.DefaultLanguage == "zh-CN") ? "Selected" : "") value="zh-CN">zh-CN</option>
-                <option @((Model.DefaultLanguage == "zh-TW") ? "Selected" : "") value="zh-TW">zh-TW</option>
-            </select>
+            @Html.DropDownListFor(m => m.DefaultLanguage, CultureInfo.GetCultures(CultureTypes.SpecificCultures).Select(cultureInfo => new SelectListItem() { Text = cultureInfo.DisplayName, Value = cultureInfo.Name, Selected = Model.DefaultLanguage == cultureInfo.Name }).OrderBy(i => i.Text))
             <i class="fa fa-info-circle" title="@Resources.Settings_Global_DefaultLanguage_Hint"></i>
         </div>
         <div class="pure-controls">

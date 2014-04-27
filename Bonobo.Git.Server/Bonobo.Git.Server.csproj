@@ -184,53 +184,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_GlobalResources\Resources.fr-FR.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.fr-FR.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Resources.sv-SE.designer.cs">
-      <DependentUpon>Resources.sv-SE.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="App_GlobalResources\Resources.ru-RU.designer.cs">
-      <DependentUpon>Resources.ru-RU.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="App_GlobalResources\Resources.es-ES.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.es-ES.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Resources.ja-JP.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.ja-JP.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Resources.tr-TR.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.tr-TR.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Resources.zh-CN.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-CN.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Resources.zh-TW.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-TW.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_GlobalResources\Resources.de-DE.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.de-DE.resx</DependentUpon>
-    </Compile>
     <Compile Include="Data\Update\AutomaticUpdater.cs" />
     <Compile Include="Data\Update\RepositorySynchronizer.cs" />
     <Compile Include="Data\Update\SqlServer\InitialCreateScript.cs" />
@@ -277,11 +232,6 @@
     <Compile Include="Models\SettingsModels.cs" />
     <Compile Include="Models\TeamModels.cs" />
     <Compile Include="Definitions.cs" />
-    <Compile Include="App_GlobalResources\Resources.cs-CZ.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.cs-CZ.resx</DependentUpon>
-    </Compile>
     <Compile Include="Attributes\WebAuthorizeRepositoryAttribute.cs" />
     <Compile Include="RepositoryBrowser.cs" />
     <Compile Include="Security\EFMembershipService.cs" />
@@ -436,10 +386,7 @@
     <Content Include="App_Data\Git\xargs.exe" />
     <Content Include="App_Data\note.txt" />
     <Content Include="App_Data\Repositories\note.txt" />
-    <EmbeddedResource Include="App_GlobalResources\Resources.fr-FR.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Resources.fr-FR.designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="App_GlobalResources\Resources.fr-FR.resx" />
     <Content Include="bin\NativeBinaries\amd64\git2-65e9dc6.dll" />
     <Content Include="bin\NativeBinaries\x86\git2-65e9dc6.dll" />
     <Content Include="Content\components\font-awesome\css\font-awesome.min.css" />
@@ -531,11 +478,7 @@
     <Content Include="App_Data\Git\vim" />
     <Content Include="App_Data\Git\which" />
     <Content Include="App_Data\Git\yacc" />
-    <EmbeddedResource Include="App_GlobalResources\Resources.de-DE.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.de-DE.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="App_GlobalResources\Resources.de-DE.resx" />
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
     <Content Include="Content\fonts\opensans-bold.eot" />
@@ -547,10 +490,7 @@
     <Content Include="Content\fonts\opensans-regular.eot" />
     <Content Include="Content\fonts\opensans-regular.ttf" />
     <Content Include="Content\fonts\opensans-regular.woff" />
-    <EmbeddedResource Include="App_GlobalResources\Resources.zh-TW.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-TW.designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="App_GlobalResources\Resources.zh-TW.resx" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <Content Include="Views\Repository\Blob.cshtml" />
   </ItemGroup>
@@ -584,40 +524,18 @@
     <Content Include="Views\Repository\_Commit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="App_GlobalResources\Resources.sv-SE.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Resources.sv-SE.designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="App_GlobalResources\Resources.cs-CZ.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.cs-CZ.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="App_GlobalResources\Resources.ru-RU.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Resources.ru-RU.designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="App_GlobalResources\Resources.es-ES.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Resources.es-ES.designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="App_GlobalResources\Resources.ja-JP.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.ja-JP.designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="App_GlobalResources\Resources.sv-SE.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.cs-CZ.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.ru-RU.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.es-ES.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.ja-JP.resx" />
     <EmbeddedResource Include="App_GlobalResources\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="App_GlobalResources\Resources.tr-TR.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.tr-TR.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="App_GlobalResources\Resources.zh-CN.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-CN.designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="App_GlobalResources\Resources.tr-TR.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.zh-CN.resx" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
