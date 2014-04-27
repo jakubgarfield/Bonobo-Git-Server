@@ -169,6 +169,9 @@ App_Data/*.ldf
 # Microsoft Fakes
 FakesAssemblies/
 
+# Microsoft Roslyn
+*.sln.ide/
+
 # =========================
 # Windows detritus
 # =========================
