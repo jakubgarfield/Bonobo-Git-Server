@@ -26,7 +26,7 @@
             </div>
             <div class="pure-control-group">
                 <label>@Resources.Repository_Detail_Location</label>
-                @String.Concat(serverAddress, Model.Name, ".git")
+                @String.Concat(serverAddress,"git/", Model.GitName)
             </div>
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.Description)

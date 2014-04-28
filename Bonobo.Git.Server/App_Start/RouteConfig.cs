@@ -9,17 +9,17 @@ namespace Bonobo.Git.Server.App_Start
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.MapRoute("SecureInfoRefs",
-                            "{project}.git/info/refs",
+                            "git/{project}/info/refs",
                             new { controller = "Git", action = "SecureGetInfoRefs" },
                             new { method = new HttpMethodConstraint("GET") });
 
-            routes.MapRoute("SecureUploadPack", 
-                            "{project}.git/git-upload-pack",
+            routes.MapRoute("SecureUploadPack",
+                            "git/{project}/git-upload-pack",
                             new { controller = "Git", action = "SecureUploadPack" },
                             new { method = new HttpMethodConstraint("POST") });
 
-            routes.MapRoute("SecureReceivePack", 
-                            "{project}.git/git-receive-pack",
+            routes.MapRoute("SecureReceivePack",
+                            "git/{project}/git-receive-pack",
                             new { controller = "Git", action = "SecureReceivePack" },
                             new { method = new HttpMethodConstraint("POST") });
 

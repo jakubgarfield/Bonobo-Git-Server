@@ -11,6 +11,7 @@
                     BEGIN
                         CREATE TABLE [Repository] (
                             [Name] VarChar(255) Not Null,
+                            [GitName] VarChar(255) Not Null,
                             [Description] VarChar(255) Null,
                             [Anonymous] Bit Not Null,
                             Constraint [PK_Repository] Primary Key ([Name])

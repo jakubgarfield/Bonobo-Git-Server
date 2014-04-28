@@ -17,14 +17,14 @@ namespace Bonobo.Git.Server
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            if (IsWindowsUserAuthenticated(filterContext))
-            {
-                return;
-            }
-
             if (filterContext == null)
             {
                 throw new ArgumentNullException("filterContext");
+            }
+
+            if (IsWindowsUserAuthenticated(filterContext))
+            {
+                return;
             }
 
             string auth = filterContext.HttpContext.Request.Headers["Authorization"];
@@ -55,6 +55,12 @@ namespace Bonobo.Git.Server
         {
             var windowsIdentity = context.HttpContext.User.Identity as WindowsIdentity;
             return windowsIdentity != null && windowsIdentity.IsAuthenticated;
+        }
+
+        private static bool IsGenericAuthenticated(ControllerContext context)
+        {
+           GenericIdentity genericIdentity= context.HttpContext.User.Identity as GenericIdentity;
+           return genericIdentity != null && genericIdentity.IsAuthenticated;
         }
     }
 }
