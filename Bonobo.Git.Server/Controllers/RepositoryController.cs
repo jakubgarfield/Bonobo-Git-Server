@@ -105,9 +105,10 @@ namespace Bonobo.Git.Server.Controllers
             }
             else if (ModelState.IsValid)
             {
+                model.GitName = model.Name + ".git";
                 if (RepositoryRepository.Create(ConvertRepositoryDetailModel(model)))
                 {
-                    string path = Path.Combine(UserConfiguration.Current.Repositories, model.Name);
+                    string path = Path.Combine(UserConfiguration.Current.Repositories, model.GitName);
                     if (!Directory.Exists(path))
                     {
                         LibGit2Sharp.Repository.Init(path, true);
@@ -185,7 +186,8 @@ namespace Bonobo.Git.Server.Controllers
             var name = PathEncoder.Decode(encodedName);
             var path = PathEncoder.Decode(encodedPath);
 
-            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+            RepositoryModel repository = RepositoryRepository.GetRepository(id);
+            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repository.GitName)))
             {
                 string referenceName;
                 var files = browser.BrowseTree(name, path, out referenceName, includeDetails);
@@ -217,7 +219,8 @@ namespace Bonobo.Git.Server.Controllers
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
             {
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+                RepositoryModel repository = RepositoryRepository.GetRepository(id);
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repository.GitName)))
                 {
                     var name = PathEncoder.Decode(encodedName);
                     var path = PathEncoder.Decode(encodedPath);
@@ -239,7 +242,8 @@ namespace Bonobo.Git.Server.Controllers
             if (String.IsNullOrEmpty(id))
                 return HttpNotFound();
 
-            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+            RepositoryModel repository = RepositoryRepository.GetRepository(id);
+            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repository.GitName)))
             {
                 var name = PathEncoder.Decode(encodedName);
                 var path = PathEncoder.Decode(encodedPath);
@@ -285,7 +289,8 @@ namespace Bonobo.Git.Server.Controllers
                 outputZip.AlternateEncodingUsage = ZipOption.AsNecessary;
                 outputZip.AlternateEncoding = Encoding.Unicode;
 
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+                RepositoryModel repository = RepositoryRepository.GetRepository(id);
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repository.GitName)))
                 {
                     AddTreeToZip(browser, name, path, outputZip);
                 }
@@ -323,7 +328,8 @@ namespace Bonobo.Git.Server.Controllers
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
             {
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+                RepositoryModel repository = RepositoryRepository.GetRepository(id);
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repository.GitName)))
                 {
                     var name = PathEncoder.Decode(encodedName);
                     string referenceName;
@@ -342,7 +348,8 @@ namespace Bonobo.Git.Server.Controllers
             ViewBag.ID = id;
             if (!String.IsNullOrEmpty(id))
             {
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+                RepositoryModel repository = RepositoryRepository.GetRepository(id);
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repository.GitName)))
                 {
                     var model = browser.GetCommitDetail(commit);
                     model.Name = id;
@@ -403,6 +410,7 @@ namespace Bonobo.Git.Server.Controllers
             return model == null ? null : new RepositoryDetailModel
             {
                 Name = model.Name,
+                GitName = model.GitName,
                 Description = model.Description,
                 Users = model.Users,
                 Administrators = model.Administrators,
@@ -415,7 +423,7 @@ namespace Bonobo.Git.Server.Controllers
 
         private RepositoryDetailStatus GetRepositoryStatus(RepositoryModel model)
         {
-            string path = Path.Combine(UserConfiguration.Current.Repositories, model.Name);
+            string path = Path.Combine(UserConfiguration.Current.Repositories, model.GitName);
             if (!Directory.Exists(path))
                 return RepositoryDetailStatus.Missing;
             else
@@ -427,6 +435,7 @@ namespace Bonobo.Git.Server.Controllers
             return model == null ? null : new RepositoryModel
             {
                 Name = model.Name,
+                GitName = model.GitName,
                 Description = model.Description,
                 Users = model.Users,
                 Administrators = model.Administrators,

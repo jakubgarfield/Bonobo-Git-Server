@@ -23,7 +23,8 @@ namespace Bonobo.Git.Server.Data.Update
             IEnumerable<string> directories = Directory.EnumerateDirectories(UserConfiguration.Current.Repositories);
             foreach (string directory in directories)
             {
-                string name = Path.GetFileName(directory);
+                string name = Path.GetFileNameWithoutExtension(directory);
+                string gitName = Path.GetFileName(directory);
 
                 RepositoryModel repository = _repositoryRepository.GetRepository(name);
                 if (repository == null)
@@ -31,6 +32,7 @@ namespace Bonobo.Git.Server.Data.Update
                     repository = new RepositoryModel();
                     repository.Description = "Discovered in file system.";
                     repository.Name = name;
+                    repository.GitName = gitName;
                     repository.AnonymousAccess = false;
                     _repositoryRepository.Create(repository);
                 }

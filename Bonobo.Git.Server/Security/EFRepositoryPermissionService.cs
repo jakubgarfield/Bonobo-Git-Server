@@ -12,12 +12,12 @@ namespace Bonobo.Git.Server.Security
             {
                 username = username.ToLowerInvariant();
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
-                var repository = database.Repositories.FirstOrDefault(i => i.Name == project);
+                var repository = database.Repositories.FirstOrDefault(i => i.GitName == project);
                 if (user != null && project != null)
                 {
                     if (user.Roles.FirstOrDefault(i => i.Name == Definitions.Roles.Administrator) != null
-                     || user.Repositories.FirstOrDefault(i => i.Name == project) != null
-                     || user.AdministratedRepositories.FirstOrDefault(i => i.Name == project) != null
+                     || user.Repositories.FirstOrDefault(i => i.GitName == project) != null
+                     || user.AdministratedRepositories.FirstOrDefault(i => i.GitName == project) != null
                      || user.Teams.Select(i => i.Name).FirstOrDefault(t => repository.Teams.Select(i => i.Name).Contains(t)) != null)
                     {
                         return true;
@@ -31,7 +31,7 @@ namespace Bonobo.Git.Server.Security
         {
             using (var database = new BonoboGitServerContext())
             {
-                var isAllowsAnonymous = database.Repositories.Any(repo => repo.Name == project && repo.Anonymous);
+                var isAllowsAnonymous = database.Repositories.Any(repo => repo.GitName == project && repo.Anonymous);
                 return isAllowsAnonymous;
             }
         }
@@ -47,7 +47,7 @@ namespace Bonobo.Git.Server.Security
                         .Any(
                             us =>
                                 (us.Roles.Any(role => role.Name == Definitions.Roles.Administrator) ||
-                                 us.AdministratedRepositories.Any(ar => ar.Name == project)));
+                                 us.AdministratedRepositories.Any(ar => ar.GitName == project)));
                 return isRepoAdmin;
             }
         }

@@ -48,6 +48,7 @@ namespace Bonobo.Git.Server.Data.Mapping
         {
             ToTable("Repository");
             Property(t => t.Name).HasColumnName("Name");
+            Property(t => t.GitName).HasColumnName("GitName");
             Property(t => t.Description).HasColumnName("Description");
             Property(t => t.Anonymous).HasColumnName("Anonymous");
         }
@@ -55,6 +56,10 @@ namespace Bonobo.Git.Server.Data.Mapping
         private void SetProperties()
         {
             Property(t => t.Name)
+                .IsRequired()
+                .HasMaxLength(255);
+
+            Property(t => t.GitName)
                 .IsRequired()
                 .HasMaxLength(255);
 
