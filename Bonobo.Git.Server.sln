@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonobo.Git.Server", "Bonobo.Git.Server\Bonobo.Git.Server.csproj", "{6129B3FE-B282-4F6F-8836-8AF66602F8DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonobo.Git.Server.Test", "Bonobo.Git.Server.Test\Bonobo.Git.Server.Test.csproj", "{0B124D88-5C2B-47AD-B660-434B709A0DFF}"
@@ -15,6 +13,12 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|Mixed Platforms = Release|Mixed Platforms
 		Release|x86 = Release|x86
+		Release-Api|Any CPU = Release-Api|Any CPU
+		Release-Api|Mixed Platforms = Release-Api|Mixed Platforms
+		Release-Api|x86 = Release-Api|x86
+		Release-UI|Any CPU = Release-UI|Any CPU
+		Release-UI|Mixed Platforms = Release-UI|Mixed Platforms
+		Release-UI|x86 = Release-UI|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6129B3FE-B282-4F6F-8836-8AF66602F8DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -27,6 +31,16 @@ Global
 		{6129B3FE-B282-4F6F-8836-8AF66602F8DA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{6129B3FE-B282-4F6F-8836-8AF66602F8DA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6129B3FE-B282-4F6F-8836-8AF66602F8DA}.Release|x86.ActiveCfg = Release|Any CPU
+		{6129B3FE-B282-4F6F-8836-8AF66602F8DA}.Release-Api|Any CPU.ActiveCfg = Release-Api|Any CPU
+		{6129B3FE-B282-4F6F-8836-8AF66602F8DA}.Release-Api|Any CPU.Build.0 = Release-Api|Any CPU
+		{6129B3FE-B282-4F6F-8836-8AF66602F8DA}.Release-Api|Mixed Platforms.ActiveCfg = Release-Api|Any CPU
+		{6129B3FE-B282-4F6F-8836-8AF66602F8DA}.Release-Api|Mixed Platforms.Build.0 = Release-Api|Any CPU
+		{6129B3FE-B282-4F6F-8836-8AF66602F8DA}.Release-Api|x86.ActiveCfg = Release-Api|Any CPU
+		{6129B3FE-B282-4F6F-8836-8AF66602F8DA}.Release-UI|Any CPU.ActiveCfg = Release-UI|Any CPU
+		{6129B3FE-B282-4F6F-8836-8AF66602F8DA}.Release-UI|Any CPU.Build.0 = Release-UI|Any CPU
+		{6129B3FE-B282-4F6F-8836-8AF66602F8DA}.Release-UI|Mixed Platforms.ActiveCfg = Release-UI|Any CPU
+		{6129B3FE-B282-4F6F-8836-8AF66602F8DA}.Release-UI|Mixed Platforms.Build.0 = Release-UI|Any CPU
+		{6129B3FE-B282-4F6F-8836-8AF66602F8DA}.Release-UI|x86.ActiveCfg = Release-UI|Any CPU
 		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -37,6 +51,16 @@ Global
 		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Release|x86.ActiveCfg = Release|Any CPU
+		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Release-Api|Any CPU.ActiveCfg = Release-Api|Any CPU
+		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Release-Api|Any CPU.Build.0 = Release-Api|Any CPU
+		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Release-Api|Mixed Platforms.ActiveCfg = Release-Api|Any CPU
+		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Release-Api|Mixed Platforms.Build.0 = Release-Api|Any CPU
+		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Release-Api|x86.ActiveCfg = Release-Api|Any CPU
+		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Release-UI|Any CPU.ActiveCfg = Release-UI|Any CPU
+		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Release-UI|Any CPU.Build.0 = Release-UI|Any CPU
+		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Release-UI|Mixed Platforms.ActiveCfg = Release-UI|Any CPU
+		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Release-UI|Mixed Platforms.Build.0 = Release-UI|Any CPU
+		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Release-UI|x86.ActiveCfg = Release-UI|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
