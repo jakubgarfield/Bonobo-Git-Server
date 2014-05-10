@@ -6,6 +6,13 @@
 *.user
 *.sln.docstates
 
+# Nuget
+.nuget
+packages
+
+#Deploy
+artifacts
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
