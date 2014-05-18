@@ -43,7 +43,7 @@ namespace Bonobo.Git.Server.Security
             // to not break backwards compatibility: use old and update
             if (GetDeprecatedHash(password) == hash)
             {
-                // modify if we use something other than username as salt
+                // has to be modified if we use something other than username as salt
                 var username = salt;
                 UpdateToCurrentHashMethod(username, password);
                 return true;

@@ -10,8 +10,8 @@ namespace Bonobo.Git.Server.Test
     {
         private const String DefaultAdminUserName = "admin";
         private const String DefaultAdminPassword = "admin";
-        private const String DefaultAdminHash = 
-            "0CC52C6751CC92916C138D8D714F003486BF8516933815DFC11D6C3E36894BFA"+
+        private const String DefaultAdminHash =
+            "0CC52C6751CC92916C138D8D714F003486BF8516933815DFC11D6C3E36894BFA" +
             "044F97651E1F3EEBA26CDA928FB32DE0869F6ACFB787D5A33DACBA76D34473A3";
 
         private const String Md5DefaultAdminHash = "21232F297A57A5A743894A0E4A801FC3";
@@ -58,7 +58,7 @@ namespace Bonobo.Git.Server.Test
             };
             var passwordService = new PasswordService(updateHook);
             bool isCorrect = passwordService
-                .ComparePassword(DefaultAdminUserName, DefaultAdminPassword, DefaultAdminHash);
+                .ComparePassword(DefaultAdminPassword, DefaultAdminUserName, DefaultAdminHash);
             Assert.IsTrue(isCorrect);
         }
 
@@ -71,7 +71,7 @@ namespace Bonobo.Git.Server.Test
             };
             var passwordService = new PasswordService(updateHook);
             bool isCorrect = passwordService
-                .ComparePassword(DefaultAdminUserName, "1"+DefaultAdminPassword, DefaultAdminHash);
+                .ComparePassword("1" + DefaultAdminPassword, DefaultAdminUserName, DefaultAdminHash);
             Assert.IsFalse(isCorrect);
         }
 
@@ -89,7 +89,7 @@ namespace Bonobo.Git.Server.Test
             };
             var passwordService = new PasswordService(updateHook);
             bool isCorrect = passwordService
-                .ComparePassword(username, password, DefaultAdminHash);
+                .ComparePassword(password, username, Md5DefaultAdminHash);
             Assert.IsTrue(isCorrect);
             Assert.AreEqual(1, correctUpgradeHookCalls, "Correct md5 password should be upgraded exactly once.");
         }
@@ -103,7 +103,7 @@ namespace Bonobo.Git.Server.Test
             };
             var passwordService = new PasswordService(updateHook);
             bool isCorrect = passwordService
-                .ComparePassword(DefaultAdminUserName, "1" + DefaultAdminPassword, Md5DefaultAdminHash);
+                .ComparePassword("1" + DefaultAdminPassword, DefaultAdminUserName, Md5DefaultAdminHash);
             Assert.IsFalse(isCorrect);
         }
     }
