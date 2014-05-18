@@ -6,7 +6,6 @@
         {
             get
             {
-                // todo embix: fix admin hash
                 return @"
 
                     INSERT INTO [Role] ([Name], [Description]) VALUES ('Administrator','System administrator');

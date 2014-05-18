@@ -11,7 +11,6 @@ namespace Bonobo.Git.Server.Data.Update
         {
             get
             {
-                // todo embix: fix admin hash
                 return @"
 
                     INSERT INTO [Role] ([Name], [Description]) VALUES ('Administrator','System administrator');
