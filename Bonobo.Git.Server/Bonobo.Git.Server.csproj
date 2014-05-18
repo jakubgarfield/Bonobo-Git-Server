@@ -251,8 +251,10 @@
     <Compile Include="Security\FormsAuthenticationService.cs" />
     <Compile Include="Security\IFormsAuthenticationService.cs" />
     <Compile Include="Security\IMembershipService.cs" />
+    <Compile Include="Security\IPasswordService.cs" />
     <Compile Include="Security\IRepositoryPermissionService.cs" />
     <Compile Include="FileDisplayHandler.cs" />
+    <Compile Include="Security\PasswordService.cs" />
     <Compile Include="UnityDependencyResolver.cs" />
     <Compile Include="FilterProviders\UnityFilterAttributeFilterProvider.cs" />
     <Compile Include="Attributes\WindowsActionFilterAttribute.cs" />
