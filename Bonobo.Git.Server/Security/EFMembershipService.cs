@@ -16,7 +16,9 @@ namespace Bonobo.Git.Server.Security
         {
             // set up dependencies
             _createDatabaseContext = ()=>new BonoboGitServerContext();
-            _passwordService = new PasswordService(_createDatabaseContext);
+            Action<string, string> updateUserPasswordHook =
+                (username, password)=>UpdateUser(username, null, null, null, password);
+            _passwordService = new PasswordService(updateUserPasswordHook);
         }
 
         public bool ValidateUser(string username, string password)

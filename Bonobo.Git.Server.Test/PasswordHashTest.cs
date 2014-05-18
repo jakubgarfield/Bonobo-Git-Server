@@ -1,5 +1,4 @@
 ﻿using System;
-using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -18,12 +17,11 @@ namespace Bonobo.Git.Server.Test
         [TestMethod]
         public void AdminDefaultPasswordIsSaltedSha512Hash()
         {
-            Func<BonoboGitServerContext> dbCreator = () =>
+            Action<string, string> updateHook = (s, s1) =>
             {
-                throw new InvalidOperationException(
-                    "hash generation should not affect database");
+                Assert.Fail("Generating password hash should not update the related db entry.");
             };
-            var passwordService = new PasswordService(dbCreator);
+            var passwordService = new PasswordService(updateHook);
             var saltedHash = passwordService.GetSaltedHash(DefaultAdminPassword, DefaultAdminUserName);
             Assert.AreEqual(DefaultAdminHash, saltedHash);
         }

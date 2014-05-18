@@ -8,14 +8,14 @@ namespace Bonobo.Git.Server.Security
 {
     public class PasswordService : IPasswordService
     {
-        private readonly Func<BonoboGitServerContext> _createDatabaseContext;
+        private readonly Action<string, string> _updateUserPasswordHook;
         private readonly Func<HashAlgorithm> _getCurrentHashProvider; 
         private readonly Func<HashAlgorithm> _getDeprecatedHashProvider;
 
-        public PasswordService(Func<BonoboGitServerContext> createDatabaseContext)
+        public PasswordService(Action<string, string> updateUserPasswordHook)
         {
-            if (createDatabaseContext == null) throw new ArgumentNullException("createDatabaseContext");
-            _createDatabaseContext = createDatabaseContext;
+            if (updateUserPasswordHook == null) throw new ArgumentNullException("updateUserPasswordHook");
+            _updateUserPasswordHook = updateUserPasswordHook;
 
             _getCurrentHashProvider = () => new SHA512CryptoServiceProvider();
             _getDeprecatedHashProvider = () => new MD5CryptoServiceProvider();
@@ -73,16 +73,7 @@ namespace Bonobo.Git.Server.Security
 
         private void UpdateToCurrentHashMethod(string username, string password)
         {
-            var saltedHash = GetSaltedHash(password, username);
-            using (var database = _createDatabaseContext())
-            {
-                var user = database.Users.FirstOrDefault(i => i.Username == username);
-                if (user != null)
-                {
-                    user.Password = saltedHash;
-                    database.SaveChanges();
-                }
-            }
+            _updateUserPasswordHook(username, password);
         }
     }
 }
