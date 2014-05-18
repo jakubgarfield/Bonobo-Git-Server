@@ -74,7 +74,7 @@
     <Compile Include="PathEncoderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Definitions.cs" />
-    <Compile Include="PasswordHashTest.cs" />
+    <Compile Include="PasswordServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bonobo.Git.Server\Bonobo.Git.Server.csproj">

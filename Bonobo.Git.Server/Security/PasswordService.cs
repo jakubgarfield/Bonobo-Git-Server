@@ -12,6 +12,12 @@ namespace Bonobo.Git.Server.Security
         private readonly Func<HashAlgorithm> _getCurrentHashProvider; 
         private readonly Func<HashAlgorithm> _getDeprecatedHashProvider;
 
+        /// <summary>
+        /// Create and initialize PasswordService instance.
+        /// </summary>
+        /// <param name="updateUserPasswordHook">
+        /// delegates the db update function with the parameters username and password.
+        /// </param>
         public PasswordService(Action<string, string> updateUserPasswordHook)
         {
             if (updateUserPasswordHook == null) throw new ArgumentNullException("updateUserPasswordHook");
