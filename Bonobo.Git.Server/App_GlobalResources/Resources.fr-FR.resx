@@ -714,4 +714,25 @@
   <data name="Validation_StringLength" xml:space="preserve">
     <value>"{0}" doit être inférieur à {1} caractères.</value>
   </data>
+  <data name="Repository_Back" xml:space="preserve">
+    <value>Retour</value>
+  </data>
+  <data name="Repository_Tree_Zip" xml:space="preserve">
+    <value>Télécharger</value>
+  </data>
+  <data name="Repository_Commit_Details" xml:space="preserve">
+    <value>Détails</value>
+  </data>
+  <data name="Item_NotFound_Text" xml:space="preserve">
+    <value>L'élément que vous cherchez n'a pas été trouvé.</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirmer</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Page officielle</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>Github</value>
+  </data>
 </root>
