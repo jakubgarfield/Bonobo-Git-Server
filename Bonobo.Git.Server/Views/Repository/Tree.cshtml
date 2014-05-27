@@ -22,7 +22,16 @@
                 @foreach (var item in Model.Files)
 	            {
                     <tr>
-                        <td class="path">@Html.ActionLink((string)item.Name, item.IsTree ? "Tree" : "Blob", new { encodedName = PathEncoder.Encode(item.TreeName), encodedPath = PathEncoder.Encode(item.Path, allowSlash: true) }, new { @class = item.IsTree ? "directory" : item.IsImage ? "image" : "file" })</td>
+                        <td class="path">
+                            @if (item.IsLink)
+                            {
+                                <span class="directory">@item.Name</span>
+                            }
+                            else
+                            {
+                                @Html.ActionLink(item.Name, item.IsTree ? "Tree" : "Blob", new {encodedName = PathEncoder.Encode(item.TreeName), encodedPath = PathEncoder.Encode(item.Path, allowSlash: true)}, new {@class = item.IsTree ? "directory" : item.IsImage ? "image" : "file"})
+                            }
+                        </td>
                         <td class="message"></td>
                         <td class="date"></td>
                     </tr>
