@@ -9,16 +9,28 @@ namespace Bonobo.Git.Server.Security
 {
     public class EFMembershipService : IMembershipService
     {
+        private readonly Func<BonoboGitServerContext> _createDatabaseContext;
+        private readonly IPasswordService _passwordService;
+
+        public EFMembershipService()
+        {
+            // set up dependencies
+            _createDatabaseContext = ()=>new BonoboGitServerContext();
+            Action<string, string> updateUserPasswordHook =
+                (username, password)=>UpdateUser(username, null, null, null, password);
+            _passwordService = new PasswordService(updateUserPasswordHook);
+        }
+
         public bool ValidateUser(string username, string password)
         {
             if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "userName");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
 
             username = username.ToLowerInvariant();
-            using (var database = new BonoboGitServerContext())
+            using (var database = _createDatabaseContext())
             {
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
-                return user != null && ComparePassword(password, user.Password);
+                return user != null && _passwordService.ComparePassword(password, username, user.Password);
             }
         }
 
@@ -31,12 +43,12 @@ namespace Bonobo.Git.Server.Security
             if (String.IsNullOrEmpty(email)) throw new ArgumentException("Value cannot be null or empty.", "email");
 
             username = username.ToLowerInvariant();
-            using (var database = new BonoboGitServerContext())
+            using (var database = _createDatabaseContext())
             {
                 var user = new User
                 {
                     Username = username,
-                    Password = EncryptPassword(password),
+                    Password = _passwordService.GetSaltedHash(password, username),
                     Name = name,
                     Surname = surname,
                     Email = email,
@@ -57,7 +69,7 @@ namespace Bonobo.Git.Server.Security
 
         public IList<UserModel> GetAllUsers()
         {
-            using (var db = new BonoboGitServerContext())
+            using (var db = _createDatabaseContext())
             {
                 return db.Users.Include("Roles").ToList().Select(item => new UserModel
                 {
@@ -75,7 +87,7 @@ namespace Bonobo.Git.Server.Security
             if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
 
             username = username.ToLowerInvariant();
-            using (var db = new BonoboGitServerContext())
+            using (var db = _createDatabaseContext())
             {
                 var user = db.Users.FirstOrDefault(i => i.Username == username);
                 return user == null ? null : new UserModel
@@ -91,7 +103,7 @@ namespace Bonobo.Git.Server.Security
 
         public void UpdateUser(string username, string name, string surname, string email, string password)
         {
-            using (var database = new BonoboGitServerContext())
+            using (var database = _createDatabaseContext())
             {
                 username = username.ToLowerInvariant();
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
@@ -100,7 +112,7 @@ namespace Bonobo.Git.Server.Security
                     user.Name = name ?? user.Name;
                     user.Surname = surname ?? user.Surname;
                     user.Email = email ?? user.Email;
-                    user.Password = password != null ? EncryptPassword(password) : user.Password;
+                    user.Password = password != null ? _passwordService.GetSaltedHash(password, username) : user.Password;
                     database.SaveChanges();
                 }
             }
@@ -108,7 +120,7 @@ namespace Bonobo.Git.Server.Security
 
         public void DeleteUser(string username)
         {
-            using (var database = new BonoboGitServerContext())
+            using (var database = _createDatabaseContext())
             {
                 username = username.ToLowerInvariant();
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
@@ -121,21 +133,6 @@ namespace Bonobo.Git.Server.Security
                     database.Users.Remove(user);
                     database.SaveChanges();
                 }
-            }
-        }
-
-        private bool ComparePassword(string password, string hash)
-        {
-            return EncryptPassword(password) == hash;
-        }
-
-        private string EncryptPassword(string password)
-        {
-            using (System.Security.Cryptography.MD5CryptoServiceProvider x = new System.Security.Cryptography.MD5CryptoServiceProvider())
-            {
-                var data = System.Text.Encoding.UTF8.GetBytes(password);
-                data = x.ComputeHash(data);
-                return BitConverter.ToString(data).Replace("-", ""); 
             }
         }
     }

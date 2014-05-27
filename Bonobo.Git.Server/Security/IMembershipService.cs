@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Bonobo.Git.Server.Data;
+﻿using System.Collections.Generic;
 using Bonobo.Git.Server.Models;
 
 namespace Bonobo.Git.Server.Security
