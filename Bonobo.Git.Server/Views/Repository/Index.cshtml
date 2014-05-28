@@ -36,13 +36,19 @@
 </div>
 
 
-@if (TempData["CreateSuccess"] != null && (bool)TempData["CreateSuccess"])
+@if (TempData["CreateSuccess"] as bool? == true)
 {
     <div class="summary-success">
         <p>@Resources.Repository_Create_Success</p>
     </div>
 }
-@if (TempData["DeleteSuccess"] != null && (bool)TempData["DeleteSuccess"])
+@if (TempData["CloneSuccess"] as bool? == true)
+{
+    <div class="summary-success">
+        <p>@Resources.Repository_Clone_Success</p>
+    </div>
+}
+@if (TempData["DeleteSuccess"] as bool? == true)
 {
     <div class="summary-success">
         <p>@Resources.Repository_Delete_Success</p>

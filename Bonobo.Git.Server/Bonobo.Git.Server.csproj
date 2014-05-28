@@ -497,6 +497,7 @@
     <None Include="Properties\PublishProfiles\Release-UI.pubxml" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <Content Include="Views\Repository\Blob.cshtml" />
+    <Content Include="Views\Repository\Clone.cshtml" />
     <None Include="Web.Release-Api.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

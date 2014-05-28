@@ -264,15 +264,6 @@
   <data name="Grid_Edit" xml:space="preserve">
     <value>Editer</value>
   </data>
-  <data name="Home_About_Thanks" xml:space="preserve">
-    <value>Merci!</value>
-  </data>
-  <data name="Home_About_Thanks_p" xml:space="preserve">
-    <value>Bonobo Git Server utilise quelques projets open source. Un grand merci à tous les auteurs et contributeurs pour leur excellent travail.</value>
-  </data>
-  <data name="Home_About_Title" xml:space="preserve">
-    <value>À propos</value>
-  </data>
   <data name="Home_Error_Text" xml:space="preserve">
     <value>Une erreur s'est produite lors du traitement de votre demande. S'il vous plaît essayer de nouveau ou contactez l'administrateur du système.</value>
   </data>
@@ -422,9 +413,6 @@
   </data>
   <data name="Repository_Commit_TypeChanged" xml:space="preserve">
     <value>Type de changé</value>
-  </data>
-  <data name="Repository_Create_Back" xml:space="preserve">
-    <value>Retour à la liste</value>
   </data>
   <data name="Repository_Create_DirectoryExists" xml:space="preserve">
     <value>Un répertoire portant ce nom existe déjà dans votre dossier de dépôts. Supprimer ce répertoire ou choisissez un autre nom et réessayez.</value>
@@ -734,5 +722,20 @@
   </data>
   <data name="Source" xml:space="preserve">
     <value>Github</value>
+  </data>
+  <data name="Repository_Layout_Clone" xml:space="preserve">
+    <value>Cloner</value>
+  </data>
+  <data name="Repository_Clone_Success" xml:space="preserve">
+    <value>Le dépôt a été cloné avec succès.</value>
+  </data>
+  <data name="Repository_Clone_Title" xml:space="preserve">
+    <value>Cloner un dépôt</value>
+  </data>
+  <data name="Repository_Clone_Fail" xml:space="preserve">
+    <value>Le clonage du dépôt a échoué. S'il vous plaît corriger les erreurs et d'essayer à nouveau.</value>
+  </data>
+  <data name="Repository_Clone_Submit" xml:space="preserve">
+    <value>Cloner</value>
   </data>
 </root>
