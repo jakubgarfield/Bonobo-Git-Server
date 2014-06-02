@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.ComponentModel.DataAnnotations;
 using Bonobo.Git.Server.App_GlobalResources;
 using LibGit2Sharp;
@@ -72,6 +70,7 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Repository_Tree_Author")]
         public string Author { get; set; }
         public bool IsTree { get; set; }
+        public bool IsLink { get; set; }
         public string TreeName { get; set; }
         public bool IsImage { get; set; }
         public bool IsText { get; set; }

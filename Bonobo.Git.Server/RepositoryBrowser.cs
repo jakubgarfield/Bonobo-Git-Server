@@ -88,6 +88,7 @@ namespace Bonobo.Git.Server
             {
                 Name = entry.Name,
                 IsTree = false,
+                IsLink = false,
                 CommitDate = commit.Author.When.LocalDateTime,
                 CommitMessage = commit.Message,
                 Author = commit.Author.Name,
@@ -125,7 +126,7 @@ namespace Bonobo.Git.Server
         }
 
 
-        private IEnumerable<RepositoryTreeDetailModel> GetTreeModelsWithDetails(Commit commit, Tree tree, string referenceName)
+        private IEnumerable<RepositoryTreeDetailModel> GetTreeModelsWithDetails(Commit commit, IEnumerable<TreeEntry> tree, string referenceName)
         {
             var ancestors = _repository.Commits.QueryBy(new CommitFilter { Since = commit, SortBy = CommitSortStrategies.Topological | CommitSortStrategies.Reverse }).ToList();
             var entries = tree.ToList();
@@ -152,7 +153,7 @@ namespace Bonobo.Git.Server
             return result;
         }
 
-        private IEnumerable<RepositoryTreeDetailModel> GetTreeModels(Tree tree, string referenceName)
+        private IEnumerable<RepositoryTreeDetailModel> GetTreeModels(IEnumerable<TreeEntry> tree, string referenceName)
         {
             return tree.Select(i => CreateRepositoryDetailModel(i, null, referenceName)).ToList();
         }
@@ -166,6 +167,7 @@ namespace Bonobo.Git.Server
                 CommitMessage = ancestor != null ? ancestor.MessageShort : String.Empty,
                 Author = ancestor != null ? ancestor.Author.Name : String.Empty,
                 IsTree = entry.TargetType == TreeEntryTargetType.Tree,
+                IsLink = entry.TargetType == TreeEntryTargetType.GitLink,
                 TreeName = treeName,
                 Path = entry.Path.Replace('\\', '/'),
                 IsImage = FileDisplayHandler.IsImage(entry.Name),

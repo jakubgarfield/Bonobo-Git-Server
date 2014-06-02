@@ -303,7 +303,11 @@ namespace Bonobo.Git.Server.Controllers
 
             foreach (var item in treeNode)
             {
-                if (!item.IsTree)
+                if (item.IsLink)
+                {
+                    outputZip.AddDirectoryByName(Path.Combine(item.TreeName, item.Path));
+                }
+                else if (!item.IsTree)
                 {
                     string blobReferenceName;
                     var model = browser.BrowseBlob(item.TreeName, item.Path, out blobReferenceName);
