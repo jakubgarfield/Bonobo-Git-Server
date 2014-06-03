@@ -5,12 +5,20 @@
     <link rel="shortcut icon" href="~/favicon.ico?v=2" type="image/x-icon" />
     <title>@ViewBag.Title :: Bonobo Git Server</title>
     @Styles.Render("~/Content/bundled.css")
+    @if (UserConfiguration.Current.HasCustomSiteLogo)
+    {
+    <style>
+        .navigation.pure-menu a.pure-menu-heading {
+            background: url('@Url.Content(UserConfiguration.Current.SiteLogoUrl)') no-repeat 0 4px;
+        }
+    </style>
+    }
 </head>
 <body class="@HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString() @HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString()">
     <div class="main">
         <div class="header">
             <div class="navigation pure-menu pure-menu-open pure-menu-horizontal">
-                @Html.ActionLink(Resources.Layout_Title, "", "", null, new { @class = "pure-menu-heading" })
+                @Html.ActionLink(UserConfiguration.Current.GetSiteTitle(), "", "", null, new { @class = "pure-menu-heading" })
 
                 <ul>
                     @if (Request.IsAuthenticated)
@@ -56,7 +64,16 @@
         </div>
 
         <div class="footer">
-            <p>&copy; 2014 <a href="http://www.chodounsky.net">Jakub Chodounský</a> &middot; <a href="http://bonobogitserver.com/">@Resources.Home</a> &middot; <a href="https://github.com/jakubgarfield/Bonobo-Git-Server">@Resources.Source</a></p>
+            <p>
+                @if (UserConfiguration.Current.HasSiteFooterMessage)
+                {
+                    @UserConfiguration.Current.SiteFooterMessage
+                    @Html.Raw("&middot;")
+                }
+                Bonobo Git Server &copy; 2014 <a href="http://www.chodounsky.net">Jakub Chodounský</a>
+                &middot; <a href="http://bonobogitserver.com/">@Resources.Home</a> 
+                &middot; <a href="https://github.com/jakubgarfield/Bonobo-Git-Server">@Resources.Source</a>
+            </p>
         </div>
     </div>
 

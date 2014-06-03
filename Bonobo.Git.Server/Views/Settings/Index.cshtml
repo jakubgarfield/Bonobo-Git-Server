@@ -26,6 +26,21 @@
             <i class="fa fa-info-circle" title="@Resources.Settings_Global_DirectoryHint"></i>
         </div>
         <div class="pure-control-group">
+            @Html.LabelFor(m => m.SiteTitle)
+            @Html.TextBoxFor(m => m.SiteTitle, new { @class = "medium", autofocus = "" })
+            <i class="fa fa-info-circle" title="@Resources.Settings_Global_SiteTitle_Hint"></i>
+        </div>
+        <div class="pure-control-group">
+            @Html.LabelFor(m => m.SiteLogoUrl)
+            @Html.TextBoxFor(m => m.SiteLogoUrl, new { @class = "medium", autofocus = "" })
+            <i class="fa fa-info-circle" title="@Resources.Settings_Global_SiteLogoUrl_Hint"></i>
+        </div>
+        <div class="pure-control-group">
+            @Html.LabelFor(m => m.SiteFooterMessage)
+            @Html.TextBoxFor(m => m.SiteFooterMessage, new { @class = "medium", autofocus = "" })
+            <i class="fa fa-info-circle" title="@Resources.Settings_Global_SiteFooterMessage_Hint"></i>
+        </div>
+        <div class="pure-control-group">
             @Html.LabelFor(m => m.DefaultLanguage)
             @Html.DropDownListFor(m => m.DefaultLanguage, CultureInfo.GetCultures(CultureTypes.SpecificCultures).Select(cultureInfo => new SelectListItem() { Text = cultureInfo.DisplayName, Value = cultureInfo.Name, Selected = Model.DefaultLanguage == cultureInfo.Name }).OrderBy(i => i.Text))
             <i class="fa fa-info-circle" title="@Resources.Settings_Global_DefaultLanguage_Hint"></i>
