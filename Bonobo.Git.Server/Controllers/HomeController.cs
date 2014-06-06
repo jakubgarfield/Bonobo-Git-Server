@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using Microsoft.Practices.Unity;
 using Bonobo.Git.Server.Security;
 using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.App_GlobalResources;
 using System.Globalization;
 
 namespace Bonobo.Git.Server.Controllers

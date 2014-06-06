@@ -547,6 +547,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <CustomToolNamespace>Bonobo.Git.Server</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="App_GlobalResources\Resources.tr-TR.resx" />
     <EmbeddedResource Include="App_GlobalResources\Resources.zh-CN.resx" />

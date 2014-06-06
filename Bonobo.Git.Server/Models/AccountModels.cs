@@ -7,7 +7,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using Bonobo.Git.Server.App_GlobalResources;
 
 namespace Bonobo.Git.Server.Models
 {

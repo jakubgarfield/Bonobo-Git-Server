@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Bonobo.Git.Server.App_GlobalResources {
+namespace Bonobo.Git.Server {
     using System;
     
     
