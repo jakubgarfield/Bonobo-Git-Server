@@ -492,6 +492,9 @@
     <Content Include="Content\fonts\opensans-regular.eot" />
     <Content Include="Content\fonts\opensans-regular.ttf" />
     <Content Include="Content\fonts\opensans-regular.woff" />
+    <Content Include="App_GlobalResources\Resources.pt-BR.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+    </Content>
     <EmbeddedResource Include="App_GlobalResources\Resources.zh-TW.resx" />
     <None Include="Properties\PublishProfiles\Release-Api.pubxml" />
     <None Include="Properties\PublishProfiles\Release-UI.pubxml" />
