@@ -622,7 +622,7 @@
     <value>"{0}" deve ser menor que {1} caracteres.</value>
   </data>
   <data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
-    <value>Conta com este nome já existe.</value>
+    <value>Uma conta com este nome já existe.</value>
   </data>
   <data name="Account_Create_AccountInformation" xml:space="preserve">
     <value>Informações da conta</value>
