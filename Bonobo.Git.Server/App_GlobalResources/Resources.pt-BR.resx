@@ -298,13 +298,13 @@
     <value>Repositórios</value>
   </data>
   <data name="Layout_Title" xml:space="preserve">
-    <value>Hering Git Server</value>
+    <value>Controle de Versão</value>
   </data>
   <data name="Repository_AddressBar_Root" xml:space="preserve">
     <value>Home</value>
   </data>
   <data name="Repository_Commits_Title" xml:space="preserve">
-    <value>Commits</value>
+    <value>Publicações</value>
   </data>
   <data name="Repository_Commit_Added" xml:space="preserve">
     <value>Adicionado</value>
@@ -463,10 +463,10 @@
     <value>Sim</value>
   </data>
   <data name="Repository_Layout_Browse" xml:space="preserve">
-    <value>Pesquisar repositório</value>
+    <value>Arquivos</value>
   </data>
   <data name="Repository_Layout_Commits" xml:space="preserve">
-    <value>Commits</value>
+    <value>Publicações</value>
   </data>
   <data name="Repository_SwitchBranch" xml:space="preserve">
     <value>Mudar ramo atual</value>
