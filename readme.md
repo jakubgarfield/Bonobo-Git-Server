@@ -28,29 +28,29 @@ Pré-requisitos
 Atualização
 -----------------------------------------------
 
-Before each update please read carefully the information about **compatibility issues** between your version and the latest one in [changelog](/changelog.md).
+Antes de cada atualização por favor leiacuidadosamente a informação sobre **compatibility issues** entre sua versão e a última atualização em [changelog](/changelog.md).
 
-* Delete all the files in the installation folder **except App_Data**.
-    * Default location is `C:\inetpub\wwwroot\Bonobo.Git.Server`.
-* Copy the files from the downloaded archive to the server location.
+* Exclua todos os arquivos no diretório de instalação **exceto App_Data**.
+    * A localização padrão é `C:\inetpub\wwwroot\Bonobo.Git.Server`.
+* Copie os arquivos para a localização no servidor.
 
 
 <hr />
 
 
 
-Installation
+Instalação
 -----------------------------------------------
 
-These steps illustrate simple installation with Windows 2008 Server and IIS 7. They are exactly the same for higher platforms (Windows Server 2012 and IIS 8.0).
+Estes passos ilustram um simples instalação no Windows 2008 Server e IIS 7. É a mesma forma para as plataformas superiores (Windows Server 2012 e IIS 8.0).
 
-* **Extract the files** from the installation archive to `C:\inetpub\wwwroot`
+* **Extraia os arquivos** do arquivo de instalação para `C:\inetpub\wwwroot`
 
-* **Allow IIS User to modify** `C:\inetpub\wwwroot\Bonobo.Git.Server\App_Data` folder. To do so
-    * select Properties of App_Data folder,
-    * go to Security tab, 
-    * click edit, 
-    * select IIS user (in my case IIS_IUSRS) and add Modify and Write permission,
+* **Permita que os Usuários do IIS modifiquem a pasta** `C:\inetpub\wwwroot\Bonobo.Git.Server\App_Data` folder. Segue os passos:
+    * selecione Propriedades da pasta App_Data,
+    * vá para aba Segurança, 
+    * clique em editar, 
+    * selecione o usuário do IIS (no meu caso IIS_IUSRS) e adicione Modify and Write permission,
     * confirm these settings with Apply button.
 
 * **Convert Bonobo.Git.Server to Application** in IIS
