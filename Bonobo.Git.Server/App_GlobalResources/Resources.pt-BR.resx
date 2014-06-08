@@ -139,7 +139,7 @@
     <value>Nome</value>
   </data>
   <data name="Account_Detail_Roles" xml:space="preserve">
-    <value>Regras</value>
+    <value>Papel</value>
   </data>
   <data name="Account_Detail_Surname" xml:space="preserve">
     <value>Sobrenome</value>
@@ -181,7 +181,7 @@
     <value>Senha não coincide com a senha atual.</value>
   </data>
   <data name="Account_Edit_Roles" xml:space="preserve">
-    <value>Regras</value>
+    <value>Papel</value>
   </data>
   <data name="Account_Edit_Submit" xml:space="preserve">
     <value>Salvar</value>
