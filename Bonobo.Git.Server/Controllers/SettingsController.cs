@@ -25,6 +25,9 @@ namespace Bonobo.Git.Server.Controllers
                 AllowAnonymousRegistration = UserConfiguration.Current.AllowAnonymousRegistration,
                 AllowUserRepositoryCreation = UserConfiguration.Current.AllowUserRepositoryCreation,
                 DefaultLanguage = UserConfiguration.Current.DefaultLanguage,
+                SiteTitle = UserConfiguration.Current.SiteTitle,
+                SiteLogoUrl = UserConfiguration.Current.SiteLogoUrl,
+                SiteFooterMessage = UserConfiguration.Current.SiteFooterMessage,
             });
         }
 
@@ -43,6 +46,9 @@ namespace Bonobo.Git.Server.Controllers
                         UserConfiguration.Current.AllowAnonymousRegistration = model.AllowAnonymousRegistration;
                         UserConfiguration.Current.AllowUserRepositoryCreation = model.AllowUserRepositoryCreation;
                         UserConfiguration.Current.DefaultLanguage = model.DefaultLanguage;
+                        UserConfiguration.Current.SiteTitle = model.SiteTitle;
+                        UserConfiguration.Current.SiteLogoUrl = model.SiteLogoUrl;
+                        UserConfiguration.Current.SiteFooterMessage = model.SiteFooterMessage;
                         UserConfiguration.Current.Save();
 
                         this.Session["Culture"] = new CultureInfo(model.DefaultLanguage);

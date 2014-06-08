@@ -6,6 +6,8 @@ using System.Xml.Serialization;
 
 namespace Bonobo.Git.Server.Configuration
 {
+    using Bonobo.Git.Server.App_GlobalResources;
+
     [XmlRootAttribute(ElementName = "Configuration", IsNullable = false)]
     public class UserConfiguration : ConfigurationEntry<UserConfiguration>
     {      
@@ -14,7 +16,30 @@ namespace Bonobo.Git.Server.Configuration
         public bool AllowUserRepositoryCreation { get; set; }
         public bool AllowAnonymousRegistration { get; set; }
         public string DefaultLanguage { get; set; }
+        public string SiteTitle { get; set; }
+        public string SiteLogoUrl { get; set; }
+        public string SiteFooterMessage { get; set; }
 
+        public bool HasSiteFooterMessage
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(this.SiteFooterMessage);
+            }
+        }
+
+        public bool HasCustomSiteLogo
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(this.SiteLogoUrl);
+            }
+        }
+
+        public string GetSiteTitle()
+        {
+            return !string.IsNullOrWhiteSpace(this.SiteTitle) ? this.SiteTitle : Resources.Layout_Title;
+        }
 
         public static void Initialize()
         {

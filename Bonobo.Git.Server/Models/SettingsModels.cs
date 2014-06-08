@@ -24,5 +24,14 @@ namespace Bonobo.Git.Server.Models
 
         [Display(ResourceType = typeof(Resources), Name = "Settings_Global_DefaultLanguage")]
         public string DefaultLanguage { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Settings_Global_SiteTitle")]
+        public string SiteTitle { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Settings_Global_SiteLogoUrl")]
+        public string SiteLogoUrl { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Settings_Global_SiteFooterMessage")]
+        public string SiteFooterMessage { get; set; }
     }   
 }

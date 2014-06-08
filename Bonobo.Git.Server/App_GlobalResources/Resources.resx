@@ -738,4 +738,22 @@
   <data name="Repository_Clone_Submit" xml:space="preserve">
     <value>Clone</value>
   </data>
+  <data name="Settings_Global_SiteFooterMessage" xml:space="preserve">
+    <value>Site Footer Message</value>
+  </data>
+  <data name="Settings_Global_SiteFooterMessage_Hint" xml:space="preserve">
+    <value>Message displayed in footer area of site pages.</value>
+  </data>
+  <data name="Settings_Global_SiteLogoUrl" xml:space="preserve">
+    <value>Site Logo URL</value>
+  </data>
+  <data name="Settings_Global_SiteLogoUrl_Hint" xml:space="preserve">
+    <value>URL to a logo to use for the site.  Site-relative (~) paths are supported.</value>
+  </data>
+  <data name="Settings_Global_SiteTitle" xml:space="preserve">
+    <value>Site Title</value>
+  </data>
+  <data name="Settings_Global_SiteTitle_Hint" xml:space="preserve">
+    <value>Title for this git site.</value>
+  </data>
 </root>
