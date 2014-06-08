@@ -53,8 +53,8 @@ Estes passos ilustram um simples instalação no Windows 2008 Server e IIS 7. É
     * selecione o usuário do IIS (no meu caso IIS_IUSRS) e adicione Modify and Write permission,
     * confirm these settings with Apply button.
 
-* **Convert Bonobo.Git.Server to Application** in IIS
-    * Run IIS Manager and navigate to Sites -> Default Web Site. You should see Bonobo.Git.Server.
+* **Converta Bonobo.Git.Server para um Aplicativo** no IIS
+    * Execute o gerenciador do IIS e selecione Sites -> Default Web Site. Você deve ver o Bonobo.Git.Server.
     * Right click on Bonobo Git Server and convert to application.
     * Check if the selected application pool runs on .NET 4.0 and convert the site.
 
