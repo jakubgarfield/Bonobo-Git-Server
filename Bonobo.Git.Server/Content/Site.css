@@ -53,7 +53,7 @@ textarea.medium, input.medium { width: 30em; }
 
 .content { width: 980px; margin: 0 auto; padding-bottom: 50px; }
 
-.footer { color: #999; background-color: #000; font-size: 0.85em; width: 100%; position: absolute; bottom: 0; height: 50px; line-height: 1.7em; text-align: center; }
+.footer { color: #999; background-color: #2d3e50; font-size: 0.85em; width: 100%; position: absolute; bottom: 0; height: 50px; line-height: 1.7em; text-align: center; }
 .footer a { color: #999; text-decoration: none; }
 .footer a:hover { color: #fff; }
 
