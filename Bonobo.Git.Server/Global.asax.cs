@@ -14,7 +14,6 @@ using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Security;
-using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server
 {
@@ -56,9 +55,9 @@ namespace Bonobo.Git.Server
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
+            UnityConfig.RegisterComponents();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            RegisterDependencyResolver();
 
             new AutomaticUpdater().Run();
             UserConfiguration.Initialize();
@@ -112,25 +111,6 @@ namespace Bonobo.Git.Server
             Context.Response.Cookies.Remove(cookie.Name);
             Context.Response.Cookies.Add(cookie);
         }
-
-        private static void RegisterDependencyResolver()
-        {
-            var container = new UnityContainer();
-
-            container.RegisterType<IMembershipService, EFMembershipService>();
-            container.RegisterType<IRepositoryPermissionService, EFRepositoryPermissionService>();
-            container.RegisterType<IFormsAuthenticationService, FormsAuthenticationService>();
-            container.RegisterType<ITeamRepository, EFTeamRepository>();
-            container.RegisterType<IRepositoryRepository, EFRepositoryRepository>();
-
-            DependencyResolver.SetResolver(new UnityDependencyResolver(container));
-
-            var oldProvider = FilterProviders.Providers.Single(f => f is FilterAttributeFilterProvider);
-            FilterProviders.Providers.Remove(oldProvider);
-            var provider = new UnityFilterAttributeFilterProvider(container);
-            FilterProviders.Providers.Add(provider);
-        }
-
 
 #if !DEBUG
         protected void Application_Error(object sender, EventArgs e)
