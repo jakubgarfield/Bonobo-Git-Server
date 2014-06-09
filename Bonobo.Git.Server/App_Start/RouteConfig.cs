@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace Bonobo.Git.Server.App_Start
+namespace Bonobo.Git.Server
 {
     public class RouteConfig
     {

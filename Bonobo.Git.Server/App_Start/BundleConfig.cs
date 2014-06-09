@@ -1,7 +1,7 @@
 ﻿using Bonobo.Git.Server.Helpers;
 using System.Web.Optimization;
 
-namespace Bonobo.Git.Server.App_Start
+namespace Bonobo.Git.Server
 {
     public class BundleConfig
     {
