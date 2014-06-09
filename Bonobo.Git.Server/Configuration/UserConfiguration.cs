@@ -6,8 +6,6 @@ using System.Xml.Serialization;
 
 namespace Bonobo.Git.Server.Configuration
 {
-    using Bonobo.Git.Server.App_GlobalResources;
-
     [XmlRootAttribute(ElementName = "Configuration", IsNullable = false)]
     public class UserConfiguration : ConfigurationEntry<UserConfiguration>
     {      

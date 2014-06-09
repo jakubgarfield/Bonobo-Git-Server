@@ -8,7 +8,6 @@ using System.Web.Security;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 using System.Globalization;
-using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Extensions;
 

@@ -7,7 +7,6 @@ using Microsoft.Practices.Unity;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
-using Bonobo.Git.Server.App_GlobalResources;
 
 namespace Bonobo.Git.Server.Controllers
 {

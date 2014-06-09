@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Bonobo.Git.Server.App_GlobalResources;
 using LibGit2Sharp;
 using System.Text;
 

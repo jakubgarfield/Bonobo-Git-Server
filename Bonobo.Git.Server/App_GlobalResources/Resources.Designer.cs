@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Bonobo.Git.Server.App_GlobalResources {
+namespace Bonobo.Git.Server {
     using System;
     
     
@@ -844,6 +844,42 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Repository cloning was unsuccessful. Please correct the errors and try again..
+        /// </summary>
+        public static string Repository_Clone_Fail {
+            get {
+                return ResourceManager.GetString("Repository_Clone_Fail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clone.
+        /// </summary>
+        public static string Repository_Clone_Submit {
+            get {
+                return ResourceManager.GetString("Repository_Clone_Submit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repository was cloned successfully..
+        /// </summary>
+        public static string Repository_Clone_Success {
+            get {
+                return ResourceManager.GetString("Repository_Clone_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clone Repository.
+        /// </summary>
+        public static string Repository_Clone_Title {
+            get {
+                return ResourceManager.GetString("Repository_Clone_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Added.
         /// </summary>
         public static string Repository_Commit_Added {
@@ -1344,6 +1380,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Repository_Layout_Browse {
             get {
                 return ResourceManager.GetString("Repository_Layout_Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clone.
+        /// </summary>
+        public static string Repository_Layout_Clone {
+            get {
+                return ResourceManager.GetString("Repository_Layout_Clone", resourceCulture);
             }
         }
         
@@ -1929,51 +1974,6 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Validation_StringLength {
             get {
                 return ResourceManager.GetString("Validation_StringLength", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Repository cloning was unsuccessful. Please correct the errors and try again..
-        /// </summary>
-        public static string Repository_Clone_Fail {
-            get {
-                return ResourceManager.GetString("Repository_Clone_Fail", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Repository was cloned successfully..
-        /// </summary>
-        public static string Repository_Clone_Success {
-            get {
-                return ResourceManager.GetString("Repository_Clone_Success", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Clone Repository.
-        /// </summary>
-        public static string Repository_Clone_Title {
-            get {
-                return ResourceManager.GetString("Repository_Clone_Title", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Clone.
-        /// </summary>
-        public static string Repository_Layout_Clone {
-            get {
-                return ResourceManager.GetString("Repository_Layout_Clone", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Clone.
-        /// </summary>
-        public static string Repository_Clone_Submit {
-            get {
-                return ResourceManager.GetString("Repository_Layout_Clone", resourceCulture);
             }
         }
     }
