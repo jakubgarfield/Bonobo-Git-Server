@@ -322,7 +322,7 @@
     <value>Repository mit gewähltem Namen existiert bereits</value>
   </data>
   <data name="Repository_Create_Submit" xml:space="preserve">
-    <value>Erstellt</value>
+    <value>Erstellen</value>
   </data>
   <data name="Repository_Create_Success" xml:space="preserve">
     <value>Repository wurde erfolgreich erstellt.</value>
@@ -620,5 +620,8 @@
   </data>
   <data name="Settings_Global_DefaultLanguage_Hint" xml:space="preserve">
     <value>Standardsprache der Anwendung</value>
+  </data>
+  <data name="Repository_Back" xml:space="preserve">
+    <value>Zurück</value>
   </data>
 </root>
