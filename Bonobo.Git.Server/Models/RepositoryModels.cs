@@ -83,6 +83,7 @@ namespace Bonobo.Git.Server.Models
 
     public class RepositoryTreeModel
     {
+
         public string Name { get; set; }
         public string Branch { get; set; }
         public string Path { get; set; }
@@ -91,12 +92,14 @@ namespace Bonobo.Git.Server.Models
 
     public class RepositoryCommitsModel
     {
+
         public string Name { get; set; }
         public IEnumerable<RepositoryCommitModel> Commits { get; set; }
     }
 
     public class RepositoryCommitChangeModel
     {
+
         public string Name { get; set; }
         public string Path { get; set; }
         public ChangeKind Status { get; set; }
@@ -109,6 +112,7 @@ namespace Bonobo.Git.Server.Models
     public class RepositoryCommitModel
     {
         public string Name { get; set; }
+
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_ID")]
         public string ID { get; set; }
@@ -128,8 +132,33 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Date")]
         public DateTime Date { get; set; }
 
+        private string _message;
         [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Message")]
-        public string Message { get; set; }
+
+        public string Message
+        {
+            get
+            {
+                if (this._message == null)
+                {
+
+                    return Resources.Repository_Commit_NoMessageDeclared;
+                }
+                if (this._message.Length == 0)
+                {
+
+                    return Resources.Repository_Commit_NoMessageDeclared;
+                }
+                else
+                {
+                    return this._message;
+                }
+            }
+            set
+            {
+                this._message = value;
+            }
+        }
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Changes")]
         public IEnumerable<RepositoryCommitChangeModel> Changes { get; set; }
