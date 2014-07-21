@@ -53,7 +53,7 @@
     <script>
         $(function () {
             var url = '@Url.Action("Tree", ViewContext.RouteData.Values)';
-            $.ajax({ url: url, success: detailsLoaded, type: 'GET', dataType: 'json' });
+            $.ajax({ url: url, success: detailsLoaded, type: 'GET', dataType: 'json', cache: false });
 
             function detailsLoaded(model) {
                 $("#files tbody > tr").each(function (index) {
