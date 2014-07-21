@@ -624,4 +624,7 @@
   <data name="Repository_Back" xml:space="preserve">
     <value>Zurück</value>
   </data>
+  <data name="Repository_Commit_NoMessageDeclared" xml:space="preserve">
+    <value>Keine Nachricht angegeben</value>
+  </data>
 </root>

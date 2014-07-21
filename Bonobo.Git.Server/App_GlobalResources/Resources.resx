@@ -756,4 +756,7 @@
   <data name="Settings_Global_SiteTitle_Hint" xml:space="preserve">
     <value>Title for this git site.</value>
   </data>
+  <data name="Repository_Commit_NoMessageDeclared" xml:space="preserve">
+    <value>Not declared</value>
+  </data>
 </root>

@@ -128,8 +128,28 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Date")]
         public DateTime Date { get; set; }
 
+        private string _message;
         [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Message")]
-        public string Message { get; set; }
+
+        public string Message
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(_message))
+                {
+                    return Resources.Repository_Commit_NoMessageDeclared;
+                }
+
+                else
+                {
+                    return _message;
+                }
+            }
+            set
+            {
+                _message = value;
+            }
+        }
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Changes")]
         public IEnumerable<RepositoryCommitChangeModel> Changes { get; set; }
