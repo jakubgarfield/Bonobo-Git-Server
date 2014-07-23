@@ -401,7 +401,14 @@ namespace Bonobo.Git.Server.Controllers
                     if (!Directory.Exists(targetRepositoryPath))
                     {
                         string sourceRepositoryPath = Path.Combine(UserConfiguration.Current.Repositories, id);
-                        LibGit2Sharp.Repository.Clone(sourceRepositoryPath, targetRepositoryPath, true, false);
+                        
+                        LibGit2Sharp.CloneOptions options = new LibGit2Sharp.CloneOptions()
+                            {
+                                IsBare = true,
+                                Checkout = false
+                            };
+
+                        LibGit2Sharp.Repository.Clone(sourceRepositoryPath, targetRepositoryPath, options);
                         TempData["CloneSuccess"] = true;
                         return RedirectToAction("Index");
                     }
