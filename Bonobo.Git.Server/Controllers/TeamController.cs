@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Microsoft.Practices.Unity;
 using Bonobo.Git.Server.Data;
@@ -31,7 +30,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (!String.IsNullOrEmpty(id))
             {
-                var model = ConvertTeamModel(TeamRepository.GetTeam(id));
+                var model = ConvertTeamModel(TeamRepository.GetTeam(UsernameUrl.Decode(id)));
                 PopulateViewData();
                 return View(model);
             }
@@ -90,7 +89,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (!String.IsNullOrEmpty(id))
             {
-                return View(new TeamDetailModel { Name = id });
+                return View(new TeamDetailModel { Name = UsernameUrl.Decode(id) });
             }
 
             return RedirectToAction("Index");
@@ -114,7 +113,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (!String.IsNullOrEmpty(id))
             {
-                return View(ConvertTeamModel(TeamRepository.GetTeam(id)));
+                return View(ConvertTeamModel(TeamRepository.GetTeam(UsernameUrl.Decode(id))));
             }
             return View();
         }

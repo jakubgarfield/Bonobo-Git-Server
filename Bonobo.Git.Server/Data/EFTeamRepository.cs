@@ -129,5 +129,26 @@ namespace Bonobo.Git.Server.Data
                 team.Users.Add(item);
             }
         }
+
+        public void UpdateUserTeams(string userName, List<string> newTeams)
+        {
+            if (string.IsNullOrEmpty(userName)) throw new ArgumentException("userName");
+            if (newTeams == null) throw new ArgumentException("newTeams");
+
+            using (var db = new BonoboGitServerContext())
+            {
+                var user = db.Users.FirstOrDefault(u => u.Username == userName.ToLower());
+                if (user != null)
+                {
+                    user.Teams.Clear();
+                    var teams = db.Teams.Where(t => newTeams.Contains(t.Name));
+                    foreach (var team in teams)
+                    {
+                        user.Teams.Add(team);
+                    }
+                    db.SaveChanges();
+                }
+            }
+        }
     }
 }
