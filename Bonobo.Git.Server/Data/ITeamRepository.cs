@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using Bonobo.Git.Server.Models;
 
 namespace Bonobo.Git.Server.Data
@@ -14,5 +11,6 @@ namespace Bonobo.Git.Server.Data
         void Delete(string name);
         bool Create(TeamModel team);
         void Update(TeamModel team);
+        void UpdateUserTeams(string userName, List<string> newTeams);
     }
 }
