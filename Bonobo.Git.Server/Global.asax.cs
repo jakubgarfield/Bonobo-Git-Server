@@ -20,6 +20,8 @@ using Bonobo.Git.Server.Git.GitService;
 using System.Configuration;
 using System.IO;
 using Bonobo.Git.Server.Git;
+using Bonobo.Git.Server.Git.GitService.ReceivePackHook;
+using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks;
 
 namespace Bonobo.Git.Server
 {
@@ -120,7 +122,8 @@ namespace Bonobo.Git.Server
 
         private static void RegisterDependencyResolver()
         {
-            var container = new UnityContainer();
+            var container = new UnityContainer()
+                                .AddExtension(new UnityDecoratorContainerExtension());
 
             container.RegisterType<IMembershipService, EFMembershipService>();
             container.RegisterType<IRepositoryPermissionService, EFRepositoryPermissionService>();
@@ -136,7 +139,14 @@ namespace Bonobo.Git.Server
                     : HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["GitPath"]),
                 RepositoriesDirPath = UserConfiguration.Current.Repositories,
             });
+
+            container.RegisterType<IGitService, ReceivePackParser>();
             container.RegisterType<IGitService, GitServiceExecutor>();
+
+            // receive pack hooks
+            container.RegisterType<IHookReceivePack, NullReceivePackHook>();
+
+
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
 

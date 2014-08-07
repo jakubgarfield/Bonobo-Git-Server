@@ -7,10 +7,12 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
 {
     /// <summary>
     /// Implement this interface to receive notifications when a pack is recieved
-    /// and perform any relevant post-processing operations.
+    /// and perform any relevant pre/post-processing operations.
     /// </summary>
     public interface IHookReceivePack
     {
-        void PackReceived(string packId, string repositoryName, DateTime timestamp, IEnumerable<ReceivePackCommits> commitData, string pushedByUser);
+        void PrePackReceive(ParsedRecievePack receivePack);
+
+        void PostPackReceive(ParsedRecievePack receivePack, IEnumerable<ReceivePackCommits> commitData);
     }
 }
