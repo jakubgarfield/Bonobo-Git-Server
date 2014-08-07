@@ -16,6 +16,10 @@ using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
+using Bonobo.Git.Server.Git.GitService;
+using System.Configuration;
+using System.IO;
+using Bonobo.Git.Server.Git;
 
 namespace Bonobo.Git.Server
 {
@@ -123,6 +127,16 @@ namespace Bonobo.Git.Server
             container.RegisterType<IFormsAuthenticationService, FormsAuthenticationService>();
             container.RegisterType<ITeamRepository, EFTeamRepository>();
             container.RegisterType<IRepositoryRepository, EFRepositoryRepository>();
+
+            container.RegisterType<IGitRepositoryLocator, ConfigurationBasedRepositoryLocator>(new InjectionConstructor(UserConfiguration.Current.Repositories));
+            container.RegisterInstance(new GitServiceExecutorParams()
+            {
+                GitPath = Path.IsPathRooted(ConfigurationManager.AppSettings["GitPath"])
+                    ? ConfigurationManager.AppSettings["GitPath"]
+                    : HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["GitPath"]),
+                RepositoriesDirPath = UserConfiguration.Current.Repositories,
+            });
+            container.RegisterType<IGitService, GitServiceExecutor>();
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
 
