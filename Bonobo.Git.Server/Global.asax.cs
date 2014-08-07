@@ -144,6 +144,7 @@ namespace Bonobo.Git.Server
             container.RegisterType<IGitService, GitServiceExecutor>();
 
             // receive pack hooks
+            container.RegisterType<IHookReceivePack, AuditPusherToGitNotes>();
             container.RegisterType<IHookReceivePack, NullReceivePackHook>();
 
 
