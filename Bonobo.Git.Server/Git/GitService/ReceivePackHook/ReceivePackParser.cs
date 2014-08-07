@@ -66,7 +66,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                         len -= 1;
                         if (inStream.Read(buff, 0, 1) != 1)
                         {
-                            throw new Exception("Unexpected receive-pack 'header' content.");
+                            throw new Exception("Unexpected receive-pack 'line' content.");
                         }
                         if (buff[0] == 0)
                         {
