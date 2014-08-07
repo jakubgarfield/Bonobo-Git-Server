@@ -1,4 +1,5 @@
-﻿using System.Data.Entity.Infrastructure;
+﻿using System;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 
 namespace Bonobo.Git.Server.Data.Update
@@ -20,10 +21,18 @@ namespace Bonobo.Git.Server.Data.Update
                 {
                     if (!string.IsNullOrEmpty(item.Precondition))
                     {
-                        var preConditionResult = ctxAdapter.ObjectContext.ExecuteStoreQuery<int>(item.Precondition).Single();
-                        if (preConditionResult == 0)
+                        try
                         {
-                            continue;
+                            var preConditionResult = ctxAdapter.ObjectContext.ExecuteStoreQuery<int>(item.Precondition).Single();
+                            if (preConditionResult == 0)
+                            {
+                                continue;
+                            }
+                        }
+                        catch(Exception)
+                        {
+                            // consider failures in pre-conditions as an indication that
+                            // store ecommand should be executed
                         }
                     }
                     ctxAdapter.ObjectContext.ExecuteStoreCommand(item.Command);

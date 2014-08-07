@@ -190,8 +190,10 @@
     <Compile Include="Git\GitService\GitServiceExecutor.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Data\Update\AddAuditPushUser.cs" />
     <Compile Include="Data\Update\AutomaticUpdater.cs" />
     <Compile Include="Data\Update\RepositorySynchronizer.cs" />
+    <Compile Include="Data\Update\SqlServer\AddAuditPushUser.cs" />
     <Compile Include="Data\Update\SqlServer\InitialCreateScript.cs" />
     <Compile Include="Data\Update\SqlServer\InsertDefaultData.cs" />
     <Compile Include="Data\Update\UsernamesToLower.cs" />
