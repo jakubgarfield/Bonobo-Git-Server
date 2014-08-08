@@ -4,6 +4,14 @@
     <div class="pure-u-4-5">
         <h4>@Model.Date.ToString()</h4>
         <h2>@Html.ActionLink(string.IsNullOrEmpty(Model.Message) ? "(null)" : Model.Message, "Commit", new { id = ViewBag.ID, commit = Model.ID }, new { title = string.IsNullOrEmpty(Model.Message) ? "(null)" : Model.Message })</h2>
+        <div class="notes">
+            @foreach (var note in Model.Notes)
+            {
+                <p>
+                    *@note.Namespace* @note.Message
+                </p>
+            }
+        </div>
     </div>
     <div class="pure-u-1-5 metadata">
         <h4>@Model.Author</h4>
