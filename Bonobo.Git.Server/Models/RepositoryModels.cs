@@ -109,6 +109,19 @@ namespace Bonobo.Git.Server.Models
         public string Patch { get; set; }
     }
 
+    public class RepositoryCommitNoteModel
+    {
+        public RepositoryCommitNoteModel(string message, string @namespace)
+        {
+            this.Message = message;
+            this.Namespace = @namespace;
+        }
+
+        public string Message { get; set; }
+
+        public string Namespace { get; set; }
+    }
+
     public class RepositoryCommitModel
     {
         public string Name { get; set; }
@@ -156,6 +169,8 @@ namespace Bonobo.Git.Server.Models
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Changes")]
         public IEnumerable<RepositoryCommitChangeModel> Changes { get; set; }
+
+        public IEnumerable<RepositoryCommitNoteModel> Notes { get; set; }
 
     }
 }

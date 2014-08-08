@@ -121,3 +121,5 @@ nav.branches ul li:hover ul li { float: none; }
 .Commit .blob .controls { text-align: left;}
 .Commit .blob .controls p { margin: 0; padding: 0.5em 1em;}
 .Commit .diff h3 { margin-top: 1.5em; }
+
+.commit .notes p { font-size: 0.7em; }
