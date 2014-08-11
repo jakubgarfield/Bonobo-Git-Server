@@ -7,12 +7,12 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks
 {
     public class NullReceivePackHook : IHookReceivePack
     {
-        public void PrePackReceive(ParsedRecievePack receivePack)
+        public void PrePackReceive(ParsedReceivePack receivePack)
         {
             // do nothing
         }
 
-        public void PostPackReceive(ParsedRecievePack receivePack, IEnumerable<ReceivePackCommits> commitData)
+        public void PostPackReceive(ParsedReceivePack receivePack)
         {
             // do nothing
         }

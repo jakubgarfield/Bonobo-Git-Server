@@ -5,9 +5,9 @@ using System.Web;
 
 namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
 {
-    public class ParsedRecievePack
+    public class ParsedReceivePack
     {
-        public ParsedRecievePack (string packId, string repositoryName, IEnumerable<ReceivePackRefChange> refChanges, string pushedByUser, DateTime timestamp)
+        public ParsedReceivePack (string packId, string repositoryName, IEnumerable<ReceivePackRefChange> refChanges, string pushedByUser, DateTime timestamp)
 	    {
             this.PackId = packId;
             this.RefChanges = refChanges;
