@@ -184,6 +184,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\EFReceivePackRepository.cs" />
+    <Compile Include="Data\IReceivePackRepository.cs" />
+    <Compile Include="Data\Mapping\ReceivePackDataMap.cs" />
+    <Compile Include="Data\ReceivePackData.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Hooks\DurableReceivePackHook.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\Hooks\AuditPusherToGitNotes.cs" />
     <Compile Include="UnityDecoratorBuildStrategy.cs" />
     <Compile Include="UnityDecoratorContainerExtension.cs" />
@@ -235,10 +240,9 @@
     <Compile Include="Git\GitService\GitServiceExtensions.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\Hooks\NullReceivePackHook.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\IHookReceivePack.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\ParsedRecievePack.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ParsedReceivePack.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\ReceivePackRefChange.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\ReceivePackParser.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommits.cs" />
     <Compile Include="Git\IGitRepositoryLocator.cs" />
     <Compile Include="Helpers\ContentDispositionUtil.cs" />
     <Compile Include="Helpers\CssRewriteUrlTransformWrapper.cs" />

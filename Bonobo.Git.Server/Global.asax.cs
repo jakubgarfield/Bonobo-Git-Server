@@ -130,6 +130,7 @@ namespace Bonobo.Git.Server
             container.RegisterType<IFormsAuthenticationService, FormsAuthenticationService>();
             container.RegisterType<ITeamRepository, EFTeamRepository>();
             container.RegisterType<IRepositoryRepository, EFRepositoryRepository>();
+            container.RegisterType<IReceivePackRepository, EFReceivePackRepository>();
 
             container.RegisterType<IGitRepositoryLocator, ConfigurationBasedRepositoryLocator>(new InjectionConstructor(UserConfiguration.Current.Repositories));
             container.RegisterInstance(new GitServiceExecutorParams()
@@ -144,6 +145,7 @@ namespace Bonobo.Git.Server
             container.RegisterType<IGitService, GitServiceExecutor>();
 
             // receive pack hooks
+            container.RegisterType<IHookReceivePack, DurableReceivePackHook>();                       
             container.RegisterType<IHookReceivePack, AuditPusherToGitNotes>();
             container.RegisterType<IHookReceivePack, NullReceivePackHook>();
 

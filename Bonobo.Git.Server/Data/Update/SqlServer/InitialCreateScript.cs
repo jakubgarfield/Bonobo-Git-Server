@@ -101,6 +101,16 @@
                             Foreign Key ([Team_Name]) References [Team]([Name])
                         );
                     END
+
+                    IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  TABLE_NAME = 'ReceivePackData'))
+                    BEGIN
+                        CREATE TABLE [dbo].[ReceivePackData] (
+                            [Data] VarChar(max) Not Null,
+                            [PackId] VarChar(255) Not Null,
+                            [EntryTimestamp] DateTime Not Null
+                        );
+                    END
+
                     ";
             }
         }

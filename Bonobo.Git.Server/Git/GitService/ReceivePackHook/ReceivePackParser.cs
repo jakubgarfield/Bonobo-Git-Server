@@ -10,20 +10,18 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
 {
     public class ReceivePackParser : IGitService
     {
-        private readonly IGitService gitService;
-        private readonly IGitRepositoryLocator repoLocator;
+        private readonly IGitService gitService;        
         private readonly IHookReceivePack receivePackHandler;
 
-        public ReceivePackParser(IGitService gitService, IGitRepositoryLocator repoLocator, IHookReceivePack receivePackHandler)
+        public ReceivePackParser(IGitService gitService, IHookReceivePack receivePackHandler)
         {
             this.gitService = gitService;
-            this.repoLocator = repoLocator;
             this.receivePackHandler = receivePackHandler;
         }
 
         public void ExecuteServiceByName(string repositoryName, string serviceName, ExecutionOptions options, System.IO.Stream inStream, System.IO.Stream outStream)
         {
-            ParsedRecievePack receivedPack = null;
+            ParsedReceivePack receivedPack = null;
 
             if (serviceName == "receive-pack" && inStream.Length > 0)
             {
@@ -89,7 +87,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                 }
 
                 var user = HttpContext.Current.User.Identity.Name;
-                receivedPack = new ParsedRecievePack(Guid.NewGuid().ToString("N"), repositoryName, refChanges, user, DateTime.Now);
+                receivedPack = new ParsedReceivePack(Guid.NewGuid().ToString("N"), repositoryName, refChanges, user, DateTime.Now);
 
                 inStream.Seek(0, SeekOrigin.Begin);
 
@@ -101,23 +99,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
             // perhaps need to check if execution succeeded before performing next step?
             if(receivedPack != null)
             {
-                var gitRepo = new Repository(repoLocator.GetRepositoryDirectoryPath(repositoryName).FullName);
-
-                var commitData = new List<ReceivePackCommits>();
-
-                foreach(var refChange in receivedPack.RefChanges)
-                {
-                    var affectedCommits = gitRepo.Commits.QueryBy(new CommitFilter()
-                    {
-                        Since = refChange.ToCommit,
-                        Until = refChange.FromCommit,
-                        SortBy = CommitSortStrategies.Topological
-                    });
-
-                    commitData.Add(new ReceivePackCommits(refChange.RefName, affectedCommits));
-                }
-
-                receivePackHandler.PostPackReceive(receivedPack, commitData);
+                receivePackHandler.PostPackReceive(receivedPack);
             }
         }
     }

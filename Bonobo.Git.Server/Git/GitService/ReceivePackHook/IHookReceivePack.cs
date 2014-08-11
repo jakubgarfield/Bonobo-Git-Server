@@ -11,8 +11,8 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
     /// </summary>
     public interface IHookReceivePack
     {
-        void PrePackReceive(ParsedRecievePack receivePack);
+        void PrePackReceive(ParsedReceivePack receivePack);
 
-        void PostPackReceive(ParsedRecievePack receivePack, IEnumerable<ReceivePackCommits> commitData);
+        void PostPackReceive(ParsedReceivePack receivePack);
     }
 }

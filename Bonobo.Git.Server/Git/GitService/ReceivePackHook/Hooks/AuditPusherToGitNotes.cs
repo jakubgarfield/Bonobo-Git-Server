@@ -21,7 +21,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks
             this.repoConfig = repoConfig;
         }
 
-        public void PostPackReceive(ParsedRecievePack receivePack, IEnumerable<ReceivePackCommits> commitData)
+        public void PostPackReceive(ParsedReceivePack receivePack)
         {
             var repo = repoConfig.GetRepository(receivePack.RepositoryName);
             if (repo.AuditPushUser == true)
@@ -33,9 +33,16 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks
                 }
 
                 var gitRepo = new Repository(repoLocator.GetRepositoryDirectoryPath(receivePack.RepositoryName).FullName);
-                foreach (var commitGroup in commitData)
+                foreach (var refChange in receivePack.RefChanges)
                 {
-                    foreach (var commit in commitGroup.Commits)
+                    var affectedCommits = gitRepo.Commits.QueryBy(new CommitFilter()
+                    {
+                        Since = refChange.ToCommit,
+                        Until = refChange.FromCommit,
+                        SortBy = CommitSortStrategies.Topological
+                    });
+
+                    foreach (var commit in affectedCommits)
                     {
                         gitRepo.Notes.Add(
                             commit.Id,
@@ -44,10 +51,11 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks
                     }
                 }
             }
-            next.PostPackReceive(receivePack, commitData);
+
+            next.PostPackReceive(receivePack);
         }
 
-        public void PrePackReceive(ParsedRecievePack receivePack)
+        public void PrePackReceive(ParsedReceivePack receivePack)
         {
             next.PrePackReceive(receivePack);
         }
