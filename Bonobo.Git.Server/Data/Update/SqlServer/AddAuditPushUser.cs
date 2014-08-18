@@ -13,7 +13,7 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
             {
                 return @"
                     
-                ALTER TABLE Repository ADD COLUMN AuditPushUser BIT NOT NULL DEFAULT('0')
+                ALTER TABLE Repository ADD AuditPushUser BIT NOT NULL DEFAULT('0')
 ";
             }
         }
