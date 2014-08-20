@@ -54,6 +54,7 @@ namespace Bonobo.Git.Server.Controllers
                 if (MembershipService.ValidateUser(model.Username, model.Password))
                 {
                     FormsAuthenticationService.SignIn(model.Username, model.RememberMe);
+                    Response.AppendToLog("SUCCESS");
                     if (Url.IsLocalUrl(model.ReturnUrl))
                     {
                         return Redirect(model.ReturnUrl);
@@ -66,6 +67,7 @@ namespace Bonobo.Git.Server.Controllers
                 else
                 {
                     ModelState.AddModelError("", Resources.Home_LogOn_UsernamePasswordIncorrect);
+                    Response.AppendToLog("FAILURE");
                 }
             }
 
