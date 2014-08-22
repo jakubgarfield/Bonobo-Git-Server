@@ -132,7 +132,12 @@ namespace Bonobo.Git.Server
             container.RegisterType<IRepositoryRepository, EFRepositoryRepository>();
             container.RegisterType<IReceivePackRepository, EFReceivePackRepository>();
 
-            container.RegisterType<IGitRepositoryLocator, ConfigurationBasedRepositoryLocator>(new InjectionConstructor(UserConfiguration.Current.Repositories));
+            container.RegisterType<IGitRepositoryLocator, ConfigurationBasedRepositoryLocator>(
+                new InjectionFactory((ctr, type, name) => {
+                    return new ConfigurationBasedRepositoryLocator(UserConfiguration.Current.Repositories);
+                })
+            );
+                
             container.RegisterInstance(new GitServiceExecutorParams()
             {
                 GitPath = Path.IsPathRooted(ConfigurationManager.AppSettings["GitPath"])
