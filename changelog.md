@@ -4,6 +4,26 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 3.3
+
+**22 Aug 2014**
+
+### Features
+
+* Clone button for repositories in web management UI - latop2604
+* Support for custom title, logo, additional footer message - OttoNull
+* Add Active Directory group / Team synchronization - Louis-Charles Levasseur
+* Add audit logging of login success or failure - dnadle
+
+### Bug Fixes
+
+* Add missing french translation keys - latop2604
+* Add backwards compatible upgrade of method to store hashed passwords - embix
+* Fix crash when repo contain GitLink node - latop2604
+* Added generic message, if commit message is null or empty - SeitzDev
+* Fix #133 JSON body displayed when going back in repository view
+*
+
 ## Version 3.2
 
 **19 May 2014**
