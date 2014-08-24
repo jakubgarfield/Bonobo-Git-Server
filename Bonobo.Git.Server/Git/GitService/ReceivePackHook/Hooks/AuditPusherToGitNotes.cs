@@ -10,7 +10,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks
 {
     public class AuditPusherToGitNotes : IHookReceivePack
     {
-        private const string EMPTY_USER = "<anonymous>";
+        public const string EMPTY_USER = "anonymous";
         private IGitRepositoryLocator repoLocator;
         private IHookReceivePack next;
         private Bonobo.Git.Server.Data.IRepositoryRepository repoConfig;
