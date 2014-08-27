@@ -13,6 +13,6 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
     {
         void PrePackReceive(ParsedReceivePack receivePack);
 
-        void PostPackReceive(ParsedReceivePack receivePack);
+        void PostPackReceive(ParsedReceivePack receivePack, GitExecutionResult result);
     }
 }

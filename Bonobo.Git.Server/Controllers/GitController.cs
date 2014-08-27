@@ -72,7 +72,7 @@ namespace Bonobo.Git.Server.Controllers
             {
                 return new GitCmdResult("application/x-git-receive-pack-result", (outStream) =>
                 {
-                    GitService.ExecuteGitReceivePack(project, GetInputStream(), outStream);
+                    GitService.ExecuteGitReceivePack(Guid.NewGuid().ToString("N"), project, GetInputStream(), outStream);
                 });
             }
             else
@@ -88,7 +88,7 @@ namespace Bonobo.Git.Server.Controllers
             {
                 return new GitCmdResult("application/x-git-upload-pack-result", (outStream) =>
                 {
-                    GitService.ExecuteGitUploadPack(project, GetInputStream(), outStream);
+                    GitService.ExecuteGitUploadPack(Guid.NewGuid().ToString("N"), project, GetInputStream(), outStream);
                 });
             }
             else
@@ -111,6 +111,7 @@ namespace Bonobo.Git.Server.Controllers
                 return new GitCmdResult(contentType, (outStream) =>
                 {
                     GitService.ExecuteServiceByName(
+                        Guid.NewGuid().ToString("N"),
                         project, 
                         serviceName, 
                         new ExecutionOptions() { AdvertiseRefs = true },

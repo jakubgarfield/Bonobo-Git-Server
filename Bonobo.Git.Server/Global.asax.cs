@@ -22,6 +22,7 @@ using System.IO;
 using Bonobo.Git.Server.Git;
 using Bonobo.Git.Server.Git.GitService.ReceivePackHook;
 using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks;
+using Bonobo.Git.Server.Git.GitService.Durability;
 
 namespace Bonobo.Git.Server
 {
@@ -146,13 +147,20 @@ namespace Bonobo.Git.Server
                 RepositoriesDirPath = UserConfiguration.Current.Repositories,
             });
 
+            // git service durability registrations to enable hook execution after failures
+            container.RegisterType<IGitService, DurableGitServiceResult>();
+            container.RegisterType<GitServiceResultParser, GitServiceResultParser>();
+            container.RegisterType<IHookReceivePack, DurableReceivePackHook>();
+            container.RegisterType<IResultFilePathBuilder, OneFolderResultFilePathBuilder>();
+            container.RegisterInstance(new NamedArguments.FailedPackWaitTimeBeforeExecution(TimeSpan.FromSeconds(5 * 60)));
+            container.RegisterInstance(new NamedArguments.ReceivePackFileResultDirectory(ConfigurationManager.AppSettings["RecoveryDataPath"]));
+
+
+            // base git service executor
             container.RegisterType<IGitService, ReceivePackParser>();
             container.RegisterType<IGitService, GitServiceExecutor>();
 
             // receive pack hooks
-            container.RegisterType<IHookReceivePack, DurableReceivePackHook>()
-                     .RegisterInstance(new FailedPackWaitTimeBeforeExecution(TimeSpan.FromSeconds(5 * 60)));
-
             container.RegisterType<IHookReceivePack, AuditPusherToGitNotes>();
             container.RegisterType<IHookReceivePack, NullReceivePackHook>();
 

@@ -12,7 +12,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks
             // do nothing
         }
 
-        public void PostPackReceive(ParsedReceivePack receivePack)
+        public void PostPackReceive(ParsedReceivePack receivePack, GitExecutionResult result)
         {
             // do nothing
         }

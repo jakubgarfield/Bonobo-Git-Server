@@ -24,8 +24,15 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks
             this.userRepo = userRepo;
         }
 
-        public void PostPackReceive(ParsedReceivePack receivePack)
+        public void PostPackReceive(ParsedReceivePack receivePack, GitExecutionResult result)
         {
+            next.PostPackReceive(receivePack, result);
+
+            if (result.HasError)
+            {
+                return;
+            }
+
             var repo = repoConfig.GetRepository(receivePack.RepositoryName);
             if (repo.AuditPushUser == true)
             {
@@ -42,28 +49,16 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks
                 }
 
                 var gitRepo = new Repository(repoLocator.GetRepositoryDirectoryPath(receivePack.RepositoryName).FullName);
-                foreach (var refChange in receivePack.RefChanges)
+                foreach (var commit in receivePack.Commits)
                 {
-                    var affectedCommits = gitRepo.Commits.QueryBy(new CommitFilter()
-                    {
-                        Since = refChange.ToCommit,
-                        Until = refChange.FromCommit,
-                        SortBy = CommitSortStrategies.Topological
-                    });
-
-                    foreach (var commit in affectedCommits)
-                    {
-                        gitRepo.Notes.Add(
-                            commit.Id,
-                            user,
-                            new Signature(user, email, DateTimeOffset.Now),
-                            new Signature(user, email, DateTimeOffset.Now),
-                            "pusher");
-                    }
+                    gitRepo.Notes.Add(
+                        new ObjectId(commit.Id),
+                        user,
+                        new Signature(user, email, DateTimeOffset.Now),
+                        new Signature(user, email, DateTimeOffset.Now),
+                        "pusher");
                 }
-            }
-
-            next.PostPackReceive(receivePack);
+            }            
         }
 
         public void PrePackReceive(ParsedReceivePack receivePack)

@@ -11,6 +11,6 @@ namespace Bonobo.Git.Server.Git.GitService
     /// </summary>
     public interface IGitService
     {
-        void ExecuteServiceByName(string repositoryName, string serviceName, ExecutionOptions options, Stream inStream, Stream outStream);
+        void ExecuteServiceByName(string correlationId, string repositoryName, string serviceName, ExecutionOptions options, Stream inStream, Stream outStream);
     }
 }

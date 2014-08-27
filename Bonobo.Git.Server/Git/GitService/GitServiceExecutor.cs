@@ -28,7 +28,7 @@ namespace Bonobo.Git.Server.Git.GitService
             this.repoLocator = repoLocator;
         }
 
-        public void ExecuteServiceByName(string repositoryName, string serviceName, ExecutionOptions options, System.IO.Stream inStream, System.IO.Stream outStream)
+        public void ExecuteServiceByName(string correlationId, string repositoryName, string serviceName, ExecutionOptions options, System.IO.Stream inStream, System.IO.Stream outStream)
         {
             var args = serviceName + " --stateless-rpc";
             args += options.ToCommandLineArgs();

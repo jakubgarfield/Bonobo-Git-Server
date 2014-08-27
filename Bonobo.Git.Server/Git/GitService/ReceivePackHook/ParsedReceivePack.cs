@@ -7,18 +7,21 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
 {
     public class ParsedReceivePack
     {
-        public ParsedReceivePack (string packId, string repositoryName, IEnumerable<ReceivePackRefChange> refChanges, string pushedByUser, DateTime timestamp)
+        public ParsedReceivePack (string packId, string repositoryName, IEnumerable<ReceivePackRefChange> refChanges, string pushedByUser, DateTime timestamp, IEnumerable<ReceivePackCommit> commits)
 	    {
             this.PackId = packId;
             this.RefChanges = refChanges;
             this.PushedByUser = pushedByUser;
             this.Timestamp = timestamp;
             this.RepositoryName = repositoryName;
+            this.Commits = commits;
 	    }
 
         public string PackId { get; private set; }
 
         public IEnumerable<ReceivePackRefChange> RefChanges { get; private set; }
+
+        public IEnumerable<ReceivePackCommit> Commits { get; private set; }
 
         public string PushedByUser { get; private set; }
 

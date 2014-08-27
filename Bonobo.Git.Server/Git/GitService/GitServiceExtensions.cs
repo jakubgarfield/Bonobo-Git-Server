@@ -8,9 +8,10 @@ namespace Bonobo.Git.Server.Git.GitService
 {
     public static class GitServiceExtensions
     {
-        public static void ExecuteGitUploadPack(this IGitService self, string repositoryName, Stream inStream, Stream outStream)
+        public static void ExecuteGitUploadPack(this IGitService self, string correlationId, string repositoryName, Stream inStream, Stream outStream)
         {
             self.ExecuteServiceByName(
+                correlationId,
                 repositoryName,
                 "upload-pack",
                 new ExecutionOptions() { AdvertiseRefs = false },
@@ -18,9 +19,10 @@ namespace Bonobo.Git.Server.Git.GitService
                 outStream);
         }
 
-        public static void ExecuteGitReceivePack(this IGitService self, string repositoryName, Stream inStream, Stream outStream)
+        public static void ExecuteGitReceivePack(this IGitService self, string correlationId, string repositoryName, Stream inStream, Stream outStream)
         {
             self.ExecuteServiceByName(
+                correlationId,
                 repositoryName,
                 "receive-pack",
                 new ExecutionOptions() { AdvertiseRefs = false },
