@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Bonobo.Git.Server.Git.GitService.Durability
+namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability
 {
     /// <summary>
     /// Perhaps there's a better way to handle wiring up simple types in Unity but i haven't found it
@@ -19,11 +19,11 @@ namespace Bonobo.Git.Server.Git.GitService.Durability
             public TimeSpan Value { get; private set; }
         }
 
-        public class ReceivePackFileResultDirectory
+        public class ReceivePackRecoveryDirectory
         {
-            public ReceivePackFileResultDirectory(string receivePackFileResultDirectory)
+            public ReceivePackRecoveryDirectory(string receivePackRecoveryDirectory)
             {
-                this.Value = receivePackFileResultDirectory;
+                this.Value = receivePackRecoveryDirectory;
             }
 
             public string Value { get; private set; }

@@ -184,18 +184,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\EFReceivePackRepository.cs" />
-    <Compile Include="Data\IReceivePackRepository.cs" />
-    <Compile Include="Data\Mapping\ReceivePackDataMap.cs" />
-    <Compile Include="Data\ReceivePackData.cs" />
     <Compile Include="Git\GitService\GitServiceResultParser.cs" />
-    <Compile Include="Git\GitService\Durability\OneFolderResultFilePathBuilder.cs" />
-    <Compile Include="Git\GitService\Durability\DurableGitServiceResult.cs" />
-    <Compile Include="Git\GitService\Durability\IResultFilePathBuilder.cs" />
-    <Compile Include="Git\GitService\Durability\NamedArguments.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\AutoCreateMissingRecoveryDirectories.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\OneFolderRecoveryFilePathBuilder.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\DurableGitServiceResult.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\IRecoveryFilePathBuilder.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\NamedArguments.cs" />
     <Compile Include="Git\GitService\GitExecutionResult.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\GIT_OBJ_TYPE.cs" />
-    <Compile Include="Git\GitService\Durability\DurableReceivePackHook.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\DurableReceivePackHook.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\Hooks\AuditPusherToGitNotes.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommit.cs" />
     <Compile Include="Git\GitService\ReplicatingStream.cs" />

@@ -81,12 +81,6 @@ namespace Bonobo.Git.Server.Data.Update
                         Foreign Key ([Team_Name]) References [Team]([Name])
                     );
 
-                    CREATE TABLE IF NOT EXISTS [ReceivePackData] (
-                        [Data] VarChar(8000) Not Null,
-                        [PackId] VarChar(255) Not Null,
-                        [EntryTimestamp] DateTime Not Null
-                    );
-                  
                     ";
             }
         }

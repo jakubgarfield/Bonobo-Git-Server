@@ -22,7 +22,7 @@ using System.IO;
 using Bonobo.Git.Server.Git;
 using Bonobo.Git.Server.Git.GitService.ReceivePackHook;
 using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks;
-using Bonobo.Git.Server.Git.GitService.Durability;
+using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability;
 
 namespace Bonobo.Git.Server
 {
@@ -131,7 +131,6 @@ namespace Bonobo.Git.Server
             container.RegisterType<IFormsAuthenticationService, FormsAuthenticationService>();
             container.RegisterType<ITeamRepository, EFTeamRepository>();
             container.RegisterType<IRepositoryRepository, EFRepositoryRepository>();
-            container.RegisterType<IReceivePackRepository, EFReceivePackRepository>();
 
             container.RegisterType<IGitRepositoryLocator, ConfigurationBasedRepositoryLocator>(
                 new InjectionFactory((ctr, type, name) => {
@@ -147,18 +146,24 @@ namespace Bonobo.Git.Server
                 RepositoriesDirPath = UserConfiguration.Current.Repositories,
             });
 
-            // git service durability registrations to enable hook execution after failures
-            container.RegisterType<IGitService, DurableGitServiceResult>();
-            container.RegisterType<GitServiceResultParser, GitServiceResultParser>();
-            container.RegisterType<IHookReceivePack, DurableReceivePackHook>();
-            container.RegisterType<IResultFilePathBuilder, OneFolderResultFilePathBuilder>();
-            container.RegisterInstance(new NamedArguments.FailedPackWaitTimeBeforeExecution(TimeSpan.FromSeconds(5 * 60)));
-            container.RegisterInstance(new NamedArguments.ReceivePackFileResultDirectory(ConfigurationManager.AppSettings["RecoveryDataPath"]));
-
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["RecoveryDataPath"]))
+            {
+                // git service execution durability registrations to enable receive-pack hook execution after failures
+                container.RegisterType<IGitService, DurableGitServiceResult>();
+                container.RegisterType<IHookReceivePack, DurableReceivePackHook>();
+                container.RegisterType<IRecoveryFilePathBuilder, AutoCreateMissingRecoveryDirectories>();
+                container.RegisterType<IRecoveryFilePathBuilder, OneFolderRecoveryFilePathBuilder>();
+                container.RegisterInstance(new NamedArguments.FailedPackWaitTimeBeforeExecution(TimeSpan.FromSeconds(5 * 60)));
+                container.RegisterInstance(new NamedArguments.ReceivePackRecoveryDirectory(
+                        Path.IsPathRooted(ConfigurationManager.AppSettings["RecoveryDataPath"])
+                            ? ConfigurationManager.AppSettings["RecoveryDataPath"]
+                            : HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["RecoveryDataPath"])));
+            }
 
             // base git service executor
             container.RegisterType<IGitService, ReceivePackParser>();
             container.RegisterType<IGitService, GitServiceExecutor>();
+            container.RegisterType<GitServiceResultParser, GitServiceResultParser>();
 
             // receive pack hooks
             container.RegisterType<IHookReceivePack, AuditPusherToGitNotes>();
