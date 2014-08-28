@@ -17,11 +17,11 @@ namespace Bonobo.Git.Server.Git.GitService
 
                 if (outputStream.Read(buff5, 0, buff5.Length) != buff5.Length)
                 {
-                    throw new Exception("Unepected number of bytes read");
+                    throw new Exception("Unxepected number of bytes read");
                 }
                 if (outputStream.Read(buff5, 0, buff5.Length) != buff5.Length)
                 {
-                    throw new Exception("Unepected number of bytes read");
+                    throw new Exception("Unxepected number of bytes read");
                 }
 
                 var firstChars = Encoding.ASCII.GetString(buff5);

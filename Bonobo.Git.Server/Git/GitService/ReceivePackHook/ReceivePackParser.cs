@@ -46,11 +46,12 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                 var buff1 = new byte[1];
                 var buff4 = new byte[4];
                 var buff20 = new byte[20];
+                var buff16K = new byte[1024 * 16]; 
 
                 while (true)
                 {
                     ReadStream(inStream, buff4);
-                    var len = Convert.ToInt32(Encoding.ASCII.GetString(buff4), 16);
+                    var len = Convert.ToInt32(Encoding.UTF8.GetString(buff4), 16);
                     if (len == 0)
                     {
                         break;
@@ -73,7 +74,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                     {
                         inStream.Seek(len, SeekOrigin.Current);
                     }
-                    var refLine = Encoding.ASCII.GetString(accum.ToArray());
+                    var refLine = Encoding.UTF8.GetString(accum.ToArray());
                     var refLineItems = refLine.Split(' ');
 
                     var fromCommit = refLineItems[0];
@@ -92,7 +93,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                 // http://schacon.github.io/gitbook/7_the_packfile.html
 
                 ReadStream(inStream, buff4);
-                if(Encoding.ASCII.GetString(buff4) != "PACK")
+                if (Encoding.UTF8.GetString(buff4) != "PACK")
                 {
                     throw new Exception("Unexpected receive-pack 'PACK' content.");
                 }
@@ -110,20 +111,20 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
 
                     ReadStream(inStream, buff1);
                     var type = (GIT_OBJ_TYPE)((buff1[0] >> 4) & 7);
-                    var len = buff1[0] & 15;
+                    long len = buff1[0] & 15;
 
                     var shiftAmount = 4;
                     while ((buff1[0] >> 7) == 1)
                     {
                         ReadStream(inStream, buff1);
-                        len = len | ((buff1[0] & 127) << shiftAmount);
+                        len = len | ((long)(buff1[0] & 127) << shiftAmount);
 
                         shiftAmount += 7;
                     }
 
                     if (type == GIT_OBJ_TYPE.OBJ_REF_DELTA)
                     {
-                        // read name
+                        // read ref name
                         ReadStream(inStream, buff20);
                     }
                     if (type == GIT_OBJ_TYPE.OBJ_OFS_DELTA)
@@ -141,17 +142,26 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
 
                     using (var zlibStream = new ZlibStream(inStream, CompressionMode.Decompress, true))
                     {
-                        var uncompressed = new byte[len];
-                        var bytesRead = zlibStream.Read(uncompressed, 0, len);
+                        // read compressed data max 16KB at a time
+                        string commitMsg = "";
+                        var readRemaining = len;
+                        do
+                        {
+                            var bytesUncompressed = zlibStream.Read(buff16K, 0, buff16K.Length);
+                            readRemaining -= bytesUncompressed;
 
-                        var uncompressedStr = Encoding.UTF8.GetString(uncompressed);
-                        
-                        if(type == GIT_OBJ_TYPE.OBJ_COMMIT)
+                            if (type == GIT_OBJ_TYPE.OBJ_COMMIT)
+                            {
+                                commitMsg += Encoding.UTF8.GetString(buff16K, 0, bytesUncompressed);
+                            }
+                        } while (readRemaining > 0);
+
+                        if (type == GIT_OBJ_TYPE.OBJ_COMMIT)
                         {
                             // Compute commit hash
                             using(var sha1 = new SHA1CryptoServiceProvider())
                             {
-                                var commitMessage = string.Format("commit {0}\0{1}", uncompressedStr.Length, uncompressedStr);
+                                var commitMessage = string.Format("commit {0}\0{1}", commitMsg.Length, commitMsg);
                                 var commitHashBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(commitMessage));
                                 
                                 var sb = new StringBuilder();
