@@ -5,9 +5,9 @@ using System.Web;
 
 namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
 {
-    public class ReceivePackRefChange
+    public class ReceivePackPktLine
     {
-        public ReceivePackRefChange(string fromCommit, string toCommit, string refName)
+        public ReceivePackPktLine(string fromCommit, string toCommit, string refName)
         {
             this.FromCommit = fromCommit;
             this.ToCommit = toCommit;

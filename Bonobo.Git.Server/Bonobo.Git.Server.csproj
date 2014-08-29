@@ -247,7 +247,7 @@
     <Compile Include="Git\GitService\ReceivePackHook\Hooks\NullReceivePackHook.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\IHookReceivePack.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\ParsedReceivePack.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackRefChange.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackPktLine.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\ReceivePackParser.cs" />
     <Compile Include="Git\IGitRepositoryLocator.cs" />
     <Compile Include="Helpers\ContentDispositionUtil.cs" />

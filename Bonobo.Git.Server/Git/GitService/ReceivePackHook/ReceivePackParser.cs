@@ -41,7 +41,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                 // 0000PACK------- REST OF PACKAGE --------
                 //
 
-                var refChanges = new List<ReceivePackRefChange>();
+                var pktLines = new List<ReceivePackPktLine>();
 
                 var buff1 = new byte[1];
                 var buff4 = new byte[4];
@@ -74,14 +74,14 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                     {
                         inStream.Seek(len, SeekOrigin.Current);
                     }
-                    var refLine = Encoding.UTF8.GetString(accum.ToArray());
-                    var refLineItems = refLine.Split(' ');
+                    var pktLine = Encoding.UTF8.GetString(accum.ToArray());
+                    var pktLineItems = pktLine.Split(' ');
 
-                    var fromCommit = refLineItems[0];
-                    var toCommit = refLineItems[1];
-                    var refName = refLineItems[2];
+                    var fromCommit = pktLineItems[0];
+                    var toCommit = pktLineItems[1];
+                    var refName = pktLineItems[2];
 
-                    refChanges.Add(new ReceivePackRefChange(fromCommit, toCommit, refName));
+                    pktLines.Add(new ReceivePackPktLine(fromCommit, toCommit, refName));
                 }
 
                 // parse PACK contents
@@ -184,7 +184,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                 // -------------------
 
                 var user = HttpContext.Current.User.Identity.Name;
-                receivedPack = new ParsedReceivePack(correlationId, repositoryName, refChanges, user, DateTime.Now, packCommits);
+                receivedPack = new ParsedReceivePack(correlationId, repositoryName, pktLines, user, DateTime.Now, packCommits);
 
                 inStream.Seek(0, SeekOrigin.Begin);
 
