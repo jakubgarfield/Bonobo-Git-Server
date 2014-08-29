@@ -5,12 +5,12 @@ using System.Web;
 
 namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
 {
-    public class ParsedPack
+    public class ParsedRecievePack
     {
-        public ParsedPack (string packId, string repositoryName, IEnumerable<ParsedPackRefHeader> headers, string pushedByUser, DateTime timestamp)
+        public ParsedRecievePack (string packId, string repositoryName, IEnumerable<ReceivePackRefChange> refChanges, string pushedByUser, DateTime timestamp)
 	    {
             this.PackId = packId;
-            this.Headers = headers;
+            this.RefChanges = refChanges;
             this.PushedByUser = pushedByUser;
             this.Timestamp = timestamp;
             this.RepositoryName = repositoryName;
@@ -18,7 +18,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
 
         public string PackId { get; private set; }
 
-        public IEnumerable<ParsedPackRefHeader> Headers { get; private set; }
+        public IEnumerable<ReceivePackRefChange> RefChanges { get; private set; }
 
         public string PushedByUser { get; private set; }
 
