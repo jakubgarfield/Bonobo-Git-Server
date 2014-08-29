@@ -20,6 +20,7 @@ namespace Bonobo.Git.Server.Data
                     Users = repo.Users.Select(i => i.Username),
                     Teams = repo.Teams.Select(i => i.Name),
                     Administrators = repo.Administrators.Select(i => i.Username),
+                    AuditPushUser = repo.AuditPushUser,
                 }).ToList();
 
                 return dbrepos.Select(repo => new RepositoryModel
@@ -30,6 +31,7 @@ namespace Bonobo.Git.Server.Data
                     Users = repo.Users.ToArray(),
                     Teams = repo.Teams.ToArray(),
                     Administrators = repo.Administrators.ToArray(),
+                    AuditPushUser = repo.AuditPushUser,
                 }).ToList();
             }
         }
@@ -93,6 +95,7 @@ namespace Bonobo.Git.Server.Data
                     Name = model.Name,
                     Description = model.Description,
                     Anonymous = model.AnonymousAccess,
+                    AuditPushUser = model.AuditPushUser,
                 };
                 database.Repositories.Add(repository);
                 AddMembers(model.Users, model.Administrators, model.Teams, repository, database);
@@ -121,6 +124,7 @@ namespace Bonobo.Git.Server.Data
                 {
                     repo.Description = model.Description;
                     repo.Anonymous = model.AnonymousAccess;
+                    repo.AuditPushUser = model.AuditPushUser;
 
                     repo.Users.Clear();
                     repo.Teams.Clear();
@@ -148,6 +152,7 @@ namespace Bonobo.Git.Server.Data
                 Users = item.Users.Select(i => i.Username).ToArray(),
                 Teams = item.Teams.Select(i => i.Name).ToArray(),
                 Administrators = item.Administrators.Select(i => i.Username).ToArray(),
+                AuditPushUser = item.AuditPushUser,
             };
         }
 

@@ -35,6 +35,11 @@ else
                 @Html.CheckBoxFor(m => m.AllowAnonymous)
                 <i class="fa fa-info-circle" title="@Resources.Repository_AllowAnonymousHint"></i>
             </div>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.AuditPushUser)
+                @Html.CheckBoxFor(m => m.AuditPushUser)
+                <i class="fa fa-info-circle" title="@Resources.Repository_AuditPushUserHint"></i>
+            </div>
             <div class="pure-control-group checkboxlist">
                 @Html.LabelFor(m => m.Users)
                 @{

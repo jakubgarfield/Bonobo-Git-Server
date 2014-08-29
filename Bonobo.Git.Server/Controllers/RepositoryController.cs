@@ -475,7 +475,8 @@ namespace Bonobo.Git.Server.Controllers
                 Teams = model.Teams,
                 IsCurrentUserAdministrator = model.Administrators.Contains(User.Identity.Name.ToLowerInvariant()),
                 AllowAnonymous = model.AnonymousAccess,
-                Status = GetRepositoryStatus(model)
+                Status = GetRepositoryStatus(model),
+                AuditPushUser = model.AuditPushUser,
             };
         }
 
@@ -498,6 +499,7 @@ namespace Bonobo.Git.Server.Controllers
                 Administrators = model.Administrators,
                 Teams = model.Teams,
                 AnonymousAccess = model.AllowAnonymous,
+                AuditPushUser = model.AuditPushUser,
             };
         }
 
