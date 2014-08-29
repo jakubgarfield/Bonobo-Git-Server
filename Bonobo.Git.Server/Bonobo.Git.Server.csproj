@@ -184,6 +184,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Git\GitService\ReceivePackHook\Hooks\AuditPusherToGitNotes.cs" />
     <Compile Include="UnityDecoratorBuildStrategy.cs" />
     <Compile Include="UnityDecoratorContainerExtension.cs" />
     <Compile Include="Git\ConfigurationBasedRepositoryLocator.cs" />
