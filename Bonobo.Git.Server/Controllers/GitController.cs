@@ -5,6 +5,10 @@ using Microsoft.Practices.Unity;
 using System;
 using System.IO;
 using System.Web.Mvc;
+using Bonobo.Git.Server.Git.GitService;
+using System.Web;
+using Ionic.Zlib;
+using Bonobo.Git.Server.Git;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -13,7 +17,9 @@ namespace Bonobo.Git.Server.Controllers
     {
         [Dependency]
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
-
+        
+        [Dependency]
+        public IGitService GitService { get; set; }
 
         public ActionResult SecureGetInfoRefs(String project, String service)
         {
@@ -64,7 +70,10 @@ namespace Bonobo.Git.Server.Controllers
             var directory = GetDirectoryInfo(project);
             if (LibGit2Sharp.Repository.IsValid(directory.FullName))
             {
-                return new GitCmdResult("application/x-git-receive-pack-result", "receive-pack", false, directory.FullName, GetGitPath());
+                return new GitCmdResult("application/x-git-receive-pack-result", (outStream) =>
+                {
+                    GitService.ExecuteGitReceivePack(project, GetInputStream(), outStream);
+                });
             }
             else
             {
@@ -77,7 +86,10 @@ namespace Bonobo.Git.Server.Controllers
             var directory = GetDirectoryInfo(project);
             if (LibGit2Sharp.Repository.IsValid(directory.FullName))
             {
-                return new GitCmdResult("application/x-git-upload-pack-result", "upload-pack", false, directory.FullName, GetGitPath());
+                return new GitCmdResult("application/x-git-upload-pack-result", (outStream) =>
+                {
+                    GitService.ExecuteGitUploadPack(project, GetInputStream(), outStream);
+                });
             }
             else
             {
@@ -93,10 +105,20 @@ namespace Bonobo.Git.Server.Controllers
                 Response.StatusCode = 200;
 
                 string contentType = String.Format("application/x-{0}-advertisement", service);
-                return new GitCmdResult(contentType, service.Substring(4), true, directory.FullName, GetGitPath())
+                string serviceName = service.Substring(4);
+                string advertiseRefsContent = FormatMessage(String.Format("# service={0}\n", service)) + FlushMessage();
+
+                return new GitCmdResult(contentType, (outStream) =>
                 {
-                    AdvertiseRefsContent = FormatMessage(String.Format("# service={0}\n", service)) + FlushMessage()
-                };
+                    GitService.ExecuteServiceByName(
+                        project, 
+                        serviceName, 
+                        new ExecutionOptions() { AdvertiseRefs = true },
+                        GetInputStream(),
+                        outStream
+                    );
+                }, 
+                advertiseRefsContent);
             }
             else
             {
@@ -126,12 +148,9 @@ namespace Bonobo.Git.Server.Controllers
             return new DirectoryInfo(Path.Combine(UserConfiguration.Current.Repositories, project));
         }
 
-        private string GetGitPath()
+        private Stream GetInputStream()
         {
-            var gitPath = Path.IsPathRooted(ConfigurationManager.AppSettings["GitPath"])
-                ? ConfigurationManager.AppSettings["GitPath"]
-                : HttpContext.Server.MapPath(ConfigurationManager.AppSettings["GitPath"]);
-            return gitPath;
+            return this.Request.Headers["Content-Encoding"] == "gzip" ? new GZipStream(this.Request.InputStream, CompressionMode.Decompress) : this.Request.InputStream;
         }
     }
 }

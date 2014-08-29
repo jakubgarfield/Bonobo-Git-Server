@@ -25,7 +25,7 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -184,6 +184,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Git\ConfigurationBasedRepositoryLocator.cs" />
+    <Compile Include="Git\GitService\IGitService.cs" />
+    <Compile Include="Git\GitService\ExecutionOptions.cs" />
+    <Compile Include="Git\GitService\GitServiceExecutor.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Data\Update\AutomaticUpdater.cs" />
@@ -222,7 +226,9 @@
     <Compile Include="FileActionResult.cs" />
     <Compile Include="Attributes\FileNameAttribute.cs" />
     <Compile Include="Attributes\WebAuthorizeAttribute.cs" />
-    <Compile Include="GitCmdResult.cs" />
+    <Compile Include="Git\GitCmdResult.cs" />
+    <Compile Include="Git\GitService\GitServiceExtensions.cs" />
+    <Compile Include="Git\IGitRepositoryLocator.cs" />
     <Compile Include="Helpers\ContentDispositionUtil.cs" />
     <Compile Include="Helpers\CssRewriteUrlTransformWrapper.cs" />
     <Compile Include="Helpers\CustomHtmlHelpers.cs" />
