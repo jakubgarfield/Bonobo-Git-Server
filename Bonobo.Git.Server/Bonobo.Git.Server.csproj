@@ -192,7 +192,7 @@
     <Compile Include="Git\GitService\ReceivePackHook\Durability\NamedArguments.cs" />
     <Compile Include="Git\GitService\GitExecutionResult.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\GIT_OBJ_TYPE.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\Durability\DurableReceivePackHook.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\ReceivePackRecovery.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\Hooks\AuditPusherToGitNotes.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommit.cs" />
     <Compile Include="Git\GitService\ReplicatingStream.cs" />

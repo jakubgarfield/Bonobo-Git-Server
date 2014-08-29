@@ -146,16 +146,18 @@ namespace Bonobo.Git.Server
                 RepositoriesDirPath = UserConfiguration.Current.Repositories,
             });
 
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["RecoveryDataPath"]))
+            var isReceivePackRecoveryProcessEnabled = !string.IsNullOrEmpty(ConfigurationManager.AppSettings["RecoveryDataPath"]);
+
+            if (isReceivePackRecoveryProcessEnabled)
             {
                 // git service execution durability registrations to enable receive-pack hook execution after failures
                 container.RegisterType<IGitService, DurableGitServiceResult>();
-                container.RegisterType<IHookReceivePack, DurableReceivePackHook>();
+                container.RegisterType<IHookReceivePack, ReceivePackRecovery>();
                 container.RegisterType<IRecoveryFilePathBuilder, AutoCreateMissingRecoveryDirectories>();
                 container.RegisterType<IRecoveryFilePathBuilder, OneFolderRecoveryFilePathBuilder>();
                 container.RegisterInstance(new NamedArguments.FailedPackWaitTimeBeforeExecution(TimeSpan.FromSeconds(5 * 60)));
                 container.RegisterInstance(new NamedArguments.ReceivePackRecoveryDirectory(
-                        Path.IsPathRooted(ConfigurationManager.AppSettings["RecoveryDataPath"])
+                    Path.IsPathRooted(ConfigurationManager.AppSettings["RecoveryDataPath"])
                             ? ConfigurationManager.AppSettings["RecoveryDataPath"]
                             : HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["RecoveryDataPath"])));
             }
@@ -177,6 +179,27 @@ namespace Bonobo.Git.Server
             FilterProviders.Providers.Remove(oldProvider);
             var provider = new UnityFilterAttributeFilterProvider(container);
             FilterProviders.Providers.Add(provider);
+
+            // run receive-pack recovery if possible
+            if (isReceivePackRecoveryProcessEnabled)
+            {
+                var recoveryProcess = container.Resolve<ReceivePackRecovery>(new ParameterOverride(
+                        "failedPackWaitTimeBeforeExecution",
+                        new NamedArguments.FailedPackWaitTimeBeforeExecution(TimeSpan.FromSeconds(0)))); // on start up set time to wait = 0 so that recovery for all waiting packs is attempted
+
+                try
+                {                    
+                    recoveryProcess.RecoverAll();
+                }
+                catch { /* don't let a failed recovery attempt stop start-up process */  }
+                finally
+                {
+                    if (recoveryProcess != null)
+                    {
+                        container.Teardown(recoveryProcess);
+                    }
+                }
+            }
         }
 
 

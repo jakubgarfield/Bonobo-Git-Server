@@ -12,14 +12,14 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability
     /// <summary>
     /// Provides at least once execution guarantee to PostPackReceive hook method
     /// </summary>
-    public class DurableReceivePackHook : IHookReceivePack
+    public class ReceivePackRecovery : IHookReceivePack
     {
         private readonly TimeSpan failedPackWaitTimeBeforeExecution;
         private readonly IHookReceivePack next;
         private readonly IRecoveryFilePathBuilder recoveryFilePathBuilder;
         private readonly GitServiceResultParser resultFileParser;
 
-        public DurableReceivePackHook(
+        public ReceivePackRecovery(
             IHookReceivePack next, 
             NamedArguments.FailedPackWaitTimeBeforeExecution failedPackWaitTimeBeforeExecution,
             IRecoveryFilePathBuilder recoveryFilePathBuilder,
@@ -39,13 +39,30 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability
 
         public void PostPackReceive(ParsedReceivePack receivePack, GitExecutionResult result)
         {
+            ProcessOnePack(receivePack, result);
+            RecoverAll();
+        }
+
+        private void ProcessOnePack(ParsedReceivePack receivePack, GitExecutionResult result)
+        {
+            next.PostPackReceive(receivePack, result);
+            
+            var packFilePath = recoveryFilePathBuilder.GetPathToPackFile(receivePack);
+            if (File.Exists(packFilePath))
+            {
+                File.Delete(packFilePath);
+            }
+        }
+
+        public void RecoverAll()
+        {
             var waitingReceivePacks = new List<ParsedReceivePack>();
 
-            foreach(var packDir in recoveryFilePathBuilder.GetPathToPackDirectory())
+            foreach (var packDir in recoveryFilePathBuilder.GetPathToPackDirectory())
             {
                 foreach (var packFilePath in Directory.GetFiles(packDir))
                 {
-                    using(var fileReader = new StreamReader(packFilePath))
+                    using (var fileReader = new StreamReader(packFilePath))
                     {
                         var packFileData = fileReader.ReadToEnd();
                         waitingReceivePacks.Add(JsonConvert.DeserializeObject<ParsedReceivePack>(packFileData));
@@ -55,33 +72,21 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability
 
             foreach (var pack in waitingReceivePacks.OrderBy(p => p.Timestamp))
             {
-                // execute PostPackReceive right away only for the current pack
-                // or if the pack has been sitting in database for X amount of time
-                var isFailedPack = ((DateTime.Now - pack.Timestamp) >= failedPackWaitTimeBeforeExecution);
-
-                if (pack.PackId == receivePack.PackId)
+                // execute if the pack has been waiting for X amount of time
+                if ((DateTime.Now - pack.Timestamp) >= failedPackWaitTimeBeforeExecution)
                 {
-                    next.PostPackReceive(pack, result);
-                }
-                else if (isFailedPack)
-                {
-                    // for failed pack re-parse result file and execute "post" hooks
+                    // re-parse result file and execute "post" hooks
                     // if result file is no longer there then move on
-                    var failedPackResultFilePath = recoveryFilePathBuilder.GetPathToResultFile(receivePack.PackId, receivePack.RepositoryName, "receive-pack");
+                    var failedPackResultFilePath = recoveryFilePathBuilder.GetPathToResultFile(pack.PackId, pack.RepositoryName, "receive-pack");
                     if (File.Exists(failedPackResultFilePath))
                     {
                         using (var resultFileStream = File.OpenRead(failedPackResultFilePath))
                         {
                             var failedPackResult = resultFileParser.ParseResult(resultFileStream);
-                            next.PostPackReceive(receivePack, failedPackResult);
+                            ProcessOnePack(pack, failedPackResult);
                         }
                         File.Delete(failedPackResultFilePath);
                     }
-                }
-                var packFilePath = recoveryFilePathBuilder.GetPathToPackFile(pack);
-                if (File.Exists(packFilePath))
-                {
-                    File.Delete(packFilePath);
                 }
             }
         }
