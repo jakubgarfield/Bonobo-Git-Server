@@ -10,7 +10,7 @@ namespace Bonobo.Git.Server.Git.GitService
     {
         public GitExecutionResult ParseResult(System.IO.Stream outputStream)
         {
-            bool hasError = false;
+            bool hasError = true;
             if (outputStream.Length >= 10)
             {
                 var buff5 = new byte[5];
@@ -27,6 +27,7 @@ namespace Bonobo.Git.Server.Git.GitService
                 var firstChars = Encoding.ASCII.GetString(buff5);
                 hasError = firstChars == "error";
             }
+            
             return new GitExecutionResult(hasError);
         }
     }

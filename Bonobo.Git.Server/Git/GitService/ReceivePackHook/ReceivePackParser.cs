@@ -158,6 +158,25 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
 
                         if (type == GIT_OBJ_TYPE.OBJ_COMMIT)
                         {
+                            // parse out commit specifics
+                            var commitLines = commitMsg.Split('\n');
+
+                            var treeHash = commitLines[0].Split(' ')[1];
+                            var parentHash = commitLines[1].Split(' ')[1];
+                            
+                            var authorLineTokens = commitLines[2].Split(' ');
+                            var authorName = authorLineTokens[1];
+                            var authorEmail = authorLineTokens[2].TrimStart('<').TrimEnd('>');
+                            var authorTimestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(long.Parse(authorLineTokens[3])).ToLocalTime();
+
+                            var committerLineTokens = commitLines[2].Split(' ');
+                            var committerName = committerLineTokens[1];
+                            var committerEmail = committerLineTokens[2].TrimStart('<').TrimEnd('>');
+                            var committerTimestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(long.Parse(committerLineTokens[3])).ToLocalTime();
+
+                            var commitComment = string.Join("\n", commitLines.Skip(5).ToArray()).TrimEnd('\n');
+                            
+
                             // Compute commit hash
                             using(var sha1 = new SHA1CryptoServiceProvider())
                             {
@@ -172,7 +191,10 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                                 }
                                 var commitHash = sb.ToString();
 
-                                packCommits.Add(new ReceivePackCommit(commitHash));
+                                packCommits.Add(new ReceivePackCommit(commitHash, treeHash, parentHash,
+                                    authorName, authorEmail, authorTimestamp,
+                                    committerName, committerEmail, committerTimestamp,
+                                    commitComment));
                             }
                         }
                         offsetVal = zlibStream.TotalIn;
