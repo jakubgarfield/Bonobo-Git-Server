@@ -92,117 +92,119 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                 // https://www.kernel.org/pub/software/scm/git/docs/technical/pack-format.html
                 // http://schacon.github.io/gitbook/7_the_packfile.html
 
-                ReadStream(inStream, buff4);
-                if (Encoding.UTF8.GetString(buff4) != "PACK")
+                if (inStream.Position < inStream.Length)
                 {
-                    throw new Exception("Unexpected receive-pack 'PACK' content.");
-                }
-                ReadStream(inStream, buff4);
-                Array.Reverse(buff4);
-                var versionNum = BitConverter.ToInt32(buff4, 0);
-
-                ReadStream(inStream, buff4);
-                Array.Reverse(buff4);
-                var numObjects = BitConverter.ToInt32(buff4, 0);
-
-                while (numObjects > 0)
-                {
-                    numObjects -= 1;
-
-                    ReadStream(inStream, buff1);
-                    var type = (GIT_OBJ_TYPE)((buff1[0] >> 4) & 7);
-                    long len = buff1[0] & 15;
-
-                    var shiftAmount = 4;
-                    while ((buff1[0] >> 7) == 1)
+                    ReadStream(inStream, buff4);
+                    if (Encoding.UTF8.GetString(buff4) != "PACK")
                     {
-                        ReadStream(inStream, buff1);
-                        len = len | ((long)(buff1[0] & 127) << shiftAmount);
-
-                        shiftAmount += 7;
+                        throw new Exception("Unexpected receive-pack 'PACK' content.");
                     }
+                    ReadStream(inStream, buff4);
+                    Array.Reverse(buff4);
+                    var versionNum = BitConverter.ToInt32(buff4, 0);
 
-                    if (type == GIT_OBJ_TYPE.OBJ_REF_DELTA)
+                    ReadStream(inStream, buff4);
+                    Array.Reverse(buff4);
+                    var numObjects = BitConverter.ToInt32(buff4, 0);
+
+                    while (numObjects > 0)
                     {
-                        // read ref name
-                        ReadStream(inStream, buff20);
-                    }
-                    if (type == GIT_OBJ_TYPE.OBJ_OFS_DELTA)
-                    {
-                        // read negative offset
+                        numObjects -= 1;
+
                         ReadStream(inStream, buff1);
+                        var type = (GIT_OBJ_TYPE)((buff1[0] >> 4) & 7);
+                        long len = buff1[0] & 15;
+
+                        var shiftAmount = 4;
                         while ((buff1[0] >> 7) == 1)
                         {
                             ReadStream(inStream, buff1);
+                            len = len | ((long)(buff1[0] & 127) << shiftAmount);
+
+                            shiftAmount += 7;
                         }
-                    }
 
-                    var origPosition = inStream.Position;
-                    long offsetVal = 0;
-
-                    using (var zlibStream = new ZlibStream(inStream, CompressionMode.Decompress, true))
-                    {
-                        // read compressed data max 16KB at a time
-                        string commitMsg = "";
-                        var readRemaining = len;
-                        do
+                        if (type == GIT_OBJ_TYPE.OBJ_REF_DELTA)
                         {
-                            var bytesUncompressed = zlibStream.Read(buff16K, 0, buff16K.Length);
-                            readRemaining -= bytesUncompressed;
+                            // read ref name
+                            ReadStream(inStream, buff20);
+                        }
+                        if (type == GIT_OBJ_TYPE.OBJ_OFS_DELTA)
+                        {
+                            // read negative offset
+                            ReadStream(inStream, buff1);
+                            while ((buff1[0] >> 7) == 1)
+                            {
+                                ReadStream(inStream, buff1);
+                            }
+                        }
+
+                        var origPosition = inStream.Position;
+                        long offsetVal = 0;
+
+                        using (var zlibStream = new ZlibStream(inStream, CompressionMode.Decompress, true))
+                        {
+                            // read compressed data max 16KB at a time
+                            string commitMsg = "";
+                            var readRemaining = len;
+                            do
+                            {
+                                var bytesUncompressed = zlibStream.Read(buff16K, 0, buff16K.Length);
+                                readRemaining -= bytesUncompressed;
+
+                                if (type == GIT_OBJ_TYPE.OBJ_COMMIT)
+                                {
+                                    commitMsg += Encoding.UTF8.GetString(buff16K, 0, bytesUncompressed);
+                                }
+                            } while (readRemaining > 0);
 
                             if (type == GIT_OBJ_TYPE.OBJ_COMMIT)
                             {
-                                commitMsg += Encoding.UTF8.GetString(buff16K, 0, bytesUncompressed);
-                            }
-                        } while (readRemaining > 0);
+                                // parse out commit specifics
+                                var commitLines = commitMsg.Split('\n');
 
-                        if (type == GIT_OBJ_TYPE.OBJ_COMMIT)
-                        {
-                            // parse out commit specifics
-                            var commitLines = commitMsg.Split('\n');
+                                var treeHash = commitLines[0].Split(' ')[1];
+                                var parentHash = commitLines[1].Split(' ')[1];
 
-                            var treeHash = commitLines[0].Split(' ')[1];
-                            var parentHash = commitLines[1].Split(' ')[1];
-                            
-                            var authorLineTokens = commitLines[2].Split(' ');
-                            var authorName = authorLineTokens[1];
-                            var authorEmail = authorLineTokens[2].TrimStart('<').TrimEnd('>');
-                            var authorTimestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(long.Parse(authorLineTokens[3])).ToLocalTime();
+                                var authorLineTokens = commitLines[2].Split(' ');
+                                var authorName = authorLineTokens[1];
+                                var authorEmail = authorLineTokens[2].TrimStart('<').TrimEnd('>');
+                                var authorTimestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(long.Parse(authorLineTokens[3])).ToLocalTime();
 
-                            var committerLineTokens = commitLines[2].Split(' ');
-                            var committerName = committerLineTokens[1];
-                            var committerEmail = committerLineTokens[2].TrimStart('<').TrimEnd('>');
-                            var committerTimestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(long.Parse(committerLineTokens[3])).ToLocalTime();
+                                var committerLineTokens = commitLines[2].Split(' ');
+                                var committerName = committerLineTokens[1];
+                                var committerEmail = committerLineTokens[2].TrimStart('<').TrimEnd('>');
+                                var committerTimestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(long.Parse(committerLineTokens[3])).ToLocalTime();
 
-                            var commitComment = string.Join("\n", commitLines.Skip(5).ToArray()).TrimEnd('\n');
-                            
+                                var commitComment = string.Join("\n", commitLines.Skip(5).ToArray()).TrimEnd('\n');
 
-                            // Compute commit hash
-                            using(var sha1 = new SHA1CryptoServiceProvider())
-                            {
-                                var commitMessage = string.Format("commit {0}\0{1}", commitMsg.Length, commitMsg);
-                                var commitHashBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(commitMessage));
-                                
-                                var sb = new StringBuilder();
-                                foreach (byte b in commitHashBytes)
+
+                                // Compute commit hash
+                                using(var sha1 = new SHA1CryptoServiceProvider())
                                 {
-                                    var hex = b.ToString("x2");
-                                    sb.Append(hex);
-                                }
-                                var commitHash = sb.ToString();
+                                    var commitMessage = string.Format("commit {0}\0{1}", commitMsg.Length, commitMsg);
+                                    var commitHashBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(commitMessage));
 
-                                packCommits.Add(new ReceivePackCommit(commitHash, treeHash, parentHash,
-                                    authorName, authorEmail, authorTimestamp,
-                                    committerName, committerEmail, committerTimestamp,
-                                    commitComment));
+                                    var sb = new StringBuilder();
+                                    foreach (byte b in commitHashBytes)
+                                    {
+                                        var hex = b.ToString("x2");
+                                        sb.Append(hex);
+                                    }
+                                    var commitHash = sb.ToString();
+
+                                    packCommits.Add(new ReceivePackCommit(commitHash, treeHash, parentHash,
+                                        authorName, authorEmail, authorTimestamp,
+                                        committerName, committerEmail, committerTimestamp,
+                                        commitComment));
+                                }
                             }
+                            offsetVal = zlibStream.TotalIn;
                         }
-                        offsetVal = zlibStream.TotalIn;
+                        // move back position a bit because ZLibStream reads more than needed for inflating
+                        inStream.Seek(origPosition + offsetVal, SeekOrigin.Begin);
                     }
-                    // move back position a bit because ZLibStream reads more than needed for inflating
-                    inStream.Seek(origPosition + offsetVal, SeekOrigin.Begin);
                 }
-                
                 // -------------------
 
                 var user = HttpContext.Current.User.Identity.Name;
@@ -232,9 +234,10 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
         [MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public void ReadStream(Stream s, byte[] buff)
         {
-            if (s.Read(buff, 0, buff.Length) != buff.Length)
+            var readBytes = s.Read(buff, 0, buff.Length);
+            if (readBytes != buff.Length)
             {
-                throw new Exception("Expected to read 1 byte, got 0.");
+                throw new Exception(string.Format("Expected to read {0} bytes, got {1}", buff.Length, readBytes));
             }
         }
     }
