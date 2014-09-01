@@ -85,7 +85,6 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                 }
 
                 // parse PACK contents
-
                 var packCommits = new List<ReceivePackCommit>();
 
                 // PACK format
@@ -160,44 +159,8 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
 
                             if (type == GIT_OBJ_TYPE.OBJ_COMMIT)
                             {
-                                // parse out commit specifics
-                                var commitLines = commitMsg.Split('\n');
-
-                                var treeHash = commitLines[0].Split(' ')[1];
-                                var parentHash = commitLines[1].Split(' ')[1];
-
-                                var authorLineTokens = commitLines[2].Split(' ');
-                                var authorName = authorLineTokens[1];
-                                var authorEmail = authorLineTokens[2].TrimStart('<').TrimEnd('>');
-                                var authorTimestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(long.Parse(authorLineTokens[3])).ToLocalTime();
-
-                                var committerLineTokens = commitLines[2].Split(' ');
-                                var committerName = committerLineTokens[1];
-                                var committerEmail = committerLineTokens[2].TrimStart('<').TrimEnd('>');
-                                var committerTimestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(long.Parse(committerLineTokens[3])).ToLocalTime();
-
-                                var commitComment = string.Join("\n", commitLines.Skip(5).ToArray()).TrimEnd('\n');
-
-
-                                // Compute commit hash
-                                using(var sha1 = new SHA1CryptoServiceProvider())
-                                {
-                                    var commitMessage = string.Format("commit {0}\0{1}", commitMsg.Length, commitMsg);
-                                    var commitHashBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(commitMessage));
-
-                                    var sb = new StringBuilder();
-                                    foreach (byte b in commitHashBytes)
-                                    {
-                                        var hex = b.ToString("x2");
-                                        sb.Append(hex);
-                                    }
-                                    var commitHash = sb.ToString();
-
-                                    packCommits.Add(new ReceivePackCommit(commitHash, treeHash, parentHash,
-                                        authorName, authorEmail, authorTimestamp,
-                                        committerName, committerEmail, committerTimestamp,
-                                        commitComment));
-                                }
+                                var parsedCommit = ParseCommitDetails(commitMsg);
+                                packCommits.Add(parsedCommit);
                             }
                             offsetVal = zlibStream.TotalIn;
                         }
@@ -229,6 +192,80 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
             {
                 receivePackHandler.PostPackReceive(receivedPack, execResult);
             }
+        }
+
+        [MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public ReceivePackCommit ParseCommitDetails(string commitMsg)
+        {
+            string treeHash = null;
+            var parentHashes = new List<string>();
+            ReceivePackCommitSignature author = null;
+            ReceivePackCommitSignature committer = null;
+
+            var commitLines = commitMsg.Split('\n');
+
+            var commitCommentStartIndex = 0;
+            foreach (var commitLine in commitLines)
+            {
+                commitCommentStartIndex += 1;
+                var commitLineItems = commitLine.Split(' ');
+                var commitLineType = commitLineItems[0];
+
+                if (commitLineType == "tree")
+                {
+                    treeHash = commitLineItems[1];
+                }
+                else if (commitLineType == "parent")
+                {
+                    parentHashes.Add(commitLineItems[1]);
+                }
+                else if (commitLineType == "author")
+                {
+                    author = ParseSignature(commitLineItems);
+                }
+                else if (commitLineType == "committer")
+                {
+                    committer = ParseSignature(commitLineItems);
+                }
+                else if (commitLineType == "")
+                {
+                    break;
+                }
+                else
+                {
+                    throw new Exception(string.Format("Unexpected commit line # {0}: {1}", commitCommentStartIndex, commitLine));
+                }
+            }
+
+            var commitComment = string.Join("\n", commitLines.Skip(commitCommentStartIndex).ToArray()).TrimEnd('\n');
+
+
+            // Compute commit hash
+            using (var sha1 = new SHA1CryptoServiceProvider())
+            {
+                var commitMessage = string.Format("commit {0}\0{1}", commitMsg.Length, commitMsg);
+                var commitHashBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(commitMessage));
+
+                var sb = new StringBuilder();
+                foreach (byte b in commitHashBytes)
+                {
+                    var hex = b.ToString("x2");
+                    sb.Append(hex);
+                }
+                var commitHash = sb.ToString();
+
+                return new ReceivePackCommit(commitHash, treeHash, parentHashes,
+                    author, committer, commitComment);
+            }
+        }
+
+        [MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public ReceivePackCommitSignature ParseSignature(string[] commitLineItems)
+        {
+            var name = commitLineItems[1];
+            var email = commitLineItems[2].TrimStart('<').TrimEnd('>');
+            var timestamp = new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).AddSeconds(long.Parse(commitLineItems[3]));
+            return new ReceivePackCommitSignature(name, email, timestamp);
         }
 
         [MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

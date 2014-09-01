@@ -195,6 +195,7 @@
     <Compile Include="Git\GitService\ReceivePackHook\Durability\ReceivePackRecovery.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\Hooks\AuditPusherToGitNotes.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommit.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommitSignature.cs" />
     <Compile Include="Git\GitService\ReplicatingStream.cs" />
     <Compile Include="UnityDecoratorBuildStrategy.cs" />
     <Compile Include="UnityDecoratorContainerExtension.cs" />
