@@ -64,7 +64,7 @@ namespace Bonobo.Git.Server
 
             return includeDetails ? GetTreeModelsWithDetails(commit, tree, branchName) : GetTreeModels(tree, branchName);
         }
-               
+
         public RepositoryTreeDetailModel BrowseBlob(string name, string path, out string referenceName)
         {
             if (path == null)
@@ -203,6 +203,12 @@ namespace Bonobo.Git.Server
 
         private RepositoryCommitModel ToModel(Commit commit, bool withDiff = false)
         {
+            string tagsString = string.Empty;
+            var tags = _repository.Tags.Where(o => o.Target.Sha == commit.Sha);
+
+            if (tags != null && tags.Any())
+                tagsString = tags.Select(o => o.Name).Aggregate((o, p) => o + " " + p);
+
             var model = new RepositoryCommitModel
             {
                 Author = commit.Author.Name,
@@ -212,6 +218,7 @@ namespace Bonobo.Git.Server
                 Message = commit.Message,
                 TreeID = commit.Tree.Sha,
                 Parents = commit.Parents.Select(i => i.Sha).ToArray(),
+                TagName = tagsString,
             };
 
             if (!withDiff)
