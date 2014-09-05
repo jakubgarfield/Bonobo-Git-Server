@@ -432,7 +432,6 @@ namespace Bonobo.Git.Server.Controllers
         private void PopulateAddressBarData(string name, string path)
         {
             ViewData["path"] = path;
-            ViewData["name"] = name;
         }
 
         private void PopulateBranchesData(RepositoryBrowser browser, string referenceName)
