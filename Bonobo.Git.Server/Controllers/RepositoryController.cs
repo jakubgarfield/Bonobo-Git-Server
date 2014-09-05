@@ -168,6 +168,12 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     model.IsCurrentUserAdministrator = RepositoryPermissionService.IsRepositoryAdministrator(User.Identity.Name, id);
                 }
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+                {
+                    string defaultReferenceName;
+                    browser.BrowseTree(null, null, out defaultReferenceName);
+                    RouteData.Values.Add("encodedName", defaultReferenceName);
+                }
                 return View(model);
             }
             return View();
@@ -205,7 +211,7 @@ namespace Bonobo.Git.Server.Controllers
                 else
                 {
                     PopulateBranchesData(browser, referenceName);
-                    PopulateAddressBarData(name, path);
+                    PopulateAddressBarData(path);
                     return View(model);
                 }
             }
@@ -224,7 +230,7 @@ namespace Bonobo.Git.Server.Controllers
                     string referenceName;
                     var model = browser.BrowseBlob(name, path, out referenceName);
                     PopulateBranchesData(browser, referenceName);
-                    PopulateAddressBarData(name, path);
+                    PopulateAddressBarData(path);
 
                     return View(model);
                 }
@@ -429,7 +435,7 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        private void PopulateAddressBarData(string name, string path)
+        private void PopulateAddressBarData(string path)
         {
             ViewData["path"] = path;
         }

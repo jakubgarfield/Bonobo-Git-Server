@@ -29,7 +29,7 @@
                             }
                             else
                             {
-                                @Html.ActionLink(item.Name, item.IsTree ? "Tree" : "Blob", new {encodedName = PathEncoder.Encode(item.TreeName), encodedPath = PathEncoder.Encode(item.Path, allowSlash: true)}, new {@class = item.IsTree ? "directory" : item.IsImage ? "image" : "file"})
+                                @Html.ActionLink(item.Name, item.IsTree ? "Tree" : "Blob", new { encodedPath = PathEncoder.Encode(item.Path, allowSlash: true)}, new {@class = item.IsTree ? "directory" : item.IsImage ? "image" : "file"})
                             }
                         </td>
                         <td class="message"></td>
