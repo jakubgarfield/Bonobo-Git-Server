@@ -144,22 +144,16 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                         using (var zlibStream = new ZlibStream(inStream, CompressionMode.Decompress, true))
                         {
                             // read compressed data max 16KB at a time
-                            string commitMsg = "";
                             var readRemaining = len;
                             do
                             {
                                 var bytesUncompressed = zlibStream.Read(buff16K, 0, buff16K.Length);
                                 readRemaining -= bytesUncompressed;
-
-                                if (type == GIT_OBJ_TYPE.OBJ_COMMIT)
-                                {
-                                    commitMsg += Encoding.UTF8.GetString(buff16K, 0, bytesUncompressed);
-                                }
                             } while (readRemaining > 0);
 
                             if (type == GIT_OBJ_TYPE.OBJ_COMMIT)
                             {
-                                var parsedCommit = ParseCommitDetails(commitMsg);
+                                var parsedCommit = ParseCommitDetails(buff16K, len);
                                 packCommits.Add(parsedCommit);
                             }
                             offsetVal = zlibStream.TotalIn;
@@ -195,8 +189,17 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
         }
 
         [MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        public ReceivePackCommit ParseCommitDetails(string commitMsg)
+        public ReceivePackCommit ParseCommitDetails(byte[] buff, long commitMsgLengthLong)
         {
+            if (commitMsgLengthLong > buff.Length)
+            {
+                // buff at the moment is 16KB, should be enough for commit messages
+                // but break just in case this ever does happen so it could be addressed then
+                throw new Exception("Encountered unexpectedly large commit message");
+            }
+            int commitMsgLength = (int)commitMsgLengthLong; // guaranteed no truncation because of above guard clause
+
+            var commitMsg = Encoding.UTF8.GetString(buff, 0, commitMsgLength);
             string treeHash = null;
             var parentHashes = new List<string>();
             ReceivePackCommitSignature author = null;
@@ -243,8 +246,18 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
             // Compute commit hash
             using (var sha1 = new SHA1CryptoServiceProvider())
             {
-                var commitMessage = string.Format("commit {0}\0{1}", commitMsg.Length, commitMsg);
-                var commitHashBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(commitMessage));
+                // append commit header to commit message
+                // put the two into one byte array, and hash that byte array
+                // 
+                // the reason this is done on byte array level instead of concatenating 
+                // header string with commitMsg string is to ensure that there are no 
+                // encoding/decoding issues intorduced and that correct hash value is obtained
+                var commitHashHeader = Encoding.UTF8.GetBytes(string.Format("commit {0}\0", commitMsgLength));
+                var commitDataToHash = new byte[commitHashHeader.Length + commitMsgLength];
+                commitHashHeader.CopyTo(commitDataToHash, 0);
+                Array.ConstrainedCopy(buff, 0, commitDataToHash, commitHashHeader.Length, commitMsgLength);
+
+                var commitHashBytes = sha1.ComputeHash(commitDataToHash);
 
                 var sb = new StringBuilder();
                 foreach (byte b in commitHashBytes)
