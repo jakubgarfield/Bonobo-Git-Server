@@ -207,57 +207,51 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
 
             var commitLines = commitMsg.Split('\n');
 
-            var commitCommentStartIndex = 0;
+            var commitHeadersEndIndex = 0;
             foreach (var commitLine in commitLines)
             {
-                commitCommentStartIndex += 1;
-                var commitLineItems = commitLine.Split(' ');
-                var commitLineType = commitLineItems[0];
+                commitHeadersEndIndex += 1;
+                var commitHeaderItems = commitLine.Split(' ');
+                var commitHeaderType = commitHeaderItems[0];
 
-                if (commitLineType == "tree")
+                if (commitHeaderType == "tree")
                 {
-                    treeHash = commitLineItems[1];
+                    treeHash = commitHeaderItems[1];
                 }
-                else if (commitLineType == "parent")
+                else if (commitHeaderType == "parent")
                 {
-                    parentHashes.Add(commitLineItems[1]);
+                    parentHashes.Add(commitHeaderItems[1]);
                 }
-                else if (commitLineType == "author")
+                else if (commitHeaderType == "author")
                 {
-                    author = ParseSignature(commitLineItems);
+                    author = ParseSignature(commitHeaderItems);
                 }
-                else if (commitLineType == "committer")
+                else if (commitHeaderType == "committer")
                 {
-                    committer = ParseSignature(commitLineItems);
+                    committer = ParseSignature(commitHeaderItems);
                 }
-                else if (commitLineType == "")
+                else if (commitHeaderType == "")
                 {
                     break;
                 }
                 else
                 {
-                    throw new Exception(string.Format("Unexpected commit line # {0}: {1}", commitCommentStartIndex, commitLine));
+                    // unrecognized header encounterd, skip over it
                 }
             }
 
-            var commitComment = string.Join("\n", commitLines.Skip(commitCommentStartIndex).ToArray()).TrimEnd('\n');
+            var commitComment = string.Join("\n", commitLines.Skip(commitHeadersEndIndex).ToArray()).TrimEnd('\n');
 
 
             // Compute commit hash
             using (var sha1 = new SHA1CryptoServiceProvider())
             {
-                // append commit header to commit message
-                // put the two into one byte array, and hash that byte array
-                // 
-                // the reason this is done on byte array level instead of concatenating 
-                // header string with commitMsg string is to ensure that there are no 
-                // encoding/decoding issues intorduced and that correct hash value is obtained
                 var commitHashHeader = Encoding.UTF8.GetBytes(string.Format("commit {0}\0", commitMsgLength));
-                var commitDataToHash = new byte[commitHashHeader.Length + commitMsgLength];
-                commitHashHeader.CopyTo(commitDataToHash, 0);
-                Array.ConstrainedCopy(buff, 0, commitDataToHash, commitHashHeader.Length, commitMsgLength);
 
-                var commitHashBytes = sha1.ComputeHash(commitDataToHash);
+                sha1.TransformBlock(commitHashHeader, 0, commitHashHeader.Length, commitHashHeader, 0);
+                sha1.TransformFinalBlock(buff, 0, commitMsgLength);
+
+                var commitHashBytes = sha1.Hash;
 
                 var sb = new StringBuilder();
                 foreach (byte b in commitHashBytes)
@@ -273,11 +267,11 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
         }
 
         [MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        public ReceivePackCommitSignature ParseSignature(string[] commitLineItems)
+        public ReceivePackCommitSignature ParseSignature(string[] commitHeaderItems)
         {
-            var name = commitLineItems[1];
-            var email = commitLineItems[2].TrimStart('<').TrimEnd('>');
-            var timestamp = new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).AddSeconds(long.Parse(commitLineItems[3]));
+            var name = commitHeaderItems[1];
+            var email = commitHeaderItems[2].TrimStart('<').TrimEnd('>');
+            var timestamp = new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).AddSeconds(long.Parse(commitHeaderItems[3]));
             return new ReceivePackCommitSignature(name, email, timestamp);
         }
 
