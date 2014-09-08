@@ -51,8 +51,8 @@ namespace Bonobo.Git.Server.App_Start
                             "Repository/{id}/{encodedName}/Commits",
                             new { controller = "Repository", action = "Commits" });
 
-            routes.MapRoute("RepositoryCommit", 
-                            "Repository/{id}/Commit/{commit}/",
+            routes.MapRoute("RepositoryCommit",
+                            "Repository/{id}/{encodedName}/Commit/{commit}/",
                             new { controller = "Repository", action = "Commit" });
 
             routes.MapRoute("Repository", 
