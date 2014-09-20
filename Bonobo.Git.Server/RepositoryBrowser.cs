@@ -212,6 +212,7 @@ namespace Bonobo.Git.Server
                 Message = commit.Message,
                 TreeID = commit.Tree.Sha,
                 Parents = commit.Parents.Select(i => i.Sha).ToArray(),
+                Notes = (from n in commit.Notes select new RepositoryCommitNoteModel(n.Message, n.Namespace)).ToList(),
             };
 
             if (!withDiff)

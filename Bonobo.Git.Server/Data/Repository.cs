@@ -49,5 +49,7 @@ namespace Bonobo.Git.Server.Data
                 _users = value;
             }
         }
+
+        public bool AuditPushUser { get; set; }
     }
 }

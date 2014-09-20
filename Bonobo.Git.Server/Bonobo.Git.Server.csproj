@@ -25,7 +25,7 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -184,10 +184,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Git\GitService\GitServiceResultParser.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\AutoCreateMissingRecoveryDirectories.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\OneFolderRecoveryFilePathBuilder.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\DurableGitServiceResult.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\IRecoveryFilePathBuilder.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\NamedArguments.cs" />
+    <Compile Include="Git\GitService\GitExecutionResult.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\GIT_OBJ_TYPE.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\ReceivePackRecovery.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Hooks\AuditPusherToGitNotes.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommit.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommitSignature.cs" />
+    <Compile Include="Git\GitService\ReplicatingStream.cs" />
+    <Compile Include="UnityDecoratorBuildStrategy.cs" />
+    <Compile Include="UnityDecoratorContainerExtension.cs" />
+    <Compile Include="Git\ConfigurationBasedRepositoryLocator.cs" />
+    <Compile Include="Git\GitService\IGitService.cs" />
+    <Compile Include="Git\GitService\ExecutionOptions.cs" />
+    <Compile Include="Git\GitService\GitServiceExecutor.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Data\Update\AddAuditPushUser.cs" />
     <Compile Include="Data\Update\AutomaticUpdater.cs" />
     <Compile Include="Data\Update\RepositorySynchronizer.cs" />
+    <Compile Include="Data\Update\SqlServer\AddAuditPushUser.cs" />
     <Compile Include="Data\Update\SqlServer\InitialCreateScript.cs" />
     <Compile Include="Data\Update\SqlServer\InsertDefaultData.cs" />
     <Compile Include="Data\Update\UsernamesToLower.cs" />
@@ -222,7 +243,14 @@
     <Compile Include="FileActionResult.cs" />
     <Compile Include="Attributes\FileNameAttribute.cs" />
     <Compile Include="Attributes\WebAuthorizeAttribute.cs" />
-    <Compile Include="GitCmdResult.cs" />
+    <Compile Include="Git\GitCmdResult.cs" />
+    <Compile Include="Git\GitService\GitServiceExtensions.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Hooks\NullReceivePackHook.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\IHookReceivePack.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ParsedReceivePack.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackPktLine.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackParser.cs" />
+    <Compile Include="Git\IGitRepositoryLocator.cs" />
     <Compile Include="Helpers\ContentDispositionUtil.cs" />
     <Compile Include="Helpers\CssRewriteUrlTransformWrapper.cs" />
     <Compile Include="Helpers\CustomHtmlHelpers.cs" />
