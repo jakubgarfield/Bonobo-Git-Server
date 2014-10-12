@@ -429,6 +429,25 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
+        [WebAuthorizeRepository]
+        public ActionResult History(string id, string encodedPath, string encodedName)
+        {
+            ViewBag.ID = id;
+            if (!String.IsNullOrEmpty(id))
+            {
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+                {
+                    var path = PathEncoder.Decode(encodedPath);
+                    var name = PathEncoder.Decode(encodedName);
+                    string referenceName;
+                    var commits = browser.GetHistory(path, name, out referenceName);
+                    return View(new RepositoryCommitsModel { Commits = commits, Name = id });
+                }
+            }
+
+            return View();
+        }
+
         private void PopulateAddressBarData(string name, string path)
         {
             ViewData["path"] = path;
