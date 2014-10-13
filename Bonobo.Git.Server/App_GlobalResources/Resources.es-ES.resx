@@ -711,4 +711,7 @@
   <data name="Settings_Global_DefaultLanguage_Hint" xml:space="preserve">
     <value>Idioma configurado por defecto en la aplicación.</value>
   </data>
+  <data name="Validation_FileName_Regex" xml:space="preserve">
+    <value>Only characters, numbers, minus and underscore are allowed for "{0}".</value>
+  </data>
 </root>

@@ -702,4 +702,7 @@
   <data name="Repository_Tree_PreviewNotSupported" xml:space="preserve">
     <value>Förhandsgranskning av den här filen stöds inte.</value>
   </data>
+  <data name="Validation_FileName_Regex" xml:space="preserve">
+    <value>Only characters, numbers, minus and underscore are allowed for "{0}".</value>
+  </data>
 </root>
