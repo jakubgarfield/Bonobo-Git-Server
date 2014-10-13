@@ -765,4 +765,7 @@
   <data name="Repository_AuditPushUserHint" xml:space="preserve">
     <value>Record user that pushed commits to the server</value>
   </data>
+  <data name="Validation_FileName_Regex" xml:space="preserve">
+    <value>Only characters, numbers, minus and underscore are allowed for "{0}".</value>
+  </data>
 </root>

@@ -20,6 +20,7 @@ namespace Bonobo.Git.Server.Models
 
     public class RepositoryDetailModel
     {
+        [RegularExpression("[a-zA-Z0-9-_]+", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_FileName_Regex")]
         [FileName(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_FileName")]
         [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Name")]
