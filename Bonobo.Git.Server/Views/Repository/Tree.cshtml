@@ -29,7 +29,7 @@
                             }
                             else
                             {
-                                @Html.ActionLink(item.Name, item.IsTree ? "Tree" : "Blob", new {encodedName = PathEncoder.Encode(item.TreeName), encodedPath = PathEncoder.Encode(item.Path, allowSlash: true)}, new {@class = item.IsTree ? "directory" : item.IsImage ? "image" : "file"})
+                                @Html.ActionLink(item.Name, item.IsTree ? "Tree" : "Blob", new { encodedPath = PathEncoder.Encode(item.Path, allowSlash: true)}, new {@class = item.IsTree ? "directory" : item.IsImage ? "image" : "file"})
                             }
                         </td>
                         <td class="message"></td>
@@ -41,7 +41,7 @@
 
         <div class="pure-menu pure-menu-open pure-menu-horizontal repository-menu">
             <ul>
-                <li><a href="@Url.Action("Download", new { encodedName = PathEncoder.Encode(Model.Branch), encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true) })"><i class="fa fa-download"></i>@Resources.Repository_Tree_Zip</a></li>
+                <li><a href="@Url.Action("Download", new { encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true) })"><i class="fa fa-download"></i>@Resources.Repository_Tree_Zip</a></li>
             </ul>
         </div>
     </div>
