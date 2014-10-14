@@ -699,4 +699,7 @@
   <data name="Validation_StringLength" xml:space="preserve">
     <value>"{0}" should be smaller than {1} chars.</value>
   </data>
+  <data name="Validation_FileName_Regex" xml:space="preserve">
+    <value>Only characters, numbers, minus and underscore are allowed for "{0}".</value>
+  </data>
 </root>
