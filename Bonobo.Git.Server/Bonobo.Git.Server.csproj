@@ -571,6 +571,7 @@
     <EmbeddedResource Include="App_GlobalResources\Resources.ru-RU.resx" />
     <EmbeddedResource Include="App_GlobalResources\Resources.es-ES.resx" />
     <EmbeddedResource Include="App_GlobalResources\Resources.ja-JP.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.pl-PL.resx" />
     <EmbeddedResource Include="App_GlobalResources\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
