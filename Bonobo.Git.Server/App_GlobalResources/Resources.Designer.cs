@@ -1339,6 +1339,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to History.
+        /// </summary>
+        public static string Repository_History_Title {
+            get {
+                return ResourceManager.GetString("Repository_History_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Administered Repositories.
         /// </summary>
         public static string Repository_Index_AdministratedRepositories {
@@ -1479,6 +1488,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Repository_Tree_Download {
             get {
                 return ResourceManager.GetString("Repository_Tree_Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to History.
+        /// </summary>
+        public static string Repository_Tree_History {
+            get {
+                return ResourceManager.GetString("Repository_Tree_History", resourceCulture);
             }
         }
         

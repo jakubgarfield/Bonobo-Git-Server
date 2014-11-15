@@ -117,6 +117,20 @@ namespace Bonobo.Git.Server
             return model;
         }
 
+        public IEnumerable<RepositoryCommitModel> GetHistory(string path, string name, out string referenceName)
+        {
+            var commit = GetCommitByName(name, out referenceName);
+            if (commit == null || String.IsNullOrEmpty(path))
+            {
+                return Enumerable.Empty<RepositoryCommitModel>();
+            }
+
+            return _repository.Commits
+                              .QueryBy(new CommitFilter { Since = commit, SortBy = CommitSortStrategies.Topological })
+                              .Where(c => c.Parents.Count() < 2 && c[path] != null && (c.Parents.Count() == 0 || c.Parents.FirstOrDefault()[path] == null || c[path].Target.Id != c.Parents.FirstOrDefault()[path].Target.Id))
+                              .Select(s => ToModel(s)).ToList();
+        }
+
         public void Dispose()
         {
             if (_repository != null)

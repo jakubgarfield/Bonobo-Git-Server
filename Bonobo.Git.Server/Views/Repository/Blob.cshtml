@@ -14,6 +14,7 @@
             <div class="controls">
                 <a href="@Url.Action("Raw", new { encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true) })"><i class="fa fa-download"></i> @Resources.Repository_Tree_Download</a>
                 <a href="@Url.Action("Raw", new { encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true), display = true })"><i class="fa fa-file-text"></i> @Resources.Repository_Tree_RawDisplay</a>
+                <a href="@Url.Action("History", new { encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true)})"><i class="fa fa-history"></i> @Resources.Repository_Tree_History</a>
             </div>
         }
         @if (Model.IsImage)

@@ -1,0 +1,20 @@
+﻿@using Bonobo.Git.Server.Extensions
+@model RepositoryCommitsModel
+@{
+    Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
+    ViewBag.Title = Resources.Repository_History_Title;
+}
+@if (Model != null)
+{
+    <div class="repositoryContent">
+        @if (Model.Commits != null)
+        {
+            var grid = new WebGrid(source: Model.Commits, rowsPerPage: 10, canPage: true, canSort: false);
+            @grid.GetHtml(displayHeader: false, mode: WebGridPagerModes.All,
+                columns: grid.Columns(
+                    grid.Column(format: item => Html.Partial("_Commit", (RepositoryCommitModel)item.Value))
+                    )
+                )
+        }
+    </div>
+}
