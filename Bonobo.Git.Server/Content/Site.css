@@ -108,6 +108,8 @@ nav.branches ul li:hover ul li { float: none; }
 .blob pre code, .diff pre code { white-space: pre; background: transparent; margin: 0.5em;}
 .blob img {margin: 1em auto; display: block;}
 
+.commit .metadata > div { float: right }
+.commit .metadata .avatar { margin: 20px 0 0 5px; }
 .commit .metadata p { margin: 0; font-size: 0.8em; font-family: monospace, sans-serif;}
 .commit .metadata h4 { margin-bottom: 0.5em;}
 .commit .metadata { text-align: right;}

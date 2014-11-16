@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bonobo.Git.Server.Models;
+using Bonobo.Git.Server.Extensions;
 using LibGit2Sharp;
 using System.IO;
 
@@ -221,6 +222,7 @@ namespace Bonobo.Git.Server
             {
                 Author = commit.Author.Name,
                 AuthorEmail = commit.Author.Email,
+                AuthorAvatar = commit.Author.GetAvatar(),
                 Date = commit.Author.When.LocalDateTime,
                 ID = commit.Sha,
                 Message = commit.Message,

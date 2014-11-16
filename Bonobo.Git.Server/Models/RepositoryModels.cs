@@ -142,6 +142,9 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_AuthorEmail")]
         public string AuthorEmail { get; set; }
 
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_AuthorAvatar")]
+        public string AuthorAvatar { get; set; }
+
         [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Date")]
         public DateTime Date { get; set; }
 
