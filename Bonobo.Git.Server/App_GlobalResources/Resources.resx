@@ -774,4 +774,10 @@
   <data name="Repository_Tree_History" xml:space="preserve">
     <value>History</value>
   </data>
+  <data name="Repository_Commit_AuthorAvatar" xml:space="preserve">
+    <value>Avatar</value>
+  </data>
+  <data name="Settings_Global_IsCommitAuthorAvatarVisible" xml:space="preserve">
+    <value>Show commit author avatar</value>
+  </data>
 </root>
