@@ -19,6 +19,7 @@ namespace Bonobo.Git.Server.Configuration
         public string SiteTitle { get; set; }
         public string SiteLogoUrl { get; set; }
         public string SiteFooterMessage { get; set; }
+        public bool IsCommitAuthorAvatarVisible { get; set; }
 
         public bool HasSiteFooterMessage
         {

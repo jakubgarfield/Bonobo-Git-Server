@@ -777,4 +777,7 @@
   <data name="Repository_Commit_AuthorAvatar" xml:space="preserve">
     <value>Avatar</value>
   </data>
+  <data name="Settings_Global_IsCommitAuthorAvatarVisible" xml:space="preserve">
+    <value>Show commit author avatar</value>
+  </data>
 </root>

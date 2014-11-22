@@ -1643,6 +1643,17 @@ namespace Bonobo.Git.Server.App_GlobalResources {
                 return ResourceManager.GetString("Settings_Global_DirectoryHint", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show commit author avatar.
+        /// </summary>
+        public static string Settings_Global_IsCommitAuthorAvatarVisible
+        {
+            get
+            {
+                return ResourceManager.GetString("Settings_Global_IsCommitAuthorAvatarVisible", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Repository Directory.
