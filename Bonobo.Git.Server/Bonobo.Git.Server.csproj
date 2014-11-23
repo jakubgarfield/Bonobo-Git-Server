@@ -528,6 +528,7 @@
     <Content Include="Views\Repository\Blob.cshtml" />
     <Content Include="Views\Repository\Clone.cshtml" />
     <Content Include="Views\Repository\History.cshtml" />
+    <Content Include="Views\Repository\Blame.cshtml" />
     <None Include="Web.Release-Api.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

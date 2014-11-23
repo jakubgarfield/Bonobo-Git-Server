@@ -853,6 +853,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Blame.
+        /// </summary>
+        public static string Repository_Blame_Title {
+            get {
+                return ResourceManager.GetString("Repository_Blame_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Repository cloning was unsuccessful. Please correct the errors and try again..
         /// </summary>
         public static string Repository_Clone_Fail {
@@ -1474,6 +1483,24 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Blame.
+        /// </summary>
+        public static string Repository_Tree_Blame {
+            get {
+                return ResourceManager.GetString("Repository_Tree_Blame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blob.
+        /// </summary>
+        public static string Repository_Tree_Blob {
+            get {
+                return ResourceManager.GetString("Repository_Tree_Blob", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Date.
         /// </summary>
         public static string Repository_Tree_CommitDate {
@@ -1643,14 +1670,12 @@ namespace Bonobo.Git.Server.App_GlobalResources {
                 return ResourceManager.GetString("Settings_Global_DirectoryHint", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Show commit author avatar.
         /// </summary>
-        public static string Settings_Global_IsCommitAuthorAvatarVisible
-        {
-            get
-            {
+        public static string Settings_Global_IsCommitAuthorAvatarVisible {
+            get {
                 return ResourceManager.GetString("Settings_Global_IsCommitAuthorAvatarVisible", resourceCulture);
             }
         }

@@ -270,6 +270,27 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository]
+        public ActionResult Blame(string id, string encodedName, string encodedPath)
+        {
+            ViewBag.ID = id;
+            if (!String.IsNullOrEmpty(id))
+            {
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+                {
+                    var name = PathEncoder.Decode(encodedName);
+                    var path = PathEncoder.Decode(encodedPath);
+                    string referenceName;
+                    var model = browser.GetBlame(name, path, out referenceName);
+                    PopulateBranchesData(browser, referenceName);
+                    PopulateAddressBarData(path);
+
+                    return View(model);
+                }
+            }
+            return HttpNotFound();
+        }
+
+        [WebAuthorizeRepository]
         public ActionResult Download(string id, string encodedName, string encodedPath)
         {
             if (String.IsNullOrEmpty(id))

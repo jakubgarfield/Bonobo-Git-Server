@@ -780,4 +780,13 @@
   <data name="Settings_Global_IsCommitAuthorAvatarVisible" xml:space="preserve">
     <value>Show commit author avatar</value>
   </data>
+  <data name="Repository_Blame_Title" xml:space="preserve">
+    <value>Blame</value>
+  </data>
+  <data name="Repository_Tree_Blame" xml:space="preserve">
+    <value>Blame</value>
+  </data>
+  <data name="Repository_Tree_Blob" xml:space="preserve">
+    <value>Blob</value>
+  </data>
 </root>

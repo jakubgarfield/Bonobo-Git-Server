@@ -118,6 +118,31 @@ namespace Bonobo.Git.Server
             return model;
         }
 
+        public RepositoryBlameModel GetBlame(string name, string path, out string referenceName)
+        {
+            var commit = GetCommitByName(name, out referenceName);
+            if (commit == null || commit[path] == null || commit[path].TargetType != TreeEntryTargetType.Blob || (commit[path].Target as Blob).IsBinary)
+            {
+                return null;
+            }
+            string[] lines = (commit[path].Target as Blob).GetContentText().Split(Environment.NewLine.ToCharArray());
+            List<RepositoryBlameHunkModel> hunks = new List<RepositoryBlameHunkModel>();
+            foreach (var hunk in _repository.Blame(path, new BlameOptions { StartingAt = commit }))
+            {
+                hunks.Add(new RepositoryBlameHunkModel
+                {
+                    Commit = ToModel(hunk.FinalCommit),
+                    Lines = lines.Skip(hunk.FinalStartLineNumber).Take(hunk.LineCount).ToArray()
+                });
+            }
+            return new RepositoryBlameModel
+            {
+                Name = commit[path].Name,
+                Path = path,
+                Hunks = hunks
+            };
+        }
+
         public IEnumerable<RepositoryCommitModel> GetHistory(string path, string name, out string referenceName)
         {
             var commit = GetCommitByName(name, out referenceName);
