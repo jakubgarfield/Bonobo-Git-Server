@@ -4,6 +4,26 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 3.4
+
+** 30 Nov 2014**
+
+### Features
+
+* Post commit hook - stanshillis
+* Commit auditing (username recording) - stashillis
+* Keep selected branch on all pages - stanshillis
+* Polish translation - Bartlomiej Kaminski
+* History view for files - Igor Nakonechnyi
+* Assembly version displayed in footer - Kyle Engibous
+* Display avatar in commits page - Igor Nakonechnyi
+* Blame for file - Igor Nakonechnyi
+
+### Bug Fixes
+
+* Disallow special characters for repository name - Matthias
+
+
 ## Version 3.3
 
 **22 Aug 2014**
