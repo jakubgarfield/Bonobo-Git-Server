@@ -6,7 +6,7 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 ## Version 3.4
 
-** 30 Nov 2014**
+**30 Nov 2014**
 
 ### Features
 
