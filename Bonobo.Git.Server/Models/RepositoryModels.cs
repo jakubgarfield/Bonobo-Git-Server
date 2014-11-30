@@ -142,6 +142,9 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_AuthorEmail")]
         public string AuthorEmail { get; set; }
 
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_AuthorAvatar")]
+        public string AuthorAvatar { get; set; }
+
         [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Date")]
         public DateTime Date { get; set; }
 
@@ -173,5 +176,18 @@ namespace Bonobo.Git.Server.Models
 
         public IEnumerable<RepositoryCommitNoteModel> Notes { get; set; }
 
+    }
+
+    public class RepositoryBlameModel
+    {
+        public string Name { get; set; }
+        public string Path { get; set; }
+        public IEnumerable<RepositoryBlameHunkModel> Hunks { get; set; }
+    }
+
+    public class RepositoryBlameHunkModel
+    {
+        public RepositoryCommitModel Commit { get; set; }
+        public string[] Lines { get; set; }
     }
 }

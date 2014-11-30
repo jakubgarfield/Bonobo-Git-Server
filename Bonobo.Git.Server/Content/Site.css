@@ -74,7 +74,7 @@ tfoot td { text-align: center; border-bottom: none !important; }
 
 .repository-menu { margin-bottom: 0em; }
 .repository-menu a:hover { text-decoration: none; }
-.Detail .repository-menu .detail, .Tree .repository-menu .browser, .Blob .repository-menu .browser, .Commit .repository-menu .commits, .Commits .repository-menu .commits { color: #4183c4; }
+.Detail .repository-menu .detail, .Tree .repository-menu .browser, .Blame .repository-menu .browser, .Blob .repository-menu .browser, .Commit .repository-menu .commits, .Commits .repository-menu .commits { color: #4183c4; }
 
 .Repository div.detail { margin-top: 2em; }
 
@@ -108,6 +108,30 @@ nav.branches ul li:hover ul li { float: none; }
 .blob pre code, .diff pre code { white-space: pre; background: transparent; margin: 0.5em;}
 .blob img {margin: 1em auto; display: block;}
 
+.blame { overflow-x: auto }
+#blame_table { margin: 0 0 -1px 0; }
+#blame_table td { border-top: 1px solid #eaeaea; border-bottom: 1px solid #eaeaea }
+#blame_table td.commit { border-right: 1px solid #eaeaea; vertical-align: top }
+#blame_table td.commit .commit { border-bottom: none; width: 500px }
+#blame_table td.commit .commit h2 { font-size: 1em; max-width: 100% }
+#blame_table td.commit .commit h4 { margin: 0 }
+#blame_table td.commit .commit .metadata .avatar { width: 65px; margin: 0 0 0 5px }
+#blame_table td.commit[rowspan="2"] .commit h2 { margin: 0 }
+#blame_table td.commit[rowspan="2"] .commit .metadata h4 + p { display: block }
+#blame_table td.commit[rowspan="2"] .commit .metadata p { display: none }
+#blame_table td.commit[rowspan="2"] .commit .metadata .avatar { display: none }
+#blame_table td.commit[rowspan="1"] .commit h2 { margin: 0 }
+#blame_table td.commit[rowspan="1"] .commit h4 { display: none }
+#blame_table td.commit[rowspan="1"] .commit .metadata h4 { display: block }
+#blame_table td.commit[rowspan="1"] .commit .metadata p { display: none }
+#blame_table td.commit[rowspan="1"] .commit .metadata .avatar { display: none }
+#blame_table td.line_nr { text-align: right; padding: 0 5px; border-right: 1px solid #eaeaea }
+#blame_table td.line { vertical-align: middle }
+#blame_table td.line pre { white-space: pre }
+#blame_table tr.even td.line { background-color: #eaeaea; border-top: 1px solid #fff; border-bottom: 1px solid #fff }
+
+.commit .metadata > div { float: right }
+.commit .metadata .avatar { margin: 20px 0 0 5px; }
 .commit .metadata p { margin: 0; font-size: 0.8em; font-family: monospace, sans-serif;}
 .commit .metadata h4 { margin-bottom: 0.5em;}
 .commit .metadata { text-align: right;}

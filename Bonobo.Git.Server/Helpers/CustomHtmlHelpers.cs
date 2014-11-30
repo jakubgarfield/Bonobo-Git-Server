@@ -13,6 +13,11 @@ namespace Bonobo.Git.Server.Helpers
 {
     public static class CustomHtmlHelpers
     {
+        public static IHtmlString AssemblyVersion(this HtmlHelper helper)
+        {
+            return MvcHtmlString.Create(Assembly.GetExecutingAssembly().GetName().Version.ToString());
+        }
+
         public static MvcHtmlString CheckboxListFor<TModel, TValue>(this HtmlHelper<TModel> helper, Expression<Func<TModel, IEnumerable<TValue>>> expression, IEnumerable<SelectListItem> selectList, object htmlAttributes)
         {
             StringBuilder sb = new StringBuilder();
