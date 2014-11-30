@@ -271,7 +271,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
         {
             var name = commitHeaderItems[1];
             var email = commitHeaderItems[2].TrimStart('<').TrimEnd('>');
-            var timestamp = new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).AddSeconds(long.Parse(commitHeaderItems[3]));
+            var timestamp = new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).AddSeconds(long.Parse(commitHeaderItems[commitHeaderItems.Length - 1]));
             return new ReceivePackCommitSignature(name, email, timestamp);
         }
 
