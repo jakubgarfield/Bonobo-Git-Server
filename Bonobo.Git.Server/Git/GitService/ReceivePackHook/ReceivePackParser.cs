@@ -309,7 +309,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
             var timestampComponents = timestampString.Split(' ');
 
             // Start with epoch in UTC, add the timestamp seconds.
-            var timestamp = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var timestamp = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
             timestamp = timestamp.AddSeconds(long.Parse(timestampComponents[0]));
 
             return new ReceivePackCommitSignature(name, email, timestamp);
