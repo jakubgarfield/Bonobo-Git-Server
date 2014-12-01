@@ -4,6 +4,14 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 3.4.1
+
+**2 Dec 2014**
+
+### Bug fixes
+
+* Made commit details parsing more robust for ReceivePackHook - kfarnung
+
 ## Version 3.4
 
 **30 Nov 2014**
