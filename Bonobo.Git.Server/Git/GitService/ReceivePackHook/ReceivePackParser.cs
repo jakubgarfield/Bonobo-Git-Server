@@ -211,32 +211,53 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
             foreach (var commitLine in commitLines)
             {
                 commitHeadersEndIndex += 1;
-                var commitHeaderItems = commitLine.Split(' ');
-                var commitHeaderType = commitHeaderItems[0];
+                
+                // Make sure we have safe default values in case the string is empty.
+                var commitHeaderType = "";
+                var commitHeaderData = "";
+
+                // Find the index of the first space.
+                var firstSpace = commitLine.IndexOf(' ');
+                if (firstSpace < 0)
+                {
+                    // Ensure that we always have a valid length for the type.
+                    firstSpace = commitLine.Length;
+                }
+
+                // Take everything up to the first space as the type.
+                commitHeaderType = commitLine.Substring(0, firstSpace);
+
+                // Data starts immediately following the space (if there is any).
+                var dataStart = firstSpace + 1;
+                if (dataStart < commitLine.Length)
+                {
+                    commitHeaderData = commitLine.Substring(dataStart);
+                }
 
                 if (commitHeaderType == "tree")
                 {
-                    treeHash = commitHeaderItems[1];
+                    treeHash = commitHeaderData;
                 }
                 else if (commitHeaderType == "parent")
                 {
-                    parentHashes.Add(commitHeaderItems[1]);
+                    parentHashes.Add(commitHeaderData);
                 }
                 else if (commitHeaderType == "author")
                 {
-                    author = ParseSignature(commitHeaderItems);
+                    author = ParseSignature(commitHeaderData);
                 }
                 else if (commitHeaderType == "committer")
                 {
-                    committer = ParseSignature(commitHeaderItems);
+                    committer = ParseSignature(commitHeaderData);
                 }
                 else if (commitHeaderType == "")
                 {
+                    // The first empty type indicates the end of the headers.
                     break;
                 }
                 else
                 {
-                    // unrecognized header encounterd, skip over it
+                    // unrecognized header encountered, skip over it
                 }
             }
 
@@ -267,11 +288,30 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
         }
 
         [MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-        public ReceivePackCommitSignature ParseSignature(string[] commitHeaderItems)
+        public ReceivePackCommitSignature ParseSignature(string commitHeaderData)
         {
-            var name = commitHeaderItems[1];
-            var email = commitHeaderItems[2].TrimStart('<').TrimEnd('>');
-            var timestamp = new DateTimeOffset(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).AddSeconds(long.Parse(commitHeaderItems[commitHeaderItems.Length - 1]));
+            // Find the start and end markers of the email address.
+            var emailStart = commitHeaderData.IndexOf('<');
+            var emailEnd = commitHeaderData.IndexOf('>');
+            
+            // Leave out the trailing space.
+            var nameLength = emailStart - 1;
+
+            // Leave out the starting bracket.
+            var emailLength = emailEnd - emailStart - 1;
+            
+            // Parse the name and email values.
+            var name = commitHeaderData.Substring(0, nameLength);
+            var email = commitHeaderData.Substring(emailStart + 1, emailLength);
+
+            // The rest of the string is the timestamp, it may include a timezone.
+            var timestampString = commitHeaderData.Substring(emailEnd + 2);
+            var timestampComponents = timestampString.Split(' ');
+
+            // Start with epoch in UTC, add the timestamp seconds.
+            var timestamp = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
+            timestamp = timestamp.AddSeconds(long.Parse(timestampComponents[0]));
+
             return new ReceivePackCommitSignature(name, email, timestamp);
         }
 
