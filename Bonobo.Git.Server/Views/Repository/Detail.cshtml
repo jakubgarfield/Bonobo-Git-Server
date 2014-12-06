@@ -43,6 +43,7 @@
                     @Resources.Repository_Detail_No
                 }
             </div>
+            @if (AppSettings.IsPushAuditEnabled) {
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.AuditPushUser)
                 @if (Model.AuditPushUser)
@@ -54,6 +55,7 @@
                     @Resources.Repository_Detail_No
                 }
             </div>
+            }
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.Users)
                 @for (int i = 0; i < Model.Users.Length; i++)

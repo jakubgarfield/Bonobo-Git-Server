@@ -146,6 +146,24 @@ namespace Bonobo.Git.Server
                 RepositoriesDirPath = UserConfiguration.Current.Repositories,
             });
 
+            if (AppSettings.IsPushAuditEnabled)
+            {
+                EnablePushAuditAnalysis(container);
+            }
+
+            container.RegisterType<IGitService, GitServiceExecutor>();
+
+
+            DependencyResolver.SetResolver(new UnityDependencyResolver(container));
+
+            var oldProvider = FilterProviders.Providers.Single(f => f is FilterAttributeFilterProvider);
+            FilterProviders.Providers.Remove(oldProvider);
+            var provider = new UnityFilterAttributeFilterProvider(container);
+            FilterProviders.Providers.Add(provider);
+        }
+
+        private static void EnablePushAuditAnalysis(IUnityContainer container)
+        {
             var isReceivePackRecoveryProcessEnabled = !string.IsNullOrEmpty(ConfigurationManager.AppSettings["RecoveryDataPath"]);
 
             if (isReceivePackRecoveryProcessEnabled)
@@ -164,21 +182,11 @@ namespace Bonobo.Git.Server
 
             // base git service executor
             container.RegisterType<IGitService, ReceivePackParser>();
-            container.RegisterType<IGitService, GitServiceExecutor>();
             container.RegisterType<GitServiceResultParser, GitServiceResultParser>();
 
             // receive pack hooks
             container.RegisterType<IHookReceivePack, AuditPusherToGitNotes>();
             container.RegisterType<IHookReceivePack, NullReceivePackHook>();
-
-
-
-            DependencyResolver.SetResolver(new UnityDependencyResolver(container));
-
-            var oldProvider = FilterProviders.Providers.Single(f => f is FilterAttributeFilterProvider);
-            FilterProviders.Providers.Remove(oldProvider);
-            var provider = new UnityFilterAttributeFilterProvider(container);
-            FilterProviders.Providers.Add(provider);
 
             // run receive-pack recovery if possible
             if (isReceivePackRecoveryProcessEnabled)
@@ -188,7 +196,7 @@ namespace Bonobo.Git.Server
                         new NamedArguments.FailedPackWaitTimeBeforeExecution(TimeSpan.FromSeconds(0)))); // on start up set time to wait = 0 so that recovery for all waiting packs is attempted
 
                 try
-                {                    
+                {
                     recoveryProcess.RecoverAll();
                 }
                 catch { /* don't let a failed recovery attempt stop start-up process */  }

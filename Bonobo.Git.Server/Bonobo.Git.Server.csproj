@@ -185,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\SignatureExtensions.cs" />
+    <Compile Include="Configuration\AppSettings.cs" />
     <Compile Include="Git\GitService\GitServiceResultParser.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\Durability\AutoCreateMissingRecoveryDirectories.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\Durability\OneFolderRecoveryFilePathBuilder.cs" />
