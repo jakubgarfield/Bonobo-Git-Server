@@ -1,8 +1,8 @@
-﻿namespace Bonobo.Git.Server.Git.GitService
-{
-    using System.Diagnostics;
-    using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 
+namespace Bonobo.Git.Server.Git.GitService
+{
     // perhaps can be done cleaner than this, but i can't figure out how to
     // to do registration in Unity to handle 2 string constructor parameters
     public class GitServiceExecutorParams

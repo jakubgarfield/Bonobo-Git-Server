@@ -1,29 +1,29 @@
-﻿namespace Bonobo.Git.Server
-{
-    using System;
-    using System.Configuration;
-    using System.Globalization;
-    using System.IO;
-    using System.Linq;
-    using System.Security.Principal;
-    using System.Threading;
-    using System.Web;
-    using System.Web.Mvc;
-    using System.Web.Optimization;
-    using System.Web.Routing;
-    using System.Web.Security;
-    using Bonobo.Git.Server.App_Start;
-    using Bonobo.Git.Server.Configuration;
-    using Bonobo.Git.Server.Data;
-    using Bonobo.Git.Server.Data.Update;
-    using Bonobo.Git.Server.Git;
-    using Bonobo.Git.Server.Git.GitService;
-    using Bonobo.Git.Server.Git.GitService.ReceivePackHook;
-    using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability;
-    using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks;
-    using Bonobo.Git.Server.Security;
-    using Microsoft.Practices.Unity;
+﻿using System;
+using System.Configuration;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Security.Principal;
+using System.Threading;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Optimization;
+using System.Web.Routing;
+using System.Web.Security;
+using Bonobo.Git.Server.App_Start;
+using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Data;
+using Bonobo.Git.Server.Data.Update;
+using Bonobo.Git.Server.Git;
+using Bonobo.Git.Server.Git.GitService;
+using Bonobo.Git.Server.Git.GitService.ReceivePackHook;
+using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability;
+using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks;
+using Bonobo.Git.Server.Security;
+using Microsoft.Practices.Unity;
 
+namespace Bonobo.Git.Server
+{
     public class MvcApplication : HttpApplication
     {
         protected void Application_AcquireRequestState(object sender, EventArgs e)

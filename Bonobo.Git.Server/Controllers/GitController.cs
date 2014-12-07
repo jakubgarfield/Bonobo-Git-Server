@@ -1,16 +1,16 @@
-﻿namespace Bonobo.Git.Server.Controllers
-{
-    using System;
-    using System.IO;
-    using System.Web.Mvc;
-    using Bonobo.Git.Server.Configuration;
-    using Bonobo.Git.Server.Git;
-    using Bonobo.Git.Server.Git.GitService;
-    using Bonobo.Git.Server.Security;
-    using Ionic.Zlib;
-    using LibGit2Sharp;
-    using Microsoft.Practices.Unity;
+﻿using System;
+using System.IO;
+using System.Web.Mvc;
+using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Git;
+using Bonobo.Git.Server.Git.GitService;
+using Bonobo.Git.Server.Security;
+using Ionic.Zlib;
+using LibGit2Sharp;
+using Microsoft.Practices.Unity;
 
+namespace Bonobo.Git.Server.Controllers
+{
     [GitAuthorize]
     public class GitController : Controller
     {
