@@ -39,20 +39,20 @@
         {
             var args = serviceName + " --stateless-rpc";
             args += options.ToCommandLineArgs();
-            args += " \"" + this.repoLocator.GetRepositoryDirectoryPath(repositoryName).FullName + "\"";
+            args += " \"" + repoLocator.GetRepositoryDirectoryPath(repositoryName).FullName + "\"";
 
-            var info = new ProcessStartInfo(this.gitPath, args)
+            var info = new ProcessStartInfo(gitPath, args)
             {
                 CreateNoWindow = true,
                 RedirectStandardError = true,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
-                WorkingDirectory = Path.GetDirectoryName(this.repositoriesDirPath),
+                WorkingDirectory = Path.GetDirectoryName(repositoriesDirPath),
             };
 
             // Set the HOME environment so that Git can find the config file.
-            info.EnvironmentVariables.Add("HOME", this.gitHomePath);
+            info.EnvironmentVariables.Add("HOME", gitHomePath);
 
             using (var process = Process.Start(info))
             {

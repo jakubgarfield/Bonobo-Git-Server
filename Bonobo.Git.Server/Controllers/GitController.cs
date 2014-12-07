@@ -22,44 +22,44 @@
 
         public ActionResult SecureGetInfoRefs(String project, String service)
         {
-            if (this.RepositoryPermissionService.HasPermission(this.User.Identity.Name, project)
-                || (this.RepositoryPermissionService.AllowsAnonymous(project)
+            if (RepositoryPermissionService.HasPermission(User.Identity.Name, project)
+                || (RepositoryPermissionService.AllowsAnonymous(project)
                     && (String.Equals("git-upload-pack", service, StringComparison.OrdinalIgnoreCase)
                         || UserConfiguration.Current.AllowAnonymousPush)))
             {
-                return this.GetInfoRefs(project, service);
+                return GetInfoRefs(project, service);
             }
             else
             {
-                return this.UnauthorizedResult();
+                return UnauthorizedResult();
             }
         }
 
         [HttpPost]
         public ActionResult SecureUploadPack(String project)
         {
-            if (this.RepositoryPermissionService.HasPermission(this.User.Identity.Name, project)
-                || this.RepositoryPermissionService.AllowsAnonymous(project))
+            if (RepositoryPermissionService.HasPermission(User.Identity.Name, project)
+                || RepositoryPermissionService.AllowsAnonymous(project))
             {
-                return this.ExecuteUploadPack(project);
+                return ExecuteUploadPack(project);
             }
             else
             {
-                return this.UnauthorizedResult();
+                return UnauthorizedResult();
             }
         }
 
         [HttpPost]
         public ActionResult SecureReceivePack(String project)
         {
-            if (this.RepositoryPermissionService.HasPermission(this.User.Identity.Name, project)
-                || (this.RepositoryPermissionService.AllowsAnonymous(project) && UserConfiguration.Current.AllowAnonymousPush))
+            if (RepositoryPermissionService.HasPermission(User.Identity.Name, project)
+                || (RepositoryPermissionService.AllowsAnonymous(project) && UserConfiguration.Current.AllowAnonymousPush))
             {
-                return this.ExecuteReceivePack(project);
+                return ExecuteReceivePack(project);
             }
             else
             {
-                return this.UnauthorizedResult();
+                return UnauthorizedResult();
             }
         }
 
@@ -72,7 +72,7 @@
                     "application/x-git-receive-pack-result",
                     (outStream) =>
                     {
-                        this.GitService.ExecuteGitReceivePack(
+                        GitService.ExecuteGitReceivePack(
                             Guid.NewGuid().ToString("N"),
                             project,
                             GetInputStream(disableBuffer: true),
@@ -94,10 +94,10 @@
                     "application/x-git-upload-pack-result",
                     (outStream) =>
                     {
-                        this.GitService.ExecuteGitUploadPack(
+                        GitService.ExecuteGitUploadPack(
                             Guid.NewGuid().ToString("N"),
                             project,
-                            this.GetInputStream(),
+                            GetInputStream(),
                             outStream);
                     });
             }
@@ -112,7 +112,7 @@
             var directory = GetDirectoryInfo(project);
             if (Repository.IsValid(directory.FullName))
             {
-                this.Response.StatusCode = 200;
+                Response.StatusCode = 200;
 
                 string contentType = String.Format("application/x-{0}-advertisement", service);
                 string serviceName = service.Substring(4);
@@ -122,12 +122,12 @@
                     contentType,
                     (outStream) =>
                     {
-                        this.GitService.ExecuteServiceByName(
+                        GitService.ExecuteServiceByName(
                             Guid.NewGuid().ToString("N"),
                             project, 
                             serviceName, 
                             new ExecutionOptions() { AdvertiseRefs = true },
-                            this.GetInputStream(),
+                            GetInputStream(),
                             outStream
                         );
                     }, 
@@ -141,8 +141,8 @@
 
         private ActionResult UnauthorizedResult()
         {
-            this.Response.Clear();
-            this.Response.AddHeader("WWW-Authenticate", "Basic realm=\"Secure Area\"");
+            Response.Clear();
+            Response.AddHeader("WWW-Authenticate", "Basic realm=\"Secure Area\"");
             
             return new HttpStatusCodeResult(401);
         }
@@ -167,10 +167,10 @@
             // For really large uploads we need to get a bufferless input stream and disable the max
             // request length.
             Stream requestStream = disableBuffer ?
-                this.Request.GetBufferlessInputStream(disableMaxRequestLength: true) :
-                this.Request.GetBufferedInputStream();
+                Request.GetBufferlessInputStream(disableMaxRequestLength: true) :
+                Request.GetBufferedInputStream();
 
-            return this.Request.Headers["Content-Encoding"] == "gzip" ?
+            return Request.Headers["Content-Encoding"] == "gzip" ?
                 new GZipStream(requestStream, CompressionMode.Decompress) :
                 requestStream;
         }
