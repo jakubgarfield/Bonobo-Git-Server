@@ -523,6 +523,7 @@
     <Content Include="Content\fonts\opensans-regular.ttf" />
     <Content Include="Content\fonts\opensans-regular.woff" />
     <EmbeddedResource Include="App_GlobalResources\Resources.zh-TW.resx" />
+    <Content Include="App_Data\.gitconfig" />
     <None Include="Properties\PublishProfiles\Release-Api.pubxml" />
     <None Include="Properties\PublishProfiles\Release-UI.pubxml" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
