@@ -90,6 +90,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\LibGit2Sharp.0.18.1.0\lib\net40\LibGit2Sharp.dll</HintPath>
     </Reference>
+    <Reference Include="MarkdownDeep">
+      <HintPath>..\packages\MarkdownDeep.Full.1.5\lib\.NetFramework 3.5\MarkdownDeep.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.Unity, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -184,6 +187,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Update\AddReadmeRepository.cs" />
     <Compile Include="Extensions\SignatureExtensions.cs" />
     <Compile Include="Configuration\AppSettings.cs" />
     <Compile Include="Git\GitService\GitServiceResultParser.cs" />
@@ -449,6 +453,15 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\MarkdownDeep License.txt" />
+    <Content Include="Scripts\MarkdownDeep Quick Reference.txt" />
+    <Content Include="Scripts\MarkdownDeepLib.min.js" />
+    <Content Include="Content\components\markdowndeep\images\mdd_ajax_loader.gif" />
+    <Content Include="Content\components\markdowndeep\images\mdd_gripper.png" />
+    <Content Include="Content\components\markdowndeep\mdd_help.htm" />
+    <Content Include="Content\components\markdowndeep\images\mdd_modal_background.png" />
+    <Content Include="Content\components\markdowndeep\css\mdd_styles.css" />
+    <Content Include="Content\components\markdowndeep\images\mdd_toolbar.png" />
     <Content Include="Scripts\MicrosoftAjax.debug.js" />
     <Content Include="Scripts\MicrosoftAjax.js" />
     <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />

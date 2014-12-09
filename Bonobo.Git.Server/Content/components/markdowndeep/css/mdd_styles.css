@@ -1,0 +1,211 @@
+div.mdd_modal
+{
+	position:fixed;
+	top:0;
+	left:0;
+	padding:0;
+	margin:0;
+	width:100%;
+	height:100%;
+	z-index:1000;
+	display:none;
+	font-size:10pt;
+	background-image:url(/Content/components/markdowndeep/images/mdd_modal_background.png);
+}
+div.mdd_modal_frame
+{
+	width:650px;
+	height:400px;
+	background-color:White;
+	z-index:2000;
+	margin:0 auto;
+	margin-top:60px;
+	border:solid 5px #808080;
+	position:relative;
+	border-radius:5px;	
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+}
+
+div.mdd_modal_button
+{
+	position:absolute;
+	top:-33px;
+	right:-5px;
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:4px;
+	padding-bottom:0px;
+	height:20px;
+	background-color:#808080;
+	z-index:1999;
+	border-radius:4px;	
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	line-height:1em;
+}
+
+div.mdd_modal_button a
+{
+	color:White;
+	text-decoration:none;
+}
+
+div.mdd_modal_button a:hover
+{
+	color:Orange;
+}
+
+div.mdd_modal_content
+{
+	overflow:scroll;
+	overflow-x:hidden;
+	position:relative;
+	width:100%;
+	height:100%;
+}
+
+div.mdd_ajax_loader
+{
+	background-position: center center;
+	background-image: url(/Content/Components/markdowndeep/images/mdd_ajax_loader.gif);
+	background-repeat: no-repeat;
+	width:100%;
+	height:200px;
+}
+
+div.mdd_syntax
+{
+	font-size:12pt;
+	padding:10px;
+}
+
+div.mdd_syntax h2
+{
+	font-size:14pt;
+}
+div.mdd_syntax h3
+{
+	font-size:12pt;
+}
+div.mdd_syntax pre
+{				
+	font-size:10pt;
+	border:solid 1px silver;
+	padding:4px;
+	background-color:#f8f8f8;
+}
+
+div.mdd_toolbar_wrap 
+{
+    width:100%;
+}
+div.mdd_toolbar
+{
+	padding:5px;
+	height:20px;
+}
+
+div.mdd_toolbar ul
+{
+	margin:0;
+	padding:0;
+}
+
+div.mdd_toolbar li
+{
+	float:left;
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+
+div.mdd_toolbar a.mdd_button
+{
+	background-image:url(/Content/components/markdowndeep/images/mdd_toolbar.png);
+	width:20px;
+	height:20px;
+	display:block;
+}
+
+span.mdd_sep
+{
+	width:5px;
+	height:20px;
+	display:block;
+	border-left:solid 1px #808080;
+	margin-left:5px;
+}
+
+#mdd_bold			{ background-position:-1px -1px;}
+#mdd_bold:hover		{ background-position:-1px -23px; }
+#mdd_italic			{ background-position:-23px -1px; }
+#mdd_italic:hover	{ background-position:-23px -23px; }
+#mdd_ullist			{ background-position:-177px -1px; }
+#mdd_ullist:hover	{ background-position:-177px -23px; }
+#mdd_ollist			{ background-position:-155px -1px; }
+#mdd_ollist:hover	{ background-position:-155px -23px; }
+#mdd_indent			{ background-position:-67px -1px; }
+#mdd_indent:hover	{ background-position:-67px -23px; }
+#mdd_outdent		{ background-position:-89px -1px; }
+#mdd_outdent:hover	{ background-position:-89px -23px; }
+#mdd_link			{ background-position:-45px -1px; }
+#mdd_link:hover		{ background-position:-45px -23px; }
+#mdd_img			{ background-position:-133px -1px; }
+#mdd_img:hover		{ background-position:-133px -23px; }
+#mdd_hr				{ background-position:-221px -1px; }
+#mdd_hr:hover		{ background-position:-221px -23px; }
+#mdd_code			{ background-position:-111px -1px; }
+#mdd_code:hover		{ background-position:-111px -23px; }
+#mdd_heading		{ background-position:-199px -1px; }
+#mdd_heading:hover	{ background-position:-199px -23px; }
+#mdd_undo			{ background-position:-243px -1px; }
+#mdd_undo:hover		{ background-position:-243px -23px; }
+#mdd_redo			{ background-position:-265px -1px; }
+#mdd_redo:hover		{ background-position:-265px -23px; }
+
+div.mdd_links
+{
+	float:right;
+}
+
+div.mdd_links a
+{
+	text-decoration:none;
+	color:#404040;
+	font-size:smaller;
+}
+div.mdd_links a:hover
+{
+	color:black;
+}
+
+div.mdd_editor_wrap
+{
+    padding-right: 8px;
+}
+textarea.mdd_editor
+{
+	width:100%;
+	resize:none;
+	margin:0;padding: 3px;
+}
+
+div.mdd_resizer_wrap
+{
+	width:100%;
+}
+div.mdd_resizer
+{
+	background:#f8f8f8; 
+	background-image:url("/Content/components/markdowndeep/images/mdd_gripper.png");
+	background-position:center center;
+	background-repeat:no-repeat;
+	padding-left:2px;
+	padding-right:2px;
+	height:9px;
+	border:solid 1px #d0d0d0;
+	margin-top:-1px;
+	cursor:n-resize;
+}
+

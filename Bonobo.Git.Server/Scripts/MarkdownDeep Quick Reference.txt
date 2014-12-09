@@ -1,0 +1,60 @@
+﻿MarkdownDeep Quick Reference
+============================
+
+Setting up the Client Side Editor
+---------------------------------
+
+The following assumes you've installed the full edition MarkdownDeep using NuGet and explains how to setup
+a client side editor with toolbar, resize bar, real-time preview and syntax reference help.  
+
+1. In either your master view page, or in the view containing the editor ensure the following references are in place:
+
+		<link rel="stylesheet" type="text/css" href="/Scripts/mdd_styles.css" />
+		<script type="text/javascript" src="/Scripts/jQuery-1.4.1.min.js"></script>
+		<script type="text/javascript" src="/Scripts/MarkdownDeepLib.min.js"></script>
+
+2. Insert the following markup at the location you want the editor to appear:
+
+		<div class="mdd_toolbar"></div>
+		<%=Html.TextArea("content", new { @class="mdd_editor" }) %>
+		<div class="mdd_resizer"></div>
+		<div class="mdd_preview"></div>
+
+	Note, the mdd_toolbar, mdd_resizer and mdd_preview divs are all optional. If ommitted, the jQuery plugin will 
+	create them however this may cause the page to appear to "jump" as it loads.  By using the above divs and the
+	associated mdd_styles.css stylesheet, the correct sizing can be in-place immediately, eliminating these jumps.
+
+3. Use the jQuery plugin to convert the textarea into a Markdown editor.  For more options, see below.
+
+		$(function () {
+			$("textarea.mdd_editor").MarkdownDeep({
+				help_location:"/Scripts/mdd_help.htm",
+				ExtraMode: true
+			});
+		})
+
+See <http://www.toptensoftware.com/markdowndeep/editor> for more information on configuring the editor.
+
+Server Side Translation
+-----------------------
+
+The above steps allow you to create forms where the user can enter and preview Markdown content. This section
+explains how to perform the equivalent translation of the entered content server side.
+
+1. When you installed MarkdownDeep to your project with NuGet, a reference to MarkdownDeep.dll would already have
+	been created.
+
+2. To translate Markdown, instantiate an instance of the MarkdownDeep class and call it's Translate method to 
+	do the translation:
+
+		// Instantiate
+		var md=new MarkdownDeep.Markdown();
+
+		// Set options
+		md.ExtraMode=true;
+
+		// Translate
+		var html=md.Transform(plaintext);
+
+
+See <http://www.toptensoftware.com/markdowndeep/api> for other methods and properties.

@@ -16,6 +16,7 @@ namespace Bonobo.Git.Server.Data.Update
                     CREATE TABLE IF NOT EXISTS [Repository] (
                         [Name] VarChar(255) Not Null,
                         [Description] VarChar(255) Null,
+                        [Readme] VarChar(20000) Null,
                         [Anonymous] Bit Not Null,
                         Constraint [PK_Repository] Primary Key ([Name])
                     );
