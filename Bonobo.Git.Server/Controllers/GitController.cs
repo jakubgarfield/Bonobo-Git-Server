@@ -1,14 +1,13 @@
-﻿using System.Configuration;
-using Bonobo.Git.Server.Configuration;
-using Bonobo.Git.Server.Security;
-using Microsoft.Practices.Unity;
-using System;
+﻿using System;
 using System.IO;
 using System.Web.Mvc;
-using Bonobo.Git.Server.Git.GitService;
-using System.Web;
-using Ionic.Zlib;
+using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Git;
+using Bonobo.Git.Server.Git.GitService;
+using Bonobo.Git.Server.Security;
+using Ionic.Zlib;
+using LibGit2Sharp;
+using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -25,7 +24,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (RepositoryPermissionService.HasPermission(User.Identity.Name, project)
                 || (RepositoryPermissionService.AllowsAnonymous(project)
-                    && (String.Equals("git-upload-pack", service, StringComparison.InvariantCultureIgnoreCase)
+                    && (String.Equals("git-upload-pack", service, StringComparison.OrdinalIgnoreCase)
                         || UserConfiguration.Current.AllowAnonymousPush)))
             {
                 return GetInfoRefs(project, service);
@@ -64,16 +63,21 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-
         private ActionResult ExecuteReceivePack(string project)
         {
             var directory = GetDirectoryInfo(project);
-            if (LibGit2Sharp.Repository.IsValid(directory.FullName))
+            if (Repository.IsValid(directory.FullName))
             {
-                return new GitCmdResult("application/x-git-receive-pack-result", (outStream) =>
-                {
-                    GitService.ExecuteGitReceivePack(Guid.NewGuid().ToString("N"), project, GetInputStream(), outStream);
-                });
+                return new GitCmdResult(
+                    "application/x-git-receive-pack-result",
+                    (outStream) =>
+                    {
+                        GitService.ExecuteGitReceivePack(
+                            Guid.NewGuid().ToString("N"),
+                            project,
+                            GetInputStream(disableBuffer: true),
+                            outStream);
+                    });
             }
             else
             {
@@ -84,12 +88,18 @@ namespace Bonobo.Git.Server.Controllers
         private ActionResult ExecuteUploadPack(string project)
         {
             var directory = GetDirectoryInfo(project);
-            if (LibGit2Sharp.Repository.IsValid(directory.FullName))
+            if (Repository.IsValid(directory.FullName))
             {
-                return new GitCmdResult("application/x-git-upload-pack-result", (outStream) =>
-                {
-                    GitService.ExecuteGitUploadPack(Guid.NewGuid().ToString("N"), project, GetInputStream(), outStream);
-                });
+                return new GitCmdResult(
+                    "application/x-git-upload-pack-result",
+                    (outStream) =>
+                    {
+                        GitService.ExecuteGitUploadPack(
+                            Guid.NewGuid().ToString("N"),
+                            project,
+                            GetInputStream(),
+                            outStream);
+                    });
             }
             else
             {
@@ -100,7 +110,7 @@ namespace Bonobo.Git.Server.Controllers
         private ActionResult GetInfoRefs(String project, String service)
         {
             var directory = GetDirectoryInfo(project);
-            if (LibGit2Sharp.Repository.IsValid(directory.FullName))
+            if (Repository.IsValid(directory.FullName))
             {
                 Response.StatusCode = 200;
 
@@ -108,18 +118,20 @@ namespace Bonobo.Git.Server.Controllers
                 string serviceName = service.Substring(4);
                 string advertiseRefsContent = FormatMessage(String.Format("# service={0}\n", service)) + FlushMessage();
 
-                return new GitCmdResult(contentType, (outStream) =>
-                {
-                    GitService.ExecuteServiceByName(
-                        Guid.NewGuid().ToString("N"),
-                        project, 
-                        serviceName, 
-                        new ExecutionOptions() { AdvertiseRefs = true },
-                        GetInputStream(),
-                        outStream
-                    );
-                }, 
-                advertiseRefsContent);
+                return new GitCmdResult(
+                    contentType,
+                    (outStream) =>
+                    {
+                        GitService.ExecuteServiceByName(
+                            Guid.NewGuid().ToString("N"),
+                            project, 
+                            serviceName, 
+                            new ExecutionOptions() { AdvertiseRefs = true },
+                            GetInputStream(),
+                            outStream
+                        );
+                    }, 
+                    advertiseRefsContent);
             }
             else
             {
@@ -131,6 +143,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             Response.Clear();
             Response.AddHeader("WWW-Authenticate", "Basic realm=\"Secure Area\"");
+            
             return new HttpStatusCodeResult(401);
         }
 
@@ -149,9 +162,17 @@ namespace Bonobo.Git.Server.Controllers
             return new DirectoryInfo(Path.Combine(UserConfiguration.Current.Repositories, project));
         }
 
-        private Stream GetInputStream()
+        private Stream GetInputStream(bool disableBuffer = false)
         {
-            return this.Request.Headers["Content-Encoding"] == "gzip" ? new GZipStream(this.Request.InputStream, CompressionMode.Decompress) : this.Request.InputStream;
+            // For really large uploads we need to get a bufferless input stream and disable the max
+            // request length.
+            Stream requestStream = disableBuffer ?
+                Request.GetBufferlessInputStream(disableMaxRequestLength: true) :
+                Request.GetBufferedInputStream();
+
+            return Request.Headers["Content-Encoding"] == "gzip" ?
+                new GZipStream(requestStream, CompressionMode.Decompress) :
+                requestStream;
         }
     }
 }

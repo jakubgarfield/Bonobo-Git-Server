@@ -16,7 +16,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <TargetFrameworkProfile />
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
@@ -523,6 +523,7 @@
     <Content Include="Content\fonts\opensans-regular.ttf" />
     <Content Include="Content\fonts\opensans-regular.woff" />
     <EmbeddedResource Include="App_GlobalResources\Resources.zh-TW.resx" />
+    <Content Include="App_Data\.gitconfig" />
     <None Include="Properties\PublishProfiles\Release-Api.pubxml" />
     <None Include="Properties\PublishProfiles\Release-UI.pubxml" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
@@ -625,7 +626,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50287</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50287/</IISUrl>
+          <IISUrl>http://localhost/Bonobo.Git.Server</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

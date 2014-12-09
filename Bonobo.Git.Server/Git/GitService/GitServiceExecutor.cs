@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Web;
 
 namespace Bonobo.Git.Server.Git.GitService
 {
@@ -11,52 +8,58 @@ namespace Bonobo.Git.Server.Git.GitService
     public class GitServiceExecutorParams
     {
         public string GitPath { get; set; }
+        
+        public string GitHomePath { get; set; }
+        
         public string RepositoriesDirPath { get; set; }
     }
-
 
     public class GitServiceExecutor : IGitService
     {
         private readonly string gitPath;
+        private readonly string gitHomePath;
         private readonly string repositoriesDirPath;
         private readonly IGitRepositoryLocator repoLocator;
 
         public GitServiceExecutor(GitServiceExecutorParams parameters, IGitRepositoryLocator repoLocator)
         {
             this.gitPath = parameters.GitPath;
+            this.gitHomePath = parameters.GitHomePath;
             this.repositoriesDirPath = parameters.RepositoriesDirPath;
             this.repoLocator = repoLocator;
         }
 
-        public void ExecuteServiceByName(string correlationId, string repositoryName, string serviceName, ExecutionOptions options, System.IO.Stream inStream, System.IO.Stream outStream)
+        public void ExecuteServiceByName(
+            string correlationId,
+            string repositoryName,
+            string serviceName,
+            ExecutionOptions options,
+            Stream inStream,
+            Stream outStream)
         {
             var args = serviceName + " --stateless-rpc";
             args += options.ToCommandLineArgs();
             args += " \"" + repoLocator.GetRepositoryDirectoryPath(repositoryName).FullName + "\"";
 
-            var info = new System.Diagnostics.ProcessStartInfo(gitPath, args)
+            var info = new ProcessStartInfo(gitPath, args)
             {
                 CreateNoWindow = true,
                 RedirectStandardError = true,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
-                WorkingDirectory = Path.GetDirectoryName(this.repositoriesDirPath),
+                WorkingDirectory = Path.GetDirectoryName(repositoriesDirPath),
             };
 
-            using (var process = System.Diagnostics.Process.Start(info))
+            // Set the HOME environment so that Git can find the config file.
+            info.EnvironmentVariables.Add("HOME", gitHomePath);
+
+            using (var process = Process.Start(info))
             {
                 inStream.CopyTo(process.StandardInput.BaseStream);
                 process.StandardInput.Write('\0');
 
-                var buffer = new byte[16 * 1024];
-                int read;
-                while ((read = process.StandardOutput.BaseStream.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    outStream.Write(buffer, 0, read);
-                    outStream.Flush();
-                }
-
+                process.StandardOutput.BaseStream.CopyTo(outStream);
                 process.WaitForExit();
             }
         }
