@@ -12,15 +12,13 @@ namespace Bonobo.Git.Server.App_Start
             bundles.Add(new ScriptBundle("~/bundled.js")
                 .Include("~/Scripts/jquery-{version}.js")
                 .Include("~/Scripts/jquery.validate*", "~/Content/uni/js/uni-form-validation.jquery.js", "~/Scripts/MicrosoftAjax.js", "~/Scripts/MicrosoftMvcAjax.js")
-                .Include("~/Scripts/highlight.pack.js")
-                .Include("~/Scripts/MarkdownDeepLib.min.js"));
+                .Include("~/Scripts/highlight.pack.js"));
 
             bundles.Add(new StyleBundle("~/Content/bundled.css")
                 .Include("~/Content/components/pure/pure-min.css", new CssRewriteUrlTransformWrapper())
                 .Include("~/Content/components/font-awesome/css/font-awesome.min.css", new CssRewriteUrlTransformWrapper())
                 .Include("~/Content/components/highlight/src/styles/github.css")
-                .Include("~/Content/fonts.css", "~/Content/site.css")
-                .Include("~/Content/components/markdowndeep/css/mdd_styles.css"));
+                .Include("~/Content/fonts.css", "~/Content/site.css"));
         }
     }
 }

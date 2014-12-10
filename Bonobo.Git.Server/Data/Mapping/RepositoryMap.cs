@@ -51,7 +51,6 @@ namespace Bonobo.Git.Server.Data.Mapping
             Property(t => t.Description).HasColumnName("Description");
             Property(t => t.Anonymous).HasColumnName("Anonymous");
             Property(t => t.AuditPushUser).HasColumnName("AuditPushUser");
-            Property(t => t.Readme).HasColumnName("Readme");
         }
 
         private void SetProperties()

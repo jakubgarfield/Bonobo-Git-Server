@@ -16,7 +16,6 @@ namespace Bonobo.Git.Server.Models
         public string[] Administrators { get; set; }
         public string[] Teams { get; set; }
         public bool AuditPushUser { get; set; }
-        public string Readme { get; set; }
     }
 
     public class RepositoryDetailModel
@@ -51,9 +50,6 @@ namespace Bonobo.Git.Server.Models
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_AuditPushUser")]
         public bool AuditPushUser { get; set; }
-
-        [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Readme")]
-        public string Readme { get; set; }
     }
 
     public enum RepositoryDetailStatus

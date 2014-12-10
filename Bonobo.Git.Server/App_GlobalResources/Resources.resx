@@ -789,7 +789,4 @@
   <data name="Repository_Tree_Blob" xml:space="preserve">
     <value>Blob</value>
   </data>
-  <data name="Repository_Detail_Readme" xml:space="preserve">
-    <value>Readme</value>
-  </data>
 </root>

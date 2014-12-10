@@ -12,7 +12,6 @@
                         CREATE TABLE [dbo].[Repository] (
                             [Name] VarChar(255) Not Null,
                             [Description] VarChar(255) Null,
-                            [Readme] VarChar(20000) Null,
                             [Anonymous] Bit Not Null,
                             Constraint [PK_Repository] Primary Key ([Name])
                         );
@@ -102,17 +101,6 @@
                             Foreign Key ([Team_Name]) References [Team]([Name])
                         );
                     END
-
-                    IF NOT EXISTS(
-                          SELECT TOP 1 1
-                          FROM INFORMATION_SCHEMA.COLUMNS
-                          WHERE 
-                            [TABLE_NAME] = 'Repository'
-                            AND [COLUMN_NAME] = 'Readme')
-                        BEGIN
-                          ALTER TABLE [Repository]
-                            ADD [Readme] VarChar(20000) NULL
-                        END
 
                     ";
             }
