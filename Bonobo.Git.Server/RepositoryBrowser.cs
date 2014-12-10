@@ -106,6 +106,7 @@ namespace Bonobo.Git.Server
             model.Text = FileDisplayHandler.GetText(model.Data);
             model.Encoding = FileDisplayHandler.GetEncoding(model.Data);
             model.IsText = model.Text != null;
+            model.IsMarkdown = model.IsText && Path.GetExtension(path).Equals(".md", StringComparison.OrdinalIgnoreCase);
             if (model.IsText)
             {
                 model.TextBrush = FileDisplayHandler.GetBrush(path);

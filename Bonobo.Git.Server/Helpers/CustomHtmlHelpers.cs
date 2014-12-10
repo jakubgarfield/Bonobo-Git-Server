@@ -8,6 +8,7 @@ using System.Text;
 using System.Web.Routing;
 using System.Linq.Expressions;
 using Bonobo.Git.Server.Models;
+using MarkdownDeep;
 
 namespace Bonobo.Git.Server.Helpers
 {
@@ -16,6 +17,12 @@ namespace Bonobo.Git.Server.Helpers
         public static IHtmlString AssemblyVersion(this HtmlHelper helper)
         {
             return MvcHtmlString.Create(Assembly.GetExecutingAssembly().GetName().Version.ToString());
+        }
+
+        public static IHtmlString MarkdownToHtml(this HtmlHelper helper, string markdownText)
+        {
+            Markdown markdown = new Markdown() { ExtraMode = true, SafeMode = true };
+            return MvcHtmlString.Create(markdown.Transform(markdownText));
         }
 
         public static MvcHtmlString CheckboxListFor<TModel, TValue>(this HtmlHelper<TModel> helper, Expression<Func<TModel, IEnumerable<TValue>>> expression, IEnumerable<SelectListItem> selectList, object htmlAttributes)
