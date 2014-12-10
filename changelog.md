@@ -10,12 +10,12 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 ### Features
 
-Support for large files and large repos - kfarnung
-Displaying markdown in repo browser - kengibous
+* Support for large files and large repos - kfarnung
+* Displaying markdown in repo browser - kengibous
 
 ### Bug Fixes
 
-Disabling post commit auditing as it causes problems with certain clients - stanshillis
+* Disabling post commit auditing as it causes problems with certain clients - stanshillis
 
 
 ## Version 3.4.1
