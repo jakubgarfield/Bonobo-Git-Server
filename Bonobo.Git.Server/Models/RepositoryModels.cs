@@ -78,6 +78,7 @@ namespace Bonobo.Git.Server.Models
         public string TreeName { get; set; }
         public bool IsImage { get; set; }
         public bool IsText { get; set; }
+        public bool IsMarkdown { get; set; }
         public string Path { get; set; }
         public byte[] Data { get; set; }
         public string Text { get; set; }

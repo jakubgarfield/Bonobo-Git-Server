@@ -22,6 +22,10 @@
         {
             <img class="fileImage" alt="@Model.Name" src="@Url.Action("Raw", new { encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true) })" />
         }
+        else if (Model.IsText && Model.IsMarkdown)
+        {
+            <pre><code>@Html.MarkdownToHtml(Model.Text)</code></pre>
+        }
         else if (Model.IsText)
         {
             <pre><code>@Model.Text</code></pre>
