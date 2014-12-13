@@ -60,8 +60,28 @@ namespace Bonobo.Git.Server
                 return Enumerable.Empty<RepositoryTreeDetailModel>();
             }
 
-            var tree = String.IsNullOrEmpty(path) ? commit.Tree : (Tree)commit[path].Target;
             string branchName = referenceName ?? name;
+
+            Tree tree;
+            if (String.IsNullOrEmpty(path))
+            {
+                tree = commit.Tree;
+            }
+            else
+            {
+                var treeEntry = commit[path];
+                if (treeEntry.TargetType == TreeEntryTargetType.Blob)
+                {
+                    return new[] { CreateRepositoryDetailModel(treeEntry, null, referenceName) };
+                }
+
+                if (treeEntry.TargetType == TreeEntryTargetType.GitLink)
+                {
+                    return new RepositoryTreeDetailModel[0];
+                }
+
+                tree = (Tree)treeEntry.Target;
+            }
 
             return includeDetails ? GetTreeModelsWithDetails(commit, tree, branchName) : GetTreeModels(tree, branchName);
         }
