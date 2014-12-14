@@ -4,6 +4,18 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 3.4.3
+
+**14 Dec 2014**
+
+### Features
+
+* Display readme.md in repository browser - kengibous
+
+### Bug Fixes
+
+* Fix broken download link for files - latop2604
+
 ## Version 3.4.2
 
 **11 Dec 2014**
