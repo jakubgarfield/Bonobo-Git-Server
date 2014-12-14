@@ -24,7 +24,7 @@
         }
         else if (Model.IsText && Model.IsMarkdown)
         {
-            <pre><code>@Html.MarkdownToHtml(Model.Text)</code></pre>
+            <div class="markdown">@Html.MarkdownToHtml(Model.Text)</div>
         }
         else if (Model.IsText)
         {

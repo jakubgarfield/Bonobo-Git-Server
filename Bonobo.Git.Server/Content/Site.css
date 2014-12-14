@@ -108,6 +108,8 @@ nav.branches ul li:hover ul li { float: none; }
 .blob pre code, .diff pre code { white-space: pre; background: transparent; margin: 0.5em;}
 .blob img {margin: 1em auto; display: block;}
 
+.markdown { padding: 1em; }
+
 .blame { overflow-x: auto }
 #blame_table { margin: 0 0 -1px 0; }
 #blame_table td { border-top: 1px solid #eaeaea; border-bottom: 1px solid #eaeaea }

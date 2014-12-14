@@ -41,12 +41,7 @@
 
         @if (!string.IsNullOrEmpty(Model.Readme))
         {
-            <div class="blob">
-                <div class="controls">
-                    <a><i class="fa fa-file-text-o"></i> Readme.md</a>
-                </div>
-                <pre><code class="hljs">@Html.MarkdownToHtml(Model.Readme)</code></pre>
-            </div>
+            <div class="markdown">@Html.MarkdownToHtml(Model.Readme)</div>
         }
 
         <div class="pure-menu pure-menu-open pure-menu-horizontal repository-menu">
