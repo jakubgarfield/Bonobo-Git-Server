@@ -195,13 +195,22 @@ namespace Bonobo.Git.Server.Controllers
             {
                 string referenceName;
                 var files = browser.BrowseTree(name, path, out referenceName, includeDetails);
-
+                
+                var readme = files.Where(x => x.Path.Equals("readme.md", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                string readmeTxt = string.Empty;
+                if (readme != null)
+                {
+                    string refereceName;
+                    var blob = browser.BrowseBlob(name, readme.Path, out refereceName);
+                    readmeTxt = blob.Text;
+                }
                 var model = new RepositoryTreeModel
                 {
                     Name = id,
                     Branch = name,
                     Path = path,
-                    Files = files.OrderByDescending(i => i.IsTree).ThenBy(i => i.Name),
+                    Files = files.OrderByDescending(i => i.IsTree).ThenBy(i => i.Name), 
+                    Readme = readmeTxt
                 };
 
                 if (includeDetails)

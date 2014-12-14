@@ -20,7 +20,7 @@
             </thead>
             <tbody>
                 @foreach (var item in Model.Files)
-	            {
+                {
                     <tr>
                         <td class="path">
                             @if (item.IsLink)
@@ -29,15 +29,25 @@
                             }
                             else
                             {
-                                @Html.ActionLink(item.Name, item.IsTree ? "Tree" : "Blob", new { encodedPath = PathEncoder.Encode(item.Path, allowSlash: true)}, new {@class = item.IsTree ? "directory" : item.IsImage ? "image" : "file"})
+                                @Html.ActionLink(item.Name, item.IsTree ? "Tree" : "Blob", new { encodedPath = PathEncoder.Encode(item.Path, allowSlash: true) }, new { @class = item.IsTree ? "directory" : item.IsImage ? "image" : "file" })
                             }
                         </td>
                         <td class="message"></td>
                         <td class="date"></td>
                     </tr>
-	            }
+                }
             </tbody>
         </table>
+
+        @if (!string.IsNullOrEmpty(Model.Readme))
+        {
+            <div class="blob">
+                <div class="controls">
+                    <a><i class="fa fa-file-text-o"></i> Readme.md</a>
+                </div>
+                <pre><code class="hljs">@Html.MarkdownToHtml(Model.Readme)</code></pre>
+            </div>
+        }
 
         <div class="pure-menu pure-menu-open pure-menu-horizontal repository-menu">
             <ul>
