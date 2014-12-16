@@ -789,4 +789,57 @@
   <data name="Repository_Tree_Blob" xml:space="preserve">
     <value>Blob</value>
   </data>
+  <data name="Email_PasswordReset_Body" xml:space="preserve">
+    <value>&lt;p&gt;A request has been received to reset your password. 
+                           If you did not initiate the request, then please ignore this email.&lt;/p&gt;
+                           &lt;p&gt;Please click the following link to reset your password:&lt;/p&gt;</value>
+  </data>
+  <data name="Email_PasswordReset_Title" xml:space="preserve">
+    <value>Bonobo - Password Reset Request</value>
+  </data>
+  <data name="Home_ForgotPassword_EmailError" xml:space="preserve">
+    <value>Unable to send email. Validate SMTP settings.</value>
+  </data>
+  <data name="Home_ForgotPassword_EmailSuccess" xml:space="preserve">
+    <value>Email sent</value>
+  </data>
+  <data name="Home_ForgotPassword_Failed" xml:space="preserve">
+    <value>Forgotten Password Failed. Please correct errors and try again.</value>
+  </data>
+  <data name="Home_ForgotPassword_ForgotPassword" xml:space="preserve">
+    <value>Forgot Password</value>
+  </data>
+  <data name="Home_ForgotPassword_Title" xml:space="preserve">
+    <value>Forgotten Password</value>
+  </data>
+  <data name="Home_ForgotPassword_Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="Home_ForgotPassword_UserNameFailure" xml:space="preserve">
+    <value>Could not find username</value>
+  </data>
+  <data name="Home_LogOn_ForgotPassword" xml:space="preserve">
+    <value>Forgot Password?</value>
+  </data>
+  <data name="Home_ResetPassword_ConfirmPassword" xml:space="preserve">
+    <value>Confirm Password</value>
+  </data>
+  <data name="Home_ResetPassword_Failed" xml:space="preserve">
+    <value>Unable to reset password</value>
+  </data>
+  <data name="Home_ResetPassword_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Home_ResetPassword_ResetPassword" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
+  <data name="Home_ResetPassword_Success" xml:space="preserve">
+    <value>Password reset</value>
+  </data>
+  <data name="Home_ResetPassword_Title" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
+  <data name="Home_ResetPassword_Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
 </root>

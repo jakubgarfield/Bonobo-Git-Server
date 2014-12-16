@@ -11,5 +11,6 @@ namespace Bonobo.Git.Server.Security
         UserModel GetUser(string username);
         void UpdateUser(string username, string name, string surname, string email, string password);
         void DeleteUser(string username);
+        string GenerateResetToken(string username);
     }
 }
