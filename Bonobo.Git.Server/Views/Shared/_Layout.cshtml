@@ -79,5 +79,22 @@
 
     @Scripts.Render("~/bundled.js")
     @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(window).resize(function () {
+                resizeMainDiv();
+            });
+        });
+
+        $(window).load(function () {
+            resizeMainDiv();
+        });
+        
+
+        function resizeMainDiv() {            
+            $(".content").height($(window).height() - $('.header').outerHeight() - $('.footer').outerHeight());
+        }
+    </script>
 </body>
 </html>

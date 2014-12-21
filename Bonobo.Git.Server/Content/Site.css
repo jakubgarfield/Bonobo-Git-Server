@@ -1,7 +1,7 @@
 ﻿html, button, input, select, textarea, .pure-g [class *= "pure-u"], .pure-g-r [class *= "pure-u"] { font-family: OpenSans, sans-serif; }
 
 html { font-size: 16px; color: #333; text-rendering: optimizeLegibility; }
-html, body { margin: 0; padding: 0; height: 100%; min-width: 1100px;}
+html, body { margin: 0; padding: 0; height: 100%; min-width: 800px;}
 
 h1, h2, h3, h4, h5, h6 { font-weight: 300; }
 a { color: #4183c4; text-decoration: none; }
@@ -53,7 +53,12 @@ textarea.medium, input.medium { width: 30em; }
 
 .main { min-height: 100%; position: relative; }
 
-.content { width: 980px; margin: 0 auto; padding-bottom: 50px; }
+.content { padding: 0px 50px; overflow:auto; min-width:860px;  }
+.content div
+{
+    max-width:980px;
+    margin:0px auto;
+}
 
 .footer { color: #999; background-color: #000; font-size: 0.85em; width: 100%; position: absolute; bottom: 0; height: 50px; line-height: 1.7em; text-align: center; }
 .footer a { color: #999; text-decoration: none; }
@@ -139,7 +144,7 @@ nav.branches ul li:hover ul li { float: none; }
 .commit .metadata p { margin: 0; font-size: 0.8em; font-family: Consolas, monospace;}
 .commit .metadata h4 { margin-bottom: 0.5em;}
 .commit .metadata { text-align: right;}
-.commit h2 {width: 780px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.commit h2 {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .commit h2 a:hover { text-decoration: none; color: #777;}
 .commit { border-bottom: 1px solid #f6f6f6; }
 
