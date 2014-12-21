@@ -127,6 +127,7 @@
     </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
@@ -202,6 +203,7 @@
     <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommit.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommitSignature.cs" />
     <Compile Include="Git\GitService\ReplicatingStream.cs" />
+    <Compile Include="Helpers\MembershipHelper.cs" />
     <Compile Include="UnityDecoratorBuildStrategy.cs" />
     <Compile Include="UnityDecoratorContainerExtension.cs" />
     <Compile Include="Git\ConfigurationBasedRepositoryLocator.cs" />
@@ -543,6 +545,8 @@
     <Content Include="Views\Repository\Clone.cshtml" />
     <Content Include="Views\Repository\History.cshtml" />
     <Content Include="Views\Repository\Blame.cshtml" />
+    <Content Include="Views\Home\ForgotPassword.cshtml" />
+    <Content Include="Views\Home\ResetPassword.cshtml" />
     <None Include="Web.Release-Api.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

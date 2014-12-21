@@ -23,11 +23,14 @@ using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability;
 using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
+using System.Runtime.Caching;
 
 namespace Bonobo.Git.Server
 {
     public class MvcApplication : HttpApplication
     {
+        public static ObjectCache Cache = MemoryCache.Default; 
+
         protected void Application_AcquireRequestState(object sender, EventArgs e)
         {
             if (HttpContext.Current.Session == null)
