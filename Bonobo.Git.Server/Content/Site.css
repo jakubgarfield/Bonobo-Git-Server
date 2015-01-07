@@ -80,11 +80,11 @@ tfoot td { text-align: center; border-bottom: none !important; }
 
 .Repository div.detail { margin-top: 2em; }
 
+
 nav.branches a:hover { text-decoration: none; }
 nav.branches li.active a { color: #4183c4; }
 nav.branches li > a:after { content: '\f107'; font-family: FontAwesome; margin-left: 0.5em; }
 nav.branches li > a:only-child:after { content: ''; }
-nav.branches .tag a:before, .branches a.tag:before { content: '\f02b'; font-family: FontAwesome; margin-right: 0.5em; }
 nav.branches .branch a:before, .branches a.branch:before { content: '\f0e8'; font-family: FontAwesome; margin-right: 0.5em; display: inline-block; -webkit-transform: rotate(180deg); -moz-transform: rotate(180deg); -o-transform: rotate(180deg); -ms-transform: rotate(180deg); transform: rotate(180deg); }
 nav.branches li:hover { background-color: #eee; }
 nav.branches ul { padding: 0; margin: 0; }
@@ -95,6 +95,7 @@ nav.branches ul li:hover ul { z-index: 99999; display: list-item; position: abso
 nav.branches ul li:hover ul li { float: none; }
 .Commits nav.branches ul li { display: inline-block; float: none;}
 .Commits nav.branches ul li:hover ul li { display: block; float: none;}
+.tag a:before, .branches a.tag:before { content: '\f02b'; font-family: FontAwesome; margin-right: 0.5em; }
 
 .Tree .pure-table tbody { font-size: 0.8em; }
 .Tree #files .path { width: 230px;}
