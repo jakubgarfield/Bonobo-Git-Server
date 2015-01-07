@@ -20,7 +20,7 @@
             </thead>
             <tbody>
                 @foreach (var item in Model.Files)
-	            {
+                {
                     <tr>
                         <td class="path">
                             @if (item.IsLink)
@@ -29,19 +29,24 @@
                             }
                             else
                             {
-                                @Html.ActionLink(item.Name, item.IsTree ? "Tree" : "Blob", new {encodedName = PathEncoder.Encode(item.TreeName), encodedPath = PathEncoder.Encode(item.Path, allowSlash: true)}, new {@class = item.IsTree ? "directory" : item.IsImage ? "image" : "file"})
+                                @Html.ActionLink(item.Name, item.IsTree ? "Tree" : "Blob", new { encodedPath = PathEncoder.Encode(item.Path, allowSlash: true) }, new { @class = item.IsTree ? "directory" : item.IsImage ? "image" : "file" })
                             }
                         </td>
                         <td class="message"></td>
                         <td class="date"></td>
                     </tr>
-	            }
+                }
             </tbody>
         </table>
 
+        @if (!string.IsNullOrEmpty(Model.Readme))
+        {
+            <div class="markdown">@Html.MarkdownToHtml(Model.Readme)</div>
+        }
+
         <div class="pure-menu pure-menu-open pure-menu-horizontal repository-menu">
             <ul>
-                <li><a href="@Url.Action("Download", new { encodedName = PathEncoder.Encode(Model.Branch), encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true) })"><i class="fa fa-download"></i>@Resources.Repository_Tree_Zip</a></li>
+                <li><a href="@Url.Action("Download", new { encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true) })"><i class="fa fa-download"></i>@Resources.Repository_Tree_Zip</a></li>
             </ul>
         </div>
     </div>

@@ -8,6 +8,10 @@ using Bonobo.Git.Server.Security;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.App_GlobalResources;
 using System.Globalization;
+using Bonobo.Git.Server.Data;
+using Bonobo.Git.Server.Helpers;
+using System.Text;
+using System.Web.Caching;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -39,6 +43,80 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult Error()
         {
             return View();
+        }
+
+        public ActionResult ResetPassword(string digest)
+        {
+            string username;
+            digest = HttpUtility.UrlDecode(digest);
+            var cacheObj = MvcApplication.Cache[digest];
+            if ( cacheObj != null )
+            {
+                using (var db = new BonoboGitServerContext())
+                {
+                    username = cacheObj.ToString();
+                    var user = db.Users.FirstOrDefault(x => x.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+                    return View(new ResetPasswordModel { Username = username });
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Password reset link was not valid");
+                return RedirectToAction("Index", "Home");    
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ResetPassword(ResetPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var db = new BonoboGitServerContext())
+                {
+                    var user = db.Users.FirstOrDefault(x => x.Username.Equals(model.Username, StringComparison.OrdinalIgnoreCase));
+                    if (user == null)
+                    {
+                        TempData["ResetSuccess"] = false;
+                        Response.AppendToLog("FAILURE");
+                    }
+                    else
+                    {
+                        MembershipService.UpdateUser(model.Username, user.Name, user.Surname, user.Email, model.Password);
+                        TempData["ResetSuccess"] = true;
+                    }
+                }
+            }
+            return View(model);
+        }
+
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ForgotPassword(ForgotPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var db = new BonoboGitServerContext())
+                {
+                    var user = db.Users.FirstOrDefault(x => x.Username.Equals(model.Username, StringComparison.OrdinalIgnoreCase));
+                    if (user == null)
+                    {
+                        
+                        ModelState.AddModelError("", Resources.Home_ForgotPassword_UserNameFailure);
+                        Response.AppendToLog("FAILURE");
+                    }
+                    else
+                    {
+                        string token = MembershipService.GenerateResetToken(model.Username);
+                        MvcApplication.Cache.Add(token, model.Username, DateTimeOffset.Now.AddHours(1));
+                        TempData["SendSuccess"] = MembershipHelper.SendForgotPasswordEmail(user, token);
+                    }
+                }
+            }
+            return View(model);
         }
 
         public ActionResult LogOn(string returnUrl)

@@ -18,6 +18,7 @@ namespace Bonobo.Git.Server.Data.Update
                         new InitialCreateScript(),
                         new InsertDefaultData(),
                         new UsernamesToLower(),
+                        new AddAuditPushUser(),
                     };
                 case "SqlConnection":
                     return new List<IUpdateScript>
@@ -25,6 +26,7 @@ namespace Bonobo.Git.Server.Data.Update
                         new SqlServer.InitialCreateScript(),
                         new SqlServer.InsertDefaultData(),
                         new UsernamesToLower(),
+                        new SqlServer.AddAuditPushUser(),
                     };
                 default:
                     throw new NotImplementedException(string.Format("The provider '{0}' is not supported yet", sqlProvider));

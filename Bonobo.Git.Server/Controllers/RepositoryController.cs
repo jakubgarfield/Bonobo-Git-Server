@@ -168,6 +168,12 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     model.IsCurrentUserAdministrator = RepositoryPermissionService.IsRepositoryAdministrator(User.Identity.Name, id);
                 }
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+                {
+                    string defaultReferenceName;
+                    browser.BrowseTree(null, null, out defaultReferenceName);
+                    RouteData.Values.Add("encodedName", defaultReferenceName);
+                }
                 return View(model);
             }
             return View();
@@ -189,13 +195,22 @@ namespace Bonobo.Git.Server.Controllers
             {
                 string referenceName;
                 var files = browser.BrowseTree(name, path, out referenceName, includeDetails);
-
+                
+                var readme = files.Where(x => x.Path.Equals("readme.md", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                string readmeTxt = string.Empty;
+                if (readme != null)
+                {
+                    string refereceName;
+                    var blob = browser.BrowseBlob(name, readme.Path, out refereceName);
+                    readmeTxt = blob.Text;
+                }
                 var model = new RepositoryTreeModel
                 {
                     Name = id,
                     Branch = name,
                     Path = path,
-                    Files = files.OrderByDescending(i => i.IsTree).ThenBy(i => i.Name),
+                    Files = files.OrderByDescending(i => i.IsTree).ThenBy(i => i.Name), 
+                    Readme = readmeTxt
                 };
 
                 if (includeDetails)
@@ -205,7 +220,7 @@ namespace Bonobo.Git.Server.Controllers
                 else
                 {
                     PopulateBranchesData(browser, referenceName);
-                    PopulateAddressBarData(name, path);
+                    PopulateAddressBarData(path);
                     return View(model);
                 }
             }
@@ -224,7 +239,7 @@ namespace Bonobo.Git.Server.Controllers
                     string referenceName;
                     var model = browser.BrowseBlob(name, path, out referenceName);
                     PopulateBranchesData(browser, referenceName);
-                    PopulateAddressBarData(name, path);
+                    PopulateAddressBarData(path);
 
                     return View(model);
                 }
@@ -260,6 +275,27 @@ namespace Bonobo.Git.Server.Controllers
                 }
             }
 
+            return HttpNotFound();
+        }
+
+        [WebAuthorizeRepository]
+        public ActionResult Blame(string id, string encodedName, string encodedPath)
+        {
+            ViewBag.ID = id;
+            if (!String.IsNullOrEmpty(id))
+            {
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+                {
+                    var name = PathEncoder.Decode(encodedName);
+                    var path = PathEncoder.Decode(encodedPath);
+                    string referenceName;
+                    var model = browser.GetBlame(name, path, out referenceName);
+                    PopulateBranchesData(browser, referenceName);
+                    PopulateAddressBarData(path);
+
+                    return View(model);
+                }
+            }
             return HttpNotFound();
         }
 
@@ -429,10 +465,28 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        private void PopulateAddressBarData(string name, string path)
+        [WebAuthorizeRepository]
+        public ActionResult History(string id, string encodedPath, string encodedName)
+        {
+            ViewBag.ID = id;
+            if (!String.IsNullOrEmpty(id))
+            {
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+                {
+                    var path = PathEncoder.Decode(encodedPath);
+                    var name = PathEncoder.Decode(encodedName);
+                    string referenceName;
+                    var commits = browser.GetHistory(path, name, out referenceName);
+                    return View(new RepositoryCommitsModel { Commits = commits, Name = id });
+                }
+            }
+
+            return View();
+        }
+
+        private void PopulateAddressBarData(string path)
         {
             ViewData["path"] = path;
-            ViewData["name"] = name;
         }
 
         private void PopulateBranchesData(RepositoryBrowser browser, string referenceName)
@@ -475,7 +529,8 @@ namespace Bonobo.Git.Server.Controllers
                 Teams = model.Teams,
                 IsCurrentUserAdministrator = model.Administrators.Contains(User.Identity.Name.ToLowerInvariant()),
                 AllowAnonymous = model.AnonymousAccess,
-                Status = GetRepositoryStatus(model)
+                Status = GetRepositoryStatus(model),
+                AuditPushUser = model.AuditPushUser,
             };
         }
 
@@ -498,6 +553,7 @@ namespace Bonobo.Git.Server.Controllers
                 Administrators = model.Administrators,
                 Teams = model.Teams,
                 AnonymousAccess = model.AllowAnonymous,
+                AuditPushUser = model.AuditPushUser,
             };
         }
 

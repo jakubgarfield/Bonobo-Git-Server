@@ -80,7 +80,7 @@ namespace Bonobo.Git.Server.Data.Update
                         Foreign Key ([User_Username]) References [User]([Username]),
                         Foreign Key ([Team_Name]) References [Team]([Name])
                     );
-                  
+
                     ";
             }
         }

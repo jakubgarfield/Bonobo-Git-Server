@@ -280,7 +280,7 @@
     <value>管理</value>
   </data>
   <data name="Layout_AdministrationGlobalSettings" xml:space="preserve">
-    <value>全域設定</value>
+    <value>系統設定</value>
   </data>
   <data name="Layout_AdministrationRepositories" xml:space="preserve">
     <value>儲存庫</value>
@@ -298,7 +298,7 @@
     <value>主頁</value>
   </data>
   <data name="Layout_LogOff" xml:space="preserve">
-    <value>註銷</value>
+    <value>登出</value>
   </data>
   <data name="Layout_LogOn" xml:space="preserve">
     <value>登錄</value>
@@ -319,7 +319,7 @@
     <value>管理員組對儲存庫具有完全訪問權限，可以對資料做出任何修改。</value>
   </data>
   <data name="Repository_AllowAnonymousHint" xml:space="preserve">
-    <value>如果允許匿名訪問，則未登錄用戶可以檢出或更新儲存庫資料。提交操作需要在全域設定中允許匿名訪問後才可操作。</value>
+    <value>如果允許匿名訪問，則未登錄用戶可以檢出或更新儲存庫資料。提交操作需要在系統設定中允許匿名訪問後才可操作。</value>
   </data>
   <data name="Repository_Commits_Title" xml:space="preserve">
     <value>提交資訊</value>
@@ -529,10 +529,10 @@
     <value>儲存</value>
   </data>
   <data name="Settings_Index_Title" xml:space="preserve">
-    <value>全域設定</value>
+    <value>系統設定</value>
   </data>
   <data name="Settings_Index_UpdateSuccess" xml:space="preserve">
-    <value>全域設定更新成功</value>
+    <value>系統設定更新成功</value>
   </data>
   <data name="Settings_RepositoryPathNotExists" xml:space="preserve">
     <value>選擇的路徑不存在，請更改目錄或建立目錄。</value>
@@ -698,5 +698,8 @@
   </data>
   <data name="Delete_Title" xml:space="preserve">
     <value>刪除確認</value>
+  </data>
+  <data name="Validation_FileName_Regex" xml:space="preserve">
+    <value>只有英文字，數字，減號和底線允許用於 "{0}"</value>
   </data>
 </root>

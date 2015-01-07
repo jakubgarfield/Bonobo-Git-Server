@@ -627,4 +627,7 @@
   <data name="Repository_Commit_NoMessageDeclared" xml:space="preserve">
     <value>Keine Nachricht angegeben</value>
   </data>
+  <data name="Validation_FileName_Regex" xml:space="preserve">
+    <value>Nur Buchstaben, Zahlen, Minus und Bindestrich für "{0}" erlaubt.</value>
+  </data>
 </root>

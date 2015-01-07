@@ -31,29 +31,37 @@ namespace Bonobo.Git.Server.App_Start
                             "{controller}/Create/",
                             new { action = "Create" });
 
-            routes.MapRoute("RepositoryTree", 
-                            "Repository/{id}/Tree/{encodedName}/{*encodedPath}",
+            routes.MapRoute("RepositoryTree",
+                            "Repository/{id}/{encodedName}/Tree/{*encodedPath}",
                             new { controller = "Repository", action = "Tree" });
 
-            routes.MapRoute("RepositoryBlob", 
-                            "Repository/{id}/Blob/{encodedName}/{*encodedPath}",
+            routes.MapRoute("RepositoryBlob",
+                            "Repository/{id}/{encodedName}/Blob/{*encodedPath}",
                             new { controller = "Repository", action = "Blob" });
 
             routes.MapRoute("RepositoryRaw",
-                            "Repository/{id}/Raw/{encodedName}/{*encodedPath}",
+                            "Repository/{id}/{encodedName}/Raw/{*encodedPath}",
                             new { controller = "Repository", action = "Raw" });
 
+            routes.MapRoute("RepositoryBlame",
+                            "Repository/{id}/{encodedName}/Blame/{*encodedPath}",
+                            new { controller = "Repository", action = "Blame" });
+
             routes.MapRoute("RepositoryDownload",
-                            "Repository/{id}/Download/{encodedName}/{*encodedPath}",
+                            "Repository/{id}/{encodedName}/Download/{*encodedPath}",
                             new { controller = "Repository", action = "Download" });
 
-            routes.MapRoute("RepositoryCommits", 
-                            "Repository/{id}/Commits/{encodedName}/",
+            routes.MapRoute("RepositoryCommits",
+                            "Repository/{id}/{encodedName}/Commits",
                             new { controller = "Repository", action = "Commits" });
 
-            routes.MapRoute("RepositoryCommit", 
-                            "Repository/{id}/Commit/{commit}/",
+            routes.MapRoute("RepositoryCommit",
+                            "Repository/{id}/{encodedName}/Commit/{commit}/",
                             new { controller = "Repository", action = "Commit" });
+
+            routes.MapRoute("RepositoryHistory",
+                "Repository/{id}/{encodedName}/History/{*encodedPath}",
+                new { controller = "Repository", action = "History" });
 
             routes.MapRoute("Repository", 
                             "Repository/{id}/{action}/",

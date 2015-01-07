@@ -16,7 +16,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <TargetFrameworkProfile />
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
@@ -25,7 +25,7 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -90,6 +90,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\LibGit2Sharp.0.18.1.0\lib\net40\LibGit2Sharp.dll</HintPath>
     </Reference>
+    <Reference Include="MarkdownDeep">
+      <HintPath>..\packages\MarkdownDeep.Full.1.5\lib\.NetFramework 3.5\MarkdownDeep.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.Unity, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -124,6 +127,7 @@
     </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
@@ -184,10 +188,34 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\SignatureExtensions.cs" />
+    <Compile Include="Configuration\AppSettings.cs" />
+    <Compile Include="Git\GitService\GitServiceResultParser.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\AutoCreateMissingRecoveryDirectories.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\OneFolderRecoveryFilePathBuilder.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\DurableGitServiceResult.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\IRecoveryFilePathBuilder.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\NamedArguments.cs" />
+    <Compile Include="Git\GitService\GitExecutionResult.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\GIT_OBJ_TYPE.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\ReceivePackRecovery.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Hooks\AuditPusherToGitNotes.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommit.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommitSignature.cs" />
+    <Compile Include="Git\GitService\ReplicatingStream.cs" />
+    <Compile Include="Helpers\MembershipHelper.cs" />
+    <Compile Include="UnityDecoratorBuildStrategy.cs" />
+    <Compile Include="UnityDecoratorContainerExtension.cs" />
+    <Compile Include="Git\ConfigurationBasedRepositoryLocator.cs" />
+    <Compile Include="Git\GitService\IGitService.cs" />
+    <Compile Include="Git\GitService\ExecutionOptions.cs" />
+    <Compile Include="Git\GitService\GitServiceExecutor.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Data\Update\AddAuditPushUser.cs" />
     <Compile Include="Data\Update\AutomaticUpdater.cs" />
     <Compile Include="Data\Update\RepositorySynchronizer.cs" />
+    <Compile Include="Data\Update\SqlServer\AddAuditPushUser.cs" />
     <Compile Include="Data\Update\SqlServer\InitialCreateScript.cs" />
     <Compile Include="Data\Update\SqlServer\InsertDefaultData.cs" />
     <Compile Include="Data\Update\UsernamesToLower.cs" />
@@ -222,7 +250,14 @@
     <Compile Include="FileActionResult.cs" />
     <Compile Include="Attributes\FileNameAttribute.cs" />
     <Compile Include="Attributes\WebAuthorizeAttribute.cs" />
-    <Compile Include="GitCmdResult.cs" />
+    <Compile Include="Git\GitCmdResult.cs" />
+    <Compile Include="Git\GitService\GitServiceExtensions.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Hooks\NullReceivePackHook.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\IHookReceivePack.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ParsedReceivePack.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackPktLine.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackParser.cs" />
+    <Compile Include="Git\IGitRepositoryLocator.cs" />
     <Compile Include="Helpers\ContentDispositionUtil.cs" />
     <Compile Include="Helpers\CssRewriteUrlTransformWrapper.cs" />
     <Compile Include="Helpers\CustomHtmlHelpers.cs" />
@@ -419,6 +454,15 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\MarkdownDeep License.txt" />
+    <Content Include="Scripts\MarkdownDeep Quick Reference.txt" />
+    <Content Include="Scripts\MarkdownDeepLib.min.js" />
+    <Content Include="Content\components\markdowndeep\images\mdd_ajax_loader.gif" />
+    <Content Include="Content\components\markdowndeep\images\mdd_gripper.png" />
+    <Content Include="Content\components\markdowndeep\mdd_help.htm" />
+    <Content Include="Content\components\markdowndeep\images\mdd_modal_background.png" />
+    <Content Include="Content\components\markdowndeep\css\mdd_styles.css" />
+    <Content Include="Content\components\markdowndeep\images\mdd_toolbar.png" />
     <Content Include="Scripts\MicrosoftAjax.debug.js" />
     <Content Include="Scripts\MicrosoftAjax.js" />
     <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
@@ -493,11 +537,16 @@
     <Content Include="Content\fonts\opensans-regular.ttf" />
     <Content Include="Content\fonts\opensans-regular.woff" />
     <EmbeddedResource Include="App_GlobalResources\Resources.zh-TW.resx" />
+    <Content Include="App_Data\.gitconfig" />
     <None Include="Properties\PublishProfiles\Release-Api.pubxml" />
     <None Include="Properties\PublishProfiles\Release-UI.pubxml" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <Content Include="Views\Repository\Blob.cshtml" />
     <Content Include="Views\Repository\Clone.cshtml" />
+    <Content Include="Views\Repository\History.cshtml" />
+    <Content Include="Views\Repository\Blame.cshtml" />
+    <Content Include="Views\Home\ForgotPassword.cshtml" />
+    <Content Include="Views\Home\ResetPassword.cshtml" />
     <None Include="Web.Release-Api.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -543,6 +592,7 @@
     <EmbeddedResource Include="App_GlobalResources\Resources.ru-RU.resx" />
     <EmbeddedResource Include="App_GlobalResources\Resources.es-ES.resx" />
     <EmbeddedResource Include="App_GlobalResources\Resources.ja-JP.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.pl-PL.resx" />
     <EmbeddedResource Include="App_GlobalResources\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -592,7 +642,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50287</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50287/</IISUrl>
+          <IISUrl>http://localhost/Bonobo.Git.Server</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -101,6 +101,7 @@
                             Foreign Key ([Team_Name]) References [Team]([Name])
                         );
                     END
+
                     ";
             }
         }
