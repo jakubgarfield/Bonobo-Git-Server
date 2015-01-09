@@ -628,6 +628,6 @@
     <value>Keine Nachricht angegeben</value>
   </data>
   <data name="Validation_FileName_Regex" xml:space="preserve">
-    <value>Nur Buchstaben, Zahlen, Minus und Bindestrich für "{0}" erlaubt.</value>
+    <value>Nur Buchstaben, Zahlen, Punkt, Minus und Unterstrich für "{0}" erlaubt.</value>
   </data>
 </root>
