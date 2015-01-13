@@ -36,6 +36,7 @@ pre code { font-family: Consolas, monospace; }
 .pure-form.detail span { vertical-align: middle; line-height: 2em; }
 .pure-form.detail label { color: silver; }
 textarea.medium, input.medium { width: 30em; }
+textarea.large, input.large { width: 40em;height: 17em; }
 
 
 
@@ -152,4 +153,5 @@ nav.branches ul li:hover ul li { float: none; }
 .Commit .diff h3 { margin-top: 1.5em; }
 
 .commit .notes p { font-size: 0.7em; }
-.commit h2,.commit h2 + pre { margin-top: 0; margin-bottom: 0 }
+.commit h2{ margin-bottom: 0 }
+.commit .commitdate { font-size: 0.7em}
