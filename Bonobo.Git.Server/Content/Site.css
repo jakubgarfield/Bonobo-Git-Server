@@ -152,3 +152,4 @@ nav.branches ul li:hover ul li { float: none; }
 .Commit .diff h3 { margin-top: 1.5em; }
 
 .commit .notes p { font-size: 0.7em; }
+.commit h2,.commit h2 + pre { margin-top: 0; margin-bottom: 0 }
