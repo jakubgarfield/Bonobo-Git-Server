@@ -700,79 +700,79 @@
     <value>確認刪除</value>
   </data>
   <data name="Repository_Tree_PreviewNotSupported" xml:space="preserve">
-    <value>Preview of this file is not supported.</value>
+    <value>不支援預覽此文件</value>
   </data>
   <data name="Settings_Global_DefaultLanguage" xml:space="preserve">
-    <value>Language</value>
+    <value>語言</value>
   </data>
   <data name="Settings_Global_DefaultLanguage_Hint" xml:space="preserve">
-    <value>Language set by default in the application.</value>
+    <value>系統預設的語言</value>
   </data>
   <data name="Repository_Detail_Status" xml:space="preserve">
-    <value>Status</value>
+    <value>狀態</value>
   </data>
   <data name="Repository_Tree_RawDisplay" xml:space="preserve">
-    <value>Raw</value>
+    <value>原始檔</value>
   </data>
   <data name="Repository_Tree_Zip" xml:space="preserve">
-    <value>Download</value>
+    <value>下載</value>
   </data>
   <data name="Repository_Commit_Details" xml:space="preserve">
-    <value>Details</value>
+    <value>詳細資料</value>
   </data>
   <data name="Item_NotFound_Text" xml:space="preserve">
-    <value>The item you were looking for wasn't found.</value>
+    <value>找不到你要找的項目。</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>Confirm</value>
+    <value>確認</value>
   </data>
   <data name="Home" xml:space="preserve">
-    <value>Official Page</value>
+    <value>官方主頁</value>
   </data>
   <data name="Source" xml:space="preserve">
     <value>Github</value>
   </data>
   <data name="Repository_Layout_Clone" xml:space="preserve">
-    <value>Clone</value>
+    <value>複製</value>
   </data>
   <data name="Repository_Clone_Success" xml:space="preserve">
-    <value>Repository was cloned successfully.</value>
+    <value>已成功複製儲存庫。</value>
   </data>
   <data name="Repository_Clone_Title" xml:space="preserve">
-    <value>Clone Repository</value>
+    <value>複製儲存庫</value>
   </data>
   <data name="Repository_Clone_Fail" xml:space="preserve">
-    <value>Repository cloning was unsuccessful. Please correct the errors and try again.</value>
+    <value>複製儲存庫時發生錯誤。請重試或聯繫系統管理員。</value>
   </data>
   <data name="Repository_Clone_Submit" xml:space="preserve">
-    <value>Clone</value>
+    <value>複製</value>
   </data>
   <data name="Settings_Global_SiteFooterMessage" xml:space="preserve">
-    <value>Site Footer Message</value>
+    <value>網站頁尾信息</value>
   </data>
   <data name="Settings_Global_SiteFooterMessage_Hint" xml:space="preserve">
-    <value>Message displayed in footer area of site pages.</value>
+    <value>顯示在網站頁尾區域的文字</value>
   </data>
   <data name="Settings_Global_SiteLogoUrl" xml:space="preserve">
-    <value>Site Logo URL</value>
+    <value>網站標誌位址</value>
   </data>
   <data name="Settings_Global_SiteLogoUrl_Hint" xml:space="preserve">
-    <value>URL to a logo to use for the site.  Site-relative (~) paths are supported.</value>
+    <value>指向網站標誌的網址。支援相對路徑 (~) 。</value>
   </data>
   <data name="Settings_Global_SiteTitle" xml:space="preserve">
-    <value>Site Title</value>
+    <value>網站名稱</value>
   </data>
   <data name="Settings_Global_SiteTitle_Hint" xml:space="preserve">
-    <value>Title for this git site.</value>
+    <value>這個 Git 網站的名稱</value>
   </data>
   <data name="Repository_Commit_NoMessageDeclared" xml:space="preserve">
-    <value>Not declared</value>
+    <value>未宣告</value>
   </data>
   <data name="Repository_Detail_AuditPushUser" xml:space="preserve">
-    <value>Audit Pushes</value>
+    <value>推送審核</value>
   </data>
   <data name="Repository_AuditPushUserHint" xml:space="preserve">
-    <value>Record user that pushed commits to the server</value>
+    <value>記錄推送提交至伺服器的用戶</value>
   </data>
   <data name="Validation_FileName_Regex" xml:space="preserve">
     <value>"{0}" 只允許英文字，數字，減號和底線</value>
