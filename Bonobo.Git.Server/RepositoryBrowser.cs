@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Extensions;
 using LibGit2Sharp;
@@ -127,6 +128,15 @@ namespace Bonobo.Git.Server
             model.Encoding = FileDisplayHandler.GetEncoding(model.Data);
             model.IsText = model.Text != null;
             model.IsMarkdown = model.IsText && Path.GetExtension(path).Equals(".md", StringComparison.OrdinalIgnoreCase);
+
+            // try to render as text file if the extension matches
+            if (FileDisplayHandler.GetBrush(path) != "plain")
+            {
+                model.IsText = true;
+                model.Encoding = Encoding.Default;
+                model.Text = model.Encoding.GetString(model.Data);
+            }
+
             if (model.IsText)
             {
                 model.TextBrush = FileDisplayHandler.GetBrush(path);

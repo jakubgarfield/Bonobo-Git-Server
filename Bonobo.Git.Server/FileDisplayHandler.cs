@@ -19,7 +19,7 @@ namespace Bonobo.Git.Server
 
         public static string GetBrush(string fileName)
         {
-            if (String.IsNullOrWhiteSpace(fileName))
+            if (String.IsNullOrWhiteSpace(fileName)) 
             {
                 throw new ArgumentNullException("fileName");
             }
@@ -595,7 +595,21 @@ namespace Bonobo.Git.Server
             cdet.DataEnd();
             if (cdet.Charset != null && cdet.Confidence > 0.5)
             {
-                return Encoding.GetEncoding(cdet.Charset);
+                if (cdet.Charset.ToLowerInvariant() == "big-5")
+                {
+                    return Encoding.GetEncoding("big5");
+                }
+                else
+                {
+                    try
+                    {
+                        return Encoding.GetEncoding(cdet.Charset);
+                    }
+                    catch
+                    {
+                        return Encoding.Default;
+                    }
+                }
             }
 
             return null;
