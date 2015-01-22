@@ -361,6 +361,7 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult Commits(string id, string encodedName)
         {
             ViewBag.ID = id;
+            ViewBag.ShowShortMessageOnly = true;
             if (!String.IsNullOrEmpty(id))
             {
                 using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
@@ -380,6 +381,7 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult Commit(string id, string commit)
         {
             ViewBag.ID = id;
+            ViewBag.ShowShortMessageOnly = false;
             if (!String.IsNullOrEmpty(id))
             {
                 using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))

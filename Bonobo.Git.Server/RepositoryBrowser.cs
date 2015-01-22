@@ -278,6 +278,7 @@ namespace Bonobo.Git.Server
                 Date = commit.Author.When.LocalDateTime,
                 ID = commit.Sha,
                 Message = commit.Message,
+                MessageShort = commit.MessageShort,
                 TreeID = commit.Tree.Sha,
                 Parents = commit.Parents.Select(i => i.Sha).ToArray(),
                 TagName = tagsString,
