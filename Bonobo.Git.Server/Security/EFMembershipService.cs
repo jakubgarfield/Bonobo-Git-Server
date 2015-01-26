@@ -7,6 +7,8 @@ using Bonobo.Git.Server.Models;
 using System.Security.Cryptography;
 using System.IO;
 using System.Text;
+using System.Web.Configuration;
+using System.Web.Security;
 
 namespace Bonobo.Git.Server.Security
 {
@@ -18,16 +20,37 @@ namespace Bonobo.Git.Server.Security
         public EFMembershipService()
         {
             // set up dependencies
-            _createDatabaseContext = ()=>new BonoboGitServerContext();
+            _createDatabaseContext = () => new BonoboGitServerContext();
             Action<string, string> updateUserPasswordHook =
-                (username, password)=>UpdateUser(username, null, null, null, password);
+                (username, password) => UpdateUser(username, null, null, null, password);
             _passwordService = new PasswordService(updateUserPasswordHook);
         }
 
         public bool ValidateUser(string username, string password)
         {
-            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "userName");
-            if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
+            if (String.IsNullOrEmpty(username)) throw new ArgumentException(@"Value cannot be null or empty.", "username");
+            if (String.IsNullOrEmpty(password)) throw new ArgumentException(@"Value cannot be null or empty.", "password");
+
+            AuthenticationSection authSection = (AuthenticationSection)WebConfigurationManager.GetSection("system.web/authentication");
+            if (authSection != null && authSection.Mode == AuthenticationMode.Forms)
+            {
+                try
+                {
+                    var validated = Membership.ValidateUser(username, password);
+
+                    if (validated)
+                    {
+                        //FormsIdentityImporter.Import();
+                        return validated;
+                    }
+
+                    
+                }
+                catch (Exception ex)
+                {
+                    if (String.IsNullOrEmpty(username)) throw new ArgumentException(ex.Message);
+                }
+            }
 
             username = username.ToLowerInvariant();
             using (var database = _createDatabaseContext())
@@ -100,7 +123,7 @@ namespace Bonobo.Git.Server.Security
                     Surname = user.Surname,
                     Email = user.Email,
                     Roles = user.Roles.Select(i => i.Name).ToArray(),
-                 };
+                };
             }
         }
 
@@ -160,6 +183,6 @@ namespace Bonobo.Git.Server.Security
             return Convert.ToBase64String(outputBytes);
         }
 
-        
+
     }
 }

@@ -1,12 +1,10 @@
-﻿using Bonobo.Git.Server.Data;
-using Bonobo.Git.Server.Security;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Configuration;
 using System.Linq;
 using System.Security.Principal;
-using System.Web;
 using System.Web.Mvc;
+using Bonobo.Git.Server.Data;
+using Bonobo.Git.Server.Security;
 
 namespace Bonobo.Git.Server
 {
@@ -47,7 +45,7 @@ namespace Bonobo.Git.Server
             }
 
             var roleProvider = new EFRoleProvider();
-            roleProvider.AddUsersToRoles(new[] { identity.Name }, new[] { Definitions.Roles.Administrator });
+            roleProvider.AddUsersToRoles(new[] { identity.Name }, new[] {Definitions.Roles.Administrator });
         }
 
         private static void RefreshTeams(WindowsIdentity identity)
