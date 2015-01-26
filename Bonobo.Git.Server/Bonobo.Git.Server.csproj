@@ -536,6 +536,7 @@
     <Content Include="Content\fonts\opensans-regular.eot" />
     <Content Include="Content\fonts\opensans-regular.ttf" />
     <Content Include="Content\fonts\opensans-regular.woff" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.zh-HK.resx" />
     <EmbeddedResource Include="App_GlobalResources\Resources.zh-TW.resx" />
     <Content Include="App_Data\.gitconfig" />
     <None Include="Properties\PublishProfiles\Release-Api.pubxml" />
