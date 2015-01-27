@@ -10,7 +10,7 @@ namespace Bonobo.Git.Server
     public class WebAuthorizeAttribute : AuthorizeAttribute
     {
         public override void OnAuthorization(AuthorizationContext filterContext)
-        {
+        {           
             WindowsIdentityImporter.Import(filterContext);
             FormsIdentityImporter.Import(filterContext);
 
@@ -43,11 +43,11 @@ namespace Bonobo.Git.Server
         {
             var windowsIdentity = context.HttpContext.User.Identity as WindowsIdentity;
             var rv = windowsIdentity != null && windowsIdentity.IsAuthenticated;
-            if (!rv)
-            {
-                var formsIdentity = context.HttpContext.User.Identity as FormsIdentity;
-                rv = formsIdentity != null && formsIdentity.IsAuthenticated;
-            }
+
+            if (rv) return true;
+
+            var formsIdentity = context.HttpContext.User.Identity as FormsIdentity;
+            rv = formsIdentity != null && formsIdentity.IsAuthenticated;
 
             return rv;
         }

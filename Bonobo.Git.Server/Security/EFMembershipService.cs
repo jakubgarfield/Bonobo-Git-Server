@@ -31,25 +31,14 @@ namespace Bonobo.Git.Server.Security
             if (String.IsNullOrEmpty(username)) throw new ArgumentException(@"Value cannot be null or empty.", "username");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException(@"Value cannot be null or empty.", "password");
 
-            AuthenticationSection authSection = (AuthenticationSection)WebConfigurationManager.GetSection("system.web/authentication");
-            if (authSection != null && authSection.Mode == AuthenticationMode.Forms)
+            try
             {
-                try
-                {
-                    var validated = Membership.ValidateUser(username, password);
-
-                    if (validated)
-                    {
-                        //FormsIdentityImporter.Import();
-                        return validated;
-                    }
-
-                    
-                }
-                catch (Exception ex)
-                {
-                    if (String.IsNullOrEmpty(username)) throw new ArgumentException(ex.Message);
-                }
+                var validated = Membership.ValidateUser(username, password);
+                if (validated) return true;
+            }
+            catch
+            {
+                // Ignored
             }
 
             username = username.ToLowerInvariant();

@@ -109,9 +109,6 @@
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp">
-      <HintPath>..\..\..\TFS\Company\DefaultCollection\YH.APIPM\YH.APIPM\YH.APIPM.Client.WebForms\bin\Debug\RestSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -189,16 +186,11 @@
     <Reference Include="WebGrease">
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
-    <Reference Include="YH.APIPM.Client">
-      <HintPath>..\..\..\TFS\Company\DefaultCollection\YH.APIPM\YH.APIPM\YH.APIPM.Client.WebForms\bin\Debug\YH.APIPM.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="YH.APIPM.Client.WebForms">
-      <HintPath>..\..\..\TFS\Company\DefaultCollection\YH.APIPM\YH.APIPM\YH.APIPM.Client.WebForms\bin\Debug\YH.APIPM.Client.WebForms.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\SignatureExtensions.cs" />
     <Compile Include="Configuration\AppSettings.cs" />
+    <Compile Include="FormsIdentityImporter.cs" />
     <Compile Include="Git\GitService\GitServiceResultParser.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\Durability\AutoCreateMissingRecoveryDirectories.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\Durability\OneFolderRecoveryFilePathBuilder.cs" />
@@ -303,7 +295,6 @@
     <Compile Include="FilterProviders\UnityFilterAttributeFilterProvider.cs" />
     <Compile Include="Attributes\WindowsActionFilterAttribute.cs" />
     <Compile Include="WindowsIdentityImporter.cs" />
-    <Compile Include="FormsIdentityImporter.cs" />
     <Compile Include="UsernameUrl.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -546,6 +537,7 @@
     <Content Include="Content\fonts\opensans-regular.eot" />
     <Content Include="Content\fonts\opensans-regular.ttf" />
     <Content Include="Content\fonts\opensans-regular.woff" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.zh-HK.resx" />
     <EmbeddedResource Include="App_GlobalResources\Resources.zh-TW.resx" />
     <Content Include="App_Data\.gitconfig" />
     <None Include="Properties\PublishProfiles\Release-Api.pubxml" />

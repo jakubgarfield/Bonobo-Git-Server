@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="~/favicon.ico?v=2" type="image/x-icon" />
-    <title>@ViewBag.Title :: Bonobo Git Server</title>
+    <title>@ViewBag.Title :: @UserConfiguration.Current.GetSiteTitle()</title>
     @Styles.Render("~/Content/bundled.css")
     @if (UserConfiguration.Current.HasCustomSiteLogo)
     {
