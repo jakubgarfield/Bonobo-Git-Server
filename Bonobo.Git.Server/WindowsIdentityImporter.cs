@@ -64,10 +64,13 @@ namespace Bonobo.Git.Server
                     IdentityReference translated = null;
                     try
                     {
-                        translated = @group.Translate(typeof(NTAccount));
+                        if (@group != null)
+                        {
+                            translated = @group.Translate(typeof(NTAccount));
+                        }
                     }
 
-                    catch { }
+                    catch (System.Security.Principal.IdentityNotMappedException) { }
 
                     return translated == null ? null : translated.ToString();
                 })
