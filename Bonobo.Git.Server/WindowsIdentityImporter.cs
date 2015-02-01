@@ -59,7 +59,23 @@ namespace Bonobo.Git.Server
 
             if (identity.Groups != null)
             {
-                var groups = identity.Groups.Select(@group => @group.Translate(typeof (NTAccount)).ToString()).ToList();
+                var groups = identity.Groups.Select(@group =>
+                {
+                    IdentityReference translated = null;
+                    try
+                    {
+                        if (@group != null)
+                        {
+                            translated = @group.Translate(typeof(NTAccount));
+                        }
+                    }
+
+                    catch (System.Security.Principal.IdentityNotMappedException) { }
+
+                    return translated == null ? null : translated.ToString();
+                })
+                .Where(s => string.IsNullOrWhiteSpace(s) == false)
+                .ToList();
 
                 var teamRepository = new EFTeamRepository();
                 var teams = teamRepository.GetAllTeams();
