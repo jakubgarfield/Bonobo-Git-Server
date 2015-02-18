@@ -11,8 +11,8 @@ namespace Bonobo.Git.Server
     {
         public override void OnAuthorization(AuthorizationContext filterContext)
         {           
-            var importer = new WindowsIdentityImporter();
             WindowsIdentityImporter.Import(filterContext);
+            FormsIdentityImporter.Import(filterContext);
 
             if (IsWindowsUserAuthenticated(filterContext))
             {
@@ -42,7 +42,14 @@ namespace Bonobo.Git.Server
         private static bool IsWindowsUserAuthenticated(ControllerContext context)
         {
             var windowsIdentity = context.HttpContext.User.Identity as WindowsIdentity;
-            return windowsIdentity != null && windowsIdentity.IsAuthenticated;
+            var rv = windowsIdentity != null && windowsIdentity.IsAuthenticated;
+
+            if (rv) return true;
+
+            var formsIdentity = context.HttpContext.User.Identity as FormsIdentity;
+            rv = formsIdentity != null && formsIdentity.IsAuthenticated;
+
+            return rv;
         }
     }
 }
