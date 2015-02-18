@@ -1,4 +1,5 @@
-﻿@model Bonobo.Git.Server.Models.LogOnModel
+﻿@using System.Collections.Concurrent
+@model Bonobo.Git.Server.Models.LogOnModel
 @{
     ViewBag.Title = @Resources.Home_LogOn_Title;
 }
@@ -8,24 +9,29 @@
 @using (Html.BeginForm("LogOn", "Home", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
 {
     @Html.ValidationSummary(false, Resources.Home_LogOn_Failed)
-    
-    <fieldset> 
+
+    <fieldset>
         <div class="pure-control-group">
             @Html.LabelFor(m => m.Username)
-            @Html.TextBoxFor(m => m.Username, new { autofocus = ""})<em>*</em>
+            @Html.TextBoxFor(m => m.Username, new { autofocus = "" })<em>*</em>
             @Html.ValidationMessageFor(m => m.Username)
-        </div> 
+        </div>
         <div class="pure-control-group">
             @Html.LabelFor(m => m.Password, new { accesskey = "p" })
             @Html.PasswordFor(m => m.Password, new { @class = "textInput small" })<em>*</em>
             @Html.ValidationMessageFor(m => m.Password)
-        </div> 
-      @Html.HiddenFor(m => m.ReturnUrl)
+        </div>
+        <div class="pure-control-group">
+            @Html.LabelFor(m => m.RememberMe)
+            @Html.CheckBoxFor(m => m.RememberMe)
+            @Html.ValidationMessageFor(m => m.RememberMe)
+        </div>
+        @Html.HiddenFor(m => m.ReturnUrl)
         <div class="pure-controls">
             <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-sign-in"></i> @Resources.Home_LogOn_LogOn</button>
         </div>
         <div class="pure-controls">
-           @Html.ActionLink(Resources.Home_LogOn_ForgotPassword, "ForgotPassword")
+            @Html.ActionLink(Resources.Home_LogOn_ForgotPassword, "ForgotPassword")
         </div>
     </fieldset>
 }
