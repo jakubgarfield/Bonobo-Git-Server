@@ -232,11 +232,16 @@ namespace Bonobo.Git.Server
 
         private RepositoryTreeDetailModel CreateRepositoryDetailModel(TreeEntry entry, Commit ancestor, string treeName)
         {
+            var maximumMessageLength = 50; //FIXME Propbably in appSettings?
+            var originMessage = ancestor != null ? ancestor.Message : String.Empty;
+            var commitMessage = String.IsNullOrEmpty(originMessage)
+                ? RepositoryCommitModelHelpers.MakeCommitMessage(originMessage, maximumMessageLength).ShortTitle : String.Empty;
+
             return new RepositoryTreeDetailModel
             {
                 Name = entry.Name,
                 CommitDate = ancestor != null ? ancestor.Author.When.LocalDateTime : default(DateTime?),
-                CommitMessage = ancestor != null ? RepositoryCommitModelHelpers.MakeCommitMessage(ancestor.Message, 50).ShortTitle : String.Empty,
+                CommitMessage = commitMessage,
                 Author = ancestor != null ? ancestor.Author.Name : String.Empty,
                 IsTree = entry.TargetType == TreeEntryTargetType.Tree,
                 IsLink = entry.TargetType == TreeEntryTargetType.GitLink,
