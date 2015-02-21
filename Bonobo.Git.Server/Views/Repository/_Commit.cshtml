@@ -2,15 +2,16 @@
 @using Bonobo.Git.Server.Extensions
 <div class="commit pure-g">
     <div class="pure-u-3-5">
-        <h2>@Html.ActionLink(Model.MessageShort, "Commit", new { id = ViewBag.ID, commit = Model.ID }, new { title = Model.Message })</h2>
+        <h2><a href="@Url.Action("Commit", new { id = ViewBag.ID, commit = Model.ID })">@Html.Raw(Model.Message)</a><span class="opacity-helper"></span></h2>
         <div class="commitdate">
             @Model.Date.ToString()
             @if (!string.IsNullOrEmpty(Model.TagName)){
                 <span class="tag">@Html.ActionLink(Model.TagName, "Commits", new { encodedName = PathEncoder.Encode(Model.TagName), encodedPath = String.Empty })</span>
             }
         </div>
-        @if (!ViewBag.ShowShortMessageOnly && Model.Message != Model.MessageShort){
-            <pre>@Model.Message.Replace(Model.MessageShort,"")</pre>
+        @if (/*!ViewBag.ShowShortMessageOnly && */Model.Message != Model.MessageShort)
+        {
+            <pre>@Html.Raw(Model.MessageShort)</pre>
         }
 
         <div class="notes">
