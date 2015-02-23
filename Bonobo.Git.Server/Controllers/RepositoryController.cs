@@ -282,6 +282,7 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult Blame(string id, string encodedName, string encodedPath)
         {
             ViewBag.ID = id;
+            ViewBag.ShowShortMessageOnly = true;
             if (!String.IsNullOrEmpty(id))
             {
                 using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
@@ -471,6 +472,7 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult History(string id, string encodedPath, string encodedName)
         {
             ViewBag.ID = id;
+            ViewBag.ShowShortMessageOnly = true;
             if (!String.IsNullOrEmpty(id))
             {
                 using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
