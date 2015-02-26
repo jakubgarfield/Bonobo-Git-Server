@@ -234,7 +234,7 @@ namespace Bonobo.Git.Server
         {
             var maximumMessageLength = 50; //FIXME Propbably in appSettings?
             var originMessage = ancestor != null ? ancestor.Message : String.Empty;
-            var commitMessage = String.IsNullOrEmpty(originMessage)
+            var commitMessage = !String.IsNullOrEmpty(originMessage)
                 ? RepositoryCommitModelHelpers.MakeCommitMessage(originMessage, maximumMessageLength).ShortTitle : String.Empty;
 
             return new RepositoryTreeDetailModel
@@ -286,7 +286,7 @@ namespace Bonobo.Git.Server
             if (tags != null && tags.Any())
                 tagsString = tags.Select(o => o.Name).Aggregate((o, p) => o + " " + p);
 
-            var shortMessageDetails = RepositoryCommitModelHelpers.MakeCommitMessage(commit.Message);
+            var shortMessageDetails = RepositoryCommitModelHelpers.MakeCommitMessage(commit.Message, 30);
 
             var model = new RepositoryCommitModel
             {

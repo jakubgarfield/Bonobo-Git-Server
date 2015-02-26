@@ -156,15 +156,35 @@ nav.branches ul li:hover ul li { float: none; }
 .commit h2{ margin-bottom: 0; position:relative; }
 .commit .commitdate { font-size: 0.7em}
 
+.pure-u-2-5.metadata div {
+    z-index:11;
+    position:relative;
+}
+
+.commit h2 {
+        margin-bottom: 0;
+        position: relative;
+    }
+
+        .commit h2 a.commit-url {
+            display: inline-block;
+            max-width: 90%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    .commit .commitdate {
+        font-size: 0.7em;
+    }
+
 .opacity-helper {
     display: block;
     height: 30px;
     position: absolute;
-    right: -1px;
+    right: 73px;
     top: 5px;
-    width: 74px;
+    width: 36px;
     z-index: 10;
-
     background: -moz-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 54%);
     background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,0)), color-stop(54%,rgba(255,255,255,1)));
     background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 54%);
@@ -174,7 +194,19 @@ nav.branches ul li:hover ul li { float: none; }
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 );
 }
 
-.pure-u-2-5.metadata div {
-    z-index:11;
-    position:relative;
+
+.more-commit-info-toggler {
+    background-color: silver;
+    border: 1px solid #a39e9e;
+    border-radius: 1px;
+    color: #827a7a;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    height: 12px;
+    line-height: 6px;
+    padding: 0 6px 1px;
+    position: relative;
+    top: -9px;
+    vertical-align: middle;
 }
