@@ -4,7 +4,6 @@
     <div class="pure-u-3-5">
         <h2>
             <a class="commit-url" href="@Url.Action("Commit", new { id = ViewBag.ID, commit = Model.ID })">@Html.Raw(Model.Message)</a>
-            <span class="opacity-helper"></span>
             @if (!string.IsNullOrEmpty(Model.MessageShort))
             {
                 <a class="more-commit-info-toggler" onclick="$('#more@(Model.ID)').toggle();">&hellip;</a>
