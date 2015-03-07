@@ -6,6 +6,7 @@ using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Extensions;
 using LibGit2Sharp;
 using System.IO;
+using Bonobo.Git.Server.Helpers;
 
 namespace Bonobo.Git.Server
 {
@@ -231,11 +232,16 @@ namespace Bonobo.Git.Server
 
         private RepositoryTreeDetailModel CreateRepositoryDetailModel(TreeEntry entry, Commit ancestor, string treeName)
         {
+            var maximumMessageLength = 50; //FIXME Propbably in appSettings?
+            var originMessage = ancestor != null ? ancestor.Message : String.Empty;
+            var commitMessage = !String.IsNullOrEmpty(originMessage)
+                ? RepositoryCommitModelHelpers.MakeCommitMessage(originMessage, maximumMessageLength).ShortTitle : String.Empty;
+
             return new RepositoryTreeDetailModel
             {
                 Name = entry.Name,
                 CommitDate = ancestor != null ? ancestor.Author.When.LocalDateTime : default(DateTime?),
-                CommitMessage = ancestor != null ? ancestor.MessageShort : String.Empty,
+                CommitMessage = commitMessage,
                 Author = ancestor != null ? ancestor.Author.Name : String.Empty,
                 IsTree = entry.TargetType == TreeEntryTargetType.Tree,
                 IsLink = entry.TargetType == TreeEntryTargetType.GitLink,
@@ -280,6 +286,8 @@ namespace Bonobo.Git.Server
             if (tags != null && tags.Any())
                 tagsString = tags.Select(o => o.Name).Aggregate((o, p) => o + " " + p);
 
+            var shortMessageDetails = RepositoryCommitModelHelpers.MakeCommitMessage(commit.Message, 30);
+
             var model = new RepositoryCommitModel
             {
                 Author = commit.Author.Name,
@@ -287,8 +295,8 @@ namespace Bonobo.Git.Server
                 AuthorAvatar = commit.Author.GetAvatar(),
                 Date = commit.Author.When.LocalDateTime,
                 ID = commit.Sha,
-                Message = commit.Message,
-                MessageShort = commit.MessageShort,
+                Message = shortMessageDetails.ShortTitle,
+                MessageShort = shortMessageDetails.ExtraTitle,
                 TreeID = commit.Tree.Sha,
                 Parents = commit.Parents.Select(i => i.Sha).ToArray(),
                 TagName = tagsString,

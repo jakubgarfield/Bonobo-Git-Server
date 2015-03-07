@@ -153,5 +153,42 @@ nav.branches ul li:hover ul li { float: none; }
 .Commit .diff h3 { margin-top: 1.5em; }
 
 .commit .notes p { font-size: 0.7em; }
-.commit h2{ margin-bottom: 0 }
+.commit h2{ margin-bottom: 0; position:relative; }
 .commit .commitdate { font-size: 0.7em}
+
+.pure-u-2-5.metadata div {
+    z-index:11;
+    position:relative;
+}
+
+.commit h2 {
+        margin-bottom: 0;
+        position: relative;
+    }
+
+        .commit h2 a.commit-url {
+            display: inline-block;
+            max-width: 90%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    .commit .commitdate {
+        font-size: 0.7em;
+    }
+
+.more-commit-info-toggler {
+    background-color: silver;
+    border: 1px solid #a39e9e;
+    border-radius: 1px;
+    color: #827a7a;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    height: 12px;
+    line-height: 6px;
+    padding: 0 6px 1px;
+    position: relative;
+    top: -9px;
+    vertical-align: middle;
+}
