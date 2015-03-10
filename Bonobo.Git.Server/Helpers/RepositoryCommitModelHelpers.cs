@@ -69,16 +69,10 @@ namespace Bonobo.Git.Server.Helpers
             var messageString = string.Join(" ", message.ToArray()).Trim();
             var preBlockString = string.Join(" ", preBlock.ToArray()).Trim();
 
-            if (preBlockString.Length > 0)
-            {
-                messageString += "&hellip;";
-                preBlockString = "&hellip;" + preBlockString;
-            }
-
             return new RepositoryCommitTitleModel
             {
-                ShortTitle = MvcHtmlString.Create(messageString).ToHtmlString(),
-                ExtraTitle = MvcHtmlString.Create(preBlockString).ToHtmlString()
+                ShortTitle = messageString,
+                ExtraTitle = preBlockString
             };
         }
     }
