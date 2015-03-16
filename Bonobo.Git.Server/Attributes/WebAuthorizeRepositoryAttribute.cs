@@ -13,8 +13,6 @@ namespace Bonobo.Git.Server
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            base.OnAuthorization(filterContext);
-
             var repository = filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString();
             var user = filterContext.HttpContext.User.Identity.Name;
             if (RequiresRepositoryAdministrator)
@@ -35,7 +33,13 @@ namespace Bonobo.Git.Server
                 {
                     filterContext.Result = new HttpUnauthorizedResult();
                 }
+                else
+                {
+                    return;
+                }
             }
+
+            base.OnAuthorization(filterContext);
         }
     }
 }

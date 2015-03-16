@@ -188,6 +188,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\WebAuthorizeListingAttribute.cs" />
     <Compile Include="Extensions\SignatureExtensions.cs" />
     <Compile Include="Configuration\AppSettings.cs" />
     <Compile Include="Git\GitService\GitServiceResultParser.cs" />
