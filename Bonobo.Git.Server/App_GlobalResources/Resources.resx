@@ -842,4 +842,10 @@
   <data name="Home_ResetPassword_Username" xml:space="preserve">
     <value>Username</value>
   </data>
+  <data name="Settings_Global_AllowAnonymousListing" xml:space="preserve">
+    <value>Allow anonymous users to list public repositories</value>
+  </data>
+  <data name="Settings_Global_AllowAnonymousListing_Hint" xml:space="preserve">
+    <value>If checkbox is checked, the repository list will be available to anonymous users, displaying all public repositories</value>
+  </data>
 </root>

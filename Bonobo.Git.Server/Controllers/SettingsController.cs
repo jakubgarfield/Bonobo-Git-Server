@@ -23,12 +23,13 @@ namespace Bonobo.Git.Server.Controllers
                 AllowAnonymousPush = UserConfiguration.Current.AllowAnonymousPush,
                 RepositoryPath = UserConfiguration.Current.Repositories,
                 AllowAnonymousRegistration = UserConfiguration.Current.AllowAnonymousRegistration,
+                AllowAnonymousListing = UserConfiguration.Current.AllowAnonymousListing,
                 AllowUserRepositoryCreation = UserConfiguration.Current.AllowUserRepositoryCreation,
                 DefaultLanguage = UserConfiguration.Current.DefaultLanguage,
                 SiteTitle = UserConfiguration.Current.SiteTitle,
                 SiteLogoUrl = UserConfiguration.Current.SiteLogoUrl,
                 SiteFooterMessage = UserConfiguration.Current.SiteFooterMessage,
-                IsCommitAuthorAvatarVisible = UserConfiguration.Current.IsCommitAuthorAvatarVisible,
+                IsCommitAuthorAvatarVisible = UserConfiguration.Current.IsCommitAuthorAvatarVisible,                
             });
         }
 
@@ -46,6 +47,7 @@ namespace Bonobo.Git.Server.Controllers
                         UserConfiguration.Current.Repositories = model.RepositoryPath;
                         UserConfiguration.Current.AllowAnonymousRegistration = model.AllowAnonymousRegistration;
                         UserConfiguration.Current.AllowUserRepositoryCreation = model.AllowUserRepositoryCreation;
+                        UserConfiguration.Current.AllowAnonymousListing = model.AllowAnonymousListing;
                         UserConfiguration.Current.DefaultLanguage = model.DefaultLanguage;
                         UserConfiguration.Current.SiteTitle = model.SiteTitle;
                         UserConfiguration.Current.SiteLogoUrl = model.SiteLogoUrl;

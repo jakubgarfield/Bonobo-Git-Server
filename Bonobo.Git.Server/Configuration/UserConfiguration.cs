@@ -15,6 +15,7 @@ namespace Bonobo.Git.Server.Configuration
         public string Repositories { get; set; }
         public bool AllowUserRepositoryCreation { get; set; }
         public bool AllowAnonymousRegistration { get; set; }
+        public bool AllowAnonymousListing { get; set; }
         public string DefaultLanguage { get; set; }
         public string SiteTitle { get; set; }
         public string SiteLogoUrl { get; set; }
