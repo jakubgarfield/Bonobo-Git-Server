@@ -232,7 +232,7 @@
     <value>Modifier le compte d'utilisateur</value>
   </data>
   <data name="Account_Edit_Unsuccessfull" xml:space="preserve">
-    <value>L'édition de compte n'a pas abouti. Veuillez corriger les erreurs et essayer à nouveau.</value>
+    <value>La modification de compte n'a pas abouti. Veuillez corriger les erreurs et essayer à nouveau.</value>
   </data>
   <data name="Account_Edit_UpdateSuccess" xml:space="preserve">
     <value>Le compte a été mis à jour.</value>
@@ -262,7 +262,7 @@
     <value>Supprimer</value>
   </data>
   <data name="Grid_Edit" xml:space="preserve">
-    <value>Editer</value>
+    <value>Modifier</value>
   </data>
   <data name="Home_Error_Text" xml:space="preserve">
     <value>Une erreur s'est produite lors du traitement de votre demande. Veuillez essayer de nouveau ou contactez l'administrateur du système.</value>
@@ -733,7 +733,7 @@
     <value>Cloner un dépôt</value>
   </data>
   <data name="Repository_Clone_Fail" xml:space="preserve">
-    <value>Le clonage du dépôt a échoué. S'il vous plaît corriger les erreurs et d'essayer à nouveau.</value>
+    <value>Le clonage du dépôt a échoué. Veuillez corriger les erreurs et essayer à nouveau.</value>
   </data>
   <data name="Repository_Clone_Submit" xml:space="preserve">
     <value>Cloner</value>
@@ -766,7 +766,7 @@
     <value>Mot de passe oublié ?</value>
   </data>
   <data name="Settings_Global_IsCommitAuthorAvatarVisible" xml:space="preserve">
-    <value>Monter l'avatar de l'auteur du commit</value>
+    <value>Montrer l'avatar de l'auteur du commit</value>
   </data>
   <data name="Settings_Global_SiteFooterMessage" xml:space="preserve">
     <value>Message de pied de page du site</value>
