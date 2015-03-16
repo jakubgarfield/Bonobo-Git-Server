@@ -748,7 +748,7 @@
     <value>Email envoyé</value>
   </data>
   <data name="Home_ForgotPassword_Failed" xml:space="preserve">
-    <value>Impossible de réinitialiser le mot de passe. Corrigez les erreurs et réessayez.</value>
+    <value>Impossible de réinitialiser le mot de passe. Veuillez corriger les erreurs et essayer à nouveau.</value>
   </data>
   <data name="Home_ForgotPassword_ForgotPassword" xml:space="preserve">
     <value>Mot de passe oublié</value>
