@@ -403,7 +403,8 @@
     <value>Admin</value>
   </data>
   <data name="Repository_Detail_Location" xml:space="preserve">
-    <value>Url</value>
+    <value>General Url</value>
+    <comment>Example: http://localhost/Bonobo.Git.Server/test.git</comment>
   </data>
   <data name="Repository_Detail_Name" xml:space="preserve">
     <value>Name</value>
@@ -841,5 +842,9 @@
   </data>
   <data name="Home_ResetPassword_Username" xml:space="preserve">
     <value>Username</value>
+  </data>
+  <data name="Repository_Detail_Location_Personal" xml:space="preserve">
+    <value>Personal URL</value>
+    <comment>Example: http://admin@localhost/Bonobo.Git.Server/test.git</comment>
   </data>
 </root>
