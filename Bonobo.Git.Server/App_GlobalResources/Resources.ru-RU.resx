@@ -718,7 +718,7 @@
     <value>Показывать аватар автора коммита</value>
   </data>
   <data name="Settings_Global_SiteFooterMessage" xml:space="preserve">
-    <value>Сообщение в футере</value>
+    <value>Сообщение в подвале</value>
   </data>
   <data name="Settings_Global_SiteFooterMessage_Hint" xml:space="preserve">
     <value>Сообщение,показывающееся в нижней части страниц сайта</value>
