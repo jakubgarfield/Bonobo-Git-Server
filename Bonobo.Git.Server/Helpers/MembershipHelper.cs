@@ -2,6 +2,7 @@
 using Bonobo.Git.Server.Data;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
@@ -44,6 +45,21 @@ namespace Bonobo.Git.Server.Helpers
                            "<a href='" + passwordLink + "'>" + passwordLink + "</a>";
 
                 SmtpClient smtpClient = new SmtpClient();
+
+                if (ConfigurationManager.AppSettings["smtpHost"] != null) { 
+                    smtpClient.Host = ConfigurationManager.AppSettings["smtpHost"];
+                }
+
+                int port = 25;
+                int.TryParse(ConfigurationManager.AppSettings["smtpPort"], out port);
+                smtpClient.Port = port;
+
+                if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["smtpUsername"]) && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["smtpPassword"])) {
+                    smtpClient.UseDefaultCredentials = false;
+                    smtpClient.Credentials = new System.Net.NetworkCredential(ConfigurationManager.AppSettings["smtpUsername"], ConfigurationManager.AppSettings["smtpPassword"]); 
+                }
+
+                email.From = new MailAddress(ConfigurationManager.AppSettings["smtpSenderAddress"]);
 
                 smtpClient.Send(email);
             }
