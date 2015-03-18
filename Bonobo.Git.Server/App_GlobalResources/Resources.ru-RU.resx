@@ -708,4 +708,31 @@
   <data name="Validation_FileName_Regex" xml:space="preserve">
     <value>Only characters, numbers, minus and underscore are allowed for "{0}".</value>
   </data>
+  <data name="Settings_Global_DefaultLanguage" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="Settings_Global_DefaultLanguage_Hint" xml:space="preserve">
+    <value>Язык по умолчанию установленный в приложении</value>
+  </data>
+  <data name="Settings_Global_IsCommitAuthorAvatarVisible" xml:space="preserve">
+    <value>Показывать аватар автора коммита</value>
+  </data>
+  <data name="Settings_Global_SiteFooterMessage" xml:space="preserve">
+    <value>Сообщение в футере</value>
+  </data>
+  <data name="Settings_Global_SiteFooterMessage_Hint" xml:space="preserve">
+    <value>Сообщение,показывающееся в нижней части страниц сайта</value>
+  </data>
+  <data name="Settings_Global_SiteLogoUrl" xml:space="preserve">
+    <value>Путь к логотипу сайта (URL)</value>
+  </data>
+  <data name="Settings_Global_SiteLogoUrl_Hint" xml:space="preserve">
+    <value>Путь к логотипу сайта. Поддерживаются относительные пути (~)</value>
+  </data>
+  <data name="Settings_Global_SiteTitle" xml:space="preserve">
+    <value>Заголовок сайта</value>
+  </data>
+  <data name="Settings_Global_SiteTitle_Hint" xml:space="preserve">
+    <value>Заголовок для сайта</value>
+  </data>
 </root>
