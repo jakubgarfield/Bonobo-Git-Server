@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
-    <value>Un compte avec ce nom d'utilisateur exist déja.</value>
+    <value>Un compte avec ce nom d'utilisateur existe déjà.</value>
   </data>
   <data name="Account_Create_AccountInformation" xml:space="preserve">
     <value>Informations du compte</value>
@@ -148,13 +148,13 @@
     <value>Créer un nouveau compte</value>
   </data>
   <data name="Account_Create_Unsuccessfull" xml:space="preserve">
-    <value>La création de compte n'a pas abouti. S'il vous plaît corriger les erreurs et d'essayer à nouveau.</value>
+    <value>La création de compte n'a pas abouti. Veuillez corriger les erreurs et essayer à nouveau.</value>
   </data>
   <data name="Account_Create_Username" xml:space="preserve">
     <value>Nom d'utilisateur</value>
   </data>
   <data name="Account_Delete_DeleteCurrentUser" xml:space="preserve">
-    <value>Vous ne pouvez pas supprimer vous-même.</value>
+    <value>Vous ne pouvez pas vous supprimer vous-même.</value>
   </data>
   <data name="Account_Delete_Success" xml:space="preserve">
     <value>L'utilisateur a été supprimé.</value>
@@ -166,7 +166,7 @@
     <value>Supprimer</value>
   </data>
   <data name="Account_Detail_Edit" xml:space="preserve">
-    <value>Editer</value>
+    <value>Modifier</value>
   </data>
   <data name="Account_Detail_Email" xml:space="preserve">
     <value>Email</value>
@@ -181,7 +181,7 @@
     <value>Surnom</value>
   </data>
   <data name="Account_Detail_Title" xml:space="preserve">
-    <value>Détail de l'utilisateur</value>
+    <value>Informations de l'utilisateur</value>
   </data>
   <data name="Account_Detail_Username" xml:space="preserve">
     <value>Nom d'utilisateur</value>
@@ -232,7 +232,7 @@
     <value>Modifier le compte d'utilisateur</value>
   </data>
   <data name="Account_Edit_Unsuccessfull" xml:space="preserve">
-    <value>L'édition de compte n'a pas abouti. S'il vous plaît corriger les erreurs et d'essayer à nouveau.</value>
+    <value>La modification de compte n'a pas abouti. Veuillez corriger les erreurs et essayer à nouveau.</value>
   </data>
   <data name="Account_Edit_UpdateSuccess" xml:space="preserve">
     <value>Le compte a été mis à jour.</value>
@@ -262,10 +262,10 @@
     <value>Supprimer</value>
   </data>
   <data name="Grid_Edit" xml:space="preserve">
-    <value>Editer</value>
+    <value>Modifier</value>
   </data>
   <data name="Home_Error_Text" xml:space="preserve">
-    <value>Une erreur s'est produite lors du traitement de votre demande. S'il vous plaît essayer de nouveau ou contactez l'administrateur du système.</value>
+    <value>Une erreur s'est produite lors du traitement de votre demande. Veuillez essayer de nouveau ou contactez l'administrateur du système.</value>
   </data>
   <data name="Home_Error_Title" xml:space="preserve">
     <value>Une erreur s'est produite</value>
@@ -274,7 +274,7 @@
     <value>Informations du compte</value>
   </data>
   <data name="Home_LogOn_Failed" xml:space="preserve">
-    <value>La connexion a échoué. S'il vous plaît corriger les erreurs et d'essayer à nouveau.</value>
+    <value>La connexion a échoué. Veuillez corriger les erreurs et essayer à nouveau.</value>
   </data>
   <data name="Home_LogOn_LogOn" xml:space="preserve">
     <value>Connexion</value>
@@ -292,7 +292,7 @@
     <value>Nom d'utilisateur</value>
   </data>
   <data name="Home_LogOn_UsernamePasswordIncorrect" xml:space="preserve">
-    <value>Le nom d'utilisateur ou mot de passe fournit n'est pas correct.</value>
+    <value>Le nom d'utilisateur ou mot de passe n'est pas correct.</value>
   </data>
   <data name="Home_PageNotFound_Text" xml:space="preserve">
     <value>La page que vous recherchez n'a pas été trouvée. S'il vous plaît essayer de nouveau ou contactez l'administrateur du système.</value>
@@ -733,12 +733,57 @@
     <value>Cloner un dépôt</value>
   </data>
   <data name="Repository_Clone_Fail" xml:space="preserve">
-    <value>Le clonage du dépôt a échoué. S'il vous plaît corriger les erreurs et d'essayer à nouveau.</value>
+    <value>Le clonage du dépôt a échoué. Veuillez corriger les erreurs et essayer à nouveau.</value>
   </data>
   <data name="Repository_Clone_Submit" xml:space="preserve">
     <value>Cloner</value>
   </data>
   <data name="Validation_FileName_Regex" xml:space="preserve">
     <value>Only characters, numbers, minus and underscore are allowed for "{0}".</value>
+  </data>
+  <data name="Home_ForgotPassword_EmailError" xml:space="preserve">
+    <value>Impossible d'envoyer l'e-mail. Vérifiez vos paramètres SMTP.</value>
+  </data>
+  <data name="Home_ForgotPassword_EmailSuccess" xml:space="preserve">
+    <value>Email envoyé</value>
+  </data>
+  <data name="Home_ForgotPassword_Failed" xml:space="preserve">
+    <value>Impossible de réinitialiser le mot de passe. Veuillez corriger les erreurs et essayer à nouveau.</value>
+  </data>
+  <data name="Home_ForgotPassword_ForgotPassword" xml:space="preserve">
+    <value>Mot de passe oublié</value>
+  </data>
+  <data name="Home_ForgotPassword_Title" xml:space="preserve">
+    <value>Mot de passe oublié</value>
+  </data>
+  <data name="Home_ForgotPassword_Username" xml:space="preserve">
+    <value>Nom d'utilisateur</value>
+  </data>
+  <data name="Home_ForgotPassword_UserNameFailure" xml:space="preserve">
+    <value>Impossible de trouver ce nom d'utilisateur</value>
+  </data>
+  <data name="Home_LogOn_ForgotPassword" xml:space="preserve">
+    <value>Mot de passe oublié ?</value>
+  </data>
+  <data name="Settings_Global_IsCommitAuthorAvatarVisible" xml:space="preserve">
+    <value>Montrer l'avatar de l'auteur du commit</value>
+  </data>
+  <data name="Settings_Global_SiteFooterMessage" xml:space="preserve">
+    <value>Message de pied de page du site</value>
+  </data>
+  <data name="Settings_Global_SiteFooterMessage_Hint" xml:space="preserve">
+    <value>Message affiché dans la zone de pied de page des pages du site.</value>
+  </data>
+  <data name="Settings_Global_SiteLogoUrl" xml:space="preserve">
+    <value>URLdu logo</value>
+  </data>
+  <data name="Settings_Global_SiteLogoUrl_Hint" xml:space="preserve">
+    <value>URL du logo à utiliser pour le site. Les chemins relatifs (~) sont supportés.</value>
+  </data>
+  <data name="Settings_Global_SiteTitle" xml:space="preserve">
+    <value>Titre du site</value>
+  </data>
+  <data name="Settings_Global_SiteTitle_Hint" xml:space="preserve">
+    <value>Titre pour ce site git</value>
   </data>
 </root>
