@@ -24,7 +24,7 @@ namespace Bonobo.Git.Server.Controllers
         public IFormsAuthenticationService FormsAuthenticationService { get; set; }
 
 
-        [WebAuthorize]
+        [WebAuthorizeListing]
         public ActionResult Index()
         {
             return RedirectToAction("Index", "Repository");

@@ -15,6 +15,9 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Settings_Global_AllowAnonymousRegistration")]
         public bool AllowAnonymousRegistration { get; set; }
 
+        [Display(ResourceType = typeof(Resources), Name = "Settings_Global_AllowAnonymousListing")]
+        public bool AllowAnonymousListing { get; set; }
+
         [Display(ResourceType = typeof(Resources), Name = "Settings_Global_AllowUserRepositoryCreation")]
         public bool AllowUserRepositoryCreation { get; set; }
 

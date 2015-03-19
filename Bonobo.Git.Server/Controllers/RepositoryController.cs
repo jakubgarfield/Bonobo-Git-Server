@@ -31,7 +31,7 @@ namespace Bonobo.Git.Server.Controllers
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
 
 
-        [WebAuthorize]
+        [WebAuthorizeListing]
         public ActionResult Index()
         {
             return View(GetIndexModel());
