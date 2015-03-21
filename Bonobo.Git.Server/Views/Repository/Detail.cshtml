@@ -29,6 +29,10 @@
                 @String.Concat(serverAddress, Model.Name, ".git")
             </div>
             <div class="pure-control-group">
+                @Html.LabelFor(m => m.Group)
+                @Model.Group
+            </div>
+            <div class="pure-control-group">
                 @Html.LabelFor(m => m.Description)
                 @Model.Description
             </div>

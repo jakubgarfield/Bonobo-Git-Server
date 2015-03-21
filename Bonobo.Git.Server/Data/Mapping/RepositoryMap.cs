@@ -13,7 +13,6 @@ namespace Bonobo.Git.Server.Data.Mapping
             SetRelationships();
         }
 
-
         private void SetRelationships()
         {
             HasMany(t => t.Teams)
@@ -48,6 +47,7 @@ namespace Bonobo.Git.Server.Data.Mapping
         {
             ToTable("Repository");
             Property(t => t.Name).HasColumnName("Name");
+            Property(t => t.Group).HasColumnName("Group");
             Property(t => t.Description).HasColumnName("Description");
             Property(t => t.Anonymous).HasColumnName("Anonymous");
             Property(t => t.AuditPushUser).HasColumnName("AuditPushUser");
@@ -57,6 +57,9 @@ namespace Bonobo.Git.Server.Data.Mapping
         {
             Property(t => t.Name)
                 .IsRequired()
+                .HasMaxLength(255);
+
+            Property(t => t.Group)
                 .HasMaxLength(255);
 
             Property(t => t.Description)

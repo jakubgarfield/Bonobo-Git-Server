@@ -9,8 +9,8 @@ namespace Bonobo.Git.Server.Data
         private ICollection<User> _administrators;
         private ICollection<User> _users;
 
-        
         public string Name { get; set; }
+        public string Group { get; set; }
         public string Description { get; set; }
         public bool Anonymous { get; set; }
 

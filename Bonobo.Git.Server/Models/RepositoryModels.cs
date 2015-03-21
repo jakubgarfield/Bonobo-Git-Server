@@ -10,6 +10,7 @@ namespace Bonobo.Git.Server.Models
     public class RepositoryModel
     {
         public string Name { get; set; }
+        public string Group { get; set; }
         public string Description { get; set; }
         public bool AnonymousAccess { get; set; }
         public string[] Users { get; set; }
@@ -26,7 +27,12 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Name")]
         public string Name { get; set; }
 
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Group")]
+        [StringLength(255, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
+        public string Group { get; set; }
+
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Description")]
+        [StringLength(255, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
         public string Description { get; set; }
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Users")]

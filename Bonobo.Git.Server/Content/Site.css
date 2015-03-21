@@ -192,3 +192,15 @@ nav.branches ul li:hover ul li { float: none; }
     top: -9px;
     vertical-align: middle;
 }
+
+.repositories {
+	margin: 0 0 1em 0;
+}
+
+h2.group {
+	margin: 0;
+}
+
+td.description {
+	width: 50%;
+}

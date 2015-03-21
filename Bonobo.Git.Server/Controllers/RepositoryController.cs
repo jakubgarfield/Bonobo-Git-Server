@@ -30,11 +30,17 @@ namespace Bonobo.Git.Server.Controllers
         [Dependency]
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
 
-
         [WebAuthorize]
         public ActionResult Index()
         {
-            return View(GetIndexModel());
+            bool sortGroup = string.IsNullOrEmpty(Request.QueryString["sortGroup"]) || Request.QueryString["sortGroup"].Equals("ASC");
+
+            var list = GetIndexModel()
+                    .GroupBy(x => x.Group)
+                    .OrderBy(x => x.Key, sortGroup)
+                    .ToDictionary(x => x.Key ?? string.Empty, x => x.ToArray());
+
+            return View(list);
         }
 
         [WebAuthorizeRepository(RequiresRepositoryAdministrator = true)]
@@ -527,6 +533,7 @@ namespace Bonobo.Git.Server.Controllers
             return model == null ? null : new RepositoryDetailModel
             {
                 Name = model.Name,
+                Group = model.Group,
                 Description = model.Description,
                 Users = model.Users,
                 Administrators = model.Administrators,
@@ -552,6 +559,7 @@ namespace Bonobo.Git.Server.Controllers
             return model == null ? null : new RepositoryModel
             {
                 Name = model.Name,
+                Group = model.Group,
                 Description = model.Description,
                 Users = model.Users,
                 Administrators = model.Administrators,
