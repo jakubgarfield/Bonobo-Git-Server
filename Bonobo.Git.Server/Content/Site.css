@@ -204,3 +204,18 @@ h2.group {
 td.description {
 	width: 50%;
 }
+
+h2.group .toggle:after {
+  display: inline-block;
+  font-family: FontAwesome;
+  top: 0;
+  content: "\f056";
+  height: 100%;
+  width: 20px;
+  cursor: pointer;
+  color: #4183c4;
+}
+
+    h2.group .toggle.on:after {
+        content: "\f055";
+    }
