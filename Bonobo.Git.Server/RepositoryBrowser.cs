@@ -322,7 +322,7 @@ namespace Bonobo.Git.Server
                     LinesDeleted = patch.LinesDeleted,
                     Patch = patch.Patch,
                 };
-            });
+            }).ToList();
 
             return model;
         }

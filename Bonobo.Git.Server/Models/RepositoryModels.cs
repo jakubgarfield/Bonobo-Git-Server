@@ -177,7 +177,7 @@ namespace Bonobo.Git.Server.Models
         public string TagName { get; set; }
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Changes")]
-        public IEnumerable<RepositoryCommitChangeModel> Changes { get; set; }
+        public List<RepositoryCommitChangeModel> Changes { get; set; }
 
         public IEnumerable<RepositoryCommitNoteModel> Notes { get; set; }
     }
