@@ -25,7 +25,9 @@
 
 <div class="pure-g">
     <div class="pure-u-3-5">
-        <h1>@Resources.Repository_Index_Title</h1>
+        <h1>
+            @Resources.Repository_Index_Title
+        </h1>
     </div>
     <div class="pure-u-2-5 add">
         @{
@@ -74,7 +76,10 @@
             if (!emptyGroup)
             {
                 <div class="pure-u-1">
-                    <h2 class="group">@Html.Raw(model.Key)</h2>
+                    <h2 class="group">
+                        <span class="toggle" data-group="@(model.Key)"></span>
+                        @Html.Raw(model.Key)
+                    </h2>
                 </div>
             }
 
@@ -100,3 +105,6 @@
     }
 </div>
 
+@section scripts{
+    <script src="~/Scripts/RepositoryGroupToggle.js" defer="defer"></script>
+}
