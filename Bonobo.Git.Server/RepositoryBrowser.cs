@@ -316,13 +316,15 @@ namespace Bonobo.Git.Server
                 var patch = patches[i.Path];
                 return new RepositoryCommitChangeModel
                 {
+                    ChangeId = i.Oid.Sha,
                     Path = i.Path.Replace('\\', '/'),
                     Status = i.Status,
                     LinesAdded = patch.LinesAdded,
                     LinesDeleted = patch.LinesDeleted,
                     Patch = patch.Patch,
+                     
                 };
-            }).ToList();
+            });
 
             return model;
         }

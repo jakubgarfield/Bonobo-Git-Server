@@ -103,6 +103,7 @@ namespace Bonobo.Git.Server.Models
 
     public class RepositoryCommitChangeModel
     {
+        public string ChangeId { get; set; }
         public string Name { get; set; }
         public string Path { get; set; }
         public ChangeKind Status { get; set; }
@@ -177,7 +178,7 @@ namespace Bonobo.Git.Server.Models
         public string TagName { get; set; }
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Changes")]
-        public List<RepositoryCommitChangeModel> Changes { get; set; }
+        public IEnumerable<RepositoryCommitChangeModel> Changes { get; set; }
 
         public IEnumerable<RepositoryCommitNoteModel> Notes { get; set; }
     }

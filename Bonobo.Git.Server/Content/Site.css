@@ -192,6 +192,3 @@ nav.branches ul li:hover ul li { float: none; }
     top: -9px;
     vertical-align: middle;
 }
-
-.pull-right { float:right; }
-.pull-left {  float:left;}

@@ -3,13 +3,12 @@
 @{
     ViewBag.Title = Resources.Repository_Commit_Detail;
     Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
-    var commitDetails = Model.Changes.Where(i => i.Status == LibGit2Sharp.ChangeKind.Modified || i.Status == LibGit2Sharp.ChangeKind.Added).ToList();
 }
-@helper HeaderForDiff(RepositoryCommitChangeModel item, int changeId)
+@helper HeaderForDiff(RepositoryCommitChangeModel item)
 {
     <div class="item">
         <p>
-            <a href="@("#change-" + changeId)"><i class="fa fa-share-square-o" title="Go To Change"></i></a>
+            <a href="@("#change-" + item.ChangeId)"><i class="fa fa-share-square-o" title="Go To Change"></i></a>
             @if (item.Status == LibGit2Sharp.ChangeKind.Added)
             {
                 <text><i class="fa fa-plus-square-o" title="@Resources.Repository_Commit_Added"></i></text>
@@ -55,21 +54,21 @@
 
         <div class="changes">
             <h3>@Model.GetType().GetDisplayValue("Changes")</h3>
-            @for (int i = 0; i < Model.Changes.Count; i++)
+            @foreach (var item in Model.Changes)
             {
-                @HeaderForDiff(Model.Changes[i], i)
+                @HeaderForDiff(item)
             }
         </div>
 
         <div class="diff">
             <h3>@Resources.Repository_Commit_Details</h3>
-            @for (int i = 0; i < commitDetails.Count; i++)
+            @foreach (var item in Model.Changes.Where(i => i.Status == LibGit2Sharp.ChangeKind.Modified || i.Status == LibGit2Sharp.ChangeKind.Added))
             {
-                <div class="blob" id="@("change-"+ i)">
+                <div class="blob" id="@("change-"+ item.ChangeId)">
                     <div class="controls">
-                        @HeaderForDiff(commitDetails[i], i)
+                        @HeaderForDiff(item)
                     </div>
-                    <pre><code class="language diff">@commitDetails[i].Patch</code></pre>
+                    <pre><code class="language diff">@item.Patch</code></pre>
                 </div>
             }
         </div>
