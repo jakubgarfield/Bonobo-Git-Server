@@ -190,7 +190,7 @@
   <ItemGroup>
     <Compile Include="Data\Update\AddGroup.cs" />
     <Compile Include="Data\Update\SqlServer\AddGroup.cs" />
-    <Compile Include="LinqExtensions.cs" />
+    <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Extensions\SignatureExtensions.cs" />
     <Compile Include="Configuration\AppSettings.cs" />
     <Compile Include="Git\GitService\GitServiceResultParser.cs" />

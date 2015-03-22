@@ -69,7 +69,9 @@
     @{
         foreach (KeyValuePair<string, RepositoryDetailModel[]> model in Model)
         {
-            if (!string.IsNullOrEmpty(model.Key))
+            bool emptyGroup = string.IsNullOrEmpty(model.Key);
+
+            if (!emptyGroup)
             {
                 <div class="pure-u-1">
                     <h2 class="group">@Html.Raw(model.Key)</h2>
@@ -80,17 +82,17 @@
                 @{
                     var permitted = new WebGrid(source: model.Value, defaultSort: "Name", rowsPerPage: 15);
 
+                    var groupColumn = new [] { permitted.Column(format: (item) => Html.Raw(string.Empty), style: "action") };
+                    var columns = permitted.Columns(
+                        permitted.Column("Name", header: typeof (RepositoryDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink(GetNameToDisplay((string) item.Name, (RepositoryDetailStatus) item.Status), "Detail", new {id = item.Name}, new {@class = "detail"})),
+                        permitted.Column("Description", typeof (RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string) item.Description).Length > 100)) ? ((string) item.Description).Substring(0, 100) + " ... " : item.Description, style: "description"),
+                        permitted.Column(format: (item) => Html.ActionLink(" ", "Edit", new {id = item.Name}, new {@class = "edit", title = Resources.Grid_Edit}), style: "action"),
+                        permitted.Column(format: (item) => Html.ActionLink(" ", "Delete", new {id = item.Name}, new {@class = "delete", title = Resources.Grid_Delete}), style: "action")
+                        );
+                        
                     @permitted.GetHtml(
-                        //displayHeader: false,
                         tableStyle: "pure-table repositories",
-                        columns: permitted.Columns(
-                            permitted.Column(format: (item) => Html.Raw(string.Empty), style: "action"),
-                            permitted.Column("Name", header: typeof (RepositoryDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink(GetNameToDisplay((string) item.Name, (RepositoryDetailStatus) item.Status), "Detail", new {id = item.Name}, new {@class = "detail"})),
-                            //permitted.Column("Group", typeof(RepositoryDetailModel).GetDisplayValue("Group"), format: (item) => item.Group),
-                            permitted.Column("Description", typeof (RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string) item.Description).Length > 100)) ? ((string) item.Description).Substring(0, 100) + " ... " : item.Description, style: "description"),
-                            permitted.Column(format: (item) => Html.ActionLink(" ", "Edit", new {id = item.Name}, new {@class = "edit", title = Resources.Grid_Edit}), style: "action"),
-                            permitted.Column(format: (item) => Html.ActionLink(" ", "Delete", new {id = item.Name}, new {@class = "delete", title = Resources.Grid_Delete}), style: "action")
-                            )
+                        columns: (emptyGroup) ? columns : groupColumn.Concat(columns)
                         )
                 }
             </div>

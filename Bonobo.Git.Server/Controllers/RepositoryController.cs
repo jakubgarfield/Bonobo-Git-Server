@@ -31,13 +31,11 @@ namespace Bonobo.Git.Server.Controllers
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
 
         [WebAuthorize]
-        public ActionResult Index()
+        public ActionResult Index(string sortGroup = null)
         {
-            bool sortGroup = string.IsNullOrEmpty(Request.QueryString["sortGroup"]) || Request.QueryString["sortGroup"].Equals("ASC");
-
             var list = GetIndexModel()
                     .GroupBy(x => x.Group)
-                    .OrderBy(x => x.Key, sortGroup)
+                    .OrderBy(x => x.Key, string.IsNullOrEmpty(sortGroup) || sortGroup.Equals("ASC"))
                     .ToDictionary(x => x.Key ?? string.Empty, x => x.ToArray());
 
             return View(list);
