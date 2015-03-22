@@ -405,6 +405,7 @@
   </data>
   <data name="Repository_Detail_Location" xml:space="preserve">
     <value>Расположение репозитория GIT</value>
+    <comment>например: http://localhost/Bonobo.Git.Server/test.git</comment>
   </data>
   <data name="Repository_Detail_Name" xml:space="preserve">
     <value>Имя</value>
@@ -734,5 +735,9 @@
   </data>
   <data name="Settings_Global_SiteTitle_Hint" xml:space="preserve">
     <value>Заголовок для сайта</value>
+  </data>
+  <data name="Repository_Detail_Location_Personal" xml:space="preserve">
+    <value>Персональный адрес</value>
+    <comment>например: http://admin@localhost/Bonobo.Git.Server/test.git</comment>
   </data>
 </root>

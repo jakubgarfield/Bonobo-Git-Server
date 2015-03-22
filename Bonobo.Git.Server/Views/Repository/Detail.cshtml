@@ -2,7 +2,14 @@
 @{
     Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
     ViewBag.Title = Resources.Repository_Detail_Title;
-    var serverAddress = System.Configuration.ConfigurationManager.AppSettings["GitServerPath"] ?? Request.Url.ToString().Substring(0, Request.Url.ToString().IndexOf("Repository"));
+
+    string serverAddress = System.Configuration.ConfigurationManager.AppSettings["GitServerPath"]
+                        ?? string.Format("{0}://{1}{2}{3}/", 
+                                            Request.Url.Scheme, 
+                                            Request.Url.Host, 
+                                            (Request.Url.Port == 80 ? "" : (":" + Request.Url.Port)),
+                                            Request.ApplicationPath == "/" ? "" : Request.ApplicationPath
+                                        );
 }
 @if (Model != null)
 {
@@ -28,6 +35,17 @@
                 <label>@Resources.Repository_Detail_Location</label>
                 @String.Concat(serverAddress, Model.Name, ".git")
             </div>
+
+            @if (User.Identity.IsAuthenticated){
+                <div class="pure-control-group">
+                    <label>
+                        @Resources.Repository_Detail_Location_Personal
+                    </label>
+
+                    @String.Concat(serverAddress.Replace("://", "://" + User.Identity.Name + "@"), Model.Name, ".git")
+                </div>
+            }
+
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.Group)
                 @Model.Group

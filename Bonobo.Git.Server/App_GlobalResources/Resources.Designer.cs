@@ -1395,11 +1395,20 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Url.
+        ///   Looks up a localized string similar to General Url.
         /// </summary>
         public static string Repository_Detail_Location {
             get {
                 return ResourceManager.GetString("Repository_Detail_Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Personal URL.
+        /// </summary>
+        public static string Repository_Detail_Location_Personal {
+            get {
+                return ResourceManager.GetString("Repository_Detail_Location_Personal", resourceCulture);
             }
         }
         
