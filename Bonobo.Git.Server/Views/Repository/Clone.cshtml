@@ -14,12 +14,14 @@
             @Html.TextBoxFor(m => m.Name, new { autofocus = "" })<em>*</em>
             @Html.ValidationMessageFor(m => m.Name)
         </div>
-
+        <div class="pure-control-group">
+            @Html.LabelFor(m => m.Group)
+            @Html.TextBoxFor(m => m.Group, new { @class = "medium" })
+        </div>
         <div class="pure-control-group">
             @Html.LabelFor(m => m.Description)
             @Html.TextAreaFor(m => m.Description, new { @class = "medium" })
         </div>
-
         <div class="pure-control-group">
             @Html.LabelFor(m => m.AllowAnonymous)
             @Html.CheckBoxFor(m => m.AllowAnonymous)

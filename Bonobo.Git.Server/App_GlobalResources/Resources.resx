@@ -843,6 +843,12 @@
   <data name="Home_ResetPassword_Username" xml:space="preserve">
     <value>Username</value>
   </data>
+  <data name="Repository_Detail_Group" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="Repository_Index_SortGroup" xml:space="preserve">
+    <value>Sort Group</value>
+  </data>
   <data name="Repository_Detail_Location_Personal" xml:space="preserve">
     <value>Personal URL</value>
     <comment>Example: http://admin@localhost/Bonobo.Git.Server/test.git</comment>

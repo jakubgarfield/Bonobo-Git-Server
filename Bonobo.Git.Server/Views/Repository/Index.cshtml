@@ -1,5 +1,5 @@
 ﻿@using Bonobo.Git.Server.Extensions
-@model IEnumerable<RepositoryDetailModel>
+@model Dictionary<string, RepositoryDetailModel[]>
 @{
     ViewBag.Title = Resources.Repository_Index_Title;
 }
@@ -28,13 +28,23 @@
         <h1>@Resources.Repository_Index_Title</h1>
     </div>
     <div class="pure-u-2-5 add">
+        @{
+            var sortGroupQuery = Request.QueryString["sortGroup"];
+
+            var sortGroup = new
+            {
+                sortGroup = string.IsNullOrEmpty(sortGroupQuery) ? "DESC" : ((sortGroupQuery.Equals("ASC") ? "DESC" : "ASC"))
+            };
+        }
+
+        <a class="pure-button pure-button-primary" href="@Url.Action("Index", sortGroup)"><i class="fa fa-sort"></i> @Resources.Repository_Index_SortGroup</a>
+
         @if (User.IsInRole(Definitions.Roles.Administrator) || UserConfiguration.Current.AllowUserRepositoryCreation)
         {
             <a class="pure-button pure-button-primary" href="@Url.Action("Create")"><i class="fa fa-plus-circle"></i> @Resources.Repository_Index_CreateNew</a>
         }
     </div>
 </div>
-
 
 @if (TempData["CreateSuccess"] as bool? == true)
 {
@@ -55,15 +65,38 @@
     </div>
 }
 
+<div class="pure-g">
+    @{
+        foreach (KeyValuePair<string, RepositoryDetailModel[]> model in Model)
+        {
+            bool emptyGroup = string.IsNullOrEmpty(model.Key);
 
-@{
-    var permitted = new WebGrid(source: Model, defaultSort: "Name", rowsPerPage: 15);
-    @permitted.GetHtml(
-    tableStyle: "pure-table repositories",
-    columns: permitted.Columns(
-             permitted.Column("Name", header: typeof(RepositoryDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink(GetNameToDisplay((string)item.Name, (RepositoryDetailStatus)item.Status), "Detail", new { id = item.Name }, new { @class = "detail" })),
-             permitted.Column("Description", typeof(RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string)item.Description).Length > 100)) ? ((string)item.Description).Substring(0, 100) + " ... " : item.Description),
-             permitted.Column(format: (item) => Html.ActionLink(" ", "Edit", new { id = item.Name }, new { @class = "edit", title = Resources.Grid_Edit }), style: "action"),
-             permitted.Column(format: (item) => Html.ActionLink(" ", "Delete", new { id = item.Name }, new { @class = "delete", title = Resources.Grid_Delete }), style: "action")
-    ))
-}
+            if (!emptyGroup)
+            {
+                <div class="pure-u-1">
+                    <h2 class="group">@Html.Raw(model.Key)</h2>
+                </div>
+            }
+
+            <div class="pure-u-1">
+                @{
+                    var permitted = new WebGrid(source: model.Value, defaultSort: "Name", rowsPerPage: 15);
+
+                    var groupColumn = new [] { permitted.Column(format: (item) => Html.Raw(string.Empty), style: "action") };
+                    var columns = permitted.Columns(
+                        permitted.Column("Name", header: typeof (RepositoryDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink(GetNameToDisplay((string) item.Name, (RepositoryDetailStatus) item.Status), "Detail", new {id = item.Name}, new {@class = "detail"})),
+                        permitted.Column("Description", typeof (RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string) item.Description).Length > 100)) ? ((string) item.Description).Substring(0, 100) + " ... " : item.Description, style: "description"),
+                        permitted.Column(format: (item) => Html.ActionLink(" ", "Edit", new {id = item.Name}, new {@class = "edit", title = Resources.Grid_Edit}), style: "action"),
+                        permitted.Column(format: (item) => Html.ActionLink(" ", "Delete", new {id = item.Name}, new {@class = "delete", title = Resources.Grid_Delete}), style: "action")
+                        );
+                        
+                    @permitted.GetHtml(
+                        tableStyle: "pure-table repositories",
+                        columns: (emptyGroup) ? columns : groupColumn.Concat(columns)
+                        )
+                }
+            </div>
+        }
+    }
+</div>
+

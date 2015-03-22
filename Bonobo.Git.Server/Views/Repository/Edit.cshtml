@@ -24,33 +24,38 @@ else
         
         @Html.ValidationSummary(false, Resources.Repository_Edit_Fail)
         @Html.HiddenFor(m => m.Name);
-        
+
         <fieldset>
             <div class="pure-control-group">
+                @Html.LabelFor(m => m.Group)
+                @Html.TextBoxFor(m => m.Group, new { @class = "medium" })
+            </div>
+            <div class="pure-control-group">
                 @Html.LabelFor(m => m.Description)
-                @Html.TextAreaFor(m => m.Description, new { @class = "medium" })
+                @Html.TextAreaFor(m => m.Description, new {@class = "medium"})
             </div>
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.AllowAnonymous)
                 @Html.CheckBoxFor(m => m.AllowAnonymous)
                 <i class="fa fa-info-circle" title="@Resources.Repository_AllowAnonymousHint"></i>
             </div>
-            @if (AppSettings.IsPushAuditEnabled) { 
-            <div class="pure-control-group">
-                @Html.LabelFor(m => m.AuditPushUser)
-                @Html.CheckBoxFor(m => m.AuditPushUser)
-                <i class="fa fa-info-circle" title="@Resources.Repository_AuditPushUserHint"></i>
-            </div>
+            @if (AppSettings.IsPushAuditEnabled)
+            {
+                <div class="pure-control-group">
+                    @Html.LabelFor(m => m.AuditPushUser)
+                    @Html.CheckBoxFor(m => m.AuditPushUser)
+                    <i class="fa fa-info-circle" title="@Resources.Repository_AuditPushUserHint"></i>
+                </div>
             }
             <div class="pure-control-group checkboxlist">
                 @Html.LabelFor(m => m.Users)
                 @{
                     var users = (from u in ViewData["AvailableUsers"] as string[]
-                                 orderby u
-                                 select new SelectListItem() { Value = u, Text = u }).ToArray();
+                        orderby u
+                        select new SelectListItem() {Value = u, Text = u}).ToArray();
                 }
 
-                @Html.CheckboxListFor(m => m.Users, users, new { @class = "checkboxList medium" })
+                @Html.CheckboxListFor(m => m.Users, users, new {@class = "checkboxList medium"})
                 <i class="fa fa-info-circle" title="@Resources.Repository_UsersHint"></i>
             </div>
 
@@ -60,11 +65,11 @@ else
                 @Html.LabelFor(m => m.Administrators)
                 @{
                     var Administrators = (from u in ViewData["AvailableAdministrators"] as string[]
-                                          orderby u
-                                          select new SelectListItem() { Value = u, Text = u }).ToArray();
+                        orderby u
+                        select new SelectListItem() {Value = u, Text = u}).ToArray();
                 }
 
-                @Html.CheckboxListFor(m => m.Administrators, Administrators, new { @class = "checkboxList medium" })
+                @Html.CheckboxListFor(m => m.Administrators, Administrators, new {@class = "checkboxList medium"})
                 <i class="fa fa-info-circle" title="@Resources.Repository_AdministratorsHint"></i>
                 @Html.ValidationMessageFor(m => m.Administrators)
             </div>
@@ -73,16 +78,16 @@ else
                 @Html.LabelFor(m => m.Teams)
                 @{
                     var teams = (from u in ViewData["AvailableTeams"] as string[]
-                                 orderby u
-                                 select new SelectListItem() { Value = u, Text = u }).ToArray();
+                        orderby u
+                        select new SelectListItem() {Value = u, Text = u}).ToArray();
                 }
 
-                @Html.CheckboxListFor(m => m.Teams, teams, new { @class = "checkboxList medium" })
+                @Html.CheckboxListFor(m => m.Teams, teams, new {@class = "checkboxList medium"})
                 <i class="fa fa-info-circle" title="@Resources.Repository_TeamsHint"></i>
             </div>
 
             <div class="pure-controls">
-                <a class="pure-button" href="@Url.Action("Detail", new { id = Model.Name})"><i class="fa fa-long-arrow-left"></i> @Resources.Repository_Edit_Back</a>
+                <a class="pure-button" href="@Url.Action("Detail", new {id = Model.Name})"><i class="fa fa-long-arrow-left"></i> @Resources.Repository_Edit_Back</a>
                 <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-save"></i> @Resources.Repository_Edit_Submit</button>
             </div>
         </fieldset>

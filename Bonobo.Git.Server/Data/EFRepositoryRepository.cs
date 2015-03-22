@@ -15,6 +15,7 @@ namespace Bonobo.Git.Server.Data
                 var dbrepos = db.Repositories.Select(repo => new
                 {
                     Name = repo.Name,
+                    Group = repo.Group,
                     Description = repo.Description,
                     AnonymousAccess = repo.Anonymous,
                     Users = repo.Users.Select(i => i.Username),
@@ -26,6 +27,7 @@ namespace Bonobo.Git.Server.Data
                 return dbrepos.Select(repo => new RepositoryModel
                 {
                     Name = repo.Name,
+                    Group = repo.Group,
                     Description = repo.Description,
                     AnonymousAccess = repo.AnonymousAccess,
                     Users = repo.Users.ToArray(),
@@ -93,6 +95,7 @@ namespace Bonobo.Git.Server.Data
                 var repository = new Repository
                 {
                     Name = model.Name,
+                    Group = model.Group,
                     Description = model.Description,
                     Anonymous = model.AnonymousAccess,
                     AuditPushUser = model.AuditPushUser,
@@ -122,6 +125,7 @@ namespace Bonobo.Git.Server.Data
                 var repo = db.Repositories.FirstOrDefault(i => i.Name == model.Name);
                 if (repo != null)
                 {
+                    repo.Group = model.Group;
                     repo.Description = model.Description;
                     repo.Anonymous = model.AnonymousAccess;
                     repo.AuditPushUser = model.AuditPushUser;
@@ -147,6 +151,7 @@ namespace Bonobo.Git.Server.Data
             return new RepositoryModel
             {
                 Name = item.Name,
+                Group = item.Group,
                 Description = item.Description,
                 AnonymousAccess = item.Anonymous,
                 Users = item.Users.Select(i => i.Username).ToArray(),
