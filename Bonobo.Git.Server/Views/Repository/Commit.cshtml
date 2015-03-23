@@ -8,6 +8,7 @@
 {
     <div class="item">
         <p>
+            <a href="@("#change-" + item.ChangeId)"><i class="fa fa-share-square-o" title="Go To Change"></i></a>
             @if (item.Status == LibGit2Sharp.ChangeKind.Added)
             {
                 <text><i class="fa fa-plus-square-o" title="@Resources.Repository_Commit_Added"></i></text>
@@ -41,6 +42,7 @@
                 @item.Path
             }
             <span class="count">@item.LinesChanged<em>(+@item.LinesAdded -@item.LinesDeleted)</em></span>
+
         </p>
     </div>
 }
@@ -62,7 +64,7 @@
             <h3>@Resources.Repository_Commit_Details</h3>
             @foreach (var item in Model.Changes.Where(i => i.Status == LibGit2Sharp.ChangeKind.Modified || i.Status == LibGit2Sharp.ChangeKind.Added))
             {
-                <div class="blob">
+                <div class="blob" id="@("change-"+ item.ChangeId)">
                     <div class="controls">
                         @HeaderForDiff(item)
                     </div>
@@ -75,5 +77,5 @@
 
 @section scripts
 {
-    <script>hljs.configure({tabReplace:'    '});hljs.initHighlightingOnLoad();</script>
+    <script>hljs.configure({ tabReplace: '    ' }); hljs.initHighlightingOnLoad();</script>
 }
