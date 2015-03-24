@@ -740,4 +740,7 @@
     <value>Персональный адрес</value>
     <comment>например: http://admin@localhost/Bonobo.Git.Server/test.git</comment>
   </data>
+  <data name="Repository_Index_SortGroup" xml:space="preserve">
+    <value>Сортировать группы</value>
+  </data>
 </root>
