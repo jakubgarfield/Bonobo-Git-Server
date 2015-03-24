@@ -743,4 +743,7 @@
   <data name="Repository_Index_SortGroup" xml:space="preserve">
     <value>Сортировать группы</value>
   </data>
+  <data name="Repository_Detail_Group" xml:space="preserve">
+    <value>Группа</value>
+  </data>
 </root>
