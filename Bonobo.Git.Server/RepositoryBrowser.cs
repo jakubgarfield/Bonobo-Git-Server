@@ -152,12 +152,13 @@ namespace Bonobo.Git.Server
 
         public RepositoryBlameModel GetBlame(string name, string path, out string referenceName)
         {
-            var commit = GetCommitByName(name, out referenceName);
-            if (commit == null || commit[path] == null || commit[path].TargetType != TreeEntryTargetType.Blob || (commit[path].Target as Blob).IsBinary)
+            var modelBlob = BrowseBlob(name, path, out referenceName);
+            if (modelBlob == null || !modelBlob.IsText)
             {
                 return null;
             }
-            string[] lines = (commit[path].Target as Blob).GetContentText().Split(Environment.NewLine.ToCharArray());
+            var commit = GetCommitByName(name, out referenceName);
+            string[] lines = modelBlob.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
             List<RepositoryBlameHunkModel> hunks = new List<RepositoryBlameHunkModel>();
             foreach (var hunk in _repository.Blame(path, new BlameOptions { StartingAt = commit }))
             {
