@@ -172,7 +172,9 @@ namespace Bonobo.Git.Server
             {
                 Name = commit[path].Name,
                 Path = path,
-                Hunks = hunks
+                Hunks = hunks,
+                FileSize = modelBlob.Data.LongLength,
+                LineCount = lines.LongLength
             };
         }
 

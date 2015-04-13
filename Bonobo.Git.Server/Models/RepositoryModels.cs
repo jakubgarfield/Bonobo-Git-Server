@@ -193,6 +193,8 @@ namespace Bonobo.Git.Server.Models
     {
         public string Name { get; set; }
         public string Path { get; set; }
+        public long FileSize { get; set; }
+        public long LineCount { get; set; }
         public IEnumerable<RepositoryBlameHunkModel> Hunks { get; set; }
     }
 

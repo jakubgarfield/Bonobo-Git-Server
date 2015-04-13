@@ -105,8 +105,10 @@ nav.branches ul li:hover ul li { float: none; }
 .breadcrumbs em { font-weight: bold; font-style: normal; }
 
 .blob { border: 1px solid #ddd; margin: 2em 0; }
-.blob .controls { border-bottom: 1px solid #ddd; text-align: right; text-shadow: 0 1px 0 #fff; background-image: linear-gradient(#fafafa, #eaeaea); background-repeat: repeat-x; padding-right: 1em;}
-.blob .controls a { color: #777; display: inline-block; padding: 0.5em;}
+.blob .controls { border-bottom: 1px solid #ddd; text-shadow: 0 1px 0 #fff; background-image: linear-gradient(#fafafa, #eaeaea); background-repeat: repeat-x; padding-right: 1em;}
+.blob .controls:after { content: ''; clear: both; display: block;}
+.blob .controls > * { color: #777; display: inline-block; padding: 0.5em;}
+.blob .controls a { float: right;}
 .blob .controls a:hover { color: #4183c4; text-decoration: none;}
 .blob pre, .diff pre { font-size: 0.8em; word-wrap:normal; overflow: auto; margin: 0; padding: 0;}
 .blob pre code, .diff pre code { white-space: pre; background: transparent; margin: 0.5em;}
