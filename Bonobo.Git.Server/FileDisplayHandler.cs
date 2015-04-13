@@ -125,7 +125,7 @@ namespace Bonobo.Git.Server
             }
 
             Encoding encoding = GetEncoding(data);
-            return encoding != null ? encoding.GetString(data) : null;
+            return encoding != null ? new StreamReader(new MemoryStream(data), encoding, true).ReadToEnd() : null;
         }
 
         public static string GetMimeType(string fileName)

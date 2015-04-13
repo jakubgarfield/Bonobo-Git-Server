@@ -135,7 +135,7 @@ namespace Bonobo.Git.Server
             {
                 model.IsText = true;
                 model.Encoding = Encoding.Default;
-                model.Text = model.Encoding.GetString(model.Data);
+                model.Text = new StreamReader(new MemoryStream(model.Data), model.Encoding, true).ReadToEnd();
             }
 
             if (model.IsText)
