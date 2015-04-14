@@ -6,7 +6,7 @@
         {
             get
             {
-                return "ALTER TABLE Repository ADD 'Group' VARCHAR(255) NULL";
+                return "ALTER TABLE Repository ADD [Group] NVARCHAR(255) NULL";
             }
         }
 
