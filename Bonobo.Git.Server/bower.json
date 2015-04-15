@@ -2,7 +2,7 @@
   "name": "Bonobo Git Server",
   "dependencies": {
     "pure": "0.4.2",
-	"font-awesome": "4.0.3",
+	"font-awesome": "4.3.0",
 	"highlight" : "8.0"
   }
 }
