@@ -56,7 +56,11 @@ namespace Bonobo.Git.Server.Git.GitService
             using (var process = Process.Start(info))
             {
                 inStream.CopyTo(process.StandardInput.BaseStream);
-                process.StandardInput.Write('\0');
+                if (options.endStreamWithClose) {
+                    process.StandardInput.Close();
+                } else {
+                    process.StandardInput.Write('\0');
+                }
 
                 process.StandardOutput.BaseStream.CopyTo(outStream);
                 process.WaitForExit();
