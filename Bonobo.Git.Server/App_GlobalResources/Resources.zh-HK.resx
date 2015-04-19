@@ -796,7 +796,7 @@
     <value>議論</value>
   </data>
   <data name="Repository_Tree_Blob" xml:space="preserve">
-    <value>Blob</value>
+    <value>正常顯示</value>
   </data>
   <data name="Email_PasswordReset_Body" xml:space="preserve">
     <value>&lt;p&gt;已收到重設密碼的請求。
