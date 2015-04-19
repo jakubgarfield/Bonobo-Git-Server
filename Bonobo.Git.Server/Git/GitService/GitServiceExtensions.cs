@@ -14,7 +14,7 @@ namespace Bonobo.Git.Server.Git.GitService
                 correlationId,
                 repositoryName,
                 "upload-pack",
-                new ExecutionOptions() { AdvertiseRefs = false },
+                new ExecutionOptions() { AdvertiseRefs = false, endStreamWithClose = true },
                 inStream,
                 outStream);
         }

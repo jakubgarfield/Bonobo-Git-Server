@@ -8,6 +8,7 @@ namespace Bonobo.Git.Server.Git.GitService
     public class ExecutionOptions
     {
         public bool AdvertiseRefs { get; set; }
+        public bool endStreamWithClose = false;
 
         public string ToCommandLineArgs()
         {
