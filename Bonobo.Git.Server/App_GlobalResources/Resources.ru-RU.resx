@@ -124,7 +124,7 @@
     <value>Пользователь был удален.</value>
   </data>
   <data name="Account_Detail_Back" xml:space="preserve">
-    <value>Обратно к списку</value>
+    <value>Назад</value>
   </data>
   <data name="Account_Detail_Delete" xml:space="preserve">
     <value>Удалить</value>
@@ -148,10 +148,10 @@
     <value>Информация о пользователе</value>
   </data>
   <data name="Account_Detail_Username" xml:space="preserve">
-    <value>Логин</value>
+    <value>Имя пользователя</value>
   </data>
   <data name="Account_Edit_Back" xml:space="preserve">
-    <value>Обратно к списку</value>
+    <value>Назад</value>
   </data>
   <data name="Account_Edit_Cancel" xml:space="preserve">
     <value>Отмена</value>
@@ -233,10 +233,10 @@
     <value>Вход</value>
   </data>
   <data name="Home_LogOn_Username" xml:space="preserve">
-    <value>Логин</value>
+    <value>Имя пользователя</value>
   </data>
   <data name="Home_LogOn_UsernamePasswordIncorrect" xml:space="preserve">
-    <value>Вы ввели неправильные логин или пароль.</value>
+    <value>Вы ввели неправильные имя пользователя или пароль.</value>
   </data>
   <data name="Home_PageNotFound_Text" xml:space="preserve">
     <value>Страница, которую вы запрашиваете не найдена. Пожалуйста, попробуйте еще раз или обратитесь к администратору системы</value>
@@ -352,8 +352,8 @@
   <data name="Repository_Commit_TypeChanged" xml:space="preserve">
     <value>Тип изменен</value>
   </data>
-  <data name="Repository_Create_Back" xml:space="preserve">
-    <value>Обратно к списку</value>
+  <data name="Repository_Back" xml:space="preserve">
+    <value>Назад</value>
   </data>
   <data name="Repository_Create_DirectoryExists" xml:space="preserve">
     <value>Папка с таким именем уже существует в вашей папке репозиториев.  Удалите её или выберете другое имя и попробуйте еще раз.</value>
@@ -386,7 +386,7 @@
     <value>Анонимный</value>
   </data>
   <data name="Repository_Detail_Back" xml:space="preserve">
-    <value>Обратно к списку</value>
+    <value>Назад</value>
   </data>
   <data name="Repository_Detail_Delete" xml:space="preserve">
     <value>Удалить</value>
@@ -426,7 +426,7 @@
     <value>Да</value>
   </data>
   <data name="Repository_Edit_Back" xml:space="preserve">
-    <value>Обратно к списку</value>
+    <value>Назад</value>
   </data>
   <data name="Repository_Edit_CantRemoveYourself" xml:space="preserve">
     <value>Вы не можете удалить сами себя из Администраторов</value>
@@ -510,7 +510,7 @@
     <value>У Вас нет прав для записи в эту папку, выберете другую.</value>
   </data>
   <data name="Team_Create_Back" xml:space="preserve">
-    <value>Обратно к списку</value>
+    <value>Назад</value>
   </data>
   <data name="Team_Create_Fail" xml:space="preserve">
     <value>Добавить команду не удалось. Исправьте ошибки и попробуйте еще раз.</value>
@@ -602,15 +602,6 @@
   <data name="Settings_Global_DirectoryHint" xml:space="preserve">
     <value>Все репозитории хранятся в этой папке</value>
   </data>
-  <data name="Home_About_Thanks" xml:space="preserve">
-    <value>Спасибо</value>
-  </data>
-  <data name="Home_About_Thanks_p" xml:space="preserve">
-    <value>Bonobo Git Server использует открытые и бесплатные проекты. Огромное спасибо тем кто их разрабатывает и предоставляет</value>
-  </data>
-  <data name="Home_About_Title" xml:space="preserve">
-    <value>О проекте</value>
-  </data>
   <data name="Repository_AdministratorsHint" xml:space="preserve">
     <value>Администраторы имеют полный доступ к репозиторию. Они также могу изменять метаданные репозитория или удалять его.</value>
   </data>
@@ -635,7 +626,7 @@
     <value>"{0}" не может быть меньше чем {1} символов.</value>
   </data>
   <data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
-    <value>Учетная запись с таким логином уже существует.</value>
+    <value>Учетная запись с таким именем пользователя уже существует.</value>
   </data>
   <data name="Account_Create_AccountInformation" xml:space="preserve">
     <value>Информация об учетной записи</value>
@@ -665,7 +656,7 @@
     <value>Создание учетной записи не удалось. Исправьте ошибки и попробуйте еще раз.</value>
   </data>
   <data name="Account_Create_Username" xml:space="preserve">
-    <value>Логин</value>
+    <value>Имя пользователя</value>
   </data>
   <data name="Account_Index_Create" xml:space="preserve">
     <value>Добавить пользователя</value>
@@ -706,17 +697,50 @@
   <data name="Repository_Tree_PreviewNotSupported" xml:space="preserve">
     <value>Предпросмотр этого типа файлов невозможно</value>
   </data>
-  <data name="Validation_FileName_Regex" xml:space="preserve">
-    <value>Only characters, numbers, minus and underscore are allowed for "{0}".</value>
-  </data>
   <data name="Settings_Global_DefaultLanguage" xml:space="preserve">
     <value>Язык</value>
   </data>
   <data name="Settings_Global_DefaultLanguage_Hint" xml:space="preserve">
     <value>Язык по умолчанию установленный в приложении</value>
   </data>
-  <data name="Settings_Global_IsCommitAuthorAvatarVisible" xml:space="preserve">
-    <value>Показывать аватар автора коммита</value>
+  <data name="Repository_Detail_Status" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="Repository_Tree_RawDisplay" xml:space="preserve">
+    <value>Raw</value>
+  </data>
+  <data name="Repository_Tree_Zip" xml:space="preserve">
+    <value>Загрузить</value>
+  </data>
+  <data name="Repository_Commit_Details" xml:space="preserve">
+    <value>Подробности</value>
+  </data>
+  <data name="Item_NotFound_Text" xml:space="preserve">
+    <value>Элемент, который вы искали, не найден.</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Подтверждение</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Домашняя страница</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>Github</value>
+  </data>
+  <data name="Repository_Layout_Clone" xml:space="preserve">
+    <value>Клонировать</value>
+  </data>
+  <data name="Repository_Clone_Success" xml:space="preserve">
+    <value>Репозиторий был успешно склонирован.</value>
+  </data>
+  <data name="Repository_Clone_Title" xml:space="preserve">
+    <value>Клонировать репозиторий</value>
+  </data>
+  <data name="Repository_Clone_Fail" xml:space="preserve">
+    <value>Клонирование репозитория не удалось. Пожалуйста, исправьте ошибки и повторите попытку.</value>
+  </data>
+  <data name="Repository_Clone_Submit" xml:space="preserve">
+    <value>Клонировать</value>
   </data>
   <data name="Settings_Global_SiteFooterMessage" xml:space="preserve">
     <value>Сообщение в подвале</value>
@@ -736,14 +760,100 @@
   <data name="Settings_Global_SiteTitle_Hint" xml:space="preserve">
     <value>Заголовок для сайта</value>
   </data>
-  <data name="Repository_Detail_Location_Personal" xml:space="preserve">
-    <value>Персональный адрес</value>
-    <comment>например: http://admin@localhost/Bonobo.Git.Server/test.git</comment>
+  <data name="Repository_Commit_NoMessageDeclared" xml:space="preserve">
+    <value>Не определено</value>
+  </data>
+  <data name="Repository_Detail_AuditPushUser" xml:space="preserve">
+    <value>Аудит изменений</value>
+  </data>
+  <data name="Repository_AuditPushUserHint" xml:space="preserve">
+    <value>Пользователь, который отправил данные на сервер</value>
+  </data>
+  <data name="Validation_FileName_Regex" xml:space="preserve">
+    <value>Для "{0}" разрешены только буквы, числа, точка, минус и символ подчеркивания.</value>
+  </data>
+  <data name="Repository_History_Title" xml:space="preserve">
+    <value>История</value>
+  </data>
+  <data name="Repository_Tree_History" xml:space="preserve">
+    <value>История</value>
+  </data>
+  <data name="Repository_Commit_AuthorAvatar" xml:space="preserve">
+    <value>Аватар</value>
+  </data>
+  <data name="Settings_Global_IsCommitAuthorAvatarVisible" xml:space="preserve">
+    <value>Показывать аватар автора коммита</value>
+  </data>
+  <data name="Repository_Blame_Title" xml:space="preserve">
+    <value>Blame</value>
+  </data>
+  <data name="Repository_Tree_Blame" xml:space="preserve">
+    <value>Blame</value>
+  </data>
+  <data name="Repository_Tree_Blob" xml:space="preserve">
+    <value>Blob</value>
+  </data>
+  <data name="Email_PasswordReset_Body" xml:space="preserve">
+    <value>&lt;p&gt;Кто-то, возможно вы, воспользовались функционалом восстановления пароля.  
+                           Если вы не являетесь инициатором данного запроса - просто проигнорируйте данное письмо.&lt;/p&gt;
+                           &lt;p&gt;Для возможности восстановления пароля перейдите, пожалуйста, по ссылке:&lt;/p&gt;</value>
+  </data>
+  <data name="Email_PasswordReset_Title" xml:space="preserve">
+    <value>Bonobo - Запрос на сброс пароля</value>
+  </data>
+  <data name="Home_ForgotPassword_EmailError" xml:space="preserve">
+    <value>Произошла ошибка при отправке почты. Проверьте, пожалуйста, настройки SMTP-сервера.</value>
+  </data>
+  <data name="Home_ForgotPassword_EmailSuccess" xml:space="preserve">
+    <value>Письмо отправлено.</value>
+  </data>
+  <data name="Home_ForgotPassword_Failed" xml:space="preserve">
+    <value>Произошла ошибка при восстановлении пароля. Исправьте, пожалуйста, ошибки и попробуйте снова.</value>
+  </data>
+  <data name="Home_ForgotPassword_ForgotPassword" xml:space="preserve">
+    <value>Восстановить пароль</value>
+  </data>
+  <data name="Home_ForgotPassword_Title" xml:space="preserve">
+    <value>Восстановление пароля</value>
+  </data>
+  <data name="Home_ForgotPassword_Username" xml:space="preserve">
+    <value>Имя пользователя</value>
+  </data>
+  <data name="Home_ForgotPassword_UserNameFailure" xml:space="preserve">
+    <value>Пользователь с указанным именем не найден.</value>
+  </data>
+  <data name="Home_LogOn_ForgotPassword" xml:space="preserve">
+    <value>Восстановить пароль?</value>
+  </data>
+  <data name="Home_ResetPassword_ConfirmPassword" xml:space="preserve">
+    <value>Подтвердить пароль</value>
+  </data>
+  <data name="Home_ResetPassword_Failed" xml:space="preserve">
+    <value>Невозможно сбросить пароль</value>
+  </data>
+  <data name="Home_ResetPassword_Password" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="Home_ResetPassword_ResetPassword" xml:space="preserve">
+    <value>Сброс пароля</value>
+  </data>
+  <data name="Home_ResetPassword_Success" xml:space="preserve">
+    <value>Пароль успешно сброшен</value>
+  </data>
+  <data name="Home_ResetPassword_Title" xml:space="preserve">
+    <value>Сброс пароля</value>
+  </data>
+  <data name="Home_ResetPassword_Username" xml:space="preserve">
+    <value>Имя пользователя</value>
+  </data>
+  <data name="Repository_Detail_Group" xml:space="preserve">
+    <value>Группа</value>
   </data>
   <data name="Repository_Index_SortGroup" xml:space="preserve">
     <value>Сортировать группы</value>
   </data>
-  <data name="Repository_Detail_Group" xml:space="preserve">
-    <value>Группа</value>
+  <data name="Repository_Detail_Location_Personal" xml:space="preserve">
+    <value>Персональный адрес</value>
+    <comment>например: http://admin@localhost/Bonobo.Git.Server/test.git</comment>
   </data>
 </root>
