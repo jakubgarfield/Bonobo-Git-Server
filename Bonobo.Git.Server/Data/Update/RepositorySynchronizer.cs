@@ -1,5 +1,6 @@
 ﻿using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Models;
+using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,11 +29,14 @@ namespace Bonobo.Git.Server.Data.Update
                 RepositoryModel repository = _repositoryRepository.GetRepository(name);
                 if (repository == null)
                 {
-                    repository = new RepositoryModel();
-                    repository.Description = "Discovered in file system.";
-                    repository.Name = name;
-                    repository.AnonymousAccess = false;
-                    _repositoryRepository.Create(repository);
+                    if (LibGit2Sharp.Repository.IsValid(directory))
+                    {
+                        repository = new RepositoryModel();
+                        repository.Description = "Discovered in file system.";
+                        repository.Name = name;
+                        repository.AnonymousAccess = false;
+                        _repositoryRepository.Create(repository);
+                    }
                 }
             }
         }
