@@ -269,7 +269,7 @@
     <value>Администрация</value>
   </data>
   <data name="Layout_AdministrationGlobalSettings" xml:space="preserve">
-    <value>Глобальные настройки</value>
+    <value>Настройки</value>
   </data>
   <data name="Layout_AdministrationRepositories" xml:space="preserve">
     <value>Репозитории</value>
@@ -308,7 +308,7 @@
     <value>Комиты</value>
   </data>
   <data name="Repository_Commit_Added" xml:space="preserve">
-    <value>Добавлено</value>
+    <value>Добавить</value>
   </data>
   <data name="Repository_Commit_Author" xml:space="preserve">
     <value>Автор</value>
@@ -320,13 +320,13 @@
     <value>Измененные файлы</value>
   </data>
   <data name="Repository_Commit_Copied" xml:space="preserve">
-    <value>Скопировано</value>
+    <value>Скопировать</value>
   </data>
   <data name="Repository_Commit_Date" xml:space="preserve">
     <value>Дата</value>
   </data>
   <data name="Repository_Commit_Deleted" xml:space="preserve">
-    <value>Удален</value>
+    <value>Удалить</value>
   </data>
   <data name="Repository_Commit_Detail" xml:space="preserve">
     <value>Подробности комита</value>
@@ -344,7 +344,7 @@
     <value>Родители</value>
   </data>
   <data name="Repository_Commit_Renamed" xml:space="preserve">
-    <value>Переименовано</value>
+    <value>Переименовать</value>
   </data>
   <data name="Repository_Commit_TreeID" xml:space="preserve">
     <value>Дерево</value>
@@ -368,7 +368,7 @@
     <value>Информация о репозитории</value>
   </data>
   <data name="Repository_Create_Submit" xml:space="preserve">
-    <value>Создано</value>
+    <value>Создать</value>
   </data>
   <data name="Repository_Create_Success" xml:space="preserve">
     <value>Репозиторий был успешно создан</value>
@@ -459,7 +459,7 @@
     <value>Репозитории</value>
   </data>
   <data name="Repository_Index_Title" xml:space="preserve">
-    <value>Управление репозиторием</value>
+    <value>Управление репозиториями</value>
   </data>
   <data name="Repository_Index_Yes" xml:space="preserve">
     <value>Да</value>
@@ -695,7 +695,7 @@
     <value>Подтвердите удаление</value>
   </data>
   <data name="Repository_Tree_PreviewNotSupported" xml:space="preserve">
-    <value>Предпросмотр этого типа файлов невозможно</value>
+    <value>Предпросмотр этого типа файлов невозможен</value>
   </data>
   <data name="Settings_Global_DefaultLanguage" xml:space="preserve">
     <value>Язык</value>
