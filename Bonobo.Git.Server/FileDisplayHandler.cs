@@ -7,6 +7,7 @@ using System.Text;
 using System.IO;
 using System.Xml;
 using Ude;
+using System.Configuration;
 
 namespace Bonobo.Git.Server
 {
@@ -25,95 +26,20 @@ namespace Bonobo.Git.Server
             }
 
             var extension = Path.GetExtension(fileName).ToLower();
-            switch (extension)
+            
+            using (StreamReader file = new StreamReader(Path.Combine(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["GitHomePath"]), "ext2app.txt")))
             {
-                case ".vb":
-                    return "vb";
+                string s = null;
 
-                case ".cs":
-                    return "csharp";
+                Dictionary<string, string> ext2app = new Dictionary<string, string>();
+                while ((s = file.ReadLine()) != null)
+                {
+                    string[] str = s.Split(new string[] { " = " }, 0);
+                    ext2app.Add(str[0], str[1]);
+                }
 
-                case ".as":
-                    return "as3";
-
-                case ".sh":
-                    return "bash";
-
-                case ".html":
-                case ".htm":
-                case ".xhtml":
-                case ".xslt":
-                case ".xml":
-                case ".asp":
-                case ".aspx":
-                case ".cshtml":
-                case ".xaml":
-                case ".csproj":
-                case ".config":
-                    return "html";
-
-                case ".cf":
-                    return "cf";
-
-                case ".h":
-                case ".c":
-                case ".cpp":
-                    return "cpp";
-
-                case ".css":
-                    return "css";
-
-                case ".pas":
-                    return "delphi";
-
-                case ".diff":
-                case ".patch":
-                    return "diff";
-
-                case ".erl":
-                case ".xlr":
-                case ".hlr":
-                    return "erlang";
-
-                case ".groovy":
-                    return "groovy";
-
-                case ".js":
-                case ".jscript":
-                case ".javascript":
-                    return "js";
-
-                case ".java":
-                    return "java";
-
-                case ".fx":
-                    return "jfx";
-
-                case ".pir":
-                case ".pm":
-                case ".pl":
-                    return "perl";
-
-                case ".php":
-                    return "php";
-
-                case ".ps1":
-                case ".psm1":
-                    return "ps";
-
-                case ".py":
-                    return "python";
-
-                case ".rb":
-                    return "ruby";
-
-                case ".scala":
-                    return "scala";
-
-                case ".sql":
-                    return "sql";
-                default:
-                    return "plain";
+                string app = null;
+                return ext2app.TryGetValue(extension, out app) ? app : "plain";
             }
         }
 
