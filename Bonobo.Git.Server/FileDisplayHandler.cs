@@ -113,7 +113,7 @@ namespace Bonobo.Git.Server
                 case ".sql":
                     return "sql";
                 default:
-                    return "plain";
+                    return "nohighlight";
             }
         }
 
