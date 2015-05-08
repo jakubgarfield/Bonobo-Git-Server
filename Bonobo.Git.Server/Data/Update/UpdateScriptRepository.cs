@@ -19,7 +19,8 @@ namespace Bonobo.Git.Server.Data.Update
                         new InsertDefaultData(),
                         new UsernamesToLower(),
                         new AddAuditPushUser(),
-                        new AddGroup()
+                        new AddGroup(),
+                        new AddRepositoryLogo()
                     };
                 case "SqlConnection":
                     return new List<IUpdateScript>

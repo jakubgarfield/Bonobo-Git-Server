@@ -19,9 +19,8 @@ else
         </div>
     }
     
-    @using (Html.BeginForm("Edit", "Repository", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
+    @using (Html.BeginForm("Edit", "Repository", FormMethod.Post, new { @class = "pure-form pure-form-aligned", enctype = "multipart/form-data" }))
     {
-        
         @Html.ValidationSummary(false, Resources.Repository_Edit_Fail)
         @Html.HiddenFor(m => m.Name);
 
@@ -34,11 +33,19 @@ else
                 @Html.LabelFor(m => m.Description)
                 @Html.TextAreaFor(m => m.Description, new {@class = "medium"})
             </div>
+
+            <div class="pure-control-group">
+                <label>Logo (48x48)</label>
+                <input type="file" name="Logo.PostedFile" />
+                <sup>.png, .jpg, .jpeg, .gif</sup>
+            </div>
+
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.AllowAnonymous)
                 @Html.CheckBoxFor(m => m.AllowAnonymous)
                 <i class="fa fa-info-circle" title="@Resources.Repository_AllowAnonymousHint"></i>
             </div>
+
             @if (AppSettings.IsPushAuditEnabled)
             {
                 <div class="pure-control-group">
