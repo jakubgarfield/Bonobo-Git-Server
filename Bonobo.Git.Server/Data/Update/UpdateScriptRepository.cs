@@ -29,7 +29,8 @@ namespace Bonobo.Git.Server.Data.Update
                         new SqlServer.InsertDefaultData(),
                         new UsernamesToLower(),
                         new SqlServer.AddAuditPushUser(),
-                        new SqlServer.AddGroup()
+                        new SqlServer.AddGroup(),
+                        new SqlServer.AddRepositoryLogo()
                     };
                 default:
                     throw new NotImplementedException(string.Format("The provider '{0}' is not supported yet", sqlProvider));
