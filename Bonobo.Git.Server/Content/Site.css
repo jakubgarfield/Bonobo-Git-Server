@@ -169,6 +169,7 @@ nav.branches ul li:hover ul li { float: none; }
 .repositories { margin: 0 0 1em 0; }
 h2.group { margin: 0; }
 td.description { width: 50%; }
+td.logo { width: 36px; }
 
 h2.group .toggle:after { display: inline-block; font-family: FontAwesome; top: 0; content: "\f056"; height: 100%; width: 20px; cursor: pointer; color: #4183c4; }
 h2.group .toggle.on:after { content: "\f055"; }

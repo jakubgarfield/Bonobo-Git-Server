@@ -542,7 +542,7 @@ namespace Bonobo.Git.Server.Controllers
                 AllowAnonymous = model.AnonymousAccess,
                 Status = GetRepositoryStatus(model),
                 AuditPushUser = model.AuditPushUser,
-                Logo = new RepositoryLogo(model.Logo)
+                Logo = new RepositoryLogoDetailModel(model.Logo)
             };
         }
 

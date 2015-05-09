@@ -63,9 +63,7 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_AuditPushUser")]
         public bool AuditPushUser { get; set; }
 
-        //TODO: set display attribute
-        //[FileUploadExtensions(Extensions = "PNG,JPG,JPEG,GIF")]
-        public RepositoryLogo Logo { get; set; }
+        public RepositoryLogoDetailModel Logo { get; set; }
     }
 
     public enum RepositoryDetailStatus
@@ -214,19 +212,28 @@ namespace Bonobo.Git.Server.Models
         public string[] Lines { get; set; }
     }
 
-    public class RepositoryLogo
+    public class RepositoryLogoDetailModel
     {
         byte[] _data;
 
-        public RepositoryLogo() { }
+        public RepositoryLogoDetailModel() { }
 
-        public RepositoryLogo(byte[] data)
+        public RepositoryLogoDetailModel(byte[] data)
         {
             this._data = data;
         }
 
         [FileUploadExtensions(Extensions = "PNG,JPG,JPEG,GIF")]
-        public HttpPostedFileWrapper PostedFile { get;  set; }
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Logo_PostedFile")]
+        public HttpPostedFileWrapper PostedFile { get; set; }
+
+        public bool Exists
+        {
+            get
+            {
+                return BinaryData != null;
+            }
+        }
 
         public byte[] BinaryData
         {
@@ -238,7 +245,7 @@ namespace Bonobo.Git.Server.Models
                     {
                         Image originalImage = Image.FromStream(PostedFile.InputStream, true, true);
 
-                        Image resizedImage = originalImage.GetThumbnailImage(48, (48* originalImage.Height) / originalImage.Width, null, IntPtr.Zero);
+                        Image resizedImage = originalImage.GetThumbnailImage(36, (36 * originalImage.Height) / originalImage.Width, null, IntPtr.Zero);
 
                         resizedImage.Save(ms, ImageFormat.Jpeg);
 

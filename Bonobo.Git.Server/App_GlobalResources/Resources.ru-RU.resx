@@ -856,4 +856,7 @@
     <value>Персональный адрес</value>
     <comment>например: http://admin@localhost/Bonobo.Git.Server/test.git</comment>
   </data>
+  <data name="Repository_Detail_Logo_PostedFile" xml:space="preserve">
+    <value>Логотип (36x36)</value>
+  </data>
 </root>

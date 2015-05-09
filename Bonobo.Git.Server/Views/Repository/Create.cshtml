@@ -24,8 +24,8 @@
             @Html.TextAreaFor(m => m.Description, new { @class = "medium" })
         </div>
         <div class="pure-control-group">
-            <label>Logo (48x48)</label>
-            <input type="file" name="Logo" />
+            @Html.LabelFor(m => m.Logo.PostedFile)
+            <input type="file" name="Logo.PostedFile" id="Logo_PostedFile" />
             <sup>.png, .jpg, .jpeg, .gif</sup>
         </div>
 
