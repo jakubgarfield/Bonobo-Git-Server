@@ -1,103 +1,113 @@
 ﻿@using Bonobo.Git.Server.Extensions
 @model Bonobo.Git.Server.Models.RepositoryDetailModel
+
 @{
     ViewBag.Title = Resources.Repository_Edit_Title;
 }
+
 @if (Model == null)
-{   
-    @Html.Partial("~/Views/Shared/_ItemNotFound.cshtml") 
+{
+    @Html.Partial("~/Views/Shared/_ItemNotFound.cshtml")
 }
 else
 {
     <text>
-    <h1>@Model.Name</h1>
-    
-    @if (ViewBag.UpdateSuccess != null && ViewBag.UpdateSuccess)
-    {
-        <div class="summary-success">
-            <p>@Resources.Repository_Edit_UpdateSuccess</p>
-        </div>
-    }
-    
-    @using (Html.BeginForm("Edit", "Repository", FormMethod.Post, new { @class = "pure-form pure-form-aligned", enctype = "multipart/form-data" }))
-    {
-        @Html.ValidationSummary(false, Resources.Repository_Edit_Fail)
-        @Html.HiddenFor(m => m.Name);
+        <h1>
+            @Html.Raw(Model.Logo.Exists ? string.Format("<img src='data:image/jpeg;base64,{0}' />", Model.Logo.Base64Image) : "")
+            @Model.Name
+        </h1>
 
-        <fieldset>
-            <div class="pure-control-group">
-                @Html.LabelFor(m => m.Group)
-                @Html.TextBoxFor(m => m.Group, new { @class = "medium" })
+        @if (ViewBag.UpdateSuccess != null && ViewBag.UpdateSuccess)
+        {
+            <div class="summary-success">
+                <p>@Resources.Repository_Edit_UpdateSuccess</p>
             </div>
-            <div class="pure-control-group">
-                @Html.LabelFor(m => m.Description)
-                @Html.TextAreaFor(m => m.Description, new {@class = "medium"})
-            </div>
+        }
 
-            <div class="pure-control-group">
-                @Html.LabelFor(m => m.Logo.PostedFile)
-                <input type="file" name="Logo.PostedFile" id="Logo_PostedFile" />
-                <sup>.png, .jpg, .jpeg, .gif</sup>
-            </div>
+        @using (Html.BeginForm("Edit", "Repository", FormMethod.Post, new { @class = "pure-form pure-form-aligned", enctype = "multipart/form-data" }))
+        {
+            @Html.ValidationSummary(false, Resources.Repository_Edit_Fail)
+            @Html.HiddenFor(m => m.Name);
 
-            <div class="pure-control-group">
-                @Html.LabelFor(m => m.AllowAnonymous)
-                @Html.CheckBoxFor(m => m.AllowAnonymous)
-                <i class="fa fa-info-circle" title="@Resources.Repository_AllowAnonymousHint"></i>
-            </div>
-
-            @if (AppSettings.IsPushAuditEnabled)
-            {
+            <fieldset>
                 <div class="pure-control-group">
-                    @Html.LabelFor(m => m.AuditPushUser)
-                    @Html.CheckBoxFor(m => m.AuditPushUser)
-                    <i class="fa fa-info-circle" title="@Resources.Repository_AuditPushUserHint"></i>
+                    @Html.LabelFor(m => m.Group)
+                    @Html.TextBoxFor(m => m.Group, new { @class = "medium" })
                 </div>
-            }
-            <div class="pure-control-group checkboxlist">
-                @Html.LabelFor(m => m.Users)
-                @{
-                    var users = (from u in ViewData["AvailableUsers"] as string[]
-                        orderby u
-                        select new SelectListItem() {Value = u, Text = u}).ToArray();
+                <div class="pure-control-group">
+                    @Html.LabelFor(m => m.Description)
+                    @Html.TextAreaFor(m => m.Description, new { @class = "medium" })
+                </div>
+
+                <div class="pure-control-group">
+                    @Html.LabelFor(m => m.Logo.PostedFile)
+                    <input type="file" name="Logo.PostedFile" id="Logo_PostedFile" />
+                    <sup>.png, .jpg, .jpeg, .gif</sup>
+                </div>
+
+                <div class="pure-control-group">
+                    @Html.LabelFor(m => m.Logo.RemoveLogo)
+                    @Html.CheckBoxFor(m => m.Logo.RemoveLogo)
+                </div>
+
+                <div class="pure-control-group">
+                    @Html.LabelFor(m => m.AllowAnonymous)
+                    @Html.CheckBoxFor(m => m.AllowAnonymous)
+                    <i class="fa fa-info-circle" title="@Resources.Repository_AllowAnonymousHint"></i>
+                </div>
+
+                @if (AppSettings.IsPushAuditEnabled)
+                {
+                    <div class="pure-control-group">
+                        @Html.LabelFor(m => m.AuditPushUser)
+                        @Html.CheckBoxFor(m => m.AuditPushUser)
+                        <i class="fa fa-info-circle" title="@Resources.Repository_AuditPushUserHint"></i>
+                    </div>
                 }
+                <div class="pure-control-group checkboxlist">
+                    @Html.LabelFor(m => m.Users)
+                    @{
+                        var users = (from u in ViewData["AvailableUsers"] as string[]
+                                     orderby u
+                                     select new SelectListItem() { Value = u, Text = u }).ToArray();
+                    }
 
-                @Html.CheckboxListFor(m => m.Users, users, new {@class = "checkboxList medium"})
-                <i class="fa fa-info-circle" title="@Resources.Repository_UsersHint"></i>
-            </div>
+                    @Html.CheckboxListFor(m => m.Users, users, new { @class = "checkboxList medium" })
+                    <i class="fa fa-info-circle" title="@Resources.Repository_UsersHint"></i>
+                </div>
 
 
 
-            <div class="pure-control-group checkboxlist">
-                @Html.LabelFor(m => m.Administrators)
-                @{
-                    var Administrators = (from u in ViewData["AvailableAdministrators"] as string[]
-                        orderby u
-                        select new SelectListItem() {Value = u, Text = u}).ToArray();
-                }
+                <div class="pure-control-group checkboxlist">
+                    @Html.LabelFor(m => m.Administrators)
+                    @{
+                        var Administrators = (from u in ViewData["AvailableAdministrators"] as string[]
+                                              orderby u
+                                              select new SelectListItem() { Value = u, Text = u }).ToArray();
+                    }
 
-                @Html.CheckboxListFor(m => m.Administrators, Administrators, new {@class = "checkboxList medium"})
-                <i class="fa fa-info-circle" title="@Resources.Repository_AdministratorsHint"></i>
-                @Html.ValidationMessageFor(m => m.Administrators)
-            </div>
+                    @Html.CheckboxListFor(m => m.Administrators, Administrators, new { @class = "checkboxList medium" })
+                    <i class="fa fa-info-circle" title="@Resources.Repository_AdministratorsHint"></i>
+                    @Html.ValidationMessageFor(m => m.Administrators)
+                </div>
 
-            <div class="pure-control-group checkboxlist">
-                @Html.LabelFor(m => m.Teams)
-                @{
-                    var teams = (from u in ViewData["AvailableTeams"] as string[]
-                        orderby u
-                        select new SelectListItem() {Value = u, Text = u}).ToArray();
-                }
+                <div class="pure-control-group checkboxlist">
+                    @Html.LabelFor(m => m.Teams)
+                    @{
+                        var teams = (from u in ViewData["AvailableTeams"] as string[]
+                                     orderby u
+                                     select new SelectListItem() { Value = u, Text = u }).ToArray();
+                    }
 
-                @Html.CheckboxListFor(m => m.Teams, teams, new {@class = "checkboxList medium"})
-                <i class="fa fa-info-circle" title="@Resources.Repository_TeamsHint"></i>
-            </div>
+                    @Html.CheckboxListFor(m => m.Teams, teams, new { @class = "checkboxList medium" })
+                    <i class="fa fa-info-circle" title="@Resources.Repository_TeamsHint"></i>
+                </div>
 
-            <div class="pure-controls">
-                <a class="pure-button" href="@Url.Action("Detail", new {id = Model.Name})"><i class="fa fa-long-arrow-left"></i> @Resources.Repository_Edit_Back</a>
-                <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-save"></i> @Resources.Repository_Edit_Submit</button>
-            </div>
-        </fieldset>
-    }
+                <div class="pure-controls">
+                    <a class="pure-button" href="@Url.Action("Detail", new {id = Model.Name})"><i class="fa fa-long-arrow-left"></i> @Resources.Repository_Edit_Back</a>
+                    <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-save"></i> @Resources.Repository_Edit_Submit</button>
+                </div>
+            </fieldset>
+                        }
     </text>
-}
+                        }

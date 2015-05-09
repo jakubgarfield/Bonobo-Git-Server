@@ -23,6 +23,7 @@ namespace Bonobo.Git.Server.Models
         public string[] Teams { get; set; }
         public bool AuditPushUser { get; set; }
         public byte[] Logo { get; set; }
+        public bool RemoveLogo { get; set; }
     }
 
     public class RepositoryDetailModel
@@ -226,6 +227,9 @@ namespace Bonobo.Git.Server.Models
         [FileUploadExtensions(Extensions = "PNG,JPG,JPEG,GIF")]
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Logo_PostedFile")]
         public HttpPostedFileWrapper PostedFile { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_RemoveLogo")]
+        public bool RemoveLogo { get; set; }
 
         public bool Exists
         {

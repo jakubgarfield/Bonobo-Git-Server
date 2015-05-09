@@ -55,6 +55,8 @@ textarea.large, input.large { width: 40em;height: 17em; }
 .main { min-height: 100%; position: relative; }
 
 .content { width: 980px; margin: 0 auto; padding-bottom: 50px; }
+.content h1 { position:relative; }
+.content h1 img {   position: absolute; left: -54px; top: 6px; }
 
 .footer { color: #999; background-color: #000; font-size: 0.85em; width: 100%; position: absolute; bottom: 0; height: 50px; line-height: 1.7em; text-align: center; }
 .footer a { color: #999; text-decoration: none; }
