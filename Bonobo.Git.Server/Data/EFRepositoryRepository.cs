@@ -132,7 +132,12 @@ namespace Bonobo.Git.Server.Data
                     repo.Description = model.Description;
                     repo.Anonymous = model.AnonymousAccess;
                     repo.AuditPushUser = model.AuditPushUser;
-                    repo.Logo = model.Logo;
+
+                    if (model.Logo != null)
+                        repo.Logo = model.Logo;
+
+                    if (model.RemoveLogo)
+                        repo.Logo = null;
 
                     repo.Users.Clear();
                     repo.Teams.Clear();

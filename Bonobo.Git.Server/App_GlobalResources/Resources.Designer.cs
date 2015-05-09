@@ -1440,6 +1440,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove logo.
+        /// </summary>
+        public static string Repository_Detail_RemoveLogo {
+            get {
+                return ResourceManager.GetString("Repository_Detail_RemoveLogo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Status.
         /// </summary>
         public static string Repository_Detail_Status {
