@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -540,6 +542,7 @@ namespace Bonobo.Git.Server.Controllers
                 AllowAnonymous = model.AnonymousAccess,
                 Status = GetRepositoryStatus(model),
                 AuditPushUser = model.AuditPushUser,
+                Logo = new RepositoryLogoDetailModel(model.Logo)
             };
         }
 
@@ -564,6 +567,8 @@ namespace Bonobo.Git.Server.Controllers
                 Teams = model.Teams,
                 AnonymousAccess = model.AllowAnonymous,
                 AuditPushUser = model.AuditPushUser,
+                Logo = model.Logo.BinaryData,
+                RemoveLogo = model.Logo.RemoveLogo
             };
         }
 

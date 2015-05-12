@@ -13,6 +13,7 @@ namespace Bonobo.Git.Server.Data
         public string Group { get; set; }
         public string Description { get; set; }
         public bool Anonymous { get; set; }
+        public byte[] Logo { get; set; }
 
         public virtual ICollection<Team> Teams
         {

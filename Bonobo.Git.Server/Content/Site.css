@@ -55,6 +55,8 @@ textarea.large, input.large { width: 40em;height: 17em; }
 .main { min-height: 100%; position: relative; }
 
 .content { width: 980px; margin: 0 auto; padding-bottom: 50px; }
+.content h1 { position:relative; }
+.content h1 img {   position: absolute; left: -54px; top: 6px; }
 
 .footer { color: #999; background-color: #000; font-size: 0.85em; width: 100%; position: absolute; bottom: 0; height: 50px; line-height: 1.7em; text-align: center; }
 .footer a { color: #999; text-decoration: none; }
@@ -169,6 +171,7 @@ nav.branches ul li:hover ul li { float: none; }
 .repositories { margin: 0 0 1em 0; }
 h2.group { margin: 0; }
 td.description { width: 50%; }
+td.logo { width: 36px; }
 
 h2.group .toggle:after { display: inline-block; font-family: FontAwesome; top: 0; content: "\f056"; height: 100%; width: 20px; cursor: pointer; color: #4183c4; }
 h2.group .toggle.on:after { content: "\f055"; }

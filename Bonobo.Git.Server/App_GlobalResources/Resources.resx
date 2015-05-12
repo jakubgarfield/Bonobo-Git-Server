@@ -853,4 +853,10 @@
     <value>Personal URL</value>
     <comment>Example: http://admin@localhost/Bonobo.Git.Server/test.git</comment>
   </data>
+  <data name="Repository_Detail_Logo_PostedFile" xml:space="preserve">
+    <value>Logo (36x36)</value>
+  </data>
+  <data name="Repository_Detail_RemoveLogo" xml:space="preserve">
+    <value>Remove logo</value>
+  </data>
 </root>

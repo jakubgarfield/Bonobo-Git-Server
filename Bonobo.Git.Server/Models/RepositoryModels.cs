@@ -4,6 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using Bonobo.Git.Server.App_GlobalResources;
 using LibGit2Sharp;
 using System.Text;
+using System.Web;
+using Bonobo.Git.Server.Attributes;
+using System.IO;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Bonobo.Git.Server.Models
 {
@@ -17,6 +22,8 @@ namespace Bonobo.Git.Server.Models
         public string[] Administrators { get; set; }
         public string[] Teams { get; set; }
         public bool AuditPushUser { get; set; }
+        public byte[] Logo { get; set; }
+        public bool RemoveLogo { get; set; }
     }
 
     public class RepositoryDetailModel
@@ -56,6 +63,8 @@ namespace Bonobo.Git.Server.Models
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_AuditPushUser")]
         public bool AuditPushUser { get; set; }
+
+        public RepositoryLogoDetailModel Logo { get; set; }
     }
 
     public enum RepositoryDetailStatus
@@ -202,5 +211,65 @@ namespace Bonobo.Git.Server.Models
     {
         public RepositoryCommitModel Commit { get; set; }
         public string[] Lines { get; set; }
+    }
+
+    public class RepositoryLogoDetailModel
+    {
+        byte[] _data;
+
+        public RepositoryLogoDetailModel() { }
+
+        public RepositoryLogoDetailModel(byte[] data)
+        {
+            this._data = data;
+        }
+
+        [FileUploadExtensions(Extensions = "PNG,JPG,JPEG,GIF")]
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Logo_PostedFile")]
+        public HttpPostedFileWrapper PostedFile { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_RemoveLogo")]
+        public bool RemoveLogo { get; set; }
+
+        public bool Exists
+        {
+            get
+            {
+                return BinaryData != null;
+            }
+        }
+
+        public byte[] BinaryData
+        {
+            get
+            {
+                if (_data == null && PostedFile != null)
+                {
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        Image originalImage = Image.FromStream(PostedFile.InputStream, true, true);
+
+                        Image resizedImage = originalImage.GetThumbnailImage(36, (36 * originalImage.Height) / originalImage.Width, null, IntPtr.Zero);
+
+                        resizedImage.Save(ms, ImageFormat.Jpeg);
+
+                        _data = ms.GetBuffer();
+                    }
+                }
+
+                return _data;
+            }
+        }
+
+        public string Base64Image
+        {
+            get
+            {
+                if (_data != null)
+                    return Convert.ToBase64String(_data);
+
+                return null;
+            }
+        }
     }
 }

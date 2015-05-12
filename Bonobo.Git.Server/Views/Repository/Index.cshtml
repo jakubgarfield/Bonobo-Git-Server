@@ -1,4 +1,7 @@
 ﻿@using Bonobo.Git.Server.Extensions
+@using System.Web.Mvc.Html
+@using Bonobo.Git.Server.Models
+
 @model Dictionary<string, RepositoryDetailModel[]>
 @{
     ViewBag.Title = Resources.Repository_Index_Title;
@@ -89,12 +92,26 @@
 
                     var groupColumn = new [] { permitted.Column(format: (item) => Html.Raw(string.Empty), style: "action") };
                     var columns = permitted.Columns(
-                        permitted.Column("Name", header: typeof (RepositoryDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink(GetNameToDisplay((string) item.Name, (RepositoryDetailStatus) item.Status), "Detail", new {id = item.Name}, new {@class = "detail"})),
+                        permitted.Column(
+                            format: item => Html.Raw(item.Logo.Exists ? string.Format("<img src='data:image/jpeg;base64,{0}' />", item.Logo.Base64Image) : ""),
+                            style: "logo"
+                        ),
+                        permitted.Column("Name",
+                            header: typeof (RepositoryDetailModel).GetDisplayValue("Name"),
+                            format: (item) =>
+                                Html.ActionLink(
+                                    GetNameToDisplay((string) item.Name, (RepositoryDetailStatus) item.Status),
+                                    "Detail",
+                                    new { id = item.Name },
+                                    new { @class = "detail" + (item.Logo.Exists ? " customLogo" : "") }
+                                )
+                        ),
+
                         permitted.Column("Description", typeof (RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string) item.Description).Length > 100)) ? ((string) item.Description).Substring(0, 100) + " ... " : item.Description, style: "description"),
                         permitted.Column(format: (item) => Html.ActionLink(" ", "Edit", new {id = item.Name}, new {@class = "edit", title = Resources.Grid_Edit}), style: "action"),
                         permitted.Column(format: (item) => Html.ActionLink(" ", "Delete", new {id = item.Name}, new {@class = "delete", title = Resources.Grid_Delete}), style: "action")
                         );
-                        
+
                     @permitted.GetHtml(
                         tableStyle: "pure-table repositories",
                         columns: (emptyGroup) ? columns : groupColumn.Concat(columns)

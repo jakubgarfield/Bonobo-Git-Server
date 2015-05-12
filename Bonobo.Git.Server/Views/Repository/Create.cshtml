@@ -5,8 +5,8 @@
 }
 <h1>@Resources.Repository_Create_Title</h1>
 
-@using (Html.BeginForm("Create", "Repository", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
-{    
+@using (Html.BeginForm("Create", "Repository", FormMethod.Post, new { @class = "pure-form pure-form-aligned", enctype = "multipart/form-data" }))
+{
     @Html.ValidationSummary(false, Resources.Repository_Create_Fail)
     
     <fieldset>
@@ -23,56 +23,61 @@
             @Html.LabelFor(m => m.Description)
             @Html.TextAreaFor(m => m.Description, new { @class = "medium" })
         </div>
-
         <div class="pure-control-group">
-            @Html.LabelFor(m => m.AllowAnonymous)
-            @Html.CheckBoxFor(m => m.AllowAnonymous)
-            <i class="fa fa-info-circle" title="@Resources.Repository_AllowAnonymousHint"></i>
-        </div>
-        <div class="pure-control-group checkboxlist">
-            @Html.LabelFor(m => m.Users)
-            @{
-                var users = (from u in ViewData["AvailableUsers"] as string[]
-                             orderby u
-                             select new SelectListItem() { Value = u, Text = u }).ToArray();
-            }
-
-            @Html.CheckboxListFor(m => m.Users, users)
-            <i class="fa fa-info-circle" title="@Resources.Repository_UsersHint"></i>
+            @Html.LabelFor(m => m.Logo.PostedFile)
+            <input type="file" name="Logo.PostedFile" id="Logo_PostedFile" />
+            <sup>.png, .jpg, .jpeg, .gif</sup>
         </div>
 
-        <div class="pure-control-group checkboxlist">
-            @Html.LabelFor(m => m.Administrators)
-            @{
-                var administrators = (from u in ViewData["AvailableAdministrators"] as string[]
-                                      orderby u
-                                      select new SelectListItem() { Value = u, Text = u }).ToArray();
-            }
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.AllowAnonymous)
+                @Html.CheckBoxFor(m => m.AllowAnonymous)
+                <i class="fa fa-info-circle" title="@Resources.Repository_AllowAnonymousHint"></i>
+            </div>
+            <div class="pure-control-group checkboxlist">
+                @Html.LabelFor(m => m.Users)
+                @{
+                    var users = (from u in ViewData["AvailableUsers"] as string[]
+                                 orderby u
+                                 select new SelectListItem() { Value = u, Text = u }).ToArray();
+                }
 
-            @Html.CheckboxListFor(m => m.Administrators, administrators)
-            @Html.ValidationMessageFor(m => m.Administrators)
-            <i class="fa fa-info-circle" title="@Resources.Repository_AdministratorsHint"></i>
-        </div>
+                @Html.CheckboxListFor(m => m.Users, users)
+                <i class="fa fa-info-circle" title="@Resources.Repository_UsersHint"></i>
+            </div>
+
+            <div class="pure-control-group checkboxlist">
+                @Html.LabelFor(m => m.Administrators)
+                @{
+                    var administrators = (from u in ViewData["AvailableAdministrators"] as string[]
+                                          orderby u
+                                          select new SelectListItem() { Value = u, Text = u }).ToArray();
+                }
+
+                @Html.CheckboxListFor(m => m.Administrators, administrators)
+                @Html.ValidationMessageFor(m => m.Administrators)
+                <i class="fa fa-info-circle" title="@Resources.Repository_AdministratorsHint"></i>
+            </div>
 
 
 
-        <div class="pure-control-group checkboxlist">
-            @Html.LabelFor(m => m.Teams)
-            @{
-                var teams = (from u in ViewData["AvailableTeams"] as string[]
-                             orderby u
-                             select new SelectListItem() { Value = u, Text = u }).ToArray();
-            }
+            <div class="pure-control-group checkboxlist">
+                @Html.LabelFor(m => m.Teams)
+                @{
+                    var teams = (from u in ViewData["AvailableTeams"] as string[]
+                                 orderby u
+                                 select new SelectListItem() { Value = u, Text = u }).ToArray();
+                }
 
-            @Html.CheckboxListFor(m => m.Teams, teams)
-            <i class="fa fa-info-circle" title="@Resources.Repository_TeamsHint"></i>
-        </div>
+                @Html.CheckboxListFor(m => m.Teams, teams)
+                <i class="fa fa-info-circle" title="@Resources.Repository_TeamsHint"></i>
+            </div>
 
 
 
-        <div class="pure-controls">
-            <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Repository_Back</a>
-            <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-save"></i> @Resources.Repository_Create_Submit</button>
-        </div>
-    </fieldset>
+            <div class="pure-controls">
+                <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Repository_Back</a>
+                <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-save"></i> @Resources.Repository_Create_Submit</button>
+            </div>
+</fieldset>
 }
