@@ -28,8 +28,8 @@ namespace Bonobo.Git.Server
         public static string Decode(string username)
         {
             var nameParts = username.Split('@');
-            if ( (nameParts.Count() == 2 && !_isEmailRegEx.IsMatch(username) ) ||
-                 String.Equals(ConfigurationManager.AppSettings["ActiveDirectoryIntegration"], "true", StringComparison.InvariantCultureIgnoreCase))
+            if ( (nameParts.Count() == 2) && (!_isEmailRegEx.IsMatch(username) ||
+                 (String.Equals(ConfigurationManager.AppSettings["ActiveDirectoryIntegration"], "true", StringComparison.InvariantCultureIgnoreCase))))
             {
                 return nameParts[1] + "\\" + nameParts[0];
             }
