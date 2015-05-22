@@ -188,8 +188,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\FileExtensionsCustom.cs" />
     <Compile Include="Data\Update\AddGroup.cs" />
+    <Compile Include="Data\Update\AddRepositoryLogo.cs" />
     <Compile Include="Data\Update\SqlServer\AddGroup.cs" />
+    <Compile Include="Data\Update\SqlServer\AddRepositoryLogo.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Extensions\SignatureExtensions.cs" />
     <Compile Include="Configuration\AppSettings.cs" />
@@ -608,7 +611,9 @@
     <EmbeddedResource Include="App_GlobalResources\Resources.tr-TR.resx" />
     <EmbeddedResource Include="App_GlobalResources\Resources.zh-CN.resx" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\Recovery\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -654,9 +659,9 @@
     <PreBuildEvent>
 if not exist "$(TargetDir)NativeBinaries" md "$(TargetDir)NativeBinaries"
 if not exist "$(TargetDir)NativeBinaries\x86" md "$(TargetDir)NativeBinaries\x86"
-xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.18.1.0\lib\net40\NativeBinaries\x86\*.*" "$(TargetDir)NativeBinaries\x86"
+C:\Windows\System32\xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.18.1.0\lib\net40\NativeBinaries\x86\*.*" "$(TargetDir)NativeBinaries\x86"
 if not exist "$(TargetDir)NativeBinaries\amd64" md "$(TargetDir)NativeBinaries\amd64"
-xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.18.1.0\lib\net40\NativeBinaries\amd64\*.*" "$(TargetDir)NativeBinaries\amd64"</PreBuildEvent>
+C:\Windows\System32\xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.18.1.0\lib\net40\NativeBinaries\amd64\*.*" "$(TargetDir)NativeBinaries\amd64"</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
