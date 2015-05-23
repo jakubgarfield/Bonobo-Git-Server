@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.Web;
 
 namespace Bonobo.Git.Server.Git.GitService
 {
@@ -52,6 +53,7 @@ namespace Bonobo.Git.Server.Git.GitService
             };
 
             SetHomePath(info);
+            info.EnvironmentVariables.Add("AUTH_USER", HttpContext.Current.Request.ServerVariables["AUTH_USER"]);
 
             using (var process = Process.Start(info))
             {
