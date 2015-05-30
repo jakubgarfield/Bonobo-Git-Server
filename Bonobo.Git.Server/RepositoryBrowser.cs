@@ -129,23 +129,18 @@ namespace Bonobo.Git.Server
             model.Encoding = FileDisplayHandler.GetEncoding(model.Data);
             model.IsText = model.Text != null;
             model.IsMarkdown = model.IsText && Path.GetExtension(path).Equals(".md", StringComparison.OrdinalIgnoreCase);
+            model.TextBrush = FileDisplayHandler.GetBrush(path);
 
             // try to render as text file if the extension matches
-            if (FileDisplayHandler.GetBrush(path) != "plain")
+            if (model.TextBrush != FileDisplayHandler.NoBrush && model.IsText == false)
             {
                 model.IsText = true;
                 model.Encoding = Encoding.Default;
                 model.Text = new StreamReader(new MemoryStream(model.Data), model.Encoding, true).ReadToEnd();
             }
 
-            if (model.IsText)
-            {
-                model.TextBrush = FileDisplayHandler.GetBrush(path);
-            }
-            else
-            {
-                model.IsImage = FileDisplayHandler.IsImage(path);
-            }
+            //blobs can be images even when they are text files.(like svg, but it's not in out MIME table yet)
+            model.IsImage = FileDisplayHandler.IsImage(path);
 
             return model;
         }
@@ -325,7 +320,7 @@ namespace Bonobo.Git.Server
                     LinesAdded = patch.LinesAdded,
                     LinesDeleted = patch.LinesDeleted,
                     Patch = patch.Patch,
-                     
+
                 };
             });
 
