@@ -12,6 +12,8 @@ namespace Bonobo.Git.Server
 {
     public static class FileDisplayHandler
     {
+        public const string NoBrush = "nohighlight";
+
         public static bool IsImage(string fileName)
         {
             return GetMimeType(fileName).Contains("image");
@@ -113,7 +115,7 @@ namespace Bonobo.Git.Server
                 case ".sql":
                     return "sql";
                 default:
-                    return "nohighlight";
+                    return NoBrush;
             }
         }
 
@@ -614,6 +616,8 @@ namespace Bonobo.Git.Server
 
             return null;
         }
+
+
 
         /// <summary>
         /// <para>Returns the human-readable file size for an arbitrary, 64-bit file size</para>
