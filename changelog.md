@@ -4,6 +4,28 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 4.0.0
+
+** 11 Jun 2015
+
+### Features
+
+* can run on Azure Website
+* email check supports new long tld - restartz
+* authenticated user name available on push - kholme2
+* add logo to repository - sansys
+* remove default port from repository view - ivanstus
+* add file info (line count, size) - lkho
+
+### Bug fixes
+
+* fix incorrect encoding in blob preview - colinniu
+* improved project infrastructure - robbforce
+* fix bug with edit/view non-domain users with enabled domain integration - padremortius
+* fix problem with not possible edit/delete account with domain authorization - padremortius
+* fix errors in highlight.js - padremortius
+* fix git clone depth 1 - silvanperego
+
 ## Version 3.6.0
 
 **2 Apr 2015
