@@ -4,32 +4,33 @@ using Unity.Mvc4;
 
 namespace Bonobo.Git.Server
 {
-    public static class Bootstrapper
+  public static class Bootstrapper
+  {
+    public static IUnityContainer Initialise()
     {
-        public static IUnityContainer Initialise()
-        {
-            var container = BuildUnityContainer();
+      var container = BuildUnityContainer();
 
-            DependencyResolver.SetResolver(new UnityDependencyResolver(container));
+      DependencyResolver.SetResolver(new UnityDependencyResolver(container));
 
-            return container;
-        }
-
-        public static void RegisterTypes(IUnityContainer container)
-        {
-        }
-
-        private static IUnityContainer BuildUnityContainer()
-        {
-            var container = new UnityContainer();
-
-            // register all your components with the container here
-            // it is NOT necessary to register your controllers
-
-            // e.g. container.RegisterType<ITestService, TestService>();    
-            RegisterTypes(container);
-
-            return container;
-        }
+      return container;
     }
+
+    private static IUnityContainer BuildUnityContainer()
+    {
+      var container = new UnityContainer();
+
+      // register all your components with the container here
+      // it is NOT necessary to register your controllers
+
+      // e.g. container.RegisterType<ITestService, TestService>();    
+      RegisterTypes(container);
+
+      return container;
+    }
+
+    public static void RegisterTypes(IUnityContainer container)
+    {
+    
+    }
+  }
 }

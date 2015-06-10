@@ -7,6 +7,7 @@ using Bonobo.Git.Server.Models;
 using System.Security.Cryptography;
 using System.IO;
 using System.Text;
+using System.Data.Entity.Core;
 
 namespace Bonobo.Git.Server.Security
 {

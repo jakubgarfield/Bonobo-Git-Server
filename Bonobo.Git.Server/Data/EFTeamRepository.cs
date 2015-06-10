@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data;
 using Bonobo.Git.Server.Models;
+using System.Data.Entity.Core;
 
 namespace Bonobo.Git.Server.Data
 {
