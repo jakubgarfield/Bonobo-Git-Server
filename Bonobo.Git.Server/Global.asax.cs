@@ -303,5 +303,10 @@ namespace Bonobo.Git.Server
                 path :
                 HttpContext.Current.Server.MapPath(path);
         }
+
+        public static void RegisterGlobalFilterst(GlobalFilterCollection filters)
+        {
+            filters.Add(new HandleErrorAttribute { View = "Home/Error" });
+        }
     }
 }
