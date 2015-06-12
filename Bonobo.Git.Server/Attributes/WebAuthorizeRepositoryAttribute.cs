@@ -1,4 +1,6 @@
 ﻿using System.Web.Mvc;
+using System.Web.Routing;
+using System.Web.Security;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 
@@ -19,9 +21,9 @@ namespace Bonobo.Git.Server
             var user = filterContext.HttpContext.User.Identity.Name;
             if (RequiresRepositoryAdministrator)
             {
-                if (!RepositoryPermissionService.IsRepositoryAdministrator(user, repository))
+                if (RepositoryPermissionService.IsRepositoryAdministrator(user, repository))
                 {
-                    filterContext.Result = new HttpUnauthorizedResult();
+                    return;
                 }
             }
             else
@@ -31,10 +33,25 @@ namespace Bonobo.Git.Server
                     return;
                 }
 
-                if (!RepositoryPermissionService.AllowsAnonymous(repository))
+                if (RepositoryPermissionService.AllowsAnonymous(repository))
                 {
-                    filterContext.Result = new HttpUnauthorizedResult();
+                    return;
                 }
+            }
+
+            if (filterContext.HttpContext.User == null || !(filterContext.HttpContext.User.Identity is FormsIdentity) || !filterContext.HttpContext.User.Identity.IsAuthenticated)
+            {
+                filterContext.Result =
+                    new RedirectToRouteResult(new RouteValueDictionary
+                    {
+                        { "controller", "Home" },
+                        { "action", "LogOn" },
+                        { "returnUrl", filterContext.HttpContext.Request.Url.PathAndQuery }
+                    });
+            }
+            else
+            {
+                filterContext.Result = new RedirectResult("~/Home/Unauthorized");
             }
         }
     }
