@@ -547,12 +547,6 @@
     <Content Include="..\readme.md">
       <Link>readme.md</Link>
     </Content>
-    <Content Include="x64\SQLite.Interop.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="x86\SQLite.Interop.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="App_Data\Web.config" />
     <Content Include="App_Data\Git\astextplain" />
     <Content Include="App_Data\Git\awk" />
