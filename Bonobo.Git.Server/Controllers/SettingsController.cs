@@ -21,7 +21,7 @@ namespace Bonobo.Git.Server.Controllers
             return View(new GlobalSettingsModel
             {
                 AllowAnonymousPush = UserConfiguration.Current.AllowAnonymousPush,
-                RepositoryPath = UserConfiguration.Current.Repositories,
+                RepositoryPath = UserConfiguration.Current.RepositoryPath,
                 AllowAnonymousRegistration = UserConfiguration.Current.AllowAnonymousRegistration,
                 AllowUserRepositoryCreation = UserConfiguration.Current.AllowUserRepositoryCreation,
                 DefaultLanguage = UserConfiguration.Current.DefaultLanguage,
@@ -40,10 +40,12 @@ namespace Bonobo.Git.Server.Controllers
             {
                 try
                 {
-                    if (Directory.Exists(model.RepositoryPath))
+                    if (Directory.Exists(Path.IsPathRooted(model.RepositoryPath)
+                                         ? model.RepositoryPath
+                                         : HttpContext.Server.MapPath(model.RepositoryPath)))
                     {
                         UserConfiguration.Current.AllowAnonymousPush = model.AllowAnonymousPush;
-                        UserConfiguration.Current.Repositories = model.RepositoryPath;
+                        UserConfiguration.Current.RepositoryPath = model.RepositoryPath;
                         UserConfiguration.Current.AllowAnonymousRegistration = model.AllowAnonymousRegistration;
                         UserConfiguration.Current.AllowUserRepositoryCreation = model.AllowUserRepositoryCreation;
                         UserConfiguration.Current.DefaultLanguage = model.DefaultLanguage;

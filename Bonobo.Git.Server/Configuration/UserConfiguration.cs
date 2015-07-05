@@ -10,9 +10,10 @@ namespace Bonobo.Git.Server.Configuration
 
     [XmlRootAttribute(ElementName = "Configuration", IsNullable = false)]
     public class UserConfiguration : ConfigurationEntry<UserConfiguration>
-    {      
+    {
         public bool AllowAnonymousPush { get; set; }
-        public string Repositories { get; set; }
+        [XmlElementAttribute(ElementName = "Repositories")]
+        public string RepositoryPath { get; set; }
         public bool AllowUserRepositoryCreation { get; set; }
         public bool AllowAnonymousRegistration { get; set; }
         public string DefaultLanguage { get; set; }
@@ -20,6 +21,16 @@ namespace Bonobo.Git.Server.Configuration
         public string SiteLogoUrl { get; set; }
         public string SiteFooterMessage { get; set; }
         public bool IsCommitAuthorAvatarVisible { get; set; }
+
+        public string Repositories
+        {
+            get
+            {
+                return Path.IsPathRooted(RepositoryPath)
+                       ? RepositoryPath
+                       : HttpContext.Current.Server.MapPath(RepositoryPath);
+            }
+        }
 
         public bool HasSiteFooterMessage
         {
@@ -47,16 +58,14 @@ namespace Bonobo.Git.Server.Configuration
             if (IsInitialized())
                 return;
 
-            Current.Repositories = Path.IsPathRooted(ConfigurationManager.AppSettings["DefaultRepositoriesDirectory"]) 
-                ? ConfigurationManager.AppSettings["DefaultRepositoriesDirectory"] 
-                : HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["DefaultRepositoriesDirectory"]);
+            Current.RepositoryPath = ConfigurationManager.AppSettings["DefaultRepositoriesDirectory"];
             Current.Save();
         }
 
 
         private static bool IsInitialized()
         {
-            return !String.IsNullOrEmpty(Current.Repositories);
+            return !String.IsNullOrEmpty(Current.RepositoryPath);
         }
     }
 }
