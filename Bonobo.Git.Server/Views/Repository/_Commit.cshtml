@@ -1,4 +1,5 @@
 ﻿@model RepositoryCommitModel
+@using System.Globalization
 @using Bonobo.Git.Server.Extensions
 <div class="commit pure-g">
     <div class="pure-u-3-5">
@@ -11,7 +12,7 @@
         </h2>
 
         <div class="commitdate">
-            @Model.Date.ToString()
+            @Model.Date.ToString(CultureInfo.InstalledUICulture)
             @if (!string.IsNullOrEmpty(Model.TagName)){
                 <span class="tag">@Html.ActionLink(Model.TagName, "Commits", new { encodedName = PathEncoder.Encode(Model.TagName), encodedPath = String.Empty })</span>
             }

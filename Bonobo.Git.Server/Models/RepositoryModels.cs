@@ -9,6 +9,7 @@ using Bonobo.Git.Server.Attributes;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 
 namespace Bonobo.Git.Server.Models
 {
@@ -84,7 +85,7 @@ namespace Bonobo.Git.Server.Models
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Tree_CommitDate")]
         public DateTime? CommitDate { get; set; }
-        public string CommitDateString { get { return CommitDate.ToString(); } }
+        public string CommitDateString { get { return CommitDate.HasValue ? CommitDate.Value.ToString(CultureInfo.InstalledUICulture) : CommitDate.ToString(); } }
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Tree_Author")]
         public string Author { get; set; }
