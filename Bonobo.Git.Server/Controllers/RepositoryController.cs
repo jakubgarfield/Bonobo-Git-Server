@@ -454,6 +454,15 @@ namespace Bonobo.Git.Server.Controllers
                             };
 
                         LibGit2Sharp.Repository.Clone(sourceRepositoryPath, targetRepositoryPath, options);
+
+                        using (var repo = new LibGit2Sharp.Repository(targetRepositoryPath))
+                        {
+                            if (repo.Network.Remotes.Any(r => r.Name == "origin"))
+                            {
+                                repo.Network.Remotes.Remove("origin");
+                            }
+                        }
+
                         TempData["CloneSuccess"] = true;
                         return RedirectToAction("Index");
                     }
