@@ -567,8 +567,8 @@ namespace Bonobo.Git.Server.Controllers
                 Teams = model.Teams,
                 AnonymousAccess = model.AllowAnonymous,
                 AuditPushUser = model.AuditPushUser,
-                Logo = model.Logo.BinaryData,
-                RemoveLogo = model.Logo.RemoveLogo
+                Logo = model.Logo != null ? model.Logo.BinaryData : null,
+                RemoveLogo = model.Logo != null && model.Logo.RemoveLogo
             };
         }
 
