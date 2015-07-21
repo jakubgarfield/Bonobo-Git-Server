@@ -238,7 +238,7 @@
     <value>Användarnamnet eller lösenordet är felaktigt.</value>
   </data>
   <data name="Home_PageNotFound_Text" xml:space="preserve">
-    <value>Sidan du letade efter kan inte hittas.Vänligen försök igen eller kontakta din systemadministratör.</value>
+    <value>Sidan du letade efter kan inte hittas. Vänligen försök igen eller kontakta din systemadministratör.</value>
   </data>
   <data name="Home_PageNotFound_Title" xml:space="preserve">
     <value>404 Sidan kunde inte hittas</value>
@@ -382,7 +382,7 @@
     <value>Administratörer</value>
   </data>
   <data name="Repository_Detail_Anonymous" xml:space="preserve">
-    <value>Anynom åtkomst</value>
+    <value>Anonym åtkomst</value>
   </data>
   <data name="Repository_Detail_Back" xml:space="preserve">
     <value>Tillbaka till listan</value>
@@ -499,7 +499,7 @@
     <value>Globala inställningar</value>
   </data>
   <data name="Settings_Index_UpdateSuccess" xml:space="preserve">
-    <value>De gloaba inställningarna har uppdaterats.</value>
+    <value>De globala inställningarna har uppdaterats.</value>
   </data>
   <data name="Settings_RepositoryPathNotExists" xml:space="preserve">
     <value>Angiven sökväg finns inte. Vänligen skapa mappen eller välj en annan sökväg.</value>
@@ -604,7 +604,7 @@
     <value>Tack!</value>
   </data>
   <data name="Home_About_Thanks_p" xml:space="preserve">
-    <value>Bonobo Gitserver använder sig av några projekt baserade på öppen källkod och några gratisprojekt.  Stort tack till alla upphovsmän och bidragsgivare för deras utmärkta arbete.</value>
+    <value>Bonobo Gitserver använder sig av några projekt baserade på öppen källkod och några gratisprojekt. Stort tack till alla upphovsmän och bidragsgivare för deras utmärkta arbete.</value>
   </data>
   <data name="Home_About_Title" xml:space="preserve">
     <value>Om</value>
@@ -703,6 +703,6 @@
     <value>Förhandsgranskning av den här filen stöds inte.</value>
   </data>
   <data name="Validation_FileName_Regex" xml:space="preserve">
-    <value>Only characters, numbers, minus and underscore are allowed for "{0}".</value>
+    <value>Enbart bokstäver, siffror, bindestreck och understreck är tillåtet för "{0}".</value>
   </data>
 </root>
