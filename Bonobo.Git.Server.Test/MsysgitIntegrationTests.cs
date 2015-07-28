@@ -14,12 +14,12 @@ namespace Bonobo.Git.Server.Test
     public class MsysgitIntegrationTests
     {
         private const string RepositoryName = "Integration";
-        private const string WorkingDirectory = @"D:\Desktop\Test\Integration";
+        private const string WorkingDirectory = @"..\..\..\Test\Integration";
         private readonly static string RepositoryDirectory = Path.Combine(WorkingDirectory, RepositoryName);
-        private const string GitPath = @"D:\Projects\Bonobo Git Server\Other\Git\{0}\bin\git.exe";
-        private readonly static string ServerRepositoryPath = Path.Combine(@"D:\Projects\Bonobo Git Server\Source\Bonobo.Git.Server\App_Data\Repositories", RepositoryName);
-        private readonly static string ServerRepositoryBackupPath = Path.Combine(@"D:\Desktop\Test\", RepositoryName, "Backup");
-        private readonly static string[] GitVersions = { "1.7.4", "1.7.6", "1.7.7.1", "1.7.8", "1.7.9", "1.8.0", "1.8.1.2", "1.8.3" };
+        private const string GitPath = @"..\..\..\Gits\{0}\bin\git.exe";
+        private readonly static string ServerRepositoryPath = Path.Combine(@"..\..\..\Bonobo.Git.Server\App_Data\Repositories", RepositoryName);
+        private readonly static string ServerRepositoryBackupPath = Path.Combine(@"..\..\..\Test\", RepositoryName, "Backup");
+        private readonly static string[] GitVersions = { "1.7.4", "1.7.6", "1.7.7.1", "1.7.8", "1.7.9", "1.8.0", "1.8.1.2", "1.8.3", "1.9.5" };
         private readonly static string Credentials = "admin:admin@";
         private readonly static string RepositoryUrl = "http://{0}localhost:50287/Integration{1}";
         private readonly static string RepositoryUrlWithoutCredentials = String.Format(RepositoryUrl, String.Empty, String.Empty);
@@ -104,7 +104,8 @@ namespace Bonobo.Git.Server.Test
             DeleteDirectory(RepositoryDirectory);
             var result = RunGit(git, String.Format(String.Format("clone {0}", RepositoryUrlWithCredentials), RepositoryName), WorkingDirectory);
 
-            Assert.AreEqual(resources[MsysgitResources.Definition.CloneRepositoryError], result.Item1);
+            Assert.AreEqual(resources[MsysgitResources.Definition.CloneRepositoryOutput], result.Item1);
+            Assert.AreEqual(resources[MsysgitResources.Definition.CloneRepositoryError], result.Item2);
         }
 
         private void PushBranch(string git, MsysgitResources resources)

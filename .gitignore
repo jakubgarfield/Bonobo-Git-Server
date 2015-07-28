@@ -13,6 +13,9 @@ packages
 #Deploy
 artifacts
 
+# Various git versions
+Gits/*.*
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
