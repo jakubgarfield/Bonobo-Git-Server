@@ -395,7 +395,6 @@
     <Content Include="App_Data\Git\libgsasl-7.def" />
     <Content Include="App_Data\Git\libgsasl-7.dll" />
     <Content Include="App_Data\Git\libiconv-2.dll" />
-    <Content Include="App_Data\Git\libiconv2.dll" />
     <Content Include="App_Data\Git\libneon-25.dll" />
     <Content Include="App_Data\Git\libpoppler-7.dll" />
     <Content Include="App_Data\Git\libssl.dll" />
@@ -421,11 +420,11 @@
     <Content Include="App_Data\Git\mkdir.exe" />
     <Content Include="App_Data\Git\msmtp.exe" />
     <Content Include="App_Data\Git\msys-1.0.dll" />
-    <Content Include="App_Data\Git\msys-crypto-0.9.8.dll" />
+    <Content Include="App_Data\Git\msys-crypto-1.0.0.dll" />
     <Content Include="App_Data\Git\msys-minires.dll" />
     <Content Include="App_Data\Git\msys-perl5_8.dll" />
     <Content Include="App_Data\Git\msys-regex-1.dll" />
-    <Content Include="App_Data\Git\msys-ssl-0.9.8.dll" />
+    <Content Include="App_Data\Git\msys-ssl-1.0.0.dll" />
     <Content Include="App_Data\Git\msys-z.dll" />
     <Content Include="App_Data\Git\msysltdl-3.dll" />
     <Content Include="App_Data\Git\mv.exe" />
