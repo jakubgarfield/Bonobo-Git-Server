@@ -595,7 +595,7 @@ namespace Bonobo.Git.Server
             ICharsetDetector cdet = new CharsetDetector();
             cdet.Feed(data, 0, data.Length);
             cdet.DataEnd();
-            if (cdet.Charset != null && cdet.Confidence > 0.5)
+            if (cdet.Charset != null && cdet.Confidence >= 0.5)
             {
                 if (cdet.Charset.ToLowerInvariant() == "big-5")
                 {
