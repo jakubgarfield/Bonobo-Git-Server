@@ -1,7 +1,7 @@
 Bonobo Git Server
 ==============================================
 
-Obirgado por baixar o Bonobo Git Server. Para mais informações visite a página a seguir [http://bonobogitserver.com](http://bonobogitserver.com).
+Obrigado por baixar o Bonobo Git Server. Para mais informações visite a página a seguir [http://bonobogitserver.com](http://bonobogitserver.com).
 
 
 Pré-requisitos
