@@ -471,8 +471,8 @@
     <Content Include="App_Data\note.txt" />
     <Content Include="App_Data\Repositories\note.txt" />
     <EmbeddedResource Include="App_GlobalResources\Resources.fr-FR.resx" />
-    <Content Include="bin\NativeBinaries\amd64\git2-90befde.dll" />
-    <Content Include="bin\NativeBinaries\x86\git2-90befde.dll" />
+    <Content Include="bin\NativeBinaries\amd64\git2-e0902fb.dll" />
+    <Content Include="bin\NativeBinaries\x86\git2-e0902fb.dll" />
     <Content Include="Content\components\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.svg" />
