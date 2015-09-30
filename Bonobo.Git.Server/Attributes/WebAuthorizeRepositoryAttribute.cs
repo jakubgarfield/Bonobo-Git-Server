@@ -1,7 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using System.Security.Claims;
+using System.Web.Mvc;
 using System.Web.Routing;
-using System.Web.Security;
+
 using Bonobo.Git.Server.Security;
+
 using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server
@@ -17,8 +19,14 @@ namespace Bonobo.Git.Server
         {
             base.OnAuthorization(filterContext);
 
-            var repository = filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString();
-            var user = filterContext.HttpContext.User.Identity.Name;
+            string repository = filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString();
+            string user = filterContext.HttpContext.User.Id();
+
+            if (filterContext.HttpContext.User.IsInRole(Definitions.Roles.Administrator))
+            {
+                return;
+            }
+
             if (RequiresRepositoryAdministrator)
             {
                 if (RepositoryPermissionService.IsRepositoryAdministrator(user, repository))
@@ -39,7 +47,7 @@ namespace Bonobo.Git.Server
                 }
             }
 
-            if (filterContext.HttpContext.User == null || !(filterContext.HttpContext.User.Identity is FormsIdentity) || !filterContext.HttpContext.User.Identity.IsAuthenticated)
+            if (filterContext.HttpContext.User == null || !(filterContext.HttpContext.User.Identity is ClaimsIdentity) || !filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
                 filterContext.Result =
                     new RedirectToRouteResult(new RouteValueDictionary

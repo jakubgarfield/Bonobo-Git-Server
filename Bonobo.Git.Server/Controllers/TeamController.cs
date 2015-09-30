@@ -19,13 +19,13 @@ namespace Bonobo.Git.Server.Controllers
         public IMembershipService MembershipService { get; set; }
 
 
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index()
         {
             return View(ConvertTeamModels(TeamRepository.GetAllTeams()));
         }
 
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Edit(string id)
         {
             if (!String.IsNullOrEmpty(id))
@@ -38,7 +38,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Edit(TeamDetailModel model)
         {           
             if (ModelState.IsValid)
@@ -50,7 +50,7 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Create()
         {
             var model = new TeamDetailModel { };
@@ -59,7 +59,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Create(TeamDetailModel model)
         {
             while (!String.IsNullOrEmpty(model.Name) && model.Name.Last() == ' ')
@@ -84,7 +84,7 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(string id)
         {
             if (!String.IsNullOrEmpty(id))
@@ -96,7 +96,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(TeamDetailModel model)
         {
             if (model != null && !String.IsNullOrEmpty(model.Name))
@@ -108,7 +108,7 @@ namespace Bonobo.Git.Server.Controllers
             return RedirectToAction("Index");
         }
 
-        [WebAuthorizeAttribute]
+        [WebAuthorize]
         public ActionResult Detail(string id)
         {
             if (!String.IsNullOrEmpty(id))

@@ -164,7 +164,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                 }
                 // -------------------
 
-                var user = HttpContext.Current.User.Identity.Name;
+                var user = HttpContext.Current.User.Id();
                 receivedPack = new ParsedReceivePack(correlationId, repositoryName, pktLines, user, DateTime.Now, packCommits);
 
                 inStream.Seek(0, SeekOrigin.Begin);

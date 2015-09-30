@@ -5,15 +5,14 @@ using Bonobo.Git.Server.Data;
 
 namespace Bonobo.Git.Server.Security
 {
-    public class EFRoleProvider : RoleProvider
+    public class EFRoleProvider : IRoleProvider
     {
-        public override string ApplicationName
+        public void AddUserToRoles(string username, string[] roleNames)
         {
-            get;
-            set;
+            AddUsersToRoles(new string[] { username }, roleNames);
         }
 
-        public override void AddUsersToRoles(string[] usernames, string[] roleNames)
+        public void AddUsersToRoles(string[] usernames, string[] roleNames)
         {
             using (var database = new BonoboGitServerContext())
             {
@@ -34,7 +33,7 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public override void CreateRole(string roleName)
+        public void CreateRole(string roleName)
         {
             using (var database = new BonoboGitServerContext())
             {
@@ -45,7 +44,7 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public override bool DeleteRole(string roleName, bool throwOnPopulatedRole)
+        public bool DeleteRole(string roleName, bool throwOnPopulatedRole)
         {
             using (var database = new BonoboGitServerContext())
             {
@@ -69,7 +68,7 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public override string[] FindUsersInRole(string roleName, string usernameToMatch)
+        public string[] FindUsersInRole(string roleName, string usernameToMatch)
         {
             using (var database = new BonoboGitServerContext())
             {
@@ -81,7 +80,7 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public override string[] GetAllRoles()
+        public string[] GetAllRoles()
         {
             using (var database = new BonoboGitServerContext())
             {
@@ -89,7 +88,7 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public override string[] GetRolesForUser(string username)
+        public string[] GetRolesForUser(string username)
         {
             using (var database = new BonoboGitServerContext())
             {
@@ -102,7 +101,7 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public override string[] GetUsersInRole(string roleName)
+        public string[] GetUsersInRole(string roleName)
         {
             using (var database = new BonoboGitServerContext())
             {
@@ -114,7 +113,7 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public override bool IsUserInRole(string username, string roleName)
+        public bool IsUserInRole(string username, string roleName)
         {
             using (var database = new BonoboGitServerContext())
             {
@@ -124,7 +123,12 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public override void RemoveUsersFromRoles(string[] usernames, string[] roleNames)
+        public void RemoveUserFromRoles(string username, string[] roleNames)
+        {
+            RemoveUsersFromRoles(new string[] { username }, roleNames);
+        }
+
+        public void RemoveUsersFromRoles(string[] usernames, string[] roleNames)
         {
             using (var database = new BonoboGitServerContext())
             {
@@ -143,7 +147,7 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public override bool RoleExists(string roleName)
+        public bool RoleExists(string roleName)
         {
             using (var database = new BonoboGitServerContext())
             {
