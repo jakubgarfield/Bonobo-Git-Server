@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.Practices.Unity;
-using Bonobo.Git.Server.Security;
-using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.App_GlobalResources;
 using System.Globalization;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Web;
+using System.Web.Caching;
+using System.Web.Mvc;
+
+using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Helpers;
-using System.Text;
-using System.Web.Caching;
+using Bonobo.Git.Server.Models;
+using Bonobo.Git.Server.Security;
+
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -21,8 +26,7 @@ namespace Bonobo.Git.Server.Controllers
         public IMembershipService MembershipService { get; set; }
 
         [Dependency]
-        public IFormsAuthenticationService FormsAuthenticationService { get; set; }
-
+        public IAuthenticationProvider AuthenticationProvider { get; set; }
 
         [WebAuthorize]
         public ActionResult Index()
@@ -131,7 +135,7 @@ namespace Bonobo.Git.Server.Controllers
             {
                 if (MembershipService.ValidateUser(model.Username, model.Password))
                 {
-                    FormsAuthenticationService.SignIn(model.Username, model.RememberMe);
+                    AuthenticationProvider.SignIn(model.Username);
                     Response.AppendToLog("SUCCESS");
                     if (Url.IsLocalUrl(model.ReturnUrl))
                     {
@@ -152,10 +156,10 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        [WebAuthorizeAttribute]
+        [WebAuthorize]
         public ActionResult LogOff()
         {
-            FormsAuthenticationService.SignOut();
+            AuthenticationProvider.SignOut();
             return RedirectToAction("Index", "Home");
         }
 

@@ -81,7 +81,6 @@ namespace Bonobo.Git.Server.Security
                     Name = item.Name,
                     Surname = item.Surname,
                     Email = item.Email,
-                    Roles = item.Roles.Select(i => i.Name).ToArray(),
                 }).ToList();
             }
         }
@@ -100,7 +99,6 @@ namespace Bonobo.Git.Server.Security
                     Name = user.Name,
                     Surname = user.Surname,
                     Email = user.Email,
-                    Roles = user.Roles.Select(i => i.Name).ToArray(),
                  };
             }
         }

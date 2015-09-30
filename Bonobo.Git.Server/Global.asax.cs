@@ -76,59 +76,13 @@ namespace Bonobo.Git.Server
             new RepositorySynchronizer().Run();
         }
 
-        protected void Application_AuthenticateRequest(object sender, EventArgs e)
-        {
-            if (Context.User != null)
-            {
-                return;
-            }
-
-            var oldTicket = ExtractTicketFromCookie(Context, FormsAuthentication.FormsCookieName);
-            if (oldTicket == null || oldTicket.Expired)
-            {
-                return;
-            }
-
-            var ticket = oldTicket;
-            if (FormsAuthentication.SlidingExpiration)
-            {
-                ticket = FormsAuthentication.RenewTicketIfOld(oldTicket);
-                if (ticket == null)
-                {
-                    return;
-                }
-            }
-
-            Context.User = new GenericPrincipal(new FormsIdentity(ticket), new string[0]);
-            if (ticket == oldTicket)
-            {
-                return;
-            }
-
-            string cookieValue = FormsAuthentication.Encrypt(ticket);
-            var cookie = Context.Request.Cookies[FormsAuthentication.FormsCookieName] ?? new HttpCookie(FormsAuthentication.FormsCookieName, cookieValue) { Path = ticket.CookiePath };
-            if (ticket.IsPersistent)
-            {
-                cookie.Expires = ticket.Expiration;
-            }
-
-            cookie.Value = cookieValue;
-            cookie.Secure = FormsAuthentication.RequireSSL;
-            cookie.HttpOnly = true;
-            if (FormsAuthentication.CookieDomain != null)
-            {
-                cookie.Domain = FormsAuthentication.CookieDomain;
-            }
-
-            Context.Response.Cookies.Remove(cookie.Name);
-            Context.Response.Cookies.Add(cookie);
-        }
-
         private static void RegisterDependencyResolver()
         {
             var container = new UnityContainer().AddExtension(new UnityDecoratorContainerExtension());
 
             container.RegisterType<IMembershipService, EFMembershipService>();
+            container.RegisterType<IRoleProvider, EFRoleProvider>();
+            container.RegisterType<IAuthenticationProvider, CookieAuthenticationProvider>();
             container.RegisterType<IRepositoryPermissionService, EFRepositoryPermissionService>();
             container.RegisterType<IFormsAuthenticationService, FormsAuthenticationService>();
             container.RegisterType<ITeamRepository, EFTeamRepository>();

@@ -17,7 +17,14 @@ namespace Bonobo.Git.Server.Models
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Email { get; set; }
-        public string[] Roles { get; set; }
+
+        public string DisplayName
+        {
+            get
+            {
+                return String.Format("{0} {1}", Name, Surname);
+            }
+        }
     }
 
     public class UserEditModel

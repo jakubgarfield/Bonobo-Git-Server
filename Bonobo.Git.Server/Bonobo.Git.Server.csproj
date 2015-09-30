@@ -106,6 +106,18 @@
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
@@ -228,6 +240,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\FileExtensionsCustom.cs" />
+    <Compile Include="Configuration\AuthenticationSettings.cs" />
     <Compile Include="Data\Update\AddGroup.cs" />
     <Compile Include="Data\Update\AddRepositoryLogo.cs" />
     <Compile Include="Data\Update\SqlServer\AddGroup.cs" />
@@ -235,6 +248,7 @@
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Extensions\SignatureExtensions.cs" />
     <Compile Include="Configuration\AppSettings.cs" />
+    <Compile Include="Extensions\UserExtensions.cs" />
     <Compile Include="Git\GitService\GitServiceResultParser.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\Durability\AutoCreateMissingRecoveryDirectories.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\Durability\OneFolderRecoveryFilePathBuilder.cs" />
@@ -251,6 +265,11 @@
     <Compile Include="Helpers\MembershipHelper.cs" />
     <Compile Include="Helpers\RepositoryCommitModelHelpers.cs" />
     <Compile Include="Models\RepositoryCommitTitle.cs" />
+    <Compile Include="Security\AuthenticationProvider.cs" />
+    <Compile Include="Security\CookieAuthenticationProvider.cs" />
+    <Compile Include="Security\IAuthenticationProvider.cs" />
+    <Compile Include="Security\IRoleProvider.cs" />
+    <Compile Include="Startup.cs" />
     <Compile Include="UnityDecoratorBuildStrategy.cs" />
     <Compile Include="UnityDecoratorContainerExtension.cs" />
     <Compile Include="Git\ConfigurationBasedRepositoryLocator.cs" />
@@ -535,7 +554,9 @@
     <Content Include="Views\Team\Delete.cshtml" />
     <Content Include="Views\Repository\Delete.cshtml" />
     <Content Include="Views\Account\Delete.cshtml" />
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="..\changelog.md">
       <Link>changelog.md</Link>
     </Content>
