@@ -25,8 +25,8 @@ else
                 <span>
                     @for (int i = 0; i < Model.Members.Length; i++)
                     {
-                        @Html.ActionLink(@Model.Members[i], "Detail", "Account", new { id = UsernameUrl.Encode(@Model.Members[i]) }, null)if (i + 1 != Model.Members.Length)
-                                                                                                                                          {<text>, </text>}
+                        @Html.ActionLink(@Model.Members[i], "Detail", "Account", new { id = @Model.Members[i] }, null)if (i + 1 != Model.Members.Length)
+                        {<text>, </text>}
                     }
                 </span>
             </div>
@@ -36,16 +36,16 @@ else
                     @for (int i = 0; i < Model.Repositories.Length; i++)
                     {
                         @Html.ActionLink(@Model.Repositories[i], "Detail", "Repository", new { id = @Model.Repositories[i] }, null)if (i + 1 != Model.Repositories.Length)
-                                                                                                                                   {<text>, </text>}
+                        {<text>, </text>}
                     }
                 </span>
             </div>
             <div class="pure-controls">
                 <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Team_Detail_Back</a>
-                @if (User.IsInRole(Definitions.Roles.Administrator))
+                @if (User.IsInRole(Definitions.Roles.Administrator) && !Model.IsReadOnly)
                 {
-                    <a class="pure-button" href="@Url.Action("Edit", new { id = UsernameUrl.Encode(Model.Name) })"><i class="fa fa-pencil-square-o"></i> @Resources.Team_Detail_Edit</a>
-                    <a class="pure-button" href="@Url.Action("Delete", new { id = UsernameUrl.Encode(Model.Name) })"><i class="fa fa-trash-o"></i> @Resources.Team_Detail_Delete</a>
+                    <a class="pure-button" href="@Url.Action("Edit", new { id = Model.Name })"><i class="fa fa-pencil-square-o"></i> @Resources.Team_Detail_Edit</a>
+                    <a class="pure-button" href="@Url.Action("Delete", new { id = Model.Name })"><i class="fa fa-trash-o"></i> @Resources.Team_Detail_Delete</a>
                 }
             </div>
 

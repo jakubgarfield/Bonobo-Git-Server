@@ -133,24 +133,27 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (MembershipService.ValidateUser(model.Username, model.Password))
+                ValidationResult result = MembershipService.ValidateUser(model.Username, model.Password);
+                switch (result)
                 {
-                    AuthenticationProvider.SignIn(model.Username);
-                    Response.AppendToLog("SUCCESS");
-                    if (Url.IsLocalUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("", Resources.Home_LogOn_UsernamePasswordIncorrect);
-                    Response.AppendToLog("FAILURE");
-                }
+                    case ValidationResult.Success:
+                        AuthenticationProvider.SignIn(model.Username);
+                        Response.AppendToLog("SUCCESS");
+                        if (Url.IsLocalUrl(model.ReturnUrl))
+                        {
+                            return Redirect(model.ReturnUrl);
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                    case ValidationResult.NotAuthorized:
+                        return new RedirectResult("~/Home/Unauthorized");
+                    default:
+                        ModelState.AddModelError("", Resources.Home_LogOn_UsernamePasswordIncorrect);
+                        Response.AppendToLog("FAILURE");
+                        break;
+                }                
             }
 
             return View(model);

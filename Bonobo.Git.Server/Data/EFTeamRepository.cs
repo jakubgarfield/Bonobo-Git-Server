@@ -26,7 +26,6 @@ namespace Bonobo.Git.Server.Data
                     Name = item.Name,
                     Description = item.Description,
                     Members = item.Members.ToArray(),
-                    Repositories = item.Repositories.ToArray(),
                 }).ToList();
             }
         }
@@ -49,7 +48,6 @@ namespace Bonobo.Git.Server.Data
                     Name = team.Name,
                     Description = team.Description,
                     Members = team.Users.Select(m => m.Username).ToArray(),
-                    Repositories = team.Repositories.Select(m => m.Name).ToArray(),
                 };
             }
         }

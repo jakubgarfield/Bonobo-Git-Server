@@ -519,7 +519,7 @@ namespace Bonobo.Git.Server.Controllers
 
         private void PopulateEditData()
         {
-            ViewData["AvailableUsers"] = MembershipService.GetAllUsers().Select(i => i.Username).ToArray();
+            ViewData["AvailableUsers"] = MembershipService.GetAllUsers().Select(i => i.Name).ToArray();
             ViewData["AvailableAdministrators"] = ViewData["AvailableUsers"];
             ViewData["AvailableTeams"] = TeamRepository.GetAllTeams().Select(i => i.Name).ToArray();
         }
@@ -561,9 +561,13 @@ namespace Bonobo.Git.Server.Controllers
         {
             string path = Path.Combine(UserConfiguration.Current.Repositories, model.Name);
             if (!Directory.Exists(path))
+            {
                 return RepositoryDetailStatus.Missing;
+            }
             else
+            {
                 return RepositoryDetailStatus.Valid;
+            }
         }
 
         private RepositoryModel ConvertRepositoryDetailModel(RepositoryDetailModel model)

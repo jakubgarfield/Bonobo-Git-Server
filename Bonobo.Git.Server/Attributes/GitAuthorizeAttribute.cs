@@ -57,7 +57,7 @@ namespace Bonobo.Git.Server
             string username = Uri.UnescapeDataString(value.Substring(0, value.IndexOf(':')));
             string password = Uri.UnescapeDataString(value.Substring(value.IndexOf(':') + 1));
 
-            if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password) && MembershipService.ValidateUser(username, password))
+            if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password) && MembershipService.ValidateUser(username, password) == ValidationResult.Success)
             {
                 httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
             }

@@ -33,16 +33,17 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (!String.IsNullOrEmpty(id))
             {
-                UserModel user = MembershipService.GetUser(UsernameUrl.Decode(id));
+                UserModel user = MembershipService.GetUser(id);
                 if (user != null)
                 {
                     var model = new UserDetailModel
                     {
-                        Username = user.Username,
-                        Name = user.Name,
+                        Username = user.Name,
+                        Name = user.GivenName,
                         Surname = user.Surname,
                         Email = user.Email,
-                        Roles = RoleProvider.GetRolesForUser(user.Username),
+                        Roles = RoleProvider.GetRolesForUser(user.Name),
+                        IsReadOnly = MembershipService.IsReadOnly()
                     };
                     return View(model);
                 }
@@ -55,8 +56,8 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (!String.IsNullOrEmpty(id))
             {
-                UserModel user = MembershipService.GetUser(UsernameUrl.Decode(id));
-                return View(new UserDetailModel { Username = user.Username });
+                UserModel user = MembershipService.GetUser(id);
+                return View(new UserEditModel { Username = user.Name });
             }
 
             return RedirectToAction("Index");
@@ -90,9 +91,14 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorize]
         public ActionResult Edit(string id)
         {
-            if (!UsernameUrl.Decode(id).Equals(User.Id(), StringComparison.OrdinalIgnoreCase) && !User.IsInRole(Definitions.Roles.Administrator))
+            if (!id.Equals(User.Id(), StringComparison.OrdinalIgnoreCase) && !User.IsInRole(Definitions.Roles.Administrator))
             {
                 return RedirectToAction("Unauthorized", "Home");
+            }
+
+            if (MembershipService.IsReadOnly())
+            {
+                return RedirectToAction("Detail", "Account", new { id = id });
             }
 
             if (!String.IsNullOrEmpty(id))
@@ -102,11 +108,11 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     var model = new UserEditModel
                     {
-                        Username = user.Username,
-                        Name = user.Name,
+                        Username = user.Name,
+                        Name = user.GivenName,
                         Surname = user.Surname,
                         Email = user.Email,
-                        Roles = RoleProvider.GetRolesForUser(user.Username),
+                        Roles = RoleProvider.GetRolesForUser(user.Name),
                     };
                     PopulateRoles();
                     return View(model);
@@ -134,7 +140,7 @@ namespace Bonobo.Git.Server.Controllers
                     valid = false;
                 }
 
-                if (model.OldPassword != null && !MembershipService.ValidateUser(model.Username, model.OldPassword))
+                if (model.OldPassword != null && MembershipService.ValidateUser(model.Username, model.OldPassword) != ValidationResult.Success)
                 {
                     ModelState.AddModelError("OldPassword", Resources.Account_Edit_OldPasswordIncorrect);
                     valid = false;
@@ -210,19 +216,21 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        private List<UserDetailModel> GetDetailUsers()
+        private UserDetailModelList GetDetailUsers()
         {
             var users = MembershipService.GetAllUsers();
-            var model = new List<UserDetailModel>();
+            var model = new UserDetailModelList();
+            model.IsReadOnly = MembershipService.IsReadOnly();
             foreach (var user in users)
             {
                 model.Add(new UserDetailModel
                 {
-                    Username = user.Username,
-                    Name = user.Name,
+                    Username = user.Name,
+                    Name = user.GivenName,
                     Surname = user.Surname,
                     Email = user.Email,
-                    Roles = RoleProvider.GetRolesForUser(user.Username),
+                    Roles = RoleProvider.GetRolesForUser(user.Name),
+                    IsReadOnly = model.IsReadOnly
                 });
             }
             return model;

@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 namespace Bonobo.Git.Server.Configuration
 {
     using Bonobo.Git.Server.App_GlobalResources;
+    using System.Web.Hosting;
 
     [XmlRootAttribute(ElementName = "Configuration", IsNullable = false)]
     public class UserConfiguration : ConfigurationEntry<UserConfiguration>
@@ -28,7 +29,7 @@ namespace Bonobo.Git.Server.Configuration
             {
                 return Path.IsPathRooted(RepositoryPath)
                        ? RepositoryPath
-                       : HttpContext.Current.Server.MapPath(RepositoryPath);
+                       : HostingEnvironment.MapPath(RepositoryPath);
             }
         }
 
