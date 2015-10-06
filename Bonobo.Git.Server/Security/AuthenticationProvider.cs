@@ -25,11 +25,11 @@ namespace Bonobo.Git.Server.Security
         {
             UserModel user = MembershipService.GetUser(username);
 
-            var claims = new List<Claim>();
+            List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, user.DisplayName));
-            claims.Add(new Claim(ClaimTypes.Upn, user.Username));
+            claims.Add(new Claim(ClaimTypes.Upn, user.Name));
             claims.Add(new Claim(ClaimTypes.Email, user.Email));
-            claims.AddRange(RoleProvider.GetRolesForUser(user.Username).Select(x => new Claim(ClaimTypes.Role, x)));
+            claims.AddRange(RoleProvider.GetRolesForUser(user.Name).Select(x => new Claim(ClaimTypes.Role, x)));
 
             return claims;
         }

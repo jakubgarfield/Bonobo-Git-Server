@@ -39,13 +39,13 @@ else
                 </span>
             </div>
         </fieldset>
-        @if (User.IsInRole(Definitions.Roles.Administrator))
-        {
-            <div class="pure-controls">
-                <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Account_Detail_Back</a>
-                <a class="pure-button" href="@Url.Action("Edit", new { id = UsernameUrl.Encode(Model.Username) })"><i class="fa fa-pencil-square-o"></i> @Resources.Account_Detail_Edit</a>
-                <a class="pure-button" href="@Url.Action("Delete", new { id = UsernameUrl.Encode(Model.Username) })"><i class="fa fa-trash-o"></i> @Resources.Account_Detail_Delete</a>       
-            </div>
-        }
+        <div class="pure-controls">
+            <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Account_Detail_Back</a>
+            @if (User.IsInRole(Definitions.Roles.Administrator) && !Model.IsReadOnly)
+            {
+                <a class="pure-button" href="@Url.Action("Edit", new { id = Model.Username })"><i class="fa fa-pencil-square-o"></i> @Resources.Account_Detail_Edit</a>
+                <a class="pure-button" href="@Url.Action("Delete", new { id = Model.Username })"><i class="fa fa-trash-o"></i> @Resources.Account_Detail_Delete</a>       
+            }
+        </div>
     </div>
 }

@@ -80,13 +80,37 @@ namespace Bonobo.Git.Server
         {
             var container = new UnityContainer().AddExtension(new UnityDecoratorContainerExtension());
 
-            container.RegisterType<IMembershipService, EFMembershipService>();
-            container.RegisterType<IRoleProvider, EFRoleProvider>();
+            /* 
+                The UnityDecoratorContainerExtension breaks resolving named type registrations, like:
+
+                container.RegisterType<IMembershipService, ADMembershipService>("ActiveDirectory");
+                container.RegisterType<IMembershipService, EFMembershipService>("Internal");
+                IMembershipService membershipService = container.Resolve<IMembershipService>("Internal");
+
+                Until this issue is resolved, the following hack will have to do
+            */
+
+            switch (AuthenticationSettings.MembershipService.ToLowerInvariant())
+            {
+                case "activedirectory":
+                    container.RegisterType<IMembershipService, ADMembershipService>();
+                    container.RegisterType<IRoleProvider, ADRoleProvider>();
+                    container.RegisterType<ITeamRepository, ADTeamRepository>();
+                    container.RegisterType<IRepositoryRepository, ADRepositoryRepository>();
+                    container.RegisterType<IRepositoryPermissionService, ADRepositoryPermissionService>();
+                    break;
+                case "internal":
+                    container.RegisterType<IMembershipService, EFMembershipService>();
+                    container.RegisterType<IRoleProvider, EFRoleProvider>();
+                    container.RegisterType<ITeamRepository, EFTeamRepository>();
+                    container.RegisterType<IRepositoryRepository, EFRepositoryRepository>();
+                    container.RegisterType<IRepositoryPermissionService, EFRepositoryPermissionService>();
+                    break;
+                default:
+                    throw new ArgumentException("Missing MembershipService declaration in config", "MembershipService");
+            }
+
             container.RegisterType<IAuthenticationProvider, CookieAuthenticationProvider>();
-            container.RegisterType<IRepositoryPermissionService, EFRepositoryPermissionService>();
-            container.RegisterType<IFormsAuthenticationService, FormsAuthenticationService>();
-            container.RegisterType<ITeamRepository, EFTeamRepository>();
-            container.RegisterType<IRepositoryRepository, EFRepositoryRepository>();
 
             container.RegisterType<IGitRepositoryLocator, ConfigurationBasedRepositoryLocator>(
                 new InjectionFactory((ctr, type, name) => {
@@ -215,41 +239,6 @@ namespace Bonobo.Git.Server
             }
         }
 #endif
-
-        private static FormsAuthenticationTicket ExtractTicketFromCookie(HttpContext context, string name)
-        {
-            FormsAuthenticationTicket ticket = null;
-            string encryptedTicket = null;
-
-            var cookie = context.Request.Cookies[name];
-            if (cookie != null)
-            {
-                encryptedTicket = cookie.Value;
-            }
-
-            if (String.IsNullOrEmpty(encryptedTicket))
-            {
-                return null;
-            }
-
-            try
-            {
-                ticket = FormsAuthentication.Decrypt(encryptedTicket);
-            }
-            catch
-            {
-                context.Request.Cookies.Remove(name);
-            }
-
-            if (ticket != null && !ticket.Expired)
-            {
-                return ticket;
-            }
-
-            context.Request.Cookies.Remove(name);
-
-            return null;
-        }
 
         private static string GetRootPath(string path)
         {

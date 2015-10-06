@@ -26,14 +26,6 @@ namespace Bonobo.Git.Server
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            var importer = new WindowsIdentityImporter();
-            WindowsIdentityImporter.Import(filterContext);
-
-            if (IsWindowsUserAuthenticated(filterContext))
-            {
-                return;
-            }
-
             if (filterContext.HttpContext.User == null || !(filterContext.HttpContext.User.Identity is ClaimsIdentity) || !filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
                 filterContext.Result =
@@ -52,12 +44,6 @@ namespace Bonobo.Git.Server
                     filterContext.Result = new RedirectResult("~/Home/Unauthorized");
                 }
             }
-        }
-
-        private static bool IsWindowsUserAuthenticated(ControllerContext context)
-        {
-            var windowsIdentity = context.HttpContext.User.Identity as WindowsIdentity;
-            return windowsIdentity != null && windowsIdentity.IsAuthenticated;
         }
     }
 }
