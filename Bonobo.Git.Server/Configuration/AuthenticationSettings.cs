@@ -9,10 +9,12 @@ namespace Bonobo.Git.Server.Configuration
     public class AuthenticationSettings
     {
         public static string MembershipService { get; private set; }
+        public static string AuthenticationProvider { get; private set; }
 
         static AuthenticationSettings()
         {
-            MembershipService = ConfigurationManager.AppSettings["MembershipService"];
+            MembershipService = ConfigurationManager.AppSettings["MembershipService"];            
+            AuthenticationProvider = ConfigurationManager.AppSettings["AuthenticationProvider"];
         }
     }
 }

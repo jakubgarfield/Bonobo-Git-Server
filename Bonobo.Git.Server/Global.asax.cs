@@ -85,9 +85,9 @@ namespace Bonobo.Git.Server
 
                 container.RegisterType<IMembershipService, ADMembershipService>("ActiveDirectory");
                 container.RegisterType<IMembershipService, EFMembershipService>("Internal");
-                IMembershipService membershipService = container.Resolve<IMembershipService>("Internal");
+                IMembershipService membershipService = container.Resolve<IMembershipService>(AuthenticationSettings.MembershipService);
 
-                Until this issue is resolved, the following hack will have to do
+                Until this issue is resolved, the following two switch hacks will have to do
             */
 
             switch (AuthenticationSettings.MembershipService.ToLowerInvariant())
@@ -107,10 +107,20 @@ namespace Bonobo.Git.Server
                     container.RegisterType<IRepositoryPermissionService, EFRepositoryPermissionService>();
                     break;
                 default:
-                    throw new ArgumentException("Missing MembershipService declaration in config", "MembershipService");
+                    throw new ArgumentException("Missing declaration in web.config", "MembershipService");
             }
 
-            container.RegisterType<IAuthenticationProvider, CookieAuthenticationProvider>();
+            switch (AuthenticationSettings.AuthenticationProvider.ToLowerInvariant())
+            {
+                case "cookies":
+                    container.RegisterType<IAuthenticationProvider, CookieAuthenticationProvider>();
+                    break;
+                case "federation":
+                    container.RegisterType<IAuthenticationProvider, FederationAuthenticationProvider>();
+                    break;
+                default:
+                    throw new ArgumentException("Missing declaration in web.config", "AuthenticationProvider");
+            }
 
             container.RegisterType<IGitRepositoryLocator, ConfigurationBasedRepositoryLocator>(
                 new InjectionFactory((ctr, type, name) => {
