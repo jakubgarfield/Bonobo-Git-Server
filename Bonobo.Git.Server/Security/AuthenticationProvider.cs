@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Web;
 
 using Bonobo.Git.Server.Models;
 
 using Microsoft.Practices.Unity;
+using System.Web;
+using Microsoft.Owin.Security.WsFederation;
+using Microsoft.Owin.Security.Cookies;
+using Owin;
 
 namespace Bonobo.Git.Server.Security
 {
@@ -18,20 +21,23 @@ namespace Bonobo.Git.Server.Security
         [Dependency]
         public IRoleProvider RoleProvider { get; set; }
 
-        public abstract void SignIn(string username);
+        public abstract void Configure(IAppBuilder app);
+        public abstract void SignIn(string username, string returnUrl);
         public abstract void SignOut();
 
         public IEnumerable<Claim> GetClaimsForUser(string username)
         {
+            List<Claim> result = new List<Claim>();
+
             UserModel user = MembershipService.GetUser(username);
 
-            List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name, user.DisplayName));
-            claims.Add(new Claim(ClaimTypes.Upn, user.Name));
-            claims.Add(new Claim(ClaimTypes.Email, user.Email));
-            claims.AddRange(RoleProvider.GetRolesForUser(user.Name).Select(x => new Claim(ClaimTypes.Role, x)));
+            result.Add(new Claim(ClaimTypes.Name, user.DisplayName));
+            result.Add(new Claim(ClaimTypes.Upn, user.Name));
+            result.Add(new Claim(ClaimTypes.Email, user.Email));
+            result.Add(new Claim(ClaimTypes.Role, Definitions.Roles.Member));
+            result.AddRange(RoleProvider.GetRolesForUser(user.Name).Select(x => new Claim(ClaimTypes.Role, x)));
 
-            return claims;
+            return result;
         }
     }
 }

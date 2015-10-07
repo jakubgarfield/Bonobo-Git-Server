@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Security.Principal;
+using System.Security.Claims;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -10,7 +10,6 @@ using System.Web.Mvc;
 using Bonobo.Git.Server.Security;
 
 using Microsoft.Practices.Unity;
-using System.Security.Claims;
 
 namespace Bonobo.Git.Server
 {
@@ -22,7 +21,7 @@ namespace Bonobo.Git.Server
         [Dependency]
         public IAuthenticationProvider AuthenticationProvider { get; set; }
 
-        public override void OnAuthorization(AuthorizationContext filterContext)
+        public override void OnAuthorization(System.Web.Mvc.AuthorizationContext filterContext)
         {
             if (filterContext == null)
             {
@@ -31,17 +30,12 @@ namespace Bonobo.Git.Server
 
             HttpContextBase httpContext = filterContext.HttpContext;
 
-            if (httpContext.Request.IsAuthenticated && httpContext.User != null && httpContext.User.Identity is ClaimsIdentity)
+            if (httpContext.Request.IsAuthenticated && httpContext.User != null && httpContext.User.Identity is System.Security.Claims.ClaimsIdentity)
             {
                 return;
             }
 
-            if (IsWindowsUserAuthenticated(filterContext))
-            {
-                return;
-            }
-
-            // Add header to prevent redirection to login page (see Startup.cs)
+            // Add header to prevent redirection to login page (see IAuthenticationProvider.Configure)
             httpContext.Request.Headers.Add("AuthNoRedirect", "1");
             string auth = httpContext.Request.Headers["Authorization"];
 
@@ -65,13 +59,6 @@ namespace Bonobo.Git.Server
             {
                 filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
-        }
-
-
-        private static bool IsWindowsUserAuthenticated(ControllerContext context)
-        {
-            var windowsIdentity = context.HttpContext.User.Identity as WindowsIdentity;
-            return windowsIdentity != null && windowsIdentity.IsAuthenticated;
         }
     }
 }

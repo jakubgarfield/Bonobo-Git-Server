@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
 
 using Bonobo.Git.Server.Security;
@@ -47,7 +46,7 @@ namespace Bonobo.Git.Server
                 }
             }
 
-            if (filterContext.HttpContext.User == null || !(filterContext.HttpContext.User.Identity is ClaimsIdentity) || !filterContext.HttpContext.User.Identity.IsAuthenticated)
+            if (filterContext.HttpContext.User == null || !(filterContext.HttpContext.User.Identity is System.Security.Claims.ClaimsIdentity) || !filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
                 filterContext.Result =
                     new RedirectToRouteResult(new RouteValueDictionary

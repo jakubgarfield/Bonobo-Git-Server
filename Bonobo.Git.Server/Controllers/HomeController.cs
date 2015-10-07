@@ -108,7 +108,6 @@ namespace Bonobo.Git.Server.Controllers
                     var user = db.Users.FirstOrDefault(x => x.Username.Equals(model.Username, StringComparison.OrdinalIgnoreCase));
                     if (user == null)
                     {
-                        
                         ModelState.AddModelError("", Resources.Home_ForgotPassword_UserNameFailure);
                         Response.AppendToLog("FAILURE");
                     }
@@ -137,16 +136,9 @@ namespace Bonobo.Git.Server.Controllers
                 switch (result)
                 {
                     case ValidationResult.Success:
-                        AuthenticationProvider.SignIn(model.Username);
+                        AuthenticationProvider.SignIn(model.Username, Url.IsLocalUrl(model.ReturnUrl) ? model.ReturnUrl : Url.Action("Index", "Home"));
                         Response.AppendToLog("SUCCESS");
-                        if (Url.IsLocalUrl(model.ReturnUrl))
-                        {
-                            return Redirect(model.ReturnUrl);
-                        }
-                        else
-                        {
-                            return RedirectToAction("Index", "Home");
-                        }
+                        return new EmptyResult();
                     case ValidationResult.NotAuthorized:
                         return new RedirectResult("~/Home/Unauthorized");
                     default:
@@ -159,7 +151,6 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        [WebAuthorize]
         public ActionResult LogOff()
         {
             AuthenticationProvider.SignOut();

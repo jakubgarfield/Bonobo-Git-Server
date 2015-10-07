@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -26,20 +24,16 @@ namespace Bonobo.Git.Server
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            if (filterContext.HttpContext.User == null || !(filterContext.HttpContext.User.Identity is ClaimsIdentity) || !filterContext.HttpContext.User.Identity.IsAuthenticated)
+            base.OnAuthorization(filterContext);
+
+            if (!(filterContext.Result is HttpUnauthorizedResult))
             {
-                filterContext.Result =
-                    new RedirectToRouteResult(new RouteValueDictionary
-                    {
-                        { "controller", "Home" },
-                        { "action", "LogOn" },
-                        { "returnUrl", filterContext.HttpContext.Request.Url.PathAndQuery }
-                    });
-            }
-            else
-            {
-                base.OnAuthorization(filterContext);
-                if (filterContext.Result is HttpUnauthorizedResult || (roles != null && !filterContext.HttpContext.User.Roles().Any(x => roles.Contains(x))))
+                if (!filterContext.HttpContext.User.IsInRole(Definitions.Roles.Member))
+                {
+                    filterContext.Result = new RedirectResult("~/Home/Unauthorized");
+                }
+
+                if (roles != null && roles.Length != 0 && !filterContext.HttpContext.User.Roles().Any(x => roles.Contains(x)))
                 {
                     filterContext.Result = new RedirectResult("~/Home/Unauthorized");
                 }

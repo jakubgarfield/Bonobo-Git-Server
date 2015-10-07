@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Net;
-using System.Threading.Tasks;
-
-using Bonobo.Git.Server.Configuration;
+using System.Web.Mvc;
 
 using Microsoft.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
 
 using Owin;
+using Bonobo.Git.Server.Security;
 
 [assembly: OwinStartup(typeof(Bonobo.Git.Server.Startup))]
 
@@ -18,25 +14,7 @@ namespace Bonobo.Git.Server
     {
         public void Configuration(IAppBuilder app)
         {
-            app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = CookieAuthenticationDefaults.AuthenticationType,
-                LoginPath = new PathString("/Home/LogOn"),
-                ExpireTimeSpan = TimeSpan.FromHours(1),
-                SlidingExpiration = true,
-                Provider = new CookieAuthenticationProvider
-                {
-                    OnApplyRedirect = context =>
-                    {
-                        if (!context.Request.Headers.ContainsKey("AuthNoRedirect"))
-                        {
-                            context.Response.Redirect(context.RedirectUri);
-                        }
-                    }
-                },
-
-            });
+            DependencyResolver.Current.GetService<IAuthenticationProvider>().Configure(app);
         }
     }
 }

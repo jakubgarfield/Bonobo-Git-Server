@@ -203,8 +203,8 @@ namespace Bonobo.Git.Server.Controllers
                     }
                     else
                     {
-                        AuthenticationProvider.SignIn(model.Username);
-                        return RedirectToAction("Index", "Home");
+                        AuthenticationProvider.SignIn(model.Username, Url.Action("Index", "Home"));
+                        return new EmptyResult();
                     }
                 }
                 else
