@@ -28,24 +28,24 @@ namespace Bonobo.Git.Server.Security
 
         public bool HasPermission(string username, string repositoryName)
         {
-            bool result = true;
+            bool result = false;
 
             RepositoryModel repositoryModel = Repository.GetRepository(repositoryName);
 
-            result &= repositoryModel.Users.Contains(username, StringComparer.OrdinalIgnoreCase);
-            result &= repositoryModel.Administrators.Contains(username, StringComparer.OrdinalIgnoreCase);
-            result &= RoleProvider.GetRolesForUser(username).Contains(Definitions.Roles.Administrator);
-            result &= TeamRepository.GetTeams(username).Any(x => repositoryModel.Teams.Contains(x.Name, StringComparer.OrdinalIgnoreCase));
+            result |= repositoryModel.Users.Contains(username, StringComparer.OrdinalIgnoreCase);
+            result |= repositoryModel.Administrators.Contains(username, StringComparer.OrdinalIgnoreCase);
+            result |= RoleProvider.GetRolesForUser(username).Contains(Definitions.Roles.Administrator);
+            result |= TeamRepository.GetTeams(username).Any(x => repositoryModel.Teams.Contains(x.Name, StringComparer.OrdinalIgnoreCase));
 
             return result;
         }
 
         public bool IsRepositoryAdministrator(string username, string repositoryName)
         {
-            bool result = true;
+            bool result = false;
 
-            result &= Repository.GetRepository(repositoryName).Administrators.Contains(username, StringComparer.OrdinalIgnoreCase);
-            result &= RoleProvider.GetRolesForUser(username).Contains(Definitions.Roles.Administrator);
+            result |= Repository.GetRepository(repositoryName).Administrators.Contains(username, StringComparer.OrdinalIgnoreCase);
+            result |= RoleProvider.GetRolesForUser(username).Contains(Definitions.Roles.Administrator);
 
             return result;
         }
