@@ -142,7 +142,7 @@ namespace Bonobo.Git.Server.Controllers
         private ActionResult UnauthorizedResult()
         {
             Response.Clear();
-            Response.AddHeader("WWW-Authenticate", "Basic realm=\"Secure Area\"");
+            Response.AddHeader("WWW-Authenticate", "Basic realm=\"Bonobo Git\"");
             
             return new HttpStatusCodeResult(401);
         }

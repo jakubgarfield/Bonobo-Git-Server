@@ -47,7 +47,7 @@ namespace Bonobo.Git.Server
 
             if (String.IsNullOrEmpty(auth))
             {
-                httpContext.Response.Headers.Add("WWW-Authenticate", "Basic realm=\"BonoboGit\"");
+                httpContext.Response.Headers.Add("WWW-Authenticate", "Basic realm=\"Bonobo Git\"");
                 filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
                 return;
             }
