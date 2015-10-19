@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.Practices.Unity;
-using Bonobo.Git.Server.Security;
-using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.App_GlobalResources;
 using System.Globalization;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Web;
+using System.Web.Caching;
+using System.Web.Mvc;
+
+using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Helpers;
-using System.Text;
-using System.Web.Caching;
+using Bonobo.Git.Server.Models;
+using Bonobo.Git.Server.Security;
+
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -21,8 +26,7 @@ namespace Bonobo.Git.Server.Controllers
         public IMembershipService MembershipService { get; set; }
 
         [Dependency]
-        public IFormsAuthenticationService FormsAuthenticationService { get; set; }
-
+        public IAuthenticationProvider AuthenticationProvider { get; set; }
 
         [WebAuthorize]
         public ActionResult Index()
@@ -104,7 +108,6 @@ namespace Bonobo.Git.Server.Controllers
                     var user = db.Users.FirstOrDefault(x => x.Username.Equals(model.Username, StringComparison.OrdinalIgnoreCase));
                     if (user == null)
                     {
-                        
                         ModelState.AddModelError("", Resources.Home_ForgotPassword_UserNameFailure);
                         Response.AppendToLog("FAILURE");
                     }
@@ -129,33 +132,28 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (MembershipService.ValidateUser(model.Username, model.Password))
+                ValidationResult result = MembershipService.ValidateUser(model.Username, model.Password);
+                switch (result)
                 {
-                    FormsAuthenticationService.SignIn(model.Username, model.RememberMe);
-                    Response.AppendToLog("SUCCESS");
-                    if (Url.IsLocalUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("", Resources.Home_LogOn_UsernamePasswordIncorrect);
-                    Response.AppendToLog("FAILURE");
-                }
+                    case ValidationResult.Success:
+                        AuthenticationProvider.SignIn(model.Username, Url.IsLocalUrl(model.ReturnUrl) ? model.ReturnUrl : Url.Action("Index", "Home"));
+                        Response.AppendToLog("SUCCESS");
+                        return new EmptyResult();
+                    case ValidationResult.NotAuthorized:
+                        return new RedirectResult("~/Home/Unauthorized");
+                    default:
+                        ModelState.AddModelError("", Resources.Home_LogOn_UsernamePasswordIncorrect);
+                        Response.AppendToLog("FAILURE");
+                        break;
+                }                
             }
 
             return View(model);
         }
 
-        [WebAuthorizeAttribute]
         public ActionResult LogOff()
         {
-            FormsAuthenticationService.SignOut();
+            AuthenticationProvider.SignOut();
             return RedirectToAction("Index", "Home");
         }
 

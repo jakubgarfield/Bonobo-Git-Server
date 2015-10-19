@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.IO;
 using System.Web;
+using System.Web.Hosting;
 using System.Xml.Serialization;
 
 namespace Bonobo.Git.Server.Configuration
@@ -12,7 +13,7 @@ namespace Bonobo.Git.Server.Configuration
         private static readonly XmlSerializer _serializer = new XmlSerializer(typeof(Entry));
         private static readonly string _configPath = Path.IsPathRooted(ConfigurationManager.AppSettings["UserConfiguration"])
                                                     ? ConfigurationManager.AppSettings["UserConfiguration"]
-                                                    : HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["UserConfiguration"]);
+                                                    : HostingEnvironment.MapPath(ConfigurationManager.AppSettings["UserConfiguration"]);
 
 
         public static Entry Current { get { return _current ?? Load(); } }
