@@ -14,16 +14,16 @@ namespace Bonobo.Git.Server
         {
             string result = null;
 
-            ClaimsIdentity claimsIdentity = user.Identity as ClaimsIdentity;
-            if (claimsIdentity != null)
+            try
             {
-                try
+                ClaimsIdentity claimsIdentity = GetClaimsIdentity(user);
+                if (claimsIdentity != null)
                 {
                     result = claimsIdentity.FindFirst(claimName).Value;
                 }
-                catch
-                {
-                }
+            }
+            catch
+            {
             }
 
             return result;
@@ -39,20 +39,38 @@ namespace Bonobo.Git.Server
             return user.GetClaim(ClaimTypes.Name);
         }
 
+        public static bool IsWindowsPrincipal(this IPrincipal user)
+        {
+            return user.Identity is WindowsIdentity;
+        }
+
         public static string[] Roles(this IPrincipal user)
         {
             string[] result = null;
 
-            ClaimsIdentity claimsIdentity = user.Identity as ClaimsIdentity;
-            if (claimsIdentity != null)
+            try
             {
-                try
+                ClaimsIdentity claimsIdentity = GetClaimsIdentity(user);
+                if (claimsIdentity != null)
                 {
                     result = claimsIdentity.FindAll(ClaimTypes.Role).Select(x => x.Value).ToArray();
                 }
-                catch
-                {
-                }
+            }
+            catch
+            {
+            }
+
+            return result;
+        }
+
+        private static ClaimsIdentity GetClaimsIdentity(this IPrincipal user)
+        {
+            ClaimsIdentity result = null;
+
+            ClaimsPrincipal claimsPrincipal = user as ClaimsPrincipal;
+            if (claimsPrincipal != null)
+            {
+                result = claimsPrincipal.Identities.FirstOrDefault(x => x is ClaimsIdentity);
             }
 
             return result;
