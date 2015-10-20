@@ -75,5 +75,21 @@ namespace Bonobo.Git.Server
 
             return result;
         }
+
+        public static string StripDomain(this string username)
+        {
+            int delimiterIndex = username.IndexOf('@');
+            if (delimiterIndex > 0)
+            {
+                username = username.Substring(0, delimiterIndex - 1);
+            }
+            delimiterIndex = username.IndexOf('\\');
+            if (delimiterIndex > 0)
+            {
+                username = username.Substring(delimiterIndex + 1);
+            }
+
+            return username;
+        }
     }
 }
