@@ -288,6 +288,15 @@
     <Compile Include="Helpers\MembershipHelper.cs" />
     <Compile Include="Helpers\RepositoryCommitModelHelpers.cs" />
     <Compile Include="Models\RepositoryCommitTitle.cs" />
+    <Compile Include="Owin\NativeMethods.cs" />
+    <Compile Include="Owin\WindowsAuthenticationDefaults.cs" />
+    <Compile Include="Owin\WindowsAuthenticationExtensions.cs" />
+    <Compile Include="Owin\WindowsAuthenticationHandler.cs" />
+    <Compile Include="Owin\WindowsAuthenticationHandshake.cs" />
+    <Compile Include="Owin\WindowsAuthenticationHandshakeCache.cs" />
+    <Compile Include="Owin\WindowsAuthenticationMiddleware.cs" />
+    <Compile Include="Owin\WindowsAuthenticationOptions.cs" />
+    <Compile Include="Owin\WindowsAuthenticationToken.cs" />
     <Compile Include="Security\ADMembershipService.cs" />
     <Compile Include="Security\ADRepositoryPermissionService.cs" />
     <Compile Include="Security\ADRoleProvider.cs" />
@@ -297,6 +306,7 @@
     <Compile Include="Security\IAuthenticationProvider.cs" />
     <Compile Include="Security\IRoleProvider.cs" />
     <Compile Include="Security\ValidationResult.cs" />
+    <Compile Include="Security\WindowsAuthenticationProvider.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="UnityDecoratorBuildStrategy.cs" />
     <Compile Include="UnityDecoratorContainerExtension.cs" />
@@ -383,7 +393,6 @@
     <Compile Include="Security\PasswordService.cs" />
     <Compile Include="UnityDependencyResolver.cs" />
     <Compile Include="FilterProviders\UnityFilterAttributeFilterProvider.cs" />
-    <Compile Include="Attributes\WindowsActionFilterAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Git\antiword.exe" />

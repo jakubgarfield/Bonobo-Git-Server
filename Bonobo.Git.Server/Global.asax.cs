@@ -112,6 +112,9 @@ namespace Bonobo.Git.Server
 
             switch (AuthenticationSettings.AuthenticationProvider.ToLowerInvariant())
             {
+                case "windows":
+                    container.RegisterType<IAuthenticationProvider, WindowsAuthenticationProvider>();
+                    break;
                 case "cookies":
                     container.RegisterType<IAuthenticationProvider, CookieAuthenticationProvider>();
                     break;

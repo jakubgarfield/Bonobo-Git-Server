@@ -17,6 +17,7 @@ using Bonobo.Git.Server.Security;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Practices.Unity;
+using Bonobo.Git.Server.Owin.Windows;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -120,6 +121,24 @@ namespace Bonobo.Git.Server.Controllers
                 }
             }
             return View(model);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult WindowsLogin(string returnUrl)
+        {
+            if (String.IsNullOrEmpty(User.Identity.Name))
+            {
+                AuthenticationProperties authenticationProperties = new AuthenticationProperties()
+                {
+                    RedirectUri = returnUrl
+                };
+
+                Request.GetOwinContext().Authentication.Challenge(authenticationProperties, WindowsAuthenticationDefaults.AuthenticationType);
+                return new EmptyResult();
+            }
+
+            return Redirect(returnUrl);
         }
 
         public ActionResult LogOn(string returnUrl)

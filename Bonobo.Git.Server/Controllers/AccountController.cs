@@ -168,7 +168,6 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        [WindowsActionFilter]
         public ActionResult Create()
         {
             if ((Request.IsAuthenticated && !User.IsInRole(Definitions.Roles.Administrator)) || (!Request.IsAuthenticated && !UserConfiguration.Current.AllowAnonymousRegistration))
@@ -179,7 +178,7 @@ namespace Bonobo.Git.Server.Controllers
             return View();
         }
 
-        [HttpPost, WindowsActionFilter]
+        [HttpPost]
         public ActionResult Create(UserCreateModel model)
         {
             if ((Request.IsAuthenticated && !User.IsInRole(Definitions.Roles.Administrator)) || (!Request.IsAuthenticated && !UserConfiguration.Current.AllowAnonymousRegistration))
