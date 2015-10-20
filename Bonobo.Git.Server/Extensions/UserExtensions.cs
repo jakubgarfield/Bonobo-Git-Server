@@ -39,9 +39,10 @@ namespace Bonobo.Git.Server
             return user.GetClaim(ClaimTypes.Name);
         }
 
-        public static bool IsWindowsPrincipal(this IPrincipal user)
+        public static bool IsWindowsAuthenticated(this IPrincipal user)
         {
-            return user.Identity is WindowsIdentity;
+            string authenticationMethod = user.GetClaim(ClaimTypes.AuthenticationMethod);
+            return !String.IsNullOrEmpty(authenticationMethod) && authenticationMethod.Equals("Windows", StringComparison.OrdinalIgnoreCase);
         }
 
         public static string[] Roles(this IPrincipal user)
