@@ -47,7 +47,7 @@ namespace Bonobo.Git.Server.Helpers
 
                 smtpClient.Send(email);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 result = false;
             }

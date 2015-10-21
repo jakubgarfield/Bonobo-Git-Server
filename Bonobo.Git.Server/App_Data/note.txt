@@ -1,1 +1,0 @@
-﻿This is the default for database and log files.

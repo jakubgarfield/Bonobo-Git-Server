@@ -518,7 +518,6 @@
     <Content Include="App_Data\Git\wish.exe" />
     <Content Include="App_Data\Git\wish85.exe" />
     <Content Include="App_Data\Git\xargs.exe" />
-    <Content Include="App_Data\note.txt" />
     <Content Include="App_Data\Repositories\note.txt" />
     <EmbeddedResource Include="App_GlobalResources\Resources.fr-FR.resx" />
     <Content Include="bin\NativeBinaries\amd64\git2-e0902fb.dll" />
