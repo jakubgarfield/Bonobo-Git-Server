@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
-using Bonobo.Git.Server.Models;
 using System.Web.Security;
-using Bonobo.Git.Server.Security;
-using Microsoft.Practices.Unity;
-using System.Globalization;
+
 using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Extensions;
+using Bonobo.Git.Server.Models;
+using Bonobo.Git.Server.Security;
+
+using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -20,25 +23,27 @@ namespace Bonobo.Git.Server.Controllers
         public IMembershipService MembershipService { get; set; }
 
         [Dependency]
-        public IFormsAuthenticationService FormsAuthenticationService { get; set; }
+        public IRoleProvider RoleProvider { get; set; }
 
+        [Dependency]
+        public IAuthenticationProvider AuthenticationProvider { get; set; }
 
-        [WebAuthorizeAttribute]
+        [WebAuthorize]
         public ActionResult Detail(string id)
         {
             if (!String.IsNullOrEmpty(id))
             {
-                id = UsernameUrl.Decode(id);
-                var user = MembershipService.GetUser(id);
+                UserModel user = MembershipService.GetUser(id);
                 if (user != null)
                 {
                     var model = new UserDetailModel
                     {
-                        Username = user.Username,
-                        Name = user.Name,
+                        Username = user.Name,
+                        Name = user.GivenName,
                         Surname = user.Surname,
                         Email = user.Email,
-                        Roles = user.Roles,                        
+                        Roles = RoleProvider.GetRolesForUser(user.Name),
+                        IsReadOnly = MembershipService.IsReadOnly()
                     };
                     return View(model);
                 }
@@ -46,25 +51,25 @@ namespace Bonobo.Git.Server.Controllers
             return View();
         }
 
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(string id)
         {
             if (!String.IsNullOrEmpty(id))
             {
-                id = UsernameUrl.Decode(id).ToLowerInvariant();
-                return View(new UserDetailModel { Username = id });
+                UserModel user = MembershipService.GetUser(id);
+                return View(new UserEditModel { Username = user.Name });
             }
 
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(UserDetailModel model)
         {
             if (model != null && !String.IsNullOrEmpty(model.Username))
             {
-                if (model.Username != User.Identity.Name.ToLowerInvariant())
+                if (!model.Username.Equals(User.Id(), StringComparison.OrdinalIgnoreCase))
                 {
                     MembershipService.DeleteUser(model.Username);
                     TempData["DeleteSuccess"] = true;
@@ -77,20 +82,23 @@ namespace Bonobo.Git.Server.Controllers
             return RedirectToAction("Index");
         }
 
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index()
         {
             return View(GetDetailUsers());
         }
 
-        [WebAuthorizeAttribute]
+        [WebAuthorize]
         public ActionResult Edit(string id)
         {
-            id = UsernameUrl.Decode(id).ToLowerInvariant();
-
-            if (User.Identity.Name.ToLowerInvariant() != id && !User.IsInRole(Definitions.Roles.Administrator))
+            if (!id.Equals(User.Id(), StringComparison.OrdinalIgnoreCase) && !User.IsInRole(Definitions.Roles.Administrator))
             {
                 return RedirectToAction("Unauthorized", "Home");
+            }
+
+            if (MembershipService.IsReadOnly())
+            {
+                return RedirectToAction("Detail", "Account", new { id = id });
             }
 
             if (!String.IsNullOrEmpty(id))
@@ -98,15 +106,13 @@ namespace Bonobo.Git.Server.Controllers
                 var user = MembershipService.GetUser(id);
                 if (user != null)
                 {
-                    var roles = Roles.GetRolesForUser(id);
-
                     var model = new UserEditModel
                     {
-                        Username = id,
-                        Name = user.Name,
+                        Username = user.Name,
+                        Name = user.GivenName,
                         Surname = user.Surname,
                         Email = user.Email,
-                        Roles = roles,
+                        Roles = RoleProvider.GetRolesForUser(user.Name),
                     };
                     PopulateRoles();
                     return View(model);
@@ -116,10 +122,10 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        [WebAuthorizeAttribute]
+        [WebAuthorize]
         public ActionResult Edit(UserEditModel model)
         {
-            if (User.Identity.Name.ToLowerInvariant() != model.Username && !User.IsInRole(Definitions.Roles.Administrator))
+            if (!User.Id().Equals(model.Username, StringComparison.OrdinalIgnoreCase) && !User.IsInRole(Definitions.Roles.Administrator))
             {
                 return RedirectToAction("Unauthorized", "Home");
             }
@@ -134,13 +140,13 @@ namespace Bonobo.Git.Server.Controllers
                     valid = false;
                 }
 
-                if (model.OldPassword != null && !MembershipService.ValidateUser(model.Username, model.OldPassword))
+                if (model.OldPassword != null && MembershipService.ValidateUser(model.Username, model.OldPassword) != ValidationResult.Success)
                 {
                     ModelState.AddModelError("OldPassword", Resources.Account_Edit_OldPasswordIncorrect);
                     valid = false;
                 }
 
-                if (User.IsInRole(Definitions.Roles.Administrator) && model.Username == User.Identity.Name.ToLowerInvariant() && !(model.Roles != null && model.Roles.Contains(Definitions.Roles.Administrator)))
+                if (User.IsInRole(Definitions.Roles.Administrator) && model.Username.Equals(User.Id(), StringComparison.OrdinalIgnoreCase) && !(model.Roles != null && model.Roles.Contains(Definitions.Roles.Administrator)))
                 {
                     ModelState.AddModelError("Roles", Resources.Account_Edit_CannotRemoveYourselfFromAdminRole);
                     valid = false;
@@ -149,10 +155,10 @@ namespace Bonobo.Git.Server.Controllers
                 if (valid)
                 {
                     MembershipService.UpdateUser(model.Username, model.Name, model.Surname, model.Email, model.NewPassword);
-                    Roles.RemoveUserFromRoles(model.Username, Roles.GetAllRoles());
+                    RoleProvider.RemoveUserFromRoles(model.Username, RoleProvider.GetAllRoles());
                     if (model.Roles != null)
                     {
-                        Roles.AddUserToRoles(model.Username, model.Roles);
+                        RoleProvider.AddUserToRoles(model.Username, model.Roles);
                     }
                     ViewBag.UpdateSuccess = true;
                 }
@@ -162,7 +168,6 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        [WindowsActionFilter]
         public ActionResult Create()
         {
             if ((Request.IsAuthenticated && !User.IsInRole(Definitions.Roles.Administrator)) || (!Request.IsAuthenticated && !UserConfiguration.Current.AllowAnonymousRegistration))
@@ -173,7 +178,7 @@ namespace Bonobo.Git.Server.Controllers
             return View();
         }
 
-        [HttpPost, WindowsActionFilter]
+        [HttpPost]
         public ActionResult Create(UserCreateModel model)
         {
             if ((Request.IsAuthenticated && !User.IsInRole(Definitions.Roles.Administrator)) || (!Request.IsAuthenticated && !UserConfiguration.Current.AllowAnonymousRegistration))
@@ -197,8 +202,8 @@ namespace Bonobo.Git.Server.Controllers
                     }
                     else
                     {
-                        FormsAuthenticationService.SignIn(model.Username, false);
-                        return RedirectToAction("Index", "Home");
+                        AuthenticationProvider.SignIn(model.Username, Url.Action("Index", "Home"));
+                        return new EmptyResult();
                     }
                 }
                 else
@@ -210,19 +215,21 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        private List<UserDetailModel> GetDetailUsers()
+        private UserDetailModelList GetDetailUsers()
         {
             var users = MembershipService.GetAllUsers();
-            var model = new List<UserDetailModel>();
-            foreach (var item in users)
+            var model = new UserDetailModelList();
+            model.IsReadOnly = MembershipService.IsReadOnly();
+            foreach (var user in users)
             {
                 model.Add(new UserDetailModel
                 {
-                    Username = item.Username,
-                    Name = item.Name,
-                    Surname = item.Surname,
-                    Email = item.Email,
-                    Roles = item.Roles,
+                    Username = user.Name,
+                    Name = user.GivenName,
+                    Surname = user.Surname,
+                    Email = user.Email,
+                    Roles = RoleProvider.GetRolesForUser(user.Name),
+                    IsReadOnly = model.IsReadOnly
                 });
             }
             return model;
@@ -230,7 +237,7 @@ namespace Bonobo.Git.Server.Controllers
 
         private void PopulateRoles()
         {
-            ViewData["AvailableRoles"] = Roles.GetAllRoles();
+            ViewData["AvailableRoles"] = RoleProvider.GetAllRoles();
         }
     }
 }

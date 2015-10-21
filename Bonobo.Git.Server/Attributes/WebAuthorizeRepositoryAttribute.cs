@@ -1,7 +1,8 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
-using System.Web.Security;
+
 using Bonobo.Git.Server.Security;
+
 using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server
@@ -17,40 +18,36 @@ namespace Bonobo.Git.Server
         {
             base.OnAuthorization(filterContext);
 
-            var repository = filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString();
-            var user = filterContext.HttpContext.User.Identity.Name;
-            if (RequiresRepositoryAdministrator)
+            if (!(filterContext.Result is HttpUnauthorizedResult))
             {
-                if (RepositoryPermissionService.IsRepositoryAdministrator(user, repository))
-                {
-                    return;
-                }
-            }
-            else
-            {
-                if (RepositoryPermissionService.HasPermission(user, repository))
+                string repository = filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString();
+                string user = filterContext.HttpContext.User.Id();
+
+                if (filterContext.HttpContext.User.IsInRole(Definitions.Roles.Administrator))
                 {
                     return;
                 }
 
-                if (RepositoryPermissionService.AllowsAnonymous(repository))
+                if (RequiresRepositoryAdministrator)
                 {
-                    return;
-                }
-            }
-
-            if (filterContext.HttpContext.User == null || !(filterContext.HttpContext.User.Identity is FormsIdentity) || !filterContext.HttpContext.User.Identity.IsAuthenticated)
-            {
-                filterContext.Result =
-                    new RedirectToRouteResult(new RouteValueDictionary
+                    if (RepositoryPermissionService.IsRepositoryAdministrator(user, repository))
                     {
-                        { "controller", "Home" },
-                        { "action", "LogOn" },
-                        { "returnUrl", filterContext.HttpContext.Request.Url.PathAndQuery }
-                    });
-            }
-            else
-            {
+                        return;
+                    }
+                }
+                else
+                {
+                    if (RepositoryPermissionService.HasPermission(user, repository))
+                    {
+                        return;
+                    }
+
+                    if (RepositoryPermissionService.AllowsAnonymous(repository))
+                    {
+                        return;
+                    }
+                }
+
                 filterContext.Result = new RedirectResult("~/Home/Unauthorized");
             }
         }

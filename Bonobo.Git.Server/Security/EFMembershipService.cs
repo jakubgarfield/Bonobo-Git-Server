@@ -25,7 +25,12 @@ namespace Bonobo.Git.Server.Security
             _passwordService = new PasswordService(updateUserPasswordHook);
         }
 
-        public bool ValidateUser(string username, string password)
+        public bool IsReadOnly()
+        {
+            return false;
+        }
+
+        public ValidationResult ValidateUser(string username, string password)
         {
             if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "userName");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
@@ -34,7 +39,7 @@ namespace Bonobo.Git.Server.Security
             using (var database = _createDatabaseContext())
             {
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
-                return user != null && _passwordService.ComparePassword(password, username, user.Password);
+                return user != null && _passwordService.ComparePassword(password, username, user.Password) ? ValidationResult.Success : ValidationResult.Failure;
             }
         }
 
@@ -77,11 +82,10 @@ namespace Bonobo.Git.Server.Security
             {
                 return db.Users.Include("Roles").ToList().Select(item => new UserModel
                 {
-                    Username = item.Username,
-                    Name = item.Name,
+                    Name = item.Username,
+                    GivenName = item.Name,
                     Surname = item.Surname,
                     Email = item.Email,
-                    Roles = item.Roles.Select(i => i.Name).ToArray(),
                 }).ToList();
             }
         }
@@ -96,11 +100,10 @@ namespace Bonobo.Git.Server.Security
                 var user = db.Users.FirstOrDefault(i => i.Username == username);
                 return user == null ? null : new UserModel
                 {
-                    Username = user.Username,
-                    Name = user.Name,
+                    Name = user.Username,
+                    GivenName = user.Name,
                     Surname = user.Surname,
                     Email = user.Email,
-                    Roles = user.Roles.Select(i => i.Name).ToArray(),
                  };
             }
         }
@@ -159,8 +162,6 @@ namespace Bonobo.Git.Server.Security
             Buffer.BlockCopy(salt, 0, outputBytes, 1, SaltSize);
             Buffer.BlockCopy(subkey, 0, outputBytes, 1 + SaltSize, PBKDF2SubkeyLength);
             return Convert.ToBase64String(outputBytes);
-        }
-
-        
+        }        
     }
 }

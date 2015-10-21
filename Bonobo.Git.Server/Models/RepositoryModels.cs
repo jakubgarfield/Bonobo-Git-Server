@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Bonobo.Git.Server.App_GlobalResources;
-using LibGit2Sharp;
-using System.Text;
-using System.Web;
-using Bonobo.Git.Server.Attributes;
-using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Web;
+
+using Bonobo.Git.Server.App_GlobalResources;
+using Bonobo.Git.Server.Attributes;
+using Bonobo.Git.Server.Data;
+
+using LibGit2Sharp;
 
 namespace Bonobo.Git.Server.Models
 {
-    public class RepositoryModel
+    public class RepositoryModel : INameProperty
     {
         public string Name { get; set; }
         public string Group { get; set; }

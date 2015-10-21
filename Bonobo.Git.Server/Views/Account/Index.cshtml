@@ -1,5 +1,5 @@
 ﻿@using Bonobo.Git.Server.Extensions;
-@model IList<UserDetailModel>
+@model UserDetailModelList
 @{
     ViewBag.Title = Resources.Account_Index_Title;
 }
@@ -9,7 +9,7 @@
         <h1>@Resources.Account_Index_Title</h1>
     </div>
     <div class="pure-u-2-5 add">
-        @if (!WindowsActionFilterAttribute.IsWindowsModeActive)
+        @if (!User.IsWindowsAuthenticated() && !Model.IsReadOnly)
         {
             <a class="pure-button pure-button-primary" href="@Url.Action("Create")"><i class="fa fa-plus-circle"></i> @Resources.Account_Index_Create</a>
         }
@@ -45,12 +45,12 @@
     @grid.GetHtml(
         tableStyle: "pure-table users",
         columns: grid.Columns(
-        grid.Column("Username", header: typeof(UserDetailModel).GetDisplayValue("Username"), format: (item) => Html.ActionLink((string)item.Username, "Detail", new { id = UsernameUrl.Encode(item.Username) }, new { @class = "detail" })),
+        grid.Column("Username", header: typeof(UserDetailModel).GetDisplayValue("Username"), format: (item) => Html.ActionLink((string)item.Username, "Detail", new { id = item.Username }, new { @class = "detail" })),
             grid.Column("Name", typeof(UserDetailModel).GetDisplayValue("Name")),
             grid.Column("Surname", typeof(UserDetailModel).GetDisplayValue("Surname")),
             grid.Column("Email", typeof(UserDetailModel).GetDisplayValue("Email")),
-            grid.Column(format: (item) => Html.ActionLink(" ", "Edit", new { id = UsernameUrl.Encode(item.Username) }, new { @class = "edit", title = Resources.Grid_Edit }), style: "action"),
-            grid.Column(format: (item) => Html.ActionLink(" ", "Delete", new { id = UsernameUrl.Encode(item.Username) }, new { @class = "delete", title = Resources.Grid_Delete }), style: "action")
+            grid.Column(format: (item) => item.IsReadOnly ? Html.Raw(String.Empty) : Html.ActionLink(" ", "Edit", new { id = item.Username }, new { @class = "edit", title = Resources.Grid_Edit }), style: "action"),
+            grid.Column(format: (item) => item.IsReadOnly ? Html.Raw(String.Empty) : Html.ActionLink(" ", "Delete", new { id = item.Username }, new { @class = "delete", title = Resources.Grid_Delete }), style: "action")
         )
     )
 }

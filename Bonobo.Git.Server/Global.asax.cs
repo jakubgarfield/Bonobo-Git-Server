@@ -76,63 +76,54 @@ namespace Bonobo.Git.Server
             new RepositorySynchronizer().Run();
         }
 
-        protected void Application_AuthenticateRequest(object sender, EventArgs e)
-        {
-            if (Context.User != null)
-            {
-                return;
-            }
-
-            var oldTicket = ExtractTicketFromCookie(Context, FormsAuthentication.FormsCookieName);
-            if (oldTicket == null || oldTicket.Expired)
-            {
-                return;
-            }
-
-            var ticket = oldTicket;
-            if (FormsAuthentication.SlidingExpiration)
-            {
-                ticket = FormsAuthentication.RenewTicketIfOld(oldTicket);
-                if (ticket == null)
-                {
-                    return;
-                }
-            }
-
-            Context.User = new GenericPrincipal(new FormsIdentity(ticket), new string[0]);
-            if (ticket == oldTicket)
-            {
-                return;
-            }
-
-            string cookieValue = FormsAuthentication.Encrypt(ticket);
-            var cookie = Context.Request.Cookies[FormsAuthentication.FormsCookieName] ?? new HttpCookie(FormsAuthentication.FormsCookieName, cookieValue) { Path = ticket.CookiePath };
-            if (ticket.IsPersistent)
-            {
-                cookie.Expires = ticket.Expiration;
-            }
-
-            cookie.Value = cookieValue;
-            cookie.Secure = FormsAuthentication.RequireSSL;
-            cookie.HttpOnly = true;
-            if (FormsAuthentication.CookieDomain != null)
-            {
-                cookie.Domain = FormsAuthentication.CookieDomain;
-            }
-
-            Context.Response.Cookies.Remove(cookie.Name);
-            Context.Response.Cookies.Add(cookie);
-        }
-
         private static void RegisterDependencyResolver()
         {
             var container = new UnityContainer().AddExtension(new UnityDecoratorContainerExtension());
 
-            container.RegisterType<IMembershipService, EFMembershipService>();
-            container.RegisterType<IRepositoryPermissionService, EFRepositoryPermissionService>();
-            container.RegisterType<IFormsAuthenticationService, FormsAuthenticationService>();
-            container.RegisterType<ITeamRepository, EFTeamRepository>();
-            container.RegisterType<IRepositoryRepository, EFRepositoryRepository>();
+            /* 
+                The UnityDecoratorContainerExtension breaks resolving named type registrations, like:
+
+                container.RegisterType<IMembershipService, ADMembershipService>("ActiveDirectory");
+                container.RegisterType<IMembershipService, EFMembershipService>("Internal");
+                IMembershipService membershipService = container.Resolve<IMembershipService>(AuthenticationSettings.MembershipService);
+
+                Until this issue is resolved, the following two switch hacks will have to do
+            */
+
+            switch (AuthenticationSettings.MembershipService.ToLowerInvariant())
+            {
+                case "activedirectory":
+                    container.RegisterType<IMembershipService, ADMembershipService>();
+                    container.RegisterType<IRoleProvider, ADRoleProvider>();
+                    container.RegisterType<ITeamRepository, ADTeamRepository>();
+                    container.RegisterType<IRepositoryRepository, ADRepositoryRepository>();
+                    container.RegisterType<IRepositoryPermissionService, ADRepositoryPermissionService>();
+                    break;
+                case "internal":
+                    container.RegisterType<IMembershipService, EFMembershipService>();
+                    container.RegisterType<IRoleProvider, EFRoleProvider>();
+                    container.RegisterType<ITeamRepository, EFTeamRepository>();
+                    container.RegisterType<IRepositoryRepository, EFRepositoryRepository>();
+                    container.RegisterType<IRepositoryPermissionService, EFRepositoryPermissionService>();
+                    break;
+                default:
+                    throw new ArgumentException("Missing declaration in web.config", "MembershipService");
+            }
+
+            switch (AuthenticationSettings.AuthenticationProvider.ToLowerInvariant())
+            {
+                case "windows":
+                    container.RegisterType<IAuthenticationProvider, WindowsAuthenticationProvider>();
+                    break;
+                case "cookies":
+                    container.RegisterType<IAuthenticationProvider, CookieAuthenticationProvider>();
+                    break;
+                case "federation":
+                    container.RegisterType<IAuthenticationProvider, FederationAuthenticationProvider>();
+                    break;
+                default:
+                    throw new ArgumentException("Missing declaration in web.config", "AuthenticationProvider");
+            }
 
             container.RegisterType<IGitRepositoryLocator, ConfigurationBasedRepositoryLocator>(
                 new InjectionFactory((ctr, type, name) => {
@@ -261,41 +252,6 @@ namespace Bonobo.Git.Server
             }
         }
 #endif
-
-        private static FormsAuthenticationTicket ExtractTicketFromCookie(HttpContext context, string name)
-        {
-            FormsAuthenticationTicket ticket = null;
-            string encryptedTicket = null;
-
-            var cookie = context.Request.Cookies[name];
-            if (cookie != null)
-            {
-                encryptedTicket = cookie.Value;
-            }
-
-            if (String.IsNullOrEmpty(encryptedTicket))
-            {
-                return null;
-            }
-
-            try
-            {
-                ticket = FormsAuthentication.Decrypt(encryptedTicket);
-            }
-            catch
-            {
-                context.Request.Cookies.Remove(name);
-            }
-
-            if (ticket != null && !ticket.Expired)
-            {
-                return ticket;
-            }
-
-            context.Request.Cookies.Remove(name);
-
-            return null;
-        }
 
         private static string GetRootPath(string path)
         {

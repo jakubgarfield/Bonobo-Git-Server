@@ -33,26 +33,18 @@
                     }
                     @if (Request.IsAuthenticated)
                     {
-                        if (!WindowsActionFilterAttribute.IsWindowsModeActive)
+                        <li class="separator"><a href="@Url.Action("Edit", "Account", new { id = User.Id() })"><i class="fa fa-male"></i> @User.Name()</a></li>
+                        if (!User.IsWindowsAuthenticated())
                         {
-                            <li class="separator"><a href="@Url.Action("Edit", "Account", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) })"><i class="fa fa-male"></i> @Context.User.Identity.Name</a></li>
                             <li><a href="@Url.Action("LogOff", "Home")"><i class="fa fa-sign-out"></i> @Resources.Layout_LogOff</a></li>
-                        }
-                        else
-                        {
-                            <li class="separator"><a href="@Url.Action("Edit", "Account", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) })"><i class="fa fa-male"></i> @Context.User.Identity.Name</a></li>
                         }
                     }
                     else
                     {
+                        <li><a href="@Url.Action("LogOn", "Home", new { id = User.Id() })"><i class="fa fa-sign-in"></i> @Resources.Layout_LogOn</a></li>
                         if (UserConfiguration.Current.AllowAnonymousRegistration)
                         {
-                            <li><a href="@Url.Action("LogOn", "Home", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) })"><i class="fa fa-sign-in"></i> @Resources.Layout_LogOn</a></li>
                             <li><a href="@Url.Action("Create", "Account")"><i class="fa fa-pencil"></i> @Resources.Layout_Register</a></li>
-                        }
-                        else
-                        {
-                            <li><a href="@Url.Action("LogOn", "Home", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) })"><i class="fa fa-sign-in"></i> @Resources.Layout_LogOn</a></li>
                         }
                     }
                 </ul>

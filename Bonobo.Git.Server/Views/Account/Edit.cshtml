@@ -39,7 +39,7 @@ else
                 @Html.TextBoxFor(m => m.Email, new { @class = "medium" })<em>*</em>
                 @Html.ValidationMessageFor(m => m.Email)
             </div>
-            @if (!WindowsActionFilterAttribute.IsWindowsModeActive)
+            @if (!User.IsWindowsAuthenticated())
             {
                 if (!User.IsInRole(Definitions.Roles.Administrator))
                 {

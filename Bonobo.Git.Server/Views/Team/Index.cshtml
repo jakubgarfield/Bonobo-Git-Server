@@ -1,5 +1,5 @@
 ﻿@using Bonobo.Git.Server.Extensions;
-@model IEnumerable<TeamDetailModel>
+@model TeamDetailModelList
 @{
     ViewBag.Title = Resources.Team_Index_Title;
 }
@@ -8,9 +8,12 @@
     <div class="pure-u-3-5">
         <h1>@Resources.Team_Index_Title</h1>
     </div>
-    <div class="pure-u-2-5 add">
+    @if (!Model.IsReadOnly)
+    {
+        <div class="pure-u-2-5 add">
         <a class="pure-button pure-button-primary" href="@Url.Action("Create")"><i class="fa fa-plus-circle"></i> @Resources.Team_Index_CreateNew</a>
-    </div>
+        </div>
+    }
 </div>
 
 @if (TempData["CreateSuccess"] != null && (bool)TempData["CreateSuccess"])
@@ -34,10 +37,10 @@
     @grid.GetHtml(
         tableStyle: "pure-table teams",
         columns: grid.Columns(
-            grid.Column(header: typeof(TeamDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink((string)item.Name, "Detail", new { id = UsernameUrl.Encode(item.Name) }, new { @class = "detail" })),
+            grid.Column(header: typeof(TeamDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink((string)item.Name, "Detail", new { id = item.Name }, new { @class = "detail" })),
             grid.Column("Description", typeof(TeamDetailModel).GetDisplayValue("Description"), format: (item) => item.Description != null && ((string)item.Description).Length > 100 ? ((string)item.Description).Substring(0, 100) + " (...) " : item.Description),
-            grid.Column(format: (item) => Html.ActionLink(" ", "Edit", new { id = UsernameUrl.Encode(item.Name) }, new { @class = "edit", title = Resources.Grid_Edit }), style: "action"),
-            grid.Column(format: (item) => Html.ActionLink(" ", "Delete", new { id = UsernameUrl.Encode(item.Name) }, new { @class = "delete", title = Resources.Grid_Delete }), style: "action")
+            grid.Column(format: (item) => item.IsReadOnly ? Html.Raw(String.Empty) : Html.ActionLink(" ", "Edit", new { id = item.Name }, new { @class = "edit", title = Resources.Grid_Edit }), style: "action"),
+            grid.Column(format: (item) => item.IsReadOnly ? Html.Raw(String.Empty) : Html.ActionLink(" ", "Delete", new { id = item.Name }, new { @class = "delete", title = Resources.Grid_Delete }), style: "action")
         )
     )
 </div>

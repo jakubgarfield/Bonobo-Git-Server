@@ -5,9 +5,10 @@ using System.Web;
 
 namespace Bonobo.Git.Server.Security
 {
-    public interface IFormsAuthenticationService
+    public enum ValidationResult
     {
-        void SignIn(string userName, bool createPersistentCookie);
-        void SignOut();
+        Success,
+        Failure,
+        NotAuthorized
     }
 }

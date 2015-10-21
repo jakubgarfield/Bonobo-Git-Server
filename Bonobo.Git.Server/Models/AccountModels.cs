@@ -7,17 +7,32 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+
 using Bonobo.Git.Server.App_GlobalResources;
+using Bonobo.Git.Server.Data;
 
 namespace Bonobo.Git.Server.Models
 {
-    public class UserModel
+    public class RoleModel : INameProperty
     {
-        public string Username { get; set; }
         public string Name { get; set; }
+        public string[] Members { get; set; }
+    }
+
+    public class UserModel : INameProperty
+    {
+        public string Name { get; set; }
+        public string GivenName { get; set; }
         public string Surname { get; set; }
         public string Email { get; set; }
-        public string[] Roles { get; set; }
+
+        public string DisplayName
+        {
+            get
+            {
+                return String.Format("{0} {1}", GivenName, Surname);
+            }
+        }
     }
 
     public class UserEditModel
@@ -52,7 +67,7 @@ namespace Bonobo.Git.Server.Models
 
         [Display(ResourceType = typeof(Resources), Name = "Account_Edit_Roles")]
         public string[] Roles { get; set; }
-    }    
+    }
 
     public class UserDetailModel
     {
@@ -70,6 +85,12 @@ namespace Bonobo.Git.Server.Models
 
         [Display(ResourceType = typeof(Resources), Name = "Account_Detail_Roles")]
         public string[] Roles { get; set; }
+        public bool IsReadOnly { get; set; }
+    }
+
+    public class UserDetailModelList : List<UserDetailModel>
+    {
+        public bool IsReadOnly { get; set; }
     }
 
     public class UserCreateModel

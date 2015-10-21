@@ -22,7 +22,7 @@ namespace Bonobo.Git.Server.Controllers
 
         public ActionResult SecureGetInfoRefs(String project, String service)
         {
-            if (RepositoryPermissionService.HasPermission(User.Identity.Name, project)
+            if (RepositoryPermissionService.HasPermission(User.Id(), project)
                 || (RepositoryPermissionService.AllowsAnonymous(project)
                     && (String.Equals("git-upload-pack", service, StringComparison.OrdinalIgnoreCase)
                         || UserConfiguration.Current.AllowAnonymousPush)))
@@ -38,7 +38,7 @@ namespace Bonobo.Git.Server.Controllers
         [HttpPost]
         public ActionResult SecureUploadPack(String project)
         {
-            if (RepositoryPermissionService.HasPermission(User.Identity.Name, project)
+            if (RepositoryPermissionService.HasPermission(User.Id(), project)
                 || RepositoryPermissionService.AllowsAnonymous(project))
             {
                 return ExecuteUploadPack(project);
@@ -52,7 +52,7 @@ namespace Bonobo.Git.Server.Controllers
         [HttpPost]
         public ActionResult SecureReceivePack(String project)
         {
-            if (RepositoryPermissionService.HasPermission(User.Identity.Name, project)
+            if (RepositoryPermissionService.HasPermission(User.Id(), project)
                 || (RepositoryPermissionService.AllowsAnonymous(project) && UserConfiguration.Current.AllowAnonymousPush))
             {
                 return ExecuteReceivePack(project);
@@ -142,7 +142,7 @@ namespace Bonobo.Git.Server.Controllers
         private ActionResult UnauthorizedResult()
         {
             Response.Clear();
-            Response.AddHeader("WWW-Authenticate", "Basic realm=\"Secure Area\"");
+            Response.AddHeader("WWW-Authenticate", "Basic realm=\"Bonobo Git\"");
             
             return new HttpStatusCodeResult(401);
         }
