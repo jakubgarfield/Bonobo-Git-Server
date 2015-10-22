@@ -43,13 +43,14 @@ namespace Bonobo.Git.Server.Data
 
         public IList<RepositoryModel> GetPermittedRepositories(string username, string[] teams)
         {
-            if (username == null) throw new ArgumentException("username");
+            if (!string.IsNullOrEmpty(username))
+                username = username.ToLowerInvariant();
 
-            username = username.ToLowerInvariant();
-            return GetAllRepositories().Where(i => i.Administrators.Contains(username)
-                || i.Users.Contains(username)
-                || i.Teams.FirstOrDefault(t => teams.Contains(t)) != null
-                || i.AnonymousAccess).ToList();
+            return GetAllRepositories().Where( i => 
+                (String.IsNullOrEmpty(username) ? false : i.Users.Contains(username)) ||
+                (String.IsNullOrEmpty(username) ? false : i.Administrators.Contains(username)) ||
+                i.Teams.FirstOrDefault(t => teams.Contains(t)) != null ||
+                i.AnonymousAccess).ToList();
         }
 
         public IList<RepositoryModel> GetAdministratedRepositories(string username)
