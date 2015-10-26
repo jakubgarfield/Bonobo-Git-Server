@@ -45,7 +45,7 @@ namespace Bonobo.Git.Server.Security
             HttpContext.Current.GetOwinContext().Authentication.SignIn(identity);
             if (!String.IsNullOrEmpty(returnUrl))
             {
-                HttpContext.Current.Response.Redirect(returnUrl);
+                HttpContext.Current.Response.Redirect(returnUrl, false);
             }
         }
 
