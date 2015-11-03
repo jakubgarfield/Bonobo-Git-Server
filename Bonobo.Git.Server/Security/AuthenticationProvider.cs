@@ -27,7 +27,7 @@ namespace Bonobo.Git.Server.Security
         {
             List<Claim> result = null;
 
-            UserModel user = MembershipService.GetUser(username.StripDomain());
+            UserModel user = MembershipService.GetUser(username);
             if (user != null)
             {
                 result = new List<Claim>();

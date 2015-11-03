@@ -37,7 +37,10 @@ namespace Bonobo.Git.Server.Data
 
         public IList<RepositoryModel> GetPermittedRepositories(string username, string[] userTeams)
         {
-            return ADBackend.Instance.Repositories.Where(x => String.IsNullOrEmpty(username) ? false : x.Users.Contains(username, StringComparer.OrdinalIgnoreCase) || x.Teams.Any(s => userTeams.Contains(s, StringComparer.OrdinalIgnoreCase))).ToList();
+            return ADBackend.Instance.Repositories.Where(x => 
+                (String.IsNullOrEmpty(username) ? false : x.Users.Contains(username, StringComparer.OrdinalIgnoreCase)) ||
+                x.Teams.Any(s => userTeams.Contains(s, StringComparer.OrdinalIgnoreCase))
+                ).ToList();
         }
 
         public RepositoryModel GetRepository(string name)
