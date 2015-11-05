@@ -56,8 +56,20 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (!String.IsNullOrEmpty(id))
             {
-                UserModel user = MembershipService.GetUser(id);
-                return View(new UserEditModel { Username = user.Name });
+                var user = MembershipService.GetUser(id);
+                if (user != null)
+                {
+                    var model = new UserDetailModel
+                    {
+                        Username = user.Name,
+                        Name = user.GivenName,
+                        Surname = user.Surname,
+                        Email = user.Email,
+                        Roles = RoleProvider.GetRolesForUser(user.Name),
+                        IsReadOnly = MembershipService.IsReadOnly()
+                    };
+                    return View(model);
+                }
             }
 
             return RedirectToAction("Index");
