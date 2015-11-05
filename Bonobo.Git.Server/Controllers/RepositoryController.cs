@@ -119,6 +119,7 @@ namespace Bonobo.Git.Server.Controllers
                     {
                         LibGit2Sharp.Repository.Init(path, true);
                         TempData["CreateSuccess"] = true;
+                        TempData["SuccessfullyCreatedRepositoryName"] = model.Name;
                         return RedirectToAction("Index");
                     }
                     else

@@ -54,7 +54,9 @@
 @if (TempData["CreateSuccess"] as bool? == true)
 {
     <div class="summary-success">
-        <p>@Resources.Repository_Create_Success</p>
+	    <p>@Resources.Repository_Create_Success</p>
+		<p>@Html.ActionLink("Go to repository : " + TempData["SuccessfullyCreatedRepositoryName"].ToString(), "Detail", new { id = TempData["SuccessfullyCreatedRepositoryName"].ToString() })</p>
+
     </div>
 }
 @if (TempData["CloneSuccess"] as bool? == true)
