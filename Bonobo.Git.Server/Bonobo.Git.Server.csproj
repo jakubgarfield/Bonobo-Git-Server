@@ -522,12 +522,6 @@
     <EmbeddedResource Include="App_GlobalResources\Resources.fr-FR.resx" />
     <Content Include="bin\NativeBinaries\amd64\git2-e0902fb.dll" />
     <Content Include="bin\NativeBinaries\x86\git2-e0902fb.dll" />
-    <Content Include="bin\x64\SQLite.Interop.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="bin\x86\SQLite.Interop.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\components\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.svg" />
@@ -753,7 +747,12 @@ if not exist "$(TargetDir)NativeBinaries" md "$(TargetDir)NativeBinaries"
 if not exist "$(TargetDir)NativeBinaries\x86" md "$(TargetDir)NativeBinaries\x86"
 %25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.21.0.176\lib\net40\NativeBinaries\x86\*.*" "$(TargetDir)NativeBinaries\x86"
 if not exist "$(TargetDir)NativeBinaries\amd64" md "$(TargetDir)NativeBinaries\amd64"
-%25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.21.0.176\lib\net40\NativeBinaries\amd64\*.*" "$(TargetDir)NativeBinaries\amd64"</PreBuildEvent>
+%25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.21.0.176\lib\net40\NativeBinaries\amd64\*.*" "$(TargetDir)NativeBinaries\amd64"
+%25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.21.0.176\lib\net40\NativeBinaries\amd64\*.*" "$(TargetDir)NativeBinaries\amd64"
+if not exist "$(TargetDir)\x86" md "$(TargetDir)\x86"
+%25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\System.Data.SQLite.Core.1.0.98.1\build\net45\x86\*.*" "$(TargetDir)x86"
+if not exist "$(TargetDir)\x64" md "$(TargetDir)\x64"
+%25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\System.Data.SQLite.Core.1.0.98.1\build\net45\x64\*.*" "$(TargetDir)x64"</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
