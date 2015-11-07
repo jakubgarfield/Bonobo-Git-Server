@@ -33,7 +33,9 @@
             </div>
             <div class="pure-control-group">
                 <label>@Resources.Repository_Detail_Location</label>
-                @String.Concat(serverAddress, Model.Name, ".git")
+                <a href="@String.Concat(serverAddress, Model.Name, ".git")">
+                    @String.Concat(serverAddress, Model.Name, ".git")
+                </a>
             </div>
 
             @if (User.Identity.IsAuthenticated) {
@@ -42,7 +44,9 @@
                         @Resources.Repository_Detail_Location_Personal
                     </label>
 
-                    @String.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(User.Id()) + "@"), Model.Name, ".git")
+                    <a href=@String.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(User.Id()) + "@"), Model.Name, ".git")>
+                        @String.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(User.Id()) + "@"), Model.Name, ".git")
+                    </a>
                 </div>
             }
 
