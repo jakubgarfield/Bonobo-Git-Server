@@ -786,4 +786,106 @@
   <data name="Settings_Global_SiteTitle_Hint" xml:space="preserve">
     <value>Titre pour ce site git</value>
   </data>
+  <data name="Repository_Commit_NoMessageDeclared" xml:space="preserve">
+    <value>Non déclaré</value>
+  </data>
+  <data name="Repository_Detail_AuditPushUser" xml:space="preserve">
+    <value>Auditer les push</value>
+  </data>
+  <data name="Repository_AuditPushUserHint" xml:space="preserve">
+    <value>Enregistrer l'utilisateur qui envoi des commits sur le serveur</value>
+  </data>
+  <data name="Validation_FileName_Regex" xml:space="preserve">
+    <value>Seulement des caractères, numbres, points, moins et souligner sont authorisés pour "{0}".</value>
+  </data>
+  <data name="Repository_History_Title" xml:space="preserve">
+    <value>Historique</value>
+  </data>
+  <data name="Repository_Tree_History" xml:space="preserve">
+    <value>Historique</value>
+  </data>
+  <data name="Repository_Commit_AuthorAvatar" xml:space="preserve">
+    <value>Avatar</value>
+  </data>
+  <data name="Settings_Global_IsCommitAuthorAvatarVisible" xml:space="preserve">
+    <value>Afficher l'avatar de l'auteur du commit</value>
+  </data>
+  <data name="Repository_Blame_Title" xml:space="preserve">
+    <value>Blame</value>
+  </data>
+  <data name="Repository_Tree_Blame" xml:space="preserve">
+    <value>Blame</value>
+  </data>
+  <data name="Repository_Tree_Blob" xml:space="preserve">
+    <value>Blob</value>
+  </data>
+  <data name="Email_PasswordReset_Body" xml:space="preserve">
+    <value>&lt;p&gt;Une requête a été reçue pour réinitialiser votre mot de passe. 
+                           Si vous n'êtes pas l'auteur de cette requête, merci d'ignorer cet email.&lt;/p&gt;
+                           &lt;p&gt;Veuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe :&lt;/p&gt;</value>
+  </data>
+  <data name="Email_PasswordReset_Title" xml:space="preserve">
+    <value>Bonobo - Requête de réinitialisation de mot de passe</value>
+  </data>
+  <data name="Home_ForgotPassword_EmailError" xml:space="preserve">
+    <value>Impossible d'envoyer un email. Vérifier les paramètres SMTP.</value>
+  </data>
+  <data name="Home_ForgotPassword_EmailSuccess" xml:space="preserve">
+    <value>Email envoyé</value>
+  </data>
+  <data name="Home_ForgotPassword_Failed" xml:space="preserve">
+    <value>Mot de passe perdu Erreur. Merci de corriger les erreurs et essayer à nouveau.</value>
+  </data>
+  <data name="Home_ForgotPassword_ForgotPassword" xml:space="preserve">
+    <value>Mot de passe perdu</value>
+  </data>
+  <data name="Home_ForgotPassword_Title" xml:space="preserve">
+    <value>Mot de passe perdu</value>
+  </data>
+  <data name="Home_ForgotPassword_Username" xml:space="preserve">
+    <value>Nom d'utilisateur</value>
+  </data>
+  <data name="Home_ForgotPassword_UserNameFailure" xml:space="preserve">
+    <value>Nom d'utilisateur inconnu</value>
+  </data>
+  <data name="Home_LogOn_ForgotPassword" xml:space="preserve">
+    <value>Mot de passe oublié?</value>
+  </data>
+  <data name="Home_ResetPassword_ConfirmPassword" xml:space="preserve">
+    <value>Confirmer le mot de passe</value>
+  </data>
+  <data name="Home_ResetPassword_Failed" xml:space="preserve">
+    <value>Impossible de réinitialiser le mot de passe</value>
+  </data>
+  <data name="Home_ResetPassword_Password" xml:space="preserve">
+    <value>Mot de passe</value>
+  </data>
+  <data name="Home_ResetPassword_ResetPassword" xml:space="preserve">
+    <value>Réinitialiser le mot de passe</value>
+  </data>
+  <data name="Home_ResetPassword_Success" xml:space="preserve">
+    <value>Mot de passe réinitialisé</value>
+  </data>
+  <data name="Home_ResetPassword_Title" xml:space="preserve">
+    <value>Réinitialisation du mot de passe</value>
+  </data>
+  <data name="Home_ResetPassword_Username" xml:space="preserve">
+    <value>Nom d'utilisateur</value>
+  </data>
+  <data name="Repository_Detail_Group" xml:space="preserve">
+    <value>Groupe</value>
+  </data>
+  <data name="Repository_Index_SortGroup" xml:space="preserve">
+    <value>Trier les groupes</value>
+  </data>
+  <data name="Repository_Detail_Location_Personal" xml:space="preserve">
+    <value>URL personnelle</value>
+    <comment>Example: http://admin@localhost/Bonobo.Git.Server/test.git</comment>
+  </data>
+  <data name="Repository_Detail_Logo_PostedFile" xml:space="preserve">
+    <value>Logo (36x36)</value>
+  </data>
+  <data name="Repository_Detail_RemoveLogo" xml:space="preserve">
+    <value>Supprimer le logo</value>
+  </data>
 </root>
