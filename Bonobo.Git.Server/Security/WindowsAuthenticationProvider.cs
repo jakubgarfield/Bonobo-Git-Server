@@ -30,7 +30,7 @@ namespace Bonobo.Git.Server.Security
                 {
                     OnApplyRedirect = context =>
                     {
-                        if (context.Request.PathBase.Add(context.Request.Path) != WindowsAuthenticationOptions.DefaultRedirectPath && !context.Request.Headers.ContainsKey("AuthNoRedirect"))
+                        if (context.Request.Path != WindowsAuthenticationOptions.DefaultRedirectPath && !context.Request.Headers.ContainsKey("AuthNoRedirect"))
                         {
                             context.Response.Redirect(context.RedirectUri);
                         }

@@ -38,7 +38,7 @@ namespace Bonobo.Git.Server.Owin.Windows
                         if (handshake.IsClientResponseValid(token))
                         {
                             properties = handshake.AuthenticationProperties;
-                            if (Options.GetClaimsForUser != null)
+                            if (Options.GetClaimsForUser(handshake.AuthenticatedUsername) != null)
                             {
                                 Claim[] claims = Options.GetClaimsForUser(handshake.AuthenticatedUsername).ToArray();
                                 if (claims.Length > 0)
@@ -86,7 +86,7 @@ namespace Bonobo.Git.Server.Owin.Windows
                     };
 
                     Options.Handshakes.Add(handshakeId, handshake);
-                    Response.Redirect(WebUtilities.AddQueryString(Options.CallbackPath.Value, "id", handshakeId));
+                    Response.Redirect(WebUtilities.AddQueryString(RequestPathBase + Options.CallbackPath.Value, "id", handshakeId));
                 }
             }
 
@@ -97,7 +97,7 @@ namespace Bonobo.Git.Server.Owin.Windows
         {
             bool result = false;
 
-            if (Options.CallbackPath.HasValue && Options.CallbackPath == Request.PathBase.Add(Request.Path))
+            if (Options.CallbackPath.HasValue && Options.CallbackPath == Request.Path)
             {
                 AuthenticationTicket ticket = await AuthenticateAsync();
                 if (ticket != null && ticket.Identity != null)
