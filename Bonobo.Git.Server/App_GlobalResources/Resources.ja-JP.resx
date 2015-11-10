@@ -751,7 +751,7 @@
     <value>サイトのフッタメッセージ</value>
   </data>
   <data name="Settings_Global_SiteFooterMessage_Hint" xml:space="preserve">
-    <value>メッセージはサイトのフッタ部分に表示されます。value>
+    <value>メッセージはサイトのフッタ部分に表示されます。</value>
   </data>
   <data name="Settings_Global_SiteLogoUrl" xml:space="preserve">
     <value>サイトロゴのURL</value>
