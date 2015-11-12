@@ -86,7 +86,7 @@ namespace Bonobo.Git.Server.Owin.Windows
                     };
 
                     Options.Handshakes.Add(handshakeId, handshake);
-                    Response.Redirect(WebUtilities.AddQueryString(RequestPathBase + Options.CallbackPath.Value, "id", handshakeId));
+                    Response.Redirect(WebUtilities.AddQueryString(Request.PathBase + Options.CallbackPath.Value, "id", handshakeId));
                 }
             }
 
