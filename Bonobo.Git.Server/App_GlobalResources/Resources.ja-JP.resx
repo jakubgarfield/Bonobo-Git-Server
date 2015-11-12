@@ -466,7 +466,7 @@
     <value>リポジトリブラウザ</value>
   </data>
   <data name="Repository_Layout_Commits" xml:space="preserve">
-    <value>コミットたち</value>
+    <value>コミット</value>
   </data>
   <data name="Repository_SwitchBranch" xml:space="preserve">
     <value>現在のブランチを切り替える</value>
