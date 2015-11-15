@@ -53,7 +53,9 @@ namespace Bonobo.Git.Server.Git.GitService
             };
 
             SetHomePath(info);
-            info.EnvironmentVariables.Add("AUTH_USER", HttpContext.Current.Request.ServerVariables["AUTH_USER"]);
+            var userid = HttpContext.Current.User.Id();
+            info.EnvironmentVariables.Add("AUTH_USER", userid);
+            info.EnvironmentVariables.Add("REMOTE_USER", userid);
 
             using (var process = Process.Start(info))
             {
