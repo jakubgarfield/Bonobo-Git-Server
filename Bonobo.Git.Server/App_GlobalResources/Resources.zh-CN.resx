@@ -183,9 +183,6 @@
   <data name="Account_Edit_Roles" xml:space="preserve">
     <value>角色</value>
   </data>
-  <data name="Account_Edit_RolesHint" xml:space="preserve">
-    <value>管理组的成员可以访问所有的库，并可以对库、用户、团队作出任何操作。</value>
-  </data>
   <data name="Account_Edit_Submit" xml:space="preserve">
     <value>保存</value>
   </data>
@@ -209,15 +206,6 @@
   </data>
   <data name="Grid_Edit" xml:space="preserve">
     <value>编辑</value>
-  </data>
-  <data name="Home_About_Thanks" xml:space="preserve">
-    <value>谢谢你！</value>
-  </data>
-  <data name="Home_About_Thanks_p" xml:space="preserve">
-    <value>Bonobo Git Server 使用了一些免费项目和开源项目，感谢所有的作者和贡献者，感谢他们的努力和付出。</value>
-  </data>
-  <data name="Home_About_Title" xml:space="preserve">
-    <value>关于</value>
   </data>
   <data name="Home_Error_Text" xml:space="preserve">
     <value>处理您的请求的时候发生未指定的错误，请重试或联系系统管理员</value>
@@ -315,12 +303,6 @@
   <data name="Repository_AddressBar_Root" xml:space="preserve">
     <value>根</value>
   </data>
-  <data name="Repository_AdministratorsHint" xml:space="preserve">
-    <value>管理员组对库具有完全访问权限，可以对数据做出任何修改。</value>
-  </data>
-  <data name="Repository_AllowAnonymousHint" xml:space="preserve">
-    <value>如果允许匿名访问，则未登录用户可以检出或更新库数据。提交操作需要在全局设置中允许匿名访问后才可操作。</value>
-  </data>
   <data name="Repository_Commits_Title" xml:space="preserve">
     <value>提交信息</value>
   </data>
@@ -369,7 +351,7 @@
   <data name="Repository_Commit_TypeChanged" xml:space="preserve">
     <value>类型已改变</value>
   </data>
-  <data name="Repository_Create_Back" xml:space="preserve">
+  <data name="Repository_Back" xml:space="preserve">
     <value>返回到列表</value>
   </data>
   <data name="Repository_Create_DirectoryExists" xml:space="preserve">
@@ -383,9 +365,6 @@
   </data>
   <data name="Repository_Create_Informations" xml:space="preserve">
     <value>库信息</value>
-  </data>
-  <data name="Repository_Create_NameFailure" xml:space="preserve">
-    <value>名称不能仅包含空白字符</value>
   </data>
   <data name="Repository_Create_Submit" xml:space="preserve">
     <value>建立</value>
@@ -425,6 +404,7 @@
   </data>
   <data name="Repository_Detail_Location" xml:space="preserve">
     <value>Git库位置</value>
+    <comment>示例：http://localhost/Bonobo.Git.Server/test.git</comment>
   </data>
   <data name="Repository_Detail_Name" xml:space="preserve">
     <value>名称</value>
@@ -492,9 +472,6 @@
   <data name="Repository_SwitchBranch" xml:space="preserve">
     <value>切换当前分支</value>
   </data>
-  <data name="Repository_TeamsHint" xml:space="preserve">
-    <value>团队成员可以访问当前库，可以更新、提交数据并查看元数据。团队中的所有成员都具有访问的权限。</value>
-  </data>
   <data name="Repository_Tree_Author" xml:space="preserve">
     <value>提交人</value>
   </data>
@@ -510,20 +487,11 @@
   <data name="Repository_Tree_Title" xml:space="preserve">
     <value>浏览库</value>
   </data>
-  <data name="Repository_UsersHint" xml:space="preserve">
-    <value>库成员可以访问当前库，可以更新、提交数据并查看元数据。</value>
-  </data>
-  <data name="Reset" xml:space="preserve">
-    <value>重置</value>
-  </data>
   <data name="Settings_Global_AllowAnonymousPush" xml:space="preserve">
     <value>允许匿名用户提交</value>
   </data>
   <data name="Settings_Global_RepositoryPath" xml:space="preserve">
     <value>库目录</value>
-  </data>
-  <data name="Settings_Index_Failed" xml:space="preserve">
-    <value>配置更新失败，请更正错误并重试。</value>
   </data>
   <data name="Settings_Index_Save" xml:space="preserve">
     <value>保存</value>
@@ -606,9 +574,6 @@
   <data name="Team_Index_CreateNew" xml:space="preserve">
     <value>创建团队</value>
   </data>
-  <data name="Team_Index_Teams" xml:space="preserve">
-    <value>团队</value>
-  </data>
   <data name="Team_Index_Title" xml:space="preserve">
     <value>团队管理</value>
   </data>
@@ -618,17 +583,44 @@
   <data name="Validation_Email" xml:space="preserve">
     <value>"{0}" 不是一个有效的电子邮件地址。</value>
   </data>
-  <data name="Validation_FileName" xml:space="preserve">
-    <value>"{0}" 包含不能用于文件路径的字符。</value>
-  </data>
   <data name="Validation_Required" xml:space="preserve">
     <value>"{0}" 是必填项。</value>
   </data>
-  <data name="Validation_StringLength" xml:space="preserve">
-    <value>"{0}" 长度不得超过 {1} 字符。</value>
+  <data name="Reset" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="Settings_Index_Failed" xml:space="preserve">
+    <value>配置更新失败，请更正错误并重试。</value>
+  </data>
+  <data name="Team_Index_Teams" xml:space="preserve">
+    <value>团队</value>
+  </data>
+  <data name="Account_Edit_RolesHint" xml:space="preserve">
+    <value>管理组的成员可以访问所有的库，并可以对库、用户、团队作出任何操作。</value>
   </data>
   <data name="Settings_Global_DirectoryHint" xml:space="preserve">
     <value>指定库保存的目录位置</value>
+  </data>
+  <data name="Repository_AdministratorsHint" xml:space="preserve">
+    <value>管理员组对库具有完全访问权限，可以对数据做出任何修改。</value>
+  </data>
+  <data name="Repository_AllowAnonymousHint" xml:space="preserve">
+    <value>如果允许匿名访问，则未登录用户可以检出或更新库数据。提交操作需要在全局设置中允许匿名访问后才可操作。</value>
+  </data>
+  <data name="Repository_Create_NameFailure" xml:space="preserve">
+    <value>名称不能仅包含空白字符</value>
+  </data>
+  <data name="Repository_TeamsHint" xml:space="preserve">
+    <value>团队成员可以访问当前库，可以更新、提交数据并查看元数据。团队中的所有成员都具有访问的权限。</value>
+  </data>
+  <data name="Repository_UsersHint" xml:space="preserve">
+    <value>库成员可以访问当前库，可以更新、提交数据并查看元数据。</value>
+  </data>
+  <data name="Validation_FileName" xml:space="preserve">
+    <value>"{0}" 包含不能用于文件路径的字符。</value>
+  </data>
+  <data name="Validation_StringLength" xml:space="preserve">
+    <value>"{0}" 长度不得超过 {1} 字符。</value>
   </data>
   <data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
     <value>用户名已经被使用</value>
@@ -699,7 +691,172 @@
   <data name="Delete_Title" xml:space="preserve">
     <value>删除确认</value>
   </data>
+  <data name="Repository_Tree_PreviewNotSupported" xml:space="preserve">
+    <value>该文件不支持预览</value>
+  </data>
+  <data name="Settings_Global_DefaultLanguage" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="Settings_Global_DefaultLanguage_Hint" xml:space="preserve">
+    <value>应用程序默认的语言设置</value>
+  </data>
+  <data name="Repository_Detail_Status" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="Repository_Tree_RawDisplay" xml:space="preserve">
+    <value>原始的</value>
+  </data>
+  <data name="Repository_Tree_Zip" xml:space="preserve">
+    <value>下载</value>
+  </data>
+  <data name="Repository_Commit_Details" xml:space="preserve">
+    <value>详细信息</value>
+  </data>
+  <data name="Item_NotFound_Text" xml:space="preserve">
+    <value>未能发现你查找的项目</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>官方网页</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>Github</value>
+  </data>
+  <data name="Repository_Layout_Clone" xml:space="preserve">
+    <value>克隆</value>
+  </data>
+  <data name="Repository_Clone_Success" xml:space="preserve">
+    <value>克隆库成功</value>
+  </data>
+  <data name="Repository_Clone_Title" xml:space="preserve">
+    <value>克隆库</value>
+  </data>
+  <data name="Repository_Clone_Fail" xml:space="preserve">
+    <value>未能成功克隆库，请修正错误并重试</value>
+  </data>
+  <data name="Repository_Clone_Submit" xml:space="preserve">
+    <value>克隆</value>
+  </data>
+  <data name="Settings_Global_SiteFooterMessage" xml:space="preserve">
+    <value>网站页脚消息</value>
+  </data>
+  <data name="Settings_Global_SiteFooterMessage_Hint" xml:space="preserve">
+    <value>消息显示在网站页面的页脚区域</value>
+  </data>
+  <data name="Settings_Global_SiteLogoUrl" xml:space="preserve">
+    <value>网站标志 URL</value>
+  </data>
+  <data name="Settings_Global_SiteLogoUrl_Hint" xml:space="preserve">
+    <value>用于网站标志的 URL，支持网站相对路径符(~)</value>
+  </data>
+  <data name="Settings_Global_SiteTitle" xml:space="preserve">
+    <value>网站标题</value>
+  </data>
+  <data name="Settings_Global_SiteTitle_Hint" xml:space="preserve">
+    <value>该 git 网站的标题</value>
+  </data>
+  <data name="Repository_Commit_NoMessageDeclared" xml:space="preserve">
+    <value>没有声明</value>
+  </data>
+  <data name="Repository_Detail_AuditPushUser" xml:space="preserve">
+    <value>审核推送</value>
+  </data>
+  <data name="Repository_AuditPushUserHint" xml:space="preserve">
+    <value>将推送提交的用户记录到服务器上</value>
+  </data>
   <data name="Validation_FileName_Regex" xml:space="preserve">
-    <value>Only characters, numbers, minus and underscore are allowed for "{0}".</value>
+    <value>"{0}" 只允许字符、数字、句点、减号和下划线</value>
+  </data>
+  <data name="Repository_History_Title" xml:space="preserve">
+    <value>历史</value>
+  </data>
+  <data name="Repository_Tree_History" xml:space="preserve">
+    <value>历史</value>
+  </data>
+  <data name="Repository_Commit_AuthorAvatar" xml:space="preserve">
+    <value>头像</value>
+  </data>
+  <data name="Settings_Global_IsCommitAuthorAvatarVisible" xml:space="preserve">
+    <value>显示提交作者的头像</value>
+  </data>
+  <data name="Repository_Blame_Title" xml:space="preserve">
+    <value>归责</value>
+  </data>
+  <data name="Repository_Tree_Blame" xml:space="preserve">
+    <value>归责</value>
+  </data>
+  <data name="Repository_Tree_Blob" xml:space="preserve">
+    <value>二进制大对象</value>
+  </data>
+  <data name="Email_PasswordReset_Body" xml:space="preserve">
+    <value>&lt;p&gt;收到一个重新设置您密码的请求。
+                           如果你没有发起过申请，那么请忽略该电子邮件。&lt;/p&gt;
+                           &lt;p&gt;请点击下方的链接以重置您的密码：&lt;/p&gt;</value>
+  </data>
+  <data name="Email_PasswordReset_Title" xml:space="preserve">
+    <value>Bonobo - 密码重置申请</value>
+  </data>
+  <data name="Home_ForgotPassword_EmailError" xml:space="preserve">
+    <value>无法发送电子邮件，请验证 SMTP 的设置</value>
+  </data>
+  <data name="Home_ForgotPassword_EmailSuccess" xml:space="preserve">
+    <value>电子邮件发送了</value>
+  </data>
+  <data name="Home_ForgotPassword_Failed" xml:space="preserve">
+    <value>忘记密码失败，请修正错误并重试</value>
+  </data>
+  <data name="Home_ForgotPassword_ForgotPassword" xml:space="preserve">
+    <value>忘记密码</value>
+  </data>
+  <data name="Home_ForgotPassword_Title" xml:space="preserve">
+    <value>忘记了密码</value>
+  </data>
+  <data name="Home_ForgotPassword_Username" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+  <data name="Home_ForgotPassword_UserNameFailure" xml:space="preserve">
+    <value>未能找到该用户名</value>
+  </data>
+  <data name="Home_LogOn_ForgotPassword" xml:space="preserve">
+    <value>忘记密码？</value>
+  </data>
+  <data name="Home_ResetPassword_ConfirmPassword" xml:space="preserve">
+    <value>确认密码</value>
+  </data>
+  <data name="Home_ResetPassword_Failed" xml:space="preserve">
+    <value>无法重置密码</value>
+  </data>
+  <data name="Home_ResetPassword_Password" xml:space="preserve">
+    <value>密码</value>
+  </data>
+  <data name="Home_ResetPassword_ResetPassword" xml:space="preserve">
+    <value>重置密码</value>
+  </data>
+  <data name="Home_ResetPassword_Success" xml:space="preserve">
+    <value>密码被重置了</value>
+  </data>
+  <data name="Home_ResetPassword_Title" xml:space="preserve">
+    <value>重置密码</value>
+  </data>
+  <data name="Home_ResetPassword_Username" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+  <data name="Repository_Detail_Group" xml:space="preserve">
+    <value>组</value>
+  </data>
+  <data name="Repository_Index_SortGroup" xml:space="preserve">
+    <value>组排序</value>
+  </data>
+  <data name="Repository_Detail_Location_Personal" xml:space="preserve">
+    <value>个人 URL</value>
+    <comment>示例：http://admin@localhost/Bonobo.Git.Server/test.git</comment>
+  </data>
+  <data name="Repository_Detail_Logo_PostedFile" xml:space="preserve">
+    <value>标志 (36x36)</value>
+  </data>
+  <data name="Repository_Detail_RemoveLogo" xml:space="preserve">
+    <value>移除标志</value>
   </data>
 </root>
