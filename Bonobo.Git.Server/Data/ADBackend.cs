@@ -148,7 +148,7 @@ namespace Bonobo.Git.Server.Data
                         Users.Remove(user);
                     }
 
-                    foreach (string username in memberGroup.Members.Cast<UserPrincipal>().Select(x => x.UserPrincipalName).Where(x => x != null))
+                    foreach (string username in memberGroup.GetMembers(true).OfType<UserPrincipal>().Select(x => x.UserPrincipalName).Where(x => x != null))
                     {
                         using (UserPrincipal principal = UserPrincipal.FindByIdentity(principalContext, IdentityType.UserPrincipalName, username))
                         {
@@ -181,7 +181,7 @@ namespace Bonobo.Git.Server.Data
                     {
                         using (GroupPrincipal group = GroupPrincipal.FindByIdentity(principalContext, IdentityType.Name, ActiveDirectorySettings.TeamNameToGroupNameMapping[teamName]))
                         {
-                            TeamModel teamModel = new TeamModel() { Description = group.Description, Name = teamName, Members = group.Members.Select(x => x.UserPrincipalName).ToArray() };
+                            TeamModel teamModel = new TeamModel() { Description = group.Description, Name = teamName, Members = group.GetMembers(true).Select(x => x.UserPrincipalName).ToArray() };
                             if (teamModel != null)
                             {
                                 Teams.AddOrUpdate(teamModel);
@@ -209,7 +209,7 @@ namespace Bonobo.Git.Server.Data
                 RoleModel roleModel = new RoleModel()
                 {
                     Name = roleName,
-                    Members = group.GetMembers().Where(x => x is UserPrincipal).Select(x => x.UserPrincipalName).ToArray()
+                    Members = group.GetMembers(true).Where(x => x is UserPrincipal).Select(x => x.UserPrincipalName).ToArray()
                 };
                 Roles.AddOrUpdate(roleModel);
             }

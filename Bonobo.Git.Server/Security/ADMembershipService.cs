@@ -13,6 +13,7 @@ using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
 using System.Web.Security;
 using System.Security.Principal;
+using Bonobo.Git.Server.Configuration;
 
 namespace Bonobo.Git.Server.Security
 {
@@ -46,24 +47,30 @@ namespace Bonobo.Git.Server.Security
                     {
                         using (UserPrincipal user = UserPrincipal.FindByIdentity(principalContext, username))
                         {
-                            if (user != null)
-                            {
-                                if (!user.GetGroups(principalContext).Any(x => x.Name.Equals(Configuration.ActiveDirectorySettings.MemberGroupName)))
-                                {
-                                    result = ValidationResult.NotAuthorized;
-                                }
-                                else
-                                {
-                                    ADBackend.Instance.Users.AddOrUpdate(new UserModel
-                                    {
-                                        Name = user.UserPrincipalName,
-                                        GivenName = user.GivenName ?? String.Empty,
-                                        Surname = user.Surname ?? String.Empty,
-                                        Email = user.EmailAddress ?? String.Empty,
-                                    });
-                                    result = ValidationResult.Success;
-                                }
-                            }
+							using (GroupPrincipal group = GroupPrincipal.FindByIdentity(principalContext, Configuration.ActiveDirectorySettings.MemberGroupName))
+							{
+								if (group == null)
+									result = ValidationResult.Failure;
+
+								if (user != null)
+								{
+									if (!group.GetMembers(true).Contains(user))
+									{
+										result = ValidationResult.NotAuthorized;
+									}
+									else
+									{
+										ADBackend.Instance.Users.AddOrUpdate(new UserModel
+										{
+											Name = user.UserPrincipalName,
+											GivenName = user.GivenName ?? String.Empty,
+											Surname = user.Surname ?? String.Empty,
+											Email = user.EmailAddress ?? String.Empty,
+										});
+										result = ValidationResult.Success;
+									}
+								}
+							}
                         }
                     }
                 }
@@ -91,14 +98,14 @@ namespace Bonobo.Git.Server.Security
             string domain = GetDomainFromUsername(username);
             if (!IsUserPrincipalName(username))
             {
-                using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, domain))
+                using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain))
                 using (UserPrincipal user = UserPrincipal.FindByIdentity(principalContext, username))
                 {
                     username = user.UserPrincipalName;
                 }
             }
 
-            return ADBackend.Instance.Users[username];
+            return ADBackend.Instance.Users.FirstOrDefault(n=>n.Name.Equals(username, StringComparison.OrdinalIgnoreCase));
         }
 
         private static bool IsUserPrincipalName(string username)
