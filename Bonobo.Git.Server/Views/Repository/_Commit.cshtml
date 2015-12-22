@@ -13,10 +13,23 @@
 
         <div class="commitdate">
             @Model.Date.ToString(CultureInfo.InstalledUICulture)
-            @if (!string.IsNullOrEmpty(Model.TagName)){
-                <span class="tag">@Html.ActionLink(Model.TagName, "Commits", new { encodedName = PathEncoder.Encode(Model.TagName), encodedPath = String.Empty })</span>
-            }
         </div>
+        @if (UserConfiguration.Current.HasLinks)
+        {
+        <span class="links">
+
+            @foreach (var link in Model.Links)
+            {
+                <a target="_blank" href="@string.Format(UserConfiguration.Current.LinksUrl, link)">@link</a>
+            }
+        </span>
+        }
+        <span class="tag">
+            @foreach (var stag in Model.Tags)
+            {
+                @Html.ActionLink(stag, "Commits", new { encodedName = stag, encodedPath = String.Empty })
+            }
+        </span>
         @if (!string.IsNullOrEmpty(Model.MessageShort))
         {
             <pre style="display:none;" id="more@(Model.ID)">@Model.MessageShort</pre>

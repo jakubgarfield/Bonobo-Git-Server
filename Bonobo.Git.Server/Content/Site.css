@@ -98,7 +98,10 @@ nav.branches ul li:hover ul { z-index: 99999; display: list-item; position: abso
 nav.branches ul li:hover ul li { float: none; }
 .Commits nav.branches ul li { display: inline-block; float: none;}
 .Commits nav.branches ul li:hover ul li { display: block; float: none;}
-.tag a:before, .branches a.tag:before { content: '\f02b'; font-family: FontAwesome; margin-right: 0.5em; }
+.tag a:before, .branches a.tag:before { content: '\f02b'; font-family: FontAwesome; margin-right: 0.25em; margin-left: 0.5em; }
+
+.links a { color: maroon; }
+.links a:before { content: '\f292'; font-family: FontAwesome; margin-right: 0.25em; margin-left: 0.5em; }
 
 .Tree .pure-table tbody { font-size: 0.8em; }
 .Tree #files .path { width: 230px;}
@@ -165,7 +168,6 @@ nav.branches ul li:hover ul li { float: none; }
 .commit h2 { margin-bottom: 0; position: relative; }
 .commit h2 a.commit-url { display: inline-block; max-width: 90%; overflow: hidden; text-overflow: ellipsis; }
 .commit .commitdate { font-size: 0.7em; }
-
 .more-commit-info-toggler { background-color: silver; border: 1px solid #a39e9e; border-radius: 1px; color: #827a7a; display: inline-block; font-size: 14px; font-weight: bold; height: 12px; line-height: 6px; padding: 0 6px 1px; position: relative; top: -9px; vertical-align: middle; }
 
 .repositories { margin: 0 0 1em 0; }

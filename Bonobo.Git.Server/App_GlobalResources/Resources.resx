@@ -859,4 +859,13 @@
   <data name="Repository_Detail_RemoveLogo" xml:space="preserve">
     <value>Remove logo</value>
   </data>
+  <data name="Settings_Global_LinksRegex" xml:space="preserve">
+    <value>Link Regex</value>
+  </data>
+  <data name="Settings_Global_LinksUrl" xml:space="preserve">
+    <value>Link Url</value>
+  </data>
+  <data name="Settings_Global_LinksUrl_Hint" xml:space="preserve">
+    <value>Set Regex to parse commit message for links and url to launch</value>
+  </data>
 </root>

@@ -7,6 +7,8 @@ using Bonobo.Git.Server.Extensions;
 using LibGit2Sharp;
 using System.IO;
 using Bonobo.Git.Server.Helpers;
+using System.Text.RegularExpressions;
+using Bonobo.Git.Server.Configuration;
 
 namespace Bonobo.Git.Server
 {
@@ -31,7 +33,7 @@ namespace Bonobo.Git.Server
 
         public IEnumerable<string> GetTags()
         {
-            return _repository.Tags.Select(s => s.Name).ToList();
+            return _repository.Tags.Select(s => s.Name).OrderByDescending(s => s).ToList();
         }
 
         public IEnumerable<RepositoryCommitModel> GetCommits(string name, out string referenceName)
@@ -279,12 +281,16 @@ namespace Bonobo.Git.Server
         private RepositoryCommitModel ToModel(Commit commit, bool withDiff = false)
         {
             string tagsString = string.Empty;
-            var tags = _repository.Tags.Where(o => o.Target.Sha == commit.Sha);
+            var tags = _repository.Tags.Where(o => o.Target.Sha == commit.Sha).Select(o => o.Name).ToList();
 
-            if (tags != null && tags.Any())
-                tagsString = tags.Select(o => o.Name).Aggregate((o, p) => o + " " + p);
+            var shortMessageDetails = RepositoryCommitModelHelpers.MakeCommitMessage(commit.Message, 50);
 
-            var shortMessageDetails = RepositoryCommitModelHelpers.MakeCommitMessage(commit.Message, 30);
+            IEnumerable<string> links = null;
+            if (UserConfiguration.Current.HasLinks)
+            {
+                links = Regex.Matches(commit.Message, UserConfiguration.Current.LinksRegex).OfType<Match>().Select(m => m.Value);
+            }
+            
 
             var model = new RepositoryCommitModel
             {
@@ -297,8 +303,9 @@ namespace Bonobo.Git.Server
                 MessageShort = shortMessageDetails.ExtraTitle,
                 TreeID = commit.Tree.Sha,
                 Parents = commit.Parents.Select(i => i.Sha).ToArray(),
-                TagName = tagsString,
+                Tags = tags,
                 Notes = (from n in commit.Notes select new RepositoryCommitNoteModel(n.Message, n.Namespace)).ToList(),
+                Links = links
             };
 
             if (!withDiff)
