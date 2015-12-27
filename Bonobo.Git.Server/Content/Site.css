@@ -175,3 +175,5 @@ td.logo { width: 36px; }
 
 h2.group .toggle:after { display: inline-block; font-family: FontAwesome; top: 0; content: "\f056"; height: 100%; width: 20px; cursor: pointer; color: #4183c4; }
 h2.group .toggle.on:after { content: "\f055"; }
+
+img.repo-logo { width:36px; height: auto; image-rendering: -moz-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; -ms-interpolation-mode: nearest-neighbor; }

@@ -13,7 +13,7 @@ else
 {
     <text>
         <h1>
-            @Html.Raw(Model.Logo.Exists ? string.Format("<img src='data:image/png;base64,{0}' />", Model.Logo.Base64Image) : "")
+            @Html.Raw(Model.Logo.Exists ? string.Format("<img src='data:image/png;base64,{0}' class='repo-logo' />", Model.Logo.Base64Image) : "")
             @Model.Name
         </h1>
 
