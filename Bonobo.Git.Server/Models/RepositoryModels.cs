@@ -255,7 +255,7 @@ namespace Bonobo.Git.Server.Models
 
                         Image resizedImage = originalImage.GetThumbnailImage(36, (36 * originalImage.Height) / originalImage.Width, null, IntPtr.Zero);
 
-                        resizedImage.Save(ms, ImageFormat.Jpeg);
+                        resizedImage.Save(ms, ImageFormat.Png);
 
                         _data = ms.GetBuffer();
                     }
