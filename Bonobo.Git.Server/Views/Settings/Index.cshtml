@@ -51,6 +51,15 @@
             <label for="AllowAnonymousPush" class="pure-checkbox">@Html.CheckBoxFor(m => m.AllowAnonymousPush) @Model.GetType().GetDisplayValue("AllowAnonymousPush")</label>
             <label for="IsCommitAuthorAvatarVisible" class="pure-checkbox">@Html.CheckBoxFor(m => m.IsCommitAuthorAvatarVisible) @Model.GetType().GetDisplayValue("IsCommitAuthorAvatarVisible")</label>
         </div>
+        <div class="pure-control-group">
+            @Html.LabelFor(m => m.LinksRegex)
+            @Html.TextBoxFor(m => m.LinksRegex, new { @class = "medium", autofocus = "" })
+        </div>
+        <div class="pure-control-group">
+            @Html.LabelFor(m => m.LinksUrl)
+            @Html.TextBoxFor(m => m.LinksUrl, new { @class = "medium", autofocus = "" })
+            <i class="fa fa-info-circle" title="@Resources.Settings_Global_LinksUrl_Hint"></i>
+        </div>
         <div class="pure-controls">
             <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-save"></i> @Resources.Settings_Index_Save</button>
         </div>
