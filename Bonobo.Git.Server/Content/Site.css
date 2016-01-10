@@ -101,7 +101,7 @@ nav.branches ul li:hover ul li { float: none; }
 .tag a:before, .branches a.tag:before { content: '\f02b'; font-family: FontAwesome; margin-right: 0.25em; margin-left: 0.5em; }
 
 .links a { color: maroon; }
-.links a:before { content: '\f292'; font-family: FontAwesome; margin-right: 0.25em; margin-left: 0.5em; }
+.links a:before { content: '\f0c1'; font-family: FontAwesome; margin-right: 0.25em; margin-left: 0.5em; }
 
 .Tree .pure-table tbody { font-size: 0.8em; }
 .Tree #files .path { width: 230px;}
