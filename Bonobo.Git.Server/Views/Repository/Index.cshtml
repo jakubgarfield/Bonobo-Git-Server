@@ -95,7 +95,7 @@
                     var groupColumn = new [] { permitted.Column(format: (item) => Html.Raw(string.Empty), style: "action") };
                     var columns = permitted.Columns(
                         permitted.Column(
-                            format: item => Html.Raw(item.Logo.Exists ? string.Format("<img src='data:image/jpeg;base64,{0}' />", item.Logo.Base64Image) : ""),
+                            format: item => Html.Raw(item.Logo.Exists ? string.Format("<img src='data:image/png;base64,{0}' class='repo-logo' />", item.Logo.Base64Image) : ""),
                             style: "logo"
                         ),
                         permitted.Column("Name",

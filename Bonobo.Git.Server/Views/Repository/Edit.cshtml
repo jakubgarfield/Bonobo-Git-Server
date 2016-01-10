@@ -6,24 +6,24 @@
 }
 
 @if (Model == null)
-{   
-    @Html.Partial("~/Views/Shared/_ItemNotFound.cshtml") 
+{
+    @Html.Partial("~/Views/Shared/_ItemNotFound.cshtml")
 }
 else
 {
     <text>
         <h1>
-            @Html.Raw(Model.Logo.Exists ? string.Format("<img src='data:image/jpeg;base64,{0}' />", Model.Logo.Base64Image) : "")
+            @Html.Raw(Model.Logo.Exists ? string.Format("<img src='data:image/png;base64,{0}' class='repo-logo' />", Model.Logo.Base64Image) : "")
             @Model.Name
         </h1>
-    
+
     @if (ViewBag.UpdateSuccess != null && ViewBag.UpdateSuccess)
     {
         <div class="summary-success">
             <p>@Resources.Repository_Edit_UpdateSuccess</p>
         </div>
     }
-    
+
     @using (Html.BeginForm("Edit", "Repository", FormMethod.Post, new { @class = "pure-form pure-form-aligned", enctype = "multipart/form-data" }))
     {
         @Html.ValidationSummary(false, Resources.Repository_Edit_Fail)

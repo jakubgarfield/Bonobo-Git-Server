@@ -255,9 +255,11 @@ namespace Bonobo.Git.Server.Models
                     {
                         Image originalImage = Image.FromStream(PostedFile.InputStream, true, true);
 
-                        Image resizedImage = originalImage.GetThumbnailImage(36, (36 * originalImage.Height) / originalImage.Width, null, IntPtr.Zero);
+                        int logoWidth = originalImage.Width >= 72 ? 72 : 36;
 
-                        resizedImage.Save(ms, ImageFormat.Jpeg);
+                        Image resizedImage = originalImage.GetThumbnailImage(logoWidth, (logoWidth * originalImage.Height) / originalImage.Width, null, IntPtr.Zero);
+
+                        resizedImage.Save(ms, ImageFormat.Png);
 
                         _data = ms.GetBuffer();
                     }
