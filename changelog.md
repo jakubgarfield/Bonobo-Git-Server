@@ -4,15 +4,49 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 5.1
+
+**11 January 2016**
+
+### Features
+
+* display general and personal repository URL as links - padremortius
+* add Danish translation - larshg
+* add Italian translation - Andrea Capigiri
+* improve Japanese translation - mattn
+* improve Chinese translation - StarryLibra
+* improve French translation - latop2604
+* Active Directory updates - Matt Bodily
+	* use nested groups for permissions
+	* allow logging in without specifying the AD domain (should use the default for all AD look-ups if one is not specified)
+	* update so username at login is not case sensitive when retrieving roles
+* External links functionality - kabongsteve
+* increase repository logo quality by using PNG - mischalandwehr
+
+### Bug Fixes
+
+* exporting correct user environment variable for AD - BIPrc
+* removing confidence requirement for file type - larshg
+* fixed subfolder application redirection to root - Alex Moran
+* fix error when changing URL - Alex Moran
+* prevent repository buttons breaking - mischalandwehr
+* fix multiple tags support - kabongsteve
+
+### Code improvements
+
+* install SQLite from nuget - padremortius
+* start using MediaTypeMap - padremortius
+* improve .gitignore - n.kochnev
+
 ## Version 5.0.1
 
 **5 November 2015**
 
-## Features
+### Features
 
 * add go to repository after creation - erdemyavuzyildiz
 
-## Fixes
+## Bug Fixes
 
 * ADRepository username handling - larshg
 * cookie authentication issue fix - bogusz
