@@ -1,0 +1,36 @@
+version: '{build}'
+build_script:
+- ps: >-
+    function Patch-Xml { param([string] $filePath, [string] $strToReplace, [string] $replacement)
+        (Get-Content $filePath -Encoding utf8) | Foreach-Object { $_ -replace $strToReplace,$replacement } | Out-File $filePath -Encoding utf8
+    }
+
+
+    nuget restore
+
+
+    Write-Host "Patch Release.pubxml"
+
+    $pubxml = 'Bonobo.Git.Server\Properties\PublishProfiles\Release.pubxml'
+
+    Patch-Xml $pubxml '<EnableUpdateable>True</EnableUpdateable>' '<EnableUpdateable>False</EnableUpdateable>'
+
+    Patch-Xml $pubxml '<LaunchSiteAfterPublish>True</LaunchSiteAfterPublish>' '<LaunchSiteAfterPublish>False</LaunchSiteAfterPublish>'
+
+    Patch-Xml $pubxml '<publishUrl>..\\..\\Bonobo_install\\Bonobo.Git.Server</publishUrl>' '<publishUrl>..\Bonobo_install\Bonobo.Git.Server</publishUrl>'
+
+
+    Write-Host Creating Packages
+
+    msbuild Bonobo.Git.Server.sln /m:4 /p:Configuration=Release /p:Platform="Any CPU" /p:DeployOnBuild=true /p:PublishProfile=Release
+
+
+    Write-Host "Create bonobo-git-server.zip"
+
+    Add-Type -assembly "system.io.compression.filesystem"
+
+    [io.compression.zipfile]::CreateFromDirectory('C:\projects\bonobo-git-server\Bonobo_install', 'C:\projects\bonobo-git-server\bonobo-git-server.zip')
+test: off
+artifacts:
+- path: bonobo-git-server.zip
+  name: bonobo-git-server.zip
