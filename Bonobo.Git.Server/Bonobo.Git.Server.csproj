@@ -520,6 +520,12 @@
     <Content Include="App_Data\Repositories\note.txt" />
     <Content Include="bin\NativeBinaries\amd64\git2-e0902fb.dll" />
     <Content Include="bin\NativeBinaries\x86\git2-e0902fb.dll" />
+    <Content Include="bin\x64\SQLite.Interop.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="bin\x86\SQLite.Interop.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\components\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.svg" />

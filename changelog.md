@@ -4,6 +4,14 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 5.1.1
+
+**12 January 2016**
+
+### Bug Fixes
+
+* add Sqlite.Interop.dll to the project so it is part of the release
+
 ## Version 5.1
 
 **11 January 2016**
