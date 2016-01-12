@@ -67,12 +67,28 @@ else
             <div class="pure-control-group checkboxlist">
                 @Html.LabelFor(m => m.Users)
                 @{
-                    var users = (from u in ViewData["AvailableUsers"] as string[]
-                        orderby u
-                                     select new SelectListItem() { Value = u, Text = u }).ToArray();
+                    IList<SelectListItem> users = null;
+                    IList<string> titles = null;
+                    IList<string>[] ud = (IList<string>[])ViewData["AvailableUsers"];
+                    if (ud.Count() > 0 && ud[0].Count > 1)
+                    {
+                        users = (from u in ud 
+                                 orderby u[1] + u[2]
+                                 select new SelectListItem() { Value = u[0], Text = (u[1] + " " + u[2]) }).ToArray();
+                        titles = (from u in ud 
+                                  orderby u[1] + u[2]
+                                  select u[0].Replace("!", "\\")).ToArray();
+
+                    }
+                    else
+                    {
+                        users = (from u in ud
+                                 orderby u
+                                 select new SelectListItem() { Value = u[0], Text = u[0].Replace("!", "\\") }).ToArray();
+                    }
                 }
 
-                    @Html.CheckboxListFor(m => m.Users, users, new { @class = "checkboxList medium" })
+                    @Html.CheckboxListFor(m => m.Users, users, new { @class = "checkboxList medium" }, titles)
                 <i class="fa fa-info-circle" title="@Resources.Repository_UsersHint"></i>
             </div>
 
@@ -81,12 +97,29 @@ else
             <div class="pure-control-group checkboxlist">
                 @Html.LabelFor(m => m.Administrators)
                 @{
-                    var Administrators = (from u in ViewData["AvailableAdministrators"] as string[]
-                        orderby u
-                                              select new SelectListItem() { Value = u, Text = u }).ToArray();
+                    IList<SelectListItem> administrators = null;
+                    titles = null;
+                    IList<string>[] ad = (IList<string>[])ViewData["AvailableAdministrators"];
+                    if (ad.Count() > 0 && ad[0].Count() > 1)
+                    {
+                        administrators = (from u in ad
+                                              orderby u[1] + u[2]
+                                              select new SelectListItem(){Value = u[0], Text = (u[1] + " " + u[2])}).ToArray();
+                        titles = (from u in ad
+                                              orderby u[1] + u[2]
+                                              select u[0].Replace("!", "\\")).ToArray();
+                    }
+                    else
+                    {
+
+                        administrators = (from u in ad
+                                          orderby u[0]
+                                          select new SelectListItem() { Value = u[0], Text = u[0].Replace("!", "\\") }).ToArray();
+                    }
+        
                 }
 
-                    @Html.CheckboxListFor(m => m.Administrators, Administrators, new { @class = "checkboxList medium" })
+                    @Html.CheckboxListFor(m => m.Administrators, administrators, new { @class = "checkboxList medium" }, titles)
                 <i class="fa fa-info-circle" title="@Resources.Repository_AdministratorsHint"></i>
                 @Html.ValidationMessageFor(m => m.Administrators)
             </div>

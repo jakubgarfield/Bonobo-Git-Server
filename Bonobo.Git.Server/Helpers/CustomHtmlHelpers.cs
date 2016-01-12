@@ -25,7 +25,7 @@ namespace Bonobo.Git.Server.Helpers
             return MvcHtmlString.Create(markdown.Transform(markdownText));
         }
 
-        public static MvcHtmlString CheckboxListFor<TModel, TValue>(this HtmlHelper<TModel> helper, Expression<Func<TModel, IEnumerable<TValue>>> expression, IEnumerable<SelectListItem> selectList, object htmlAttributes)
+        public static MvcHtmlString CheckboxListFor<TModel, TValue>(this HtmlHelper<TModel> helper, Expression<Func<TModel, IEnumerable<TValue>>> expression, IEnumerable<SelectListItem> selectList, object htmlAttributes, IList<string> labels = null)
         {
             StringBuilder sb = new StringBuilder();
             TagBuilder ul = new TagBuilder("ul");
@@ -36,6 +36,7 @@ namespace Bonobo.Git.Server.Helpers
             string propertyName = ExpressionHelper.GetExpressionText(expression);            
             TModel model = (TModel)helper.ViewContext.ViewData.ModelMetadata.Model;        
             IEnumerable<TValue> collection = expression.Compile().Invoke(model);
+            int index = 0;
 
             if (selectList != null)
             {
@@ -59,6 +60,11 @@ namespace Bonobo.Git.Server.Helpers
                     }
 
                     label.Attributes.Add(new KeyValuePair<string, string>("for", propertyName + "_" + listItem.Value));
+                    if (labels != null)
+                    {
+                        label.Attributes.Add(new KeyValuePair<string, string>("title", labels[index]));
+                        index++;
+                    }
                     label.InnerHtml = listItem.Text;
 
                     li.InnerHtml = input.ToString() + label.ToString();

@@ -33,6 +33,9 @@ namespace Bonobo.Git.Server.Controllers
         [Dependency]
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
 
+        [Dependency]
+        public IAuthenticationProvider AuthenticationProvider { get; set; }
+
         [WebAuthorize]
         public ActionResult Index(string sortGroup = null)
         {
@@ -521,7 +524,14 @@ namespace Bonobo.Git.Server.Controllers
 
         private void PopulateEditData()
         {
-            ViewData["AvailableUsers"] = MembershipService.GetAllUsers().Select(i => i.Name).ToArray();
+            if (AuthenticationProvider is WindowsAuthenticationProvider)
+            {
+                ViewData["AvailableUsers"] = MembershipService.GetAllUsers().Select(i => new List<string>(){i.Name, i.GivenName, i.Surname}).ToArray();
+            }
+            else
+            {
+                ViewData["AvailableUsers"] = MembershipService.GetAllUsers().Select(i => new List<string>(){i.Name}).ToArray();
+            }
             ViewData["AvailableAdministrators"] = ViewData["AvailableUsers"];
             ViewData["AvailableTeams"] = TeamRepository.GetAllTeams().Select(i => i.Name).ToArray();
         }
