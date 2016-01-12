@@ -2,12 +2,17 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using Microsoft.Owin.Infrastructure;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Infrastructure;
 using System.Security.Cryptography;
 using System.Text;
+using System.DirectoryServices.AccountManagement;
+
+using Bonobo.Git.Server.Security;
+using Bonobo.Git.Server.Helpers;
 
 namespace Bonobo.Git.Server.Owin.Windows
 {
@@ -38,9 +43,34 @@ namespace Bonobo.Git.Server.Owin.Windows
                         if (handshake.IsClientResponseValid(token))
                         {
                             properties = handshake.AuthenticationProperties;
-                            if (Options.GetClaimsForUser(handshake.AuthenticatedUsername) != null)
+                            var claimdelegate = Options.GetClaimsForUser(handshake.AuthenticatedUsername);
+
+
+                            if (claimdelegate == null) 
                             {
-                                Claim[] claims = Options.GetClaimsForUser(handshake.AuthenticatedUsername).ToArray();
+                                var parts = handshake.AuthenticatedUsername.Split('\\');
+                                var dc = new PrincipalContext(ContextType.Domain, parts[0]);
+                                var adUser = UserPrincipal.FindByIdentity(dc, handshake.AuthenticatedUsername);
+
+
+                                ClaimsIdentity identity = new ClaimsIdentity(Options.SignInAsAuthenticationType);
+                                List<Claim> result = new List<Claim>();
+                                result.Add(new Claim(ClaimTypes.Name, adUser.GivenName));
+                                result.Add(new Claim(ClaimTypes.Surname, adUser.Surname));
+                                result.Add(new Claim(ClaimTypes.Upn, handshake.AuthenticatedUsername));
+                                result.Add(new Claim(ClaimTypes.Email, adUser.EmailAddress));
+                                result.Add(new Claim(ClaimTypes.Role, Definitions.Roles.Administrator));
+                                result.Add(new Claim(ClaimTypes.Role, "Administrator"));
+                                identity.AddClaims(result);
+                                identity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, WindowsAuthenticationDefaults.AuthenticationType));
+                                Options.Handshakes.TryRemove(handshakeId);
+
+                                // user does not exist! Redirect to create page.
+                                properties.RedirectUri = "/Account/"+PathEncoder.Encode(handshake.AuthenticatedUsername)+ "/CreateADUser";
+                                return Task.FromResult(new AuthenticationTicket(identity, properties));
+
+                            }else{
+                                Claim[] claims = claimdelegate.ToArray();
                                 if (claims.Length > 0)
                                 {
                                     ClaimsIdentity identity = new ClaimsIdentity(Options.SignInAsAuthenticationType);
