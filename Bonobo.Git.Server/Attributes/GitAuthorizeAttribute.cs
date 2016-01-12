@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.DirectoryServices.AccountManagement;
 
 using Bonobo.Git.Server.Security;
 
@@ -51,11 +52,37 @@ namespace Bonobo.Git.Server
             string username = Uri.UnescapeDataString(value.Substring(0, value.IndexOf(':')));
             string password = Uri.UnescapeDataString(value.Substring(value.IndexOf(':') + 1));
 
-            if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password) && MembershipService.ValidateUser(username, password) == ValidationResult.Success)
+            bool allowed = false;
+
+            if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password))
             {
-                httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
+                if (AuthenticationProvider is WindowsAuthenticationProvider)
+                {
+                    var parts = username.Split('\\');
+                    using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, parts[0]))
+                    {
+                        var adUser = UserPrincipal.FindByIdentity(pc, username);
+                        if (adUser != null)
+                        {
+                            if (pc.ValidateCredentials(username, password))
+                            {
+                                httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
+                                allowed = true;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (MembershipService.ValidateUser(username, password) == ValidationResult.Success)
+                    {
+                        httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
+                        allowed = true;
+                    }
+                }
             }
-            else
+
+            if (!allowed)
             {
                 filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
