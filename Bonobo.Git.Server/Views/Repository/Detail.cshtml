@@ -44,8 +44,8 @@
                         @Resources.Repository_Detail_Location_Personal
                     </label>
 
-                    <a href=@String.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(User.Id()) + "@"), Model.Name, ".git")>
-                        @String.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(User.Id()) + "@"), Model.Name, ".git")
+                    <a href=@String.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(User.Id()).Replace("!", "\\") + "@"), Model.Name, ".git")>
+                        @String.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(User.Id()).Replace("!", "\\") + "@"), Model.Name, ".git")
                     </a>
                 </div>
             }
