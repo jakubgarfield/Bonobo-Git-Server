@@ -133,7 +133,12 @@ namespace Bonobo.Git.Server.Owin.Windows
                 AuthenticationTicket ticket = await AuthenticateAsync();
                 if (ticket != null && ticket.Identity != null)
                 {
+
                     Context.Authentication.SignIn(ticket.Properties, ticket.Identity);
+                    if(!ticket.Properties.RedirectUri.StartsWith(Request.PathBase.Value))
+                    {
+                        ticket.Properties.RedirectUri = Request.PathBase.Value + ticket.Properties.RedirectUri;
+                    }
                     Response.Redirect(ticket.Properties.RedirectUri);
                     result = true;
                 }
