@@ -187,16 +187,17 @@ namespace Bonobo.Git.Server.Controllers
         {
             if ((!Request.IsAuthenticated) || !(MembershipService is EFMembershipService))
             {
-                return RedirectToAction("Unauthorizedx", "Home");
+                return RedirectToAction("Unauthorized", "Home");
             }
 
             var uid = User.Id();
+            var dbuid = uid.Replace("\\", "!");
             var parts = uid.Split('\\');
             var dc = new PrincipalContext(ContextType.Domain, parts[0]);
             var adUser = UserPrincipal.FindByIdentity(dc, uid);
             if (adUser != null)
             {
-                if(MembershipService.CreateUser(uid, "AD_PASSWORD", adUser.GivenName, adUser.Surname, adUser.EmailAddress))
+                if(MembershipService.CreateUser(dbuid, "AD_PASSWORD", adUser.GivenName, adUser.Surname, adUser.EmailAddress))
                 {
                     if (MembershipService is EFMembershipService)
                     {
@@ -204,10 +205,10 @@ namespace Bonobo.Git.Server.Controllers
                         // 2 because we just added the user and there is the default admin user.
                         if ((AuthenticationSettings.ImportWindowsAuthUsersAsAdmin || efms.UserCount() == 2))
                         {
-                            RoleProvider.AddUserToRoles(uid, new string[] {Definitions.Roles.Administrator});
+                            RoleProvider.AddUserToRoles(dbuid, new string[] {Definitions.Roles.Administrator});
                         }
                     }
-                    return RedirectToAction("Edit", PathEncoder.Encode(User.Id()), "Account");
+                    return RedirectToAction("Index", "Repository");
                 }
                 else
                 {

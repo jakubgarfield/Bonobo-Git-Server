@@ -66,7 +66,7 @@ namespace Bonobo.Git.Server
                         {
                             if (pc.ValidateCredentials(username, password))
                             {
-                                httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
+                                httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username.Replace("\\", "!"))));
                                 allowed = true;
                             }
                         }

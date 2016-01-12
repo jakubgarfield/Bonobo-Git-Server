@@ -9,7 +9,7 @@
 else
 {
     <text>
-    <h1>@Model.Username</h1>
+    <h1>@Model.Username.Replace("!", "\\")</h1>
 
     @if (ViewBag.UpdateSuccess != null && ViewBag.UpdateSuccess)
     {

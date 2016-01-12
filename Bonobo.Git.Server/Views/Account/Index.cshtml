@@ -45,7 +45,7 @@
     @grid.GetHtml(
         tableStyle: "pure-table users",
         columns: grid.Columns(
-        grid.Column("Username", header: typeof(UserDetailModel).GetDisplayValue("Username"), format: (item) => Html.ActionLink((string)item.Username, "Detail", new { id = item.Username }, new { @class = "detail" })),
+        grid.Column("Username", header: typeof(UserDetailModel).GetDisplayValue("Username"), format: (item) => Html.ActionLink((string)item.Username.Replace("!", "\\"), "Detail", new { id = item.Username }, new { @class = "detail" })),
             grid.Column("Name", typeof(UserDetailModel).GetDisplayValue("Name")),
             grid.Column("Surname", typeof(UserDetailModel).GetDisplayValue("Surname")),
             grid.Column("Email", typeof(UserDetailModel).GetDisplayValue("Email")),

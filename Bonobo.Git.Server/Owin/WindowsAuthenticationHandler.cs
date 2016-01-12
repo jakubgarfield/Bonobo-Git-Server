@@ -43,7 +43,8 @@ namespace Bonobo.Git.Server.Owin.Windows
                         if (handshake.IsClientResponseValid(token))
                         {
                             properties = handshake.AuthenticationProperties;
-                            var claimdelegate = Options.GetClaimsForUser(handshake.AuthenticatedUsername);
+                            var uid = handshake.AuthenticatedUsername.Replace("\\", "!").ToLowerInvariant();
+                            var claimdelegate = Options.GetClaimsForUser(uid);
 
 
                             if (claimdelegate == null) 
@@ -66,7 +67,7 @@ namespace Bonobo.Git.Server.Owin.Windows
                                 Options.Handshakes.TryRemove(handshakeId);
 
                                 // user does not exist! Redirect to create page.
-                                properties.RedirectUri = "/Account/"+PathEncoder.Encode(handshake.AuthenticatedUsername)+ "/CreateADUser";
+                                properties.RedirectUri = "/Account/" + uid + "/CreateADUser";
                                 return Task.FromResult(new AuthenticationTicket(identity, properties));
 
                             }else{
