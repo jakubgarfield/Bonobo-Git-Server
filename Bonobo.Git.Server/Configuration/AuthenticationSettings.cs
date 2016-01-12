@@ -10,11 +10,13 @@ namespace Bonobo.Git.Server.Configuration
     {
         public static string MembershipService { get; private set; }
         public static string AuthenticationProvider { get; private set; }
+        public static bool ImportWindowsAuthUsersAsAdmin { get; private set; }
 
         static AuthenticationSettings()
         {
             MembershipService = ConfigurationManager.AppSettings["MembershipService"];            
             AuthenticationProvider = ConfigurationManager.AppSettings["AuthenticationProvider"];
+            ImportWindowsAuthUsersAsAdmin = Convert.ToBoolean(ConfigurationManager.AppSettings["ImportWindowsAuthUsersAsAdmin"]);
         }
     }
 }

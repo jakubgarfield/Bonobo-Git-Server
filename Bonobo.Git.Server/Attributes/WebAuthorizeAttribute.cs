@@ -28,7 +28,7 @@ namespace Bonobo.Git.Server
 
             if (!(filterContext.Result is HttpUnauthorizedResult))
             {
-                if (!filterContext.HttpContext.User.IsInRole(Definitions.Roles.Member))
+                if (!filterContext.HttpContext.User.IsInRole(Definitions.Roles.Member) && !filterContext.HttpContext.User.Identity.IsAuthenticated)
                 {
                     filterContext.Result = new RedirectResult("~/Home/Unauthorized");
                 }

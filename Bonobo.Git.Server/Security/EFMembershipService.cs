@@ -90,6 +90,14 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
+        public int UserCount()
+        {
+            using (var db = _createDatabaseContext())
+            {
+                return db.Users.Count();
+            }
+        }
+
         public UserModel GetUser(string username)
         {
             if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");

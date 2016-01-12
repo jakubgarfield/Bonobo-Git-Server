@@ -13,6 +13,9 @@ using Bonobo.Git.Server.Extensions;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 
+using Bonobo.Git.Server.Helpers;
+using System.DirectoryServices.AccountManagement;
+
 using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Controllers
@@ -178,6 +181,44 @@ namespace Bonobo.Git.Server.Controllers
 
             PopulateRoles();
             return View(model);
+        }
+
+        public ActionResult CreateADUser()
+        {
+            if ((!Request.IsAuthenticated) || !(MembershipService is EFMembershipService))
+            {
+                return RedirectToAction("Unauthorizedx", "Home");
+            }
+
+            var uid = User.Id();
+            var parts = uid.Split('\\');
+            var dc = new PrincipalContext(ContextType.Domain, parts[0]);
+            var adUser = UserPrincipal.FindByIdentity(dc, uid);
+            if (adUser != null)
+            {
+                if(MembershipService.CreateUser(uid, "AD_PASSWORD", adUser.GivenName, adUser.Surname, adUser.EmailAddress))
+                {
+                    if (MembershipService is EFMembershipService)
+                    {
+                        var efms = MembershipService as EFMembershipService;
+                        // 2 because we just added the user and there is the default admin user.
+                        if ((AuthenticationSettings.ImportWindowsAuthUsersAsAdmin || efms.UserCount() == 2))
+                        {
+                            RoleProvider.AddUserToRoles(uid, new string[] {Definitions.Roles.Administrator});
+                        }
+                    }
+                    return RedirectToAction("Edit", PathEncoder.Encode(User.Id()), "Account");
+                }
+                else
+                {
+                    ModelState.AddModelError("Username", Resources.Account_Create_AccountAlreadyExists);
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Unauthorized", "Home");
+            }
         }
 
         public ActionResult Create()
