@@ -4,7 +4,7 @@
 }
 <h1>@Resources.Confirm</h1>
 <div>
-    <p class="summary-error">@String.Format(Resources.Delete_ConfirmationText, Model.Username)</p>
+    <p class="summary-error">@String.Format(Resources.Delete_ConfirmationText, Model.Username.Replace("!", "\\"))</p>
 </div>
 
 @using (Html.BeginForm("Delete", "Account", FormMethod.Post, new { @class = "pure-form" }))

@@ -50,7 +50,8 @@ namespace Bonobo.Git.Server
                     string langName = "en";
 
                     if (HttpContext.Current.Request.UserLanguages != null &&
-                        HttpContext.Current.Request.UserLanguages.Length != 0)
+                        HttpContext.Current.Request.UserLanguages.Length != 0 &&
+                        HttpContext.Current.Request.UserLanguages[0].Length > 2)
                     {
                         langName = HttpContext.Current.Request.UserLanguages[0].Substring(0, 2);
                     }
