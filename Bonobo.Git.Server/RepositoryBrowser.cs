@@ -36,17 +36,26 @@ namespace Bonobo.Git.Server
             return _repository.Tags.Select(s => s.Name).OrderByDescending(s => s).ToList();
         }
 
-        public IEnumerable<RepositoryCommitModel> GetCommits(string name, out string referenceName)
+        public IEnumerable<RepositoryCommitModel> GetCommits(string name, int page, int pageSize, out string referenceName, out int totalCount)
         {
             var commit = GetCommitByName(name, out referenceName);
             if (commit == null)
             {
+                totalCount = 0;
                 return Enumerable.Empty<RepositoryCommitModel>();
             }
 
-            return _repository.Commits
-                              .QueryBy(new CommitFilter { Since = commit, SortBy = CommitSortStrategies.Topological })
-                              .Select(s => ToModel(s)).ToList();
+            IEnumerable<Commit> commitLogQuery = this._repository.Commits
+                .QueryBy(new CommitFilter { Since = commit, SortBy = CommitSortStrategies.Topological });
+
+            totalCount = commitLogQuery.Count();
+
+            if (page >= 1 && pageSize >= 1)
+            {
+                commitLogQuery = commitLogQuery.Skip((page - 1) * pageSize).Take(pageSize);
+            }
+
+            return commitLogQuery.Select(s => ToModel(s)).ToList();
         }
 
         public RepositoryCommitModel GetCommitDetail(string name)
@@ -290,7 +299,7 @@ namespace Bonobo.Git.Server
             {
                 links = Regex.Matches(commit.Message, UserConfiguration.Current.LinksRegex).OfType<Match>().Select(m => m.Value);
             }
-            
+
 
             var model = new RepositoryCommitModel
             {

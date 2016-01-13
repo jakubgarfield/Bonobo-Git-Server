@@ -369,8 +369,10 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Commits(string id, string encodedName)
+        public ActionResult Commits(string id, string encodedName, int page = 1)
         {
+            page = page >= 1 ? page : 1;
+            
             ViewBag.ID = id;
             ViewBag.ShowShortMessageOnly = true;
             if (!String.IsNullOrEmpty(id))
@@ -379,8 +381,10 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     var name = PathEncoder.Decode(encodedName);
                     string referenceName;
-                    var commits = browser.GetCommits(name, out referenceName);
+                    int totalCount;
+                    var commits = browser.GetCommits(name, page, 10, out referenceName, out totalCount);
                     PopulateBranchesData(browser, referenceName);
+                    ViewBag.TotalCount = totalCount;
                     return View(new RepositoryCommitsModel { Commits = commits, Name = id });
                 }
             }
