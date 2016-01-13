@@ -59,17 +59,24 @@ namespace Bonobo.Git.Server
                 if (AuthenticationProvider is WindowsAuthenticationProvider)
                 {
                     var parts = username.Split('\\');
-                    using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, parts[0]))
+                    try
                     {
-                        var adUser = UserPrincipal.FindByIdentity(pc, username);
-                        if (adUser != null)
+                        using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, parts[0]))
                         {
-                            if (pc.ValidateCredentials(username, password))
+                            var adUser = UserPrincipal.FindByIdentity(pc, username);
+                            if (adUser != null)
                             {
-                                httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username.Replace("\\", "!"))));
-                                allowed = true;
+                                if (pc.ValidateCredentials(username, password))
+                                {
+                                    httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username.Replace("\\", "!"))));
+                                    allowed = true;
+                                }
                             }
                         }
+                    }
+                    catch (PrincipalException)
+                    {
+                        // let it fail
                     }
                 }
                 else
