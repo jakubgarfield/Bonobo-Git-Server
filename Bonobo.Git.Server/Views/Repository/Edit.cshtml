@@ -83,7 +83,7 @@ else
                     else
                     {
                         users = (from u in ud
-                                 orderby u
+                                 orderby u[0]
                                  select new SelectListItem() { Value = u[0], Text = u[0].Replace("!", "\\") }).ToArray();
                     }
                 }
