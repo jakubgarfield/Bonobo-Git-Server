@@ -43,7 +43,8 @@ namespace Bonobo.Git.Server.Owin.Windows
                         if (handshake.IsClientResponseValid(token))
                         {
                             properties = handshake.AuthenticationProperties;
-                            var uid = handshake.AuthenticatedUsername.Replace("\\", "!").ToLowerInvariant();
+                            var username = UsernameHelper.ReplaceFirstOccurrence(handshake.AuthenticatedUsername, '\\', '!');
+                            var uid = username.ToLowerInvariant();
                             var claimdelegate = Options.GetClaimsForUser(uid);
 
 

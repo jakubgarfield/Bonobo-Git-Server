@@ -191,7 +191,7 @@ namespace Bonobo.Git.Server.Controllers
             }
 
             var uid = User.Id();
-            var dbuid = uid.Replace("\\", "!");
+            var dbuid = UsernameHelper.ReplaceFirstOccurrence(uid, '\\','!'); 
             var parts = uid.Split('\\');
             var dc = new PrincipalContext(ContextType.Domain, parts[0]);
             var adUser = UserPrincipal.FindByIdentity(dc, uid);
