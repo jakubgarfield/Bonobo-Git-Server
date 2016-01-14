@@ -11,6 +11,7 @@ using System.DirectoryServices.AccountManagement;
 using Bonobo.Git.Server.Security;
 
 using Microsoft.Practices.Unity;
+using Bonobo.Git.Server.Helpers;
 
 namespace Bonobo.Git.Server
 {
@@ -79,7 +80,7 @@ namespace Bonobo.Git.Server
                             {
                                 if (pc.ValidateCredentials(username, password))
                                 {
-                                    httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username.Replace("\\", "!"))));
+                                    httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(UsernameHelper.ReplaceFirstOccurrence(username,'\\','!'))));
                                     allowed = true;
                                 }
                             }

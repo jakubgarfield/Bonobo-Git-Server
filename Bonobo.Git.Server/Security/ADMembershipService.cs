@@ -14,6 +14,7 @@ using Bonobo.Git.Server.Models;
 using System.Web.Security;
 using System.Security.Principal;
 using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Helpers;
 
 namespace Bonobo.Git.Server.Security
 {
@@ -99,7 +100,7 @@ namespace Bonobo.Git.Server.Security
             if (!IsUserPrincipalName(username))
             {
                 using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain))
-                using (UserPrincipal user = UserPrincipal.FindByIdentity(principalContext, username))
+                using (UserPrincipal user = UserPrincipal.FindByIdentity(principalContext, UsernameHelper.ReplaceFirstOccurrence(username, '!', '\\')))
                 {
                     username = user.UserPrincipalName;
                 }
