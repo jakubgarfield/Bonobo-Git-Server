@@ -22,6 +22,9 @@ namespace Bonobo.Git.Server
         [Dependency]
         public IAuthenticationProvider AuthenticationProvider { get; set; }
 
+        [Dependency]
+        public IRepositoryPermissionService RepositoryPermissionService { get; set; }
+
         public override void OnAuthorization(System.Web.Mvc.AuthorizationContext filterContext)
         {
             if (filterContext == null)
@@ -30,6 +33,14 @@ namespace Bonobo.Git.Server
             }
 
             HttpContextBase httpContext = filterContext.HttpContext;
+
+            // check if repo allows anonymous pulls
+            var repo = httpContext.Request.Path.Replace(httpContext.Request.ApplicationPath, "");
+            repo = repo.Substring(1, repo.IndexOf(".git")-1);
+            if (RepositoryPermissionService.AllowsAnonymous(repo))
+            {
+                return;
+            }
 
             if (httpContext.Request.IsAuthenticated && httpContext.User != null && httpContext.User.Identity is System.Security.Claims.ClaimsIdentity)
             {
