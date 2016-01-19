@@ -30,7 +30,10 @@ build_script:
     Add-Type -assembly "system.io.compression.filesystem"
 
     [io.compression.zipfile]::CreateFromDirectory('C:\projects\bonobo-git-server\Bonobo_install', 'C:\projects\bonobo-git-server\bonobo-git-server.zip')
-test: off
+test:
+  categories:
+    except:
+    - Integration
 artifacts:
 - path: bonobo-git-server.zip
   name: bonobo-git-server.zip
