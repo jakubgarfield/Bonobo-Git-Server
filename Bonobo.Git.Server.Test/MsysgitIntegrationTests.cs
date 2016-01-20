@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bonobo.Git.Server.Test
 {
@@ -19,7 +20,7 @@ namespace Bonobo.Git.Server.Test
         private const string GitPath = @"..\..\..\Gits\{0}\bin\git.exe";
         private readonly static string ServerRepositoryPath = Path.Combine(@"..\..\..\Bonobo.Git.Server\App_Data\Repositories", RepositoryName);
         private readonly static string ServerRepositoryBackupPath = Path.Combine(@"..\..\..\Test\", RepositoryName, "Backup");
-        private readonly static string[] GitVersions = { "1.7.4", "1.7.6", "1.7.7.1", "1.7.8", "1.7.9", "1.8.0", "1.8.1.2", "1.8.3", "1.9.5" };
+        private readonly static string[] GitVersions = { "1.7.4", "1.7.6", "1.7.7.1", "1.7.8", "1.7.9", "1.8.0", "1.8.1.2", "1.8.3", "1.9.5", "2.6.1" };
         private readonly static string Credentials = "admin:admin@";
         private readonly static string RepositoryUrl = "http://{0}localhost:50287/Integration{1}";
         private readonly static string RepositoryUrlWithoutCredentials = String.Format(RepositoryUrl, String.Empty, String.Empty);
@@ -37,15 +38,26 @@ namespace Bonobo.Git.Server.Test
         [TestInitialize]
         public void Initialize()
         {
+            if (!Directory.Exists(ServerRepositoryPath))
+            {
+                Assert.Fail(string.Format("Please create a repository called Integration in '{0}'.", Path.GetFullPath(ServerRepositoryPath)));
+            }
             DeleteDirectory(WorkingDirectory);
         }
 
         [TestMethod, TestCategory(Definitions.Integration)]
         public void Run()
         {
+            bool has_any_test_run = false;
+            List<string> gitpaths = new List<string>();
             foreach (var version in GitVersions)
             {
                 var git = String.Format(GitPath, version);
+                if (!File.Exists(git))
+                {
+                    gitpaths.Add(git);
+                    continue;
+                }
                 var resources = new MsysgitResources(version);
 
                 Directory.CreateDirectory(WorkingDirectory);
@@ -67,10 +79,15 @@ namespace Bonobo.Git.Server.Test
                     RestoreServerRepository();
                     DeleteDirectory(WorkingDirectory);
                 }
+                has_any_test_run = true;
+            }
+
+            if (!has_any_test_run)
+            {
+                Assert.Fail(string.Format("Please ensure that you have at least one git installation in '{0}'.", string.Join("', '", gitpaths.Select(n => Path.GetFullPath(n)))));
             }
 
         }
-
 
         private void PullBranch(string git, MsysgitResources resources)
         {

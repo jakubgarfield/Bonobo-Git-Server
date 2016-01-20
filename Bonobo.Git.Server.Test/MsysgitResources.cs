@@ -62,7 +62,8 @@ namespace Bonobo.Git.Server.Test
                 _resources[Definition.CloneEmptyRepositoryOutput] = "Cloning into 'Integration'...\n";
             }
 
-            if(string.Equals(version,"1.9.5"))
+            if (String.Equals(version, "1.9.5")
+             || String.Equals(version, "2.6.1"))
             {
                 _resources[Definition.CloneEmptyRepositoryOutput] = "";
                 _resources[Definition.CloneEmptyRepositoryError] = "Cloning into 'Integration'...\nwarning: You appear to have cloned an empty repository.\n";
