@@ -19,7 +19,7 @@ namespace Bonobo.Git.Server.Test
         private const string GitPath = @"..\..\..\Gits\{0}\bin\git.exe";
         private readonly static string ServerRepositoryPath = Path.Combine(@"..\..\..\Bonobo.Git.Server\App_Data\Repositories", RepositoryName);
         private readonly static string ServerRepositoryBackupPath = Path.Combine(@"..\..\..\Test\", RepositoryName, "Backup");
-        private readonly static string[] GitVersions = { "1.7.4", "1.7.6", "1.7.7.1", "1.7.8", "1.7.9", "1.8.0", "1.8.1.2", "1.8.3", "1.9.5" };
+        private readonly static string[] GitVersions = { "1.7.4", "1.7.6", "1.7.7.1", "1.7.8", "1.7.9", "1.8.0", "1.8.1.2", "1.8.3", "1.9.5", "2.6.1" };
         private readonly static string Credentials = "admin:admin@";
         private readonly static string RepositoryUrl = "http://{0}localhost:50287/Integration{1}";
         private readonly static string RepositoryUrlWithoutCredentials = String.Format(RepositoryUrl, String.Empty, String.Empty);
