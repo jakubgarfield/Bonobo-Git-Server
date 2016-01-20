@@ -4,7 +4,7 @@
 		<MainSolution>$(MSBuildThisFileDirectory)\Bonobo.Git.Server.sln</MainSolution>
     </PropertyGroup>
 	
-	<UsingTask TaskName="DownloadNuGet" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v$(MSBuildToolsVersion).dll">
+	<UsingTask TaskName="DownloadNuGet" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
        <ParameterGroup>
            <OutputFilename ParameterType="System.String" Required="true" />
        </ParameterGroup>
