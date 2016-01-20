@@ -1,13 +1,11 @@
 version: '{build}'
+before_build:
+- cmd: nuget restore
 build_script:
 - ps: >-
     function Patch-Xml { param([string] $filePath, [string] $strToReplace, [string] $replacement)
         (Get-Content $filePath -Encoding utf8) | Foreach-Object { $_ -replace $strToReplace,$replacement } | Out-File $filePath -Encoding utf8
     }
-
-
-    nuget restore
-
 
     Write-Host "Patch Release.pubxml"
 
