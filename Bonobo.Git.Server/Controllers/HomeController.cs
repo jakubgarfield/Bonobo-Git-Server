@@ -53,7 +53,7 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult ResetPassword(string digest)
         {
             string username;
-            digest = HttpUtility.UrlDecode(digest);
+            digest = HttpUtility.UrlDecode(digest, Encoding.UTF8);
             var cacheObj = MvcApplication.Cache[digest];
             if ( cacheObj != null )
             {
