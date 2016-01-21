@@ -72,6 +72,14 @@
     </div>
 }
 
+@using (Html.BeginForm())
+{
+    <p>
+        Search : @Html.TextBox("SearchString")
+        <input type="submit" value="Search" />
+    </p>
+}
+
 <div class="pure-g">
     @{
         foreach (KeyValuePair<string, RepositoryDetailModel[]> model in Model)
