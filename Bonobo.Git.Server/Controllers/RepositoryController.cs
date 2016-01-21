@@ -37,9 +37,19 @@ namespace Bonobo.Git.Server.Controllers
         public IAuthenticationProvider AuthenticationProvider { get; set; }
 
         [WebAuthorize]
-        public ActionResult Index(string sortGroup = null)
+        public ActionResult Index(string sortGroup = null, string searchString = null)
         {
-            var list = GetIndexModel()
+            var firstList = this.GetIndexModel();
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                var search = searchString.ToLower();
+                firstList = firstList.Where(a => a.Name.ToLower().Contains(search) ||
+                                            (!string.IsNullOrEmpty(a.Group) && a.Group.ToLower().Contains(search)) ||
+                                            (!string.IsNullOrEmpty(a.Description) && a.Description.ToLower().Contains(search)))
+                                            .AsEnumerable();
+            }
+
+            var list = firstList
                     .GroupBy(x => x.Group)
                     .OrderBy(x => x.Key, string.IsNullOrEmpty(sortGroup) || sortGroup.Equals("ASC"))
                     .ToDictionary(x => x.Key ?? string.Empty, x => x.ToArray());
