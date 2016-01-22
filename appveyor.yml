@@ -1,11 +1,14 @@
 version: '{build}'
+configuration: Release
+platform: Any CPU
 before_build:
-- cmd: nuget restore
-build_script:
 - ps: >-
     function Patch-Xml { param([string] $filePath, [string] $strToReplace, [string] $replacement)
         (Get-Content $filePath -Encoding utf8) | Foreach-Object { $_ -replace $strToReplace,$replacement } | Out-File $filePath -Encoding utf8
     }
+
+
+    nuget restore
 
     Write-Host "Patch Release.pubxml"
 
@@ -17,11 +20,18 @@ build_script:
 
     Patch-Xml $pubxml '<publishUrl>..\\..\\Bonobo_install\\Bonobo.Git.Server</publishUrl>' '<publishUrl>..\Bonobo_install\Bonobo.Git.Server</publishUrl>'
 
+    Write-Host "End Patch Release.pubxml"
+build:
+  project: Bonobo.Git.Server.sln
+  parallel: true
+  verbosity: minimal
+after_build:
+- ps: >-
+    Write-Host "Creating Packages"
 
-    Write-Host Creating Packages
+    msbuild Bonobo.Git.Server.sln /m:4 /p:Configuration=Release /p:Platform="Any CPU" /p:DeployOnBuild=true /p:PublishProfile=Release 
 
-    msbuild Bonobo.Git.Server.sln /m:4 /p:Configuration=Release /p:Platform="Any CPU" /p:DeployOnBuild=true /p:PublishProfile=Release
-
+    Write-Host "End Creating Packages"
 
     Write-Host "Create bonobo-git-server.zip"
 
