@@ -15,13 +15,19 @@ namespace Bonobo.Git.Server.Data
 {
     public class ADRepositoryRepository : IRepositoryRepository
     {
+        Dictionary<int, string> _id_to_name = null;
+
         public bool Create(RepositoryModel repository)
-        {            
+        {
+            repository.Id = _id_to_name.Keys.Max() + 1;
+            _id_to_name[repository.Id] = repository.Name;
             return ADBackend.Instance.Repositories.Add(SanitizeModel(repository));
         }
 
         public void Delete(string name)
         {
+            var repo = GetRepository(name);
+            _id_to_name.Remove(repo.Id);
             ADBackend.Instance.Repositories.Remove(name);
         }
 
@@ -32,7 +38,12 @@ namespace Bonobo.Git.Server.Data
 
         public IList<RepositoryModel> GetAllRepositories()
         {
-            return ADBackend.Instance.Repositories.ToList();
+            var repos = ADBackend.Instance.Repositories.ToList();
+            foreach(var repo in repos)
+            {
+                _id_to_name[repo.Id] = repo.Name;
+            }
+            return repos;
         }
 
         public IList<RepositoryModel> GetPermittedRepositories(string username, string[] userTeams)
@@ -48,8 +59,20 @@ namespace Bonobo.Git.Server.Data
             return ADBackend.Instance.Repositories[name]; 
         }
 
+        public RepositoryModel GetRepository(int id)
+        {
+            if (_id_to_name == null)
+            {
+                _id_to_name = new Dictionary<int, string>();
+                GetAllRepositories();
+            }
+            var name = _id_to_name[id];
+            return GetRepository(name);
+        }
+
         public void Update(RepositoryModel repository)
         {
+            _id_to_name[repository.Id] = repository.Name;
             ADBackend.Instance.Repositories.Update(SanitizeModel(repository));
         }
 

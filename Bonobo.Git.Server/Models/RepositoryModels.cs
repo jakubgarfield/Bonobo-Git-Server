@@ -19,6 +19,7 @@ namespace Bonobo.Git.Server.Models
 {
     public class RepositoryModel : INameProperty
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Group { get; set; }
         public string Description { get; set; }
@@ -44,6 +45,8 @@ namespace Bonobo.Git.Server.Models
 
     public class RepositoryDetailModel
     {
+        public int Id { get; set; }
+
         [RegularExpression(RepositoryModel.NameValidityRegex, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_FileName_Regex")]
         [FileName(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_FileName")]
         [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]

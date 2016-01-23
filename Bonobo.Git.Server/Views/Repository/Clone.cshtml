@@ -30,9 +30,25 @@
         <div class="pure-control-group checkboxlist">
             @Html.LabelFor(m => m.Users)
             @{
-                var users = (from user in ViewData["AvailableUsers"] as string[]
-                             orderby user
-                             select new SelectListItem { Value = user, Text = user }).ToArray();
+                IList<SelectListItem> users = null;
+                IList<string> titles = null;
+                IList<string>[] ud = (IList<string>[])ViewData["AvailableUsers"];
+                if (ud.Count() > 0 && ud[0].Count > 1)
+                {
+                    users = (from u in ud 
+                             orderby u[1] + u[2]
+                             select new SelectListItem() { Value = u[0], Text = (u[1] + " " + u[2]) }).ToArray();
+                    titles = (from u in ud 
+                              orderby u[1] + u[2]
+                              select u[0]).ToArray();
+
+                }
+                else
+                {
+                    users = (from u in ud
+                             orderby u[0]
+                             select new SelectListItem() { Value = u[0], Text = u[0] }).ToArray();
+                }
             }
 
             @Html.CheckboxListFor(m => m.Users, users)
@@ -42,9 +58,26 @@
         <div class="pure-control-group checkboxlist">
             @Html.LabelFor(m => m.Administrators)
             @{
-                var administrators = (from user in ViewData["AvailableAdministrators"] as string[]
-                                      orderby user
-                                      select new SelectListItem { Value = user, Text = user }).ToArray();
+                IList<SelectListItem> administrators = null;
+                titles = null;
+                IList<string>[] ad = (IList<string>[])ViewData["AvailableAdministrators"];
+                if (ad.Count() > 0 && ad[0].Count() > 1)
+                {
+                    administrators = (from u in ad
+                                          orderby u[1] + u[2]
+                                          select new SelectListItem(){Value = u[0], Text = (u[1] + " " + u[2])}).ToArray();
+                    titles = (from u in ad
+                                          orderby u[1] + u[2]
+                                          select u[0]).ToArray();
+                }
+                else
+                {
+
+                    administrators = (from u in ad
+                                      orderby u[0]
+                                      select new SelectListItem() { Value = u[0], Text = u[0] }).ToArray();
+                }
+    
             }
 
             @Html.CheckboxListFor(m => m.Administrators, administrators)

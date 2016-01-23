@@ -15,6 +15,7 @@ namespace Bonobo.Git.Server.Data
             {
                 var dbrepos = db.Repositories.Select(repo => new
                 {
+                    Id = repo.Id,
                     Name = repo.Name,
                     Group = repo.Group,
                     Description = repo.Description,
@@ -28,6 +29,7 @@ namespace Bonobo.Git.Server.Data
 
                 return dbrepos.Select(repo => new RepositoryModel
                 {
+                    Id = repo.Id,
                     Name = repo.Name,
                     Group = repo.Group,
                     Description = repo.Description,
@@ -71,10 +73,16 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
+        public RepositoryModel GetRepository(int id)
+        {
+            using (var db = new BonoboGitServerContext())
+            {
+                return ConvertToModel(db.Repositories.FirstOrDefault(i => i.Id == id));
+            }
+        }
+
         public void Delete(string name)
         {
-            if (name == null) throw new ArgumentException("name");
-
             using (var db = new BonoboGitServerContext())
             {
                 var repo = db.Repositories.FirstOrDefault(i => i.Name == name);
@@ -161,6 +169,7 @@ namespace Bonobo.Git.Server.Data
 
             return new RepositoryModel
             {
+                Id = item.Id,
                 Name = item.Name,
                 Group = item.Group,
                 Description = item.Description,
