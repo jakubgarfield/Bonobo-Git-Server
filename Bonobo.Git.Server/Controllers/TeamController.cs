@@ -30,15 +30,11 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
-        public ActionResult Edit(string id)
+        public ActionResult Edit(int id)
         {
-            if (!String.IsNullOrEmpty(id))
-            {
-                var model = ConvertTeamModel(TeamRepository.GetTeam(id));
-                PopulateViewData();
-                return View(model);
-            }
-            return View();
+            var model = ConvertTeamModel(TeamRepository.GetTeam(id));
+            PopulateViewData();
+            return View(model);
         }
 
         [HttpPost]
@@ -89,23 +85,19 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
-        public ActionResult Delete(string id)
+        public ActionResult Delete(int id)
         {
-            if (!String.IsNullOrEmpty(id))
-            {
-                return View(new TeamDetailModel { Name = id });
-            }
-
-            return RedirectToAction("Index");
+            return View(ConvertTeamModel(TeamRepository.GetTeam(id)));
         }
 
         [HttpPost]
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(TeamDetailModel model)
         {
-            if (model != null && !String.IsNullOrEmpty(model.Name))
+            if (model != null && model.Id != 0)
             {
-                TeamRepository.Delete(model.Name);
+                TeamModel team = TeamRepository.GetTeam(model.Id);
+                TeamRepository.Delete(team.Name);
                 TempData["DeleteSuccess"] = true;
                 return RedirectToAction("Index");
             }
@@ -113,13 +105,9 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorize]
-        public ActionResult Detail(string id)
+        public ActionResult Detail(int id)
         {
-            if (!String.IsNullOrEmpty(id))
-            {
-                return View(ConvertTeamModel(TeamRepository.GetTeam(id)));
-            }
-            return View();
+            return View(ConvertTeamModel(TeamRepository.GetTeam(id)));
         }
 
 
@@ -138,6 +126,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             return model == null ? null : new TeamDetailModel
             {
+                Id = model.Id,
                 Name = model.Name,
                 Description = model.Description,
                 Members = model.Members,
@@ -150,6 +139,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             return new TeamModel
             {
+                Id = model.Id,
                 Name = model.Name,
                 Description = model.Description,
                 Members = model.Members,

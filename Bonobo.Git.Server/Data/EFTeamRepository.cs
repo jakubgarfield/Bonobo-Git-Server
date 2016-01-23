@@ -15,6 +15,7 @@ namespace Bonobo.Git.Server.Data
             {
                 var dbTeams = db.Teams.Select(team => new
                 {
+                    Id = team.Id,
                     Name = team.Name,
                     Description = team.Description,
                     Members = team.Users.Select(i => i.Username),
@@ -23,6 +24,7 @@ namespace Bonobo.Git.Server.Data
 
                 return dbTeams.Select(item => new TeamModel
                 {
+                    Id = item.Id,
                     Name = item.Name,
                     Description = item.Description,
                     Members = item.Members.ToArray(),
@@ -36,6 +38,27 @@ namespace Bonobo.Git.Server.Data
             return GetAllTeams().Where(i => i.Members.Contains(username)).ToList();
         }
 
+        private TeamModel GetTeam(Team team)
+        {
+                return team == null ? null : new TeamModel
+                {
+                    Id = team.Id,
+                    Name = team.Name,
+                    Description = team.Description,
+                    Members = team.Users.Select(m => m.Username).ToArray(),
+                };
+        }
+
+        public TeamModel GetTeam(int id)
+        {
+
+            using (var db = new BonoboGitServerContext())
+            {
+                var team = db.Teams.FirstOrDefault(i => i.Id == id);
+                return GetTeam(team);
+            }
+        }
+
         public TeamModel GetTeam(string name)
         {
             if (name == null) throw new ArgumentException("name");
@@ -43,12 +66,7 @@ namespace Bonobo.Git.Server.Data
             using (var db = new BonoboGitServerContext())
             {
                 var team = db.Teams.FirstOrDefault(i => i.Name == name);
-                return team == null ? null : new TeamModel
-                {
-                    Name = team.Name,
-                    Description = team.Description,
-                    Members = team.Users.Select(m => m.Username).ToArray(),
-                };
+                return GetTeam(team);
             }
         }
 

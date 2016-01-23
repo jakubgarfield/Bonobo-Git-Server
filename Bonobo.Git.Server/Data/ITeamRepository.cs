@@ -8,6 +8,7 @@ namespace Bonobo.Git.Server.Data
         IList<TeamModel> GetAllTeams();
         IList<TeamModel> GetTeams(string username);
         TeamModel GetTeam(string name);
+        TeamModel GetTeam(int id);
         void Delete(string name);
         bool Create(TeamModel team);
         void Update(TeamModel team);

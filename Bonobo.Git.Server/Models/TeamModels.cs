@@ -11,6 +11,7 @@ namespace Bonobo.Git.Server.Models
 {
     public class TeamModel : INameProperty 
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string[] Members { get; set; }
@@ -18,6 +19,8 @@ namespace Bonobo.Git.Server.Models
 
     public class TeamDetailModel
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
         [StringLength(40, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
         [Display(ResourceType = typeof(Resources), Name = "Team_Detail_Name")]

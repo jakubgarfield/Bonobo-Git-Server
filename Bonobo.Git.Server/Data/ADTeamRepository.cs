@@ -16,6 +16,9 @@ namespace Bonobo.Git.Server.Data
 {
     public class ADTeamRepository : ITeamRepository
     {
+
+        Dictionary<int, string> _id_to_name = new Dictionary<int, string>();
+
         public bool Create(TeamModel team)
         {
             throw new NotImplementedException();
@@ -28,7 +31,18 @@ namespace Bonobo.Git.Server.Data
 
         public IList<TeamModel> GetAllTeams()
         {
-            return ADBackend.Instance.Teams.ToList();
+            var ret = ADBackend.Instance.Teams.ToList();
+            foreach (var t in ret)
+            {
+                _id_to_name[t.Id] = t.Name;
+            }
+            return ret;
+        }
+
+        public TeamModel GetTeam(int id)
+        {
+            var name = _id_to_name[id];
+            return GetTeam(name);
         }
 
         public TeamModel GetTeam(string name)
