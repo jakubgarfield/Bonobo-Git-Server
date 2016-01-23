@@ -21,9 +21,14 @@ else
     @using (Html.BeginForm("Edit", "Account", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
     {   
         @Html.ValidationSummary(false, Resources.Account_Edit_Unsuccessfull)
-        @Html.HiddenFor(m => m.Username)
+        @Html.HiddenFor(m => m.Id)
         
         <fieldset>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Username)
+                @Html.TextBoxFor(m => m.Username)<em>*</em>
+                @Html.ValidationMessageFor(m => m.Username)
+            </div>
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.Name)
                 @Html.TextBoxFor(m => m.Name, new { autofocus = "" })<em>*</em>
