@@ -16,6 +16,7 @@ namespace Bonobo.Git.Server.Data.Mapping
         private void SetTableAndColumnMappings()
         {
             ToTable("User");
+            Property(t => t.Id).HasColumnName("Id");
             Property(t => t.Name).HasColumnName("Name");
             Property(t => t.Surname).HasColumnName("Surname");
             Property(t => t.Username).HasColumnName("Username");
@@ -48,7 +49,7 @@ namespace Bonobo.Git.Server.Data.Mapping
 
         private void SetPrimaryKey()
         {
-            HasKey(t => t.Username);
+            HasKey(t => t.Id);
         }
     }
 }

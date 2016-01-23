@@ -21,14 +21,15 @@ namespace Bonobo.Git.Server.Data.Mapping
                 .Map(m =>
                 {
                     m.ToTable("UserRole_InRole");
-                    m.MapLeftKey("Role_Name");
-                    m.MapRightKey("User_Username");
+                    m.MapLeftKey("Role_Id");
+                    m.MapRightKey("User_Id");
                 });
         }
 
         private void SetTableAndColumnMappings()
         {
             ToTable("Role");
+            Property(t => t.Id).HasColumnName("Id");
             Property(t => t.Name).HasColumnName("Name");
             Property(t => t.Description).HasColumnName("Description");
         }
@@ -45,7 +46,7 @@ namespace Bonobo.Git.Server.Data.Mapping
 
         private void SetPrimaryKey()
         {
-            HasKey(t => t.Name);
+            HasKey(t => t.Id);
         }
     }
 }
