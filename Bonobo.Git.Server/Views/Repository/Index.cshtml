@@ -54,8 +54,8 @@
 @if (TempData["CreateSuccess"] as bool? == true)
 {
     <div class="summary-success">
-	    <p>@Resources.Repository_Create_Success</p>
-		<p>@Html.ActionLink("Go to repository : " + TempData["SuccessfullyCreatedRepositoryName"].ToString(), "Detail", new { id = TempData["SuccessfullyCreatedRepositoryName"].ToString() })</p>
+        <p>@Resources.Repository_Create_Success</p>
+        <p>@Html.ActionLink("Go to repository : " + TempData["SuccessfullyCreatedRepositoryName"].ToString(), "Detail", new { id = TempData["SuccessfullyCreatedRepositoryName"].ToString() })</p>
 
     </div>
 }
@@ -72,11 +72,11 @@
     </div>
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "pure-form" }))
 {
     <p>
         Search : @Html.TextBox("SearchString")
-        <input type="submit" value="Search" />
+        <input type="submit" value="Search" class="pure-button pure-button-primary" />
     </p>
 }
 
