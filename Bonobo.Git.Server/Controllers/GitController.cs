@@ -54,7 +54,7 @@ namespace Bonobo.Git.Server.Controllers
                 return new HttpNotFoundResult();
             }
 
-            if (RepositoryPermissionService.HasPermission(User.Id(), project)
+            if (RepositoryPermissionService.HasPermission(User.Username(), project)
                 || RepositoryPermissionService.AllowsAnonymous(project))
             {
                 return ExecuteUploadPack(project);
@@ -73,7 +73,7 @@ namespace Bonobo.Git.Server.Controllers
                 return new HttpNotFoundResult();
             }
 
-            if (RepositoryPermissionService.HasPermission(User.Id(), project)
+            if (RepositoryPermissionService.HasPermission(User.Username(), project)
                 || (RepositoryPermissionService.AllowsAnonymous(project) && UserConfiguration.Current.AllowAnonymousPush))
             {
                 return ExecuteReceivePack(project);

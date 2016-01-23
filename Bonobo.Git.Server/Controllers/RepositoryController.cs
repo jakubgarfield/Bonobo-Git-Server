@@ -76,7 +76,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (model.Administrators.Contains(User.Id(), StringComparer.OrdinalIgnoreCase))
+                if (model.Administrators.Contains(User.Username(), StringComparer.OrdinalIgnoreCase))
                 {
                     RepositoryRepository.Update(ConvertRepositoryDetailModel(model));
                     ViewBag.UpdateSuccess = true;
@@ -100,7 +100,7 @@ namespace Bonobo.Git.Server.Controllers
 
             var model = new RepositoryDetailModel
             {
-                Administrators = new string[] { User.Id() },
+                Administrators = new string[] { User.Username() },
             };
             PopulateEditData();
             return View(model);
@@ -188,7 +188,7 @@ namespace Bonobo.Git.Server.Controllers
                 var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id));
                 if (model != null)
                 {
-                    model.IsCurrentUserAdministrator = User.IsInRole(Definitions.Roles.Administrator) || RepositoryPermissionService.IsRepositoryAdministrator(User.Id(), id);
+                    model.IsCurrentUserAdministrator = User.IsInRole(Definitions.Roles.Administrator) || RepositoryPermissionService.IsRepositoryAdministrator(User.Username(), id);
                     SetGitUrls(model);
                 }
                 using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
@@ -221,7 +221,7 @@ namespace Bonobo.Git.Server.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 model.PersonalGitUrl =
-                    String.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(User.Id()) + "@").Replace("!", "\\"),model.Name, ".git");
+                    String.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(User.Username()) + "@"), model.Name, ".git");
             }
         }
 
@@ -456,7 +456,7 @@ namespace Bonobo.Git.Server.Controllers
 
             var model = new RepositoryDetailModel
             {
-                Administrators = new string[] { User.Id() },
+                Administrators = new string[] { User.Username() },
             };
             ViewBag.ID = id;
             PopulateEditData();
@@ -592,8 +592,8 @@ namespace Bonobo.Git.Server.Controllers
             }
             else
             {
-                var userTeams = TeamRepository.GetTeams(User.Id()).Select(i => i.Name).ToArray();
-                repositoryModels = RepositoryRepository.GetPermittedRepositories(User.Id(), userTeams);
+                var userTeams = TeamRepository.GetTeams(User.Username()).Select(i => i.Name).ToArray();
+                repositoryModels = RepositoryRepository.GetPermittedRepositories(User.Username(), userTeams);
             }
             return repositoryModels.Select(ConvertRepositoryModel).ToList();
         }
@@ -602,13 +602,14 @@ namespace Bonobo.Git.Server.Controllers
         {
             return model == null ? null : new RepositoryDetailModel
             {
+                Id = model.Id,
                 Name = model.Name,
                 Group = model.Group,
                 Description = model.Description,
                 Users = model.Users,
                 Administrators = model.Administrators,
                 Teams = model.Teams,
-                IsCurrentUserAdministrator = model.Administrators.Contains(User.Id(), StringComparer.OrdinalIgnoreCase),
+                IsCurrentUserAdministrator = model.Administrators.Contains(User.Username(), StringComparer.OrdinalIgnoreCase),
                 AllowAnonymous = model.AnonymousAccess,
                 Status = GetRepositoryStatus(model),
                 AuditPushUser = model.AuditPushUser,

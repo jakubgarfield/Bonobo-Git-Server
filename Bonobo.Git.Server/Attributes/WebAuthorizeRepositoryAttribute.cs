@@ -26,7 +26,7 @@ namespace Bonobo.Git.Server
                 string incomingRepoName = filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString();
                 string repository = Repository.NormalizeRepositoryName(incomingRepoName, RepositoryRepository);
 
-                string user = filterContext.HttpContext.User.Id();
+                string user = filterContext.HttpContext.User.Username();
 
                 if (filterContext.HttpContext.User.IsInRole(Definitions.Roles.Administrator))
                 {
