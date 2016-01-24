@@ -21,7 +21,18 @@ namespace Bonobo.Git.Server.Security
             // set up dependencies
             _createDatabaseContext = ()=>new BonoboGitServerContext();
             Action<string, string> updateUserPasswordHook =
-                (username, password)=>UpdateUser(username, null, null, null, password);
+                (username, password) =>
+                {
+                    using (var db = new BonoboGitServerContext())
+                    {
+                        var user = db.Users.FirstOrDefault(i => i.Username == username);
+                        if (user != null)
+                        {
+
+                            UpdateUser(user.Id, username, null, null, null, password);
+                        }
+                    }
+                };
             _passwordService = new PasswordService(updateUserPasswordHook);
         }
 
@@ -39,7 +50,7 @@ namespace Bonobo.Git.Server.Security
             using (var database = _createDatabaseContext())
             {
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
-                return user != null && _passwordService.ComparePassword(password, username, user.Password) ? ValidationResult.Success : ValidationResult.Failure;
+                return user != null && _passwordService.ComparePassword(password, user.Id.ToString(), user.Password) ? ValidationResult.Success : ValidationResult.Failure;
             }
         }
 
@@ -82,6 +93,7 @@ namespace Bonobo.Git.Server.Security
             {
                 return db.Users.Include("Roles").ToList().Select(item => new UserModel
                 {
+                    Id = item.Id,
                     Name = item.Username,
                     GivenName = item.Name,
                     Surname = item.Surname,
@@ -98,36 +110,47 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public UserModel GetUser(string username)
+        private UserModel GetUser(User user)
         {
-            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
+            return user == null ? null : new UserModel
+            {
+                Id = user.Id,
+                Name = user.Username,
+                GivenName = user.Name,
+                Surname = user.Surname,
+                Email = user.Email,
+             };
+        }
 
-            username = username.ToLowerInvariant();
+        public UserModel GetUser(int id)
+        {
             using (var db = _createDatabaseContext())
             {
-                var user = db.Users.FirstOrDefault(i => i.Username == username);
-                return user == null ? null : new UserModel
-                {
-                    Name = user.Username,
-                    GivenName = user.Name,
-                    Surname = user.Surname,
-                    Email = user.Email,
-                 };
+                var user = db.Users.FirstOrDefault(i => i.Id == id);
+                return GetUser(user);
             }
         }
 
-        public void UpdateUser(string username, string name, string surname, string email, string password)
+        public UserModel GetUser(string username)
+        {
+            using (var db = _createDatabaseContext())
+            {
+                var user = db.Users.FirstOrDefault(i => i.Username == username);
+                return GetUser(user);
+            }
+        }
+
+        public void UpdateUser(int id, string username, string name, string surname, string email, string password)
         {
             using (var database = _createDatabaseContext())
             {
-                username = username.ToLowerInvariant();
-                var user = database.Users.FirstOrDefault(i => i.Username == username);
+                var user = database.Users.FirstOrDefault(i => i.Id == id);
                 if (user != null)
                 {
                     user.Name = name ?? user.Name;
                     user.Surname = surname ?? user.Surname;
                     user.Email = email ?? user.Email;
-                    user.Password = password != null ? _passwordService.GetSaltedHash(password, username) : user.Password;
+                    user.Password = password != null ? _passwordService.GetSaltedHash(password, id.ToString()) : user.Password;
                     database.SaveChanges();
                 }
             }

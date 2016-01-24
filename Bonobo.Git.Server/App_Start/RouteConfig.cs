@@ -38,47 +38,58 @@ namespace Bonobo.Git.Server.App_Start
 
             routes.MapRoute("RepositoryTree",
                             "Repository/{id}/{encodedName}/Tree/{*encodedPath}",
-                            new { controller = "Repository", action = "Tree" });
+                            new { controller = "Repository", action = "Tree" },
+                            new { id = @"\d+" });
 
             routes.MapRoute("RepositoryBlob",
                             "Repository/{id}/{encodedName}/Blob/{*encodedPath}",
-                            new { controller = "Repository", action = "Blob" });
+                            new { controller = "Repository", action = "Blob" },
+                            new { id = @"\d+" });
 
             routes.MapRoute("RepositoryRaw",
                             "Repository/{id}/{encodedName}/Raw/{*encodedPath}",
-                            new { controller = "Repository", action = "Raw" });
+                            new { controller = "Repository", action = "Raw" },
+                            new { id = @"\d+" });
 
             routes.MapRoute("RepositoryBlame",
                             "Repository/{id}/{encodedName}/Blame/{*encodedPath}",
-                            new { controller = "Repository", action = "Blame" });
+                            new { controller = "Repository", action = "Blame" },
+                            new { id = @"\d+" });
 
             routes.MapRoute("RepositoryDownload",
                             "Repository/{id}/{encodedName}/Download/{*encodedPath}",
-                            new { controller = "Repository", action = "Download" });
+                            new { controller = "Repository", action = "Download" },
+                            new { id = @"\d+" });
 
             routes.MapRoute("RepositoryCommits",
                             "Repository/{id}/{encodedName}/Commits",
-                            new { controller = "Repository", action = "Commits" });
+                            new { controller = "Repository", action = "Commits" },
+                            new { id = @"\d+" });
 
             routes.MapRoute("RepositoryCommit",
                             "Repository/{id}/{encodedName}/Commit/{commit}/",
-                            new { controller = "Repository", action = "Commit" });
+                            new { controller = "Repository", action = "Commit" },
+                            new { id = @"\d+" });
 
             routes.MapRoute("RepositoryHistory",
                 "Repository/{id}/{encodedName}/History/{*encodedPath}",
-                new { controller = "Repository", action = "History" });
+                new { controller = "Repository", action = "History" },
+                            new { id = @"\d+" });
 
             routes.MapRoute("Repository", 
-                            "Repository/{id}/{action}/",
-                            new { controller = "Repository", action = "Detail" });
+                            "Repository/{id}/{action}/{reponame}",
+                            new { controller = "Repository", action = "Detail", reponame = UrlParameter.Optional },
+                            new { id = @"\d+" });
 
-            routes.MapRoute("Account", 
-                            "Account/{id}/{action}/",
-                            new { controller = "Account", action = "Detail" });
+            routes.MapRoute("Account",
+                            "Account/{id}/{action}/{username}",
+                            new { controller = "Account", action = "Detail", username = UrlParameter.Optional },
+                            new { id = @"\d+" });
 
             routes.MapRoute("Team", 
-                            "Team/{id}/{action}/",
-                            new { controller = "Team", action = "Detail" });
+                            "Team/{id}/{action}/{teamname}",
+                            new { controller = "Team", action = "Detail", teamname = UrlParameter.Optional },
+                            new { id = @"\d+" });
 
 
             routes.MapRoute("Default", 

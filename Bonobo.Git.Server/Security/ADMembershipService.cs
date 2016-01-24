@@ -83,6 +83,8 @@ namespace Bonobo.Git.Server.Security
             return result;
         }
 
+        private Dictionary<int, string> _id_to_name = null;
+
         public bool CreateUser(string username, string password, string name, string surname, string email)
         {
             return false;
@@ -90,7 +92,12 @@ namespace Bonobo.Git.Server.Security
 
         public IList<UserModel> GetAllUsers()
         {
-            return ADBackend.Instance.Users.ToList();
+            var users = ADBackend.Instance.Users.ToList();
+            foreach (var user in users)
+            {
+                _id_to_name[user.Id] = user.Name;
+            }
+            return users;
         }
 
         public UserModel GetUser(string username)
@@ -108,6 +115,15 @@ namespace Bonobo.Git.Server.Security
             return ADBackend.Instance.Users.FirstOrDefault(n=>n.Name.Equals(username, StringComparison.OrdinalIgnoreCase));
         }
 
+        public UserModel GetUser(int id)
+        {
+            if (_id_to_name == null){
+                _id_to_name = new Dictionary<int, string>();
+                GetAllUsers();
+            }
+            return GetUser(_id_to_name[id]);
+        }
+
         private static bool IsUserPrincipalName(string username)
         {
             bool result = false;
@@ -121,7 +137,7 @@ namespace Bonobo.Git.Server.Security
             return result;
         }
 
-        public void UpdateUser(string username, string name, string surname, string email, string password)
+        public void UpdateUser(int id, string username, string name, string surname, string email, string password)
         {
             throw new NotImplementedException();
         }

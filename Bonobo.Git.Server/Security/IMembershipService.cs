@@ -9,8 +9,9 @@ namespace Bonobo.Git.Server.Security
         ValidationResult ValidateUser(string username, string password);
         bool CreateUser(string username, string password, string name, string surname, string email);
         IList<UserModel> GetAllUsers();
+        UserModel GetUser(int id);
         UserModel GetUser(string username);
-        void UpdateUser(string username, string name, string surname, string email, string password);
+        void UpdateUser(int id, string username, string name, string surname, string email, string password);
         void DeleteUser(string username);
         string GenerateResetToken(string username);
     }

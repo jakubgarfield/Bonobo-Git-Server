@@ -79,7 +79,7 @@ namespace Bonobo.Git.Server.Controllers
                 }
                 else
                 {
-                    MembershipService.UpdateUser(model.Username, user.Name, user.Surname, user.Email, model.Password);
+                    MembershipService.UpdateUser(user.Id, model.Username, user.Name, user.Surname, user.Email, model.Password);
                     TempData["ResetSuccess"] = true;
                 }
             }
@@ -99,6 +99,7 @@ namespace Bonobo.Git.Server.Controllers
                 var user = MembershipService.GetUser(model.Username);
                 if (user == null)
                 {
+<<<<<<< ce6ddded21a797a6a04762e9f83e98d784be9267
                     ModelState.AddModelError("", Resources.Home_ForgotPassword_UserNameFailure);
                     Response.AppendToLog("FAILURE");
                 }
@@ -111,6 +112,20 @@ namespace Bonobo.Git.Server.Controllers
                     var resetUrl = Url.Action("ResetPassword", "Home", new {digest = HttpUtility.UrlEncode(Encoding.UTF8.GetBytes(token))},Request.Url.Scheme);
 
                     TempData["SendSuccess"] = MembershipHelper.SendForgotPasswordEmail(user, resetUrl);
+=======
+                    var user = db.Users.FirstOrDefault(x => x.Username.Equals(model.Username, StringComparison.OrdinalIgnoreCase));
+                    if (user == null)
+                    {
+                        ModelState.AddModelError("", Resources.Home_ForgotPassword_UserNameFailure);
+                        Response.AppendToLog("FAILURE");
+                    }
+                    else
+                    {
+                        string token = MembershipService.GenerateResetToken(user.Name);
+                        MvcApplication.Cache.Add(token, model.Username, DateTimeOffset.Now.AddHours(1));
+                        TempData["SendSuccess"] = MembershipHelper.SendForgotPasswordEmail(user, token);
+                    }
+>>>>>>> Membership provider, resources, router updated for numeric userid.
                 }
             }
             return View(model);

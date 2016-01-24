@@ -868,4 +868,7 @@
   <data name="Settings_Global_LinksUrl_Hint" xml:space="preserve">
     <value>Set Regex to parse commit message for links and url to launch</value>
   </data>
+  <data name="Account_Edit_Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
 </root>
