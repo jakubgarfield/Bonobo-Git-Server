@@ -80,6 +80,9 @@ namespace Bonobo.Git.Server.Models
 
         [Display(ResourceType = typeof(Resources), Name = "Account_Edit_Roles")]
         public string[] Roles { get; set; }
+
+        public string[] SelectedRoles { get; set; }
+        public string[] PostedSelectedRoles { get; set; }
     }
 
     public class UserDetailModel

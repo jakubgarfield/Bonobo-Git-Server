@@ -9,7 +9,7 @@
 else
 {
     <text>
-    <h1>@Model.Username.Replace("!", "\\")</h1>
+    <h1>@Model.Username</h1>
 
     @if (ViewBag.UpdateSuccess != null && ViewBag.UpdateSuccess)
     {
@@ -22,13 +22,9 @@ else
     {   
         @Html.ValidationSummary(false, Resources.Account_Edit_Unsuccessfull)
         @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.Username)
         
         <fieldset>
-            <div class="pure-control-group">
-                @Html.LabelFor(m => m.Username)
-                @Html.TextBoxFor(m => m.Username)<em>*</em>
-                @Html.ValidationMessageFor(m => m.Username)
-            </div>
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.Name)
                 @Html.TextBoxFor(m => m.Name, new { autofocus = "" })<em>*</em>
@@ -69,13 +65,7 @@ else
             {
                 <div class="pure-control-group checkboxlist">
                     @Html.LabelFor(m => m.Roles)
-                    @{
-                        var users = (from u in ViewData["AvailableRoles"] as string[]
-                                     orderby u
-                                     select new SelectListItem() { Value = u, Text = u }).ToArray();
-                    }
-
-                    @Html.CheckboxListFor(m => m.Roles, users)
+                    @Html.CheckBoxListFor(m => m.PostedSelectedRoles, m => m.Roles, m => m, m => m, m => m.SelectedRoles)
                     <i class="fa fa-info-circle" title="@Resources.Account_Edit_RolesHint"></i>
                 </div>
             }

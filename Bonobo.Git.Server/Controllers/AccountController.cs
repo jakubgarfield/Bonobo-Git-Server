@@ -123,9 +123,9 @@ namespace Bonobo.Git.Server.Controllers
                     Name = user.GivenName,
                     Surname = user.Surname,
                     Email = user.Email,
-                    Roles = RoleProvider.GetRolesForUser(user.Name),
+                    Roles = RoleProvider.GetAllRoles(),
+                    SelectedRoles = RoleProvider.GetRolesForUser(user.Name)
                 };
-                PopulateRoles();
                 return View(model);
             }
             return View();
@@ -156,7 +156,7 @@ namespace Bonobo.Git.Server.Controllers
                     valid = false;
                 }
 
-                if (User.IsInRole(Definitions.Roles.Administrator) && model.Id == User.Id() && !(model.Roles != null && model.Roles.Contains(Definitions.Roles.Administrator)))
+                if (User.IsInRole(Definitions.Roles.Administrator) && model.Id == User.Id() && !(model.PostedSelectedRoles != null && model.PostedSelectedRoles.Contains(Definitions.Roles.Administrator)))
                 {
                     ModelState.AddModelError("Roles", Resources.Account_Edit_CannotRemoveYourselfFromAdminRole);
                     valid = false;
@@ -166,15 +166,17 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     MembershipService.UpdateUser(model.Id, model.Username, model.Name, model.Surname, model.Email, model.NewPassword);
                     RoleProvider.RemoveUserFromRoles(model.Username, RoleProvider.GetAllRoles());
-                    if (model.Roles != null)
+                    if (model.PostedSelectedRoles != null)
                     {
-                        RoleProvider.AddUserToRoles(model.Username, model.Roles);
+                        RoleProvider.AddUserToRoles(model.Username, model.PostedSelectedRoles);
                     }
                     ViewBag.UpdateSuccess = true;
                 }
             }
 
-            PopulateRoles();
+            model.Roles = RoleProvider.GetAllRoles();
+            model.SelectedRoles = model.PostedSelectedRoles;
+
             return View(model);
         }
 
@@ -284,9 +286,5 @@ namespace Bonobo.Git.Server.Controllers
             return model;
         }
 
-        private void PopulateRoles()
-        {
-            ViewData["AvailableRoles"] = RoleProvider.GetAllRoles();
-        }
     }
 }
