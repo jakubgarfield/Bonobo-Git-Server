@@ -871,4 +871,7 @@
   <data name="Account_Edit_Username" xml:space="preserve">
     <value>Username</value>
   </data>
+  <data name="Repository_Create_Success_Go_To" xml:space="preserve">
+    <value>Go to "{0}"</value>
+  </data>
 </root>

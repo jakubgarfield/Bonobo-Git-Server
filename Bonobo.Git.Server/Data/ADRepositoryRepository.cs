@@ -33,7 +33,7 @@ namespace Bonobo.Git.Server.Data
 
         public IList<RepositoryModel> GetAdministratedRepositories(string username)
         {
-            return ADBackend.Instance.Repositories.Where(x => x.Administrators.Contains(username, StringComparer.OrdinalIgnoreCase)).ToList();
+            return ADBackend.Instance.Repositories.Where(x => x.Administrators.Select(y => y.Name).Contains(username, StringComparer.OrdinalIgnoreCase)).ToList();
         }
 
         public IList<RepositoryModel> GetAllRepositories()
@@ -49,8 +49,8 @@ namespace Bonobo.Git.Server.Data
         public IList<RepositoryModel> GetPermittedRepositories(string username, string[] userTeams)
         {
             return ADBackend.Instance.Repositories.Where(x => 
-                (String.IsNullOrEmpty(username) ? false : x.Users.Contains(username, StringComparer.OrdinalIgnoreCase)) ||
-                x.Teams.Any(s => userTeams.Contains(s, StringComparer.OrdinalIgnoreCase))
+                (String.IsNullOrEmpty(username) ? false : x.Users.Select(y => y.Name).Contains(username, StringComparer.OrdinalIgnoreCase)) ||
+                x.Teams.Any(s => userTeams.Contains(s.Name, StringComparer.OrdinalIgnoreCase))
                 ).ToList();
         }
 
@@ -80,17 +80,17 @@ namespace Bonobo.Git.Server.Data
         {
             if (model.Administrators == null)
             {
-                model.Administrators = new string[0];
+                model.Administrators = new UserModel[0];
             }
 
             if (model.Users == null)
             {
-                model.Users = new string[0];
+                model.Users = new UserModel[0];
             }
 
             if (model.Teams == null)
             {
-                model.Teams = new string[0];
+                model.Teams = new TeamModel[0];
             }
 
             return model;

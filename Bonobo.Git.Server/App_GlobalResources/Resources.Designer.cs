@@ -1296,6 +1296,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Go to &quot;{0}&quot;.
+        /// </summary>
+        public static string Repository_Create_Success_Go_To {
+            get {
+                return ResourceManager.GetString("Repository_Create_Success_Go_To", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create New Repository.
         /// </summary>
         public static string Repository_Create_Title {

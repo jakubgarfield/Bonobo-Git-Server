@@ -50,7 +50,7 @@ namespace Bonobo.Git.Server.Security
             using (var database = _createDatabaseContext())
             {
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
-                return user != null && _passwordService.ComparePassword(password, user.Id.ToString(), user.Password) ? ValidationResult.Success : ValidationResult.Failure;
+                return user != null && _passwordService.ComparePassword(password, username, user.Password) ? ValidationResult.Success : ValidationResult.Failure;
             }
         }
 

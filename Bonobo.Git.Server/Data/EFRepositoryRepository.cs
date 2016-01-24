@@ -20,9 +20,9 @@ namespace Bonobo.Git.Server.Data
                     Group = repo.Group,
                     Description = repo.Description,
                     AnonymousAccess = repo.Anonymous,
-                    Users = repo.Users.Select(i => i.Username),
-                    Teams = repo.Teams.Select(i => i.Name),
-                    Administrators = repo.Administrators.Select(i => i.Username),
+                    Users = repo.Users,
+                    Teams = repo.Teams,
+                    Administrators = repo.Administrators,
                     AuditPushUser = repo.AuditPushUser,
                     Logo = repo.Logo
                 }).ToList();
@@ -34,9 +34,9 @@ namespace Bonobo.Git.Server.Data
                     Group = repo.Group,
                     Description = repo.Description,
                     AnonymousAccess = repo.AnonymousAccess,
-                    Users = repo.Users.ToArray(),
-                    Teams = repo.Teams.ToArray(),
-                    Administrators = repo.Administrators.ToArray(),
+                    Users = repo.Users.Select(UserToUserModel).ToArray(),
+                    Teams = repo.Teams.Select(TeamToTeamModel).ToArray(),
+                    Administrators = repo.Administrators.Select(UserToUserModel).ToArray(),
                     AuditPushUser = repo.AuditPushUser,
                     Logo = repo.Logo
                 }).ToList();
@@ -49,9 +49,9 @@ namespace Bonobo.Git.Server.Data
                 username = username.ToLowerInvariant();
 
             return GetAllRepositories().Where( i => 
-                (String.IsNullOrEmpty(username) ? false : i.Users.Contains(username)) ||
-                (String.IsNullOrEmpty(username) ? false : i.Administrators.Contains(username)) ||
-                i.Teams.FirstOrDefault(t => teams.Contains(t)) != null ||
+                (String.IsNullOrEmpty(username) ? false : i.Users.Select(x => x.Name).Contains(username)) ||
+                (String.IsNullOrEmpty(username) ? false : i.Administrators.Select(x => x.Name).Contains(username)) ||
+                i.Teams.FirstOrDefault(t => teams.Contains(t.Name)) != null ||
                 i.AnonymousAccess).ToList();
         }
 
@@ -60,7 +60,7 @@ namespace Bonobo.Git.Server.Data
             if (username == null) throw new ArgumentException("username");
             
             username = username.ToLowerInvariant();
-            return GetAllRepositories().Where(i => i.Administrators.Contains(username)).ToList();
+            return GetAllRepositories().Where(i => i.Administrators.Select(x => x.Name).Contains(username)).ToList();
         }
 
         public RepositoryModel GetRepository(string name)
@@ -114,7 +114,7 @@ namespace Bonobo.Git.Server.Data
                     AuditPushUser = model.AuditPushUser,
                 };
                 database.Repositories.Add(repository);
-                AddMembers(model.Users, model.Administrators, model.Teams, repository, database);
+                AddMembers(model.Users.Select(x => x.Name), model.Administrators.Select(x => x.Name), model.Teams.Select(x => x.Name), repository, database);
                 try
                 {
                     database.SaveChanges();
@@ -153,11 +153,34 @@ namespace Bonobo.Git.Server.Data
                     repo.Teams.Clear();
                     repo.Administrators.Clear();
 
-                    AddMembers(model.Users, model.Administrators, model.Teams, repo, db);
+                    AddMembers(model.Users.Select(x => x.Name), model.Administrators.Select(x => x.Name), model.Teams.Select(x => x.Name), repo, db);
 
                     db.SaveChanges();
                 }
             }
+        }
+
+        private UserModel UserToUserModel(User u)
+        {
+            return new UserModel
+            {
+                Id = u.Id,
+                Name = u.Username,
+                GivenName = u.Name,
+                Surname = u.Surname,
+                Email = u.Email,
+            };
+        }
+
+        private TeamModel TeamToTeamModel(Team t)
+        {
+            return new TeamModel
+            {
+                Id = t.Id,
+                Name = t.Name,
+                Description = t.Description,
+                Members = t.Users.Select(UserToUserModel).ToArray()
+            };
         }
 
         private RepositoryModel ConvertToModel(Repository item)
@@ -174,9 +197,9 @@ namespace Bonobo.Git.Server.Data
                 Group = item.Group,
                 Description = item.Description,
                 AnonymousAccess = item.Anonymous,
-                Users = item.Users.Select(i => i.Username).ToArray(),
-                Teams = item.Teams.Select(i => i.Name).ToArray(),
-                Administrators = item.Administrators.Select(i => i.Username).ToArray(),
+                Users = item.Users.Select(UserToUserModel).ToArray(),
+                Teams = item.Teams.Select(TeamToTeamModel).ToArray(),
+                Administrators = item.Administrators.Select(UserToUserModel).ToArray(),
                 AuditPushUser = item.AuditPushUser,
                 Logo = item.Logo
             };

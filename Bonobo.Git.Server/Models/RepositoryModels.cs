@@ -24,9 +24,9 @@ namespace Bonobo.Git.Server.Models
         public string Group { get; set; }
         public string Description { get; set; }
         public bool AnonymousAccess { get; set; }
-        public string[] Users { get; set; }
-        public string[] Administrators { get; set; }
-        public string[] Teams { get; set; }
+        public UserModel[] Users { get; set; }
+        public UserModel[] Administrators { get; set; }
+        public TeamModel[] Teams { get; set; }
         public bool AuditPushUser { get; set; }
         public byte[] Logo { get; set; }
         public bool RemoveLogo { get; set; }
@@ -70,15 +70,22 @@ namespace Bonobo.Git.Server.Models
         [StringLength(255, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
         public string Description { get; set; }
 
+
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Users")]
-        public string[] Users { get; set; }
+        public UserModel[] Users { get; set; }
+        public string[] PostedSelectedUsers { get; set; }
+        public UserModel[] AllUsers { get; set; }
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Teams")]
-        public string[] Teams { get; set; }
+        public TeamModel[] Teams { get; set; }
+        public string[] PostedSelectedTeams { get; set; }
+        public TeamModel[] AllTeams { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Administrators")]
-        public string[] Administrators { get; set; }
+        public UserModel[] Administrators { get; set; }
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
+        public string[] PostedSelectedAdministrators { get; set; }
+        public UserModel[] AllAdministrators { get; set; }
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_IsCurrentUserAdmin")]
         public bool IsCurrentUserAdministrator { get; set; }

@@ -32,10 +32,10 @@ namespace Bonobo.Git.Server.Security
 
             RepositoryModel repositoryModel = Repository.GetRepository(repositoryName);
 
-            result |= repositoryModel.Users.Contains(username, StringComparer.OrdinalIgnoreCase);
-            result |= repositoryModel.Administrators.Contains(username, StringComparer.OrdinalIgnoreCase);
+            result |= repositoryModel.Users.Select(x => x.Name).Contains(username, StringComparer.OrdinalIgnoreCase);
+            result |= repositoryModel.Administrators.Select(x => x.Name).Contains(username, StringComparer.OrdinalIgnoreCase);
             result |= RoleProvider.GetRolesForUser(username).Contains(Definitions.Roles.Administrator);
-            result |= TeamRepository.GetTeams(username).Any(x => repositoryModel.Teams.Contains(x.Name, StringComparer.OrdinalIgnoreCase));
+            result |= TeamRepository.GetTeams(username).Any(x => repositoryModel.Teams.Select(y => y.Name).Contains(x.Name, StringComparer.OrdinalIgnoreCase));
 
             return result;
         }
@@ -44,7 +44,7 @@ namespace Bonobo.Git.Server.Security
         {
             bool result = false;
 
-            result |= Repository.GetRepository(repositoryName).Administrators.Contains(username, StringComparer.OrdinalIgnoreCase);
+            result |= Repository.GetRepository(repositoryName).Administrators.Select(x => x.Name).Contains(username, StringComparer.OrdinalIgnoreCase);
             result |= RoleProvider.GetRolesForUser(username).Contains(Definitions.Roles.Administrator);
 
             return result;

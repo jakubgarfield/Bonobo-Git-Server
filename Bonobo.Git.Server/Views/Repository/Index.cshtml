@@ -59,8 +59,7 @@
 {
     <div class="summary-success">
         <p>@Resources.Repository_Create_Success</p>
-        <p>@Html.ActionLink("Go to repository : " + TempData["SuccessfullyCreatedRepositoryName"].ToString(), "Detail", new { id = TempData["SuccessfullyCreatedRepositoryName"].ToString() })</p>
-
+				<p>@Html.ActionLink(string.Format(@Resources.Repository_Create_Success_Go_To, TempData["SuccessfullyCreatedRepositoryName"].ToString()), "Detail", new { id = TempData["SuccessfullyCreatedRepositoryId"].ToString() })</p>
     </div>
 }
 @if (TempData["CloneSuccess"] as bool? == true)
