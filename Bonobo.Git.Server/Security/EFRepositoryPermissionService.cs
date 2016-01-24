@@ -8,6 +8,9 @@ namespace Bonobo.Git.Server.Security
     {
         public bool HasPermission(string username, string project)
         {
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(project))
+                return false;
+
             using (var database = new BonoboGitServerContext())
             {
                 username = username.ToLowerInvariant();
