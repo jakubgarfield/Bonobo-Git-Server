@@ -52,7 +52,7 @@ namespace Bonobo.Git.Server.Data
 
         public IList<TeamModel> GetTeams(string username)
         {
-            return ADBackend.Instance.Teams.Where(x => x.Members.Contains(username, StringComparer.OrdinalIgnoreCase)).ToList();
+            return ADBackend.Instance.Teams.Where(x => x.Members.Select(y => y.Name).Contains(username, StringComparer.OrdinalIgnoreCase)).ToList();
         }
 
         public void Update(TeamModel team)

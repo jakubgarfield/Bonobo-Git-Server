@@ -40,6 +40,15 @@ namespace Bonobo.Git.Server.Models
                 return match.Success && match.Index == 0 && match.Length == Name.Length;
             }
         }
+
+        public string DisplayName
+        {
+            get
+            {
+                return Name;
+            }
+        }
+
         public const string NameValidityRegex = @"([\w\.-])*([\w])$";
     }
 

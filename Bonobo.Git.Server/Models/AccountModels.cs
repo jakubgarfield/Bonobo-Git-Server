@@ -18,6 +18,13 @@ namespace Bonobo.Git.Server.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string[] Members { get; set; }
+        public string DisplayName
+        {
+            get
+            {
+                return Name;
+            }
+        }
     }
 
     public class UserModel : INameProperty

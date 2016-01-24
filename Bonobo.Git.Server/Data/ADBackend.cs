@@ -7,12 +7,17 @@ using Bonobo.Git.Server.Models;
 using System.DirectoryServices.AccountManagement;
 using System.Threading.Tasks;
 using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Security;
 using System.Threading;
+using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Data
 {
     public sealed class ADBackend
     {
+        [Dependency]
+        public IMembershipService MembershipService { get; set; }
+
         public ADBackendStore<RepositoryModel> Repositories { get { return repositories.Value; } }
         public ADBackendStore<TeamModel> Teams { get { return teams.Value; } }
         public ADBackendStore<UserModel> Users { get { return users.Value; } }
@@ -181,7 +186,11 @@ namespace Bonobo.Git.Server.Data
                     {
                         using (GroupPrincipal group = GroupPrincipal.FindByIdentity(principalContext, IdentityType.Name, ActiveDirectorySettings.TeamNameToGroupNameMapping[teamName]))
                         {
-                            TeamModel teamModel = new TeamModel() { Description = group.Description, Name = teamName, Members = group.GetMembers(true).Select(x => x.UserPrincipalName).ToArray() };
+                            TeamModel teamModel = new TeamModel() {
+                                Description = group.Description,
+                                Name = teamName,
+                                Members = group.GetMembers(true).Select(x => MembershipService.GetUser(x.UserPrincipalName)).ToArray()
+                            };
                             if (teamModel != null)
                             {
                                 Teams.AddOrUpdate(teamModel);
