@@ -17,7 +17,7 @@ namespace Bonobo.Git.Server.App_Start
             bundles.Add(new StyleBundle("~/Content/bundled.css")
                 .Include("~/Content/components/pure/pure-min.css", new CssRewriteUrlTransformWrapper())
                 .Include("~/Content/components/font-awesome/css/font-awesome.min.css", new CssRewriteUrlTransformWrapper())
-                .Include("~/Content/components/highlight/src/styles/github.css")
+                .Include("~/Content/components/highlight/styles/github.css")
                 .Include("~/Content/fonts.css", "~/Content/site.css"));
         }
     }
