@@ -60,13 +60,6 @@ namespace Bonobo.Git.Server.Security
 									}
 									else
 									{
-										ADBackend.Instance.Users.AddOrUpdate(new UserModel
-										{
-											Name = user.UserPrincipalName,
-											GivenName = user.GivenName ?? String.Empty,
-											Surname = user.Surname ?? String.Empty,
-											Email = user.EmailAddress ?? String.Empty,
-										});
 										result = ValidationResult.Success;
 									}
 								}
@@ -83,7 +76,7 @@ namespace Bonobo.Git.Server.Security
             return result;
         }
 
-        private Dictionary<int, string> _id_to_name = null;
+        private Dictionary<int, string> _id_to_name = new Dictionary<int, string>();
 
         public bool CreateUser(string username, string password, string name, string surname, string email)
         {
@@ -117,10 +110,7 @@ namespace Bonobo.Git.Server.Security
 
         public UserModel GetUser(int id)
         {
-            if (_id_to_name == null){
-                _id_to_name = new Dictionary<int, string>();
-                GetAllUsers();
-            }
+            GetAllUsers();
             return GetUser(_id_to_name[id]);
         }
 

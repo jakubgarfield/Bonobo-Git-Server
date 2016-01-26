@@ -15,11 +15,13 @@ namespace Bonobo.Git.Server.Data
 {
     public class ADRepositoryRepository : IRepositoryRepository
     {
-        Dictionary<int, string> _id_to_name = null;
+        Dictionary<int, string> _id_to_name = new Dictionary<int, string>();
 
         public bool Create(RepositoryModel repository)
         {
-            repository.Id = _id_to_name.Keys.Max() + 1;
+            // To populate _id_to_name table
+            GetAllRepositories();
+            repository.Id = _id_to_name.Keys.Count + 1;
             _id_to_name[repository.Id] = repository.Name;
             return ADBackend.Instance.Repositories.Add(SanitizeModel(repository));
         }
@@ -61,11 +63,7 @@ namespace Bonobo.Git.Server.Data
 
         public RepositoryModel GetRepository(int id)
         {
-            if (_id_to_name == null)
-            {
-                _id_to_name = new Dictionary<int, string>();
-                GetAllRepositories();
-            }
+            GetAllRepositories();
             var name = _id_to_name[id];
             return GetRepository(name);
         }
