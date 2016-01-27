@@ -31,7 +31,7 @@ namespace Bonobo.Git.Server.Controllers
             }
 
             bool allowAnonClone = RepositoryPermissionService.AllowsAnonymous(project);
-            bool hasPermission = RepositoryPermissionService.HasPermission(User.Id(), project);
+            bool hasPermission = RepositoryPermissionService.HasPermission(User.Username(), project);
             bool isClone = String.Equals("git-upload-pack", service, StringComparison.OrdinalIgnoreCase);
             bool isPush = String.Equals("git-receive-pack", service, StringComparison.OrdinalIgnoreCase);
             bool allowAnonPush = UserConfiguration.Current.AllowAnonymousPush;
