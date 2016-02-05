@@ -865,4 +865,13 @@
   <data name="Repository_Detail_RemoveLogo" xml:space="preserve">
     <value>ロゴを削除</value>
   </data>
+  <data name="Settings_Global_LinksRegex" xml:space="preserve">
+    <value>リンクの正規表現</value>
+  </data>
+  <data name="Settings_Global_LinksUrl" xml:space="preserve">
+    <value>リンクURL</value>
+  </data>
+  <data name="Settings_Global_LinksUrl_Hint" xml:space="preserve">
+    <value>コミットメッセージをパースしてリンクやURLを開く為に用いる正規表現を設定</value>
+  </data>
 </root>
