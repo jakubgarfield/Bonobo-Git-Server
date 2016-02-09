@@ -177,5 +177,19 @@ namespace Bonobo.Git.Server.Controllers
                 new GZipStream(requestStream, CompressionMode.Decompress) :
                 requestStream;
         }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            Exception exception = filterContext.Exception;
+            Trace.TraceError("{0}: Error caught in GitController {1}", DateTime.Now, exception);
+            filterContext.Result = new ContentResult { Content = exception.ToString() };
+
+            filterContext.ExceptionHandled = true;
+
+            filterContext.HttpContext.Response.Clear();
+            filterContext.HttpContext.Response.StatusCode = 500;
+            filterContext.HttpContext.Response.StatusDescription = "Exception in GitController";
+            filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
+        }
     }
 }
