@@ -16,7 +16,7 @@ namespace Bonobo.Git.Server.Security
                 username = username.ToLowerInvariant();
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
                 var repository = database.Repositories.FirstOrDefault(i => i.Name == project);
-                if (user != null && project != null)
+                if (user != null && repository != null)
                 {
                     if (user.Roles.FirstOrDefault(i => i.Name == Definitions.Roles.Administrator) != null
                      || user.Repositories.FirstOrDefault(i => i.Name == project) != null
