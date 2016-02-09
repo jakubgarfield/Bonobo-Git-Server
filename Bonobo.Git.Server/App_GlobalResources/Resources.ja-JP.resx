@@ -277,7 +277,7 @@
     <value>チーム一覧</value>
   </data>
   <data name="Layout_AdministrationUsers" xml:space="preserve">
-    <value>管理者一覧</value>
+    <value>ユーザ一覧</value>
   </data>
   <data name="Layout_Footer_Copyright" xml:space="preserve">
     <value>All rights reserved.</value>
