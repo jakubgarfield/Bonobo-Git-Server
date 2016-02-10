@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -52,5 +53,39 @@ namespace Bonobo.Git.Server.Data
         }
 
         public bool AuditPushUser { get; set; }
+
+
+        /// <summary>
+        /// Correct a repository name have the same case as it has in the database
+        /// If the repo is not in the database, then the name is returned unchanged
+        /// </summary>
+        public static string NormalizeRepositoryName(string incomingProjectName, IRepositoryRepository repositoryRepository)
+        {
+            // In the most common case, we're just going to find the repo straight off
+            // This is fastest if it succeeds, but might be case-sensitive
+            var knownRepos = repositoryRepository.GetRepository(incomingProjectName);
+            if (knownRepos != null)
+            {
+                return knownRepos.Name;
+            }
+
+            // We might have a real repo, but it wasn't returned by GetRepository, because that's not 
+            // guaranteed to be case insensitive (very difficult to assure this with EF, because it's the back
+            // end which matters, not EF itself)
+            // We'll try and check all repos in a slow but safe fashion
+            knownRepos =
+                repositoryRepository.GetAllRepositories()
+                    .FirstOrDefault(
+                        repo => repo.Name.Equals(incomingProjectName, StringComparison.OrdinalIgnoreCase));
+            if (knownRepos != null)
+            {
+                // We've found it now
+                return knownRepos.Name;
+            }
+
+            // We can't find this repo - it's probably invalid, but it's not
+            // our job to worry about that
+            return incomingProjectName;
+        }
     }
 }

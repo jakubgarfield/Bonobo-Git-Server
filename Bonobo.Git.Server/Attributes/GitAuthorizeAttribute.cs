@@ -7,7 +7,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.DirectoryServices.AccountManagement;
-
+using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
 
 using Microsoft.Practices.Unity;
@@ -25,6 +25,9 @@ namespace Bonobo.Git.Server
         [Dependency]
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
 
+        [Dependency]
+        public IRepositoryRepository RepositoryRepository { get; set; }
+
         public static string GetRepoPath(string path, string applicationPath)
         {
             var repo = path.Replace(applicationPath, "").Replace("/","");
@@ -40,7 +43,9 @@ namespace Bonobo.Git.Server
 
             HttpContextBase httpContext = filterContext.HttpContext;
 
-            string repo = GetRepoPath(httpContext.Request.Path, httpContext.Request.ApplicationPath);
+            string incomingRepoName = GetRepoPath(httpContext.Request.Path, httpContext.Request.ApplicationPath);
+            string repo = Repository.NormalizeRepositoryName(incomingRepoName, RepositoryRepository);
+
             // check if repo allows anonymous pulls
             if (RepositoryPermissionService.AllowsAnonymous(repo))
             {

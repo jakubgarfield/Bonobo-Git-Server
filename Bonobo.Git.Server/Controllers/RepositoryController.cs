@@ -19,6 +19,7 @@ using MimeTypes;
 
 namespace Bonobo.Git.Server.Controllers
 {
+    [RepositoryNameNormalizer("id")]
     public class RepositoryController : Controller
     {
         [Dependency]
