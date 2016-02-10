@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Web.Mvc;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Git;
