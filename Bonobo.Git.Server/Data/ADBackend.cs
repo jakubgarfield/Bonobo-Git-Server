@@ -112,6 +112,7 @@ namespace Bonobo.Git.Server.Data
                 {
                     result = new UserModel
                     {
+                        Id = user.Guid.Value,
                         Name = user.UserPrincipalName,
                         GivenName = user.GivenName ?? String.Empty,
                         Surname = user.Surname ?? String.Empty,
@@ -152,22 +153,11 @@ namespace Bonobo.Git.Server.Data
                     {
                         Users.Remove(user);
                     }
-                    int nextId;
-                    if (Users.Count() > 0)
-                        nextId = Users.Max(o => o.Id) + 1;
-                    else
-                        nextId = 1;
                     foreach (string username in memberGroup.GetMembers(true).OfType<UserPrincipal>().Select(x => x.UserPrincipalName).Where(x => x != null))
                     {
                         using (UserPrincipal principal = UserPrincipal.FindByIdentity(principalContext, IdentityType.UserPrincipalName, username))
                         {
                             UserModel user = GetUserModelFromPrincipal(principal);
-                            if (Users[user.Name] != null && Users[user.Name].Id != 0)
-                                user.Id = Users[user.Name].Id;
-                            else
-                            {
-                                user.Id = nextId++;
-                            }
                             if (user != null)
                             {
                                 Users.AddOrUpdate(user);
@@ -199,7 +189,7 @@ namespace Bonobo.Git.Server.Data
                             TeamModel teamModel = new TeamModel() {
                                 Description = group.Description,
                                 Name = teamName,
-                                Members = group.GetMembers(true).Select(x => MembershipService.GetUser(x.UserPrincipalName)).ToArray()
+                                Members = group.GetMembers(true).Select(x => MembershipService.GetUserModel(x.UserPrincipalName)).ToArray()
                             };
                             if (teamModel != null)
                             {

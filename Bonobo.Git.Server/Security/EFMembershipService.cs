@@ -67,6 +67,7 @@ namespace Bonobo.Git.Server.Security
             {
                 var user = new User
                 {
+                    Id = Guid.NewGuid(),
                     Username = username,
                     Password = _passwordService.GetSaltedHash(password, username),
                     Name = name,
@@ -110,7 +111,7 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        private UserModel GetUser(User user)
+        private UserModel GetUserModel(User user)
         {
             return user == null ? null : new UserModel
             {
@@ -122,57 +123,62 @@ namespace Bonobo.Git.Server.Security
              };
         }
 
-        public UserModel GetUser(int id)
+        public UserModel GetUserModel(Guid id)
         {
             using (var db = _createDatabaseContext())
             {
                 var user = db.Users.FirstOrDefault(i => i.Id == id);
-                return GetUser(user);
+                return GetUserModel(user);
             }
         }
 
-        public UserModel GetUser(string username)
+        public UserModel GetUserModel(string username)
         {
             using (var db = _createDatabaseContext())
             {
                 var user = db.Users.FirstOrDefault(i => i.Username == username);
-                return GetUser(user);
+                return GetUserModel(user);
             }
         }
 
-        public void UpdateUser(int id, string username, string name, string surname, string email, string password)
+        public void UpdateUser(Guid id, string username, string name, string surname, string email, string password)
         {
-            using (var database = _createDatabaseContext())
+            using (var db = _createDatabaseContext())
             {
-                var user = database.Users.FirstOrDefault(i => i.Id == id);
-                if (user != null)
+                foreach (var user in db.Users)
                 {
-                    user.Name = name ?? user.Name;
-                    user.Surname = surname ?? user.Surname;
-                    user.Email = email ?? user.Email;
-                    user.Password = password != null ? _passwordService.GetSaltedHash(password, id.ToString()) : user.Password;
-                    database.SaveChanges();
+                    if (user.Id == id)
+                    {
+                        user.Name = name ?? user.Name;
+                        user.Surname = surname ?? user.Surname;
+                        user.Email = email ?? user.Email;
+                        user.Password = password != null ? _passwordService.GetSaltedHash(password, id.ToString()) : user.Password;
+                        db.SaveChanges();
+                        return;
+                    }
                 }
             }
         }
 
-        public void DeleteUser(string username)
+        public void DeleteUser(Guid id)
         {
-            using (var database = _createDatabaseContext())
+            using (var db = _createDatabaseContext())
             {
-                username = username.ToLowerInvariant();
-                var user = database.Users.FirstOrDefault(i => i.Username == username);
-                if (user != null)
+                foreach (var user in db.Users)
                 {
-                    user.AdministratedRepositories.Clear();
-                    user.Roles.Clear();
-                    user.Repositories.Clear();
-                    user.Teams.Clear();
-                    database.Users.Remove(user);
-                    database.SaveChanges();
+                    if (user.Id == id)
+                    {
+                        user.AdministratedRepositories.Clear();
+                        user.Roles.Clear();
+                        user.Repositories.Clear();
+                        user.Teams.Clear();
+                        db.Users.Remove(user);
+                        db.SaveChanges();
+                    }
                 }
             }
         }
+
 
 
         private const int PBKDF2IterCount = 1000; // default for Rfc2898DeriveBytes

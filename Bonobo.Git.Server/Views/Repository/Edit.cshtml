@@ -81,7 +81,7 @@ else
 
             <div class="pure-control-group checkboxlist">
                 @Html.LabelFor(m => m.Teams)
-                @Html.CheckBoxListFor(m => m.Teams, m => m.AllTeams, mm => mm.Id, mm => mm.DisplayName, mm => mm.Teams)
+                @Html.CheckBoxListFor(m => m.PostedSelectedTeams, m => m.AllTeams, mm => mm.Id, mm => mm.DisplayName, mm => mm.Teams)
                 <i class="fa fa-info-circle" title="@Resources.Repository_TeamsHint"></i>
             </div>
 

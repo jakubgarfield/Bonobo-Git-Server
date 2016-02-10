@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Bonobo.Git.Server.Models;
+using System;
 
 namespace Bonobo.Git.Server.Security
 {
@@ -9,10 +10,10 @@ namespace Bonobo.Git.Server.Security
         ValidationResult ValidateUser(string username, string password);
         bool CreateUser(string username, string password, string name, string surname, string email);
         IList<UserModel> GetAllUsers();
-        UserModel GetUser(int id);
-        UserModel GetUser(string username);
-        void UpdateUser(int id, string username, string name, string surname, string email, string password);
-        void DeleteUser(string username);
+        UserModel GetUserModel(Guid id);
+        UserModel GetUserModel(string username);
+        void UpdateUser(Guid id, string username, string name, string surname, string email, string password);
+        void DeleteUser(Guid id);
         string GenerateResetToken(string username);
     }
 }

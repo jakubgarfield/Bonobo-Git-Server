@@ -43,24 +43,20 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public IList<RepositoryModel> GetPermittedRepositories(string username, string[] teams)
+        public IList<RepositoryModel> GetPermittedRepositories(Guid? UserId, Guid[] teamsId)
         {
-            if (!string.IsNullOrEmpty(username))
-                username = username.ToLowerInvariant();
-
             return GetAllRepositories().Where( i => 
-                (String.IsNullOrEmpty(username) ? false : i.Users.Select(x => x.Name).Contains(username)) ||
-                (String.IsNullOrEmpty(username) ? false : i.Administrators.Select(x => x.Name).Contains(username)) ||
-                i.Teams.FirstOrDefault(t => teams.Contains(t.Name)) != null ||
+                i.Users.Any(x => x.Id == UserId) ||
+                i.Administrators.Any(x => x.Id == UserId) ||
+                i.Teams.FirstOrDefault(t => teamsId.Contains(t.Id)) != null ||
                 i.AnonymousAccess).ToList();
         }
 
-        public IList<RepositoryModel> GetAdministratedRepositories(string username)
+        public IList<RepositoryModel> GetAdministratedRepositories(Guid UserId)
         {
-            if (username == null) throw new ArgumentException("username");
+            if (UserId == null) throw new ArgumentException("UserId");
             
-            username = username.ToLowerInvariant();
-            return GetAllRepositories().Where(i => i.Administrators.Select(x => x.Name).Contains(username)).ToList();
+            return GetAllRepositories().Where(i => i.Administrators.Any(x => x.Id == UserId)).ToList();
         }
 
         public RepositoryModel GetRepository(string name)
@@ -73,19 +69,19 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public RepositoryModel GetRepository(int id)
+        public RepositoryModel GetRepository(Guid id)
         {
             using (var db = new BonoboGitServerContext())
             {
-                return ConvertToModel(db.Repositories.FirstOrDefault(i => i.Id == id));
+                return ConvertToModel(db.Repositories.Where(i => i.Id.Equals(id)).First());
             }
         }
 
-        public void Delete(string name)
+        public void Delete(Guid RepositoryId)
         {
             using (var db = new BonoboGitServerContext())
             {
-                var repo = db.Repositories.FirstOrDefault(i => i.Name == name);
+                var repo = db.Repositories.FirstOrDefault(i => i.Id == RepositoryId);
                 if (repo != null)
                 {
                     repo.Administrators.Clear();
@@ -106,6 +102,7 @@ namespace Bonobo.Git.Server.Data
             {
                 var repository = new Repository
                 {
+                    Id = Guid.NewGuid(),
                     Name = model.Name,
                     Logo = model.Logo,
                     Group = model.Group,
@@ -114,7 +111,7 @@ namespace Bonobo.Git.Server.Data
                     AuditPushUser = model.AuditPushUser,
                 };
                 database.Repositories.Add(repository);
-                AddMembers(model.Users.Select(x => x.Name), model.Administrators.Select(x => x.Name), model.Teams.Select(x => x.Name), repository, database);
+                AddMembers(model.Users.Select(x => x.Id), model.Administrators.Select(x => x.Id), model.Teams.Select(x => x.Id), repository, database);
                 try
                 {
                     database.SaveChanges();
@@ -135,7 +132,7 @@ namespace Bonobo.Git.Server.Data
 
             using (var db = new BonoboGitServerContext())
             {
-                var repo = db.Repositories.FirstOrDefault(i => i.Name == model.Name);
+                var repo = db.Repositories.FirstOrDefault(i => i.Id == model.Id);
                 if (repo != null)
                 {
                     repo.Group = model.Group;
@@ -153,7 +150,7 @@ namespace Bonobo.Git.Server.Data
                     repo.Teams.Clear();
                     repo.Administrators.Clear();
 
-                    AddMembers(model.Users.Select(x => x.Name), model.Administrators.Select(x => x.Name), model.Teams.Select(x => x.Name), repo, db);
+                    AddMembers(model.Users.Select(x => x.Id), model.Administrators.Select(x => x.Id), model.Teams.Select(x => x.Id), repo, db);
 
                     db.SaveChanges();
                 }
@@ -205,11 +202,11 @@ namespace Bonobo.Git.Server.Data
             };
         }
 
-        private void AddMembers(IEnumerable<string> users, IEnumerable<string> admins, IEnumerable<string> teams, Repository repo, BonoboGitServerContext database)
+        private void AddMembers(IEnumerable<Guid> users, IEnumerable<Guid> admins, IEnumerable<Guid> teams, Repository repo, BonoboGitServerContext database)
         {
             if (admins != null)
             {
-                var administrators = database.Users.Where(i => admins.Contains(i.Username));
+                var administrators = database.Users.Where(i => admins.Contains(i.Id));
                 foreach (var item in administrators)
                 {
                     repo.Administrators.Add(item);
@@ -218,7 +215,7 @@ namespace Bonobo.Git.Server.Data
 
             if (users != null)
             {
-                var permittedUsers = database.Users.Where(i => users.Contains(i.Username));
+                var permittedUsers = database.Users.Where(i => users.Contains(i.Id));
                 foreach (var item in permittedUsers)
                 {
                     repo.Users.Add(item);
@@ -227,7 +224,7 @@ namespace Bonobo.Git.Server.Data
 
             if (teams != null)
             {
-                var permittedTeams = database.Teams.Where(i => teams.Contains(i.Name));
+                var permittedTeams = database.Teams.Where(i => teams.Contains(i.Id));
                 foreach (var item in permittedTeams)
                 {
                     repo.Teams.Add(item);

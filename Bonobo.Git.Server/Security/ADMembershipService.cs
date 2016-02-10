@@ -76,7 +76,7 @@ namespace Bonobo.Git.Server.Security
             return result;
         }
 
-        private Dictionary<int, string> _id_to_name = new Dictionary<int, string>();
+        private Dictionary<Guid, string> _id_to_name = new Dictionary<Guid, string>();
 
         public bool CreateUser(string username, string password, string name, string surname, string email)
         {
@@ -93,7 +93,7 @@ namespace Bonobo.Git.Server.Security
             return users;
         }
 
-        public UserModel GetUser(string username)
+        public UserModel GetUserModel(string username)
         {
             string domain = GetDomainFromUsername(username);
             if (!IsUserPrincipalName(username))
@@ -108,10 +108,10 @@ namespace Bonobo.Git.Server.Security
             return ADBackend.Instance.Users.FirstOrDefault(n=>n.Name.Equals(username, StringComparison.OrdinalIgnoreCase));
         }
 
-        public UserModel GetUser(int id)
+        public UserModel GetUserModel(Guid id)
         {
             GetAllUsers();
-            return GetUser(_id_to_name[id]);
+            return GetUserModel(_id_to_name[id]);
         }
 
         private static bool IsUserPrincipalName(string username)
@@ -127,12 +127,12 @@ namespace Bonobo.Git.Server.Security
             return result;
         }
 
-        public void UpdateUser(int id, string username, string name, string surname, string email, string password)
+        public void UpdateUser(Guid id, string username, string name, string surname, string email, string password)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteUser(string username)
+        public void DeleteUser(Guid id)
         {
             throw new NotImplementedException();
         }

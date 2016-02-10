@@ -42,7 +42,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks
                 {
                     user = EMPTY_USER;
                 } else {
-                    var userData = userRepo.GetUser(user);
+                    var userData = userRepo.GetUserModel(user);
                     if(userData != null) {
                         email = userData.Email;
                     }

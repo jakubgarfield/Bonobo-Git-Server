@@ -30,7 +30,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
-        public ActionResult Edit(int id)
+        public ActionResult Edit(Guid id)
         {
             var model = ConvertEditTeamModel(TeamRepository.GetTeam(id));
             return View(model);
@@ -86,7 +86,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(Guid id)
         {
             return View(ConvertEditTeamModel(TeamRepository.GetTeam(id)));
         }
@@ -95,10 +95,10 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(TeamEditModel model)
         {
-            if (model != null && model.Id != 0)
+            if (model != null && model.Id != null)
             {
                 TeamModel team = TeamRepository.GetTeam(model.Id);
-                TeamRepository.Delete(team.Name);
+                TeamRepository.Delete(team.Id);
                 TempData["DeleteSuccess"] = true;
                 return RedirectToAction("Index");
             }
@@ -106,7 +106,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorize]
-        public ActionResult Detail(int id)
+        public ActionResult Detail(Guid id)
         {
             return View(ConvertDetailTeamModel(TeamRepository.GetTeam(id)));
         }
@@ -143,7 +143,7 @@ namespace Bonobo.Git.Server.Controllers
                 Name = model.Name,
                 Description = model.Description,
                 Members = model.Members.ToArray(),
-                Repositories = RepositoryRepository.GetPermittedRepositories(null, new[] { model.Name }).ToArray(),
+                Repositories = RepositoryRepository.GetPermittedRepositories(null, new[] { model.Id }).ToArray(),
                 IsReadOnly = MembershipService.IsReadOnly()
             };
         }
@@ -155,7 +155,7 @@ namespace Bonobo.Git.Server.Controllers
                 Id = model.Id,
                 Name = model.Name,
                 Description = model.Description,
-                Members = model.PostedSelectedUsers.Select(x => MembershipService.GetUser(int.Parse(x))).ToArray(),
+                Members = model.PostedSelectedUsers.Select(x => MembershipService.GetUserModel(x)).ToArray(),
             };
         }
     }

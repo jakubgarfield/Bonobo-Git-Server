@@ -38,6 +38,7 @@ namespace Bonobo.Git.Server.Data.Update
                     if (LibGit2Sharp.Repository.IsValid(directory))
                     {
                         repository = new RepositoryModel();
+                        repository.Id = Guid.NewGuid();
                         repository.Description = "Discovered in file system.";
                         repository.Name = name;
                         repository.AnonymousAccess = false;

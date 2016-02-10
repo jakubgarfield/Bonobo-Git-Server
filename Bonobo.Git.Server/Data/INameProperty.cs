@@ -7,7 +7,7 @@ namespace Bonobo.Git.Server.Data
 {
     public interface INameProperty
     {
-        int Id { get; }
+        Guid Id { get; }
         string Name { get; }
         string DisplayName { get; }
     }

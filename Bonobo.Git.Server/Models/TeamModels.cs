@@ -13,7 +13,7 @@ namespace Bonobo.Git.Server.Models
 
     public class TeamModel : INameProperty 
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public UserModel[] Members { get; set; }
@@ -28,7 +28,7 @@ namespace Bonobo.Git.Server.Models
 
     public class TeamEditModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
         [StringLength(40, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
@@ -43,13 +43,13 @@ namespace Bonobo.Git.Server.Models
 
         public UserModel[] SelectedUsers { get; set; }
 
-        public string[] PostedSelectedUsers { get; set; }
+        public Guid[] PostedSelectedUsers { get; set; }
     }
 
 
     public class TeamDetailModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Display(ResourceType = typeof(Resources), Name = "Team_Detail_Name")]
         public string Name { get; set; }

@@ -19,7 +19,7 @@ namespace Bonobo.Git.Server.Models
 {
     public class RepositoryModel : INameProperty
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Group { get; set; }
         public string Description { get; set; }
@@ -54,7 +54,7 @@ namespace Bonobo.Git.Server.Models
 
     public class RepositoryDetailModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [RegularExpression(RepositoryModel.NameValidityRegex, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_FileName_Regex")]
         [FileName(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_FileName")]
@@ -73,18 +73,18 @@ namespace Bonobo.Git.Server.Models
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Users")]
         public UserModel[] Users { get; set; }
-        public string[] PostedSelectedUsers { get; set; }
+        public Guid[] PostedSelectedUsers { get; set; }
         public UserModel[] AllUsers { get; set; }
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Teams")]
         public TeamModel[] Teams { get; set; }
-        public string[] PostedSelectedTeams { get; set; }
+        public Guid[] PostedSelectedTeams { get; set; }
         public TeamModel[] AllTeams { get; set; }
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Administrators")]
         public UserModel[] Administrators { get; set; }
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
-        public string[] PostedSelectedAdministrators { get; set; }
+        public Guid[] PostedSelectedAdministrators { get; set; }
         public UserModel[] AllAdministrators { get; set; }
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_IsCurrentUserAdmin")]

@@ -43,10 +43,14 @@ namespace Bonobo.Git.Server.Data
             };
         }
 
-        public IList<TeamModel> GetTeams(string username)
+        public IList<TeamModel> GetTeams(Guid UserId)
         {
-            username = username.ToLowerInvariant(); 
-            return GetAllTeams().Where(i => i.Members.Select(x => x.Name).Contains(username)).ToList();
+            return GetAllTeams().Where(i => i.Members.Any(x => x.Id == UserId)).ToList();
+        }
+
+        public IList<TeamModel> GetTeams(string UserName)
+        {
+            return GetAllTeams().Where(i => i.Members.Any(x => x.Name == UserName)).ToList();
         }
 
         private TeamModel GetTeam(Team team)
@@ -60,7 +64,7 @@ namespace Bonobo.Git.Server.Data
                 };
         }
 
-        public TeamModel GetTeam(int id)
+        public TeamModel GetTeam(Guid id)
         {
 
             using (var db = new BonoboGitServerContext())
@@ -81,13 +85,11 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public void Delete(string name)
+        public void Delete(Guid teamId)
         {
-            if (name == null) throw new ArgumentException("name");
-
             using (var db = new BonoboGitServerContext())
             {
-                var team = db.Teams.FirstOrDefault(i => i.Name == name);
+                var team = db.Teams.FirstOrDefault(i => i.Id == teamId);
                 if (team != null)
                 {
                     team.Repositories.Clear();
@@ -107,6 +109,7 @@ namespace Bonobo.Git.Server.Data
             {
                 var team = new Team
                 {
+                    Id = Guid.NewGuid(),
                     Name = model.Name,
                     Description = model.Description
                 };

@@ -15,62 +15,50 @@ namespace Bonobo.Git.Server.Data
 {
     public class ADRepositoryRepository : IRepositoryRepository
     {
-        Dictionary<int, string> _id_to_name = new Dictionary<int, string>();
-
         public bool Create(RepositoryModel repository)
         {
             // To populate _id_to_name table
             GetAllRepositories();
-            repository.Id = _id_to_name.Keys.Count + 1;
-            _id_to_name[repository.Id] = repository.Name;
+            repository.Id = Guid.NewGuid();
+
             return ADBackend.Instance.Repositories.Add(SanitizeModel(repository));
         }
 
-        public void Delete(string name)
+        public void Delete(Guid Id)
         {
-            var repo = GetRepository(name);
-            _id_to_name.Remove(repo.Id);
-            ADBackend.Instance.Repositories.Remove(name);
+            ADBackend.Instance.Repositories.Remove(Id.ToString());
         }
 
-        public IList<RepositoryModel> GetAdministratedRepositories(string username)
+        public IList<RepositoryModel> GetAdministratedRepositories(Guid Id)
         {
-            return ADBackend.Instance.Repositories.Where(x => x.Administrators.Select(y => y.Name).Contains(username, StringComparer.OrdinalIgnoreCase)).ToList();
+            return ADBackend.Instance.Repositories.Where(x => x.Administrators.Any(y => y.Id == Id)).ToList();
         }
 
         public IList<RepositoryModel> GetAllRepositories()
         {
-            var repos = ADBackend.Instance.Repositories.ToList();
-            foreach(var repo in repos)
-            {
-                _id_to_name[repo.Id] = repo.Name;
-            }
-            return repos;
+            return ADBackend.Instance.Repositories.ToList();
         }
 
-        public IList<RepositoryModel> GetPermittedRepositories(string username, string[] userTeams)
+        public IList<RepositoryModel> GetPermittedRepositories(Guid? userId, Guid[] userTeamsId)
         {
             return ADBackend.Instance.Repositories.Where(x => 
-                (String.IsNullOrEmpty(username) ? false : x.Users.Select(y => y.Name).Contains(username, StringComparer.OrdinalIgnoreCase)) ||
-                x.Teams.Any(s => userTeams.Contains(s.Name, StringComparer.OrdinalIgnoreCase))
+                (userId != null ? false : x.Users.Count(y => y.Id == userId) > 0) ||
+                x.Teams.Any(s => userTeamsId.Contains(userId.Value))
                 ).ToList();
         }
 
         public RepositoryModel GetRepository(string name)
         {
-            return ADBackend.Instance.Repositories[name]; 
+            return ADBackend.Instance.Repositories.FirstOrDefault(o => o.Name == name);
         }
-
-        public RepositoryModel GetRepository(int id)
+        
+        public RepositoryModel GetRepository(Guid id)
         {
-            GetAllRepositories();
-            var name = _id_to_name[id];
-            return GetRepository(name);
+            return ADBackend.Instance.Repositories[id.ToString()];
         }
 
         public void Update(RepositoryModel repository)
         {
-            _id_to_name[repository.Id] = repository.Name;
             ADBackend.Instance.Repositories.Update(SanitizeModel(repository));
         }
 

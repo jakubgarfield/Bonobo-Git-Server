@@ -15,7 +15,7 @@ namespace Bonobo.Git.Server.Models
 {
     public class RoleModel : INameProperty
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string[] Members { get; set; }
         public string DisplayName
@@ -29,7 +29,7 @@ namespace Bonobo.Git.Server.Models
 
     public class UserModel : INameProperty
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string GivenName { get; set; }
         public string Surname { get; set; }
@@ -46,7 +46,7 @@ namespace Bonobo.Git.Server.Models
 
     public class UserEditModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
         [Display(ResourceType = typeof(Resources), Name = "Account_Edit_Username")]
@@ -87,7 +87,7 @@ namespace Bonobo.Git.Server.Models
 
     public class UserDetailModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Display(ResourceType = typeof(Resources), Name = "Account_Detail_Username")]
         public string Username { get; set; }

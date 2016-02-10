@@ -32,9 +32,9 @@ namespace Bonobo.Git.Server.Controllers
         public IAuthenticationProvider AuthenticationProvider { get; set; }
 
         [WebAuthorize]
-        public ActionResult Detail(int id)
+        public ActionResult Detail(Guid id)
         {
-            UserModel user = MembershipService.GetUser(id);
+            UserModel user = MembershipService.GetUserModel(id);
             if (user != null)
             {
                 var model = new UserDetailModel
@@ -53,22 +53,12 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(Guid id)
         {
-            var user = MembershipService.GetUser(id);
+            var user = MembershipService.GetUserModel(id);
             if (user != null)
             {
-                var model = new UserDetailModel
-                {
-                    Id = user.Id,
-                    Username = user.Name,
-                    Name = user.GivenName,
-                    Surname = user.Surname,
-                    Email = user.Email,
-                    Roles = RoleProvider.GetRolesForUser(user.Name),
-                    IsReadOnly = MembershipService.IsReadOnly()
-                };
-                return View(model);
+                return View(user);
             }
 
             return RedirectToAction("Index");
@@ -78,12 +68,12 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(UserDetailModel model)
         {
-            if (model != null && model.Id != 0)
+            if (model != null && model.Id != null)
             {
                 if (model.Id != User.Id())
                 {
-                    var user = MembershipService.GetUser(model.Id);
-                    MembershipService.DeleteUser(user.Name);
+                    var user = MembershipService.GetUserModel(model.Id);
+                    MembershipService.DeleteUser(user.Id);
                     TempData["DeleteSuccess"] = true;
                 }
                 else
@@ -101,7 +91,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorize]
-        public ActionResult Edit(int id)
+        public ActionResult Edit(Guid id)
         {
             if (id != User.Id() && !User.IsInRole(Definitions.Roles.Administrator))
             {
@@ -113,7 +103,7 @@ namespace Bonobo.Git.Server.Controllers
                 return RedirectToAction("Detail", "Account", new { id = id });
             }
 
-            var user = MembershipService.GetUser(id);
+            var user = MembershipService.GetUserModel(id);
             if (user != null)
             {
                 var model = new UserEditModel
