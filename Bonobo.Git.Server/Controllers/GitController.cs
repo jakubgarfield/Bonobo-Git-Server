@@ -14,6 +14,7 @@ using Microsoft.Practices.Unity;
 namespace Bonobo.Git.Server.Controllers
 {
     [GitAuthorize]
+    [RepositoryNameNormalizer("project")]
     public class GitController : Controller
     {
         [Dependency]

@@ -260,6 +260,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Attributes\FileExtensionsCustom.cs" />
+    <Compile Include="Attributes\RepositoryNameNormalizerAttribute.cs" />
     <Compile Include="Configuration\ActiveDirectorySettings.cs" />
     <Compile Include="Configuration\AuthenticationSettings.cs" />
     <Compile Include="Configuration\FederationSettings.cs" />

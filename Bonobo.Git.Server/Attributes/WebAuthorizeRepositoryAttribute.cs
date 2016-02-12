@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
-
+using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
 
 using Microsoft.Practices.Unity;
@@ -12,6 +12,9 @@ namespace Bonobo.Git.Server
         [Dependency]
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
 
+        [Dependency]
+        public IRepositoryRepository RepositoryRepository { get; set; }
+
         public bool RequiresRepositoryAdministrator { get; set; }
 
         public override void OnAuthorization(AuthorizationContext filterContext)
@@ -20,7 +23,9 @@ namespace Bonobo.Git.Server
 
             if (!(filterContext.Result is HttpUnauthorizedResult))
             {
-                string repository = filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString();
+                string incomingRepoName = filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString();
+                string repository = Repository.NormalizeRepositoryName(incomingRepoName, RepositoryRepository);
+
                 string user = filterContext.HttpContext.User.Id();
 
                 if (filterContext.HttpContext.User.IsInRole(Definitions.Roles.Administrator))
