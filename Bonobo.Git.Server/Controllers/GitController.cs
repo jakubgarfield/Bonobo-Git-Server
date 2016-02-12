@@ -24,6 +24,11 @@ namespace Bonobo.Git.Server.Controllers
 
         public ActionResult SecureGetInfoRefs(String project, String service)
         {
+            if (!RepositoryIsValid(project))
+            {
+                return new HttpNotFoundResult();
+            }
+
             bool allowAnonClone = RepositoryPermissionService.AllowsAnonymous(project);
             bool hasPermission = RepositoryPermissionService.HasPermission(User.Id(), project);
             bool isClone = String.Equals("git-upload-pack", service, StringComparison.OrdinalIgnoreCase);
@@ -43,6 +48,11 @@ namespace Bonobo.Git.Server.Controllers
         [HttpPost]
         public ActionResult SecureUploadPack(String project)
         {
+            if (!RepositoryIsValid(project))
+            {
+                return new HttpNotFoundResult();
+            }
+
             if (RepositoryPermissionService.HasPermission(User.Id(), project)
                 || RepositoryPermissionService.AllowsAnonymous(project))
             {
@@ -57,6 +67,11 @@ namespace Bonobo.Git.Server.Controllers
         [HttpPost]
         public ActionResult SecureReceivePack(String project)
         {
+            if (!RepositoryIsValid(project))
+            {
+                return new HttpNotFoundResult();
+            }
+
             if (RepositoryPermissionService.HasPermission(User.Id(), project)
                 || (RepositoryPermissionService.AllowsAnonymous(project) && UserConfiguration.Current.AllowAnonymousPush))
             {
@@ -70,78 +85,54 @@ namespace Bonobo.Git.Server.Controllers
 
         private ActionResult ExecuteReceivePack(string project)
         {
-            var directory = GetDirectoryInfo(project);
-            if (Repository.IsValid(directory.FullName))
-            {
-                return new GitCmdResult(
-                    "application/x-git-receive-pack-result",
-                    (outStream) =>
-                    {
-                        GitService.ExecuteGitReceivePack(
-                            Guid.NewGuid().ToString("N"),
-                            project,
-                            GetInputStream(disableBuffer: true),
-                            outStream);
-                    });
-            }
-            else
-            {
-                return new HttpNotFoundResult();
-            }
+            return new GitCmdResult(
+                "application/x-git-receive-pack-result",
+                (outStream) =>
+                {
+                    GitService.ExecuteGitReceivePack(
+                        Guid.NewGuid().ToString("N"),
+                        project,
+                        GetInputStream(disableBuffer: true),
+                        outStream);
+                });
         }
 
         private ActionResult ExecuteUploadPack(string project)
         {
-            var directory = GetDirectoryInfo(project);
-            if (Repository.IsValid(directory.FullName))
-            {
-                return new GitCmdResult(
-                    "application/x-git-upload-pack-result",
-                    (outStream) =>
-                    {
-                        GitService.ExecuteGitUploadPack(
-                            Guid.NewGuid().ToString("N"),
-                            project,
-                            GetInputStream(),
-                            outStream);
-                    });
-            }
-            else
-            {
-                return new HttpNotFoundResult();
-            }
+            return new GitCmdResult(
+                "application/x-git-upload-pack-result",
+                (outStream) =>
+                {
+                    GitService.ExecuteGitUploadPack(
+                        Guid.NewGuid().ToString("N"),
+                        project,
+                        GetInputStream(),
+                        outStream);
+                });
         }
 
         private ActionResult GetInfoRefs(String project, String service)
         {
-            var directory = GetDirectoryInfo(project);
-            if (Repository.IsValid(directory.FullName))
-            {
-                Response.StatusCode = 200;
+            Response.StatusCode = 200;
 
-                string contentType = String.Format("application/x-{0}-advertisement", service);
-                string serviceName = service.Substring(4);
-                string advertiseRefsContent = FormatMessage(String.Format("# service={0}\n", service)) + FlushMessage();
+            string contentType = String.Format("application/x-{0}-advertisement", service);
+            string serviceName = service.Substring(4);
+            string advertiseRefsContent = FormatMessage(String.Format("# service={0}\n", service)) + FlushMessage();
 
-                return new GitCmdResult(
-                    contentType,
-                    (outStream) =>
-                    {
-                        GitService.ExecuteServiceByName(
-                            Guid.NewGuid().ToString("N"),
-                            project, 
-                            serviceName, 
-                            new ExecutionOptions() { AdvertiseRefs = true },
-                            GetInputStream(),
-                            outStream
-                        );
-                    }, 
-                    advertiseRefsContent);
-            }
-            else
-            {
-                return new HttpNotFoundResult();
-            }
+            return new GitCmdResult(
+                contentType,
+                (outStream) =>
+                {
+                    GitService.ExecuteServiceByName(
+                        Guid.NewGuid().ToString("N"),
+                        project, 
+                        serviceName, 
+                        new ExecutionOptions() { AdvertiseRefs = true },
+                        GetInputStream(),
+                        outStream
+                    );
+                }, 
+                advertiseRefsContent);
         }
 
         private ActionResult UnauthorizedResult()
@@ -165,6 +156,13 @@ namespace Bonobo.Git.Server.Controllers
         private static DirectoryInfo GetDirectoryInfo(String project)
         {
             return new DirectoryInfo(Path.Combine(UserConfiguration.Current.Repositories, project));
+        }
+
+        private static bool RepositoryIsValid(string project)
+        {
+            var directory = GetDirectoryInfo(project);
+            var isValid = Repository.IsValid(directory.FullName);
+            return isValid;
         }
 
         private Stream GetInputStream(bool disableBuffer = false)
