@@ -21,6 +21,12 @@ namespace Bonobo.Git.Server.Data.Update
 
         private void CheckForNewRepositories()
         {
+            if (!Directory.Exists(UserConfiguration.Current.Repositories))
+            {
+                // We don't want an exception if the repo dir no longer exists, 
+                // as this would make it impossible to start the server
+                return;
+            }
             IEnumerable<string> directories = Directory.EnumerateDirectories(UserConfiguration.Current.Repositories);
             foreach (string directory in directories)
             {
