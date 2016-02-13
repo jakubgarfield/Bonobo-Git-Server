@@ -26,7 +26,7 @@
             <div class="pure-control-group">
                 <label>@Resources.Repository_Detail_Location</label>
                 <button class="pure-button copy-to-clip-button" data-clipboard-target=".git-url-text"><i class="fa fa-copy"></i>Copy</button>
-                <span class="git-url-text">@Model.GeneralUrl</span>
+                <span class="git-url-text">@Model.GitUrl</span>
             </div>
 
             @if (User.Identity.IsAuthenticated) {
@@ -35,7 +35,7 @@
                         @Resources.Repository_Detail_Location_Personal
                     </label>
                     <button class="pure-button copy-to-clip-button" data-clipboard-target=".personal-url-text"><i class="fa fa-copy"></i>Copy</button>
-                    <span class="personal-url-text">@Model.PersonalUrl</span>
+                    <span class="personal-url-text">@Model.PersonalGitUrl</span>
                 </div>
             }
 

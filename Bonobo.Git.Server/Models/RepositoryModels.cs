@@ -69,8 +69,8 @@ namespace Bonobo.Git.Server.Models
         public bool AuditPushUser { get; set; }
 
         public RepositoryLogoDetailModel Logo { get; set; }
-        public string GeneralUrl { get; set; }
-        public string PersonalUrl { get; set; }
+        public string GitUrl { get; set; }
+        public string PersonalGitUrl { get; set; }
     }
 
     public enum RepositoryDetailStatus

@@ -190,7 +190,7 @@ namespace Bonobo.Git.Server.Controllers
                 if (model != null)
                 {
                     model.IsCurrentUserAdministrator = User.IsInRole(Definitions.Roles.Administrator) || RepositoryPermissionService.IsRepositoryAdministrator(User.Id(), id);
-                    SetDetailUrls(model);
+                    SetGitUrls(model);
                 }
                 using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
                 {
@@ -208,7 +208,7 @@ namespace Bonobo.Git.Server.Controllers
         /// Construct the URLs for the repository
         /// (This code extracted from the view)
         /// </summary>
-        void SetDetailUrls(RepositoryDetailModel model)
+        void SetGitUrls(RepositoryDetailModel model)
         {
             string serverAddress = System.Configuration.ConfigurationManager.AppSettings["GitServerPath"]
                                    ?? string.Format("{0}://{1}{2}{3}/",
@@ -218,10 +218,10 @@ namespace Bonobo.Git.Server.Controllers
                                        Request.ApplicationPath == "/" ? "" : Request.ApplicationPath
                                        );
 
-            model.GeneralUrl = String.Concat(serverAddress, model.Name, ".git");
+            model.GitUrl = String.Concat(serverAddress, model.Name, ".git");
             if (User.Identity.IsAuthenticated)
             {
-                model.PersonalUrl =
+                model.PersonalGitUrl =
                     String.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(User.Id()) + "@").Replace("!", "\\"),model.Name, ".git");
             }
         }
