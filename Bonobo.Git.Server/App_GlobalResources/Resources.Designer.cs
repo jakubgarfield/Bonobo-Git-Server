@@ -1395,7 +1395,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to General Url.
+        ///   Looks up a localized string similar to Git URL.
         /// </summary>
         public static string Repository_Detail_Location {
             get {
