@@ -179,3 +179,5 @@ h2.group .toggle:after { display: inline-block; font-family: FontAwesome; top: 0
 h2.group .toggle.on:after { content: "\f055"; }
 
 img.repo-logo { width:36px; height: auto; image-rendering: -moz-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; -ms-interpolation-mode: nearest-neighbor; }
+
+.copy-to-clip-button {font-size: 12px; padding: 4px; }

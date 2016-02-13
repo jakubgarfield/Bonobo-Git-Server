@@ -403,7 +403,7 @@
     <value>Admin</value>
   </data>
   <data name="Repository_Detail_Location" xml:space="preserve">
-    <value>General Url</value>
+    <value>Git URL</value>
     <comment>Example: http://localhost/Bonobo.Git.Server/test.git</comment>
   </data>
   <data name="Repository_Detail_Name" xml:space="preserve">

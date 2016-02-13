@@ -2,14 +2,6 @@
 @{
     Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
     ViewBag.Title = Resources.Repository_Detail_Title;
-
-    string serverAddress = System.Configuration.ConfigurationManager.AppSettings["GitServerPath"]
-                        ?? string.Format("{0}://{1}{2}{3}/", 
-                                            Request.Url.Scheme, 
-                                            Request.Url.Host, 
-                                            (Request.Url.IsDefaultPort ? "" : (":" + Request.Url.Port)),
-                                            Request.ApplicationPath == "/" ? "" : Request.ApplicationPath
-                                        );
 }
 @if (Model != null)
 {
@@ -33,9 +25,8 @@
             </div>
             <div class="pure-control-group">
                 <label>@Resources.Repository_Detail_Location</label>
-                <a href="@String.Concat(serverAddress, Model.Name, ".git")">
-                    @String.Concat(serverAddress, Model.Name, ".git")
-                </a>
+                <button class="pure-button copy-to-clip-button" data-clipboard-target=".git-url-text"><i class="fa fa-copy"></i>Copy</button>
+                <span class="git-url-text">@Model.GitUrl</span>
             </div>
 
             @if (User.Identity.IsAuthenticated) {
@@ -43,10 +34,8 @@
                     <label>
                         @Resources.Repository_Detail_Location_Personal
                     </label>
-
-                    <a href=@String.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(User.Id()) + "@").Replace("!", "\\"), Model.Name, ".git")>
-                        @String.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(User.Id()) + "@").Replace("!", "\\"), Model.Name, ".git")
-                    </a>
+                    <button class="pure-button copy-to-clip-button" data-clipboard-target=".personal-url-text"><i class="fa fa-copy"></i>Copy</button>
+                    <span class="personal-url-text">@Model.PersonalGitUrl</span>
                 </div>
             }
 
@@ -125,4 +114,9 @@
                 </div>
 </fieldset>
     </div>
+}
+
+@section scripts
+{
+    <script>new Clipboard('.copy-to-clip-button');</script>
 }
