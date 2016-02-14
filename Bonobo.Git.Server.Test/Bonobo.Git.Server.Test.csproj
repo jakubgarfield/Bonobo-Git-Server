@@ -78,7 +78,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Definitions.cs" />
     <Compile Include="PasswordServiceTest.cs" />
-    <Compile Include="GitAutherizeAttributeTest.cs" />
+    <Compile Include="GitAuthorizeAttributeTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bonobo.Git.Server\Bonobo.Git.Server.csproj">
