@@ -85,6 +85,8 @@ namespace Bonobo.Git.Server
                 case ".jscript":
                 case ".javascript":
                     return "js";
+                case ".json":
+                    return "json";
 
                 case ".java":
                     return "java";
@@ -115,6 +117,10 @@ namespace Bonobo.Git.Server
 
                 case ".sql":
                     return "sql";
+
+                case ".ts":
+                    return "typescript";
+
                 default:
                     return NoBrush;
             }
