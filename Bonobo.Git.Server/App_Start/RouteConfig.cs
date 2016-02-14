@@ -23,6 +23,11 @@ namespace Bonobo.Git.Server.App_Start
                             new { controller = "Git", action = "SecureReceivePack" },
                             new { method = new HttpMethodConstraint("POST") });
 
+            routes.MapRoute("GitBaseUrl",
+                            "{project}.git",
+                            new { controller = "Git", action = "GitUrl" },
+                            new { method = new HttpMethodConstraint("GET") });
+
             routes.MapRoute("IndexRoute", 
                             "{controller}/Index/",
                             new { action = "Index" });

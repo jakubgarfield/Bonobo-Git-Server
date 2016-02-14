@@ -84,6 +84,15 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
+        /// <summary>
+        /// This is the action invoked if you browse to a .git URL
+        /// We just redirect to the repo details page, which is basically what GitHub does
+        /// </summary>
+        public ActionResult GitUrl(string project)
+        {
+            return RedirectPermanent(Url.Action("Detail", "Repository", new { id = project}));
+        }
+
         private ActionResult ExecuteReceivePack(string project)
         {
             return new GitCmdResult(
