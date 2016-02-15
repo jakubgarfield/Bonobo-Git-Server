@@ -3,13 +3,16 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Web.Mvc;
+using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Git;
 using Bonobo.Git.Server.Git.GitService;
+using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 using Ionic.Zlib;
-using LibGit2Sharp;
 using Microsoft.Practices.Unity;
+using Repository = LibGit2Sharp.Repository;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -23,20 +26,39 @@ namespace Bonobo.Git.Server.Controllers
         [Dependency]
         public IGitService GitService { get; set; }
 
+        [Dependency]
+        public IRepositoryRepository RepositoryRepository { get; set; }
+
+
         public ActionResult SecureGetInfoRefs(String project, String service)
         {
-            if (!RepositoryIsValid(project))
-            {
-                return new HttpNotFoundResult();
-            }
-
             bool allowAnonClone = RepositoryPermissionService.AllowsAnonymous(project);
             bool hasPermission = RepositoryPermissionService.HasPermission(User.Id(), project);
             bool isClone = String.Equals("git-upload-pack", service, StringComparison.OrdinalIgnoreCase);
             bool isPush = String.Equals("git-receive-pack", service, StringComparison.OrdinalIgnoreCase);
             bool allowAnonPush = UserConfiguration.Current.AllowAnonymousPush;
 
-            if (hasPermission || (allowAnonClone && isClone) || (allowAnonPush && isPush))
+            bool okToPush = isPush && (hasPermission || allowAnonPush);
+
+            // Normally you can't get past here if we don't recognise the repo, but to allow pushing an 
+            // unknown repo. we make an exception
+            if (!RepositoryIsValid(project))
+            {
+                if (okToPush && UserConfiguration.Current.AllowPushToCreate)
+                {
+                    // This isn't an existing repo, so we'll create it
+                    if (!TryCreateOnPush(project))
+                    {
+                        return UnauthorizedResult();
+                    }
+                }
+                else
+                {
+                    return new HttpNotFoundResult();
+                }
+            }
+
+            if (hasPermission || (allowAnonClone && isClone) || okToPush)
             {
                 return GetInfoRefs(project, service);
             }
@@ -153,6 +175,33 @@ namespace Bonobo.Git.Server.Controllers
             return new HttpStatusCodeResult(401);
         }
 
+        private bool TryCreateOnPush(string project)
+        {
+            DirectoryInfo directory = GetDirectoryInfo(project);
+            if (directory.Exists)
+            {
+                // We can't create a new repo - there's already a directory with that name
+                return false;
+            }
+            RepositoryModel repository = new RepositoryModel();
+            repository.Name = project;
+            if (!repository.NameIsValid)
+            {
+                // We don't like this name
+                return false;
+            }
+            repository.Description = "Auto-created by push";
+            repository.AnonymousAccess = false;
+            if (!RepositoryRepository.Create(repository))
+            {
+                // We can't add this to the repo store
+                return false;
+            }
+
+            Repository.Init(Path.Combine(UserConfiguration.Current.Repositories, repository.Name), true);
+            return true;
+        }
+
         private static String FormatMessage(String input)
         {
             return (input.Length + 4).ToString("X").PadLeft(4, '0') + input;
@@ -171,8 +220,7 @@ namespace Bonobo.Git.Server.Controllers
         private static bool RepositoryIsValid(string project)
         {
             var directory = GetDirectoryInfo(project);
-            var isValid = Repository.IsValid(directory.FullName);
-            return isValid;
+            return Repository.IsValid(directory.FullName);
         }
 
         private Stream GetInputStream(bool disableBuffer = false)

@@ -18,6 +18,9 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Settings_Global_AllowUserRepositoryCreation")]
         public bool AllowUserRepositoryCreation { get; set; }
 
+        [Display(ResourceType = typeof(Resources), Name = "Settings_Global_AllowPushToCreate")]
+        public bool AllowPushToCreate { get; set; }
+
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
         [Display(ResourceType = typeof(Resources), Name = "Settings_Global_RepositoryPath")]
         public string RepositoryPath { get; set; }
