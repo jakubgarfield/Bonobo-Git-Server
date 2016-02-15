@@ -24,6 +24,7 @@ namespace Bonobo.Git.Server.Controllers
                 RepositoryPath = UserConfiguration.Current.RepositoryPath,
                 AllowAnonymousRegistration = UserConfiguration.Current.AllowAnonymousRegistration,
                 AllowUserRepositoryCreation = UserConfiguration.Current.AllowUserRepositoryCreation,
+                AllowPushToCreate = UserConfiguration.Current.AllowPushToCreate,
                 DefaultLanguage = UserConfiguration.Current.DefaultLanguage,
                 SiteTitle = UserConfiguration.Current.SiteTitle,
                 SiteLogoUrl = UserConfiguration.Current.SiteLogoUrl,
@@ -50,6 +51,7 @@ namespace Bonobo.Git.Server.Controllers
                         UserConfiguration.Current.RepositoryPath = model.RepositoryPath;
                         UserConfiguration.Current.AllowAnonymousRegistration = model.AllowAnonymousRegistration;
                         UserConfiguration.Current.AllowUserRepositoryCreation = model.AllowUserRepositoryCreation;
+                        UserConfiguration.Current.AllowPushToCreate = model.AllowPushToCreate;
                         UserConfiguration.Current.DefaultLanguage = model.DefaultLanguage;
                         UserConfiguration.Current.SiteTitle = model.SiteTitle;
                         UserConfiguration.Current.SiteLogoUrl = model.SiteLogoUrl;

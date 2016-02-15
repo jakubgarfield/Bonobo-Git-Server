@@ -244,7 +244,23 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             });
         }
 
-        
+        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        public void PushToCreateIsNotNormallyAllowed()
+        {
+            ForAllGits((git, resource) =>
+            {
+                // Create a repo locally
+                CreateIdentity(git);
+
+                Directory.CreateDirectory(RepositoryDirectory);
+                InitAndPushRepository(git, resource);
+
+
+//                DeleteRepository(repo_id);
+            });
+        }
+
+
         /// <summary>
         /// Helper to run a test for every installed Git instance
         /// </summary>
@@ -377,6 +393,15 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             RunGitOnRepo(git, "init");
             RunGitOnRepo(git, String.Format("remote add origin {0}", RepositoryUrlWithCredentials));
             var result = RunGitOnRepo(git, "pull origin master");
+
+            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PullRepositoryError], RepositoryUrlWithoutCredentials), result.Item2);
+        }
+
+        private void InitAndPushRepository(string git, MsysgitResources resource)
+        {
+            RunGitOnRepo(git, "init");
+            RunGitOnRepo(git, String.Format("remote add origin {0}", RepositoryUrlWithCredentials));
+            var result = RunGitOnRepo(git, "push origin master");
 
             Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PullRepositoryError], RepositoryUrlWithoutCredentials), result.Item2);
         }

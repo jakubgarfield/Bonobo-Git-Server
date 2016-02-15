@@ -1926,6 +1926,24 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow push to create repositories.
+        /// </summary>
+        public static string Settings_Global_AllowPushToCreate {
+            get {
+                return ResourceManager.GetString("Settings_Global_AllowPushToCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If checkbox is checked, Administrators can push a new repository .
+        /// </summary>
+        public static string Settings_Global_AllowPushToCreate_Hint {
+            get {
+                return ResourceManager.GetString("Settings_Global_AllowPushToCreate_Hint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow user repository creation.
         /// </summary>
         public static string Settings_Global_AllowUserRepositoryCreation {
