@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -121,7 +119,7 @@ namespace Bonobo.Git.Server.Controllers
                 model.Name = Regex.Replace(model.Name, @"\s", "");
             }
 
-            if (String.IsNullOrEmpty(model.Name))
+            if (model != null && String.IsNullOrEmpty(model.Name))
             {
                 ModelState.AddModelError("Name", Resources.Repository_Create_NameFailure);
             }
@@ -241,9 +239,9 @@ namespace Bonobo.Git.Server.Controllers
             using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
             {
                 string referenceName;
-                var files = browser.BrowseTree(name, path, out referenceName, includeDetails);
+                var files = browser.BrowseTree(name, path, out referenceName, includeDetails).ToList();
                 
-                var readme = files.Where(x => x.Path.Equals("readme.md", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                var readme = files.FirstOrDefault(x => x.Path.Equals("readme.md", StringComparison.OrdinalIgnoreCase));
                 string readmeTxt = string.Empty;
                 if (readme != null)
                 {
@@ -479,7 +477,7 @@ namespace Bonobo.Git.Server.Controllers
                 model.Name = Regex.Replace(model.Name, @"\s", "");
             }
 
-            if (String.IsNullOrEmpty(model.Name))
+            if (model != null && String.IsNullOrEmpty(model.Name))
             {
                 ModelState.AddModelError("Name", Resources.Repository_Create_NameFailure);
             }
