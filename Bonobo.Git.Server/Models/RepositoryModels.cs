@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 
 using Bonobo.Git.Server.App_GlobalResources;
@@ -28,11 +29,22 @@ namespace Bonobo.Git.Server.Models
         public bool AuditPushUser { get; set; }
         public byte[] Logo { get; set; }
         public bool RemoveLogo { get; set; }
+
+        public bool NameIsValid
+        {
+            get
+            {
+                // Check for an exact match, not just a substring hit - based on RegularExpressionAttribute
+                Match match = Regex.Match(Name, NameValidityRegex);
+                return match.Success && match.Index == 0 && match.Length == Name.Length;
+            }
+        }
+        public const string NameValidityRegex = @"([\w\.-])*([\w])$";
     }
 
     public class RepositoryDetailModel
     {
-        [RegularExpression(@"([\w\.-])*([\w])$", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_FileName_Regex")]
+        [RegularExpression(RepositoryModel.NameValidityRegex, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_FileName_Regex")]
         [FileName(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_FileName")]
         [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Name")]

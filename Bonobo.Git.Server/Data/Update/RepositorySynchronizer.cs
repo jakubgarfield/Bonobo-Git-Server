@@ -41,7 +41,10 @@ namespace Bonobo.Git.Server.Data.Update
                         repository.Description = "Discovered in file system.";
                         repository.Name = name;
                         repository.AnonymousAccess = false;
-                        _repositoryRepository.Create(repository);
+                        if (repository.NameIsValid)
+                        {
+                            _repositoryRepository.Create(repository);
+                        }
                     }
                 }
             }
