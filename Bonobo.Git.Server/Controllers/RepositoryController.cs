@@ -18,7 +18,6 @@ using MimeTypes;
 
 namespace Bonobo.Git.Server.Controllers
 {
-    [RepositoryNameNormalizer("id")]
     public class RepositoryController : Controller
     {
         [Dependency]
@@ -178,20 +177,8 @@ namespace Bonobo.Git.Server.Controllers
             var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id));
             if (model != null)
             {
-                var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id));
-                if (model != null)
-                {
-                    model.IsCurrentUserAdministrator = User.IsInRole(Definitions.Roles.Administrator) || RepositoryPermissionService.IsRepositoryAdministrator(User.Username(), id);
-                    SetGitUrls(model);
-                }
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
-                {
-                    string defaultReferenceName;
-                    browser.BrowseTree(null, null, out defaultReferenceName);
-                    RouteData.Values.Add("encodedName", defaultReferenceName);
-                }
-
-                return View(model);
+                model.IsCurrentUserAdministrator = User.IsInRole(Definitions.Roles.Administrator) || RepositoryPermissionService.IsRepositoryAdministrator(User.Username(), model.Name);
+                SetGitUrls(model);
             }
             using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, model.Name)))
             {
