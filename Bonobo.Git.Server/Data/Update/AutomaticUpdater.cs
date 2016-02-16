@@ -37,6 +37,9 @@ namespace Bonobo.Git.Server.Data.Update
                     }
                     ctxAdapter.ObjectContext.ExecuteStoreCommand(item.Command);
                 }
+
+                // the current pattern does not cut it anymore for adding the guid column
+                new AddGuidColumn(ctx);
             }
         }
     }

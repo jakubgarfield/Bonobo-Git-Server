@@ -11,8 +11,8 @@ namespace Bonobo.Git.Server.Data.Update
         {
             get
             {
-                Guid roleId = Guid.NewGuid();
-                Guid UserId = Guid.NewGuid();
+                Guid roleId = new Guid("a3139d2b-5a59-427f-bb2d-af251dce00e4");
+                Guid UserId = new Guid("3eb9995e-99e3-425a-b978-1409bdd61fb6");
                 return @"
 
                     INSERT INTO [Role] ([Id], [Name], [Description]) VALUES ('" + roleId.ToString() + @"','Administrator','System administrator');
