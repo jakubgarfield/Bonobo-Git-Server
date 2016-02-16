@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Data;
+using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Helpers;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
@@ -544,6 +545,16 @@ namespace Bonobo.Git.Server.Controllers
             }
 
             return View();
+        }
+
+        [HttpPost]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
+        // This takes an irrelevant ID, because there isn't a good route
+        // to RepositoryController for anything without an Id which isn't the Index action
+        public ActionResult Rescan(string id)
+        {
+            new RepositorySynchronizer().Run();
+            return RedirectToAction("Index");
         }
 
         private void PopulateAddressBarData(string path)

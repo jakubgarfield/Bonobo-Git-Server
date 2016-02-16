@@ -48,6 +48,10 @@
         {
             <a class="pure-button pure-button-primary" href="@Url.Action("Create")"><i class="fa fa-plus-circle"></i> @Resources.Repository_Index_CreateNew</a>
         }
+        @if (User.IsInRole(Definitions.Roles.Administrator))
+        {
+            <form action="@Url.Action("Rescan", new { id = "x" })" method="post" class="inline-form"><button type="submit" class="pure-button pure-button-primary"><i class="fa fa-refresh"></i> Rescan Directory</button></form>
+        }
     </div>
 </div>
 

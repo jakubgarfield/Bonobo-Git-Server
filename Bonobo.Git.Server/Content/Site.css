@@ -108,6 +108,7 @@ nav.branches ul li:hover ul li { float: none; }
 .Tree #files .date { width: 150px;}
 .breadcrumbs { padding: 7px; margin: 0; }
 .breadcrumbs em { font-weight: bold; font-style: normal; }
+.inline-form { display: inline-block; }
 
 .blob { border: 1px solid #ddd; margin: 2em 0; }
 .blob .controls { border-bottom: 1px solid #ddd; text-shadow: 0 1px 0 #fff; background-image: linear-gradient(#fafafa, #eaeaea); background-repeat: repeat-x; padding-right: 1em;}
