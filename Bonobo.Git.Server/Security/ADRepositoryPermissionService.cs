@@ -23,7 +23,8 @@ namespace Bonobo.Git.Server.Security
 
         public bool AllowsAnonymous(string repositoryName)
         {
-            return Repository.GetRepository(repositoryName).AnonymousAccess;
+            var repository = Repository.GetRepository(repositoryName);
+            return repository != null && repository.AnonymousAccess;
         }
 
         public bool HasPermission(string username, string repositoryName)

@@ -15,13 +15,24 @@ namespace Bonobo.Git.Server.Security
             {
                 username = username.ToLowerInvariant();
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
-                var repository = database.Repositories.FirstOrDefault(i => i.Name == project);
-                if (user != null && repository != null)
+                if (user == null)
                 {
-                    if (user.Roles.FirstOrDefault(i => i.Name == Definitions.Roles.Administrator) != null
-                     || user.Repositories.FirstOrDefault(i => i.Name == project) != null
-                     || user.AdministratedRepositories.FirstOrDefault(i => i.Name == project) != null
-                     || user.Teams.Select(i => i.Name).FirstOrDefault(t => repository.Teams.Select(i => i.Name).Contains(t)) != null)
+                    // If we don't know the user, then we can't say they have permission
+                    return false;
+                }
+
+                if (user.Roles.FirstOrDefault(i => i.Name == Definitions.Roles.Administrator) != null)
+                {
+                    // This user is an admin, so they always have permission, regardless of the repository
+                    return true;
+                }
+
+                var repository = database.Repositories.FirstOrDefault(i => i.Name == project);
+                if (repository != null)
+                {
+                    if (user.Repositories.FirstOrDefault(i => i.Name == project) != null
+                    || user.AdministratedRepositories.FirstOrDefault(i => i.Name == project) != null
+                    || user.Teams.Select(i => i.Name).FirstOrDefault(t => repository.Teams.Select(i => i.Name).Contains(t)) != null)
                     {
                         return true;
                     }

@@ -682,6 +682,12 @@
   <data name="Settings_Global_AllowUserRepositoryCreation_Hint" xml:space="preserve">
     <value>If checkbox is unchecked, only administrators can create repositories.</value>
   </data>
+  <data name="Settings_Global_AllowPushToCreate" xml:space="preserve">
+    <value>Allow push to create repositories</value>
+  </data>
+  <data name="Settings_Global_AllowPushToCreate_Hint" xml:space="preserve">
+    <value>If checkbox is checked, Administrators can push a new repository </value>
+  </data>
   <data name="Delete_Back" xml:space="preserve">
     <value>Back</value>
   </data>
