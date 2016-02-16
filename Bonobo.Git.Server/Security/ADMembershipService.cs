@@ -78,7 +78,7 @@ namespace Bonobo.Git.Server.Security
 
         private Dictionary<Guid, string> _id_to_name = new Dictionary<Guid, string>();
 
-        public bool CreateUser(string username, string password, string name, string surname, string email)
+        public bool CreateUser(string username, string password, string name, string surname, string email, Guid? guid)
         {
             return false;
         }

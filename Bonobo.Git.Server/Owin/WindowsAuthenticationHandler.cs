@@ -49,8 +49,7 @@ namespace Bonobo.Git.Server.Owin.Windows
 
                             if (claimdelegate == null) 
                             {
-                                var parts = handshake.AuthenticatedUsername.Split('\\');
-                                var dc = new PrincipalContext(ContextType.Domain, parts[0]);
+                                var dc = new PrincipalContext(ContextType.Domain, handshake.AuthenticatedUsername.GetDomain());
                                 var adUser = UserPrincipal.FindByIdentity(dc, handshake.AuthenticatedUsername);
 
 
@@ -59,6 +58,7 @@ namespace Bonobo.Git.Server.Owin.Windows
                                 result.Add(new Claim(ClaimTypes.Name, adUser.GivenName));
                                 result.Add(new Claim(ClaimTypes.Surname, adUser.Surname));
                                 result.Add(new Claim(ClaimTypes.Upn, adUser.Guid.ToString()));
+                                result.Add(new Claim(ClaimTypes.NameIdentifier, handshake.AuthenticatedUsername));
                                 result.Add(new Claim(ClaimTypes.Email, adUser.EmailAddress));
                                 result.Add(new Claim(ClaimTypes.Role, Definitions.Roles.Administrator));
                                 result.Add(new Claim(ClaimTypes.Role, "Administrator"));
@@ -67,7 +67,7 @@ namespace Bonobo.Git.Server.Owin.Windows
                                 Options.Handshakes.TryRemove(handshakeId);
 
                                 // user does not exist! Redirect to create page.
-                                properties.RedirectUri = "/Account/" + uid + "/CreateADUser";
+                                properties.RedirectUri = "/Account/CreateADUser";
                                 return Task.FromResult(new AuthenticationTicket(identity, properties));
 
                             }else{

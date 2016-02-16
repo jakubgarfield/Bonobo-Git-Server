@@ -155,7 +155,7 @@ namespace Bonobo.Git.Server.Controllers
                 Id = model.Id,
                 Name = model.Name,
                 Description = model.Description,
-                Members = model.PostedSelectedUsers.Select(x => MembershipService.GetUserModel(x)).ToArray(),
+                Members = model.PostedSelectedUsers == null ? new UserModel[0] : model.PostedSelectedUsers.Select(x => MembershipService.GetUserModel(x)).ToArray(),
             };
         }
     }

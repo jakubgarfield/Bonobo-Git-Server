@@ -99,5 +99,22 @@ namespace Bonobo.Git.Server
 
             return username;
         }
+
+        public static string GetDomain(this string username)
+        {
+            int deliIndex = username.IndexOf('@');
+            if (deliIndex > 0)
+            {
+                return username.Substring(deliIndex + 1);
+            }
+
+            deliIndex = username.IndexOf('\\');
+            if (deliIndex > 0)
+            {
+                return username.Substring(0, deliIndex);
+            }
+
+            return string.Empty;
+        }
     }
 }
