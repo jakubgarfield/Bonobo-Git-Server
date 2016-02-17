@@ -71,7 +71,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = MembershipService.GetUser(model.Username);
+                var user = MembershipService.GetUserModel(model.Username);
                 if (user == null)
                 {
                     TempData["ResetSuccess"] = false;
@@ -96,36 +96,21 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = MembershipService.GetUser(model.Username);
+                var user = MembershipService.GetUserModel(model.Username);
                 if (user == null)
                 {
-<<<<<<< ce6ddded21a797a6a04762e9f83e98d784be9267
                     ModelState.AddModelError("", Resources.Home_ForgotPassword_UserNameFailure);
                     Response.AppendToLog("FAILURE");
                 }
                 else
                 {
-                    string token = MembershipService.GenerateResetToken(model.Username);
+                    string token = MembershipService.GenerateResetToken(user.Name);
                     MvcApplication.Cache.Add(token, model.Username, DateTimeOffset.Now.AddHours(1));
 
                     // Passing Requust.Url.Scheme to Url.Action forces it to generate a full URL
                     var resetUrl = Url.Action("ResetPassword", "Home", new {digest = HttpUtility.UrlEncode(Encoding.UTF8.GetBytes(token))},Request.Url.Scheme);
 
                     TempData["SendSuccess"] = MembershipHelper.SendForgotPasswordEmail(user, resetUrl);
-=======
-                    var user = db.Users.FirstOrDefault(x => x.Username.Equals(model.Username, StringComparison.OrdinalIgnoreCase));
-                    if (user == null)
-                    {
-                        ModelState.AddModelError("", Resources.Home_ForgotPassword_UserNameFailure);
-                        Response.AppendToLog("FAILURE");
-                    }
-                    else
-                    {
-                        string token = MembershipService.GenerateResetToken(user.Name);
-                        MvcApplication.Cache.Add(token, model.Username, DateTimeOffset.Now.AddHours(1));
-                        TempData["SendSuccess"] = MembershipHelper.SendForgotPasswordEmail(user, token);
-                    }
->>>>>>> Membership provider, resources, router updated for numeric userid.
                 }
             }
             return View(model);
