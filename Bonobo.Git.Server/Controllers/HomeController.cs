@@ -52,22 +52,17 @@ namespace Bonobo.Git.Server.Controllers
 
         public ActionResult ResetPassword(string digest)
         {
-            string username;
             digest = HttpUtility.UrlDecode(digest, Encoding.UTF8);
             var cacheObj = MvcApplication.Cache[digest];
-            if ( cacheObj != null )
+            if (cacheObj != null)
             {
-                using (var db = new BonoboGitServerContext())
-                {
-                    username = cacheObj.ToString();
-                    var user = db.Users.FirstOrDefault(x => x.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
-                    return View(new ResetPasswordModel { Username = username });
-                }
+                var username = cacheObj.ToString();
+                return View(new ResetPasswordModel {Username = username});
             }
             else
             {
                 ModelState.AddModelError("", "Password reset link was not valid");
-                return RedirectToAction("Index", "Home");    
+                return RedirectToAction("Index", "Home");
             }
         }
 
@@ -76,19 +71,16 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var db = new BonoboGitServerContext())
+                var user = MembershipService.GetUser(model.Username);
+                if (user == null)
                 {
-                    var user = db.Users.FirstOrDefault(x => x.Username.Equals(model.Username, StringComparison.OrdinalIgnoreCase));
-                    if (user == null)
-                    {
-                        TempData["ResetSuccess"] = false;
-                        Response.AppendToLog("FAILURE");
-                    }
-                    else
-                    {
-                        MembershipService.UpdateUser(model.Username, user.Name, user.Surname, user.Email, model.Password);
-                        TempData["ResetSuccess"] = true;
-                    }
+                    TempData["ResetSuccess"] = false;
+                    Response.AppendToLog("FAILURE");
+                }
+                else
+                {
+                    MembershipService.UpdateUser(model.Username, user.Name, user.Surname, user.Email, model.Password);
+                    TempData["ResetSuccess"] = true;
                 }
             }
             return View(model);
@@ -96,7 +88,7 @@ namespace Bonobo.Git.Server.Controllers
 
         public ActionResult ForgotPassword()
         {
-            return View();
+            return View(new ForgotPasswordModel());
         }
 
         [HttpPost]
@@ -104,20 +96,21 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var db = new BonoboGitServerContext())
+                var user = MembershipService.GetUser(model.Username);
+                if (user == null)
                 {
-                    var user = db.Users.FirstOrDefault(x => x.Username.Equals(model.Username, StringComparison.OrdinalIgnoreCase));
-                    if (user == null)
-                    {
-                        ModelState.AddModelError("", Resources.Home_ForgotPassword_UserNameFailure);
-                        Response.AppendToLog("FAILURE");
-                    }
-                    else
-                    {
-                        string token = MembershipService.GenerateResetToken(model.Username);
-                        MvcApplication.Cache.Add(token, model.Username, DateTimeOffset.Now.AddHours(1));
-                        TempData["SendSuccess"] = MembershipHelper.SendForgotPasswordEmail(user, token);
-                    }
+                    ModelState.AddModelError("", Resources.Home_ForgotPassword_UserNameFailure);
+                    Response.AppendToLog("FAILURE");
+                }
+                else
+                {
+                    string token = MembershipService.GenerateResetToken(model.Username);
+                    MvcApplication.Cache.Add(token, model.Username, DateTimeOffset.Now.AddHours(1));
+
+                    // Passing Requust.Url.Scheme to Url.Action forces it to generate a full URL
+                    var resetUrl = Url.Action("ResetPassword", "Home", new {digest = HttpUtility.UrlEncode(Encoding.UTF8.GetBytes(token))},Request.Url.Scheme);
+
+                    TempData["SendSuccess"] = MembershipHelper.SendForgotPasswordEmail(user, resetUrl);
                 }
             }
             return View(model);
