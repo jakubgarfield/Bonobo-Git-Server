@@ -53,17 +53,56 @@ namespace Bonobo.Git.Server.Test
         [TestMethod]
         public void NewUserCanBeAdded()
         {
-            _service.CreateUser("testUser", "hello", "Test", "User", "test@user.com");
+            CreateTestUser();
             Assert.AreEqual(2, _service.GetAllUsers().Count);
+            var newUser = _service.GetUser("testuser");
+            Assert.AreEqual("Test", newUser.GivenName);
+            Assert.AreEqual("User", newUser.Surname);
+            Assert.AreEqual("test@user.com", newUser.Email);
         }
 
         [TestMethod]
         public void NewUserCanBeRetrieved()
         {
-            _service.CreateUser("testUser", "hello", "Test", "User", "test@user.com");
+            CreateTestUser();
             var user = _service.GetUser("testUser");
             Assert.AreEqual("testuser", user.Name);
         }
+
+        [TestMethod]
+        public void NewUserCanBeDeleted()
+        {
+            CreateTestUser();
+            Assert.AreEqual(2, _service.UserCount());
+            _service.DeleteUser("testUser");
+            Assert.AreEqual(1, _service.UserCount());
+        }
+
+        [TestMethod]
+        public void NonExistentUserDeleteIsSilentlyIgnored()
+        {
+            _service.DeleteUser("testUser");
+            Assert.AreEqual(1, _service.UserCount());
+        }
+
+        [TestMethod]
+        public void UserCanBeModified()
+        {
+            _service.UpdateUser("admin", "Mr", "Big", "big.admin@admin.com", "letmein");
+            var newUser = _service.GetUser("admin");
+            Assert.AreEqual("Mr", newUser.GivenName);
+            Assert.AreEqual("Big", newUser.Surname);
+            Assert.AreEqual("big.admin@admin.com", newUser.Email);
+            Assert.AreEqual(ValidationResult.Success, _service.ValidateUser("admin", "letmein"));
+        }
+
+
+        void CreateTestUser()
+        {
+            _service.CreateUser("testUser", "hello", "Test", "User", "test@user.com");
+        }
+
+
 
 
     }
