@@ -101,7 +101,7 @@ namespace Bonobo.Git.Server
                     container.RegisterType<IRepositoryPermissionService, ADRepositoryPermissionService>();
                     break;
                 case "internal":
-                    container.RegisterType<IMembershipService, EFMembershipService>(new InjectionConstructor());
+                    container.RegisterType<IMembershipService, EFMembershipService>();
                     container.RegisterType<IRoleProvider, EFRoleProvider>();
                     container.RegisterType<ITeamRepository, EFTeamRepository>();
                     container.RegisterType<IRepositoryRepository, EFRepositoryRepository>();

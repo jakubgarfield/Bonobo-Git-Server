@@ -1,6 +1,7 @@
 using System.Data.Common;
 using Bonobo.Git.Server.Data.Mapping;
 using System.Data.Entity;
+using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -17,6 +18,7 @@ namespace Bonobo.Git.Server.Data
             Database.SetInitializer<BonoboGitServerContext>(null);
         }
 
+        [InjectionConstructor]
         public BonoboGitServerContext()
             : base("Name=BonoboGitServerContext")
         {
