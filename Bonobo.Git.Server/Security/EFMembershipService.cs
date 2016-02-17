@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.IO;
 using System.Text;
 using System.Data.Entity.Core;
+using System.Data.SQLite;
 
 namespace Bonobo.Git.Server.Security
 {
@@ -16,10 +17,14 @@ namespace Bonobo.Git.Server.Security
         private readonly Func<BonoboGitServerContext> _createDatabaseContext;
         private readonly IPasswordService _passwordService;
 
-        public EFMembershipService()
+        public EFMembershipService() : this(() => new BonoboGitServerContext())
+        {
+        }
+
+        public EFMembershipService(Func<BonoboGitServerContext> contextCreator)
         {
             // set up dependencies
-            _createDatabaseContext = ()=>new BonoboGitServerContext();
+            _createDatabaseContext = contextCreator;
             Action<string, string> updateUserPasswordHook =
                 (username, password)=>UpdateUser(username, null, null, null, password);
             _passwordService = new PasswordService(updateUserPasswordHook);
@@ -32,7 +37,7 @@ namespace Bonobo.Git.Server.Security
 
         public ValidationResult ValidateUser(string username, string password)
         {
-            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "userName");
+            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
 
             username = username.ToLowerInvariant();
@@ -45,7 +50,7 @@ namespace Bonobo.Git.Server.Security
 
         public bool CreateUser(string username, string password, string name, string surname, string email)
         {
-            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "userName");
+            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
             if (String.IsNullOrEmpty(name)) throw new ArgumentException("Value cannot be null or empty.", "name");
             if (String.IsNullOrEmpty(surname)) throw new ArgumentException("Value cannot be null or empty.", "surname");

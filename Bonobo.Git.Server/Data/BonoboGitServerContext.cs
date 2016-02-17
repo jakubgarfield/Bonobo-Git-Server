@@ -1,3 +1,4 @@
+using System.Data.Common;
 using Bonobo.Git.Server.Data.Mapping;
 using System.Data.Entity;
 
@@ -18,6 +19,10 @@ namespace Bonobo.Git.Server.Data
 
         public BonoboGitServerContext()
             : base("Name=BonoboGitServerContext")
+        {
+        }
+
+        public BonoboGitServerContext(DbConnection databaseConnection) : base(databaseConnection, false)
         {
         }
 
