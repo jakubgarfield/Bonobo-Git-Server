@@ -21,6 +21,7 @@ namespace Bonobo.Git.Server.Data.Mapping
             Property(t => t.Surname).HasColumnName("Surname");
             Property(t => t.Username).HasColumnName("Username");
             Property(t => t.Password).HasColumnName("Password");
+            Property(t => t.PasswordSalt).HasColumnName("PasswordSalt");
             Property(t => t.Email).HasColumnName("Email");
         }
 

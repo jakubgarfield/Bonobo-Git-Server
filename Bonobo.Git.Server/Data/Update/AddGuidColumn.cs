@@ -1,44 +1,33 @@
-﻿using System.Data.Entity.Core.Objects;
-using Microsoft.Practices.Unity;
-using Bonobo.Git.Server.Security;
+﻿using Bonobo.Git.Server.Security;
 using System.DirectoryServices.AccountManagement;
 using System.Web.Mvc;
 using System.Collections.Generic;
 using System;
 using System.Data.Entity;
+using System.Data.SQLite;
 
 namespace Bonobo.Git.Server.Data.Update
 {
     public class AddGuidColumn
     {
+        readonly IAuthenticationProvider AuthProvider;
+        readonly Database _db;
 
-        IAuthenticationProvider AuthProvider = null;
-
-        Database _db = null;
-
-
-        public AddGuidColumn(BonoboGitServerContext ctx)
+        public AddGuidColumn(BonoboGitServerContext context)
         {
             AuthProvider = DependencyResolver.Current.GetService<IAuthenticationProvider>();
 
-            var result = ctx.Database.SqlQuery<int>("SELECT Count([Id]) = -1 FROM User");
+            _db = context.Database;
 
-            try
+            if (UpgradeHasAlreadyBeenRun())
             {
-                // force evaluation to get an error if column does not exist
-                result.SingleAsync().GetAwaiter().GetResult();
                 return;
             }
-            catch (System.Data.SQLite.SQLiteException)
-            {
-                // the column does not exist!
-            }
 
-            using (var trans = ctx.Database.BeginTransaction())
+            using (var trans = context.Database.BeginTransaction())
             {
                 try
                 {
-                    _db = ctx.Database;
                     RenameTables();
                     CreateTables();
                     CopyData();
@@ -52,8 +41,21 @@ namespace Bonobo.Git.Server.Data.Update
                     throw;
                 }
             }
+        }
 
-
+        private bool UpgradeHasAlreadyBeenRun()
+        {
+            try
+            {
+                // force evaluation to get an error if column does not exist
+                _db.ExecuteSqlCommand("SELECT Count([Id]) = -1 FROM User");
+                return true;
+            }
+            catch (SQLiteException)
+            {
+                // the column does not exist!
+                return false;
+            }
         }
 
         void RenameTables()
@@ -69,7 +71,6 @@ namespace Bonobo.Git.Server.Data.Update
                 ALTER TABLE UserRole_InRole RENAME TO urir;
                 ALTER TABLE TeamRepository_Permission RENAME TO trp;
             ");
-
         }
 
         void DropRenamedTables()
@@ -98,6 +99,7 @@ namespace Bonobo.Git.Server.Data.Update
                     Username VARCHAR (255) NOT NULL
                                            UNIQUE,
                     Password VARCHAR (255) NOT NULL,
+                    PasswordSalt VARCHAR (255) NOT NULL,
                     Email    VARCHAR (255) NOT NULL
                 );
 
@@ -216,7 +218,7 @@ namespace Bonobo.Git.Server.Data.Update
             ");
         }
 
-        class oldUser
+        class OldUser
         {
             public string Name { get; set; }
             public string Surname { get; set; }
@@ -231,7 +233,7 @@ namespace Bonobo.Git.Server.Data.Update
             public string Description { get; set; }
         }
 
-        class oldRepo
+        class OldRepo
         {
             public string Name { get; set; }
             public string Description { get; set; }
@@ -241,9 +243,17 @@ namespace Bonobo.Git.Server.Data.Update
             public byte[] Logo { get; set; }
         }
 
-        void CopyData()
+        private void CopyData()
         {
-            var users = _db.SqlQuery<oldUser>("Select * from oUser;");
+            CopyUsers();
+            CopyTeams();
+            CopyRoles();
+            CopyRepositories();
+        }
+
+        private void CopyUsers()
+        {
+            var users = _db.SqlQuery<OldUser>("Select * from oUser;");
             Dictionary<string, PrincipalContext> domains = new Dictionary<string, PrincipalContext>();
             foreach (var entry in users)
             {
@@ -251,7 +261,8 @@ namespace Bonobo.Git.Server.Data.Update
                 if (AuthProvider is WindowsAuthenticationProvider)
                 {
                     var domain = entry.Username.GetDomain(); // not sure what to do if domain is not found...
-                    PrincipalContext dc; ;
+                    PrincipalContext dc;
+                    ;
                     if (!domains.TryGetValue(domain, out dc))
                     {
                         dc = new PrincipalContext(ContextType.Domain, domain);
@@ -268,11 +279,13 @@ namespace Bonobo.Git.Server.Data.Update
                         {
                             entry.Email = user.EmailAddress;
                         }
-                        if (string.IsNullOrEmpty(entry.Surname) || entry.Surname.Equals("None", StringComparison.OrdinalIgnoreCase))
+                        if (string.IsNullOrEmpty(entry.Surname) ||
+                            entry.Surname.Equals("None", StringComparison.OrdinalIgnoreCase))
                         {
                             entry.Surname = user.Surname;
                         }
-                        if (string.IsNullOrEmpty(entry.Name) || entry.Name.Equals(entry.Username, StringComparison.OrdinalIgnoreCase))
+                        if (string.IsNullOrEmpty(entry.Name) ||
+                            entry.Name.Equals(entry.Username, StringComparison.OrdinalIgnoreCase))
                         {
                             entry.Name = user.GivenName;
                         }
@@ -287,34 +300,45 @@ namespace Bonobo.Git.Server.Data.Update
                         guid = new Guid("3eb9995e-99e3-425a-b978-1409bdd61fb6");
                     }
                 }
-                _db.ExecuteSqlCommand("INSERT INTO User VALUES ({0}, {1}, {2}, {3}, {4}, {5})",
-                    guid.ToString(), entry.Name, entry.Surname, entry.Username, entry.Password, entry.Email);
+                // Existing users will have had passwords which were salted with their username, so we need to replicate that into the Salt column
+                var salt = entry.Username;
+                _db.ExecuteSqlCommand("INSERT INTO User VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6})",
+                    guid.ToString(), entry.Name, entry.Surname, entry.Username, entry.Password, salt, entry.Email);
             }
+        }
 
+        private void CopyTeams()
+        {
             var teams = _db.SqlQuery<NameDesc>("Select * from oTeam");
             foreach (var team in teams)
             {
                 _db.ExecuteSqlCommand("INSERT INTO Team VALUES ({0}, {1}, {2})",
                     Guid.NewGuid(), team.Name, team.Description);
             }
+        }
 
+        private void CopyRoles()
+        {
             var roles = _db.SqlQuery<NameDesc>("Select * from oRole");
             foreach (var role in roles)
             {
                 _db.ExecuteSqlCommand("INSERT INTO Role VALUES ({0}, {1}, {2})",
                     // Administrator is a default role and should have the same Guid on all systems to make debugging easier
-                    role.Name.Equals("Administrator") ? new Guid("a3139d2b-5a59-427f-bb2d-af251dce00e4") : Guid.NewGuid(), role.Name, role.Description);
+                    role.Name.Equals("Administrator") ? new Guid("a3139d2b-5a59-427f-bb2d-af251dce00e4") : Guid.NewGuid(),
+                    role.Name, role.Description);
             }
+        }
 
-            var repos = _db.SqlQuery<oldRepo>("SELECT * FROM oRepo");
+        private void CopyRepositories()
+        {
+            var repos = _db.SqlQuery<OldRepo>("SELECT * FROM oRepo");
             foreach (var repo in repos)
             {
                 _db.ExecuteSqlCommand("INSERT INTO Repository VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6})",
                     Guid.NewGuid(), repo.Name, repo.Description, repo.Anonymous, repo.AuditPushUser, repo.Group, repo.Logo);
             }
-
         }
-
+        
         private void AddRelations()
         {
             // ALTER TABLE UserRepository_Administrator RENAME TO ura;

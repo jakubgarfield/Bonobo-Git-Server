@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bonobo.Git.Server.Data;
-using System.Data;
 using Bonobo.Git.Server.Models;
 using System.Security.Cryptography;
-using System.IO;
-using System.Text;
 using System.Data.Entity.Core;
 
 namespace Bonobo.Git.Server.Security
@@ -16,20 +13,23 @@ namespace Bonobo.Git.Server.Security
         private readonly Func<BonoboGitServerContext> _createDatabaseContext;
         private readonly IPasswordService _passwordService;
 
-        public EFMembershipService()
+        public EFMembershipService() : this(() => new BonoboGitServerContext())
+        {
+        }
+
+        public EFMembershipService(Func<BonoboGitServerContext> contextCreator)
         {
             // set up dependencies
-            _createDatabaseContext = ()=>new BonoboGitServerContext();
+            _createDatabaseContext = contextCreator;
             Action<string, string> updateUserPasswordHook =
                 (username, password) =>
                 {
-                    using (var db = new BonoboGitServerContext())
+                    using (var db = _createDatabaseContext())
                     {
                         var user = db.Users.FirstOrDefault(i => i.Username == username);
                         if (user != null)
                         {
-
-                            UpdateUser(user.Id, username, null, null, null, password);
+                            UpdateUser(user.Id, null, null, null, null, password);
                         }
                     }
                 };
@@ -43,20 +43,20 @@ namespace Bonobo.Git.Server.Security
 
         public ValidationResult ValidateUser(string username, string password)
         {
-            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "userName");
+            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
 
             username = username.ToLowerInvariant();
             using (var database = _createDatabaseContext())
             {
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
-                return user != null && _passwordService.ComparePassword(password, username, user.Password) ? ValidationResult.Success : ValidationResult.Failure;
+                return user != null && _passwordService.ComparePassword(password, username, user.PasswordSalt, user.Password) ? ValidationResult.Success : ValidationResult.Failure;
             }
         }
 
         public bool CreateUser(string username, string password, string name, string surname, string email, Guid? guid)
         {
-            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "userName");
+            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
             if (String.IsNullOrEmpty(name)) throw new ArgumentException("Value cannot be null or empty.", "name");
             if (String.IsNullOrEmpty(surname)) throw new ArgumentException("Value cannot be null or empty.", "surname");
@@ -70,11 +70,11 @@ namespace Bonobo.Git.Server.Security
                 {
                     Id = guid.Value,
                     Username = username,
-                    Password = _passwordService.GetSaltedHash(password, username),
                     Name = name,
                     Surname = surname,
                     Email = email,
                 };
+                SetPassword(user, password);
                 database.Users.Add(user);
                 try
                 {
@@ -137,6 +137,7 @@ namespace Bonobo.Git.Server.Security
         {
             using (var db = _createDatabaseContext())
             {
+                username = username.ToLowerInvariant();
                 var user = db.Users.FirstOrDefault(i => i.Username == username);
                 return GetUserModel(user);
             }
@@ -146,17 +147,19 @@ namespace Bonobo.Git.Server.Security
         {
             using (var db = _createDatabaseContext())
             {
-                foreach (var user in db.Users)
+                var user = db.Users.FirstOrDefault(i => i.Id == id);
+                if (user != null)
                 {
-                    if (user.Id == id)
+                    var lowerUsername = username == null ? null : username.ToLowerInvariant();
+                    user.Username = lowerUsername ?? user.Name;
+                    user.Name = name ?? user.Name;
+                    user.Surname = surname ?? user.Surname;
+                    user.Email = email ?? user.Email;
+                    if (password != null)
                     {
-                        user.Name = name ?? user.Name;
-                        user.Surname = surname ?? user.Surname;
-                        user.Email = email ?? user.Email;
-                        user.Password = password != null ? _passwordService.GetSaltedHash(password, id.ToString()) : user.Password;
-                        db.SaveChanges();
-                        return;
+                        SetPassword(user, password);
                     }
+                    db.SaveChanges();
                 }
             }
         }
@@ -180,7 +183,14 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
+        private void SetPassword(User user, string password)
+        {
+            if (user == null) throw new ArgumentNullException("user", "User cannot be null");
+            if (String.IsNullOrEmpty(password)) throw new ArgumentException("Password cannot be null or empty.", "password");
 
+            user.PasswordSalt = Guid.NewGuid().ToString();
+            user.Password = _passwordService.GetSaltedHash(password, user.PasswordSalt);
+        }
 
         private const int PBKDF2IterCount = 1000; // default for Rfc2898DeriveBytes
         private const int PBKDF2SubkeyLength = 256 / 8; // 256 bits

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Web.Security;
 using Bonobo.Git.Server.Data;
 
 namespace Bonobo.Git.Server.Security
