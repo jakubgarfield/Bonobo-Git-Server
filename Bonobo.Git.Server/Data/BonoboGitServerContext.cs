@@ -18,16 +18,20 @@ namespace Bonobo.Git.Server.Data
             Database.SetInitializer<BonoboGitServerContext>(null);
         }
 
-        [InjectionConstructor]
         public BonoboGitServerContext()
             : base("Name=BonoboGitServerContext")
         {
         }
 
-        public BonoboGitServerContext(DbConnection databaseConnection) : base(databaseConnection, false)
+        // Don't make this public because it confuses Unity
+        private BonoboGitServerContext(DbConnection databaseConnection) : base(databaseConnection, false)
         {
         }
 
+        public static BonoboGitServerContext FromDatabase(DbConnection databaseConnection)
+        {
+            return new BonoboGitServerContext(databaseConnection);
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

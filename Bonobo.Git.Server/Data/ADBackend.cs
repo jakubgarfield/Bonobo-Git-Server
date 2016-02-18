@@ -13,7 +13,7 @@ using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Data
 {
-    public sealed class ADBackend
+    public sealed class ADBackend : IDisposable
     {
         [Dependency]
         public IMembershipService MembershipService { get; set; }
@@ -32,7 +32,7 @@ namespace Bonobo.Git.Server.Data
                     {
                         if (instance == null)
                         {
-                            instance = new ADBackend();
+                            instance = new ADBackend(true);
                         }
                     }
                 }
@@ -66,9 +66,31 @@ namespace Bonobo.Git.Server.Data
         private object updateLock = new object();
         private Timer updateTimer;
 
-        private ADBackend()
+        private ADBackend(bool allowAutoUpdate)
         {
-            updateTimer = new Timer(Update, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(180));
+            if (allowAutoUpdate)
+            {
+                updateTimer = new Timer(Update, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(180));
+            }
+            else
+            {
+                UpdateUsers();
+                UpdateTeams();
+                UpdateRoles();
+                UpdateRepositories();
+            }
+        }
+
+        public static void ResetSingletonForTest()
+        {
+            lock (instanceLock)
+            {
+                if (instance != null)
+                {
+                    instance.Dispose();
+                }
+                instance = new ADBackend(false);
+            }
         }
 
         private void Update(object state)
@@ -221,6 +243,16 @@ namespace Bonobo.Git.Server.Data
                     Members = group.GetMembers(true).Where(x => x is UserPrincipal).Select(x => x.UserPrincipalName).ToArray()
                 };
                 Roles.AddOrUpdate(roleModel);
+            }
+        }
+
+        public void Dispose()
+        {
+            if (updateTimer != null)
+            {
+                var disposeWait= new ManualResetEvent(false);
+                updateTimer.Dispose(disposeWait);
+                disposeWait.WaitOne(3000);
             }
         }
     }

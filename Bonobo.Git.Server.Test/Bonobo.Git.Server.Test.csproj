@@ -65,6 +65,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.99.0\lib\net45\System.Data.SQLite.dll</HintPath>
@@ -96,7 +97,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ADMembershipServiceTest.cs" />
+    <Compile Include="EFRoleProviderTests.cs" />
     <Compile Include="EFMembershipServiceTest.cs" />
+    <Compile Include="MembershipServiceTestBase.cs" />
     <Compile Include="MsysgitIntegrationTests.cs" />
     <Compile Include="MsysgitResources.cs" />
     <Compile Include="PathEncoderTest.cs" />
@@ -104,6 +108,7 @@
     <Compile Include="Definitions.cs" />
     <Compile Include="PasswordServiceTest.cs" />
     <Compile Include="GitAuthorizeAttributeTest.cs" />
+    <Compile Include="SqliteTestConnection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bonobo.Git.Server\Bonobo.Git.Server.csproj">
