@@ -19,8 +19,6 @@ namespace Bonobo.Git.Server.Security
 {
     public class ADMembershipService : IMembershipService
     {
-        private static EFMembershipService userRepository = new EFMembershipService();
-
         public bool IsReadOnly()
         {
             return true;
@@ -76,8 +74,6 @@ namespace Bonobo.Git.Server.Security
             return result;
         }
 
-        private Dictionary<Guid, string> _id_to_name = new Dictionary<Guid, string>();
-
         public bool CreateUser(string username, string password, string name, string surname, string email, Guid? guid)
         {
             return false;
@@ -86,10 +82,6 @@ namespace Bonobo.Git.Server.Security
         public IList<UserModel> GetAllUsers()
         {
             var users = ADBackend.Instance.Users.ToList();
-            foreach (var user in users)
-            {
-                _id_to_name[user.Id] = user.Name;
-            }
             return users;
         }
 
@@ -101,17 +93,17 @@ namespace Bonobo.Git.Server.Security
                 using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain))
                 using (UserPrincipal user = UserPrincipal.FindByIdentity(principalContext, username))
                 {
-                    username = user.UserPrincipalName;
+                    // assuming all users has a guid on AD
+                    return ADBackend.Instance.Users.FirstOrDefault(n => n.Id == user.Guid.Value);
                 }
             }
-
-            return ADBackend.Instance.Users.FirstOrDefault(n=>n.Name.Equals(username, StringComparison.OrdinalIgnoreCase));
+            // Not found
+            return null;
         }
 
         public UserModel GetUserModel(Guid id)
         {
-            GetAllUsers();
-            return GetUserModel(_id_to_name[id]);
+            return ADBackend.Instance.Users[id.ToString()];
         }
 
         private static bool IsUserPrincipalName(string username)

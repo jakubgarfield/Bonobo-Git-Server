@@ -43,9 +43,9 @@ namespace Bonobo.Git.Server.Security
             return ADBackend.Instance.Roles.Select(x => x.Name).ToArray();
         }
 
-        public string[] GetRolesForUser(string username)
+        public string[] GetRolesForUser(Guid userId)
         {
-            return ADBackend.Instance.Roles.Where(x => x.Members.Contains(username, StringComparer.OrdinalIgnoreCase)).Select(x => x.Name).ToArray();
+            return ADBackend.Instance.Roles.Where(x => x.Members.Contains(userId.ToString(), StringComparer.OrdinalIgnoreCase)).Select(x => x.Name).ToArray();
         }
 
         public string[] GetUsersInRole(string roleName)

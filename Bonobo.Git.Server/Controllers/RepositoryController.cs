@@ -177,7 +177,7 @@ namespace Bonobo.Git.Server.Controllers
             var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id));
             if (model != null)
             {
-                model.IsCurrentUserAdministrator = User.IsInRole(Definitions.Roles.Administrator) || RepositoryPermissionService.IsRepositoryAdministrator(User.Username(), model.Name);
+                model.IsCurrentUserAdministrator = User.IsInRole(Definitions.Roles.Administrator) || RepositoryPermissionService.IsRepositoryAdministrator(User.Id(), model.Id);
                 SetGitUrls(model);
             }
             using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, model.Name)))

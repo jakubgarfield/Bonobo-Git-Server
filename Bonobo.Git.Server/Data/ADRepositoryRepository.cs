@@ -17,8 +17,6 @@ namespace Bonobo.Git.Server.Data
     {
         public bool Create(RepositoryModel repository)
         {
-            // To populate _id_to_name table
-            GetAllRepositories();
             repository.Id = Guid.NewGuid();
 
             return ADBackend.Instance.Repositories.Add(SanitizeModel(repository));
@@ -41,8 +39,8 @@ namespace Bonobo.Git.Server.Data
 
         public IList<RepositoryModel> GetPermittedRepositories(Guid? userId, Guid[] userTeamsId)
         {
-            return ADBackend.Instance.Repositories.Where(x => 
-                (userId != null ? false : x.Users.Count(y => y.Id == userId) > 0) ||
+            return ADBackend.Instance.Repositories.Where(x =>
+            (userId == null ? false : x.Users.Any(u => u.Id == userId.Value)) ||
                 x.Teams.Any(s => userTeamsId.Contains(userId.Value))
                 ).ToList();
         }
