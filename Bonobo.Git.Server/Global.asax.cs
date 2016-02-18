@@ -73,8 +73,16 @@ namespace Bonobo.Git.Server
             UserConfiguration.Initialize();
             RegisterDependencyResolver();
 
-            new AutomaticUpdater().Run();
-            new RepositorySynchronizer().Run();
+            try
+            {
+                new AutomaticUpdater().Run();
+                new RepositorySynchronizer().Run();
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine("StartupException " + ex);
+                throw;
+            }
         }
 
         private static void RegisterDependencyResolver()

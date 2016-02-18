@@ -38,6 +38,7 @@ namespace Bonobo.Git.Server.Data.Update
                         [Surname] VarChar(255) Not Null,
                         [Username] VarChar(255) Not Null UNIQUE,
                         [Password] VarChar(255) Not Null,
+                        [PasswordSalt] VarChar(255) Not Null,
                         [Email] VarChar(255) Not Null
                     );
 

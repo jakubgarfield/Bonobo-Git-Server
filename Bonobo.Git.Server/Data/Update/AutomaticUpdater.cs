@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Bonobo.Git.Server.Data.Update
@@ -46,11 +47,20 @@ namespace Bonobo.Git.Server.Data.Update
                         // store ecommand should be executed
                     }
                 }
-                ctxAdapter.ObjectContext.ExecuteStoreCommand(item.Command);
 
-                // the current pattern does not cut it anymore for adding the guid column
-                new AddGuidColumn(ctx);
+                try
+                {
+                    ctxAdapter.ObjectContext.ExecuteStoreCommand(item.Command);
+                }
+                catch(Exception ex)
+                {
+                    Trace.TraceError("Exception while processing upgrade script {0}\r\n{1}", item.Command, ex);
+                    throw;
+                }
             }
+            // the current pattern does not cut it anymore for adding the guid column
+            new AddGuidColumn(ctx);
+
         }
     }
 }
