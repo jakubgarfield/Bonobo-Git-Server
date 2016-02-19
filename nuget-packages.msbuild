@@ -7,6 +7,7 @@
 	<UsingTask TaskName="DownloadNuGet" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
        <ParameterGroup>
            <OutputFilename ParameterType="System.String" Required="true" />
+           <Proxy ParameterType="System.String" />
        </ParameterGroup>
        <Task>
            <Reference Include="System.Core" />
@@ -22,6 +23,17 @@
 
                    Log.LogMessage("Downloading latest version of NuGet.exe...");
                    WebClient webClient = new WebClient();
+                   IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
+                   defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+                   webClient.Proxy = defaultWebProxy;
+
+                   // Maybe we need a certain proxy
+                   if(!String.IsNullOrEmpty(Proxy))
+                   {
+                       var p = new WebProxy(Proxy, true);
+                       webClient.Proxy = p;
+                       Log.LogMessage("Using Proxy {0}", Proxy);
+                   }
                    webClient.DownloadFile("https://nuget.org/nuget.exe", OutputFilename);
 
                    return true;
@@ -48,7 +60,7 @@
         </PropertyGroup>
         <MakeDir Directories="$(NuGetExeDir)" Condition="!Exists('$(NuGetExeDir)')" />
         <Message Text="Restoring packages ... " Importance="high" />
-        <DownloadNuGet OutputFilename="$(NuGetExePath)" Condition=" !Exists('$(NuGetExePath)')" />
+        <DownloadNuGet OutputFilename="$(NuGetExePath)" Proxy="$(Proxy)" Condition=" !Exists('$(NuGetExePath)')" />
         <Exec Command="$(RestoreCommand)" LogStandardErrorAsError="true" />
     </Target>
   
