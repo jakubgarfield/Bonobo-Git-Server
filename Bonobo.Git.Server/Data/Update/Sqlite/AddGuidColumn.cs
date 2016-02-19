@@ -6,7 +6,7 @@ using System;
 using System.Data.Entity;
 using System.Data.SQLite;
 
-namespace Bonobo.Git.Server.Data.Update
+namespace Bonobo.Git.Server.Data.Update.Sqlite
 {
     public class AddGuidColumn
     {

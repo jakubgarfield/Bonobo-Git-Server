@@ -28,8 +28,9 @@ namespace Bonobo.Git.Server.Data.Update
         private void DoUpdate(BonoboGitServerContext ctx)
         {
             IObjectContextAdapter ctxAdapter = ctx;
+            var connectiontype = ctx.Database.Connection.GetType().Name;
 
-            foreach (var item in UpdateScriptRepository.GetScriptsBySqlProviderName(ctx.Database.Connection.GetType().Name))
+            foreach (var item in UpdateScriptRepository.GetScriptsBySqlProviderName(connectiontype))
             {
                 if (!string.IsNullOrEmpty(item.Precondition))
                 {
@@ -59,7 +60,15 @@ namespace Bonobo.Git.Server.Data.Update
                 }
             }
             // the current pattern does not cut it anymore for adding the guid column
-            new AddGuidColumn(ctx);
+
+            if (connectiontype.Equals("SQLiteConnection"))
+            {
+                new Sqlite.AddGuidColumn(ctx);
+            }
+            else
+            {
+                new SqlServer.AddGuidColumn(ctx);
+            }
 
         }
     }

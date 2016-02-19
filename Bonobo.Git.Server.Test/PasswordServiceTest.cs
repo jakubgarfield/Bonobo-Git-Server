@@ -31,7 +31,7 @@ namespace Bonobo.Git.Server.Test
         [TestMethod]
         public void InsertDefaultDataCommandUsesSaltedSha512Hash()
         {
-            var script = new Bonobo.Git.Server.Data.Update.InsertDefaultData();
+            var script = new Bonobo.Git.Server.Data.Update.Sqlite.InsertDefaultData();
             AssertSaltedSha512HashIsUsed(script);
         }
 

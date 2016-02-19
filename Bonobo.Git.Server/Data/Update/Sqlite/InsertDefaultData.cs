@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace Bonobo.Git.Server.Data.Update
+namespace Bonobo.Git.Server.Data.Update.Sqlite
 {
     public class InsertDefaultData : IUpdateScript
     {

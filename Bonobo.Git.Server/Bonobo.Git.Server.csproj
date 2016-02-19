@@ -273,9 +273,9 @@
     <Compile Include="Data\ADRepositoryRepository.cs" />
     <Compile Include="Data\ADTeamRepository.cs" />
     <Compile Include="Data\INameProperty.cs" />
-    <Compile Include="Data\Update\AddGroup.cs" />
-    <Compile Include="Data\Update\AddGuidColumn.cs" />
-    <Compile Include="Data\Update\AddRepositoryLogo.cs" />
+    <Compile Include="Data\Update\Sqlite\AddGroup.cs" />
+    <Compile Include="Data\Update\Sqlite\AddGuidColumn.cs" />
+    <Compile Include="Data\Update\Sqlite\AddRepositoryLogo.cs" />
     <Compile Include="Data\Update\SqlServer\AddGroup.cs" />
     <Compile Include="Data\Update\SqlServer\AddGuidColumn.cs" />
     <Compile Include="Data\Update\SqlServer\AddRepositoryLogo.cs" />
@@ -327,7 +327,7 @@
     <Compile Include="Git\GitService\GitServiceExecutor.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Data\Update\AddAuditPushUser.cs" />
+    <Compile Include="Data\Update\Sqlite\AddAuditPushUser.cs" />
     <Compile Include="Data\Update\AutomaticUpdater.cs" />
     <Compile Include="Data\Update\RepositorySynchronizer.cs" />
     <Compile Include="Data\Update\SqlServer\AddAuditPushUser.cs" />
@@ -349,8 +349,8 @@
     <Compile Include="Data\Mapping\UserMap.cs" />
     <Compile Include="Data\Repository.cs" />
     <Compile Include="Data\Role.cs" />
-    <Compile Include="Data\Update\InitialCreateScript.cs" />
-    <Compile Include="Data\Update\InsertDefaultData.cs" />
+    <Compile Include="Data\Update\Sqlite\InitialCreateScript.cs" />
+    <Compile Include="Data\Update\Sqlite\InsertDefaultData.cs" />
     <Compile Include="Data\Update\IUpdateScript.cs" />
     <Compile Include="Data\Update\UpdateScriptRepository.cs" />
     <Compile Include="Data\Team.cs" />
