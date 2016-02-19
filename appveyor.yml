@@ -5,6 +5,12 @@ platform: Any CPU
 cache:
 - packages -> **\packages.config
 
+assembly_info:
+  patch: true
+  file: AssemblyInfo.cs
+  assembly_version: "5.1.1.{build}-$(APPVEYOR_BUILD_ID)-$(APPVEYOR_REPO_BRANCH)-$(APPVEYOR_REPO_COMMIT)"
+  assembly_file_version: "5.1.1.{build}-$(APPVEYOR_BUILD_ID)-$(APPVEYOR_REPO_BRANCH)-$(APPVEYOR_REPO_COMMIT)"
+
 install:
 - set IIS_USER_HOME=%USERPROFILE%\Documents\IISExpress
 - md %IIS_USER_HOME%\Logs
@@ -61,8 +67,8 @@ after_build:
 
     Add-Type -assembly "system.io.compression.filesystem"
 
-    [io.compression.zipfile]::CreateFromDirectory('C:\projects\bonobo-git-server\Bonobo_install', 'C:\projects\bonobo-git-server\bonobo-git-server.zip')
+    [io.compression.zipfile]::CreateFromDirectory('C:\projects\bonobo-git-server\Bonobo_install', "C:\projects\bonobo-git-server\bonobo-git-server-$env:APPVEYOR_BUILD_ID-$env:APPVEYOR_REPO_COMMIT.zip")
 
 artifacts:
-- path: bonobo-git-server.zip
-  name: bonobo-git-server.zip
+- path: bonobo-git-server-$(APPVEYOR_BUILD_ID)-$(APPVEYOR_REPO_COMMIT).zip
+  name: bonobo-git-server-$(APPVEYOR_BUILD_ID)-$(APPVEYOR_REPO_COMMIT).zip
