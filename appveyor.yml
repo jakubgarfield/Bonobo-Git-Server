@@ -1,17 +1,39 @@
 version: '{build}'
 configuration: Release
 platform: Any CPU
+
+cache:
+- packages -> **\packages.config
+
+install:
+- set IIS_USER_HOME=%USERPROFILE%\Documents\IISExpress
+- md %IIS_USER_HOME%\Logs
+- md %IIS_USER_HOME%\TraceLogFile
+- md %IIS_USER_HOME%\config
+- ps: >-
+    cp c:\projects\Bonobo-Git-Server\Bonobo.Git.Server.Test\iissetup\applicationhost.config $env:IIS_USER_HOME\config\
+    
+    cp c:\projects\Bonobo-Git-Server\Bonobo.Git.Server.Test\iissetup\redirection.config $env:IIS_USER_HOME\config\
+    
+    cp c:\projects\Bonobo-Git-Server\Bonobo.Git.Server.Test\iissetup\aspnet.config $env:IIS_USER_HOME\config\
+
+    & "C:\Program Files (x86)\IIS Express\appcmd.exe" set config -section:system.applicationHost/sites /+"[name='Bonobo.Git.Server-Site',id='2'].bindings.[protocol='http',bindingInformation='*:5000:localhost']" /commit:apphost
+    
+    & "C:\Program Files (x86)\IIS Express\appcmd.exe" set config -section:system.applicationHost/sites /+"[name='Bonobo.Git.Server-Site',id='2'].[path='/',applicationPool='Clr4IntegratedAppPool']" /commit:apphost
+    
+    & "C:\Program Files (x86)\IIS Express\appcmd.exe" set config -section:system.applicationHost/sites /+"[name='Bonobo.Git.Server-Site',id='2'].[path='/'].[path='/',physicalPath='C:\projects\Bonobo-Git-Server\Bonobo.Git.Server']" /commit:apphost
+
+
 before_build:
 - ps: >-
     function Patch-Xml { param([string] $filePath, [string] $strToReplace, [string] $replacement)
         (Get-Content $filePath -Encoding utf8) | Foreach-Object { $_ -replace $strToReplace,$replacement } | Out-File $filePath -Encoding utf8
     }
 
-
     nuget restore
 
     Write-Host "Patch Release.pubxml"
-
+    
     $pubxml = 'Bonobo.Git.Server\Properties\PublishProfiles\Release.pubxml'
 
     Patch-Xml $pubxml '<EnableUpdateable>True</EnableUpdateable>' '<EnableUpdateable>False</EnableUpdateable>'
@@ -21,10 +43,12 @@ before_build:
     Patch-Xml $pubxml '<publishUrl>..\\..\\Bonobo_install\\Bonobo.Git.Server</publishUrl>' '<publishUrl>..\Bonobo_install\Bonobo.Git.Server</publishUrl>'
 
     Write-Host "End Patch Release.pubxml"
+
 build:
   project: Bonobo.Git.Server.sln
   parallel: true
-  verbosity: minimal
+  verbosity: Minimal
+
 after_build:
 - ps: >-
     Write-Host "Creating Packages"
@@ -38,6 +62,7 @@ after_build:
     Add-Type -assembly "system.io.compression.filesystem"
 
     [io.compression.zipfile]::CreateFromDirectory('C:\projects\bonobo-git-server\Bonobo_install', 'C:\projects\bonobo-git-server\bonobo-git-server.zip')
+
 artifacts:
 - path: bonobo-git-server.zip
   name: bonobo-git-server.zip

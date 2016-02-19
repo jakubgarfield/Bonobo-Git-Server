@@ -22,42 +22,48 @@
            <Using Namespace="Microsoft.Build.Utilities" />
            <Using Namespace="System.LINQ" />
            <Code Type="Fragment" Language="cs">
-               <![CDATA[
-               try {
-                   OutputFilename = Path.GetFullPath(OutputFilename);
+                <![CDATA[
+                try {
+                    OutputFilename = Path.GetFullPath(OutputFilename);
 
-                   Log.LogMessage("Downloading version {0} of git...", GitVersion);
-                   WebClient webClient = new WebClient();                        
-                   IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
-                   defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
-                   webClient.Proxy = defaultWebProxy;
+                    Log.LogMessage("Downloading version {0} of git...", GitVersion);
+                    WebClient webClient = new WebClient();
+                    IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
+                    if (defaultWebProxy != null)
+                    {
+                        defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+                        webClient.Proxy = defaultWebProxy;
+                    }
                    
-                   // Maybe we need a certain proxy
-                   if(!String.IsNullOrEmpty(Proxy))
-                   {
-                       var p = new WebProxy(Proxy, true);
-                       webClient.Proxy = p;
-                       Log.LogMessage("Using Proxy {0}", Proxy);
-                   }
+                    // Maybe we need a certain proxy
+                    if(!String.IsNullOrEmpty(Proxy))
+                    {
+                        var p = new WebProxy(Proxy, true);
+                        webClient.Proxy = p;
+                        Log.LogMessage("Using Proxy {0}", Proxy);
+                    }
    
-                   var parts = GitVersion.Split('.');
-                   var versionfolder = String.Format("{0}.{1}.{2}.windows.{3}",
-                        parts[0], parts[1], parts[2], parts.Count() > 3 ? parts[3] : "1");
+                    var parts = GitVersion.Split('.');
+                    var versionfolder = String.Format("{0}.{1}.{2}.windows.{3}",
+                            parts[0], parts[1], parts[2], parts.Count() > 3 ? parts[3] : "1");
 
-                   var url = String.Format("http://github.com/git-for-windows/git/releases/download/v{1}/PortableGit-{2}-{0}-bit.7z.exe",
-                                                           GitArch,
-                                                           versionfolder,
-                                                           GitVersion);
-                   Log.LogMessage("Url: {0}", url);
-                       webClient.DownloadFile(url, OutputFilename);
-
-                   return true;
-               }
-               catch (Exception ex) {
-                   Log.LogErrorFromException(ex);
-                   return false;
-               }
-           ]]>
+                    var url = String.Format("http://github.com/git-for-windows/git/releases/download/v{1}/PortableGit-{2}-{0}-bit.7z.exe",
+                                            GitArch,
+                                            versionfolder,
+                                            GitVersion);
+                    Log.LogMessage("Url: {0}", url);
+                    webClient.DownloadFile(url, OutputFilename);
+                    return true;
+                }
+                catch (Exception ex) {
+                    Log.LogErrorFromException(ex);
+                    if (ex.InnerException != null)
+                    {
+                        Log.LogErrorFromException(ex.InnerException);
+                    }
+                    return false;
+                }
+                ]]>
            </Code>
        </Task>
     </UsingTask>
@@ -69,7 +75,7 @@
             <GitPackagePath>$(GitDir)\Portable-$(GitVersion)-$(GitArchitecture)-bits.7z.exe</GitPackagePath>
             <UnpackGit>7z.exe -o$(GitVersionDir) x $(GitPackagePath)</UnpackGit>
         </PropertyGroup>
-        <!--<MakeDir Directories="$(GitVersionDir)" Condition="!Exists('$(GitVersionDir)')" />-->
+        <MakeDir Directories="$(GitDir)" Condition="!Exists('$(GitDir)')" />
         <Message Text="Setting up git $(GitVersion)" Importance="high" />
         <DownloadGit OutputFilename="$(GitPackagePath)" GitVersion="$(GitVersion)" GitArch="$(GitArchitecture)" Proxy="$(Proxy)" Condition=" !Exists('$(GitVersionDir)\bin\git.exe')" />
         <Exec Command="$(UnpackGit)" LogStandardErrorAsError="true" Condition=" !Exists('$(GitVersionDir)\bin\git.exe')" />
