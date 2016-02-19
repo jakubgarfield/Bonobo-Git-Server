@@ -44,7 +44,7 @@ namespace Bonobo.Git.Server.Controllers
                     Name = user.GivenName,
                     Surname = user.Surname,
                     Email = user.Email,
-                    Roles = RoleProvider.GetRolesForUser(user.Name),
+                    Roles = RoleProvider.GetRolesForUser(user.Id),
                     IsReadOnly = MembershipService.IsReadOnly()
                 };
                 return View(model);
@@ -114,7 +114,7 @@ namespace Bonobo.Git.Server.Controllers
                     Surname = user.Surname,
                     Email = user.Email,
                     Roles = RoleProvider.GetAllRoles(),
-                    SelectedRoles = RoleProvider.GetRolesForUser(user.Name)
+                    SelectedRoles = RoleProvider.GetRolesForUser(user.Id)
                 };
                 return View(model);
             }
@@ -268,7 +268,7 @@ namespace Bonobo.Git.Server.Controllers
                     Name = user.GivenName,
                     Surname = user.Surname,
                     Email = user.Email,
-                    Roles = RoleProvider.GetRolesForUser(user.Name),
+                    Roles = RoleProvider.GetRolesForUser(user.Id),
                     IsReadOnly = model.IsReadOnly
                 });
             }

@@ -36,7 +36,7 @@ namespace Bonobo.Git.Server.Security
                 result.Add(new Claim(ClaimTypes.NameIdentifier, user.Name));
                 result.Add(new Claim(ClaimTypes.Email, user.Email));
                 result.Add(new Claim(ClaimTypes.Role, Definitions.Roles.Member));
-                result.AddRange(RoleProvider.GetRolesForUser(user.Name).Select(x => new Claim(ClaimTypes.Role, x)));
+                result.AddRange(RoleProvider.GetRolesForUser(user.Id).Select(x => new Claim(ClaimTypes.Role, x)));
             }
 
             return result;

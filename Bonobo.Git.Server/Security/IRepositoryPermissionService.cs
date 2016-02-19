@@ -7,8 +7,14 @@ namespace Bonobo.Git.Server.Security
 {
     public interface IRepositoryPermissionService
     {
-        bool HasPermission(string username, string project);
-        bool AllowsAnonymous(string project);
-        bool IsRepositoryAdministrator(string username, string project);
+        // Used by bonobo
+        bool HasPermission(Guid userId, Guid repositoryId);
+        bool IsRepositoryAdministrator(Guid userId, Guid repositoryId);
+        bool AllowsAnonymous(Guid repositoryId);
+
+        // Used by git clients as they don't have the GUID of the project
+        bool HasPermission(Guid userId, string repositoryName);
+        bool AllowsAnonymous(string repositoryName);
+        
     }
 }

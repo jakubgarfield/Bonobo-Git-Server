@@ -87,13 +87,12 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public string[] GetRolesForUser(string username)
+        public string[] GetRolesForUser(Guid userId)
         {
             using (var database = new BonoboGitServerContext())
             {
-                username = username.ToLowerInvariant();
                 var roles = database.Roles
-                    .Where(role => role.Users.Any(us => us.Username == username))
+                    .Where(role => role.Users.Any(us => us.Id == userId))
                     .Select(role => role.Name)
                     .ToArray();
                 return roles;

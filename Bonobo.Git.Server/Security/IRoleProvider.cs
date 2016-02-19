@@ -13,7 +13,7 @@ namespace Bonobo.Git.Server.Security
         bool DeleteRole(string roleName, bool throwOnPopulatedRole);
         string[] FindUsersInRole(string roleName, string usernameToMatch);
         string[] GetAllRoles();
-        string[] GetRolesForUser(string username);
+        string[] GetRolesForUser(Guid userId);
         string[] GetUsersInRole(string roleName);
         void RemoveUserFromRoles(string username, string[] roleNames);
         void RemoveUsersFromRoles(string[] username, string[] roleNames);

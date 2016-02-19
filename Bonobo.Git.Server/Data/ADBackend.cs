@@ -149,9 +149,9 @@ namespace Bonobo.Git.Server.Data
                 using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain))
                 using (GroupPrincipal memberGroup = GetMembersGroup(principalContext))
                 {
-                    foreach (string user in Users.Select(x => x.Name).Where(x => UserPrincipal.FindByIdentity(principalContext, IdentityType.UserPrincipalName, x) == null))
+                    foreach (Guid Id in Users.Select(x => x.Id).Where(x => UserPrincipal.FindByIdentity(principalContext, IdentityType.Guid, x.ToString()) == null))
                     {
-                        Users.Remove(user);
+                        Users.Remove(Id.ToString());
                     }
                     foreach (string username in memberGroup.GetMembers(true).OfType<UserPrincipal>().Select(x => x.UserPrincipalName).Where(x => x != null))
                     {
@@ -173,10 +173,13 @@ namespace Bonobo.Git.Server.Data
 
         private void UpdateTeams()
         {
-            foreach (string team in Teams.Select(x => x.Name).Where(x => !ActiveDirectorySettings.TeamNameToGroupNameMapping.Keys.Contains(x, StringComparer.OrdinalIgnoreCase)))
+            foreach (var team in Teams.Select(x => new { x.Id, x.Name }).Where(x => !ActiveDirectorySettings.TeamNameToGroupNameMapping.Keys.Contains(x.Name, StringComparer.OrdinalIgnoreCase)))
             {
-                Teams.Remove(team);
+                Teams.Remove(team.Id.ToString());
             }
+
+            if(MembershipService == null)
+                MembershipService = new ADMembershipService();
 
             using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain))
             {
@@ -187,9 +190,10 @@ namespace Bonobo.Git.Server.Data
                         using (GroupPrincipal group = GroupPrincipal.FindByIdentity(principalContext, IdentityType.Name, ActiveDirectorySettings.TeamNameToGroupNameMapping[teamName]))
                         {
                             TeamModel teamModel = new TeamModel() {
+                                Id = group.Guid.Value,
                                 Description = group.Description,
                                 Name = teamName,
-                                Members = group.GetMembers(true).Select(x => MembershipService.GetUserModel(x.UserPrincipalName)).ToArray()
+                                Members = group.GetMembers(true).Select(x => MembershipService.GetUserModel(x.Guid.Value)).ToArray()
                             };
                             if (teamModel != null)
                             {
@@ -197,7 +201,7 @@ namespace Bonobo.Git.Server.Data
                             }
                         }
                     }
-                    catch
+                    catch (Exception exp)
                     {
                     }
                 }
@@ -206,17 +210,19 @@ namespace Bonobo.Git.Server.Data
 
         private void UpdateRoles()
         {
-            foreach (string role in Roles.Select(x => x.Name).Where(x => !ActiveDirectorySettings.RoleNameToGroupNameMapping.Keys.Contains(x, StringComparer.OrdinalIgnoreCase)))
+            foreach (var role in Roles.Select(x => new { x.Id, x.Name }).Where(x => !ActiveDirectorySettings.RoleNameToGroupNameMapping.Keys.Contains(x.Name, StringComparer.OrdinalIgnoreCase)))
             {
-                Roles.Remove(role);
+                Roles.Remove(role.Id.ToString());
             }
 
             PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain);
             foreach (string roleName in ActiveDirectorySettings.RoleNameToGroupNameMapping.Keys)
             {
                 GroupPrincipal group = GroupPrincipal.FindByIdentity(principalContext, IdentityType.Name, ActiveDirectorySettings.RoleNameToGroupNameMapping[roleName]);
+
                 RoleModel roleModel = new RoleModel()
                 {
+                    Id = group.Guid.Value,
                     Name = roleName,
                     Members = group.GetMembers(true).Where(x => x is UserPrincipal).Select(x => x.UserPrincipalName).ToArray()
                 };
