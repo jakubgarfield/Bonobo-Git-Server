@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 
-namespace Bonobo.Git.Server.Test
+namespace Bonobo.Git.Server.Test.Unit
 {
     [TestClass]
     public class PathEncoderTest

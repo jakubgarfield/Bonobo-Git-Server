@@ -10,8 +10,7 @@ call setup-env.cmd
 
 msbuild Bonobo.Git.Server.sln /m /property:Configuration=%config%
 if exist Bonobo.Git.Server.Test/bin/%config%/Bonobo.Git.Server.Test.dll (
-	cd Bonobo.Git.Server.Test/bin/%config%
-	mstest /testcontainer:Bonobo.Git.Server.Test.dll
+	mstest /testcontainer:Bonobo.Git.Server.Test/bin/%config%/Bonobo.Git.Server.Test.dll
 )
 
 cd %curpath%

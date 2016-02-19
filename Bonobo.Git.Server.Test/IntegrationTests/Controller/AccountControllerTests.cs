@@ -1,17 +1,16 @@
 ﻿using System;
-using SpecsFor;
 using SpecsFor.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
 
-namespace Bonobo.Git.Server.IntegrationTests
+namespace Bonobo.Git.Server.Test.Integration.Web
 {
     public class HomeControllerSpecs
     {
         [TestClass]
-        public class when_viewing_the_homepage : SpecsFor<MvcWebApp>
+        public class AccountControllerTests
         {
             private static MvcWebApp app;
 
@@ -28,7 +27,7 @@ namespace Bonobo.Git.Server.IntegrationTests
                 app.Browser.Close();
             }
 
-            [TestMethod]
+            [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
             public void UserDetailRequiresLogin()
             {
                 app.NavigateTo<HomeController>(c => c.LogOff());
@@ -39,7 +38,7 @@ namespace Bonobo.Git.Server.IntegrationTests
                 app.UrlShouldMapTo<HomeController>(c => c.LogOn("/Account/123"));
             }
 
-            [TestMethod]
+            [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
             public void LoginWithoutCredentialFailsWithInvalidMessages()
             {
                 app.NavigateTo<HomeController>(c => c.LogOn("/"));
