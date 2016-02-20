@@ -4,14 +4,31 @@ using System.Linq;
 using Bonobo.Git.Server.Models;
 using System.Data;
 using System.Data.Entity.Core;
+using Bonobo.Git.Server.Security;
 
 namespace Bonobo.Git.Server.Data
 {
     public class EFRepositoryRepository : IRepositoryRepository
     {
+        private readonly Func<BonoboGitServerContext> _createDatabaseContext;
+
+        public EFRepositoryRepository()
+        {
+            _createDatabaseContext = () => new BonoboGitServerContext();
+        }
+        private EFRepositoryRepository(Func<BonoboGitServerContext> contextCreator)
+        {
+            _createDatabaseContext = contextCreator;
+        }
+        public static EFRepositoryRepository FromCreator(Func<BonoboGitServerContext> contextCreator)
+        {
+            return new EFRepositoryRepository(contextCreator);
+        }
+
+
         public IList<RepositoryModel> GetAllRepositories()
         {
-            using (var db = new BonoboGitServerContext())
+            using (var db = _createDatabaseContext())
             {
                 var dbrepos = db.Repositories.Select(repo => new
                 {
@@ -34,9 +51,9 @@ namespace Bonobo.Git.Server.Data
                     Group = repo.Group,
                     Description = repo.Description,
                     AnonymousAccess = repo.AnonymousAccess,
-                    Users = repo.Users.Select(UserToUserModel).ToArray(),
+                    Users = repo.Users.Select(user => user.ToModel()).ToArray(),
                     Teams = repo.Teams.Select(TeamToTeamModel).ToArray(),
-                    Administrators = repo.Administrators.Select(UserToUserModel).ToArray(),
+                    Administrators = repo.Administrators.Select(user => user.ToModel()).ToArray(),
                     AuditPushUser = repo.AuditPushUser,
                     Logo = repo.Logo
                 }).ToList();
@@ -54,16 +71,14 @@ namespace Bonobo.Git.Server.Data
 
         public IList<RepositoryModel> GetAdministratedRepositories(Guid UserId)
         {
-            if (UserId == null) throw new ArgumentException("UserId");
-            
             return GetAllRepositories().Where(i => i.Administrators.Any(x => x.Id == UserId)).ToList();
         }
 
         public RepositoryModel GetRepository(string name)
         {
-            if (name == null) throw new ArgumentException("name");
+            if (name == null) throw new ArgumentNullException("name");
 
-            using (var db = new BonoboGitServerContext())
+            using (var db = _createDatabaseContext())
             {
                 return ConvertToModel(db.Repositories.FirstOrDefault(i => i.Name == name));
             }
@@ -71,15 +86,15 @@ namespace Bonobo.Git.Server.Data
 
         public RepositoryModel GetRepository(Guid id)
         {
-            using (var db = new BonoboGitServerContext())
+            using (var db = _createDatabaseContext())
             {
-                return ConvertToModel(db.Repositories.Where(i => i.Id.Equals(id)).First());
+                return ConvertToModel(db.Repositories.First(i => i.Id.Equals(id)));
             }
         }
 
         public void Delete(Guid RepositoryId)
         {
-            using (var db = new BonoboGitServerContext())
+            using (var db = _createDatabaseContext())
             {
                 var repo = db.Repositories.FirstOrDefault(i => i.Id == RepositoryId);
                 if (repo != null)
@@ -98,11 +113,12 @@ namespace Bonobo.Git.Server.Data
             if (model == null) throw new ArgumentException("model");
             if (model.Name == null) throw new ArgumentException("name");
 
-            using (var database = new BonoboGitServerContext())
+            using (var database = _createDatabaseContext())
             {
+                model.Id = Guid.NewGuid();
                 var repository = new Repository
                 {
-                    Id = Guid.NewGuid(),
+                    Id = model.Id,
                     Name = model.Name,
                     Logo = model.Logo,
                     Group = model.Group,
@@ -130,11 +146,12 @@ namespace Bonobo.Git.Server.Data
             if (model == null) throw new ArgumentException("model");
             if (model.Name == null) throw new ArgumentException("name");
 
-            using (var db = new BonoboGitServerContext())
+            using (var db = _createDatabaseContext())
             {
                 var repo = db.Repositories.FirstOrDefault(i => i.Id == model.Id);
                 if (repo != null)
                 {
+                    repo.Name = model.Name;
                     repo.Group = model.Group;
                     repo.Description = model.Description;
                     repo.Anonymous = model.AnonymousAccess;
@@ -157,18 +174,6 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        private UserModel UserToUserModel(User u)
-        {
-            return new UserModel
-            {
-                Id = u.Id,
-                Name = u.Username,
-                GivenName = u.Name,
-                Surname = u.Surname,
-                Email = u.Email,
-            };
-        }
-
         private TeamModel TeamToTeamModel(Team t)
         {
             return new TeamModel
@@ -176,7 +181,7 @@ namespace Bonobo.Git.Server.Data
                 Id = t.Id,
                 Name = t.Name,
                 Description = t.Description,
-                Members = t.Users.Select(UserToUserModel).ToArray()
+                Members = t.Users.Select(user => user.ToModel()).ToArray()
             };
         }
 
@@ -194,9 +199,9 @@ namespace Bonobo.Git.Server.Data
                 Group = item.Group,
                 Description = item.Description,
                 AnonymousAccess = item.Anonymous,
-                Users = item.Users.Select(UserToUserModel).ToArray(),
+                Users = item.Users.Select(user => user.ToModel()).ToArray(),
                 Teams = item.Teams.Select(TeamToTeamModel).ToArray(),
-                Administrators = item.Administrators.Select(UserToUserModel).ToArray(),
+                Administrators = item.Administrators.Select(user => user.ToModel()).ToArray(),
                 AuditPushUser = item.AuditPushUser,
                 Logo = item.Logo
             };

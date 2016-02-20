@@ -43,17 +43,6 @@ namespace Bonobo.Git.Server.Models
             }
         }
 
-        public static UserModel FromUser(User user)
-        {
-            return new UserModel
-            {
-                Id = user.Id,
-                Name = user.Username,
-                GivenName = user.Name,
-                Surname = user.Surname,
-                Email = user.Email,
-            };
-        }
     }
 
     public class UserEditModel

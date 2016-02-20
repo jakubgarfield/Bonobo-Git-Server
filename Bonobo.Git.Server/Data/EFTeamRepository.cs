@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Data;
 using Bonobo.Git.Server.Models;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
-using Bonobo.Git.Server.Security;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -44,7 +42,7 @@ namespace Bonobo.Git.Server.Data
                     Id = item.Id,
                     Name = item.Name,
                     Description = item.Description,
-                    Members = item.Members.Select(UserModel.FromUser).ToArray(),
+                    Members = item.Members.Select(user => user.ToModel()).ToArray(),
                 }).ToList();
             }
         }
@@ -61,7 +59,7 @@ namespace Bonobo.Git.Server.Data
                     Id = team.Id,
                     Name = team.Name,
                     Description = team.Description,
-                    Members = team.Users.Select(UserModel.FromUser).ToArray(),
+                    Members = team.Users.Select(user => user.ToModel()).ToArray(),
                 };
         }
 
