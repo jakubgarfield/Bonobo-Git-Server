@@ -102,6 +102,7 @@
     <Compile Include="MembershipTests\EFMembershipServiceTest.cs" />
     <Compile Include="MembershipTests\EfSqliteMembershipServiceTest.cs" />
     <Compile Include="MembershipTests\EfSqlServerMembershipServiceTest.cs" />
+    <Compile Include="MembershipTests\EFTeamRepositoryTests.cs" />
     <Compile Include="MembershipTests\MembershipServiceTestBase.cs" />
     <Compile Include="MsysgitIntegrationTests.cs" />
     <Compile Include="MsysgitResources.cs" />

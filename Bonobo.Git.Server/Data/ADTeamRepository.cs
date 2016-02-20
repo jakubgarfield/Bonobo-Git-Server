@@ -58,7 +58,7 @@ namespace Bonobo.Git.Server.Data
             throw new NotImplementedException();
         }
 
-        public void UpdateUserTeams(string userName, List<string> newTeams)
+        public void UpdateUserTeams(Guid userId, List<string> newTeams)
         {
             throw new NotImplementedException();
         }

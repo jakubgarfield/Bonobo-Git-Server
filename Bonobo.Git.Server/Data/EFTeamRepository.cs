@@ -4,14 +4,31 @@ using System.Linq;
 using System.Data;
 using Bonobo.Git.Server.Models;
 using System.Data.Entity.Core;
+using System.Data.Entity.Infrastructure;
+using Bonobo.Git.Server.Security;
 
 namespace Bonobo.Git.Server.Data
 {
     public class EFTeamRepository : ITeamRepository
     {
+        private readonly Func<BonoboGitServerContext> _createDatabaseContext;
+
+        public EFTeamRepository() : this(() => new BonoboGitServerContext())
+        {
+            
+        }
+        private EFTeamRepository(Func<BonoboGitServerContext> contextCreator)
+        {
+            _createDatabaseContext = contextCreator;
+        }
+        public static EFTeamRepository FromCreator(Func<BonoboGitServerContext> contextCreator)
+        {
+            return new EFTeamRepository(contextCreator);
+        }
+
         public IList<TeamModel> GetAllTeams()
         {
-            using (var db = new BonoboGitServerContext())
+            using (var db = _createDatabaseContext())
             {
                 var dbTeams = db.Teams.Select(team => new
                 {
@@ -27,30 +44,14 @@ namespace Bonobo.Git.Server.Data
                     Id = item.Id,
                     Name = item.Name,
                     Description = item.Description,
-                    Members = item.Members.Select(ToUserModel).ToArray(),
+                    Members = item.Members.Select(UserModel.FromUser).ToArray(),
                 }).ToList();
             }
-        }
-
-        private UserModel ToUserModel(User u){
-            return new UserModel
-            {
-                Id = u.Id,
-                Name = u.Username,
-                GivenName = u.Name,
-                Surname = u.Surname,
-                Email = u.Email
-            };
         }
 
         public IList<TeamModel> GetTeams(Guid UserId)
         {
             return GetAllTeams().Where(i => i.Members.Any(x => x.Id == UserId)).ToList();
-        }
-
-        public IList<TeamModel> GetTeams(string UserName)
-        {
-            return GetAllTeams().Where(i => i.Members.Any(x => x.Name == UserName)).ToList();
         }
 
         private TeamModel GetTeam(Team team)
@@ -60,34 +61,22 @@ namespace Bonobo.Git.Server.Data
                     Id = team.Id,
                     Name = team.Name,
                     Description = team.Description,
-                    Members = team.Users.Select(ToUserModel).ToArray(),
+                    Members = team.Users.Select(UserModel.FromUser).ToArray(),
                 };
         }
 
         public TeamModel GetTeam(Guid id)
         {
-
-            using (var db = new BonoboGitServerContext())
+            using (var db = _createDatabaseContext())
             {
                 var team = db.Teams.FirstOrDefault(i => i.Id == id);
                 return GetTeam(team);
             }
         }
 
-        public TeamModel GetTeam(string name)
-        {
-            if (name == null) throw new ArgumentException("name");
-
-            using (var db = new BonoboGitServerContext())
-            {
-                var team = db.Teams.FirstOrDefault(i => i.Name == name);
-                return GetTeam(team);
-            }
-        }
-
         public void Delete(Guid teamId)
         {
-            using (var db = new BonoboGitServerContext())
+            using (var db = _createDatabaseContext())
             {
                 var team = db.Teams.FirstOrDefault(i => i.Id == teamId);
                 if (team != null)
@@ -105,25 +94,32 @@ namespace Bonobo.Git.Server.Data
             if (model == null) throw new ArgumentException("team");
             if (model.Name == null) throw new ArgumentException("name");
 
-            using (var database = new BonoboGitServerContext())
+            using (var database = _createDatabaseContext())
             {
+                // Write this into the model so that the caller knows the ID of the new itel
+                model.Id = Guid.NewGuid();
                 var team = new Team
                 {
-                    Id = Guid.NewGuid(),
+                    Id = model.Id,
                     Name = model.Name,
                     Description = model.Description
                 };
                 database.Teams.Add(team);
                 if (model.Members != null)
                 {
-                    AddMembers(model.Members.Select(x => x.Name), team, database);
+                    AddMembers(model.Members.Select(x => x.Id), team, database);
                 }
                 try
                 {
                     database.SaveChanges();
                 }
+                catch (DbUpdateException)
+                {
+                    return false;
+                }
                 catch (UpdateException)
                 {
+                    // Not sure when this exception happens - DbUpdateException is what you get for adding a duplicate teamname
                     return false;
                 }
             }
@@ -136,39 +132,39 @@ namespace Bonobo.Git.Server.Data
             if (model == null) throw new ArgumentException("team");
             if (model.Name == null) throw new ArgumentException("name");
 
-            using (var db = new BonoboGitServerContext())
+            using (var db = _createDatabaseContext())
             {
-                var team = db.Teams.FirstOrDefault(i => i.Name == model.Name);
+                var team = db.Teams.FirstOrDefault(i => i.Id == model.Id);
                 if (team != null)
                 {
+                    team.Name = model.Name;
                     team.Description = model.Description;
                     team.Users.Clear();
                     if (model.Members != null)
                     {
-                        AddMembers(model.Members.Select(x => x.Name), team, db);
+                        AddMembers(model.Members.Select(x => x.Id), team, db);
                     }
                     db.SaveChanges();
                 }
             }
         }
 
-        private void AddMembers(IEnumerable<string> members, Team team, BonoboGitServerContext database)
+        private void AddMembers(IEnumerable<Guid> members, Team team, BonoboGitServerContext database)
         {
-            var users = database.Users.Where(i => members.Contains(i.Username));
+            var users = database.Users.Where(user => members.Contains(user.Id));
             foreach (var item in users)
             {
                 team.Users.Add(item);
             }
         }
 
-        public void UpdateUserTeams(string userName, List<string> newTeams)
+        public void UpdateUserTeams(Guid userId, List<string> newTeams)
         {
-            if (string.IsNullOrEmpty(userName)) throw new ArgumentException("userName");
             if (newTeams == null) throw new ArgumentException("newTeams");
 
-            using (var db = new BonoboGitServerContext())
+            using (var db = _createDatabaseContext())
             {
-                var user = db.Users.FirstOrDefault(u => u.Username == userName.ToLower());
+                var user = db.Users.FirstOrDefault(u => u.Id == userId);
                 if (user != null)
                 {
                     user.Teams.Clear();

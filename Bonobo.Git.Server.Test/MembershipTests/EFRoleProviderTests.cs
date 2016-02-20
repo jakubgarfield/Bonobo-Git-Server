@@ -84,14 +84,14 @@ namespace Bonobo.Git.Server.Test.MembershipTests
             AddUserFred();
             _provider.AddUserToRoles("Fred", new[] { "Administrator" });
             var users = _provider.GetUsersInRole("Administrator");
-            CollectionAssert.AreEqual(new[] { "admin","fred" }, users);
+            CollectionAssert.AreEqual(new[] { "admin","fred" }, users.OrderBy(user => user).ToArray());
         }
 
         [TestMethod]
         public void TestCreatingRole()
         {
             _provider.CreateRole("Programmer");
-            CollectionAssert.AreEqual(new[] { "Administrator", "Programmer" }, _provider.GetAllRoles());
+            CollectionAssert.AreEqual(new[] { "Administrator", "Programmer" }, _provider.GetAllRoles().OrderBy(role => role).ToArray());
         }
 
         [TestMethod]
