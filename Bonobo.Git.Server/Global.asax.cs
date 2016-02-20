@@ -218,7 +218,7 @@ namespace Bonobo.Git.Server
         }
 
 
-#if !DEBUG
+#if true ||  !DEBUG
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception exception = Server.GetLastError();

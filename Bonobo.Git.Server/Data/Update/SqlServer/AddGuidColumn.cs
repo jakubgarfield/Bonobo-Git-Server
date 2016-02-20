@@ -47,13 +47,13 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
         {
             try
             {
-                var result = _db.SqlQuery<string>(@"
+                var result = _db.SqlQuery<int>(@"
                             IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'User' AND  COLUMN_NAME = 'Id')
                                 SELECT 1
                             ELSE
                                 SELECT 0
                 ");
-                return int.Parse(result.SingleAsync().GetAwaiter().GetResult()) == 1;
+                return result.SingleAsync().GetAwaiter().GetResult() == 1;
             }
             catch (SqlException)
             {
@@ -62,41 +62,67 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
             }
         }
 
+        void UpdateUserTable()
+        {
+            AddGuidKey("User");
+            _db.ExecuteSqlCommand(
+                @"ALTER TABLE [User] ADD [PasswordSalt] NVARCHAR(255) NOT NULL DEFAULT 'x';
+                ");
+            _db.ExecuteSqlCommand(
+                @"UPDATE [User] SET [PasswordSalt] = [Name];
+                ");
+        }
+
+        private void AddGuidKey(string tableName)
+        {
+            _db.ExecuteSqlCommand(string.Format(
+                @"ALTER TABLE [{0}] ADD [Id] uniqueidentifier NOT NULL DEFAULT NEWID();",
+                tableName));
+        }
+
+        private void SetGuidPrimaryKey(string tableName)
+        {
+            _db.ExecuteSqlCommand(string.Format(
+                @"ALTER TABLE [{0}] DROP CONSTRAINT PK_{0};
+                ALTER TABLE [{0}] ADD PRIMARY KEY (Id);",
+                tableName));
+        }
+
         void RenameTables()
         {
             _db.ExecuteSqlCommand(@"
-                ALTER TABLE User RENAME TO oUser;
-                ALTER TABLE Repository RENAME TO oRepo;
-                ALTER TABLE Team RENAME TO oTeam;
-                ALTER TABLE Role RENAME TO oRole;
-                ALTER TABLE UserRepository_Administrator RENAME TO ura;
-                ALTER TABLE UserRepository_Permission RENAME TO urp;
-                ALTER TABLE UserTeam_Member RENAME TO utm;
-                ALTER TABLE UserRole_InRole RENAME TO urir;
-                ALTER TABLE TeamRepository_Permission RENAME TO trp;
+                EXEC sp_rename 'User', 'oUser';
+                EXEC sp_rename 'Repository', 'oRepo';
+                EXEC sp_rename 'Team', 'oTeam';
+                EXEC sp_rename 'Role', 'oRole';
+                EXEC sp_rename 'UserRepository_Administrator', 'ura';
+                EXEC sp_rename 'UserRepository_Permission', 'urp';
+                EXEC sp_rename 'UserTeam_Member', 'utm';
+                EXEC sp_rename 'UserRole_InRole', 'urir';
+                EXEC sp_rename 'TeamRepository_Permission', 'trp';
             ");
         }
 
         void DropRenamedTables()
         {
             _db.ExecuteSqlCommand(@"
-                DROP TABLE oUser;
-                DROP TABLE oRepo;
-                DROP TABLE oTeam;
-                DROP TABLE oRole;
                 DROP TABLE ura;
                 DROP TABLE urp;
                 DROP TABLE utm;
                 DROP TABLE urir;
                 DROP TABLE trp;
+                DROP TABLE oUser;
+                DROP TABLE oRepo;
+                DROP TABLE oTeam;
+                DROP TABLE oRole;
             ");
         }
 
         void CreateTables()
         {
             _db.ExecuteSqlCommand(@"
-                CREATE TABLE User (
-                    Id       Char(36)      PRIMARY KEY
+                CREATE TABLE [User] (
+                    Id       UNIQUEIDENTIFIER      PRIMARY KEY
                                            NOT NULL,
                     Name     VARCHAR (255) NOT NULL,
                     Surname  VARCHAR (255) NOT NULL,
@@ -108,7 +134,7 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
                 );
 
                 CREATE TABLE Team (
-                    Id       Char(36)      PRIMARY KEY
+                    Id       UNIQUEIDENTIFIER      PRIMARY KEY
                                            NOT NULL,
                     Name        VARCHAR (255) NOT NULL
                                               UNIQUE,
@@ -116,7 +142,7 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
                 );
 
                 CREATE TABLE Repository (
-                    Id       Char(36)      PRIMARY KEY
+                    Id       UNIQUEIDENTIFIER      PRIMARY KEY
                                            NOT NULL,
                     Name          VARCHAR (255) NOT NULL
                                                 UNIQUE,
@@ -125,26 +151,26 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
                     AuditPushUser BIT           NOT NULL
                                                 DEFAULT ('0'),
                     [Group]       VARCHAR (255) DEFAULT (NULL),
-                    Logo          BLOB          DEFAULT (NULL) 
+                    Logo          [varbinary](max) DEFAULT (NULL) 
                 );
 
                 CREATE TABLE [Role] (
-                    [Id] Char(36) PRIMARY KEY,
+                    [Id] UNIQUEIDENTIFIER PRIMARY KEY,
                     [Name] VarChar(255) Not Null UNIQUE,
                     [Description] VarChar(255) Null
                 );
 
                 CREATE TABLE UserRepository_Administrator (
-                    User_Id       CHAR(36) NOT NULL,
-                    Repository_Id CHAR(36) NOT NULL,
-                    CONSTRAINT UNQ_UserRepository_Administrator_1 UNIQUE (
+                    User_Id       UNIQUEIDENTIFIER NOT NULL,
+                    Repository_Id UNIQUEIDENTIFIER NOT NULL,
+                    CONSTRAINT UNQ_UserRepository_Administrator_12 UNIQUE (
                         User_Id,
                         Repository_Id
                     ),
                     FOREIGN KEY (
                         User_Id
                     )
-                    REFERENCES User (Id),
+                    REFERENCES [User] (Id),
                     FOREIGN KEY (
                         Repository_Id
                     )
@@ -152,16 +178,16 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
                 );
 
                 CREATE TABLE UserRepository_Permission (
-                    User_Id       CHAR(36) NOT NULL,
-                    Repository_Id CHAR(36) NOT NULL,
-                    CONSTRAINT UNQ_UserRepository_Permission_1 UNIQUE (
+                    User_Id       UNIQUEIDENTIFIER NOT NULL,
+                    Repository_Id UNIQUEIDENTIFIER NOT NULL,
+                    CONSTRAINT UNQ_UserRepository_Permission_12 UNIQUE (
                         User_Id,
                         Repository_Id
                     ),
                     FOREIGN KEY (
                         User_Id
                     )
-                    REFERENCES User (Id),
+                    REFERENCES [User] (Id),
                     FOREIGN KEY (
                         Repository_Id
                     )
@@ -169,16 +195,16 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
                 );
 
                 CREATE TABLE UserTeam_Member (
-                    User_Id CHAR(36) NOT NULL,
-                    Team_Id CHAR(36) NOT NULL,
-                    CONSTRAINT UNQ_UserTeam_Member_1 UNIQUE (
+                    User_Id UNIQUEIDENTIFIER NOT NULL,
+                    Team_Id UNIQUEIDENTIFIER NOT NULL,
+                    CONSTRAINT UNQ_UserTeam_Member_12 UNIQUE (
                         User_Id,
                         Team_Id
                     ),
                     FOREIGN KEY (
                         User_Id
                     )
-                    REFERENCES User (Id),
+                    REFERENCES [User] (Id),
                     FOREIGN KEY (
                         Team_Id
                     )
@@ -186,16 +212,16 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
                 );
 
                 CREATE TABLE UserRole_InRole (
-                    User_Id   CHAR(36) NOT NULL,
-                    Role_Id   CHAR(36) NOT NULL,
-                    CONSTRAINT UNQ_UserRole_InRole_1 UNIQUE (
+                    User_Id   UNIQUEIDENTIFIER NOT NULL,
+                    Role_Id   UNIQUEIDENTIFIER NOT NULL,
+                    CONSTRAINT UNQ_UserRole_InRole_12 UNIQUE (
                         User_Id,
                         Role_Id
                     ),
                     FOREIGN KEY (
                         User_Id
                     )
-                    REFERENCES User (Id),
+                    REFERENCES [User] (Id),
                     FOREIGN KEY (
                         Role_Id
                     )
@@ -203,9 +229,9 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
                 );
 
                 CREATE TABLE TeamRepository_Permission (
-                    Team_Id       CHAR(36)      NOT NULL,
-                    Repository_Id CHAR(36) NOT NULL,
-                    CONSTRAINT UNQ_TeamRepository_Permission_1 UNIQUE (
+                    Team_Id       UNIQUEIDENTIFIER      NOT NULL,
+                    Repository_Id UNIQUEIDENTIFIER NOT NULL,
+                    CONSTRAINT UNQ_TeamRepository_Permission_12 UNIQUE (
                         Team_Id,
                         Repository_Id
                     ),
@@ -306,7 +332,7 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
                 }
                 // Existing users will have had passwords which were salted with their username, so we need to replicate that into the Salt column
                 var salt = entry.Username;
-                _db.ExecuteSqlCommand("INSERT INTO User VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6})",
+                _db.ExecuteSqlCommand("INSERT INTO [User] VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6})",
                     guid.ToString(), entry.Name, entry.Surname, entry.Username, entry.Password, salt, entry.Email);
             }
         }
@@ -351,57 +377,49 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
                                                              User_Id,
                                                              Repository_Id
                                                          )
-                                                         SELECT User.Id,
+                                                         SELECT [User].Id,
                                                                 Repository.Id
-                                                           FROM ura
-                                                                JOIN
-                                                                User
-                                                                JOIN
-                                                                Repository
-                                                          WHERE ura.User_Username = User.Username
-                                                          AND ura.Repository_Name = Repository.Name;
-
-                INSERT INTO UserRepository_Permission (
+                                                           FROM ura JOIN [User]
+                                                        ON ura.User_Username = [User].Username
+                                                                JOIN Repository
+                                                          ON ura.Repository_Name = Repository.Name;
+            INSERT INTO UserRepository_Permission (
                                                           User_Id,
                                                           Repository_Id
                                                       )
-                                                      SELECT User.Id,
+                                                      SELECT [User].Id,
                                                              Repository.Id
-                                                        FROM urp
-                                                             JOIN
-                                                             User
-                                                             Join
-                                                             Repository
-                                                       WHERE urp.User_Username = User.Username
-                                                       AND urp.Repository_Name = Repository.Name;
+                                                        FROM urp JOIN [User] 
+                                                            ON urp.User_Username = [User].Username
+                                                             Join Repository
+                                                       ON urp.Repository_Name = Repository.Name;
 
                 INSERT INTO UserTeam_Member (
                                                 User_Id,
                                                 Team_Id
                                             )
-                                            SELECT User.Id,
+                                            SELECT [User].Id,
                                                    Team.Id
                                               FROM utm
                                                    JOIN
-                                                   User
+                                                   [User] ON utm.User_Username = [User].Username
                                                    JOIN
                                                    Team
-                                             WHERE utm.User_Username = User.Username AND 
+                                             ON
                                                    utm.Team_Name = Team.Name;
 
                 INSERT INTO UserRole_InRole (
                                                 User_Id,
                                                 Role_Id
                                             )
-                                            SELECT User.Id,
+                                            SELECT [User].Id,
                                                    Role.Id
                                               FROM urir
                                                    JOIN
-                                                   User
+                                                   [User] ON urir.User_Username = [User].Username
                                                    JOIN
                                                    Role
-                                             WHERE urir.User_Username = User.Username
-                                             AND urir.Role_Name = Role.Name;
+                                             ON urir.Role_Name = Role.Name;
 
                 INSERT INTO TeamRepository_Permission (
                                                           Team_Id,
@@ -411,11 +429,10 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
                                                              Repository.Id
                                                         FROM trp
                                                              JOIN
-                                                             Team
+                                                             Team ON trp.Team_Name = Team.Name
                                                              JOIN
                                                              Repository
-                                                       WHERE trp.Team_Name = Team.Name
-                                                       AND trp.Repository_Name = Repository.Name;
+                                                        ON trp.Repository_Name = Repository.Name;
 
             ");
         }

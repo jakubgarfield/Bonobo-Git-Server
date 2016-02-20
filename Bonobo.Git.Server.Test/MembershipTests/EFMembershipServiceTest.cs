@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Common;
 using System.Linq;
 using System.Security.Cryptography;
 using Bonobo.Git.Server.Data;
@@ -7,29 +6,20 @@ using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bonobo.Git.Server.Test
+namespace Bonobo.Git.Server.Test.MembershipTests
 {
-    [TestClass]
-    public class EFMembershipServiceTest
+    /// <summary>
+    /// Base for all membership service tests which use EF (Sqlite and SqlServer)
+    /// </summary>
+    public abstract class EFMembershipServiceTest : MembershipServiceTestBase
     {
-        EFMembershipService _service;
-        DbConnection _connection;
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            _connection = DbProviderFactories.GetFactory("System.Data.SQLite").CreateConnection();
-            _connection.ConnectionString = "Data Source =:memory:;BinaryGUID=False";
-            _connection.Open();
-            _service = new EFMembershipService(() => new BonoboGitServerContext(_connection));
-            new AutomaticUpdater().RunWithContext(new BonoboGitServerContext(_connection));
-        }
+        protected abstract BonoboGitServerContext MakeContext();
 
         [TestMethod]
         public void UpdatesCanBeRunOnAlreadyUpdatedDatabase()
         {
             // Run all the updates again - this should be completely harmless
-            new AutomaticUpdater().RunWithContext(new BonoboGitServerContext(_connection));
+            new AutomaticUpdater().RunWithContext(MakeContext());
         }
 
         [TestMethod]
@@ -49,60 +39,6 @@ namespace Bonobo.Git.Server.Test
         public void PasswordsAreCaseSensitive()
         {
             Assert.AreEqual(ValidationResult.Failure, _service.ValidateUser("admin", "Admin"));
-        }
-
-        [TestMethod]
-        public void GetUserIsCaseInsensitive()
-        {
-            Assert.AreEqual("admin", _service.GetUserModel("admin").Name);
-            Assert.AreEqual("admin", _service.GetUserModel("ADMIN").Name);
-            Assert.AreEqual("admin", _service.GetUserModel("Admin").Name);
-        }
-
-        [TestMethod]
-        public void NewUserCanBeAdded()
-        {
-            CreateTestUser();
-            Assert.AreEqual(2, _service.GetAllUsers().Count);
-            var newUser = _service.GetUserModel("testuser");
-            Assert.AreEqual("Test", newUser.GivenName);
-            Assert.AreEqual("User", newUser.Surname);
-            Assert.AreEqual("test@user.com", newUser.Email);
-        }
-
-        [TestMethod]
-        public void UserCanBeRetrievedById()
-        {
-            CreateTestUser();
-            var newUserByName = _service.GetUserModel("testuser");
-            var newUserByGuid = _service.GetUserModel(newUserByName.Id);
-
-            Assert.AreEqual(newUserByName.Name, newUserByGuid.Name);
-            Assert.AreEqual(newUserByName.Id, newUserByGuid.Id);
-        }
-
-        [TestMethod]
-        public void NewUserCanBeRetrieved()
-        {
-            CreateTestUser();
-            var user = _service.GetUserModel("testUser");
-            Assert.AreEqual("testuser", user.Name);
-        }
-
-        [TestMethod]
-        public void NewUsersPasswordValidates()
-        {
-            CreateTestUser();
-            Assert.AreEqual(ValidationResult.Success, _service.ValidateUser("testuseR", "hello"));
-        }
-
-        [TestMethod]
-        public void NewUserCanBeDeleted()
-        {
-            CreateTestUser();
-            Assert.AreEqual(2, _service.UserCount());
-            _service.DeleteUser(_service.GetUserModel("testUser").Id);
-            Assert.AreEqual(1, _service.UserCount());
         }
 
         [TestMethod]
@@ -148,27 +84,9 @@ namespace Bonobo.Git.Server.Test
             Assert.AreNotEqual("admin", GetPasswordSalt("admin"));
         }
 
-        [TestMethod]
-        public void NonExistentUserDeleteIsSilentlyIgnored()
-        {
-            _service.DeleteUser(Guid.NewGuid());
-            Assert.AreEqual(1, _service.UserCount());
-        }
-
-        [TestMethod]
-        public void UserCanBeModified()
-        {
-            _service.UpdateUser(_service.GetUserModel("admin").Id, "SonOfadmin", "Mr", "Big", "big.admin@admin.com", "letmein");
-            var newUser = _service.GetUserModel("sonofadmiN");
-            Assert.AreEqual("Mr", newUser.GivenName);
-            Assert.AreEqual("Big", newUser.Surname);
-            Assert.AreEqual("big.admin@admin.com", newUser.Email);
-            Assert.AreEqual(ValidationResult.Success, _service.ValidateUser("sonofadmin", "letmein"));
-        }
-
         User GetRawUser(string username)
         {
-            using (var context = new BonoboGitServerContext(_connection))
+            using (var context = MakeContext())
             {
                 username = username.ToLower();
                 return context.Users.First(u => u.Username == username);
@@ -182,7 +100,7 @@ namespace Bonobo.Git.Server.Test
 
         void ForceInDeprecatedHash(string username, string password)
         {
-            using (var context = new BonoboGitServerContext(_connection))
+            using (var context = MakeContext())
             {
                 username = username.ToLower();
                 var user = context.Users.First(u => u.Username == username);
@@ -196,11 +114,6 @@ namespace Bonobo.Git.Server.Test
                 }
                 context.SaveChanges();
             }
-        }
-
-        void CreateTestUser()
-        {
-            _service.CreateUser("testUser", "hello", "Test", "User", "test@user.com", null);
         }
     }
 }
