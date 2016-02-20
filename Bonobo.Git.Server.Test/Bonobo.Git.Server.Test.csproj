@@ -97,10 +97,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ADMembershipServiceTest.cs" />
-    <Compile Include="EFRoleProviderTests.cs" />
-    <Compile Include="EFMembershipServiceTest.cs" />
-    <Compile Include="MembershipServiceTestBase.cs" />
+    <Compile Include="MembershipTests\ADMembershipServiceTest.cs" />
+    <Compile Include="MembershipTests\EFRoleProviderTests.cs" />
+    <Compile Include="MembershipTests\EFMembershipServiceTest.cs" />
+    <Compile Include="MembershipTests\EfSqliteMembershipServiceTest.cs" />
+    <Compile Include="MembershipTests\EfSqlServerMembershipServiceTest.cs" />
+    <Compile Include="MembershipTests\MembershipServiceTestBase.cs" />
     <Compile Include="MsysgitIntegrationTests.cs" />
     <Compile Include="MsysgitResources.cs" />
     <Compile Include="PathEncoderTest.cs" />
@@ -108,7 +110,8 @@
     <Compile Include="Definitions.cs" />
     <Compile Include="PasswordServiceTest.cs" />
     <Compile Include="GitAuthorizeAttributeTest.cs" />
-    <Compile Include="SqliteTestConnection.cs" />
+    <Compile Include="MembershipTests\SqliteTestConnection.cs" />
+    <Compile Include="MembershipTests\SqlServerTestConnection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bonobo.Git.Server\Bonobo.Git.Server.csproj">

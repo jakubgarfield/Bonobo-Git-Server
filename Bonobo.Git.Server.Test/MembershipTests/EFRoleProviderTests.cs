@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Cryptography;
+using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bonobo.Git.Server.Test
+namespace Bonobo.Git.Server.Test.MembershipTests
 {
     [TestClass]
-    public class EFRoleProviderTest
+    public class EFSqliteRoleProviderTest : EFRoleProviderTest
     {
-        IRoleProvider _provider;
         SqliteTestConnection _connection;
 
         [TestInitialize]
@@ -21,11 +20,41 @@ namespace Bonobo.Git.Server.Test
             new AutomaticUpdater().RunWithContext(_connection.GetContext());
         }
 
+        protected override BonoboGitServerContext MakeContext()
+        {
+            return _connection.GetContext();
+        }
+    }
+
+    [TestClass]
+    public class EFSqlServerRoleProviderTest : EFRoleProviderTest
+    {
+        SqlServerTestConnection _connection;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            _connection = new SqlServerTestConnection();
+            _provider = EFRoleProvider.FromCreator(() => _connection.GetContext());
+            new AutomaticUpdater().RunWithContext(_connection.GetContext());
+        }
+
+        protected override BonoboGitServerContext MakeContext()
+        {
+            return _connection.GetContext();
+        }
+    }
+
+    public abstract class EFRoleProviderTest
+    {
+        protected IRoleProvider _provider;
+        protected abstract BonoboGitServerContext MakeContext();
+
         [TestMethod]
         public void UpdatesCanBeRunOnAlreadyUpdatedDatabase()
         {
             // Run all the updates again - this should be completely harmless
-            new AutomaticUpdater().RunWithContext(_connection.GetContext());
+            new AutomaticUpdater().RunWithContext(MakeContext());
         }
 
         [TestMethod]
@@ -69,10 +98,10 @@ namespace Bonobo.Git.Server.Test
         public void TestAddingUserToMultipleRoles()
         {
             _provider.CreateRole("Programmer");
-            AddUserFred();
+            var fredId = AddUserFred();
             _provider.AddUserToRoles("Fred", new[] { "Programmer", "Administrator" });
-            CollectionAssert.AreEqual(new[] { "Administrator", "Programmer" }, _provider.GetRolesForUser("fred"));
-            CollectionAssert.AreEqual(new[] { "admin", "fred" }, _provider.GetUsersInRole("Administrator"));
+            CollectionAssert.AreEqual(new[] { "Administrator", "Programmer" }, _provider.GetRolesForUser(fredId).OrderBy(role => role).ToArray());
+            CollectionAssert.AreEqual(new[] { "admin", "fred" }, _provider.GetUsersInRole("Administrator").OrderBy(name => name).ToArray());
             CollectionAssert.AreEqual(new[] { "fred" }, _provider.GetUsersInRole("Programmer"));
         }
 
@@ -94,10 +123,11 @@ namespace Bonobo.Git.Server.Test
             Assert.AreEqual(1, _provider.GetAllRoles().Length);
         }
 
-        void AddUserFred()
+        Guid AddUserFred()
         {
-            EFMembershipService memberService = new EFMembershipService(() => _connection.GetContext());
+            EFMembershipService memberService = new EFMembershipService(MakeContext);
             memberService.CreateUser("fred", "letmein", "Fred", "FredBlogs", "fred@aol", null);
+            return memberService.GetUserModel("fred").Id;
         }
     }
 }

@@ -1,7 +1,7 @@
 using System.Data.Common;
 using Bonobo.Git.Server.Data;
 
-namespace Bonobo.Git.Server.Test
+namespace Bonobo.Git.Server.Test.MembershipTests
 {
     class SqliteTestConnection
     {
@@ -20,3 +20,4 @@ namespace Bonobo.Git.Server.Test
         }
     }
 }
+

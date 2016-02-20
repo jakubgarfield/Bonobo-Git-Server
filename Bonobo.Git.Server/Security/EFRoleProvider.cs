@@ -10,7 +10,7 @@ namespace Bonobo.Git.Server.Security
 
         public EFRoleProvider()
         {
-            _createDatabaseContext = () => _createDatabaseContext();
+            _createDatabaseContext = () => new BonoboGitServerContext();
         }
         private EFRoleProvider(Func<BonoboGitServerContext> contextCreator)
         {

@@ -6,25 +6,14 @@ using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bonobo.Git.Server.Test
+namespace Bonobo.Git.Server.Test.MembershipTests
 {
-    [TestClass]
-    public class EFMembershipServiceTest : MembershipServiceTestBase
+    /// <summary>
+    /// Base for all membership service tests which use EF (Sqlite and SqlServer)
+    /// </summary>
+    public abstract class EFMembershipServiceTest : MembershipServiceTestBase
     {
-        SqliteTestConnection _connection;
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            _connection = new SqliteTestConnection();
-            _service = new EFMembershipService(MakeContext);
-            new AutomaticUpdater().RunWithContext(MakeContext());
-        }
-
-        BonoboGitServerContext MakeContext()
-        {
-            return _connection.GetContext();
-        }
+        protected abstract BonoboGitServerContext MakeContext();
 
         [TestMethod]
         public void UpdatesCanBeRunOnAlreadyUpdatedDatabase()
