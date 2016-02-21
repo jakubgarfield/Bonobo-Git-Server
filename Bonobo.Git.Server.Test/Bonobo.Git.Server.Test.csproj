@@ -97,7 +97,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="MembershipTests\ADMembershipServiceTest.cs" />
     <Compile Include="MembershipTests\EFRepositoryRepositoryTest.cs" />
     <Compile Include="MembershipTests\EFRoleProviderTests.cs" />
     <Compile Include="MembershipTests\EFMembershipServiceTest.cs" />
