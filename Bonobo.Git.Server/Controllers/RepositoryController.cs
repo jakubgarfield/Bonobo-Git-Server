@@ -120,7 +120,9 @@ namespace Bonobo.Git.Server.Controllers
             }
             else if (ModelState.IsValid)
             {
-                if (RepositoryRepository.Create(ConvertRepositoryDetailModel(model)))
+
+                var repo_model = ConvertRepositoryDetailModel(model);
+                if (RepositoryRepository.Create(repo_model))
                 {
                     string path = Path.Combine(UserConfiguration.Current.Repositories, model.Name);
                     if (!Directory.Exists(path))
@@ -128,7 +130,7 @@ namespace Bonobo.Git.Server.Controllers
                         LibGit2Sharp.Repository.Init(path, true);
                         TempData["CreateSuccess"] = true;
                         TempData["SuccessfullyCreatedRepositoryName"] = model.Name;
-                        TempData["SuccessfullyCreatedRepositoryId"] = RepositoryRepository.GetRepository(model.Id).Id;
+                        TempData["SuccessfullyCreatedRepositoryId"] = repo_model.Id;
                         return RedirectToAction("Index");
                     }
                     else
@@ -451,7 +453,8 @@ namespace Bonobo.Git.Server.Controllers
             }
             else if (ModelState.IsValid)
             {
-                if (RepositoryRepository.Create(ConvertRepositoryDetailModel(model)))
+                var repo_model = ConvertRepositoryDetailModel(model);
+                if (RepositoryRepository.Create(repo_model))
                 {
                     string targetRepositoryPath = Path.Combine(UserConfiguration.Current.Repositories, model.Name);
                     if (!Directory.Exists(targetRepositoryPath))
@@ -513,7 +516,7 @@ namespace Bonobo.Git.Server.Controllers
 
         private void PopulateCheckboxListData(ref RepositoryDetailModel model)
         {
-            model = !string.IsNullOrEmpty(model.Name) ? ConvertRepositoryModel(RepositoryRepository.GetRepository(model.Id)) : model;
+            model = model.Id != Guid.Empty ? ConvertRepositoryModel(RepositoryRepository.GetRepository(model.Id)) : model;
             model.AllAdministrators = MembershipService.GetAllUsers().ToArray();
             model.AllUsers = MembershipService.GetAllUsers().ToArray();
             model.AllTeams = TeamRepository.GetAllTeams().ToArray();
