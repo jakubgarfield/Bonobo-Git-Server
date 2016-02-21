@@ -14,7 +14,7 @@ using Microsoft.Practices.Unity;
 namespace Bonobo.Git.Server.Controllers
 {
     [GitAuthorize]
-    [RepositoryNameNormalizer("project")]
+    [RepositoryNameNormalizer("repositoryName")]
     public class GitController : Controller
     {
         [Dependency]
@@ -88,12 +88,12 @@ namespace Bonobo.Git.Server.Controllers
         /// This is the action invoked if you browse to a .git URL
         /// We just redirect to the repo details page, which is basically what GitHub does
         /// </summary>
-        public ActionResult GitUrl(string project)
+        public ActionResult GitUrl(string repositoryName)
         {
-            return RedirectPermanent(Url.Action("Detail", "Repository", new { id = project}));
+            return RedirectPermanent(Url.Action("Detail", "Repository", new { id = repositoryName}));
         }
 
-        private ActionResult ExecuteReceivePack(string project)
+        private ActionResult ExecuteReceivePack(string repositoryName)
         {
             return new GitCmdResult(
                 "application/x-git-receive-pack-result",
@@ -101,13 +101,13 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     GitService.ExecuteGitReceivePack(
                         Guid.NewGuid().ToString("N"),
-                        project,
+                        repositoryName,
                         GetInputStream(disableBuffer: true),
                         outStream);
                 });
         }
 
-        private ActionResult ExecuteUploadPack(string project)
+        private ActionResult ExecuteUploadPack(string repositoryName)
         {
             return new GitCmdResult(
                 "application/x-git-upload-pack-result",
@@ -115,13 +115,13 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     GitService.ExecuteGitUploadPack(
                         Guid.NewGuid().ToString("N"),
-                        project,
+                        repositoryName,
                         GetInputStream(),
                         outStream);
                 });
         }
 
-        private ActionResult GetInfoRefs(String project, String service)
+        private ActionResult GetInfoRefs(String repositoryName, String service)
         {
             Response.StatusCode = 200;
 
@@ -135,7 +135,7 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     GitService.ExecuteServiceByName(
                         Guid.NewGuid().ToString("N"),
-                        project, 
+                        repositoryName, 
                         serviceName, 
                         new ExecutionOptions() { AdvertiseRefs = true },
                         GetInputStream(),
@@ -163,14 +163,14 @@ namespace Bonobo.Git.Server.Controllers
             return "0000";
         }
 
-        private static DirectoryInfo GetDirectoryInfo(String project)
+        private static DirectoryInfo GetDirectoryInfo(String repositoryName)
         {
-            return new DirectoryInfo(Path.Combine(UserConfiguration.Current.Repositories, project));
+            return new DirectoryInfo(Path.Combine(UserConfiguration.Current.Repositories, repositoryName));
         }
 
-        private static bool RepositoryIsValid(string project)
+        private static bool RepositoryIsValid(string repositoryName)
         {
-            var directory = GetDirectoryInfo(project);
+            var directory = GetDirectoryInfo(repositoryName);
             var isValid = Repository.IsValid(directory.FullName);
             return isValid;
         }
