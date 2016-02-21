@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Collections;
+using System.Diagnostics;
 using System.Web.Hosting;
 using Bonobo.Git.Server.Configuration;
 
@@ -94,8 +95,9 @@ namespace Bonobo.Git.Server.Data
                 File.WriteAllText(itemFilename, JsonConvert.SerializeObject(item));
                 result = true;
             }
-            catch
+            catch(Exception ex)
             {
+                Trace.TraceError("ADStoreErr: " + ex);
             }
 
             return result;
@@ -111,8 +113,9 @@ namespace Bonobo.Git.Server.Data
                 File.Delete(itemFilename);
                 result = true;
             }
-            catch
+            catch (Exception ex)
             {
+                Trace.TraceError("ADStoreErr: " + ex);
             }
 
             return result;
@@ -134,8 +137,9 @@ namespace Bonobo.Git.Server.Data
                     T item = JsonConvert.DeserializeObject<T>(File.ReadAllText(filename));
                     result.TryAdd(item.Id.ToString(), item);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Trace.TraceError("ADStoreErr: " + ex);
                 }
             }
 

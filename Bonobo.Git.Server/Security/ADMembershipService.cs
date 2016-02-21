@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 using System.IO;
 using System.Text;
 using System.Data.Entity.Core;
-
+using System.Diagnostics;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
 using System.Web.Security;
@@ -28,7 +28,7 @@ namespace Bonobo.Git.Server.Security
         {
             ValidationResult result = ValidationResult.Failure;
 
-            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty", "userName");
+            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty", "username");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty", "password");
 
             try
@@ -66,8 +66,9 @@ namespace Bonobo.Git.Server.Security
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                Trace.TraceError("AD.ValidateUser Exception: " + ex);
                 result = ValidationResult.Failure;
             }
 

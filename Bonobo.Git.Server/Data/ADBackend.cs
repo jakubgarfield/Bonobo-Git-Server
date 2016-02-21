@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -102,8 +103,9 @@ namespace Bonobo.Git.Server.Data
                     Parallel.Invoke(() => UpdateUsers(), () => UpdateTeams(), () => UpdateRoles());
                     UpdateRepositories();
                 }
-                catch
+                catch(Exception ex)
                 {
+                    LogException(ex);
                 }
                 finally
                 {
@@ -142,8 +144,9 @@ namespace Bonobo.Git.Server.Data
                     };
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                LogException(ex);
             }
 
             return result;
@@ -188,8 +191,9 @@ namespace Bonobo.Git.Server.Data
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                LogException(ex);
             }
         }
 
@@ -223,8 +227,9 @@ namespace Bonobo.Git.Server.Data
                             }
                         }
                     }
-                    catch (Exception exp)
+                    catch (Exception ex)
                     {
+                        LogException(ex);
                     }
                 }
             }
@@ -251,6 +256,12 @@ namespace Bonobo.Git.Server.Data
                 Roles.AddOrUpdate(roleModel);
             }
         }
+
+        private void LogException(Exception exception)
+        {
+            Trace.TraceError("{0}: ADBackend Exception: {1}", DateTime.Now, exception);
+        }
+
 
         public void Dispose()
         {
