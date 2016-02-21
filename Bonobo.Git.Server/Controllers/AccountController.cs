@@ -40,7 +40,7 @@ namespace Bonobo.Git.Server.Controllers
                 var model = new UserDetailModel
                 {
                     Id = user.Id,
-                    Username = user.Name,
+                    Username = user.Username,
                     Name = user.GivenName,
                     Surname = user.Surname,
                     Email = user.Email,
@@ -109,7 +109,7 @@ namespace Bonobo.Git.Server.Controllers
                 var model = new UserEditModel
                 {
                     Id = user.Id,
-                    Username = user.Name,
+                    Username = user.Username,
                     Name = user.GivenName,
                     Surname = user.Surname,
                     Email = user.Email,
@@ -264,7 +264,7 @@ namespace Bonobo.Git.Server.Controllers
                 model.Add(new UserDetailModel
                 {
                     Id = user.Id,
-                    Username = user.Name,
+                    Username = user.Username,
                     Name = user.GivenName,
                     Surname = user.Surname,
                     Email = user.Email,

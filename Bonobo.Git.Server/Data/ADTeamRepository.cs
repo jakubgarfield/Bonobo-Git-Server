@@ -45,7 +45,7 @@ namespace Bonobo.Git.Server.Data
 
         public IList<TeamModel> GetTeams(string userName)
         {
-            return ADBackend.Instance.Teams.Where(x => x.Members.Any(y => y.Name == userName)).ToList();
+            return ADBackend.Instance.Teams.Where(x => x.Members.Any(y => y.Username == userName)).ToList();
         }
 
         public IList<TeamModel> GetTeams(Guid userId)

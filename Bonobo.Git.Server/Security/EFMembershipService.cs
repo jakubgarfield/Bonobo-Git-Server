@@ -54,11 +54,11 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public bool CreateUser(string username, string password, string name, string surname, string email, Guid? guid)
+        public bool CreateUser(string username, string password, string givenName, string surname, string email, Guid? guid)
         {
             if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
-            if (String.IsNullOrEmpty(name)) throw new ArgumentException("Value cannot be null or empty.", "name");
+            if (String.IsNullOrEmpty(givenName)) throw new ArgumentException("Value cannot be null or empty.", "givenName");
             if (String.IsNullOrEmpty(surname)) throw new ArgumentException("Value cannot be null or empty.", "surname");
             if (String.IsNullOrEmpty(email)) throw new ArgumentException("Value cannot be null or empty.", "email");
             if ((!guid.HasValue) || guid.Value == Guid.Empty) guid = Guid.NewGuid();
@@ -70,7 +70,7 @@ namespace Bonobo.Git.Server.Security
                 {
                     Id = guid.Value,
                     Username = username,
-                    Name = name,
+                    GivenName = givenName,
                     Surname = surname,
                     Email = email,
                 };
@@ -96,8 +96,8 @@ namespace Bonobo.Git.Server.Security
                 return db.Users.Include("Roles").ToList().Select(item => new UserModel
                 {
                     Id = item.Id,
-                    Name = item.Username,
-                    GivenName = item.Name,
+                    Username = item.Username,
+                    GivenName = item.GivenName,
                     Surname = item.Surname,
                     Email = item.Email,
                 }).ToList();
@@ -117,8 +117,8 @@ namespace Bonobo.Git.Server.Security
             return user == null ? null : new UserModel
             {
                 Id = user.Id,
-                Name = user.Username,
-                GivenName = user.Name,
+                Username = user.Username,
+                GivenName = user.GivenName,
                 Surname = user.Surname,
                 Email = user.Email,
              };
@@ -143,7 +143,7 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public void UpdateUser(Guid id, string username, string name, string surname, string email, string password)
+        public void UpdateUser(Guid id, string username, string givenName, string surname, string email, string password)
         {
             using (var db = _createDatabaseContext())
             {
@@ -151,8 +151,8 @@ namespace Bonobo.Git.Server.Security
                 if (user != null)
                 {
                     var lowerUsername = username == null ? null : username.ToLowerInvariant();
-                    user.Username = lowerUsername ?? user.Name;
-                    user.Name = name ?? user.Name;
+                    user.Username = lowerUsername ?? user.Username;
+                    user.GivenName = givenName ?? user.GivenName;
                     user.Surname = surname ?? user.Surname;
                     user.Email = email ?? user.Email;
                     if (password != null)

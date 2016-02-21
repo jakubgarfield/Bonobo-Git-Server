@@ -114,7 +114,7 @@ namespace Bonobo.Git.Server.Data
                     result = new UserModel
                     {
                         Id = user.Guid.Value,
-                        Name = user.UserPrincipalName,
+                        Username = user.UserPrincipalName,
                         GivenName = user.GivenName ?? String.Empty,
                         Surname = user.Surname ?? String.Empty,
                         Email = user.EmailAddress ?? String.Empty,
@@ -133,7 +133,7 @@ namespace Bonobo.Git.Server.Data
         {
             foreach(RepositoryModel repository in Repositories)
             {
-                UserModel[] usersToRemove = repository.Users.Where(x => !Users.Select(u => u.Name).Contains(x.Name, StringComparer.OrdinalIgnoreCase)).ToArray();
+                UserModel[] usersToRemove = repository.Users.Where(x => !Users.Select(u => u.Username).Contains(x.Username, StringComparer.OrdinalIgnoreCase)).ToArray();
                 TeamModel[] teamsToRemove = repository.Teams.Where(x => !Teams.Select(u => u.Name).Contains(x.Name, StringComparer.OrdinalIgnoreCase)).ToArray();
                 repository.Users = repository.Users.Except(usersToRemove).ToArray();
                 repository.Teams = repository.Teams.Except(teamsToRemove).ToArray();
@@ -176,7 +176,7 @@ namespace Bonobo.Git.Server.Data
 
         private void UpdateTeams()
         {
-            foreach (var team in Teams.Select(x => new { x.Id, x.Name }).Where(x => !ActiveDirectorySettings.TeamNameToGroupNameMapping.Keys.Contains(x.Name, StringComparer.OrdinalIgnoreCase)))
+            foreach (var team in Teams.Select(x => new { x.Id, Name = x.Name }).Where(x => !ActiveDirectorySettings.TeamNameToGroupNameMapping.Keys.Contains(x.Name, StringComparer.OrdinalIgnoreCase)))
             {
                 Teams.Remove(team.Id.ToString());
             }
@@ -214,7 +214,7 @@ namespace Bonobo.Git.Server.Data
 
         private void UpdateRoles()
         {
-            foreach (var role in Roles.Select(x => new { x.Id, x.Name }).Where(x => !ActiveDirectorySettings.RoleNameToGroupNameMapping.Keys.Contains(x.Name, StringComparer.OrdinalIgnoreCase)))
+            foreach (var role in Roles.Select(x => new { x.Id, Name = x.Name }).Where(x => !ActiveDirectorySettings.RoleNameToGroupNameMapping.Keys.Contains(x.Name, StringComparer.OrdinalIgnoreCase)))
             {
                 Roles.Remove(role.Id.ToString());
             }

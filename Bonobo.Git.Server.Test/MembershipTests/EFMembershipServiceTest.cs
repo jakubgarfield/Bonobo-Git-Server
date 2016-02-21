@@ -26,7 +26,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         public void NewDatabaseContainsJustAdminUser()
         {
             var admin = _service.GetAllUsers().Single();
-            Assert.AreEqual("admin", admin.Name);
+            Assert.AreEqual("admin", admin.Username);
         }
 
         [TestMethod]

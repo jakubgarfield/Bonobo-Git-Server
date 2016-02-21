@@ -25,7 +25,7 @@ else
                 <span>
                     @for (int i = 0; i < Model.Members.Length; i++)
                     {
-                        @Html.ActionLink(@Model.Members[i].DisplayName, "Detail", "Account", new { id = @Model.Members[i].Id}, new { title = @Model.Members[i].Name })if (i + 1 != Model.Members.Length)
+                        @Html.ActionLink(@Model.Members[i].DisplayName, "Detail", "Account", new { id = @Model.Members[i].Id}, new { title = @Model.Members[i].Username })if (i + 1 != Model.Members.Length)
                         {<text>, </text>}
                     }
                 </span>

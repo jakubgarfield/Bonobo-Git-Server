@@ -75,7 +75,7 @@ namespace Bonobo.Git.Server.Security
             return result;
         }
 
-        public bool CreateUser(string username, string password, string name, string surname, string email, Guid? guid)
+        public bool CreateUser(string username, string password, string givenName, string surname, string email, Guid? guid)
         {
             return false;
         }
@@ -120,7 +120,7 @@ namespace Bonobo.Git.Server.Security
             return result;
         }
 
-        public void UpdateUser(Guid id, string username, string name, string surname, string email, string password)
+        public void UpdateUser(Guid id, string username, string givenName, string surname, string email, string password)
         {
             throw new NotImplementedException();
         }

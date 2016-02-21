@@ -116,7 +116,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
             Assert.IsTrue(createResult);
             var addedTeam = _repo.GetAllTeams().Single();
             Assert.AreEqual("Team1", addedTeam.Name);
-            CollectionAssert.AreEqual(new[] { "fred"}, addedTeam.Members.Select(user => user.Name).ToArray());
+            CollectionAssert.AreEqual(new[] { "fred"}, addedTeam.Members.Select(user => user.Username).ToArray());
         }
 
         [TestMethod]

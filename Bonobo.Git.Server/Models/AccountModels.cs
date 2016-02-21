@@ -30,7 +30,7 @@ namespace Bonobo.Git.Server.Models
     public class UserModel : INameProperty
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string Username { get; set; }
         public string GivenName { get; set; }
         public string Surname { get; set; }
         public string Email { get; set; }
@@ -43,6 +43,10 @@ namespace Bonobo.Git.Server.Models
             }
         }
 
+        string INameProperty.Name
+        {
+            get { return Username; }
+        }
     }
 
     public class UserEditModel

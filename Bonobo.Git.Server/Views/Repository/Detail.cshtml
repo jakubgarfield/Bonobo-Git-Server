@@ -75,7 +75,7 @@
                 @Html.LabelFor(m => m.Users)
                 @for (int i = 0; i < Model.Users.Length; i++)
                 {
-                        @Html.ActionLink(@Model.Users[i].DisplayName, "Detail", "Account", new { id = @Model.Users[i].Id}, new { title = @Model.Users[i].Name })
+                        @Html.ActionLink(@Model.Users[i].DisplayName, "Detail", "Account", new { id = @Model.Users[i].Id}, new { title = @Model.Users[i].Username })
                         if (i + 1 != Model.Users.Length)
                         {
                             <text>, </text>
@@ -86,7 +86,7 @@
                 @Html.LabelFor(m => m.Administrators)
                 @for (int i = 0; i < Model.Administrators.Length; i++)
                     {
-                        @Html.ActionLink(@Model.Administrators[i].DisplayName, "Detail", "Account", new { id = @Model.Administrators[i].Id }, new { title = @Model.Administrators[i].Name })
+                        @Html.ActionLink(@Model.Administrators[i].DisplayName, "Detail", "Account", new { id = @Model.Administrators[i].Id }, new { title = @Model.Administrators[i].Username })
                         if (i + 1 != Model.Administrators.Length)
                         {
                             <text>, </text>

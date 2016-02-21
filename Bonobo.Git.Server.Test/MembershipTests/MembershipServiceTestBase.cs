@@ -17,9 +17,9 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         [TestMethod]
         public void GetUserIsCaseInsensitive()
         {
-            Assert.AreEqual("admin", _service.GetUserModel("admin").Name);
-            Assert.AreEqual("admin", _service.GetUserModel("ADMIN").Name);
-            Assert.AreEqual("admin", _service.GetUserModel("Admin").Name);
+            Assert.AreEqual("admin", _service.GetUserModel("admin").Username);
+            Assert.AreEqual("admin", _service.GetUserModel("ADMIN").Username);
+            Assert.AreEqual("admin", _service.GetUserModel("Admin").Username);
         }
 
         [TestMethod]
@@ -28,7 +28,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
             CreateTestUser();
             Assert.AreEqual(2, _service.GetAllUsers().Count);
             var newUser = _service.GetUserModel("testuser");
-            Assert.AreEqual("Test", newUser.GivenName);
+            Assert.AreEqual("John", newUser.GivenName);
             Assert.AreEqual("User", newUser.Surname);
             Assert.AreEqual("test@user.com", newUser.Email);
         }
@@ -40,7 +40,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
             var newUserByName = _service.GetUserModel("testuser");
             var newUserByGuid = _service.GetUserModel(newUserByName.Id);
 
-            Assert.AreEqual(newUserByName.Name, newUserByGuid.Name);
+            Assert.AreEqual(newUserByName.Username, newUserByGuid.Username);
             Assert.AreEqual(newUserByName.Id, newUserByGuid.Id);
         }
 
@@ -49,7 +49,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         {
             CreateTestUser();
             var user = _service.GetUserModel("testUser");
-            Assert.AreEqual("testuser", user.Name);
+            Assert.AreEqual("testuser", user.Username);
         }
 
         [TestMethod]
@@ -87,9 +87,34 @@ namespace Bonobo.Git.Server.Test.MembershipTests
             Assert.AreEqual(ValidationResult.Success, _service.ValidateUser("sonofadmin", "letmein"));
         }
 
-        void CreateTestUser()
+        [TestMethod]
+        public void UserModificationPreservesUsernameIfNull()
         {
-            _service.CreateUser("testUser", "hello", "Test", "User", "test@user.com", null);
+            var userId = CreateTestUser();
+            _service.UpdateUser(userId, null, "Mr", "Big", "big.admin@admin.com", "letmein");
+            var newUser = _service.GetUserModel(userId);
+            Assert.AreEqual("Mr", newUser.GivenName);
+            Assert.AreEqual("Big", newUser.Surname);
+            Assert.AreEqual("big.admin@admin.com", newUser.Email);
+            Assert.AreEqual(ValidationResult.Success, _service.ValidateUser("testUser", "letmein"));
+        }
+
+        [TestMethod]
+        public void UserModificationCanJustChangePassword()
+        {
+            var userId = CreateTestUser();
+            _service.UpdateUser(userId, null, null, null, null, "newPassword");
+            var newUser = _service.GetUserModel(userId);
+            Assert.AreEqual("John", newUser.GivenName);
+            Assert.AreEqual("User", newUser.Surname);
+            Assert.AreEqual("test@user.com", newUser.Email);
+            Assert.AreEqual(ValidationResult.Success, _service.ValidateUser("testUser", "newPassword"));
+        }
+
+        Guid CreateTestUser()
+        {
+            _service.CreateUser("testUser", "hello", "John", "User", "test@user.com", null);
+            return _service.GetUserModel("testUser").Id;
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Bonobo.Git.Server.Data.Mapping
         {
             ToTable("User");
             Property(t => t.Id).HasColumnName("Id");
-            Property(t => t.Name).HasColumnName("Name");
+            Property(t => t.GivenName).HasColumnName("Name");
             Property(t => t.Surname).HasColumnName("Surname");
             Property(t => t.Username).HasColumnName("Username");
             Property(t => t.Password).HasColumnName("Password");
@@ -27,7 +27,7 @@ namespace Bonobo.Git.Server.Data.Mapping
 
         private void SetProperties()
         {
-            Property(t => t.Name)
+            Property(t => t.GivenName)
                 .IsRequired()
                 .HasMaxLength(255);
 

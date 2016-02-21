@@ -12,7 +12,7 @@ namespace Bonobo.Git.Server.Data
         private ICollection<Team> _teams;
 
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string GivenName { get; set; }
         public string Surname { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
@@ -72,8 +72,8 @@ namespace Bonobo.Git.Server.Data
             return new UserModel
             {
                 Id = Id,
-                Name = Username,
-                GivenName = Name,
+                Username = Username,
+                GivenName = GivenName,
                 Surname = Surname,
                 Email = Email,
             };

@@ -79,7 +79,7 @@ namespace Bonobo.Git.Server.Controllers
                 }
                 else
                 {
-                    MembershipService.UpdateUser(user.Id, model.Username, user.Name, user.Surname, user.Email, model.Password);
+                    MembershipService.UpdateUser(user.Id, null, null, null, null, model.Password);
                     TempData["ResetSuccess"] = true;
                 }
             }
@@ -104,7 +104,7 @@ namespace Bonobo.Git.Server.Controllers
                 }
                 else
                 {
-                    string token = MembershipService.GenerateResetToken(user.Name);
+                    string token = MembershipService.GenerateResetToken(user.Username);
                     MvcApplication.Cache.Add(token, model.Username, DateTimeOffset.Now.AddHours(1));
 
                     // Passing Requust.Url.Scheme to Url.Action forces it to generate a full URL
