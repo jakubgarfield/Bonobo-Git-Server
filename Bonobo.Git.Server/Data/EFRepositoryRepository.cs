@@ -4,6 +4,7 @@ using System.Linq;
 using Bonobo.Git.Server.Models;
 using System.Data;
 using System.Data.Entity.Core;
+using System.Data.Entity.Infrastructure;
 using Bonobo.Git.Server.Security;
 
 namespace Bonobo.Git.Server.Data
@@ -131,6 +132,10 @@ namespace Bonobo.Git.Server.Data
                 try
                 {
                     database.SaveChanges();
+                }
+                catch (DbUpdateException)
+                {
+                    return false;
                 }
                 catch (UpdateException)
                 {

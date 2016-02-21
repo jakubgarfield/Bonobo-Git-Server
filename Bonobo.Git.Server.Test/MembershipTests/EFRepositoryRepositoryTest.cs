@@ -69,6 +69,13 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         }
 
         [TestMethod]
+        public void DuplicateRepoAddReturnsFalse()
+        {
+            Assert.IsTrue(_repo.Create(MakeRepo("Repo1")));
+            Assert.IsFalse(_repo.Create(MakeRepo("Repo1")));
+        }
+
+        [TestMethod]
         public void RespositoryWithUsersCanBeAdded()
         {
             var newRepo = MakeRepo("Repo1");
@@ -295,6 +302,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
 
             Assert.AreEqual(0, _repo.GetPermittedRepositories(null, new[] { Guid.NewGuid() }).Count);
         }
+
 
         UserModel AddUserFred()
         {
