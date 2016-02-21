@@ -35,25 +35,25 @@ namespace Bonobo.Git.Server.Security
             return false;
         }
 
-        public bool AllowsAnonymous(string project)
+        public bool AllowsAnonymous(string repositoryName)
         {
             using (var database = new BonoboGitServerContext())
             {
-                var isAllowsAnonymous = database.Repositories.Any(repo => repo.Name == project && repo.Anonymous);
+                var isAllowsAnonymous = database.Repositories.Any(repo => repo.Name == repositoryName && repo.Anonymous);
                 return isAllowsAnonymous;
             }
         }
 
-        public bool AllowsAnonymous(Guid projectId)
+        public bool AllowsAnonymous(Guid repositoryId)
         {
             using (var database = new BonoboGitServerContext())
             {
-                var isAllowsAnonymous = database.Repositories.Any(repo => repo.Id == projectId && repo.Anonymous);
+                var isAllowsAnonymous = database.Repositories.Any(repo => repo.Id == repositoryId && repo.Anonymous);
                 return isAllowsAnonymous;
             }
         }
 
-        public bool IsRepositoryAdministrator(Guid userId, Guid projectId)
+        public bool IsRepositoryAdministrator(Guid userId, Guid repositoryId)
         {
             using (var database = new BonoboGitServerContext())
             {
@@ -62,7 +62,7 @@ namespace Bonobo.Git.Server.Security
                         .Any(
                             us =>
                                 (us.Roles.Any(role => role.Name == Definitions.Roles.Administrator) ||
-                                 us.AdministratedRepositories.Any(ar => ar.Id == projectId)));
+                                 us.AdministratedRepositories.Any(ar => ar.Id == repositoryId)));
                 return isRepoAdmin;
             }
         }
