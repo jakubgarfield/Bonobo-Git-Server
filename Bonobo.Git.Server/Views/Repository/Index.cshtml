@@ -59,8 +59,7 @@
 {
     <div class="summary-success">
         <p>@Resources.Repository_Create_Success</p>
-        <p>@Html.ActionLink("Go to repository : " + TempData["SuccessfullyCreatedRepositoryName"].ToString(), "Detail", new { id = TempData["SuccessfullyCreatedRepositoryName"].ToString() })</p>
-
+				<p>@Html.ActionLink(string.Format(@Resources.Repository_Create_Success_Go_To, TempData["SuccessfullyCreatedRepositoryName"].ToString()), "Detail", new { id = TempData["SuccessfullyCreatedRepositoryId"].ToString() })</p>
     </div>
 }
 @if (TempData["CloneSuccess"] as bool? == true)
@@ -116,14 +115,14 @@
                                 Html.ActionLink(
                                     GetNameToDisplay((string) item.Name, (RepositoryDetailStatus) item.Status),
                                     "Detail",
-                                    new { id = item.Name },
+                                    new { id = item.Id },
                                     new { @class = "detail" + (item.Logo.Exists ? " customLogo" : "") }
                                 )
                         ),
 
                         permitted.Column("Description", typeof (RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string) item.Description).Length > 100)) ? ((string) item.Description).Substring(0, 100) + " ... " : item.Description, style: "description"),
-                        permitted.Column(format: (item) => Html.ActionLink(" ", "Edit", new {id = item.Name}, new {@class = "edit", title = Resources.Grid_Edit}), style: "action"),
-                        permitted.Column(format: (item) => Html.ActionLink(" ", "Delete", new {id = item.Name}, new {@class = "delete", title = Resources.Grid_Delete}), style: "action")
+                        permitted.Column(format: (item) => Html.ActionLink(" ", "Edit", new {id = item.Id}, new {@class = "edit", title = Resources.Grid_Edit}), style: "action"),
+                        permitted.Column(format: (item) => Html.ActionLink(" ", "Delete", new {id = item.Id}, new {@class = "delete", title = Resources.Grid_Delete}), style: "action")
                         );
 
                     @permitted.GetHtml(

@@ -19,8 +19,6 @@ namespace Bonobo.Git.Server.Security
 {
     public class ADMembershipService : IMembershipService
     {
-        private static EFMembershipService userRepository = new EFMembershipService();
-
         public bool IsReadOnly()
         {
             return true;
@@ -60,13 +58,6 @@ namespace Bonobo.Git.Server.Security
 									}
 									else
 									{
-										ADBackend.Instance.Users.AddOrUpdate(new UserModel
-										{
-											Name = user.UserPrincipalName,
-											GivenName = user.GivenName ?? String.Empty,
-											Surname = user.Surname ?? String.Empty,
-											Email = user.EmailAddress ?? String.Empty,
-										});
 										result = ValidationResult.Success;
 									}
 								}
@@ -83,17 +74,18 @@ namespace Bonobo.Git.Server.Security
             return result;
         }
 
-        public bool CreateUser(string username, string password, string name, string surname, string email)
+        public bool CreateUser(string username, string password, string name, string surname, string email, Guid? guid)
         {
             return false;
         }
 
         public IList<UserModel> GetAllUsers()
         {
-            return ADBackend.Instance.Users.ToList();
+            var users = ADBackend.Instance.Users.ToList();
+            return users;
         }
 
-        public UserModel GetUser(string username)
+        public UserModel GetUserModel(string username)
         {
             string domain = GetDomainFromUsername(username);
             if (!IsUserPrincipalName(username))
@@ -101,11 +93,17 @@ namespace Bonobo.Git.Server.Security
                 using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain))
                 using (UserPrincipal user = UserPrincipal.FindByIdentity(principalContext, username))
                 {
-                    username = user.UserPrincipalName;
+                    // assuming all users has a guid on AD
+                    return ADBackend.Instance.Users.FirstOrDefault(n => n.Id == user.Guid.Value);
                 }
             }
+            // Not found
+            return null;
+        }
 
-            return ADBackend.Instance.Users.FirstOrDefault(n=>n.Name.Equals(username, StringComparison.OrdinalIgnoreCase));
+        public UserModel GetUserModel(Guid id)
+        {
+            return ADBackend.Instance.Users[id.ToString()];
         }
 
         private static bool IsUserPrincipalName(string username)
@@ -121,12 +119,12 @@ namespace Bonobo.Git.Server.Security
             return result;
         }
 
-        public void UpdateUser(string username, string name, string surname, string email, string password)
+        public void UpdateUser(Guid id, string username, string name, string surname, string email, string password)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteUser(string username)
+        public void DeleteUser(Guid id)
         {
             throw new NotImplementedException();
         }

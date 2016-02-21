@@ -18,7 +18,6 @@ using MimeTypes;
 
 namespace Bonobo.Git.Server.Controllers
 {
-    [RepositoryNameNormalizer("id")]
     public class RepositoryController : Controller
     {
         [Dependency]
@@ -58,16 +57,11 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository(RequiresRepositoryAdministrator = true)]
-        public ActionResult Edit(string id)
+        public ActionResult Edit(Guid id)
         {
-            if (!String.IsNullOrEmpty(id))
-            {
-                var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id));
-                PopulateEditData();
-                return View(model);
-            }
-
-            return View();
+            var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id));
+            PopulateCheckboxListData(ref model);
+            return View(model);
         }
 
         [HttpPost]
@@ -76,7 +70,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (model.Administrators.Contains(User.Id(), StringComparer.OrdinalIgnoreCase))
+                if (model.PostedSelectedAdministrators.Contains(User.Id()))
                 {
                     RepositoryRepository.Update(ConvertRepositoryDetailModel(model));
                     ViewBag.UpdateSuccess = true;
@@ -86,7 +80,7 @@ namespace Bonobo.Git.Server.Controllers
                     ModelState.AddModelError("Administrators", Resources.Repository_Edit_CantRemoveYourself);
                 }
             }
-            PopulateEditData();
+            PopulateCheckboxListData(ref model);
             return View(model);
         }
 
@@ -100,9 +94,9 @@ namespace Bonobo.Git.Server.Controllers
 
             var model = new RepositoryDetailModel
             {
-                Administrators = new string[] { User.Id() },
+                Administrators = new UserModel[] { MembershipService.GetUserModel(User.Id()) },
             };
-            PopulateEditData();
+            PopulateCheckboxListData(ref model);
             return View(model);
         }
 
@@ -134,11 +128,12 @@ namespace Bonobo.Git.Server.Controllers
                         LibGit2Sharp.Repository.Init(path, true);
                         TempData["CreateSuccess"] = true;
                         TempData["SuccessfullyCreatedRepositoryName"] = model.Name;
+                        TempData["SuccessfullyCreatedRepositoryId"] = RepositoryRepository.GetRepository(model.Id).Id;
                         return RedirectToAction("Index");
                     }
                     else
                     {
-                        RepositoryRepository.Delete(model.Name);
+                        RepositoryRepository.Delete(model.Id);
                         ModelState.AddModelError("", Resources.Repository_Create_DirectoryExists);
                     }
                 }
@@ -147,60 +142,52 @@ namespace Bonobo.Git.Server.Controllers
                     ModelState.AddModelError("", Resources.Repository_Create_Failure);
                 }
             }
-            PopulateEditData();
+            PopulateCheckboxListData(ref model);
             return View(model);
         }
 
         [WebAuthorizeRepository(RequiresRepositoryAdministrator = true)]
-        public ActionResult Delete(string id)
+        public ActionResult Delete(Guid id)
         {
-            if (!String.IsNullOrEmpty(id))
-            {
-                return View(new RepositoryDetailModel { Name = id });
-            }
-
-            return RedirectToAction("Index");
+            return View(ConvertRepositoryModel(RepositoryRepository.GetRepository(id)));
         }
 
         [HttpPost]
         [WebAuthorizeRepository(RequiresRepositoryAdministrator = true)]
         public ActionResult Delete(RepositoryDetailModel model)
         {
-            if (model != null && !String.IsNullOrEmpty(model.Name))
+            if (model != null)
             {
-                string path = Path.Combine(UserConfiguration.Current.Repositories, model.Name);
+                var repo = RepositoryRepository.GetRepository(model.Id);
+                string path = Path.Combine(UserConfiguration.Current.Repositories, repo.Name);
                 if (Directory.Exists(path))
                 {
                     DeleteFileSystemInfo(new DirectoryInfo(path));
                 }
-                RepositoryRepository.Delete(model.Name);
+                RepositoryRepository.Delete(repo.Id);
                 TempData["DeleteSuccess"] = true;
             }
             return RedirectToAction("Index");
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Detail(string id)
+        public ActionResult Detail(Guid id)
         {
             ViewBag.ID = id;
-            if (!String.IsNullOrEmpty(id))
+            var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id));
+            if (model != null)
             {
-                var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id));
-                if (model != null)
-                {
-                    model.IsCurrentUserAdministrator = User.IsInRole(Definitions.Roles.Administrator) || RepositoryPermissionService.IsRepositoryAdministrator(User.Id(), id);
-                    SetGitUrls(model);
-                }
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
-                {
-                    string defaultReferenceName;
-                    browser.BrowseTree(null, null, out defaultReferenceName);
-                    RouteData.Values.Add("encodedName", defaultReferenceName);
-                }
-
-                return View(model);
+                model.IsCurrentUserAdministrator = User.IsInRole(Definitions.Roles.Administrator) || RepositoryPermissionService.IsRepositoryAdministrator(User.Id(), model.Id);
+                SetGitUrls(model);
             }
-            return View();
+            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, model.Name)))
+            {
+                string defaultReferenceName;
+                browser.BrowseTree(null, null, out defaultReferenceName);
+                RouteData.Values.Add("encodedName", defaultReferenceName);
+            }
+
+            return View(model);
         }
 
         /// <summary>
@@ -221,23 +208,22 @@ namespace Bonobo.Git.Server.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 model.PersonalGitUrl =
-                    String.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(User.Id()) + "@").Replace("!", "\\"),model.Name, ".git");
+                    String.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(User.Username()) + "@"), model.Name, ".git");
             }
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Tree(string id, string encodedName, string encodedPath)
+        public ActionResult Tree(Guid id, string encodedName, string encodedPath)
         {
             bool includeDetails = Request.IsAjaxRequest(); 
-
-            if (String.IsNullOrEmpty(id))
-                return View();
 
             ViewBag.ID = id;
             var name = PathEncoder.Decode(encodedName);
             var path = PathEncoder.Decode(encodedPath);
 
-            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+            var repo = RepositoryRepository.GetRepository(id);
+
+            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))
             {
                 string referenceName;
                 var files = browser.BrowseTree(name, path, out referenceName, includeDetails).ToList();
@@ -252,7 +238,7 @@ namespace Bonobo.Git.Server.Controllers
                 }
                 var model = new RepositoryTreeModel
                 {
-                    Name = id,
+                    Name = repo.Name,
                     Branch = name,
                     Path = path,
                     Files = files.OrderByDescending(i => i.IsTree).ThenBy(i => i.Name), 
@@ -273,34 +259,30 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Blob(string id, string encodedName, string encodedPath)
+        public ActionResult Blob(Guid id, string encodedName, string encodedPath)
         {
             ViewBag.ID = id;
-            if (!String.IsNullOrEmpty(id))
+            var repo = RepositoryRepository.GetRepository(id);
+            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))
             {
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
-                {
-                    var name = PathEncoder.Decode(encodedName);
-                    var path = PathEncoder.Decode(encodedPath);
-                    string referenceName;
-                    var model = browser.BrowseBlob(name, path, out referenceName);
-                    PopulateBranchesData(browser, referenceName);
-                    PopulateAddressBarData(path);
+                var name = PathEncoder.Decode(encodedName);
+                var path = PathEncoder.Decode(encodedPath);
+                string referenceName;
+                var model = browser.BrowseBlob(name, path, out referenceName);
+                PopulateBranchesData(browser, referenceName);
+                PopulateAddressBarData(path);
 
-                    return View(model);
-                }
+                return View(model);
             }
-            return View();
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Raw(string id, string encodedName, string encodedPath, bool display = false)
+        public ActionResult Raw(Guid id, string encodedName, string encodedPath, bool display = false)
         {
             ViewBag.ID = id;
-            if (String.IsNullOrEmpty(id))
-                return HttpNotFound();
 
-            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+            var repo = RepositoryRepository.GetRepository(id);
+            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))
             {
                 var name = PathEncoder.Decode(encodedName);
                 var path = PathEncoder.Decode(encodedPath);
@@ -325,33 +307,27 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Blame(string id, string encodedName, string encodedPath)
+        public ActionResult Blame(Guid id, string encodedName, string encodedPath)
         {
             ViewBag.ID = id;
             ViewBag.ShowShortMessageOnly = true;
-            if (!String.IsNullOrEmpty(id))
+            var repo = RepositoryRepository.GetRepository(id);
+            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))
             {
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
-                {
-                    var name = PathEncoder.Decode(encodedName);
-                    var path = PathEncoder.Decode(encodedPath);
-                    string referenceName;
-                    var model = browser.GetBlame(name, path, out referenceName);
-                    PopulateBranchesData(browser, referenceName);
-                    PopulateAddressBarData(path);
+                var name = PathEncoder.Decode(encodedName);
+                var path = PathEncoder.Decode(encodedPath);
+                string referenceName;
+                var model = browser.GetBlame(name, path, out referenceName);
+                PopulateBranchesData(browser, referenceName);
+                PopulateAddressBarData(path);
 
-                    return View(model);
-                }
+                return View(model);
             }
-            return HttpNotFound();
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Download(string id, string encodedName, string encodedPath)
+        public ActionResult Download(Guid id, string encodedName, string encodedPath)
         {
-            if (String.IsNullOrEmpty(id))
-                return HttpNotFound();
-
             var name = PathEncoder.Decode(encodedName);
             var path = PathEncoder.Decode(encodedPath);
 
@@ -359,7 +335,8 @@ namespace Bonobo.Git.Server.Controllers
             Response.Charset = "";
             Response.ContentType = "application/zip";
 
-            string headerValue = ContentDispositionUtil.GetHeaderValue((name ?? id) + ".zip");
+            var repo = RepositoryRepository.GetRepository(id);
+            string headerValue = ContentDispositionUtil.GetHeaderValue((name ?? repo.Name) + ".zip");
             Response.AddHeader("Content-Disposition", headerValue);
 
             using (var outputZip = new ZipFile())
@@ -368,7 +345,7 @@ namespace Bonobo.Git.Server.Controllers
                 outputZip.AlternateEncodingUsage = ZipOption.AsNecessary;
                 outputZip.AlternateEncoding = Encoding.Unicode;
 
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
+                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))
                 {
                     AddTreeToZip(browser, name, path, outputZip);
                 }
@@ -405,68 +382,58 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Commits(string id, string encodedName, int page = 1)
+        public ActionResult Commits(Guid id, string encodedName, int page = 1)
         {
             page = page >= 1 ? page : 1;
             
             ViewBag.ID = id;
             ViewBag.ShowShortMessageOnly = true;
-            if (!String.IsNullOrEmpty(id))
+            var repo = RepositoryRepository.GetRepository(id);
+            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))
             {
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
-                {
-                    var name = PathEncoder.Decode(encodedName);
-                    string referenceName;
-                    int totalCount;
-                    var commits = browser.GetCommits(name, page, 10, out referenceName, out totalCount);
-                    PopulateBranchesData(browser, referenceName);
-                    ViewBag.TotalCount = totalCount;
-                    return View(new RepositoryCommitsModel { Commits = commits, Name = id });
-                }
+                var name = PathEncoder.Decode(encodedName);
+                string referenceName;
+                int totalCount;
+                var commits = browser.GetCommits(name, page, 10, out referenceName, out totalCount);
+                PopulateBranchesData(browser, referenceName);
+                ViewBag.TotalCount = totalCount;
+                return View(new RepositoryCommitsModel { Commits = commits, Name = repo.Name });
             }
-
-            return View();
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Commit(string id, string commit)
+        public ActionResult Commit(Guid id, string commit)
         {
             ViewBag.ID = id;
             ViewBag.ShowShortMessageOnly = false;
-            if (!String.IsNullOrEmpty(id))
+            var repo = RepositoryRepository.GetRepository(id);
+            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))
             {
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
-                {
-                    var model = browser.GetCommitDetail(commit);
-                    model.Name = id;
-                    return View(model);
-                }
+                var model = browser.GetCommitDetail(commit);
+                model.Name = repo.Name;
+                return View(model);
             }
-
-            return View();
         }
 
         [WebAuthorize]
-        public ActionResult Clone(string id)
+        public ActionResult Clone(Guid id)
         {
             if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfiguration.Current.AllowUserRepositoryCreation)
             {
                 return RedirectToAction("Unauthorized", "Home");
             }
 
-            var model = new RepositoryDetailModel
-            {
-                Administrators = new string[] { User.Id() },
-            };
+            var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id));
+            model.Name = "";
+            PopulateCheckboxListData(ref model);
             ViewBag.ID = id;
-            PopulateEditData();
             return View(model);
         }
 
         [HttpPost]
         [WebAuthorize]
         [WebAuthorizeRepository]
-        public ActionResult Clone(string id, RepositoryDetailModel model)
+        public ActionResult Clone(Guid id, RepositoryDetailModel model)
         {
             if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfiguration.Current.AllowUserRepositoryCreation)
             {
@@ -489,7 +456,8 @@ namespace Bonobo.Git.Server.Controllers
                     string targetRepositoryPath = Path.Combine(UserConfiguration.Current.Repositories, model.Name);
                     if (!Directory.Exists(targetRepositoryPath))
                     {
-                        string sourceRepositoryPath = Path.Combine(UserConfiguration.Current.Repositories, id);
+                        var source_repo = RepositoryRepository.GetRepository(id);
+                        string sourceRepositoryPath = Path.Combine(UserConfiguration.Current.Repositories, source_repo.Name);
                         
                         LibGit2Sharp.CloneOptions options = new LibGit2Sharp.CloneOptions()
                             {
@@ -512,7 +480,7 @@ namespace Bonobo.Git.Server.Controllers
                     }
                     else
                     {
-                        RepositoryRepository.Delete(model.Name);
+                        RepositoryRepository.Delete(model.Id);
                         ModelState.AddModelError("", Resources.Repository_Create_DirectoryExists);
                     }
                 }
@@ -523,28 +491,35 @@ namespace Bonobo.Git.Server.Controllers
             }
 
             ViewBag.ID = id;
-            PopulateEditData();
+            PopulateCheckboxListData(ref model);
             return View(model);
         }
 
         [WebAuthorizeRepository]
-        public ActionResult History(string id, string encodedPath, string encodedName)
+        public ActionResult History(Guid id, string encodedPath, string encodedName)
         {
             ViewBag.ID = id;
             ViewBag.ShowShortMessageOnly = true;
-            if (!String.IsNullOrEmpty(id))
+            var repo = RepositoryRepository.GetRepository(id);
+            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))
             {
-                using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, id)))
-                {
-                    var path = PathEncoder.Decode(encodedPath);
-                    var name = PathEncoder.Decode(encodedName);
-                    string referenceName;
-                    var commits = browser.GetHistory(path, name, out referenceName);
-                    return View(new RepositoryCommitsModel { Commits = commits, Name = id });
-                }
+                var path = PathEncoder.Decode(encodedPath);
+                var name = PathEncoder.Decode(encodedName);
+                string referenceName;
+                var commits = browser.GetHistory(path, name, out referenceName);
+                return View(new RepositoryCommitsModel { Commits = commits, Name = repo.Name });
             }
+        }
 
-            return View();
+        private void PopulateCheckboxListData(ref RepositoryDetailModel model)
+        {
+            model = !string.IsNullOrEmpty(model.Name) ? ConvertRepositoryModel(RepositoryRepository.GetRepository(model.Id)) : model;
+            model.AllAdministrators = MembershipService.GetAllUsers().ToArray();
+            model.AllUsers = MembershipService.GetAllUsers().ToArray();
+            model.AllTeams = TeamRepository.GetAllTeams().ToArray();
+            model.PostedSelectedAdministrators = new Guid[0];
+            model.PostedSelectedUsers = new Guid[0];
+            model.PostedSelectedTeams = new Guid[0];
         }
 
         [HttpPost]
@@ -569,20 +544,6 @@ namespace Bonobo.Git.Server.Controllers
             ViewData["tags"] = browser.GetTags();
         }
 
-        private void PopulateEditData()
-        {
-            if (AuthenticationProvider is WindowsAuthenticationProvider)
-            {
-                ViewData["AvailableUsers"] = MembershipService.GetAllUsers().Select(i => new List<string>(){i.Name, i.GivenName, i.Surname}).ToArray();
-            }
-            else
-            {
-                ViewData["AvailableUsers"] = MembershipService.GetAllUsers().Select(i => new List<string>(){i.Name}).ToArray();
-            }
-            ViewData["AvailableAdministrators"] = ViewData["AvailableUsers"];
-            ViewData["AvailableTeams"] = TeamRepository.GetAllTeams().Select(i => i.Name).ToArray();
-        }
-
         private IEnumerable<RepositoryDetailModel> GetIndexModel()
         {
             IEnumerable<RepositoryModel> repositoryModels;
@@ -592,7 +553,7 @@ namespace Bonobo.Git.Server.Controllers
             }
             else
             {
-                var userTeams = TeamRepository.GetTeams(User.Id()).Select(i => i.Name).ToArray();
+                var userTeams = TeamRepository.GetTeams(User.Id()).Select(i => i.Id).ToArray();
                 repositoryModels = RepositoryRepository.GetPermittedRepositories(User.Id(), userTeams);
             }
             return repositoryModels.Select(ConvertRepositoryModel).ToList();
@@ -602,17 +563,18 @@ namespace Bonobo.Git.Server.Controllers
         {
             return model == null ? null : new RepositoryDetailModel
             {
+                Id = model.Id,
                 Name = model.Name,
                 Group = model.Group,
                 Description = model.Description,
                 Users = model.Users,
                 Administrators = model.Administrators,
                 Teams = model.Teams,
-                IsCurrentUserAdministrator = model.Administrators.Contains(User.Id(), StringComparer.OrdinalIgnoreCase),
+                IsCurrentUserAdministrator = model.Administrators.Select(x => x.Name).Contains(User.Username(), StringComparer.OrdinalIgnoreCase),
                 AllowAnonymous = model.AnonymousAccess,
                 Status = GetRepositoryStatus(model),
                 AuditPushUser = model.AuditPushUser,
-                Logo = new RepositoryLogoDetailModel(model.Logo)
+                Logo = new RepositoryLogoDetailModel(model.Logo),
             };
         }
 
@@ -633,12 +595,13 @@ namespace Bonobo.Git.Server.Controllers
         {
             return model == null ? null : new RepositoryModel
             {
+                Id = model.Id,
                 Name = model.Name,
                 Group = model.Group,
                 Description = model.Description,
-                Users = model.Users,
-                Administrators = model.Administrators,
-                Teams = model.Teams,
+                Users = model.PostedSelectedUsers != null ? model.PostedSelectedUsers.Select(x => MembershipService.GetUserModel(x)).ToArray() : new UserModel[0],
+                Administrators = model.PostedSelectedAdministrators != null ? model.PostedSelectedAdministrators.Select(x => MembershipService.GetUserModel(x)).ToArray() : new UserModel[0],
+                Teams = model.PostedSelectedTeams != null ? model.PostedSelectedTeams.Select(x => TeamRepository.GetTeam(x)).ToArray() : new TeamModel[0],
                 AnonymousAccess = model.AllowAnonymous,
                 AuditPushUser = model.AuditPushUser,
                 Logo = model.Logo != null ? model.Logo.BinaryData : null,

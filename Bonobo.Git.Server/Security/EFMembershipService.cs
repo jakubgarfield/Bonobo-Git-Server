@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bonobo.Git.Server.Data;
-using System.Data;
 using Bonobo.Git.Server.Models;
 using System.Security.Cryptography;
-using System.IO;
-using System.Text;
 using System.Data.Entity.Core;
 
 namespace Bonobo.Git.Server.Security
@@ -16,12 +13,26 @@ namespace Bonobo.Git.Server.Security
         private readonly Func<BonoboGitServerContext> _createDatabaseContext;
         private readonly IPasswordService _passwordService;
 
-        public EFMembershipService()
+        public EFMembershipService() : this(() => new BonoboGitServerContext())
+        {
+        }
+
+        public EFMembershipService(Func<BonoboGitServerContext> contextCreator)
         {
             // set up dependencies
-            _createDatabaseContext = ()=>new BonoboGitServerContext();
+            _createDatabaseContext = contextCreator;
             Action<string, string> updateUserPasswordHook =
-                (username, password)=>UpdateUser(username, null, null, null, password);
+                (username, password) =>
+                {
+                    using (var db = _createDatabaseContext())
+                    {
+                        var user = db.Users.FirstOrDefault(i => i.Username == username);
+                        if (user != null)
+                        {
+                            UpdateUser(user.Id, null, null, null, null, password);
+                        }
+                    }
+                };
             _passwordService = new PasswordService(updateUserPasswordHook);
         }
 
@@ -32,36 +43,38 @@ namespace Bonobo.Git.Server.Security
 
         public ValidationResult ValidateUser(string username, string password)
         {
-            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "userName");
+            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
 
             username = username.ToLowerInvariant();
             using (var database = _createDatabaseContext())
             {
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
-                return user != null && _passwordService.ComparePassword(password, username, user.Password) ? ValidationResult.Success : ValidationResult.Failure;
+                return user != null && _passwordService.ComparePassword(password, username, user.PasswordSalt, user.Password) ? ValidationResult.Success : ValidationResult.Failure;
             }
         }
 
-        public bool CreateUser(string username, string password, string name, string surname, string email)
+        public bool CreateUser(string username, string password, string name, string surname, string email, Guid? guid)
         {
-            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "userName");
+            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
             if (String.IsNullOrEmpty(name)) throw new ArgumentException("Value cannot be null or empty.", "name");
             if (String.IsNullOrEmpty(surname)) throw new ArgumentException("Value cannot be null or empty.", "surname");
             if (String.IsNullOrEmpty(email)) throw new ArgumentException("Value cannot be null or empty.", "email");
+            if ((!guid.HasValue) || guid.Value == Guid.Empty) guid = Guid.NewGuid();
 
             username = username.ToLowerInvariant();
             using (var database = _createDatabaseContext())
             {
                 var user = new User
                 {
+                    Id = guid.Value,
                     Username = username,
-                    Password = _passwordService.GetSaltedHash(password, username),
                     Name = name,
                     Surname = surname,
                     Email = email,
                 };
+                SetPassword(user, password);
                 database.Users.Add(user);
                 try
                 {
@@ -82,6 +95,7 @@ namespace Bonobo.Git.Server.Security
             {
                 return db.Users.Include("Roles").ToList().Select(item => new UserModel
                 {
+                    Id = item.Id,
                     Name = item.Username,
                     GivenName = item.Name,
                     Surname = item.Surname,
@@ -98,59 +112,85 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public UserModel GetUser(string username)
+        private UserModel GetUserModel(User user)
         {
-            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
+            return user == null ? null : new UserModel
+            {
+                Id = user.Id,
+                Name = user.Username,
+                GivenName = user.Name,
+                Surname = user.Surname,
+                Email = user.Email,
+             };
+        }
 
-            username = username.ToLowerInvariant();
+        public UserModel GetUserModel(Guid id)
+        {
             using (var db = _createDatabaseContext())
             {
-                var user = db.Users.FirstOrDefault(i => i.Username == username);
-                return user == null ? null : new UserModel
-                {
-                    Name = user.Username,
-                    GivenName = user.Name,
-                    Surname = user.Surname,
-                    Email = user.Email,
-                 };
+                var user = db.Users.FirstOrDefault(i => i.Id == id);
+                return GetUserModel(user);
             }
         }
 
-        public void UpdateUser(string username, string name, string surname, string email, string password)
+        public UserModel GetUserModel(string username)
         {
-            using (var database = _createDatabaseContext())
+            using (var db = _createDatabaseContext())
             {
                 username = username.ToLowerInvariant();
-                var user = database.Users.FirstOrDefault(i => i.Username == username);
+                var user = db.Users.FirstOrDefault(i => i.Username == username);
+                return GetUserModel(user);
+            }
+        }
+
+        public void UpdateUser(Guid id, string username, string name, string surname, string email, string password)
+        {
+            using (var db = _createDatabaseContext())
+            {
+                var user = db.Users.FirstOrDefault(i => i.Id == id);
                 if (user != null)
                 {
+                    var lowerUsername = username == null ? null : username.ToLowerInvariant();
+                    user.Username = lowerUsername ?? user.Name;
                     user.Name = name ?? user.Name;
                     user.Surname = surname ?? user.Surname;
                     user.Email = email ?? user.Email;
-                    user.Password = password != null ? _passwordService.GetSaltedHash(password, username) : user.Password;
-                    database.SaveChanges();
+                    if (password != null)
+                    {
+                        SetPassword(user, password);
+                    }
+                    db.SaveChanges();
                 }
             }
         }
 
-        public void DeleteUser(string username)
+        public void DeleteUser(Guid id)
         {
-            using (var database = _createDatabaseContext())
+            using (var db = _createDatabaseContext())
             {
-                username = username.ToLowerInvariant();
-                var user = database.Users.FirstOrDefault(i => i.Username == username);
-                if (user != null)
+                foreach (var user in db.Users)
                 {
-                    user.AdministratedRepositories.Clear();
-                    user.Roles.Clear();
-                    user.Repositories.Clear();
-                    user.Teams.Clear();
-                    database.Users.Remove(user);
-                    database.SaveChanges();
+                    if (user.Id == id)
+                    {
+                        user.AdministratedRepositories.Clear();
+                        user.Roles.Clear();
+                        user.Repositories.Clear();
+                        user.Teams.Clear();
+                        db.Users.Remove(user);
+                        db.SaveChanges();
+                    }
                 }
             }
         }
 
+        private void SetPassword(User user, string password)
+        {
+            if (user == null) throw new ArgumentNullException("user", "User cannot be null");
+            if (String.IsNullOrEmpty(password)) throw new ArgumentException("Password cannot be null or empty.", "password");
+
+            user.PasswordSalt = Guid.NewGuid().ToString();
+            user.Password = _passwordService.GetSaltedHash(password, user.PasswordSalt);
+        }
 
         private const int PBKDF2IterCount = 1000; // default for Rfc2898DeriveBytes
         private const int PBKDF2SubkeyLength = 256 / 8; // 256 bits

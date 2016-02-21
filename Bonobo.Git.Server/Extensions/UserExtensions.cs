@@ -29,9 +29,15 @@ namespace Bonobo.Git.Server
             return null;
         }
 
-        public static string Id(this IPrincipal user)
+        public static Guid Id(this IPrincipal user)
         {
-            return user.GetClaim(ClaimTypes.Upn);
+            string id = user.GetClaim(ClaimTypes.Upn);
+            return id != null ? Guid.Parse(id) : Guid.Empty;
+        }
+
+        public static string Username(this IPrincipal user)
+        {
+            return user.GetClaim(ClaimTypes.NameIdentifier);
         }
 
         public static string Name(this IPrincipal user)
@@ -92,6 +98,23 @@ namespace Bonobo.Git.Server
             }
 
             return username;
+        }
+
+        public static string GetDomain(this string username)
+        {
+            int deliIndex = username.IndexOf('@');
+            if (deliIndex > 0)
+            {
+                return username.Substring(deliIndex + 1);
+            }
+
+            deliIndex = username.IndexOf('\\');
+            if (deliIndex > 0)
+            {
+                return username.Substring(0, deliIndex);
+            }
+
+            return string.Empty;
         }
     }
 }

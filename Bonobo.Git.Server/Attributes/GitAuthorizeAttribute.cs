@@ -79,25 +79,10 @@ namespace Bonobo.Git.Server
             {
                 if (AuthenticationProvider is WindowsAuthenticationProvider)
                 {
-                    var parts = username.Split('\\');
-                    try
+                    if (MembershipService.ValidateUser(username, password) == ValidationResult.Success)
                     {
-                        using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, parts[0]))
-                        {
-                            var adUser = UserPrincipal.FindByIdentity(pc, username);
-                            if (adUser != null)
-                            {
-                                if (pc.ValidateCredentials(username, password))
-                                {
-                                    httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username.Replace("\\", "!"))));
-                                    allowed = true;
-                                }
-                            }
-                        }
-                    }
-                    catch (PrincipalException)
-                    {
-                        // let it fail
+                        httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username.Replace("\\", "!"))));
+                        allowed = true;
                     }
                 }
                 else

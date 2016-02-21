@@ -155,6 +155,10 @@
       <HintPath>..\packages\MediaTypeMap.2.1.0.0\lib\net40\MimeTypeMap.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MvcCheckBoxList, Version=1.4.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvcCheckBoxList.1.4.5\lib\net45\MvcCheckBoxList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -166,16 +170,16 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data.SQLite, Version=1.0.98.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Core.1.0.98.1\lib\net45\System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Data.SQLite, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.99.0\lib\net45\System.Data.SQLite.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.SQLite.EF6, Version=1.0.98.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.98.1\lib\net45\System.Data.SQLite.EF6.dll</HintPath>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.99.0\lib\net45\System.Data.SQLite.EF6.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.98.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.98.1\lib\net45\System.Data.SQLite.Linq.dll</HintPath>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.99.0\lib\net45\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.DirectoryServices.AccountManagement" />
@@ -269,9 +273,11 @@
     <Compile Include="Data\ADRepositoryRepository.cs" />
     <Compile Include="Data\ADTeamRepository.cs" />
     <Compile Include="Data\INameProperty.cs" />
-    <Compile Include="Data\Update\AddGroup.cs" />
-    <Compile Include="Data\Update\AddRepositoryLogo.cs" />
+    <Compile Include="Data\Update\Sqlite\AddGroup.cs" />
+    <Compile Include="Data\Update\Sqlite\AddGuidColumn.cs" />
+    <Compile Include="Data\Update\Sqlite\AddRepositoryLogo.cs" />
     <Compile Include="Data\Update\SqlServer\AddGroup.cs" />
+    <Compile Include="Data\Update\SqlServer\AddGuidColumn.cs" />
     <Compile Include="Data\Update\SqlServer\AddRepositoryLogo.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Extensions\SignatureExtensions.cs" />
@@ -321,7 +327,7 @@
     <Compile Include="Git\GitService\GitServiceExecutor.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Data\Update\AddAuditPushUser.cs" />
+    <Compile Include="Data\Update\Sqlite\AddAuditPushUser.cs" />
     <Compile Include="Data\Update\AutomaticUpdater.cs" />
     <Compile Include="Data\Update\RepositorySynchronizer.cs" />
     <Compile Include="Data\Update\SqlServer\AddAuditPushUser.cs" />
@@ -343,8 +349,8 @@
     <Compile Include="Data\Mapping\UserMap.cs" />
     <Compile Include="Data\Repository.cs" />
     <Compile Include="Data\Role.cs" />
-    <Compile Include="Data\Update\InitialCreateScript.cs" />
-    <Compile Include="Data\Update\InsertDefaultData.cs" />
+    <Compile Include="Data\Update\Sqlite\InitialCreateScript.cs" />
+    <Compile Include="Data\Update\Sqlite\InsertDefaultData.cs" />
     <Compile Include="Data\Update\IUpdateScript.cs" />
     <Compile Include="Data\Update\UpdateScriptRepository.cs" />
     <Compile Include="Data\Team.cs" />
@@ -756,20 +762,20 @@ if not exist "$(TargetDir)NativeBinaries\amd64" md "$(TargetDir)NativeBinaries\a
 %25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.21.0.176\lib\net40\NativeBinaries\amd64\*.*" "$(TargetDir)NativeBinaries\amd64"
 %25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.21.0.176\lib\net40\NativeBinaries\amd64\*.*" "$(TargetDir)NativeBinaries\amd64"
 if not exist "$(TargetDir)\x86" md "$(TargetDir)\x86"
-%25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\System.Data.SQLite.Core.1.0.98.1\build\net45\x86\*.*" "$(TargetDir)x86"
+%25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\System.Data.SQLite.Core.1.0.99.0\build\net45\x86\*.*" "$(TargetDir)x86"
 if not exist "$(TargetDir)\x64" md "$(TargetDir)\x64"
-%25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\System.Data.SQLite.Core.1.0.98.1\build\net45\x64\*.*" "$(TargetDir)x64"</PreBuildEvent>
+%25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\System.Data.SQLite.Core.1.0.99.0\build\net45\x64\*.*" "$(TargetDir)x64"</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\System.Data.SQLite.Core.1.0.98.1\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.98.1\build\net45\System.Data.SQLite.Core.targets')" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net45\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>Dieses Projekt verweist auf mindestens ein NuGet-Paket, das auf diesem Computer fehlt. Verwenden Sie die Wiederherstellung von NuGet-Paketen, um die fehlenden Dateien herunterzuladen. Weitere Informationen finden Sie unter "http://go.microsoft.com/fwlink/?LinkID=322105". Die fehlende Datei ist "{0}".</ErrorText>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.98.1\build\net45\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.98.1\build\net45\System.Data.SQLite.Core.targets'))" />
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net45\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.99.0\build\net45\System.Data.SQLite.Core.targets'))" />
   </Target>
 </Project>

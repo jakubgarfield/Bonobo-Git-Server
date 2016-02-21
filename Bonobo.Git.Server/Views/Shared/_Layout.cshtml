@@ -33,7 +33,7 @@
                     }
                     @if (Request.IsAuthenticated)
                     {
-                        <li class="separator"><a href="@Url.Action("Edit", "Account", new { id = User.Id().Replace("\\", "!") })"><i class="fa fa-male"></i> @User.Name()</a></li>
+                        <li class="separator"><a href="@Url.Action("Edit", "Account", new { id = User.Id() })"><i class="fa fa-male"></i> @User.Name()</a></li>
                         if (!User.IsWindowsAuthenticated())
                         {
                             <li><a href="@Url.Action("LogOff", "Home")"><i class="fa fa-sign-out"></i> @Resources.Layout_LogOff</a></li>

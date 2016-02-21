@@ -10,6 +10,7 @@ namespace Bonobo.Git.Server.Data
         private ICollection<User> _administrators;
         private ICollection<User> _users;
 
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Group { get; set; }
         public string Description { get; set; }
@@ -59,11 +60,11 @@ namespace Bonobo.Git.Server.Data
         /// Correct a repository name have the same case as it has in the database
         /// If the repo is not in the database, then the name is returned unchanged
         /// </summary>
-        public static string NormalizeRepositoryName(string incomingProjectName, IRepositoryRepository repositoryRepository)
+        public static string NormalizeRepositoryName(string incomingRepositoryName, IRepositoryRepository repositoryRepository)
         {
             // In the most common case, we're just going to find the repo straight off
             // This is fastest if it succeeds, but might be case-sensitive
-            var knownRepos = repositoryRepository.GetRepository(incomingProjectName);
+            var knownRepos = repositoryRepository.GetRepository(incomingRepositoryName);
             if (knownRepos != null)
             {
                 return knownRepos.Name;
@@ -76,7 +77,7 @@ namespace Bonobo.Git.Server.Data
             knownRepos =
                 repositoryRepository.GetAllRepositories()
                     .FirstOrDefault(
-                        repo => repo.Name.Equals(incomingProjectName, StringComparison.OrdinalIgnoreCase));
+                        repo => repo.Name.Equals(incomingRepositoryName, StringComparison.OrdinalIgnoreCase));
             if (knownRepos != null)
             {
                 // We've found it now
@@ -85,7 +86,7 @@ namespace Bonobo.Git.Server.Data
 
             // We can't find this repo - it's probably invalid, but it's not
             // our job to worry about that
-            return incomingProjectName;
+            return incomingRepositoryName;
         }
     }
 }

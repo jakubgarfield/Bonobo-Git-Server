@@ -1,4 +1,5 @@
-﻿@model Bonobo.Git.Server.Models.TeamDetailModel
+﻿@using MvcCheckBoxList.Model
+@model Bonobo.Git.Server.Models.TeamEditModel
 @{
     ViewBag.Title = Resources.Team_Edit_Title;
 }
@@ -29,14 +30,8 @@ else
                 @Html.TextAreaFor(m => m.Description, new { @class = "textInput medium", autofocus = "" })
             </div> 
             <div class="pure-control-group checkboxlist">
-                @Html.LabelFor(m => m.Members)
-                @{
-                    var users = (from u in ViewData["AvailableUsers"] as string[]
-                                 orderby u
-                                 select new SelectListItem() { Value = u, Text = u.Replace("!", "\\") }).ToArray();
-                }
-
-                @Html.CheckboxListFor(m => m.Members, users, new { @class = "checkboxList medium" })
+                @Html.LabelFor(m => m.AllUsers)
+                @Html.CheckBoxListFor(m => m.PostedSelectedUsers, m => m.AllUsers, m => m.Id, m => m.DisplayName, m => m.SelectedUsers, x => new { @class = "checkboxList medium" })
             </div>
             <div class="pure-controls">
                 <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Team_Edit_Back</a>

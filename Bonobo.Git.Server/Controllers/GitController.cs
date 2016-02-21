@@ -14,7 +14,7 @@ using Microsoft.Practices.Unity;
 namespace Bonobo.Git.Server.Controllers
 {
     [GitAuthorize]
-    [RepositoryNameNormalizer("project")]
+    [RepositoryNameNormalizer("repositoryName")]
     public class GitController : Controller
     {
         [Dependency]
@@ -23,22 +23,22 @@ namespace Bonobo.Git.Server.Controllers
         [Dependency]
         public IGitService GitService { get; set; }
 
-        public ActionResult SecureGetInfoRefs(String project, String service)
+        public ActionResult SecureGetInfoRefs(String repositoryName, String service)
         {
-            if (!RepositoryIsValid(project))
+            if (!RepositoryIsValid(repositoryName))
             {
                 return new HttpNotFoundResult();
             }
 
-            bool allowAnonClone = RepositoryPermissionService.AllowsAnonymous(project);
-            bool hasPermission = RepositoryPermissionService.HasPermission(User.Id(), project);
+            bool allowAnonClone = RepositoryPermissionService.AllowsAnonymous(repositoryName);
+            bool hasPermission = RepositoryPermissionService.HasPermission(User.Id(), repositoryName);
             bool isClone = String.Equals("git-upload-pack", service, StringComparison.OrdinalIgnoreCase);
             bool isPush = String.Equals("git-receive-pack", service, StringComparison.OrdinalIgnoreCase);
             bool allowAnonPush = UserConfiguration.Current.AllowAnonymousPush;
 
             if (hasPermission || (allowAnonClone && isClone) || (allowAnonPush && isPush))
             {
-                return GetInfoRefs(project, service);
+                return GetInfoRefs(repositoryName, service);
             }
             else
             {
@@ -47,17 +47,17 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        public ActionResult SecureUploadPack(String project)
+        public ActionResult SecureUploadPack(String repositoryName)
         {
-            if (!RepositoryIsValid(project))
+            if (!RepositoryIsValid(repositoryName))
             {
                 return new HttpNotFoundResult();
             }
 
-            if (RepositoryPermissionService.HasPermission(User.Id(), project)
-                || RepositoryPermissionService.AllowsAnonymous(project))
+            if (RepositoryPermissionService.HasPermission(User.Id(), repositoryName)
+                || RepositoryPermissionService.AllowsAnonymous(repositoryName))
             {
-                return ExecuteUploadPack(project);
+                return ExecuteUploadPack(repositoryName);
             }
             else
             {
@@ -66,17 +66,17 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        public ActionResult SecureReceivePack(String project)
+        public ActionResult SecureReceivePack(String repositoryName)
         {
-            if (!RepositoryIsValid(project))
+            if (!RepositoryIsValid(repositoryName))
             {
                 return new HttpNotFoundResult();
             }
 
-            if (RepositoryPermissionService.HasPermission(User.Id(), project)
-                || (RepositoryPermissionService.AllowsAnonymous(project) && UserConfiguration.Current.AllowAnonymousPush))
+            if (RepositoryPermissionService.HasPermission(User.Id(), repositoryName)
+                || (RepositoryPermissionService.AllowsAnonymous(repositoryName) && UserConfiguration.Current.AllowAnonymousPush))
             {
-                return ExecuteReceivePack(project);
+                return ExecuteReceivePack(repositoryName);
             }
             else
             {
@@ -88,12 +88,12 @@ namespace Bonobo.Git.Server.Controllers
         /// This is the action invoked if you browse to a .git URL
         /// We just redirect to the repo details page, which is basically what GitHub does
         /// </summary>
-        public ActionResult GitUrl(string project)
+        public ActionResult GitUrl(string repositoryName)
         {
-            return RedirectPermanent(Url.Action("Detail", "Repository", new { id = project}));
+            return RedirectPermanent(Url.Action("Detail", "Repository", new { id = repositoryName}));
         }
 
-        private ActionResult ExecuteReceivePack(string project)
+        private ActionResult ExecuteReceivePack(string repositoryName)
         {
             return new GitCmdResult(
                 "application/x-git-receive-pack-result",
@@ -101,13 +101,13 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     GitService.ExecuteGitReceivePack(
                         Guid.NewGuid().ToString("N"),
-                        project,
+                        repositoryName,
                         GetInputStream(disableBuffer: true),
                         outStream);
                 });
         }
 
-        private ActionResult ExecuteUploadPack(string project)
+        private ActionResult ExecuteUploadPack(string repositoryName)
         {
             return new GitCmdResult(
                 "application/x-git-upload-pack-result",
@@ -115,13 +115,13 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     GitService.ExecuteGitUploadPack(
                         Guid.NewGuid().ToString("N"),
-                        project,
+                        repositoryName,
                         GetInputStream(),
                         outStream);
                 });
         }
 
-        private ActionResult GetInfoRefs(String project, String service)
+        private ActionResult GetInfoRefs(String repositoryName, String service)
         {
             Response.StatusCode = 200;
 
@@ -135,7 +135,7 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     GitService.ExecuteServiceByName(
                         Guid.NewGuid().ToString("N"),
-                        project, 
+                        repositoryName, 
                         serviceName, 
                         new ExecutionOptions() { AdvertiseRefs = true },
                         GetInputStream(),
@@ -163,14 +163,14 @@ namespace Bonobo.Git.Server.Controllers
             return "0000";
         }
 
-        private static DirectoryInfo GetDirectoryInfo(String project)
+        private static DirectoryInfo GetDirectoryInfo(String repositoryName)
         {
-            return new DirectoryInfo(Path.Combine(UserConfiguration.Current.Repositories, project));
+            return new DirectoryInfo(Path.Combine(UserConfiguration.Current.Repositories, repositoryName));
         }
 
-        private static bool RepositoryIsValid(string project)
+        private static bool RepositoryIsValid(string repositoryName)
         {
-            var directory = GetDirectoryInfo(project);
+            var directory = GetDirectoryInfo(repositoryName);
             var isValid = Repository.IsValid(directory.FullName);
             return isValid;
         }

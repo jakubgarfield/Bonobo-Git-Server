@@ -40,6 +40,11 @@ namespace Bonobo.Git.Server.Configuration
 
         static ActiveDirectorySettings()
         {
+            LoadSettings();
+        }
+
+        public static void LoadSettings()
+        {
             DefaultDomain = ConfigurationManager.AppSettings["ActiveDirectoryDefaultDomain"];
             MemberGroupName = ConfigurationManager.AppSettings["ActiveDirectoryMemberGroupName"];
             BackendPath = ConfigurationManager.AppSettings["ActiveDirectoryBackendPath"];

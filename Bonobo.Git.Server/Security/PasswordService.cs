@@ -33,18 +33,33 @@ namespace Bonobo.Git.Server.Security
             return GetHash(GetHash(hashedSalt + password + hashedSalt));
         }
 
-        public bool ComparePassword(string password, string salt, string hash)
+        public bool ComparePassword(string password, string username, string salt, string hash)
         {
             if (IsOfCurrentHashFormat(hash))
             {
                 return GetSaltedHash(password, salt) == hash;
+                /*
+                This is code to upgrade the salt on existing passwords, don't know if we want to do this or not
+                There's test to cover it "TestThatValidatingAUserWithOldStyleSaltUpgradesTheirSalt" which can be turned off if necessary
+                            if(GetSaltedHash(password, salt) == hash)
+                            {
+                                // We have the right password - if the salt is equal to the username, then we know we're using 
+                                // old-style salting, and this is a good chance to update it
+                                if (username == salt)
+                                {
+                                    UpdateToCurrentHashMethod(username, password);
+                                }
+                                return true;
+                            }
+
+                            return false;
+                */
             }
 
             // to not break backwards compatibility: use old and update
+            // This is the only use of username - to allow us to access accounts with deprecated hashes.  It's not used for salting any more
             if (GetDeprecatedHash(password) == hash)
             {
-                // has to be modified if we use something other than username as salt
-                var username = salt;
                 UpdateToCurrentHashMethod(username, password);
                 return true;
             }

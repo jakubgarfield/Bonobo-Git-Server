@@ -4,6 +4,7 @@ using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
 
 using Microsoft.Practices.Unity;
+using System;
 
 namespace Bonobo.Git.Server
 {
@@ -23,10 +24,8 @@ namespace Bonobo.Git.Server
 
             if (!(filterContext.Result is HttpUnauthorizedResult))
             {
-                string incomingRepoName = filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString();
-                string repository = Repository.NormalizeRepositoryName(incomingRepoName, RepositoryRepository);
-
-                string user = filterContext.HttpContext.User.Id();
+                Guid incomingRepoId = Guid.Parse(filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString());
+                Guid userId = filterContext.HttpContext.User.Id();
 
                 if (filterContext.HttpContext.User.IsInRole(Definitions.Roles.Administrator))
                 {
@@ -35,19 +34,19 @@ namespace Bonobo.Git.Server
 
                 if (RequiresRepositoryAdministrator)
                 {
-                    if (RepositoryPermissionService.IsRepositoryAdministrator(user, repository))
+                    if (RepositoryPermissionService.IsRepositoryAdministrator(userId, incomingRepoId))
                     {
                         return;
                     }
                 }
                 else
                 {
-                    if (RepositoryPermissionService.HasPermission(user, repository))
+                    if (RepositoryPermissionService.HasPermission(userId, incomingRepoId))
                     {
                         return;
                     }
 
-                    if (RepositoryPermissionService.AllowsAnonymous(repository))
+                    if (RepositoryPermissionService.AllowsAnonymous(incomingRepoId))
                     {
                         return;
                     }

@@ -45,7 +45,7 @@ namespace Bonobo.Git.Server.Data
 
         public bool Add(T item)
         {
-            return content.TryAdd(item.Name, item) && Store(item);
+            return content.TryAdd(item.Id.ToString(), item) && Store(item);
         }
 
         public bool Remove(string key)
@@ -56,12 +56,12 @@ namespace Bonobo.Git.Server.Data
 
         public bool Remove(T item)
         {
-            return Remove(item.Name);
+            return Remove(item.Id.ToString());
         }
 
         public void Update(T item)
         {
-            if (content.TryUpdate(item.Name, item, content[item.Name]))
+            if (content.TryUpdate(item.Id.ToString(), item, content[item.Id.ToString()]))
             {
                 Store(item);
             }
@@ -69,7 +69,7 @@ namespace Bonobo.Git.Server.Data
 
         public void AddOrUpdate(T item)
         {
-            content.AddOrUpdate(item.Name, item, (k, v) => item);
+            content.AddOrUpdate(item.Id.ToString(), item, (k, v) => item);
             Store(item);
         }
 
@@ -132,7 +132,7 @@ namespace Bonobo.Git.Server.Data
                 try
                 {
                     T item = JsonConvert.DeserializeObject<T>(File.ReadAllText(filename));
-                    result.TryAdd(item.Name, item);
+                    result.TryAdd(item.Id.ToString(), item);
                 }
                 catch
                 {

@@ -16,29 +16,41 @@ namespace Bonobo.Git.Server.Data
 {
     public class ADTeamRepository : ITeamRepository
     {
+        Dictionary<Guid, string> _id_to_name = new Dictionary<Guid, string>();
+
         public bool Create(TeamModel team)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(string name)
+        public void Delete(Guid name)
         {
             throw new NotImplementedException();
         }
 
         public IList<TeamModel> GetAllTeams()
         {
-            return ADBackend.Instance.Teams.ToList();
+            var ret = ADBackend.Instance.Teams.ToList();
+            foreach (var t in ret)
+            {
+                _id_to_name[t.Id] = t.Name;
+            }
+            return ret;
         }
 
-        public TeamModel GetTeam(string name)
+        public TeamModel GetTeam(Guid TeamId)
         {
-            return ADBackend.Instance.Teams[name];
+            return ADBackend.Instance.Teams[TeamId.ToString()];
         }
 
-        public IList<TeamModel> GetTeams(string username)
+        public IList<TeamModel> GetTeams(string userName)
         {
-            return ADBackend.Instance.Teams.Where(x => x.Members.Contains(username, StringComparer.OrdinalIgnoreCase)).ToList();
+            return ADBackend.Instance.Teams.Where(x => x.Members.Any(y => y.Name == userName)).ToList();
+        }
+
+        public IList<TeamModel> GetTeams(Guid userId)
+        {
+            return ADBackend.Instance.Teams.Where(x => x.Members.Any(y => y.Id == userId)).ToList();
         }
 
         public void Update(TeamModel team)
@@ -46,7 +58,7 @@ namespace Bonobo.Git.Server.Data
             throw new NotImplementedException();
         }
 
-        public void UpdateUserTeams(string userName, List<string> newTeams)
+        public void UpdateUserTeams(Guid userId, List<string> newTeams)
         {
             throw new NotImplementedException();
         }

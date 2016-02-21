@@ -1,16 +1,16 @@
-﻿@model Bonobo.Git.Server.Models.UserDetailModel
+﻿@model Bonobo.Git.Server.Models.UserModel
 @{
     ViewBag.Title = Resources.Delete_Title;
 }
 <h1>@Resources.Confirm</h1>
 <div>
-    <p class="summary-error">@String.Format(Resources.Delete_ConfirmationText, Model.Username.Replace("!", "\\"))</p>
+    <p class="summary-error">@String.Format(Resources.Delete_ConfirmationText, Model.DisplayName)</p>
 </div>
 
 @using (Html.BeginForm("Delete", "Account", FormMethod.Post, new { @class = "pure-form" }))
 {
     <fieldset class="deleteForm">
-        @Html.HiddenFor(m => m.Username)
+        @Html.HiddenFor(m => m.Id)
         <div class="pure-controls">
             <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Delete_Back</a>
             <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-trash-o"></i> @Resources.Delete_Confirm</button>

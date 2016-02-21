@@ -1,4 +1,4 @@
-﻿@model Bonobo.Git.Server.Models.TeamDetailModel
+﻿@model Bonobo.Git.Server.Models.TeamEditModel
 @{    
     ViewBag.Title = Resources.Team_Create_Title;
 }
@@ -19,14 +19,8 @@
             @Html.TextAreaFor(m => m.Description, new { @class = "medium" })
         </div> 
         <div class="pure-control-group checkboxlist">
-            @{
-                var users = (from u in ViewData["AvailableUsers"] as string[]
-                             orderby u
-                             select new SelectListItem() { Value = u, Text = u.Replace("!", "\\") }).ToArray();
-            }
-
-            @Html.LabelFor(m => m.Members)
-            @Html.CheckboxListFor(m => m.Members, users)
+            @Html.LabelFor(m => m.AllUsers)
+            @Html.CheckBoxListFor(m => m.PostedSelectedUsers, m => m.AllUsers, m => m.Id, m => m.DisplayName, m => m.SelectedUsers)
         </div>
 
         <div class="pure-controls">

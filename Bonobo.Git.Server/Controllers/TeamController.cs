@@ -30,41 +30,39 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
-        public ActionResult Edit(string id)
+        public ActionResult Edit(Guid id)
         {
-            if (!String.IsNullOrEmpty(id))
-            {
-                var model = ConvertTeamModel(TeamRepository.GetTeam(id));
-                PopulateViewData();
-                return View(model);
-            }
-            return View();
+            var model = ConvertEditTeamModel(TeamRepository.GetTeam(id));
+            return View(model);
         }
 
         [HttpPost]
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
-        public ActionResult Edit(TeamDetailModel model)
+        public ActionResult Edit(TeamEditModel model)
         {           
             if (ModelState.IsValid)
             {
                 TeamRepository.Update(ConvertTeamDetailModel(model));
                 ViewBag.UpdateSuccess = true;
             }
-            PopulateViewData();
+            model = ConvertEditTeamModel(TeamRepository.GetTeam(model.Id));
             return View(model);
         }
 
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Create()
         {
-            var model = new TeamDetailModel { };
-            PopulateViewData();
+            var model = new TeamEditModel 
+            {
+                AllUsers = MembershipService.GetAllUsers().ToArray(),
+                SelectedUsers = new UserModel[] { }
+            };
             return View(model);
         }
 
         [HttpPost]
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
-        public ActionResult Create(TeamDetailModel model)
+        public ActionResult Create(TeamEditModel model)
         {
             while (!String.IsNullOrEmpty(model.Name) && model.Name.Last() == ' ')
             {
@@ -84,28 +82,23 @@ namespace Bonobo.Git.Server.Controllers
                 }
             }
 
-            PopulateViewData();
             return View(model);
         }
 
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
-        public ActionResult Delete(string id)
+        public ActionResult Delete(Guid id)
         {
-            if (!String.IsNullOrEmpty(id))
-            {
-                return View(new TeamDetailModel { Name = id });
-            }
-
-            return RedirectToAction("Index");
+            return View(ConvertEditTeamModel(TeamRepository.GetTeam(id)));
         }
 
         [HttpPost]
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
-        public ActionResult Delete(TeamDetailModel model)
+        public ActionResult Delete(TeamEditModel model)
         {
-            if (model != null && !String.IsNullOrEmpty(model.Name))
+            if (model != null && model.Id != null)
             {
-                TeamRepository.Delete(model.Name);
+                TeamModel team = TeamRepository.GetTeam(model.Id);
+                TeamRepository.Delete(team.Id);
                 TempData["DeleteSuccess"] = true;
                 return RedirectToAction("Index");
             }
@@ -113,13 +106,9 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorize]
-        public ActionResult Detail(string id)
+        public ActionResult Detail(Guid id)
         {
-            if (!String.IsNullOrEmpty(id))
-            {
-                return View(ConvertTeamModel(TeamRepository.GetTeam(id)));
-            }
-            return View();
+            return View(ConvertDetailTeamModel(TeamRepository.GetTeam(id)));
         }
 
 
@@ -129,36 +118,45 @@ namespace Bonobo.Git.Server.Controllers
             result.IsReadOnly = MembershipService.IsReadOnly();
             foreach (var item in models)
             {
-                result.Add(ConvertTeamModel(item));
+                result.Add(ConvertDetailTeamModel(item));
             }
             return result;
         }
 
-        private TeamDetailModel ConvertTeamModel(TeamModel model)
+        private TeamEditModel ConvertEditTeamModel(TeamModel model)
+        {
+            return model == null ? null : new TeamEditModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Description = model.Description,
+                AllUsers = MembershipService.GetAllUsers().ToArray(),
+                SelectedUsers = model.Members.ToArray(),
+            };
+        }
+
+        private TeamDetailModel ConvertDetailTeamModel(TeamModel model)
         {
             return model == null ? null : new TeamDetailModel
             {
+                Id = model.Id,
                 Name = model.Name,
                 Description = model.Description,
-                Members = model.Members,
-                Repositories = RepositoryRepository.GetPermittedRepositories(null, new[] { model.Name }).Select(x => x.Name).ToArray(),
+                Members = model.Members.ToArray(),
+                Repositories = RepositoryRepository.GetPermittedRepositories(null, new[] { model.Id }).ToArray(),
                 IsReadOnly = MembershipService.IsReadOnly()
             };
         }
 
-        private TeamModel ConvertTeamDetailModel(TeamDetailModel model)
+        private TeamModel ConvertTeamDetailModel(TeamEditModel model)
         {
             return new TeamModel
             {
+                Id = model.Id,
                 Name = model.Name,
                 Description = model.Description,
-                Members = model.Members,
+                Members = model.PostedSelectedUsers == null ? new UserModel[0] : model.PostedSelectedUsers.Select(x => MembershipService.GetUserModel(x)).ToArray(),
             };
-        }
-
-        private void PopulateViewData()
-        {
-            ViewData["AvailableUsers"] = MembershipService.GetAllUsers().Select(i => i.Name).ToArray();
         }
     }
 }

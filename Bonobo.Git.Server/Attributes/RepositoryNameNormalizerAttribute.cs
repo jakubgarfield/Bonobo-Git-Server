@@ -5,7 +5,7 @@ using Microsoft.Practices.Unity;
 namespace Bonobo.Git.Server
 {
     /// <summary>
-    /// Applied to a Controller or Action, this attribute will ensure that a repo/project name has its case corrected to match that in the database
+    /// Applied to a Controller or Action, this attribute will ensure that a repo name has its case corrected to match that in the database
     /// If the name doesn't match anything in the database, then it's returned unchanged
     /// The name of the action parameter to be corrected is passed as a constructor parameter
     /// Normalising the name of the repos at this early stage means that later stages do not have to be concerned about trying 
@@ -25,14 +25,14 @@ namespace Bonobo.Git.Server
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            object incomingProjectParameter;
-            if(filterContext.ActionParameters.TryGetValue(_repositoryNameParameterName, out incomingProjectParameter))
+            object incomingRepositoryNameParameter;
+            if(filterContext.ActionParameters.TryGetValue(_repositoryNameParameterName, out incomingRepositoryNameParameter))
             {
-                var incomingProjectName = (string)incomingProjectParameter;
-                var normalizedName = Repository.NormalizeRepositoryName(incomingProjectName, RepositoryRepository);
-                if (normalizedName != incomingProjectName)
+                var incomingRepositoryName = (string)incomingRepositoryNameParameter;
+                var normalizedName = Repository.NormalizeRepositoryName(incomingRepositoryName, RepositoryRepository);
+                if (normalizedName != incomingRepositoryName)
                 {
-                    // We've had to correct the incoming project name
+                    // We've had to correct the incoming repository name
                     filterContext.ActionParameters[_repositoryNameParameterName] = normalizedName;
                 }
             }

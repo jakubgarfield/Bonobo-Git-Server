@@ -29,40 +29,20 @@
         </div>
         <div class="pure-control-group checkboxlist">
             @Html.LabelFor(m => m.Users)
-            @{
-                var users = (from user in ViewData["AvailableUsers"] as string[]
-                             orderby user
-                             select new SelectListItem { Value = user, Text = user }).ToArray();
-            }
-
-            @Html.CheckboxListFor(m => m.Users, users)
+            @Html.CheckBoxListFor(m => m.PostedSelectedUsers, mm => mm.AllUsers, mm => mm.Id, mm => mm.DisplayName, mm => mm.Users)
             <i class="fa fa-info-circle" title="@Resources.Repository_UsersHint"></i>
         </div>
 
         <div class="pure-control-group checkboxlist">
             @Html.LabelFor(m => m.Administrators)
-            @{
-                var administrators = (from user in ViewData["AvailableAdministrators"] as string[]
-                                      orderby user
-                                      select new SelectListItem { Value = user, Text = user }).ToArray();
-            }
-
-            @Html.CheckboxListFor(m => m.Administrators, administrators)
+            @Html.CheckBoxListFor(m => m.PostedSelectedAdministrators, mm => mm.AllAdministrators, mm => mm.Id, mm => mm.DisplayName, mm => mm.Administrators)
             @Html.ValidationMessageFor(m => m.Administrators)
             <i class="fa fa-info-circle" title="@Resources.Repository_AdministratorsHint"></i>
         </div>
 
-
-
         <div class="pure-control-group checkboxlist">
             @Html.LabelFor(m => m.Teams)
-            @{
-                var teams = (from user in ViewData["AvailableTeams"] as string[]
-                             orderby user
-                             select new SelectListItem { Value = user, Text = user }).ToArray();
-            }
-
-            @Html.CheckboxListFor(m => m.Teams, teams)
+            @Html.CheckBoxListFor(m => m.PostedSelectedTeams, mm => mm.AllTeams, mm => mm.Id, mm => mm.DisplayName, mm => mm.Teams)
             <i class="fa fa-info-circle" title="@Resources.Repository_TeamsHint"></i>
         </div>
 

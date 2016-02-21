@@ -15,12 +15,12 @@ namespace Bonobo.Git.Server.Data.Update
                 case "SQLiteConnection":
                     return new List<IUpdateScript>
                     {
-                        new InitialCreateScript(),
-                        new InsertDefaultData(),
+                        new Sqlite.InitialCreateScript(),
+                        new Sqlite.InsertDefaultData(),
                         new UsernamesToLower(),
-                        new AddAuditPushUser(),
-                        new AddGroup(),
-                        new AddRepositoryLogo()
+                        new Sqlite.AddAuditPushUser(),
+                        new Sqlite.AddGroup(),
+                        new Sqlite.AddRepositoryLogo()
                     };
                 case "SqlConnection":
                     return new List<IUpdateScript>

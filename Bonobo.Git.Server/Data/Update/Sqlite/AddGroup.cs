@@ -1,4 +1,4 @@
-﻿namespace Bonobo.Git.Server.Data.Update
+﻿namespace Bonobo.Git.Server.Data.Update.Sqlite
 {
     public class AddGroup : IUpdateScript
     {

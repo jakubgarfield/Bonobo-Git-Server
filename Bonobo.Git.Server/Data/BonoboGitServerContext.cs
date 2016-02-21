@@ -1,5 +1,7 @@
+using System.Data.Common;
 using Bonobo.Git.Server.Data.Mapping;
 using System.Data.Entity;
+using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -21,6 +23,15 @@ namespace Bonobo.Git.Server.Data
         {
         }
 
+        // Don't make this public because it confuses Unity
+        private BonoboGitServerContext(DbConnection databaseConnection) : base(databaseConnection, false)
+        {
+        }
+
+        public static BonoboGitServerContext FromDatabase(DbConnection databaseConnection)
+        {
+            return new BonoboGitServerContext(databaseConnection);
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

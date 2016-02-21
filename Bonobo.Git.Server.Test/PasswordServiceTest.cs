@@ -31,7 +31,7 @@ namespace Bonobo.Git.Server.Test
         [TestMethod]
         public void InsertDefaultDataCommandUsesSaltedSha512Hash()
         {
-            var script = new Bonobo.Git.Server.Data.Update.InsertDefaultData();
+            var script = new Bonobo.Git.Server.Data.Update.Sqlite.InsertDefaultData();
             AssertSaltedSha512HashIsUsed(script);
         }
 
@@ -58,7 +58,7 @@ namespace Bonobo.Git.Server.Test
             };
             var passwordService = new PasswordService(updateHook);
             bool isCorrect = passwordService
-                .ComparePassword(DefaultAdminPassword, DefaultAdminUserName, DefaultAdminHash);
+                .ComparePassword(DefaultAdminPassword, DefaultAdminUserName, DefaultAdminUserName, DefaultAdminHash);
             Assert.IsTrue(isCorrect);
         }
 
@@ -71,7 +71,7 @@ namespace Bonobo.Git.Server.Test
             };
             var passwordService = new PasswordService(updateHook);
             bool isCorrect = passwordService
-                .ComparePassword("1" + DefaultAdminPassword, DefaultAdminUserName, DefaultAdminHash);
+                .ComparePassword("1" + DefaultAdminPassword, DefaultAdminUserName, DefaultAdminUserName, DefaultAdminHash);
             Assert.IsFalse(isCorrect);
         }
 
@@ -89,7 +89,7 @@ namespace Bonobo.Git.Server.Test
             };
             var passwordService = new PasswordService(updateHook);
             bool isCorrect = passwordService
-                .ComparePassword(password, username, Md5DefaultAdminHash);
+                .ComparePassword(password, username, username, Md5DefaultAdminHash);
             Assert.IsTrue(isCorrect);
             Assert.AreEqual(1, correctUpgradeHookCalls, "Correct md5 password should be upgraded exactly once.");
         }
@@ -103,7 +103,7 @@ namespace Bonobo.Git.Server.Test
             };
             var passwordService = new PasswordService(updateHook);
             bool isCorrect = passwordService
-                .ComparePassword("1" + DefaultAdminPassword, DefaultAdminUserName, Md5DefaultAdminHash);
+                .ComparePassword("1" + DefaultAdminPassword, DefaultAdminUserName, DefaultAdminUserName, Md5DefaultAdminHash);
             Assert.IsFalse(isCorrect);
         }
     }
