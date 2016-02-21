@@ -54,8 +54,15 @@ namespace Bonobo.Git.Server.Configuration
         {
             _report.AppendLine("User Configuration:");
             var configFile = MapPath(AppSetting("UserConfiguration"));
-            QuotedReport("User Config File", configFile);
+            QuotedReport("User config file", configFile);
             SafelyReport("User config readable", () => !String.IsNullOrEmpty(File.ReadAllText(configFile)));
+            SafelyReport("User config saveable", () =>
+            {
+                UserConfiguration.Current.Save();
+                return true;
+            });
+            ReportDirectoryStatus("User config folder", Path.GetDirectoryName(configFile));
+
         }
 
         private void CheckRepositoryDirectory()
@@ -63,7 +70,7 @@ namespace Bonobo.Git.Server.Configuration
             _report.AppendLine("Repo Directory");
             QuotedReport("Configured repo path", _userConfig.RepositoryPath);
             QuotedReport("Effective repo path", _userConfig.Repositories);
-            SafelyReport("Repo folder exists", () => Directory.Exists(_userConfig.Repositories));
+            ReportDirectoryStatus("Repo dir", _userConfig.Repositories);
         }
 
         private void CheckGitSettings()
@@ -99,10 +106,11 @@ namespace Bonobo.Git.Server.Configuration
 
             if (AppSetting("MembershipService") == "ActiveDirectory")
             {
-                SafelyReport("Backand folder exists", () => Directory.Exists(MapPath(AppSetting("ActiveDirectoryBackendPath"))));
+                SafelyReport("Backend folder exists", () => Directory.Exists(MapPath(AppSetting("ActiveDirectoryBackendPath"))));
+                ReportDirectoryStatus("Backend folder", MapPath(AppSetting("ActiveDirectoryBackendPath")));
 
                 var ad = ADBackend.Instance;
-                SafelyReport("Users", () => String.Join(",", ad.Users.Select(user => user.Name)));
+                SafelyReport("User count", () => ad.Users.Count());
 
                 _report.AppendLine("AD Teams");
                 SafelyRun(() =>
@@ -110,7 +118,7 @@ namespace Bonobo.Git.Server.Configuration
                     foreach (var item in ad.Teams)
                     {
                         var thisTeam = item;
-                        SafelyReport(item.Name, () => String.Join(",", thisTeam.Members.Select(member => member.Name)));
+                        SafelyReport(item.Name, () => thisTeam.Members.Length + " members");
                     }
                 });
                 _report.AppendLine("AD Roles");
@@ -119,7 +127,7 @@ namespace Bonobo.Git.Server.Configuration
                     foreach (var item in ad.Roles)
                     {
                         var thisRole = item;
-                        SafelyReport(item.Name, () => String.Join(",", thisRole.Members));
+                        SafelyReport(item.Name, () => thisRole.Members.Length + " members");
                     }
                 });
             }
@@ -129,13 +137,57 @@ namespace Bonobo.Git.Server.Configuration
             }
         }
 
+        private void ReportDirectoryStatus(string text, string directory)
+        {
+            var sb = new StringBuilder();
+            if (Directory.Exists(directory))
+            {
+                sb.AppendFormat("Exists, {0} files, {1} entries, ", 
+                    Directory.GetFiles(directory).Length,
+                    Directory.GetFileSystemEntries(directory).Length
+                    );
+                sb.Append(DirectoryIsWritable(directory) ? "writeable" : "NOT WRITEABLE");
+            }
+            else
+            {
+                sb.Append("Doesn't exist");
+            }
+            Report(text, sb.ToString());
+        }
+
+        private bool DirectoryIsWritable(string directory)
+        {
+            string probeFile = Path.Combine(directory, "Probe.txt");
+            try
+            {
+                File.WriteAllBytes(probeFile, new byte[16]);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Report("Exception probing dir " + directory, ex.Message);
+                return false;
+            }
+            finally
+            {
+                try
+                {
+                    File.Delete(probeFile);
+                }
+                catch
+                {
+                    // We deliberately ignore these exceptions, we don't care
+                }
+            }
+        }
+
         private void CheckInternalMembership()
         {
             _report.AppendLine("Internal Membership");
 
             if (AppSetting("MembershipService") == "Internal")
             {
-                SafelyReport("Users", () => String.Join(",", new EFMembershipService().GetAllUsers().Select(member => member.Name)));
+                SafelyReport("User count", () => new EFMembershipService().GetAllUsers().Count);
             }
             else
             {
@@ -148,6 +200,7 @@ namespace Bonobo.Git.Server.Configuration
         /// </summary>
         private void ExceptionLog()
         {
+            _report.AppendLine("**********************************************************************************");
             _report.AppendLine("Exception Log");
             SafelyRun(() =>
             {
