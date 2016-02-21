@@ -33,9 +33,9 @@ namespace Bonobo.Git.Server.Test.Integration.Web
                 app.NavigateTo<HomeController>(c => c.LogOff());
                 app.UrlShouldMapTo<HomeController>(c => c.LogOn("/Home/Index"));
 
-                app.NavigateTo<AccountController>(c => c.Detail("123"));
+                app.NavigateTo<AccountController>(c => c.Detail(new Guid("7479fc09-2c0b-4e93-a2cf-5e4bbf6bab4f")));
 
-                app.UrlShouldMapTo<HomeController>(c => c.LogOn("/Account/123"));
+                app.UrlShouldMapTo<HomeController>(c => c.LogOn("/Account/Detail/7479fc09-2c0b-4e93-a2cf-5e4bbf6bab4f"));
             }
 
             [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]

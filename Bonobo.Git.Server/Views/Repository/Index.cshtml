@@ -115,8 +115,13 @@
                                 Html.ActionLink(
                                     GetNameToDisplay((string) item.Name, (RepositoryDetailStatus) item.Status),
                                     "Detail",
-                                    new { id = item.Name },
-                                    new { @class = "detail" + (item.Logo.Exists ? " customLogo" : ""), @id = "Name"}
+                                    new { id = item.Id },
+                                    new
+                                    {
+                                        @class = "detail" + (item.Logo.Exists ? " customLogo" : ""),
+                                        @id = "Name",
+                                        @data_repo_id = item.Id
+                                    }
                                 )
                         ),
 

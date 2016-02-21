@@ -151,13 +151,6 @@
     <Compile Include="MembershipTests\EfSqlServerMembershipServiceTest.cs" />
     <Compile Include="MembershipTests\EFTeamRepositoryTests.cs" />
     <Compile Include="MembershipTests\MembershipServiceTestBase.cs" />
-    <Compile Include="MsysgitIntegrationTests.cs" />
-    <Compile Include="MsysgitResources.cs" />
-    <Compile Include="PathEncoderTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Definitions.cs" />
-    <Compile Include="PasswordServiceTest.cs" />
-    <Compile Include="GitAuthorizeAttributeTest.cs" />
     <Compile Include="MembershipTests\SqliteTestConnection.cs" />
     <Compile Include="MembershipTests\SqlServerTestConnection.cs" />
     <Compile Include="IntegrationTests\AssemblyStartup.cs" />
@@ -220,7 +213,7 @@
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->
   <Target Name="BeforeBuild">
-	<MSBuild Projects="..\get-git.msbuild" />
+    <MSBuild Projects="..\get-git.msbuild" />
   </Target>
   <!-- <Target Name="AfterBuild">
   </Target>

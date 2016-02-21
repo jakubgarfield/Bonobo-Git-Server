@@ -72,7 +72,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
                 try
                 {
-                    CreateRepository();
+                    Guid repo_id = CreateRepository();
                     CloneEmptyRepositoryAndEnterRepo(git, resources);
                     CreateIdentity(git);
                     PushFiles(git, resources);
@@ -82,7 +82,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                     PullRepository(git, resources);
                     PullTag(git, resources);
                     PullBranch(git, resources);
-                    DeleteRepository();
+                    DeleteRepository(repo_id);
                 }
                 finally
                 {
@@ -104,9 +104,9 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             RunGit(git, "config user.email \"DontBotherMe@home.never\"");
         }
 
-        private void DeleteRepository()
+        private void DeleteRepository(Guid guid)
         {
-            app.NavigateTo<RepositoryController>(c => c.Delete("Integration"));
+            app.NavigateTo<RepositoryController>(c => c.Delete(guid));
             app.FindFormFor<RepositoryDetailModel>().Submit();
 
             // make sure it no longer is listed
@@ -125,7 +125,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             }
         }
 
-        private void CreateRepository()
+        private Guid CreateRepository()
         {
             app.NavigateTo<RepositoryController>(c => c.Create());
             app.FindFormFor<RepositoryDetailModel>()
@@ -136,7 +136,10 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             app.NavigateTo<RepositoryController>(c => c.Index(null, null));
 
             var rpm = app.FindDisplayFor<IEnumerable<RepositoryDetailModel>>();
-            Assert.AreEqual(rpm.DisplayFor(s => s.First().Name).Text, "Integration");
+            //var l_to = app.FindLinkTo<RepositoryController>(c => c.Detail(Guid.NewGuid()));
+            var repo_item = rpm.DisplayFor(s => s.First().Name);
+            Assert.AreEqual(repo_item.Text, "Integration");
+            return new Guid(repo_item.GetAttribute("data-repo-id"));
         }
 
         private void PullBranch(string git, MsysgitResources resources)
