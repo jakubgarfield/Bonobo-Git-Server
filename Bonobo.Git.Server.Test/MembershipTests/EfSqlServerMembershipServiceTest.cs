@@ -9,7 +9,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
     /// EF Membership tests using SQL Server
     /// </summary>
     [TestClass]
-    public class EfSqlServerMembershipServiceTest : EFMembershipServiceTest
+    public class EFSqlServerMembershipServiceTest : EFMembershipServiceTest
     {
         SqlServerTestConnection _connection;
 

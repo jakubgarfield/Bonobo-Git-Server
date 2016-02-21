@@ -9,7 +9,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
     /// EF Membership tests using in-memory Sqlite
     /// </summary>
     [TestClass]
-    public class EfSqliteMembershipServiceTest : EFMembershipServiceTest
+    public class EFSqliteMembershipServiceTest : EFMembershipServiceTest
     {
         SqliteTestConnection _connection;
 

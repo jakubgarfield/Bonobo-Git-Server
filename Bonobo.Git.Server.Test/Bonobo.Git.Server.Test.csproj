@@ -100,8 +100,8 @@
     <Compile Include="MembershipTests\EFRepositoryRepositoryTest.cs" />
     <Compile Include="MembershipTests\EFRoleProviderTests.cs" />
     <Compile Include="MembershipTests\EFMembershipServiceTest.cs" />
-    <Compile Include="MembershipTests\EfSqliteMembershipServiceTest.cs" />
-    <Compile Include="MembershipTests\EfSqlServerMembershipServiceTest.cs" />
+    <Compile Include="MembershipTests\EFSqliteMembershipServiceTest.cs" />
+    <Compile Include="MembershipTests\EFSqlServerMembershipServiceTest.cs" />
     <Compile Include="MembershipTests\EFTeamRepositoryTests.cs" />
     <Compile Include="MembershipTests\MembershipServiceTestBase.cs" />
     <Compile Include="MsysgitIntegrationTests.cs" />
