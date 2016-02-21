@@ -73,7 +73,8 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 try
                 {
                     CreateRepository();
-                    CloneEmptyRepository(git, resources);
+                    CloneEmptyRepositoryAndEnterRepo(git, resources);
+                    CreateIdentity(git);
                     PushFiles(git, resources);
                     PushTag(git, resources);
                     PushBranch(git, resources);
@@ -95,6 +96,12 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 Assert.Fail(string.Format("Please ensure that you have at least one git installation in '{0}'.", string.Join("', '", gitpaths.Select(n => Path.GetFullPath(n)))));
             }
 
+        }
+
+        private void CreateIdentity(string git)
+        {
+            RunGit(git, "config user.name \"McFlono McFloonyloo\"");
+            RunGit(git, "config user.email \"DontBotherMe@home.never\"");
         }
 
         private void DeleteRepository()
@@ -199,7 +206,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             Assert.AreEqual(String.Format(resources[MsysgitResources.Definition.PushFilesError], RepositoryUrlWithCredentials), result.Item2);
         }
 
-        private void CloneEmptyRepository(string git, MsysgitResources resources)
+        private void CloneEmptyRepositoryAndEnterRepo(string git, MsysgitResources resources)
         {
             var result = RunGit(git, String.Format(String.Format("clone {0}", RepositoryUrlWithCredentials), RepositoryName), WorkingDirectory);
             
