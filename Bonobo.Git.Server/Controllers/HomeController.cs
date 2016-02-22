@@ -9,6 +9,7 @@ using System.Web.Caching;
 using System.Web.Mvc;
 
 using Bonobo.Git.Server.App_GlobalResources;
+using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Helpers;
 using Bonobo.Git.Server.Models;
@@ -178,6 +179,19 @@ namespace Bonobo.Git.Server.Controllers
         {
             Session["Culture"] = new CultureInfo(lang);
             return Redirect(returnUrl);
+        }
+
+        public ActionResult Diagnostics()
+        {
+            if (Request.IsLocal)
+            {
+                var verifier = new DiagnosticReporter();
+                return Content(verifier.GetVerificationReport(), "text/plain", Encoding.UTF8);
+            }
+            else
+            {
+                return Content("You can only run the diagnostics locally to the server");
+            }
         }
     }
 }
