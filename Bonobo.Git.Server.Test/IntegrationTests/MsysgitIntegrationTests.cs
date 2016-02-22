@@ -4,27 +4,31 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
+using SpecsFor.Mvc;
+using OpenQA.Selenium;
 
-namespace Bonobo.Git.Server.Test
+using Bonobo.Git.Server.Controllers;
+using Bonobo.Git.Server.Models;
+
+namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 {
     /// <summary>
     /// This is a regression test for msysgit clients. It can be run against installed version of Bonobo Git Server.
-    /// It requires empty Integration repository created on the server before first run. It backups and restores the data when the test is finished. Therefore can be run multiple times.
     /// </summary>
     [TestClass]
     public class MsysgitIntegrationTests
     {
         private const string RepositoryName = "Integration";
-        private const string WorkingDirectory = @"..\..\..\Test\Integration";
-        private readonly static string RepositoryDirectory = Path.Combine(WorkingDirectory, RepositoryName);
+        private const string WorkingDirectory = @"..\..\..\Tests\IntegrationTests";
         private const string GitPath = @"..\..\..\Gits\{0}\bin\git.exe";
+        private readonly static string RepositoryDirectory = Path.Combine(WorkingDirectory, RepositoryName);
         private readonly static string ServerRepositoryPath = Path.Combine(@"..\..\..\Bonobo.Git.Server\App_Data\Repositories", RepositoryName);
-        private readonly static string ServerRepositoryBackupPath = Path.Combine(@"..\..\..\Test\", RepositoryName, "Backup");
+        private readonly static string ServerRepositoryBackupPath = Path.Combine(@"..\..\..\Tests\", RepositoryName, "Backup");
         private readonly static string[] GitVersions = { "1.7.4", "1.7.6", "1.7.7.1", "1.7.8", "1.7.9", "1.8.0", "1.8.1.2", "1.8.3", "1.9.5", "2.6.1" };
         private readonly static string Credentials = "admin:admin@";
-        private readonly static string RepositoryUrl = "http://{0}localhost:50287/Integration{1}";
-        private readonly static string RepositoryUrlWithoutCredentials = String.Format(RepositoryUrl, String.Empty, String.Empty);
-        private readonly static string RepositoryUrlWithCredentials = String.Format(RepositoryUrl, Credentials, ".git");
+        private readonly static string RepositoryUrl = "http://{0}localhost:20000/{2}{1}";
+        private readonly static string RepositoryUrlWithoutCredentials = String.Format(RepositoryUrl, String.Empty, String.Empty, RepositoryName);
+        private readonly static string RepositoryUrlWithCredentials = String.Format(RepositoryUrl, Credentials, ".git", RepositoryName);
 
         private readonly static Dictionary<string, Dictionary<string, string>> Resources = new Dictionary<string, Dictionary<string, string>>
         {
@@ -34,19 +38,23 @@ namespace Bonobo.Git.Server.Test
             }}
         };
 
+        private static MvcWebApp app;
+
+        [ClassInitialize]
+        public static void ClassInit(TestContext testContext)
+        {
+            app = new MvcWebApp();
+        }
+
 
         [TestInitialize]
         public void Initialize()
         {
-            if (!Directory.Exists(ServerRepositoryPath))
-            {
-                Assert.Fail(string.Format("Please create a repository called Integration in '{0}'.", Path.GetFullPath(ServerRepositoryPath)));
-            }
             DeleteDirectory(WorkingDirectory);
         }
 
-        [TestMethod, TestCategory(Definitions.Integration)]
-        public void Run()
+        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        public void RunGitTests()
         {
             bool has_any_test_run = false;
             List<string> gitpaths = new List<string>();
@@ -61,11 +69,12 @@ namespace Bonobo.Git.Server.Test
                 var resources = new MsysgitResources(version);
 
                 Directory.CreateDirectory(WorkingDirectory);
-                BackupServerRepository();
 
                 try
                 {
-                    CloneEmptyRepository(git, resources);
+                    Guid repo_id = CreateRepository();
+                    CloneEmptyRepositoryAndEnterRepo(git, resources);
+                    CreateIdentity(git);
                     PushFiles(git, resources);
                     PushTag(git, resources);
                     PushBranch(git, resources);
@@ -73,10 +82,10 @@ namespace Bonobo.Git.Server.Test
                     PullRepository(git, resources);
                     PullTag(git, resources);
                     PullBranch(git, resources);
+                    DeleteRepository(repo_id);
                 }
                 finally
                 {
-                    RestoreServerRepository();
                     DeleteDirectory(WorkingDirectory);
                 }
                 has_any_test_run = true;
@@ -87,6 +96,50 @@ namespace Bonobo.Git.Server.Test
                 Assert.Fail(string.Format("Please ensure that you have at least one git installation in '{0}'.", string.Join("', '", gitpaths.Select(n => Path.GetFullPath(n)))));
             }
 
+        }
+
+        private void CreateIdentity(string git)
+        {
+            RunGit(git, "config user.name \"McFlono McFloonyloo\"");
+            RunGit(git, "config user.email \"DontBotherMe@home.never\"");
+        }
+
+        private void DeleteRepository(Guid guid)
+        {
+            app.NavigateTo<RepositoryController>(c => c.Delete(guid));
+            app.FindFormFor<RepositoryDetailModel>().Submit();
+
+            // make sure it no longer is listed
+            app.NavigateTo<RepositoryController>(c => c.Index(null, null));
+            try
+            {
+                var ele = app.Browser.FindElement(By.Id("Repositories"));
+                Assert.Fail("Table should not exist without repositories!");
+            }
+            catch (NoSuchElementException exc)
+            {
+                if (!exc.Message.Contains(" == Repositories"))
+                {
+                    throw;
+                }
+            }
+        }
+
+        private Guid CreateRepository()
+        {
+            app.NavigateTo<RepositoryController>(c => c.Create());
+            app.FindFormFor<RepositoryDetailModel>()
+                .Field(f => f.Name).SetValueTo("Integration")
+                .Submit();
+
+            // ensure it appears on the listing
+            app.NavigateTo<RepositoryController>(c => c.Index(null, null));
+
+            var rpm = app.FindDisplayFor<IEnumerable<RepositoryDetailModel>>();
+            //var l_to = app.FindLinkTo<RepositoryController>(c => c.Detail(Guid.NewGuid()));
+            var repo_item = rpm.DisplayFor(s => s.First().Name);
+            Assert.AreEqual(repo_item.Text, "Integration");
+            return new Guid(repo_item.GetAttribute("data-repo-id"));
         }
 
         private void PullBranch(string git, MsysgitResources resources)
@@ -156,7 +209,7 @@ namespace Bonobo.Git.Server.Test
             Assert.AreEqual(String.Format(resources[MsysgitResources.Definition.PushFilesError], RepositoryUrlWithCredentials), result.Item2);
         }
 
-        private void CloneEmptyRepository(string git, MsysgitResources resources)
+        private void CloneEmptyRepositoryAndEnterRepo(string git, MsysgitResources resources)
         {
             var result = RunGit(git, String.Format(String.Format("clone {0}", RepositoryUrlWithCredentials), RepositoryName), WorkingDirectory);
             

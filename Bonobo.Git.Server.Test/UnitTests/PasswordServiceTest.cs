@@ -3,7 +3,7 @@ using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bonobo.Git.Server.Test
+namespace Bonobo.Git.Server.Test.Unit
 {
     [TestClass]
     public class PasswordServiceTest

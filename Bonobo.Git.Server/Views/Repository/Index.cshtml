@@ -116,7 +116,12 @@
                                     GetNameToDisplay((string) item.Name, (RepositoryDetailStatus) item.Status),
                                     "Detail",
                                     new { id = item.Id },
-                                    new { @class = "detail" + (item.Logo.Exists ? " customLogo" : "") }
+                                    new
+                                    {
+                                        @class = "detail" + (item.Logo.Exists ? " customLogo" : ""),
+                                        @id = "Name",
+                                        @data_repo_id = item.Id
+                                    }
                                 )
                         ),
 
@@ -127,7 +132,8 @@
 
                     @permitted.GetHtml(
                         tableStyle: "pure-table repositories",
-                        columns: (emptyGroup) ? columns : groupColumn.Concat(columns)
+                        columns: (emptyGroup) ? columns : groupColumn.Concat(columns),
+                        htmlAttributes: new { @Id = "Repositories" }
                         )
                 }
             </div>

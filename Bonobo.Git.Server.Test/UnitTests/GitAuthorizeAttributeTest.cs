@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 
-namespace Bonobo.Git.Server.Test
+namespace Bonobo.Git.Server.Test.Unit
 {
     [TestClass]
     public class GitAutherizeAttributeTest

@@ -141,9 +141,8 @@ namespace Bonobo.Git.Server.Data
                 {
                     return false;
                 }
+                return true;
             }
-
-            return true;
         }
 
         public void Update(RepositoryModel model)
