@@ -212,7 +212,7 @@
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. -->
   <Target Name="BeforeBuild">
-    <MSBuild Projects="..\get-git.msbuild" />
+    <MSBuild Projects="..\get-git.msbuild" Condition="'$(NCrunch)' != '1'" />
   </Target>
   <!-- <Target Name="AfterBuild">
   </Target>

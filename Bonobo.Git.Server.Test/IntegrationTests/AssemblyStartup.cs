@@ -9,6 +9,7 @@ using Bonobo.Git.Server.Models;
 
 namespace Bonobo.Git.Server.IntegrationTests
 {
+#if !NCRUNCH
     [TestClass]
     public class AssemblyStartup
     {
@@ -72,4 +73,5 @@ namespace Bonobo.Git.Server.IntegrationTests
             _host.Shutdown();
         }
     }
+#endif // !NCRUNCH
 }
