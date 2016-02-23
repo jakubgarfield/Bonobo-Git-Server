@@ -48,7 +48,7 @@ namespace Bonobo.Git.Server.Security
 
             result |= repositoryModel.Users.Any(x => x.Id == userId);
             result |= repositoryModel.Administrators.Any(x => x.Id == userId);
-            result |= RoleProvider.GetRolesForUser(user.Id).Contains(Definitions.Roles.Administrator);
+            result |= RoleProvider.GetRolesForUser(userId).Contains(Definitions.Roles.Administrator);
             result |= TeamRepository.GetTeams(userId).Any(x => repositoryModel.Teams.Select(y => y.Name).Contains(x.Name, StringComparer.OrdinalIgnoreCase));
 
             return result;

@@ -103,6 +103,10 @@ namespace Bonobo.Git.Server.Security
                     return ADBackend.Instance.Users.FirstOrDefault(n => n.Id == user.Guid.Value);
                 }
             }
+            else if (!string.IsNullOrEmpty(username))
+            {
+                return ADBackend.Instance.Users.Where(x => x.Username == username).FirstOrDefault();
+            }
             // Not found
             return null;
         }

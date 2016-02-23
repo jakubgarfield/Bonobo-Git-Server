@@ -79,6 +79,9 @@ namespace Bonobo.Git.Server
             {
                 if (AuthenticationProvider is WindowsAuthenticationProvider)
                 {
+                    var domain = username.GetDomain();
+                    username = username.StripDomain();
+                    username = username + "@" + domain.ToLower() + ".local";
                     if (MembershipService.ValidateUser(username, password) == ValidationResult.Success)
                     {
                         httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username.Replace("\\", "!"))));
