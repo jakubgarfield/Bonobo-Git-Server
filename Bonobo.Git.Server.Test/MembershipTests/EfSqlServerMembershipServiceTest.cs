@@ -11,25 +11,16 @@ namespace Bonobo.Git.Server.Test.MembershipTests
     [TestClass]
     public class EFSqlServerMembershipServiceTest : EFMembershipServiceTest
     {
-        SqlServerTestConnection _connection;
-
         [TestInitialize]
         public void Initialize()
         {
             _connection = new SqlServerTestConnection();
-            new AutomaticUpdater().RunWithContext(_connection.GetContext());
-            _service = new EFMembershipService { CreateContext = GetContext };
+            InitialiseTestObjects();
         }
-
         [TestCleanup]
         public void Cleanup()
         {
             _connection.Dispose();
-        }
-
-        protected override BonoboGitServerContext GetContext()
-        {
-            return _connection.GetContext();
         }
     }
 }

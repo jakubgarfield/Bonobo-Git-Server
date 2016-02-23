@@ -13,7 +13,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
     /// </summary>
     public abstract class EFMembershipServiceTest : MembershipServiceTestBase
     {
-        protected abstract BonoboGitServerContext GetContext();
+        protected IDatabaseTestConnection _connection;
 
         [TestMethod]
         public void UpdatesCanBeRunOnAlreadyUpdatedDatabase()
@@ -114,6 +114,17 @@ namespace Bonobo.Git.Server.Test.MembershipTests
                 }
                 context.SaveChanges();
             }
+        }
+
+        private BonoboGitServerContext GetContext()
+        {
+            return _connection.GetContext();
+        }
+
+        protected void InitialiseTestObjects()
+        {
+            _service = new EFMembershipService {CreateContext = GetContext};
+            new AutomaticUpdater().RunWithContext(GetContext());
         }
     }
 }

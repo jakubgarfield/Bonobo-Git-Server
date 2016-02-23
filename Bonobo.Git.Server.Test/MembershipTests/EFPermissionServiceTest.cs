@@ -10,53 +10,39 @@ namespace Bonobo.Git.Server.Test.MembershipTests
     [TestClass]
     public class EFSqlitePermissionServiceTest : EFPermissionServiceTest
     {
-        private SqliteTestConnection _connection;
-
         [TestInitialize]
         public void Initialize()
         {
             _connection = new SqliteTestConnection();
-            _service = new EFRepositoryPermissionService
-            {
-                CreateContext = () => _connection.GetContext(),
-                Repository = new EFRepositoryRepository { CreateContext = () => _connection.GetContext() }
-            };
-            new AutomaticUpdater().RunWithContext(_connection.GetContext());
+            InitialiseTestObjects();
         }
-
-        protected override BonoboGitServerContext GetContext()
+        [TestCleanup]
+        public void Cleanup()
         {
-            return _connection.GetContext();
+            _connection.Dispose();
         }
     }
 
     [TestClass]
     public class EfSqlServerPermissionServiceTest : EFPermissionServiceTest
     {
-        private SqlServerTestConnection _connection;
-
         [TestInitialize]
         public void Initialize()
         {
             _connection = new SqlServerTestConnection();
-            _service = new EFRepositoryPermissionService
-            {
-                CreateContext = () => _connection.GetContext(),
-                Repository = new EFRepositoryRepository() { CreateContext = () => _connection.GetContext() }
-            };
-            new AutomaticUpdater().RunWithContext(_connection.GetContext());
+            InitialiseTestObjects();
         }
-
-        protected override BonoboGitServerContext GetContext()
+        [TestCleanup]
+        public void Cleanup()
         {
-            return _connection.GetContext();
+            _connection.Dispose();
         }
     }
 
     public abstract class EFPermissionServiceTest
     {
-        protected IRepositoryPermissionService _service;
-        protected abstract BonoboGitServerContext GetContext();
+        protected IDatabaseTestConnection _connection;
+        private IRepositoryPermissionService _service;
 
         [TestMethod]
         public void NonExistentRepositoryByNameReturnsFalse()
@@ -250,6 +236,21 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         {
             EFMembershipService memberService = new EFMembershipService { CreateContext = GetContext };
             return memberService.GetUserModel("Admin").Id;
+        }
+
+        protected void InitialiseTestObjects()
+        {
+            _service = new EFRepositoryPermissionService
+            {
+                CreateContext = () => _connection.GetContext(),
+                Repository = new EFRepositoryRepository {CreateContext = () => _connection.GetContext()}
+            };
+            new AutomaticUpdater().RunWithContext(_connection.GetContext());
+        }
+
+        private BonoboGitServerContext GetContext()
+        {
+            return _connection.GetContext();
         }
     }
 }

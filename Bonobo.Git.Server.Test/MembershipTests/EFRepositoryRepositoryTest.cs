@@ -12,45 +12,39 @@ namespace Bonobo.Git.Server.Test.MembershipTests
     [TestClass]
     public class EFSqliteRepositoryRepositoryTest : EFRepositoryRepositoryTest
     {
-        SqliteTestConnection _connection;
-
         [TestInitialize]
         public void Initialize()
         {
             _connection = new SqliteTestConnection();
-            _repo = new EFRepositoryRepository {CreateContext = () => _connection.GetContext()};
-            new AutomaticUpdater().RunWithContext(_connection.GetContext());
+            InitialiseTestObjects();
         }
-
-        protected override BonoboGitServerContext GetContext()
+        [TestCleanup]
+        public void Cleanup()
         {
-            return _connection.GetContext();
+            _connection.Dispose();
         }
     }
 
     [TestClass]
     public class EfSqlServerRepositoryRepositoryTest : EFRepositoryRepositoryTest
     {
-        SqlServerTestConnection _connection;
-
         [TestInitialize]
         public void Initialize()
         {
             _connection = new SqlServerTestConnection();
-            _repo = new EFRepositoryRepository { CreateContext = () => _connection.GetContext() };
-            new AutomaticUpdater().RunWithContext(_connection.GetContext());
+            InitialiseTestObjects();
         }
-
-        protected override BonoboGitServerContext GetContext()
+        [TestCleanup]
+        public void Cleanup()
         {
-            return _connection.GetContext();
+            _connection.Dispose();
         }
     }
 
     public abstract class EFRepositoryRepositoryTest
     {
-        protected IRepositoryRepository _repo;
-        protected abstract BonoboGitServerContext GetContext();
+        protected IDatabaseTestConnection _connection;
+        IRepositoryRepository _repo;
 
         [TestMethod]
         public void NewRepoIsEmpty()
@@ -359,5 +353,15 @@ namespace Bonobo.Git.Server.Test.MembershipTests
             return newRepo;
         }
 
+        BonoboGitServerContext GetContext()
+        {
+            return _connection.GetContext();
+        }
+
+        protected void InitialiseTestObjects()
+        {
+            _repo = new EFRepositoryRepository {CreateContext = () => _connection.GetContext()};
+            new AutomaticUpdater().RunWithContext(_connection.GetContext());
+        }
     }
 }

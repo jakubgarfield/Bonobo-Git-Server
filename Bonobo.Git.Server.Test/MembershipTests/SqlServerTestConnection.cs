@@ -5,7 +5,7 @@ using Bonobo.Git.Server.Data;
 
 namespace Bonobo.Git.Server.Test.MembershipTests
 {
-    class SqlServerTestConnection : IDisposable
+    class SqlServerTestConnection : IDatabaseTestConnection
     {
         readonly SqlConnection _connection;
         private readonly string _databaseName;

@@ -1,9 +1,15 @@
+using System;
 using System.Data.Common;
 using Bonobo.Git.Server.Data;
 
 namespace Bonobo.Git.Server.Test.MembershipTests
 {
-    class SqliteTestConnection
+    public interface IDatabaseTestConnection : IDisposable
+    {
+        BonoboGitServerContext GetContext();
+    }
+
+    class SqliteTestConnection : IDatabaseTestConnection
     {
         readonly DbConnection _connection;
 
@@ -17,6 +23,11 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         public BonoboGitServerContext GetContext()
         {
             return BonoboGitServerContext.FromDatabase(_connection);
+        }
+
+        public void Dispose()
+        {
+            _connection.Dispose();
         }
     }
 }

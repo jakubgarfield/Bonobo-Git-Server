@@ -10,45 +10,39 @@ namespace Bonobo.Git.Server.Test.MembershipTests
     [TestClass]
     public class EFSqliteRoleProviderTest : EFRoleProviderTest
     {
-        SqliteTestConnection _connection;
-
         [TestInitialize]
         public void Initialize()
         {
             _connection = new SqliteTestConnection();
-            _provider = new EFRoleProvider { CreateContext = () => _connection.GetContext() };
-            new AutomaticUpdater().RunWithContext(_connection.GetContext());
+            InitialiseTestObjects();
         }
-
-        protected override BonoboGitServerContext GetContext()
+        [TestCleanup]
+        public void Cleanup()
         {
-            return _connection.GetContext();
+            _connection.Dispose();
         }
     }
 
     [TestClass]
     public class EFSqlServerRoleProviderTest : EFRoleProviderTest
     {
-        SqlServerTestConnection _connection;
-
         [TestInitialize]
         public void Initialize()
         {
             _connection = new SqlServerTestConnection();
-            _provider = new EFRoleProvider { CreateContext = () => _connection.GetContext() };
-            new AutomaticUpdater().RunWithContext(_connection.GetContext());
+            InitialiseTestObjects();
         }
-
-        protected override BonoboGitServerContext GetContext()
+        [TestCleanup]
+        public void Cleanup()
         {
-            return _connection.GetContext();
+            _connection.Dispose();
         }
     }
 
     public abstract class EFRoleProviderTest
     {
+        protected IDatabaseTestConnection _connection;
         protected IRoleProvider _provider;
-        protected abstract BonoboGitServerContext GetContext();
 
         [TestMethod]
         public void UpdatesCanBeRunOnAlreadyUpdatedDatabase()
@@ -163,6 +157,17 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         {
             EFMembershipService memberService = new EFMembershipService { CreateContext = GetContext };
             return memberService.GetUserModel("Admin").Id;
+        }
+
+        private BonoboGitServerContext GetContext()
+        {
+            return _connection.GetContext();
+        }
+
+        protected void InitialiseTestObjects()
+        {
+            _provider = new EFRoleProvider {CreateContext = () => _connection.GetContext()};
+            new AutomaticUpdater().RunWithContext(_connection.GetContext());
         }
     }
 }
