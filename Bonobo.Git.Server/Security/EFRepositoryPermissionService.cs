@@ -66,5 +66,10 @@ namespace Bonobo.Git.Server.Security
                 return isRepoAdmin;
             }
         }
+
+        public bool HasPermission(string username, string password, string repositoryName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

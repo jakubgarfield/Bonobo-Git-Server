@@ -20,9 +20,9 @@ namespace Bonobo.Git.Server.Security
 
         [Dependency]
         public ITeamRepository TeamRepository { get; set; }
-        
+
         [Dependency]
-        public IMembershipService MemberShipService { get; set; } 
+        public IMembershipService MemberShipService { get; set; }
 
         public bool AllowsAnonymous(string repositoryName)
         {
@@ -39,16 +39,26 @@ namespace Bonobo.Git.Server.Security
             return HasPermission(userId, Repository.GetRepository(repositoryName).Id);
         }
 
+        public bool HasPermission(string username, string password, string repositoryName)
+        {
+            var result = MemberShipService.ValidateUser(username, password);
+            if(result == ValidationResult.Success)
+            {
+                var user = MemberShipService.GetAllUsers().Where(x => x.Username == username).FirstOrDefault();
+                return HasPermission(user.Id, Repository.GetRepository(repositoryName).Id);
+            }
+            return false;
+        }
+
         public bool HasPermission(Guid userId, Guid repositoryId)
         {
             bool result = false;
 
             RepositoryModel repositoryModel = Repository.GetRepository(repositoryId);
-            UserModel user = MemberShipService.GetUserModel(userId);
 
             result |= repositoryModel.Users.Any(x => x.Id == userId);
             result |= repositoryModel.Administrators.Any(x => x.Id == userId);
-            result |= RoleProvider.GetRolesForUser(user.Id).Contains(Definitions.Roles.Administrator);
+            result |= RoleProvider.GetRolesForUser(userId).Contains(Definitions.Roles.Administrator);
             result |= TeamRepository.GetTeams(userId).Any(x => repositoryModel.Teams.Select(y => y.Name).Contains(x.Name, StringComparer.OrdinalIgnoreCase));
 
             return result;

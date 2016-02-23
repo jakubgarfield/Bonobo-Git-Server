@@ -19,7 +19,7 @@ namespace Bonobo.Git.Server.Controllers
     {
         [Dependency]
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
-        
+
         [Dependency]
         public IGitService GitService { get; set; }
 
@@ -30,8 +30,41 @@ namespace Bonobo.Git.Server.Controllers
                 return new HttpNotFoundResult();
             }
 
+            bool hasPermission = false;
+            string username = string.Empty;
+            string password = string.Empty;
+            if (User.Id() == Guid.Empty)
+            {
+                var basicAuth = Request.Headers["Authorization"];
+                if (!string.IsNullOrEmpty(basicAuth))
+                {
+                    var base64 = basicAuth.Split(' ');
+                    if (base64.Length > 0)
+                    {
+                        var plainTextBytes = System.Convert.FromBase64String(base64[1]);
+                        var usernameAndPassword = System.Text.Encoding.UTF8.GetString(plainTextBytes);
+
+                        if (!string.IsNullOrEmpty(usernameAndPassword))
+                        {
+                            var usernameAndPasswordArray = usernameAndPassword.Split(':');
+                            if(usernameAndPasswordArray.Length > 0)
+                            {
+                                username = usernameAndPasswordArray[0];
+                                password = usernameAndPasswordArray[1];
+                                System.Diagnostics.Debug.WriteLine("User: " + username);
+                            }
+                        }
+                    }
+                }
+                hasPermission = RepositoryPermissionService.HasPermission(username, password, repositoryName);
+                System.Diagnostics.Debug.WriteLine("Repository: {0} hasPermission: {1}", repositoryName, hasPermission);
+            }
+            else
+            {
+                hasPermission = RepositoryPermissionService.HasPermission(User.Id(), repositoryName);
+            }
+
             bool allowAnonClone = RepositoryPermissionService.AllowsAnonymous(repositoryName);
-            bool hasPermission = RepositoryPermissionService.HasPermission(User.Id(), repositoryName);
             bool isClone = String.Equals("git-upload-pack", service, StringComparison.OrdinalIgnoreCase);
             bool isPush = String.Equals("git-receive-pack", service, StringComparison.OrdinalIgnoreCase);
             bool allowAnonPush = UserConfiguration.Current.AllowAnonymousPush;
@@ -90,7 +123,7 @@ namespace Bonobo.Git.Server.Controllers
         /// </summary>
         public ActionResult GitUrl(string repositoryName)
         {
-            return RedirectPermanent(Url.Action("Detail", "Repository", new { id = repositoryName}));
+            return RedirectPermanent(Url.Action("Detail", "Repository", new { id = repositoryName }));
         }
 
         private ActionResult ExecuteReceivePack(string repositoryName)
@@ -135,13 +168,13 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     GitService.ExecuteServiceByName(
                         Guid.NewGuid().ToString("N"),
-                        repositoryName, 
-                        serviceName, 
+                        repositoryName,
+                        serviceName,
                         new ExecutionOptions() { AdvertiseRefs = true },
                         GetInputStream(),
                         outStream
                     );
-                }, 
+                },
                 advertiseRefsContent);
         }
 
@@ -149,7 +182,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             Response.Clear();
             Response.AddHeader("WWW-Authenticate", "Basic realm=\"Bonobo Git\"");
-            
+
             return new HttpStatusCodeResult(401);
         }
 
