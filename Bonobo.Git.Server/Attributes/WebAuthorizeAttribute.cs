@@ -28,6 +28,12 @@ namespace Bonobo.Git.Server
 
             if (!(filterContext.Result is HttpUnauthorizedResult))
             {
+                if (filterContext.HttpContext.User.Identity.IsAuthenticated && filterContext.HttpContext.User.Id() == Guid.Empty)
+                {
+                    // We're authenticated but with a bad ID in the cookie
+                    filterContext.Result = new HttpUnauthorizedResult();
+                }
+
                 if (!filterContext.HttpContext.User.IsInRole(Definitions.Roles.Member) && !filterContext.HttpContext.User.Identity.IsAuthenticated)
                 {
                     filterContext.Result = new RedirectResult("~/Home/Unauthorized");

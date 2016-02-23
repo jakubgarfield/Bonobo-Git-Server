@@ -52,9 +52,16 @@ namespace Bonobo.Git.Server
                 return;
             }
 
-            if (httpContext.Request.IsAuthenticated && httpContext.User != null && httpContext.User.Identity is System.Security.Claims.ClaimsIdentity)
+            if (httpContext.Request.IsAuthenticated && 
+                httpContext.User != null && 
+                httpContext.User.Identity is ClaimsIdentity)
             {
-                return;
+                // We already have a claims ID, but we need to check if it has a valid GUID in the ID
+                if (httpContext.User.Id() != Guid.Empty)
+                {
+                    // Looks like we have a current authentication with a GUID in the claim
+                    return;
+                }
             }
 
             // Add header to prevent redirection to login page (see IAuthenticationProvider.Configure)
