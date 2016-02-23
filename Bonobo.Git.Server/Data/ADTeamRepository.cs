@@ -40,7 +40,7 @@ namespace Bonobo.Git.Server.Data
 
         public TeamModel GetTeam(Guid TeamId)
         {
-            return ADBackend.Instance.Teams[TeamId.ToString()];
+            return ADBackend.Instance.Teams[TeamId];
         }
 
         public IList<TeamModel> GetTeams(string userName)

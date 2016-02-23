@@ -109,7 +109,7 @@ namespace Bonobo.Git.Server.Security
 
         public UserModel GetUserModel(Guid id)
         {
-            return ADBackend.Instance.Users[id.ToString()];
+            return ADBackend.Instance.Users[id];
         }
 
         private static bool IsUserPrincipalName(string username)

@@ -5,6 +5,7 @@ using System.DirectoryServices.AccountManagement;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
+using Bonobo.Git.Server.Models;
 
 namespace Bonobo.Git.Server.Security
 {
@@ -35,7 +36,7 @@ namespace Bonobo.Git.Server.Security
         {
             if (String.IsNullOrEmpty(usernameToMatch)) throw new ArgumentException("Value cannot be null or empty.", "usernameToMatch");
 
-            return String.IsNullOrEmpty(usernameToMatch) ? ADBackend.Instance.Roles[roleName].Members : ADBackend.Instance.Roles[roleName].Members.Where(x => x.Contains(usernameToMatch)).ToArray();
+            return String.IsNullOrEmpty(usernameToMatch) ? GetRoleByName(roleName).Members : GetRoleByName(roleName).Members.Where(x => x.Contains(usernameToMatch)).ToArray();
         }
 
         public string[] GetAllRoles()
@@ -51,13 +52,13 @@ namespace Bonobo.Git.Server.Security
 
         public string[] GetUsersInRole(string roleName)
         {
-            return ADBackend.Instance.Roles[roleName].Members;
+            return GetRoleByName(roleName).Members;
         }
 
         public bool IsUserInRole(Guid userId, string roleName)
         {
             var user = ADBackend.Instance.Users.First(x => x.Id == userId);
-            return ADBackend.Instance.Roles[roleName].Members.Contains(user.Username, StringComparer.OrdinalIgnoreCase);
+            return GetRoleByName(roleName).Members.Contains(user.Username, StringComparer.OrdinalIgnoreCase);
         }
 
         public void RemoveUserFromRoles(Guid userId, string[] roleNames)
@@ -72,7 +73,12 @@ namespace Bonobo.Git.Server.Security
 
         public bool RoleExists(string roleName)
         {
-            return ADBackend.Instance.Roles[roleName] != null;
+            return ADBackend.Instance.Roles.Any(role => role.Name == roleName);
+        }
+
+        private static RoleModel GetRoleByName(string roleName)
+        {
+            return ADBackend.Instance.Roles.First(role => role.Name == roleName);
         }
     }
 }

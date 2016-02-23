@@ -24,7 +24,7 @@ namespace Bonobo.Git.Server.Data
 
         public void Delete(Guid Id)
         {
-            ADBackend.Instance.Repositories.Remove(Id.ToString());
+            ADBackend.Instance.Repositories.Remove(Id);
         }
 
         public IList<RepositoryModel> GetAdministratedRepositories(Guid userId)
@@ -58,7 +58,7 @@ namespace Bonobo.Git.Server.Data
         
         public RepositoryModel GetRepository(Guid id)
         {
-            return ADBackend.Instance.Repositories[id.ToString()];
+            return ADBackend.Instance.Repositories[id];
         }
 
         public void Update(RepositoryModel repository)

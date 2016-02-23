@@ -17,52 +17,52 @@ namespace Bonobo.Git.Server.Data
 {
     public class ADBackendStore<T> : IEnumerable<T> where T : INameProperty
     {
-        public T this[string key]
+        public T this[Guid key]
         {
             get
             {
                 T result = default(T);
 
-                content.TryGetValue(key, out result);
+                _content.TryGetValue(key, out result);
 
                 return result;
             }
 
             set
             {
-                content.AddOrUpdate(key, value, (k, v) => value);
+                _content.AddOrUpdate(key, value, (k, v) => value);
             }
         }
 
-        private string storagePath;
-        private ConcurrentDictionary<string, T> content;
+        private readonly string _storagePath;
+        private readonly ConcurrentDictionary<Guid, T> _content;
         private readonly string hexchars = "0123456789abcdef";
 
         public ADBackendStore(string rootpath, string name)
         {
-            storagePath = Path.Combine(GetRootPath(rootpath), name);
-            content = LoadContent();
+            _storagePath = Path.Combine(GetRootPath(rootpath), name);
+            _content = LoadContent();
         }
 
         public bool Add(T item)
         {
-            return content.TryAdd(item.Id.ToString(), item) && Store(item);
+            return _content.TryAdd(item.Id, item) && Store(item);
         }
 
-        public bool Remove(string key)
+        public bool Remove(Guid key)
         {
             T removedItem;
-            return content.TryRemove(key, out removedItem) && Delete(removedItem);
+            return _content.TryRemove(key, out removedItem) && Delete(removedItem);
         }
 
         public bool Remove(T item)
         {
-            return Remove(item.Id.ToString());
+            return Remove(item.Id);
         }
 
         public void Update(T item)
         {
-            if (content.TryUpdate(item.Id.ToString(), item, content[item.Id.ToString()]))
+            if (_content.TryUpdate(item.Id, item, _content[item.Id]))
             {
                 Store(item);
             }
@@ -70,13 +70,13 @@ namespace Bonobo.Git.Server.Data
 
         public void AddOrUpdate(T item)
         {
-            content.AddOrUpdate(item.Id.ToString(), item, (k, v) => item);
+            _content.AddOrUpdate(item.Id, item, (k, v) => item);
             Store(item);
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            return content.Values.GetEnumerator();
+            return _content.Values.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -91,7 +91,7 @@ namespace Bonobo.Git.Server.Data
 
             try
             {
-                string itemFilename = Path.Combine(storagePath, GetItemFilename(item));
+                string itemFilename = Path.Combine(_storagePath, GetItemFilename(item));
                 File.WriteAllText(itemFilename, JsonConvert.SerializeObject(item));
                 result = true;
             }
@@ -109,7 +109,7 @@ namespace Bonobo.Git.Server.Data
 
             try
             {
-                string itemFilename = Path.Combine(storagePath, GetItemFilename(item));
+                string itemFilename = Path.Combine(_storagePath, GetItemFilename(item));
                 File.Delete(itemFilename);
                 result = true;
             }
@@ -121,21 +121,21 @@ namespace Bonobo.Git.Server.Data
             return result;
         }
 
-        private ConcurrentDictionary<string, T> LoadContent()
+        private ConcurrentDictionary<Guid, T> LoadContent()
         {
-            ConcurrentDictionary<string, T> result = new ConcurrentDictionary<string, T>();
+            var result = new ConcurrentDictionary<Guid, T>();
 
-            if (!Directory.Exists(storagePath))
+            if (!Directory.Exists(_storagePath))
             {
-                Directory.CreateDirectory(storagePath);
+                Directory.CreateDirectory(_storagePath);
             }
 
-            foreach (string filename in Directory.EnumerateFileSystemEntries(storagePath, "*.json"))
+            foreach (string filename in Directory.EnumerateFileSystemEntries(_storagePath, "*.json"))
             {
                 try
                 {
                     T item = JsonConvert.DeserializeObject<T>(File.ReadAllText(filename));
-                    result.TryAdd(item.Id.ToString(), item);
+                    result.TryAdd(item.Id, item);
                 }
                 catch (Exception ex)
                 {
