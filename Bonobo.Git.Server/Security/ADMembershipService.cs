@@ -75,7 +75,12 @@ namespace Bonobo.Git.Server.Security
             return result;
         }
 
-        public bool CreateUser(string username, string password, string givenName, string surname, string email, Guid? guid)
+        public bool CreateUser(string username, string password, string givenName, string surname, string email, Guid id)
+        {
+            return false;
+        }
+
+        public bool CreateUser(string username, string password, string givenName, string surname, string email)
         {
             return false;
         }

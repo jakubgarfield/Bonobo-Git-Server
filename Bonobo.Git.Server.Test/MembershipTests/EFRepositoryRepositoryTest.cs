@@ -227,17 +227,20 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         {
             _repo.Create(MakeRepo("Repo1"));
 
-            Assert.IsFalse(_repo.GetPermittedRepositories(null, null).Any());
+            Assert.AreEqual(0, _repo.GetRepository("Repo1").Administrators.Length);
+            Assert.AreEqual(0, _repo.GetRepository("Repo1").Teams.Length);
+            Assert.AreEqual(0, _repo.GetRepository("Repo1").Users.Length);
         }
 
         [TestMethod]
-        public void AnonymousRepoIsPermittedToEverybody()
+        public void AnonymousRepoIsPermittedToAnybody()
         {
             var repo = MakeRepo("Repo1");
             repo.AnonymousAccess = true;
             _repo.Create(repo);
 
-            Assert.AreEqual("Repo1", _repo.GetPermittedRepositories(null, null).Single().Name);
+            var randomUserId = Guid.NewGuid();
+            Assert.AreEqual("Repo1", _repo.GetPermittedRepositories(randomUserId, null).Single().Name);
         }
 
         [TestMethod]
@@ -261,7 +264,8 @@ namespace Bonobo.Git.Server.Test.MembershipTests
             repoWithUser.Users = new[] { user };
             _repo.Create(repoWithUser);
 
-            Assert.IsFalse(_repo.GetPermittedRepositories(Guid.NewGuid(), null).Any());
+            var unknownUserId = Guid.NewGuid();
+            Assert.IsFalse(_repo.GetPermittedRepositories(unknownUserId, null).Any());
         }
 
         [TestMethod]
@@ -278,20 +282,35 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         }
 
         [TestMethod]
-        public void RepositoryIsPermittedToTeam()
+        public void RepositoryIsPermittedToTeamEvenWhenUserIsNotInTeam()
         {
+            var user = AddUserFred();
             var team = AddTeam();
             var repoWithTeam = MakeRepo("Repo1");
-            repoWithTeam.Teams = new []{ team };
+            repoWithTeam.Teams = new[] { team };
             _repo.Create(repoWithTeam);
             var repoWithoutTeam = MakeRepo("Repo2");
             _repo.Create(repoWithoutTeam);
 
-            Assert.AreEqual("Repo1", _repo.GetPermittedRepositories(null, new[] { team.Id }).Single().Name);
+            Assert.AreEqual("Repo1", _repo.GetPermittedRepositories(user.Id, new[] { team.Id }).Single().Name);
         }
 
         [TestMethod]
         public void RepositoryIsNotPermittedIfTeamIsWrong()
+        {
+            var user = AddUserFred();
+            var team = AddTeam();
+            var repoWithTeam = MakeRepo("Repo1");
+            repoWithTeam.Teams = new[] { team };
+            _repo.Create(repoWithTeam);
+            var repoWithoutTeam = MakeRepo("Repo2");
+            _repo.Create(repoWithoutTeam);
+
+            Assert.AreEqual(0, _repo.GetPermittedRepositories(user.Id, new[] { Guid.NewGuid() }).Count);
+        }
+
+        [TestMethod]
+        public void RepositoryIsReportedAsAccessibleToTeam()
         {
             var team = AddTeam();
             var repoWithTeam = MakeRepo("Repo1");
@@ -300,14 +319,25 @@ namespace Bonobo.Git.Server.Test.MembershipTests
             var repoWithoutTeam = MakeRepo("Repo2");
             _repo.Create(repoWithoutTeam);
 
-            Assert.AreEqual(0, _repo.GetPermittedRepositories(null, new[] { Guid.NewGuid() }).Count);
+            Assert.AreEqual("Repo1", _repo.GetTeamRepositories(new[] { team.Id }).Single().Name);
         }
 
+        [TestMethod]
+        public void NoReposistoriesListedIfNoneInTeam()
+        {
+            var team = AddTeam();
+            var repoWithoutTeam1 = MakeRepo("Repo1");
+            _repo.Create(repoWithoutTeam1);
+            var repoWithoutTeam2 = MakeRepo("Repo2");
+            _repo.Create(repoWithoutTeam2);
+
+            Assert.AreEqual(0, _repo.GetTeamRepositories(new[] { team.Id }).Count);
+        }
 
         UserModel AddUserFred()
         {
             EFMembershipService memberService = new EFMembershipService(MakeContext);
-            memberService.CreateUser("fred", "letmein", "Fred", "Blogs", "fred@aol", null);
+            memberService.CreateUser("fred", "letmein", "Fred", "Blogs", "fred@aol");
             return memberService.GetUserModel("fred");
         }
 

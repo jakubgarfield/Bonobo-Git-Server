@@ -147,7 +147,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         Guid AddUserFred()
         {
             EFMembershipService memberService = new EFMembershipService(MakeContext);
-            memberService.CreateUser("fred", "letmein", "Fred", "FredBlogs", "fred@aol", null);
+            memberService.CreateUser("fred", "letmein", "Fred", "FredBlogs", "fred@aol");
             return memberService.GetUserModel("fred").Id;
         }
 

@@ -143,7 +143,7 @@ namespace Bonobo.Git.Server.Controllers
                 Name = model.Name,
                 Description = model.Description,
                 Members = model.Members.ToArray(),
-                Repositories = RepositoryRepository.GetPermittedRepositories(null, new[] { model.Id }).ToArray(),
+                Repositories = RepositoryRepository.GetTeamRepositories(new[] { model.Id }).ToArray(),
                 IsReadOnly = MembershipService.IsReadOnly()
             };
         }

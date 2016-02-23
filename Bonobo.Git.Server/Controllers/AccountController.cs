@@ -182,7 +182,9 @@ namespace Bonobo.Git.Server.Controllers
             var adUser = UserPrincipal.FindByIdentity(dc, credentials);
             if (adUser != null)
             {
-                if(MembershipService.CreateUser(credentials, "AD_PASSWORD", adUser.GivenName, adUser.Surname, adUser.EmailAddress, adUser.Guid))
+                //TODO Is this legit? Could an AD user ever not have a Guid
+                var userId = adUser.Guid.GetValueOrDefault(Guid.NewGuid());
+                if (MembershipService.CreateUser(credentials, "AD_PASSWORD", adUser.GivenName, adUser.Surname, adUser.EmailAddress, userId))
                 {
                     if (MembershipService is EFMembershipService)
                     {

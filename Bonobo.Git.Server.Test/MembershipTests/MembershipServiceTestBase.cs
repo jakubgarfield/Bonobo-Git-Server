@@ -34,6 +34,19 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         }
 
         [TestMethod]
+        public void NewUserCanBeAddedWithKnownGuid()
+        {
+            var newUserGuid = Guid.NewGuid();
+            _service.CreateUser("testUser", "hello", "John", "User", "test@user.com", newUserGuid);
+            Assert.AreEqual(2, _service.GetAllUsers().Count);
+            var newUser = _service.GetUserModel("testuser");
+            Assert.AreEqual(newUserGuid, newUser.Id);
+            Assert.AreEqual("John", newUser.GivenName);
+            Assert.AreEqual("User", newUser.Surname);
+            Assert.AreEqual("test@user.com", newUser.Email);
+        }
+
+        [TestMethod]
         public void UserCanBeRetrievedById()
         {
             CreateTestUser();
@@ -113,7 +126,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
 
         Guid CreateTestUser()
         {
-            _service.CreateUser("testUser", "hello", "John", "User", "test@user.com", null);
+            _service.CreateUser("testUser", "hello", "John", "User", "test@user.com");
             return _service.GetUserModel("testUser").Id;
         }
     }

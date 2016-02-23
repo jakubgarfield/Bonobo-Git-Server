@@ -54,21 +54,26 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public bool CreateUser(string username, string password, string givenName, string surname, string email, Guid? guid)
+        public bool CreateUser(string username, string password, string givenName, string surname, string email)
+        {
+            return CreateUser(username, password, givenName, surname, email, Guid.NewGuid());
+        }
+
+        public bool CreateUser(string username, string password, string givenName, string surname, string email, Guid id)
         {
             if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
             if (String.IsNullOrEmpty(givenName)) throw new ArgumentException("Value cannot be null or empty.", "givenName");
             if (String.IsNullOrEmpty(surname)) throw new ArgumentException("Value cannot be null or empty.", "surname");
             if (String.IsNullOrEmpty(email)) throw new ArgumentException("Value cannot be null or empty.", "email");
-            if ((!guid.HasValue) || guid.Value == Guid.Empty) guid = Guid.NewGuid();
+            if (id == Guid.Empty) throw new ArgumentException("Id must be a proper Guid", "id");
 
             username = username.ToLowerInvariant();
             using (var database = _createDatabaseContext())
             {
                 var user = new User
                 {
-                    Id = guid.Value,
+                    Id = id,
                     Username = username,
                     GivenName = givenName,
                     Surname = surname,

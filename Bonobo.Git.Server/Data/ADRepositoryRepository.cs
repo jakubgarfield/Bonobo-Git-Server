@@ -27,9 +27,9 @@ namespace Bonobo.Git.Server.Data
             ADBackend.Instance.Repositories.Remove(Id.ToString());
         }
 
-        public IList<RepositoryModel> GetAdministratedRepositories(Guid Id)
+        public IList<RepositoryModel> GetAdministratedRepositories(Guid userId)
         {
-            return ADBackend.Instance.Repositories.Where(x => x.Administrators.Any(y => y.Id == Id)).ToList();
+            return ADBackend.Instance.Repositories.Where(x => x.Administrators.Any(y => y.Id == userId)).ToList();
         }
 
         public IList<RepositoryModel> GetAllRepositories()
@@ -37,12 +37,18 @@ namespace Bonobo.Git.Server.Data
             return ADBackend.Instance.Repositories.ToList();
         }
 
-        public IList<RepositoryModel> GetPermittedRepositories(Guid? userId, Guid[] userTeamsId)
+        public IList<RepositoryModel> GetPermittedRepositories(Guid userId, Guid[] userTeamsId)
         {
-            return ADBackend.Instance.Repositories.Where(x =>
-            (userId == null ? false : x.Users.Any(u => u.Id == userId.Value)) ||
-                x.Teams.Any(s => userTeamsId.Contains(userId.Value))
+            if (userId == Guid.Empty) throw new ArgumentException("Do not pass invalid userId", "userId");
+            return GetAllRepositories().Where(x =>
+                x.Users.Any(user => user.Id == userId) ||
+                x.Teams.Any(team => userTeamsId.Contains(team.Id))
                 ).ToList();
+        }
+
+        public IList<RepositoryModel> GetTeamRepositories(Guid[] teamsId)
+        {
+            return GetAllRepositories().Where(repo => repo.Teams.Any(team => teamsId.Contains(team.Id))).ToList();
         }
 
         public RepositoryModel GetRepository(string name)

@@ -61,18 +61,24 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public IList<RepositoryModel> GetPermittedRepositories(Guid? UserId, Guid[] teamsId)
+        public IList<RepositoryModel> GetPermittedRepositories(Guid userId, Guid[] teamsId)
         {
-            return GetAllRepositories().Where( i => 
-                i.Users.Any(x => x.Id == UserId) ||
-                i.Administrators.Any(x => x.Id == UserId) ||
-                i.Teams.FirstOrDefault(t => teamsId.Contains(t.Id)) != null ||
-                i.AnonymousAccess).ToList();
+            if(userId == Guid.Empty) throw new ArgumentException("Do not pass invalid userId", "userId");
+            return GetAllRepositories().Where(repo => 
+                repo.Users.Any(user => user.Id == userId) ||
+                repo.Administrators.Any(admin => admin.Id == userId) ||
+                repo.Teams.Any(team => teamsId.Contains(team.Id)) ||
+                repo.AnonymousAccess).ToList();
         }
 
-        public IList<RepositoryModel> GetAdministratedRepositories(Guid UserId)
+        public IList<RepositoryModel> GetTeamRepositories(Guid[] teamsId)
         {
-            return GetAllRepositories().Where(i => i.Administrators.Any(x => x.Id == UserId)).ToList();
+            return GetAllRepositories().Where(repo => repo.Teams.Any(t => teamsId.Contains(t.Id))).ToList();
+        }
+
+        public IList<RepositoryModel> GetAdministratedRepositories(Guid userId)
+        {
+            return GetAllRepositories().Where(i => i.Administrators.Any(x => x.Id == userId)).ToList();
         }
 
         public RepositoryModel GetRepository(string name)
