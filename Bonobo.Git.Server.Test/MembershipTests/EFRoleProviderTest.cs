@@ -128,12 +128,11 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         }
 
         [TestMethod]
-        public void RoleCanBeDeletedIfNoMembersPresen()
+        public void RoleCanBeDeletedIfNoMembersPresent()
         {
             _provider.CreateRole("Programmer");
             _provider.DeleteRole("Programmer", false);
-            _provider.DeleteRole("Administrator", false);
-            Assert.AreEqual(0, _provider.GetAllRoles().Length);
+            Assert.AreEqual(1, _provider.GetAllRoles().Length);
         }
 
         [TestMethod]
