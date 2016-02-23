@@ -143,8 +143,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="MembershipTests\EFPermissionServiceTest.cs" />
     <Compile Include="MembershipTests\EFRepositoryRepositoryTest.cs" />
-    <Compile Include="MembershipTests\EFRoleProviderTests.cs" />
+    <Compile Include="MembershipTests\EFRoleProviderTest.cs" />
     <Compile Include="MembershipTests\EFMembershipServiceTest.cs" />
     <Compile Include="MembershipTests\EFSqliteMembershipServiceTest.cs" />
     <Compile Include="MembershipTests\EFSqlServerMembershipServiceTest.cs" />

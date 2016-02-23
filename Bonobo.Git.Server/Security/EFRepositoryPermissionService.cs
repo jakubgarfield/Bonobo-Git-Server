@@ -15,7 +15,12 @@ namespace Bonobo.Git.Server.Security
 
         public bool HasPermission(Guid userId, string repositoryName)
         {
-            return HasPermission(userId, Repository.GetRepository(repositoryName).Id);
+            var repository = Repository.GetRepository(repositoryName);
+            if (repository == null)
+            {
+                return false;
+            }
+            return HasPermission(userId, repository.Id);
         }
 
         public bool HasPermission(Guid userId, Guid repositoryId)

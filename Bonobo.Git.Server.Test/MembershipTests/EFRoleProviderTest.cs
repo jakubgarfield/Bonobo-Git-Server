@@ -128,6 +128,15 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         }
 
         [TestMethod]
+        public void RoleCanBeDeletedIfNoMembersPresen()
+        {
+            _provider.CreateRole("Programmer");
+            _provider.DeleteRole("Programmer", false);
+            _provider.DeleteRole("Administrator", false);
+            Assert.AreEqual(0, _provider.GetAllRoles().Length);
+        }
+
+        [TestMethod]
         public void UserInRoleDetectedCorrectly()
         {
             Assert.IsTrue(_provider.IsUserInRole(GetAdminId(), "Administrator"));
