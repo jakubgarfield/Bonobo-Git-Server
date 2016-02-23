@@ -77,7 +77,9 @@ namespace Bonobo.Git.Server.Data
             {
                 try
                 {
-                    Parallel.Invoke(() => UpdateUsers(), () => UpdateTeams(), () => UpdateRoles());
+                    UpdateUsers();
+                    UpdateTeams();
+                    UpdateRoles();
                     UpdateRepositories();
                 }
                 catch(Exception ex)
