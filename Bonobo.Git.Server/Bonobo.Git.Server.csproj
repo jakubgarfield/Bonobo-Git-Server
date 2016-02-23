@@ -274,6 +274,7 @@
     <Compile Include="Data\ADRepositoryRepository.cs" />
     <Compile Include="Data\ADTeamRepository.cs" />
     <Compile Include="Data\INameProperty.cs" />
+    <Compile Include="Data\RepositoryRepositoryBase.cs" />
     <Compile Include="Data\Update\Sqlite\AddGroup.cs" />
     <Compile Include="Data\Update\Sqlite\AddGuidColumn.cs" />
     <Compile Include="Data\Update\Sqlite\AddRepositoryLogo.cs" />

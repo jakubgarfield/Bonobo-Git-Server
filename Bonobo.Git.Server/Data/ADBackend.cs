@@ -33,11 +33,19 @@ namespace Bonobo.Git.Server.Data
                     {
                         if (instance == null)
                         {
-                            instance = new ADBackend();
+                            instance = new ADBackend(true);
                         }
                     }
                 }
                 return instance;
+            }
+        }
+
+        public static void ResetSingletonForTesting()
+        {
+            lock (instanceLock)
+            {
+                instance = new ADBackend(false);
             }
         }
 
@@ -66,9 +74,12 @@ namespace Bonobo.Git.Server.Data
         private object updateLock = new object();
         private Timer updateTimer;
 
-        private ADBackend()
+        private ADBackend(bool enableAutoUpdate)
         {
-            updateTimer = new Timer(Update, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(180));
+            if (enableAutoUpdate)
+            {
+                updateTimer = new Timer(Update, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(180));
+            }
         }
 
         private void Update(object state)

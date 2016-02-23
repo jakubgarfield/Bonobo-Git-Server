@@ -1,68 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Bonobo.Git.Server.Models;
-using System.IO;
-using System.Configuration;
-
-using Newtonsoft.Json;
-using System.Security.Cryptography;
-using System.Text;
-using System.Collections.Concurrent;
 
 namespace Bonobo.Git.Server.Data
 {
-    public class ADRepositoryRepository : IRepositoryRepository
+    public class ADRepositoryRepository : RepositoryRepositoryBase
     {
-        public bool Create(RepositoryModel repository)
+        public override bool Create(RepositoryModel repository)
         {
-            repository.Id = Guid.NewGuid();
+            // Make sure we don't already have a repo with this name
+            if (GetRepository(repository.Name) != null)
+            {
+                return false;
+            }
 
+            repository.Id = Guid.NewGuid();
             return ADBackend.Instance.Repositories.Add(SanitizeModel(repository));
         }
 
-        public void Delete(Guid Id)
+        public override void Delete(Guid id)
         {
-            ADBackend.Instance.Repositories.Remove(Id);
+            ADBackend.Instance.Repositories.Remove(id);
         }
 
-        public IList<RepositoryModel> GetAdministratedRepositories(Guid userId)
-        {
-            return ADBackend.Instance.Repositories.Where(x => x.Administrators.Any(y => y.Id == userId)).ToList();
-        }
-
-        public IList<RepositoryModel> GetAllRepositories()
+        public override IList<RepositoryModel> GetAllRepositories()
         {
             return ADBackend.Instance.Repositories.ToList();
         }
 
-        public IList<RepositoryModel> GetPermittedRepositories(Guid userId, Guid[] userTeamsId)
-        {
-            if (userId == Guid.Empty) throw new ArgumentException("Do not pass invalid userId", "userId");
-            return GetAllRepositories().Where(x =>
-                x.Users.Any(user => user.Id == userId) ||
-                x.Teams.Any(team => userTeamsId.Contains(team.Id))
-                ).ToList();
-        }
-
-        public IList<RepositoryModel> GetTeamRepositories(Guid[] teamsId)
-        {
-            return GetAllRepositories().Where(repo => repo.Teams.Any(team => teamsId.Contains(team.Id))).ToList();
-        }
-
-        public RepositoryModel GetRepository(string name)
+        public override RepositoryModel GetRepository(string name)
         {
             return ADBackend.Instance.Repositories.FirstOrDefault(o => o.Name == name);
         }
         
-        public RepositoryModel GetRepository(Guid id)
+        public override RepositoryModel GetRepository(Guid id)
         {
-            return ADBackend.Instance.Repositories[id];
+            var result = ADBackend.Instance.Repositories[id];
+            if (result == null)
+            {
+                // Ensure that we behave the same way as the EF reporepo
+                throw new InvalidOperationException("Cannot find repository with ID " + id);
+            }
+            return result;
         }
 
-        public void Update(RepositoryModel repository)
+        public override void Update(RepositoryModel repository)
         {
+            if (repository.RemoveLogo)
+            {
+                repository.Logo = null;
+            }
+            else if (repository.Logo == null)
+            {
+                // If we're given a null logo, then we need to preserve the existing one
+                repository.Logo = GetRepository(repository.Id).Logo;
+            }
             ADBackend.Instance.Repositories.Update(SanitizeModel(repository));
         }
 

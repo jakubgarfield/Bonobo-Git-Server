@@ -16,6 +16,6 @@ namespace Bonobo.Git.Server.Data
         RepositoryModel GetRepository(string Name);
         bool Create(RepositoryModel repository);
         void Update(RepositoryModel repository);
-        void Delete(Guid ID);
+        void Delete(Guid id);
     }
 }
