@@ -73,7 +73,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         [TestMethod]
         public void TestAddingNonExistentUserToRoleIsSilentlyIgnored()
         {
-            _provider.AddUserToRoles("Fred", new[] { "Administrator" });
+            _provider.AddUserToRoles(Guid.NewGuid(), new[] { "Administrator" });
             var users = _provider.GetUsersInRole("Administrator");
             CollectionAssert.AreEqual(new[] { "admin" }, users);
         }
@@ -81,10 +81,10 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         [TestMethod]
         public void TestAddingRealUserIsSuccessful()
         {
-            AddUserFred();
-            _provider.AddUserToRoles("Fred", new[] { "Administrator" });
+            var userId = AddUserFred();
+            _provider.AddUserToRoles(userId, new[] { "Administrator" });
             var users = _provider.GetUsersInRole("Administrator");
-            CollectionAssert.AreEqual(new[] { "admin","fred" }, users.OrderBy(user => user).ToArray());
+            CollectionAssert.AreEqual(new[] { "admin", "fred" }, users.OrderBy(user => user).ToArray());
         }
 
         [TestMethod]
@@ -95,11 +95,23 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         }
 
         [TestMethod]
+        public void RemovingAUserFromARole()
+        {
+            _provider.CreateRole("Programmer");
+            var userId = AddUserFred();
+            _provider.AddUserToRoles(userId, new[] { "Administrator", "Programmer" });
+
+            _provider.RemoveUserFromRoles(userId, new [] { "Administrator" });
+
+            CollectionAssert.AreEqual(new[] { "Programmer" }, _provider.GetRolesForUser(userId));
+        }
+
+        [TestMethod]
         public void TestAddingUserToMultipleRoles()
         {
             _provider.CreateRole("Programmer");
             var fredId = AddUserFred();
-            _provider.AddUserToRoles("Fred", new[] { "Programmer", "Administrator" });
+            _provider.AddUserToRoles(fredId, new[] { "Programmer", "Administrator" });
             CollectionAssert.AreEqual(new[] { "Administrator", "Programmer" }, _provider.GetRolesForUser(fredId).OrderBy(role => role).ToArray());
             CollectionAssert.AreEqual(new[] { "admin", "fred" }, _provider.GetUsersInRole("Administrator").OrderBy(name => name).ToArray());
             CollectionAssert.AreEqual(new[] { "fred" }, _provider.GetUsersInRole("Programmer"));
@@ -109,17 +121,25 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestRoleCannotBeDeletedWhilePopulatedIfForbidden()
         {
+            var userId = AddUserFred();
             _provider.CreateRole("Programmer");
-            _provider.AddUserToRoles("admin", new[] { "Programmer" });
+            _provider.AddUserToRoles(userId, new[] { "Programmer" });
             _provider.DeleteRole("Programmer", true);
+        }
+
+        [TestMethod]
+        public void UserInRoleDetectedCorrectly()
+        {
+            Assert.IsTrue(_provider.IsUserInRole(GetAdminId(), "Administrator"));
         }
 
         // I'm ignoring this for the moment because it fails with SqlServer and I need to investigate if we're supposed to have it at all
         [TestMethod, Ignore]
         public void TestRoleCanBeDeletedWhilePopulatedIfAllowed()
         {
+            var userId = AddUserFred();
             _provider.CreateRole("Programmer");
-            _provider.AddUserToRoles("admin", new[] { "Programmer" });
+            _provider.AddUserToRoles(userId, new[] { "Programmer" });
             _provider.DeleteRole("Programmer", false);
             Assert.AreEqual(1, _provider.GetAllRoles().Length);
         }
@@ -129,6 +149,12 @@ namespace Bonobo.Git.Server.Test.MembershipTests
             EFMembershipService memberService = new EFMembershipService(MakeContext);
             memberService.CreateUser("fred", "letmein", "Fred", "FredBlogs", "fred@aol", null);
             return memberService.GetUserModel("fred").Id;
+        }
+
+        Guid GetAdminId()
+        {
+            EFMembershipService memberService = new EFMembershipService(MakeContext);
+            return memberService.GetUserModel("Admin").Id;
         }
     }
 }

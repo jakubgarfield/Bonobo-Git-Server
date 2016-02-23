@@ -10,12 +10,12 @@ namespace Bonobo.Git.Server.Security
 {
     public class ADRoleProvider : IRoleProvider
     {
-        public void AddUserToRoles(string username, string[] roleNames)
+        public void AddUserToRoles(Guid userId, string[] roleNames)
         {
             // Use ADUC to assign groups to users instead
         }
 
-        public void AddUsersToRoles(string[] usernames, string[] roleNames)
+        public void AddUsersToRoles(Guid[] userIds, string[] roleNames)
         {
             // Use ADUC to assign groups to users instead
         }
@@ -45,7 +45,7 @@ namespace Bonobo.Git.Server.Security
 
         public string[] GetRolesForUser(Guid userId)
         {
-            var user = ADBackend.Instance.Users.Where(x => x.Id.Equals(userId)).FirstOrDefault();
+            var user = ADBackend.Instance.Users.First(x => x.Id == userId);
             return ADBackend.Instance.Roles.Where(x => x.Members.Contains(user.Username, StringComparer.OrdinalIgnoreCase)).Select(x => x.Name).ToArray();
         }
 
@@ -54,17 +54,18 @@ namespace Bonobo.Git.Server.Security
             return ADBackend.Instance.Roles[roleName].Members;
         }
 
-        public bool IsUserInRole(string username, string roleName)
+        public bool IsUserInRole(Guid userId, string roleName)
         {
-            return ADBackend.Instance.Roles[roleName].Members.Contains(username, StringComparer.OrdinalIgnoreCase);
+            var user = ADBackend.Instance.Users.First(x => x.Id == userId);
+            return ADBackend.Instance.Roles[roleName].Members.Contains(user.Username, StringComparer.OrdinalIgnoreCase);
         }
 
-        public void RemoveUserFromRoles(string username, string[] roleNames)
+        public void RemoveUserFromRoles(Guid userId, string[] roleNames)
         {
             // Use ADUC to remove users from groups
         }
 
-        public void RemoveUsersFromRoles(string[] usernames, string[] roleNames)
+        public void RemoveUsersFromRoles(Guid[] userIds, string[] roleNames)
         {
             // Use ADUC to remove users from groups
         }

@@ -155,10 +155,10 @@ namespace Bonobo.Git.Server.Controllers
                 if (valid)
                 {
                     MembershipService.UpdateUser(model.Id, model.Username, model.Name, model.Surname, model.Email, model.NewPassword);
-                    RoleProvider.RemoveUserFromRoles(model.Username, RoleProvider.GetAllRoles());
+                    RoleProvider.RemoveUserFromRoles(model.Id, RoleProvider.GetAllRoles());
                     if (model.PostedSelectedRoles != null)
                     {
-                        RoleProvider.AddUserToRoles(model.Username, model.PostedSelectedRoles);
+                        RoleProvider.AddUserToRoles(model.Id, model.PostedSelectedRoles);
                     }
                     ViewBag.UpdateSuccess = true;
                 }
@@ -190,7 +190,8 @@ namespace Bonobo.Git.Server.Controllers
                         // 2 because we just added the user and there is the default admin user.
                         if ((AuthenticationSettings.ImportWindowsAuthUsersAsAdmin || efms.UserCount() == 2))
                         {
-                            RoleProvider.AddUserToRoles(credentials, new string[] {Definitions.Roles.Administrator});
+                            var id = MembershipService.GetUserModel(credentials).Id;
+                            RoleProvider.AddUserToRoles(id, new string[] {Definitions.Roles.Administrator});
                         }
                     }
                     return RedirectToAction("Index", "Repository");

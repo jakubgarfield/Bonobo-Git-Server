@@ -21,19 +21,17 @@ namespace Bonobo.Git.Server.Security
             return new EFRoleProvider(contextCreator);
         }
 
-        public void AddUserToRoles(string username, string[] roleNames)
+        public void AddUserToRoles(Guid userId, string[] roleNames)
         {
-            AddUsersToRoles(new string[] { username }, roleNames);
+            AddUsersToRoles(new Guid[] { userId }, roleNames);
         }
 
-        public void AddUsersToRoles(string[] usernames, string[] roleNames)
+        public void AddUsersToRoles(Guid[] userIds, string[] roleNames)
         {
             using (var database = _createDatabaseContext())
             {
-                usernames = usernames.Select(i => i.ToLowerInvariant()).ToArray();
-
                 var roles = database.Roles.Where(i => roleNames.Contains(i.Name)).ToList();
-                var users = database.Users.Where(i => usernames.Contains(i.Username)).ToList();
+                var users = database.Users.Where(i => userIds.Contains(i.Id)).ToList();
 
                 foreach (var role in roles)
                 {
@@ -46,6 +44,7 @@ namespace Bonobo.Git.Server.Security
                 database.SaveChanges();
             }
         }
+
 
         public void CreateRole(string roleName)
         {
@@ -127,29 +126,25 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public bool IsUserInRole(string username, string roleName)
+        public bool IsUserInRole(Guid userId, string roleName)
         {
             using (var database = _createDatabaseContext())
             {
-                username = username.ToLowerInvariant();
-                bool isInRole = database.Roles.Any(role => role.Name == roleName && role.Users.Any(us => us.Username == username));
-                return isInRole;
+                return database.Roles.Any(role => role.Name == roleName && role.Users.Any(us => us.Id == userId));
             }
         }
 
-        public void RemoveUserFromRoles(string username, string[] roleNames)
+        public void RemoveUserFromRoles(Guid userId, string[] roleNames)
         {
-            RemoveUsersFromRoles(new string[] { username }, roleNames);
+            RemoveUsersFromRoles(new[] { userId }, roleNames);
         }
 
-        public void RemoveUsersFromRoles(string[] usernames, string[] roleNames)
+        public void RemoveUsersFromRoles(Guid[] userIds, string[] roleNames)
         {
             using (var database = _createDatabaseContext())
             {
-                usernames = usernames.Select(i => i.ToLowerInvariant()).ToArray();
-
                 var roles = database.Roles.Where(i => roleNames.Contains(i.Name)).ToList();
-                var users = database.Users.Where(i => usernames.Contains(i.Username)).ToList();
+                var users = database.Users.Where(i => userIds.Contains(i.Id)).ToList();
                 foreach (var role in roles)
                 {
                     foreach (var user in users)
