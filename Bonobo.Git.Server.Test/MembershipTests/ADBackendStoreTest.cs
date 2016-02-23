@@ -10,12 +10,34 @@ namespace Bonobo.Git.Server.Test.MembershipTests
     public class ADBackendStoreTest
     {
         private ADBackendStore<StorableClass> _store;
+        private string _testDirectory;
 
         [TestInitialize]
         public void Initialise()
         {
-            Directory.Delete(Path.Combine(Path.GetTempPath(), "BonoboTestStore"), true);
+            _testDirectory = Path.Combine(Path.GetTempPath(), "BonoboTestStore");
+            SafelyDeleteTestData();
             _store = MakeStore();
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            SafelyDeleteTestData();
+        }
+
+        private void SafelyDeleteTestData()
+        {
+            if (Directory.Exists(_testDirectory))
+            {
+                try
+                {
+                    Directory.Delete(_testDirectory, true);
+                }
+                catch
+                {
+                }
+            }
         }
 
         private static ADBackendStore<StorableClass> MakeStore()
