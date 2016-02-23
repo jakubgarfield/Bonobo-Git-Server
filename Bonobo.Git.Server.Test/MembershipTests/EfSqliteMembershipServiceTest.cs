@@ -17,11 +17,11 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         public void Initialize()
         {
             _connection = new SqliteTestConnection();
-            _service = new EFMembershipService(MakeContext);
-            new AutomaticUpdater().RunWithContext(MakeContext());
+            _service = new EFMembershipService { CreateContext = GetContext };
+            new AutomaticUpdater().RunWithContext(GetContext());
         }
 
-        protected override BonoboGitServerContext MakeContext()
+        protected override BonoboGitServerContext GetContext()
         {
             return _connection.GetContext();
         }

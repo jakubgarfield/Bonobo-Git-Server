@@ -6,30 +6,18 @@ using System.Data;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using Bonobo.Git.Server.Security;
+using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Data
 {
     public class EFRepositoryRepository : IRepositoryRepository
     {
-        private readonly Func<BonoboGitServerContext> _createDatabaseContext;
-
-        public EFRepositoryRepository()
-        {
-            _createDatabaseContext = () => new BonoboGitServerContext();
-        }
-        private EFRepositoryRepository(Func<BonoboGitServerContext> contextCreator)
-        {
-            _createDatabaseContext = contextCreator;
-        }
-        public static EFRepositoryRepository FromCreator(Func<BonoboGitServerContext> contextCreator)
-        {
-            return new EFRepositoryRepository(contextCreator);
-        }
-
+        [Dependency]
+        public Func<BonoboGitServerContext> CreateContext { get; set; }
 
         public IList<RepositoryModel> GetAllRepositories()
         {
-            using (var db = _createDatabaseContext())
+            using (var db = CreateContext())
             {
                 var dbrepos = db.Repositories.Select(repo => new
                 {
@@ -85,7 +73,7 @@ namespace Bonobo.Git.Server.Data
         {
             if (name == null) throw new ArgumentNullException("name");
 
-            using (var db = _createDatabaseContext())
+            using (var db = CreateContext())
             {
                 return ConvertToModel(db.Repositories.FirstOrDefault(i => i.Name == name));
             }
@@ -93,7 +81,7 @@ namespace Bonobo.Git.Server.Data
 
         public RepositoryModel GetRepository(Guid id)
         {
-            using (var db = _createDatabaseContext())
+            using (var db = CreateContext())
             {
                 return ConvertToModel(db.Repositories.First(i => i.Id.Equals(id)));
             }
@@ -101,7 +89,7 @@ namespace Bonobo.Git.Server.Data
 
         public void Delete(Guid RepositoryId)
         {
-            using (var db = _createDatabaseContext())
+            using (var db = CreateContext())
             {
                 var repo = db.Repositories.FirstOrDefault(i => i.Id == RepositoryId);
                 if (repo != null)
@@ -120,7 +108,7 @@ namespace Bonobo.Git.Server.Data
             if (model == null) throw new ArgumentException("model");
             if (model.Name == null) throw new ArgumentException("name");
 
-            using (var database = _createDatabaseContext())
+            using (var database = CreateContext())
             {
                 model.Id = Guid.NewGuid();
                 var repository = new Repository
@@ -156,7 +144,7 @@ namespace Bonobo.Git.Server.Data
             if (model == null) throw new ArgumentException("model");
             if (model.Name == null) throw new ArgumentException("name");
 
-            using (var db = _createDatabaseContext())
+            using (var db = CreateContext())
             {
                 var repo = db.Repositories.FirstOrDefault(i => i.Id == model.Id);
                 if (repo != null)

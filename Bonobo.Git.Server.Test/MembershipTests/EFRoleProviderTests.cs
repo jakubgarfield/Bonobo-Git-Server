@@ -16,11 +16,11 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         public void Initialize()
         {
             _connection = new SqliteTestConnection();
-            _provider = EFRoleProvider.FromCreator(() => _connection.GetContext());
+            _provider = new EFRoleProvider { CreateContext = () => _connection.GetContext() };
             new AutomaticUpdater().RunWithContext(_connection.GetContext());
         }
 
-        protected override BonoboGitServerContext MakeContext()
+        protected override BonoboGitServerContext GetContext()
         {
             return _connection.GetContext();
         }
@@ -35,11 +35,11 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         public void Initialize()
         {
             _connection = new SqlServerTestConnection();
-            _provider = EFRoleProvider.FromCreator(() => _connection.GetContext());
+            _provider = new EFRoleProvider { CreateContext = () => _connection.GetContext() };
             new AutomaticUpdater().RunWithContext(_connection.GetContext());
         }
 
-        protected override BonoboGitServerContext MakeContext()
+        protected override BonoboGitServerContext GetContext()
         {
             return _connection.GetContext();
         }
@@ -48,13 +48,13 @@ namespace Bonobo.Git.Server.Test.MembershipTests
     public abstract class EFRoleProviderTest
     {
         protected IRoleProvider _provider;
-        protected abstract BonoboGitServerContext MakeContext();
+        protected abstract BonoboGitServerContext GetContext();
 
         [TestMethod]
         public void UpdatesCanBeRunOnAlreadyUpdatedDatabase()
         {
             // Run all the updates again - this should be completely harmless
-            new AutomaticUpdater().RunWithContext(MakeContext());
+            new AutomaticUpdater().RunWithContext(GetContext());
         }
 
         [TestMethod]
@@ -146,14 +146,14 @@ namespace Bonobo.Git.Server.Test.MembershipTests
 
         Guid AddUserFred()
         {
-            EFMembershipService memberService = new EFMembershipService(MakeContext);
+            EFMembershipService memberService = new EFMembershipService { CreateContext = GetContext };
             memberService.CreateUser("fred", "letmein", "Fred", "FredBlogs", "fred@aol");
             return memberService.GetUserModel("fred").Id;
         }
 
         Guid GetAdminId()
         {
-            EFMembershipService memberService = new EFMembershipService(MakeContext);
+            EFMembershipService memberService = new EFMembershipService { CreateContext = GetContext };
             return memberService.GetUserModel("Admin").Id;
         }
     }

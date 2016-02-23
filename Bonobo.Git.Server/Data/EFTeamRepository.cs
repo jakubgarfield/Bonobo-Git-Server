@@ -4,29 +4,18 @@ using System.Linq;
 using Bonobo.Git.Server.Models;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
+using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Data
 {
     public class EFTeamRepository : ITeamRepository
     {
-        private readonly Func<BonoboGitServerContext> _createDatabaseContext;
-
-        public EFTeamRepository() : this(() => new BonoboGitServerContext())
-        {
-            
-        }
-        private EFTeamRepository(Func<BonoboGitServerContext> contextCreator)
-        {
-            _createDatabaseContext = contextCreator;
-        }
-        public static EFTeamRepository FromCreator(Func<BonoboGitServerContext> contextCreator)
-        {
-            return new EFTeamRepository(contextCreator);
-        }
+        [Dependency]
+        public Func<BonoboGitServerContext> CreateContext { get; set; }
 
         public IList<TeamModel> GetAllTeams()
         {
-            using (var db = _createDatabaseContext())
+            using (var db = CreateContext())
             {
                 var dbTeams = db.Teams.Select(team => new
                 {
@@ -65,7 +54,7 @@ namespace Bonobo.Git.Server.Data
 
         public TeamModel GetTeam(Guid id)
         {
-            using (var db = _createDatabaseContext())
+            using (var db = CreateContext())
             {
                 var team = db.Teams.FirstOrDefault(i => i.Id == id);
                 return GetTeam(team);
@@ -74,7 +63,7 @@ namespace Bonobo.Git.Server.Data
 
         public void Delete(Guid teamId)
         {
-            using (var db = _createDatabaseContext())
+            using (var db = CreateContext())
             {
                 var team = db.Teams.FirstOrDefault(i => i.Id == teamId);
                 if (team != null)
@@ -92,7 +81,7 @@ namespace Bonobo.Git.Server.Data
             if (model == null) throw new ArgumentException("team");
             if (model.Name == null) throw new ArgumentException("name");
 
-            using (var database = _createDatabaseContext())
+            using (var database = CreateContext())
             {
                 // Write this into the model so that the caller knows the ID of the new itel
                 model.Id = Guid.NewGuid();
@@ -130,7 +119,7 @@ namespace Bonobo.Git.Server.Data
             if (model == null) throw new ArgumentException("team");
             if (model.Name == null) throw new ArgumentException("name");
 
-            using (var db = _createDatabaseContext())
+            using (var db = CreateContext())
             {
                 var team = db.Teams.FirstOrDefault(i => i.Id == model.Id);
                 if (team != null)
@@ -160,7 +149,7 @@ namespace Bonobo.Git.Server.Data
         {
             if (newTeams == null) throw new ArgumentException("newTeams");
 
-            using (var db = _createDatabaseContext())
+            using (var db = CreateContext())
             {
                 var user = db.Users.FirstOrDefault(u => u.Id == userId);
                 if (user != null)

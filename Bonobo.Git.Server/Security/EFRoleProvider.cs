@@ -1,25 +1,14 @@
 ﻿using System;
 using System.Linq;
 using Bonobo.Git.Server.Data;
+using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Security
 {
     public class EFRoleProvider : IRoleProvider
     {
-        private readonly Func<BonoboGitServerContext> _createDatabaseContext;
-
-        public EFRoleProvider()
-        {
-            _createDatabaseContext = () => new BonoboGitServerContext();
-        }
-        private EFRoleProvider(Func<BonoboGitServerContext> contextCreator)
-        {
-            _createDatabaseContext = contextCreator;
-        }
-        public static EFRoleProvider FromCreator(Func<BonoboGitServerContext> contextCreator)
-        {
-            return new EFRoleProvider(contextCreator);
-        }
+        [Dependency]
+        public Func<BonoboGitServerContext> CreateContext { get; set; }
 
         public void AddUserToRoles(Guid userId, string[] roleNames)
         {
@@ -28,7 +17,7 @@ namespace Bonobo.Git.Server.Security
 
         public void AddUsersToRoles(Guid[] userIds, string[] roleNames)
         {
-            using (var database = _createDatabaseContext())
+            using (var database = CreateContext())
             {
                 var roles = database.Roles.Where(i => roleNames.Contains(i.Name)).ToList();
                 var users = database.Users.Where(i => userIds.Contains(i.Id)).ToList();
@@ -48,7 +37,7 @@ namespace Bonobo.Git.Server.Security
 
         public void CreateRole(string roleName)
         {
-            using (var database = _createDatabaseContext())
+            using (var database = CreateContext())
             {
                 database.Roles.Add(new Role
                 {
@@ -60,7 +49,7 @@ namespace Bonobo.Git.Server.Security
 
         public bool DeleteRole(string roleName, bool throwOnPopulatedRole)
         {
-            using (var database = _createDatabaseContext())
+            using (var database = CreateContext())
             {
                 var role = database.Roles.FirstOrDefault(i => i.Name == roleName);
                 if (role != null)
@@ -84,7 +73,7 @@ namespace Bonobo.Git.Server.Security
 
         public string[] FindUsersInRole(string roleName, string usernameToMatch)
         {
-            using (var database = _createDatabaseContext())
+            using (var database = CreateContext())
             {
                 var users = database.Users
                     .Where(us => us.Username.Contains(usernameToMatch) && us.Roles.Any(role => role.Name == roleName))
@@ -96,7 +85,7 @@ namespace Bonobo.Git.Server.Security
 
         public string[] GetAllRoles()
         {
-            using (var database = _createDatabaseContext())
+            using (var database = CreateContext())
             {
                 return database.Roles.Select(i => i.Name).ToArray();
             }
@@ -104,7 +93,7 @@ namespace Bonobo.Git.Server.Security
 
         public string[] GetRolesForUser(Guid userId)
         {
-            using (var database = _createDatabaseContext())
+            using (var database = CreateContext())
             {
                 var roles = database.Roles
                     .Where(role => role.Users.Any(us => us.Id == userId))
@@ -116,7 +105,7 @@ namespace Bonobo.Git.Server.Security
 
         public string[] GetUsersInRole(string roleName)
         {
-            using (var database = _createDatabaseContext())
+            using (var database = CreateContext())
             {
                 var users = database.Users
                     .Where(us => us.Roles.Any(role => role.Name == roleName))
@@ -128,7 +117,7 @@ namespace Bonobo.Git.Server.Security
 
         public bool IsUserInRole(Guid userId, string roleName)
         {
-            using (var database = _createDatabaseContext())
+            using (var database = CreateContext())
             {
                 return database.Roles.Any(role => role.Name == roleName && role.Users.Any(us => us.Id == userId));
             }
@@ -141,7 +130,7 @@ namespace Bonobo.Git.Server.Security
 
         public void RemoveUsersFromRoles(Guid[] userIds, string[] roleNames)
         {
-            using (var database = _createDatabaseContext())
+            using (var database = CreateContext())
             {
                 var roles = database.Roles.Where(i => roleNames.Contains(i.Name)).ToList();
                 var users = database.Users.Where(i => userIds.Contains(i.Id)).ToList();
@@ -158,7 +147,7 @@ namespace Bonobo.Git.Server.Security
 
         public bool RoleExists(string roleName)
         {
-            using (var database = _createDatabaseContext())
+            using (var database = CreateContext())
             {
                 return database.Roles.Any(i => i.Name == roleName);
             }

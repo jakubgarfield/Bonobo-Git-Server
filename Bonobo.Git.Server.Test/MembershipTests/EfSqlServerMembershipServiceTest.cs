@@ -18,7 +18,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         {
             _connection = new SqlServerTestConnection();
             new AutomaticUpdater().RunWithContext(_connection.GetContext());
-            _service = new EFMembershipService(() => _connection.GetContext());
+            _service = new EFMembershipService { CreateContext = GetContext };
         }
 
         [TestCleanup]
@@ -27,7 +27,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
             _connection.Dispose();
         }
 
-        protected override BonoboGitServerContext MakeContext()
+        protected override BonoboGitServerContext GetContext()
         {
             return _connection.GetContext();
         }

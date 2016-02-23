@@ -18,11 +18,11 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         public void Initialize()
         {
             _connection = new SqliteTestConnection();
-            _repo = EFRepositoryRepository.FromCreator(() => _connection.GetContext());
+            _repo = new EFRepositoryRepository {CreateContext = () => _connection.GetContext()};
             new AutomaticUpdater().RunWithContext(_connection.GetContext());
         }
 
-        protected override BonoboGitServerContext MakeContext()
+        protected override BonoboGitServerContext GetContext()
         {
             return _connection.GetContext();
         }
@@ -37,11 +37,11 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         public void Initialize()
         {
             _connection = new SqlServerTestConnection();
-            _repo = EFRepositoryRepository.FromCreator(() => _connection.GetContext());
+            _repo = new EFRepositoryRepository { CreateContext = () => _connection.GetContext() };
             new AutomaticUpdater().RunWithContext(_connection.GetContext());
         }
 
-        protected override BonoboGitServerContext MakeContext()
+        protected override BonoboGitServerContext GetContext()
         {
             return _connection.GetContext();
         }
@@ -50,7 +50,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
     public abstract class EFRepositoryRepositoryTest
     {
         protected IRepositoryRepository _repo;
-        protected abstract BonoboGitServerContext MakeContext();
+        protected abstract BonoboGitServerContext GetContext();
 
         [TestMethod]
         public void NewRepoIsEmpty()
@@ -336,14 +336,14 @@ namespace Bonobo.Git.Server.Test.MembershipTests
 
         UserModel AddUserFred()
         {
-            EFMembershipService memberService = new EFMembershipService(MakeContext);
+            EFMembershipService memberService = new EFMembershipService { CreateContext = GetContext };
             memberService.CreateUser("fred", "letmein", "Fred", "Blogs", "fred@aol");
             return memberService.GetUserModel("fred");
         }
 
         TeamModel AddTeam()
         {
-            EFTeamRepository teams = EFTeamRepository.FromCreator(MakeContext);
+            EFTeamRepository teams = new EFTeamRepository { CreateContext = GetContext };
             var newTeam = new TeamModel { Name="Team1" };
             teams.Create(newTeam);
             return newTeam;

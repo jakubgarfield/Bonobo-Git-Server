@@ -5,26 +5,24 @@ using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
 using System.Security.Cryptography;
 using System.Data.Entity.Core;
+using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Security
 {
     public class EFMembershipService : IMembershipService
     {
-        private readonly Func<BonoboGitServerContext> _createDatabaseContext;
+        [Dependency]
+        public Func<BonoboGitServerContext> CreateContext { get; set; }
+
         private readonly IPasswordService _passwordService;
 
-        public EFMembershipService() : this(() => new BonoboGitServerContext())
-        {
-        }
-
-        public EFMembershipService(Func<BonoboGitServerContext> contextCreator)
+        public EFMembershipService()
         {
             // set up dependencies
-            _createDatabaseContext = contextCreator;
             Action<string, string> updateUserPasswordHook =
                 (username, password) =>
                 {
-                    using (var db = _createDatabaseContext())
+                    using (var db = CreateContext())
                     {
                         var user = db.Users.FirstOrDefault(i => i.Username == username);
                         if (user != null)
@@ -47,7 +45,7 @@ namespace Bonobo.Git.Server.Security
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
 
             username = username.ToLowerInvariant();
-            using (var database = _createDatabaseContext())
+            using (var database = CreateContext())
             {
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
                 return user != null && _passwordService.ComparePassword(password, username, user.PasswordSalt, user.Password) ? ValidationResult.Success : ValidationResult.Failure;
@@ -69,7 +67,7 @@ namespace Bonobo.Git.Server.Security
             if (id == Guid.Empty) throw new ArgumentException("Id must be a proper Guid", "id");
 
             username = username.ToLowerInvariant();
-            using (var database = _createDatabaseContext())
+            using (var database = CreateContext())
             {
                 var user = new User
                 {
@@ -96,7 +94,7 @@ namespace Bonobo.Git.Server.Security
 
         public IList<UserModel> GetAllUsers()
         {
-            using (var db = _createDatabaseContext())
+            using (var db = CreateContext())
             {
                 return db.Users.Include("Roles").ToList().Select(item => new UserModel
                 {
@@ -111,7 +109,7 @@ namespace Bonobo.Git.Server.Security
 
         public int UserCount()
         {
-            using (var db = _createDatabaseContext())
+            using (var db = CreateContext())
             {
                 return db.Users.Count();
             }
@@ -131,7 +129,7 @@ namespace Bonobo.Git.Server.Security
 
         public UserModel GetUserModel(Guid id)
         {
-            using (var db = _createDatabaseContext())
+            using (var db = CreateContext())
             {
                 var user = db.Users.FirstOrDefault(i => i.Id == id);
                 return GetUserModel(user);
@@ -140,7 +138,7 @@ namespace Bonobo.Git.Server.Security
 
         public UserModel GetUserModel(string username)
         {
-            using (var db = _createDatabaseContext())
+            using (var db = CreateContext())
             {
                 username = username.ToLowerInvariant();
                 var user = db.Users.FirstOrDefault(i => i.Username == username);
@@ -150,7 +148,7 @@ namespace Bonobo.Git.Server.Security
 
         public void UpdateUser(Guid id, string username, string givenName, string surname, string email, string password)
         {
-            using (var db = _createDatabaseContext())
+            using (var db = CreateContext())
             {
                 var user = db.Users.FirstOrDefault(i => i.Id == id);
                 if (user != null)
@@ -171,7 +169,7 @@ namespace Bonobo.Git.Server.Security
 
         public void DeleteUser(Guid id)
         {
-            using (var db = _createDatabaseContext())
+            using (var db = CreateContext())
             {
                 foreach (var user in db.Users)
                 {

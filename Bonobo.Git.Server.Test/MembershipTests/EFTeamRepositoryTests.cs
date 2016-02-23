@@ -18,11 +18,11 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         public void Initialize()
         {
             _connection = new SqliteTestConnection();
-            _repo = EFTeamRepository.FromCreator(() => _connection.GetContext());
+            _repo = new EFTeamRepository { CreateContext =  () => _connection.GetContext() };
             new AutomaticUpdater().RunWithContext(_connection.GetContext());
         }
 
-        protected override BonoboGitServerContext MakeContext()
+        protected override BonoboGitServerContext GetContext()
         {
             return _connection.GetContext();
         }
@@ -37,11 +37,11 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         public void Initialize()
         {
             _connection = new SqlServerTestConnection();
-            _repo = EFTeamRepository.FromCreator(() => _connection.GetContext());
+            _repo = new EFTeamRepository { CreateContext = () => _connection.GetContext() };
             new AutomaticUpdater().RunWithContext(_connection.GetContext());
         }
 
-        protected override BonoboGitServerContext MakeContext()
+        protected override BonoboGitServerContext GetContext()
         {
             return _connection.GetContext();
         }
@@ -50,8 +50,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
     public abstract class EFTeamRepositoryTests
     {
         protected EFTeamRepository _repo;
-
-        protected abstract BonoboGitServerContext MakeContext();
+        protected abstract BonoboGitServerContext GetContext();
 
         [TestMethod]
         public void TestRepositoryIsCreated()
@@ -189,7 +188,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
 
         private UserModel AddUserFred()
         {
-            EFMembershipService memberService = new EFMembershipService(MakeContext);
+            EFMembershipService memberService = new EFMembershipService { CreateContext = GetContext };
             memberService.CreateUser("fred", "letmein", "Fred", "FredBlogs", "fred@aol");
             return memberService.GetUserModel("fred");
         }

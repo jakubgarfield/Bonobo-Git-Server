@@ -13,13 +13,13 @@ namespace Bonobo.Git.Server.Test.MembershipTests
     /// </summary>
     public abstract class EFMembershipServiceTest : MembershipServiceTestBase
     {
-        protected abstract BonoboGitServerContext MakeContext();
+        protected abstract BonoboGitServerContext GetContext();
 
         [TestMethod]
         public void UpdatesCanBeRunOnAlreadyUpdatedDatabase()
         {
             // Run all the updates again - this should be completely harmless
-            new AutomaticUpdater().RunWithContext(MakeContext());
+            new AutomaticUpdater().RunWithContext(GetContext());
         }
 
         [TestMethod]
@@ -86,7 +86,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
 
         User GetRawUser(string username)
         {
-            using (var context = MakeContext())
+            using (var context = GetContext())
             {
                 username = username.ToLower();
                 return context.Users.First(u => u.Username == username);
@@ -100,7 +100,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
 
         void ForceInDeprecatedHash(string username, string password)
         {
-            using (var context = MakeContext())
+            using (var context = GetContext())
             {
                 username = username.ToLower();
                 var user = context.Users.First(u => u.Username == username);
