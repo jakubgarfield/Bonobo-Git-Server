@@ -39,19 +39,25 @@ namespace Bonobo.Git.Server.Controllers
                 if (!string.IsNullOrEmpty(basicAuth))
                 {
                     var base64 = basicAuth.Split(' ');
-                    var plainTextBytes = System.Convert.FromBase64String(base64[1]);
-                    var usernameAndPassword = System.Text.Encoding.UTF8.GetString(plainTextBytes);
-
-                    if (!string.IsNullOrEmpty(usernameAndPassword))
+                    if (base64.Length > 0)
                     {
-                        var usernameAndPasswordArray = usernameAndPassword.Split(':');
-                        username = usernameAndPasswordArray[0];
-                        password = usernameAndPasswordArray[1];
-                        System.Diagnostics.Debug.WriteLine("username : " + username);
+                        var plainTextBytes = System.Convert.FromBase64String(base64[1]);
+                        var usernameAndPassword = System.Text.Encoding.UTF8.GetString(plainTextBytes);
+
+                        if (!string.IsNullOrEmpty(usernameAndPassword))
+                        {
+                            var usernameAndPasswordArray = usernameAndPassword.Split(':');
+                            if(usernameAndPasswordArray.Length > 0)
+                            {
+                                username = usernameAndPasswordArray[0];
+                                password = usernameAndPasswordArray[1];
+                                System.Diagnostics.Debug.WriteLine("User: " + username);
+                            }
+                        }
                     }
                 }
                 hasPermission = RepositoryPermissionService.HasPermission(username, password, repositoryName);
-                System.Diagnostics.Debug.WriteLine("hasPermission: " + hasPermission);
+                System.Diagnostics.Debug.WriteLine("Repository: {0} hasPermission: {1}", repositoryName, hasPermission);
             }
             else
             {
