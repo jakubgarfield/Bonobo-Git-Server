@@ -73,7 +73,7 @@
             <GitDir>$(MSBuildThisFileDirectory)\Gits</GitDir>
             <GitVersionDir>$(GitDir)\$(GitVersion)</GitVersionDir>
             <GitPackagePath>$(GitDir)\Portable-$(GitVersion)-$(GitArchitecture)-bits.7z.exe</GitPackagePath>
-            <UnpackGit>7z.exe -o$(GitVersionDir) x $(GitPackagePath)</UnpackGit>
+          <UnpackGit>"$(GitPackagePath)" -nr -y -gm2 -InstallPath="$(GitVersionDir)"</UnpackGit>
         </PropertyGroup>
         <MakeDir Directories="$(GitDir)" Condition="!Exists('$(GitDir)')" />
         <Message Text="Setting up git $(GitVersion)" Importance="high" />
