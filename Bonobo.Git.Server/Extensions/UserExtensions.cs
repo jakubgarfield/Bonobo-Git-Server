@@ -32,7 +32,13 @@ namespace Bonobo.Git.Server
         public static Guid Id(this IPrincipal user)
         {
             string id = user.GetClaim(ClaimTypes.Upn);
-            return id != null ? Guid.Parse(id) : Guid.Empty;
+            if (id == null)
+            {
+                return Guid.Empty;
+            }
+            Guid result;
+            Guid.TryParse(id, out result);
+            return result;
         }
 
         public static string Username(this IPrincipal user)
