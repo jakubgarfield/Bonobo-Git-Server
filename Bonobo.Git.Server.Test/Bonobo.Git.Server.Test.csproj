@@ -161,6 +161,7 @@
     <Compile Include="TestCategories.cs" />
     <Compile Include="UnitTests\PasswordServiceTest.cs" />
     <Compile Include="UnitTests\GitAuthorizeAttributeTest.cs" />
+    <Compile Include="UnitTests\UserExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bonobo.Git.Server\Bonobo.Git.Server.csproj">

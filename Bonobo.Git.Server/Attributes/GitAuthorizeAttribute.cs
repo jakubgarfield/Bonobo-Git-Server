@@ -81,11 +81,24 @@ namespace Bonobo.Git.Server
                 {
                     var domain = username.GetDomain();
                     username = username.StripDomain();
-                    username = username + "@" + domain.ToLower() + ".local";
-                    if (MembershipService.ValidateUser(username, password) == ValidationResult.Success)
+                    try
                     {
-                        httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username.Replace("\\", "!"))));
-                        allowed = true;
+                        using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain))
+                        {
+                            var adUser = UserPrincipal.FindByIdentity(pc, username);
+                            if (adUser != null)
+                            {
+                                if (pc.ValidateCredentials(username, password))
+                                {
+                                    httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username.Replace("\\", "!"))));
+                                    allowed = true;
+                                }
+                            }
+                        }
+                    }
+                    catch (PrincipalException)
+                    {
+                        // let it fail
                     }
                 }
                 else

@@ -89,7 +89,7 @@ namespace Bonobo.Git.Server
             int delimiterIndex = username.IndexOf('@');
             if (delimiterIndex > 0)
             {
-                username = username.Substring(0, delimiterIndex - 1);
+                username = username.Substring(0, delimiterIndex);
             }
             delimiterIndex = username.IndexOf('\\');
             if (delimiterIndex > 0)
