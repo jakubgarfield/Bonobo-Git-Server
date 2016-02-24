@@ -30,13 +30,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         private readonly static string RepositoryUrlWithoutCredentials = String.Format(RepositoryUrl, String.Empty, String.Empty, RepositoryName);
         private readonly static string RepositoryUrlWithCredentials = String.Format(RepositoryUrl, Credentials, ".git", RepositoryName);
 
-        private readonly static Dictionary<string, Dictionary<string, string>> Resources = new Dictionary<string, Dictionary<string, string>>
-        {
-            { String.Format(GitPath,  "1.7.4"), new Dictionary<string, string> 
-            {
-                { "Key", "Value" }
-            }}
-        };
+        List<Tuple<string, MsysgitResources>> installedgits = new List<Tuple<string, MsysgitResources>>();
 
         private static MvcWebApp app;
 
@@ -57,24 +51,39 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         public void Initialize()
         {
             DeleteDirectory(WorkingDirectory);
+            bool any_git_installed = false;
+            List<string> not_found = new List<string>();
+
+            foreach (var version in GitVersions)
+            {
+                var git = String.Format(GitPath, version);
+                if (File.Exists(git))
+                {
+                    var resources = new MsysgitResources(git);
+                    installedgits.Add(Tuple.Create(git, resources));
+                    any_git_installed = true;
+                }
+                else
+                {
+                    not_found.Add(git);
+                }
+            }
+
+            if (!any_git_installed)
+            {
+                Assert.Fail(string.Format("Please ensure that you have at least one git installation in '{0}'.", string.Join("', '", not_found.Select(n => Path.GetFullPath(n)))));
+            }
         }
 
         [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
         public void RunGitTests()
         {
-            bool has_any_test_run = false;
-            List<string> gitpaths = new List<string>();
-            foreach (var version in GitVersions)
+            foreach (var gitresource in installedgits)
             {
-                var git = String.Format(GitPath, version);
-                if (!File.Exists(git))
-                {
-                    gitpaths.Add(git);
-                    continue;
-                }
-                var resources = new MsysgitResources(version);
 
                 Directory.CreateDirectory(WorkingDirectory);
+                var git = gitresource.Item1;
+                var resources = gitresource.Item2;
 
                 try
                 {
@@ -94,14 +103,70 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 {
                     DeleteDirectory(WorkingDirectory);
                 }
-                has_any_test_run = true;
             }
+        }
 
-            if (!has_any_test_run)
+        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        public void AnonRepoClone()
+        {
+            foreach (var gitres in installedgits)
             {
-                Assert.Fail(string.Format("Please ensure that you have at least one git installation in '{0}'.", string.Join("', '", gitpaths.Select(n => Path.GetFullPath(n)))));
+                Directory.CreateDirectory(WorkingDirectory);
+                try
+                {
+                    var git = gitres.Item1;
+                    var resource = gitres.Item2;
+                    Guid repo = CreateRepository();
+                    CreateIdentity(git);
+                    AllowAnonRepoClone(repo, false);
+                    CloneRepoAnon(git, resource, false);
+                    AllowAnonRepoClone(repo, true);
+                    CloneRepoAnon(git, resource, true);
+                }
+                finally
+                {
+                    DeleteDirectory(WorkingDirectory);
+                }
+            }
+        }
+
+        private void CloneRepoAnon(string git, MsysgitResources resource, bool success)
+        {
+            var result = RunGit(git, string.Format("clone {0}.git", RepositoryUrlWithoutCredentials), WorkingDirectory);
+            return;
+            if (success)
+            {
+                Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryOutput], result.Item1);
+                Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryError], result.Item2);
+            }
+            else
+            {
+                Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryOutput], result.Item1);
+                Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryError], result.Item2);
             }
 
+        }
+
+        private void AllowAnonRepoClone(Guid repo, bool allow)
+        {
+            app.NavigateTo<RepositoryController>(c => c.Edit(repo));
+            var form = app.FindFormFor<RepositoryDetailModel>();
+            var repo_clone = form.Field(f => f.AllowAnonymous);
+            if (allow)
+            {
+                if (!repo_clone.Field.Selected)
+                {
+                    repo_clone.Field.Click();
+                }
+            }
+            else
+            {
+                if (repo_clone.Field.Selected)
+                {
+                    repo_clone.Field.Click();
+                }
+            }
+            form.Submit();
         }
 
         private void CreateIdentity(string git)
