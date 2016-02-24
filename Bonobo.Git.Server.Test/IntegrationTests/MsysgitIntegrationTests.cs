@@ -289,33 +289,6 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         }
 
 
-        private void RestoreServerRepository()
-        {
-            CopyOverrideDirectory(ServerRepositoryBackupPath, ServerRepositoryPath);
-        }
-
-        private void BackupServerRepository()
-        {
-            CopyOverrideDirectory(ServerRepositoryPath, ServerRepositoryBackupPath);
-        }
-
-        private void CopyOverrideDirectory(string target, string destination)
-        {
-            DeleteDirectory(destination);
-            Directory.CreateDirectory(destination);
-
-
-            foreach (string dirPath in Directory.GetDirectories(target, "*", SearchOption.AllDirectories))
-            {
-                Directory.CreateDirectory(dirPath.Replace(target, destination));
-            }
-
-            foreach (string newPath in Directory.GetFiles(target, "*.*", SearchOption.AllDirectories))
-            {
-                File.Copy(newPath, newPath.Replace(target, destination));
-            }
-        }
-
         private Tuple<string, string> RunGit(string git, string arguments)
         {
             return RunGit(git, arguments, RepositoryDirectory);
