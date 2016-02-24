@@ -46,6 +46,12 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             app = new MvcWebApp();
         }
 
+        [ClassCleanup]
+        public static void Cleanup()
+        {
+            app.Browser.Close();
+            app.Browser.Dispose();
+        }
 
         [TestInitialize]
         public void Initialize()

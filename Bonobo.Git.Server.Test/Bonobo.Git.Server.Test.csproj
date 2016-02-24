@@ -149,6 +149,7 @@
     <Compile Include="MembershipTests\ADRepositoryRepositoryServiceTest.cs" />
     <Compile Include="MembershipTests\ADTestSupport.cs" />
     <Compile Include="MembershipTests\EFPermissionServiceTest.cs" />
+    <Compile Include="IntegrationTests\Controller\RepositoryControllerTests.cs" />
     <Compile Include="MembershipTests\EFRepositoryRepositoryTest.cs" />
     <Compile Include="MembershipTests\RepositoryRepositoryTestBase.cs" />
     <Compile Include="MembershipTests\EFRoleProviderTest.cs" />

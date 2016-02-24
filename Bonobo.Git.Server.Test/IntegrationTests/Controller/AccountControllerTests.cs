@@ -25,6 +25,7 @@ namespace Bonobo.Git.Server.Test.Integration.Web
             public static void Cleanup()
             {
                 app.Browser.Close();
+                app.Browser.Dispose();
             }
 
             [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
