@@ -176,8 +176,10 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
         private void CreateIdentity(string git)
         {
+/*
             RunGit(git, "config user.name \"McFlono McFloonyloo\"", WorkingDirectory);
             RunGit(git, "config user.email \"DontBotherMe@home.never\"", WorkingDirectory);
+*/
         }
 
         private void DeleteRepository(Guid guid)
@@ -301,6 +303,8 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
         private Tuple<string, string> RunGit(string git, string arguments, string workingDirectory)
         {
+            Console.WriteLine("About to run '{0}' with args '{1}' in '{2}'", git, arguments, workingDirectory);
+
             using (var process = new Process())
             {
                 process.StartInfo.FileName = git;
@@ -314,6 +318,9 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
                 var output = process.StandardOutput.ReadToEnd();
                 var error = process.StandardError.ReadToEnd();
+
+                Console.WriteLine("Output: {0}", output);
+                Console.WriteLine("Errors: {0}", error);
 
                 return new Tuple<string, string>(output, error);
             }
