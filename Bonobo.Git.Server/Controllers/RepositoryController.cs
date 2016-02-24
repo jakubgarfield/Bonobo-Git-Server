@@ -520,7 +520,19 @@ namespace Bonobo.Git.Server.Controllers
             model.AllAdministrators = MembershipService.GetAllUsers().ToArray();
             model.AllUsers = MembershipService.GetAllUsers().ToArray();
             model.AllTeams = TeamRepository.GetAllTeams().ToArray();
-            model.PostedSelectedAdministrators = new Guid[0];
+            if (model.PostedSelectedUsers != null && model.PostedSelectedUsers.Count() > 0)
+            {
+                model.Users = model.PostedSelectedUsers.Select(x => MembershipService.GetUserModel(x)).ToArray();
+            }
+            if (model.PostedSelectedTeams != null && model.PostedSelectedTeams.Count() > 0)
+            {
+                model.Teams = model.PostedSelectedTeams.Select(x => TeamRepository.GetTeam(x)).ToArray();
+            }
+            if (model.PostedSelectedAdministrators != null && model.PostedSelectedAdministrators.Count() > 0)
+            {
+                model.Administrators = model.PostedSelectedAdministrators.Select(x => MembershipService.GetUserModel(x)).ToArray();
+            }
+            model.PostedSelectedAdministrators =  new Guid[0];
             model.PostedSelectedUsers = new Guid[0];
             model.PostedSelectedTeams = new Guid[0];
         }

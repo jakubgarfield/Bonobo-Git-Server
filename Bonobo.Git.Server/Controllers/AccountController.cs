@@ -237,6 +237,7 @@ namespace Bonobo.Git.Server.Controllers
                     if (User.IsInRole(Definitions.Roles.Administrator))
                     {
                         TempData["CreateSuccess"] = true;
+                        TempData["NewUserId"] = MembershipService.GetUserModel(model.Username).Id;
                         return RedirectToAction("Index");
                     }
                     else

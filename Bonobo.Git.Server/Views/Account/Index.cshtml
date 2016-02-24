@@ -20,7 +20,7 @@
 @if (TempData["CreateSuccess"] != null && (bool)TempData["CreateSuccess"])
 {
     <div class="summary-success">
-        <p>@Resources.Account_Create_Success</p>
+        <p id="@TempData["NewUserId"]">@Resources.Account_Create_Success</p>
     </div>
 }
 @if (TempData["DeleteSuccess"] != null)
