@@ -874,4 +874,7 @@
   <data name="Repository_Create_Success_Go_To" xml:space="preserve">
     <value>Go to "{0}"</value>
   </data>
+  <data name="Repository_Needs_Administrator" xml:space="preserve">
+    <value>Repository requires at least one administrator.</value>
+  </data>
 </root>

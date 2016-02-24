@@ -1674,6 +1674,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Repository requires at least one administrator..
+        /// </summary>
+        public static string Repository_Needs_Administrator {
+            get {
+                return ResourceManager.GetString("Repository_Needs_Administrator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Switch current branch.
         /// </summary>
         public static string Repository_SwitchBranch {

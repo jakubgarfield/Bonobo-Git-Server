@@ -83,7 +83,7 @@ namespace Bonobo.Git.Server.Models
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Administrators")]
         public UserModel[] Administrators { get; set; }
-        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Repository_Needs_Administrator")]
         public Guid[] PostedSelectedAdministrators { get; set; }
         public UserModel[] AllAdministrators { get; set; }
 
