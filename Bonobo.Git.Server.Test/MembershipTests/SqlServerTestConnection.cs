@@ -9,6 +9,40 @@ namespace Bonobo.Git.Server.Test.MembershipTests
     {
         readonly SqlConnection _connection;
         private readonly string _databaseName;
+        private static readonly string _instanceName;
+
+        static SqlServerTestConnection()
+        {
+            // If you need to find the instance names on your computer run "sqllocaldb info" at the command prompt 
+            var instances = new[] {"v11.0", "MSSQLLocalDB"};
+            foreach (var instanceName in instances)
+            {
+                if (TryOpeningInstance(instanceName))
+                {
+                    _instanceName = instanceName;
+                    break;
+                }
+            }
+        }
+    
+        private static bool TryOpeningInstance(string instanceName)
+        {
+            try
+            {
+                using (var conn = 
+                    new SqlConnection(
+                        string.Format(@"Data Source=(LocalDb)\{0};Initial Catalog=Master;Integrated Security=True",
+                            instanceName)))
+                {
+                    conn.Open();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
 
         public SqlServerTestConnection()
         {
@@ -18,7 +52,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
 
             Console.WriteLine("Created test database: " + fileName);
 
-            _connection = new SqlConnection(String.Format(@"Data Source=(LocalDB)\v11.0;Integrated Security=True;AttachDbFilename={0};Initial Catalog={1}", fileName, _databaseName));
+            _connection = new SqlConnection(String.Format(@"Data Source=(LocalDB)\{0};Integrated Security=True;AttachDbFilename={1};Initial Catalog={2}", _instanceName, fileName, _databaseName));
             _connection.Open();
         }
 
@@ -31,7 +65,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         {
             using (
                 var connection =
-                    new SqlConnection(@"Data Source=(LocalDb)\v11.0;Initial Catalog=Master;Integrated Security=True"))
+                    new SqlConnection(string.Format(@"Data Source=(LocalDb)\{0};Initial Catalog=Master;Integrated Security=True", _instanceName)))
             {
                 connection.Open();
 
