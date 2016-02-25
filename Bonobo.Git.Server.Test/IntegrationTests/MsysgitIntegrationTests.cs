@@ -9,6 +9,8 @@ using OpenQA.Selenium;
 
 using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
+using System.Text;
+using System.Threading;
 
 namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 {
@@ -93,14 +95,19 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
                 try
                 {
-                    Guid repo_id = CreateRepository();
+                    Guid repo_id = CreateRepositoryOnWebInterface();
                     CloneEmptyRepositoryAndEnterRepo(git, resources);
                     CreateIdentity(git);
                     PushFiles(git, resources);
                     PushTag(git, resources);
                     PushBranch(git, resources);
+
+                    DeleteDirectory(RepositoryDirectory);
                     CloneRepository(git, resources);
-                    PullRepository(git, resources);
+
+                    DeleteDirectory(RepositoryDirectory);
+                    Directory.CreateDirectory(RepositoryDirectory);
+                    InitAndPullRepository(git, resources);
                     PullTag(git, resources);
                     PullBranch(git, resources);
                     DeleteRepository(repo_id);
@@ -117,13 +124,13 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         {
             foreach (var gitres in installedgits)
             {
-                string old_helper = null;
                 Directory.CreateDirectory(WorkingDirectory);
+                string old_helper = null;
                 var git = gitres.Item1;
                 var resource = gitres.Item2;
                 try
                 {
-                    Guid repo = CreateRepository();
+                    Guid repo = CreateRepositoryOnWebInterface();
                     old_helper = DisableCredentialHelper(git);
                     AllowAnonRepoClone(repo, false);
                     CloneRepoAnon(git, resource, false);
@@ -136,6 +143,37 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                     DeleteDirectory(WorkingDirectory);
                 }
             }
+        }
+
+        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        public void NoDeadlockLargeOutput()
+        {
+            var gitres = installedgits.Last();
+            var git = gitres.Item1;
+            var resource = gitres.Item2;
+            Directory.CreateDirectory(WorkingDirectory);
+
+            try{
+                var repo = CreateRepositoryOnWebInterface();
+                CloneEmptyRepositoryAndEnterRepo(git, resource);
+                CreateIdentity(git);
+                CreateAndAddTestFiles(git, 2000);
+            }
+            finally
+            {
+                DeleteDirectory(WorkingDirectory);
+            }
+
+        }
+
+        private void CreateAndAddTestFiles(string git, int count)
+        {
+            foreach (var i in 0.To(count - 1))
+            {
+                CreateRandomFile(Path.Combine(RepositoryDirectory, "file" + i.ToString()), 0);
+            }
+            RunGitOnRepo(git, "add .");
+            RunGitOnRepo(git, "commit -m \"Commit me!\"");
         }
 
         private void RestoreCredentialHelper(string git, string old_helper)
@@ -226,7 +264,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             }
         }
 
-        private Guid CreateRepository()
+        private Guid CreateRepositoryOnWebInterface()
         {
             app.NavigateTo<RepositoryController>(c => c.Create());
             app.FindFormFor<RepositoryDetailModel>()
@@ -258,10 +296,8 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             Assert.AreEqual(String.Format(resources[MsysgitResources.Definition.PullTagError], RepositoryUrlWithoutCredentials), result.Item2);
         }
 
-        private void PullRepository(string git, MsysgitResources resources)
+        private void InitAndPullRepository(string git, MsysgitResources resources)
         {
-            DeleteDirectory(RepositoryDirectory);
-            Directory.CreateDirectory(RepositoryDirectory);
 
             RunGitOnRepo(git, "init");
             RunGitOnRepo(git, String.Format("remote add origin {0}", RepositoryUrlWithCredentials));
@@ -272,7 +308,6 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
         private void CloneRepository(string git, MsysgitResources resources)
         {
-            DeleteDirectory(RepositoryDirectory);
             var result = RunGit(git, String.Format(String.Format("clone {0}", RepositoryUrlWithCredentials), RepositoryName), WorkingDirectory);
 
             Assert.AreEqual(resources[MsysgitResources.Definition.CloneRepositoryOutput], result.Item1);
@@ -319,34 +354,78 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         }
 
 
-        private Tuple<string, string> RunGitOnRepo(string git, string arguments)
+        private Tuple<string, string> RunGitOnRepo(string git, string arguments, int timeout = 30000 /* milliseconds */)
         {
-            return RunGit(git, arguments, RepositoryDirectory);
+            return RunGit(git, arguments, RepositoryDirectory, timeout);
         }
 
-        private Tuple<string, string> RunGit(string git, string arguments, string workingDirectory)
+        private Tuple<string, string> RunGit(string git, string arguments, string workingDirectory, int timeout = 30000 /* milliseconds */)
         {
             Console.WriteLine("About to run '{0}' with args '{1}' in '{2}'", git, arguments, workingDirectory);
             Debug.WriteLine("About to run '{0}' with args '{1}' in '{2}'", git, arguments, workingDirectory);
 
-            using (var process = new Process())
+            // http://stackoverflow.com/a/7608823/551045 and http://stackoverflow.com/a/22956924/551045
+            using (AutoResetEvent outputWaitHandle = new AutoResetEvent(false))
+            using (AutoResetEvent errorWaitHandle = new AutoResetEvent(false))
             {
-                process.StartInfo.FileName = git;
-                process.StartInfo.WorkingDirectory = workingDirectory;
-                process.StartInfo.Arguments = arguments;
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.RedirectStandardError = true;
-                process.Start();
-                process.WaitForExit();
+                using (var process = new Process())
+                {
+                    process.StartInfo.FileName = git;
+                    process.StartInfo.WorkingDirectory = workingDirectory;
+                    process.StartInfo.Arguments = arguments;
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.RedirectStandardError = true;
 
-                var output = process.StandardOutput.ReadToEnd();
-                var error = process.StandardError.ReadToEnd();
+                    StringBuilder output = new StringBuilder();
+                    StringBuilder error = new StringBuilder();
 
-                Console.WriteLine("Output: {0}", output);
-                Console.WriteLine("Errors: {0}", error);
+                    process.OutputDataReceived += (sender, e) =>
+                    {
+                        if (e.Data == null)
+                        {
+                            outputWaitHandle.Set();
+                        }
+                        else
+                        {
+                            output.AppendLine(e.Data);
+                        }
+                    };
+                    process.ErrorDataReceived += (sender, e) =>
+                    {
+                        if (e.Data == null)
+                        {
+                            errorWaitHandle.Set();
+                        }
+                        else
+                        {
+                            error.AppendLine(e.Data);
+                        }
+                    };
 
-                return new Tuple<string, string>(output, error);
+                    process.Start();
+
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+
+                    if (process.WaitForExit(timeout) &&
+                        outputWaitHandle.WaitOne(timeout) &&
+                        errorWaitHandle.WaitOne(timeout))
+                    {
+                        var strout = output.ToString();
+                        var strerr = error.ToString();
+
+                        Console.WriteLine("Output: {0}", output);
+                        Console.WriteLine("Errors: {0}", error);
+
+                        return Tuple.Create(strout, strerr);
+                    }
+                    else
+                    {
+                        Assert.Fail(string.Format("Runing command '{0} {1}' timed out! Timeout {2} seconds.", git, arguments, timeout));
+                        return Tuple.Create<string, string>(null, null);
+                    }
+                }
             }
         }
 
