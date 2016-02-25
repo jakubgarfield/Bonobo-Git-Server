@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Bonobo.Git.Server.Test.MembershipTests
 {
     [TestClass]
-    class ADMembershipServiceTest : MembershipServiceTestBase
+    public class ADMembershipServiceTest : MembershipServiceTestBase
     {
         private ADTestSupport _testSupport;
 

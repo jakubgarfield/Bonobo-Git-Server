@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Bonobo.Git.Server.Test.MembershipTests
 {
     [TestClass]
-    class ADRepositoryRepositoryServiceTest : RepositoryRepositoryTestBase
+    public class ADRepositoryRepositoryServiceTest : RepositoryRepositoryTestBase
     {
         private ADTestSupport _testSupport;
 
@@ -15,11 +15,6 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         {
             _testSupport = new ADTestSupport();
             _repo = new ADRepositoryRepository();
-/*
-            _service = new ADMembershipServiceTestFacade(new ADMembershipService());
-            ADBackend.Instance.Users.Add(new UserModel() { Username = "admin", Id = Guid.NewGuid() });
-            Assert.AreEqual(1, ADBackend.Instance.Users.Count());
-*/
         }
 
         [TestCleanup]
