@@ -19,9 +19,9 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
     public class MsysgitIntegrationTests
     {
         private const string RepositoryName = "Integration";
-        private const string WorkingDirectory = @"..\..\..\Tests\IntegrationTests";
-        private const string GitPath = @"..\..\..\Gits\{0}\bin\git.exe";
-        private readonly static string RepositoryDirectory = Path.Combine(WorkingDirectory, RepositoryName);
+        private static string WorkingDirectory = @"..\..\..\Tests\IntegrationTests";
+        private static string GitPath = @"..\..\..\Gits\{0}\bin\git.exe";
+        private static string RepositoryDirectory = Path.Combine(WorkingDirectory, RepositoryName);
         private readonly static string ServerRepositoryPath = Path.Combine(@"..\..\..\Bonobo.Git.Server\App_Data\Repositories", RepositoryName);
         private readonly static string ServerRepositoryBackupPath = Path.Combine(@"..\..\..\Tests\", RepositoryName, "Backup");
         private readonly static string[] GitVersions = { "1.7.4", "1.7.6", "1.7.7.1", "1.7.8", "1.7.9", "1.8.0", "1.8.1.2", "1.8.3", "1.9.5", "2.6.1" };
@@ -37,6 +37,11 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)
         {
+            // Make sure relative paths are frozen in case the app's CurrentDir changes
+            WorkingDirectory = Path.GetFullPath(WorkingDirectory);
+            GitPath = Path.GetFullPath(GitPath);
+            RepositoryDirectory = Path.Combine(WorkingDirectory, RepositoryName);
+            
             app = new MvcWebApp();
         }
 
@@ -171,8 +176,8 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
         private void CreateIdentity(string git)
         {
-            RunGit(git, "config user.name \"McFlono McFloonyloo\"");
-            RunGit(git, "config user.email \"DontBotherMe@home.never\"");
+            RunGit(git, "config user.name \"McFlono McFloonyloo\"", WorkingDirectory);
+            RunGit(git, "config user.email \"DontBotherMe@home.never\"", WorkingDirectory);
         }
 
         private void DeleteRepository(Guid guid)
@@ -215,7 +220,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
         private void PullBranch(string git, MsysgitResources resources)
         {
-            var result = RunGit(git, "pull origin TestBranch");
+            var result = RunGitOnRepo(git, "pull origin TestBranch");
 
             Assert.AreEqual("Already up-to-date.\n", result.Item1);
             Assert.AreEqual(String.Format(resources[MsysgitResources.Definition.PullBranchError], RepositoryUrlWithoutCredentials), result.Item2);
@@ -223,7 +228,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
         private void PullTag(string git, MsysgitResources resources)
         {
-            var result = RunGit(git, "fetch");
+            var result = RunGitOnRepo(git, "fetch");
 
             Assert.AreEqual(String.Format(resources[MsysgitResources.Definition.PullTagError], RepositoryUrlWithoutCredentials), result.Item2);
         }
@@ -233,9 +238,9 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             DeleteDirectory(RepositoryDirectory);
             Directory.CreateDirectory(RepositoryDirectory);
 
-            RunGit(git, "init");
-            RunGit(git, String.Format("remote add origin {0}", RepositoryUrlWithCredentials));
-            var result = RunGit(git, "pull origin master");
+            RunGitOnRepo(git, "init");
+            RunGitOnRepo(git, String.Format("remote add origin {0}", RepositoryUrlWithCredentials));
+            var result = RunGitOnRepo(git, "pull origin master");
 
             Assert.AreEqual(String.Format(resources[MsysgitResources.Definition.PullRepositoryError], RepositoryUrlWithoutCredentials), result.Item2);
         }
@@ -251,16 +256,16 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
         private void PushBranch(string git, MsysgitResources resources)
         {
-            RunGit(git, "checkout -b \"TestBranch\"");
-            var result = RunGit(git, "push origin TestBranch");
+            RunGitOnRepo(git, "checkout -b \"TestBranch\"");
+            var result = RunGitOnRepo(git, "push origin TestBranch");
 
             Assert.AreEqual(String.Format(resources[MsysgitResources.Definition.PushBranchError], RepositoryUrlWithCredentials), result.Item2);
         }
 
         private void PushTag(string git, MsysgitResources resources)
         {
-            RunGit(git, "tag -a v1.4 -m \"my version 1.4\"");
-            var result = RunGit(git, "push --tags origin");
+            RunGitOnRepo(git, "tag -a v1.4 -m \"my version 1.4\"");
+            var result = RunGitOnRepo(git, "push --tags origin");
             
             Assert.AreEqual(String.Format(resources[MsysgitResources.Definition.PushTagError], RepositoryUrlWithCredentials), result.Item2);
         }
@@ -273,9 +278,9 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             CreateRandomFile(Path.Combine(RepositoryDirectory, "Subdirectory", "3.dat"), 20);
             CreateRandomFile(Path.Combine(RepositoryDirectory, "Subdirectory", "4.dat"), 15);
 
-            RunGit(git, "add .");
-            RunGit(git, "commit -m \"Test Files Added\"");
-            var result = RunGit(git, "push origin master");
+            RunGitOnRepo(git, "add .");
+            RunGitOnRepo(git, "commit -m \"Test Files Added\"");
+            var result = RunGitOnRepo(git, "push origin master");
 
             Assert.AreEqual(String.Format(resources[MsysgitResources.Definition.PushFilesError], RepositoryUrlWithCredentials), result.Item2);
         }
@@ -289,7 +294,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         }
 
 
-        private Tuple<string, string> RunGit(string git, string arguments)
+        private Tuple<string, string> RunGitOnRepo(string git, string arguments)
         {
             return RunGit(git, arguments, RepositoryDirectory);
         }
