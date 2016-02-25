@@ -29,6 +29,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         private readonly static string RepositoryUrl = "http://{0}localhost:20000/{2}{1}";
         private readonly static string RepositoryUrlWithoutCredentials = String.Format(RepositoryUrl, String.Empty, String.Empty, RepositoryName);
         private readonly static string RepositoryUrlWithCredentials = String.Format(RepositoryUrl, Credentials, ".git", RepositoryName);
+        private readonly static string Url = string.Format(RepositoryUrl, string.Empty, string.Empty, string.Empty);
 
         List<Tuple<string, MsysgitResources>> installedgits = new List<Tuple<string, MsysgitResources>>();
 
@@ -64,7 +65,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 var git = String.Format(GitPath, version);
                 if (File.Exists(git))
                 {
-                    var resources = new MsysgitResources(git);
+                    var resources = new MsysgitResources(version);
                     installedgits.Add(Tuple.Create(git, resources));
                     any_git_installed = true;
                 }
@@ -116,13 +117,14 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         {
             foreach (var gitres in installedgits)
             {
+                string old_helper = null;
                 Directory.CreateDirectory(WorkingDirectory);
+                var git = gitres.Item1;
+                var resource = gitres.Item2;
                 try
                 {
-                    var git = gitres.Item1;
-                    var resource = gitres.Item2;
                     Guid repo = CreateRepository();
-                    CreateIdentity(git);
+                    old_helper = DisableCredentialHelper(git);
                     AllowAnonRepoClone(repo, false);
                     CloneRepoAnon(git, resource, false);
                     AllowAnonRepoClone(repo, true);
@@ -130,15 +132,38 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 }
                 finally
                 {
+                    RestoreCredentialHelper(git, old_helper);
                     DeleteDirectory(WorkingDirectory);
                 }
             }
         }
 
+        private void RestoreCredentialHelper(string git, string old_helper)
+        {
+            if (old_helper != null)
+            {
+                var helper_location = string.Format("credential.{0}.helper", Url);
+                RunGit(git, "config " + helper_location + " " + old_helper, WorkingDirectory);
+            }
+        }
+
+        private string DisableCredentialHelper(string git)
+        {
+            var helper_location = string.Format("credential.{0}.helper", Url);
+            var result = RunGit(git, "config --get " + helper_location, WorkingDirectory);
+            RunGit(git, "config " + helper_location + " \"\"", WorkingDirectory);
+            var current_helper = result.Item1;
+            var last_newline = current_helper.LastIndexOf('\n');
+            if (last_newline != -1)
+            {
+                current_helper = current_helper.Substring(0, last_newline);
+            }
+            return current_helper;
+        }
+
         private void CloneRepoAnon(string git, MsysgitResources resource, bool success)
         {
             var result = RunGit(git, string.Format("clone {0}.git", RepositoryUrlWithoutCredentials), WorkingDirectory);
-            return;
             if (success)
             {
                 Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryOutput], result.Item1);
@@ -147,7 +172,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             else
             {
                 Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryOutput], result.Item1);
-                Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryError], result.Item2);
+                Assert.AreEqual(string.Format(resource[MsysgitResources.Definition.CloneRepositoryFailRequiresAuthError], Url.Substring(0, Url.Length - 1)), result.Item2);
             }
 
         }
@@ -176,10 +201,8 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
         private void CreateIdentity(string git)
         {
-/*
-            RunGit(git, "config user.name \"McFlono McFloonyloo\"", WorkingDirectory);
-            RunGit(git, "config user.email \"DontBotherMe@home.never\"", WorkingDirectory);
-*/
+            RunGitOnRepo(git, "config user.name \"McFlono McFloonyloo\"");
+            RunGitOnRepo(git, "config user.email \"DontBotherMe@home.never\"");
         }
 
         private void DeleteRepository(Guid guid)
@@ -304,6 +327,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         private Tuple<string, string> RunGit(string git, string arguments, string workingDirectory)
         {
             Console.WriteLine("About to run '{0}' with args '{1}' in '{2}'", git, arguments, workingDirectory);
+            Debug.WriteLine("About to run '{0}' with args '{1}' in '{2}'", git, arguments, workingDirectory);
 
             using (var process = new Process())
             {

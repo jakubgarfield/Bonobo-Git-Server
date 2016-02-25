@@ -20,6 +20,7 @@ namespace Bonobo.Git.Server.Test
             CloneRepositoryOutput,
             CloneRepositoryError,
             PushBranchError,
+            CloneRepositoryFailRequiresAuthError,
         }
 
 
@@ -71,6 +72,7 @@ namespace Bonobo.Git.Server.Test
                 _resources[Definition.CloneRepositoryError] = "Cloning into 'Integration'...\n";
                 _resources[Definition.PullRepositoryError] = "From {0}\n * branch            master     -> FETCH_HEAD\n * [new branch]      master     -> origin/master\n";
                 _resources[Definition.PullTagError] = "From {0}\n * [new branch]      TestBranch -> origin/TestBranch\n * [new tag]         v1.4       -> v1.4\n";
+                _resources[Definition.CloneRepositoryFailRequiresAuthError] = "Cloning into 'Integration'...\nbash: /dev/tty: No such device or address\nerror: failed to execute prompt script (exit code 1)\nfatal: could not read Username for '{0}': Invalid argument\n";
             }
         }
     }
