@@ -55,10 +55,10 @@ namespace Bonobo.Git.Server.Owin.Windows
 
                                 ClaimsIdentity identity = new ClaimsIdentity(Options.SignInAsAuthenticationType);
                                 List<Claim> result = new List<Claim>();
-                                result.Add(new Claim(ClaimTypes.Name, adUser.GivenName));
+                                result.Add(new Claim(ClaimTypes.GivenName, adUser.GivenName));
                                 result.Add(new Claim(ClaimTypes.Surname, adUser.Surname));
-                                result.Add(new Claim(ClaimTypes.Upn, adUser.Guid.ToString()));
-                                result.Add(new Claim(ClaimTypes.NameIdentifier, handshake.AuthenticatedUsername));
+                                result.Add(new Claim(ClaimTypes.NameIdentifier, adUser.Guid.ToString()));
+                                result.Add(new Claim(ClaimTypes.Name, handshake.AuthenticatedUsername));
                                 result.Add(new Claim(ClaimTypes.Email, adUser.EmailAddress));
                                 result.Add(new Claim(ClaimTypes.Role, Definitions.Roles.Administrator));
                                 result.Add(new Claim(ClaimTypes.Role, "Administrator"));

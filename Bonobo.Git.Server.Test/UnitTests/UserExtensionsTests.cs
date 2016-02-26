@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Security.Claims;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using Bonobo.Git.Server;
 
 namespace Bonobo.Git.Server.Test.UnitTests
 {
@@ -33,6 +32,74 @@ namespace Bonobo.Git.Server.Test.UnitTests
         public void StripDomainFromUsernameAtDomain()
         {
             Assert.AreEqual("username", usernameatdomain.StripDomain());
+        }
+
+        [TestMethod]
+        public void GetGuidFromNameIdentityClaimWhenGuidStringEncoded()
+        {
+            var testGuid = Guid.NewGuid();
+            var user = MakeUserWithClaims(new Claim(ClaimTypes.NameIdentifier, testGuid.ToString()));
+            Assert.AreEqual(testGuid, user.Id());
+        }
+
+        [TestMethod]
+        public void GetGuidFromNameIdentityClaimWhenGuidIsBase64Encoded()
+        {
+            var testGuid = Guid.NewGuid();
+            var user = MakeUserWithClaims(new Claim(ClaimTypes.NameIdentifier, Convert.ToBase64String(testGuid.ToByteArray())));
+            Assert.AreEqual(testGuid, user.Id());
+        }
+
+        [TestMethod]
+        public void GuidIsEmptyForUserWithNoNameIdentifier()
+        {
+            var user = new ClaimsPrincipal(new ClaimsIdentity());
+            Assert.AreEqual(Guid.Empty, user.Id());
+        }
+
+        [TestMethod]
+        public void GuidIsEmptyForUserWithUnparsableNameIdentifier()
+        {
+            var user = MakeUserWithClaims(new Claim(ClaimTypes.NameIdentifier, "NotAGuid"));
+            Assert.AreEqual(Guid.Empty, user.Id());
+        }
+
+        [TestMethod]
+        public void DisplayNameCanBeAssembledFromGivenNameAndSurname()
+        {
+            var user = MakeUserWithClaims(new Claim(ClaimTypes.GivenName, "Joe"), new Claim(ClaimTypes.Surname, "Bloggs"));
+            Assert.AreEqual("Joe Bloggs", user.DisplayName());
+        }
+
+        [TestMethod]
+        public void UsernameIsInNameClaim()
+        {
+            var user = MakeUserWithClaims(new Claim(ClaimTypes.Name, "JoeBloggs"));
+            Assert.AreEqual("JoeBloggs", user.Username());
+        }
+
+        [TestMethod]
+        public void UsernameFallsbackToUpn()
+        {
+            var user = MakeUserWithClaims(new Claim(ClaimTypes.Upn, "JoeBloggs@local"));
+            Assert.AreEqual("JoeBloggs@local", user.Username());
+        }
+
+        [TestMethod]
+        public void UsernameFallsbackToUpnOnlyIfNameIsMissing()
+        {
+            var user = MakeUserWithClaims(new Claim(ClaimTypes.Upn, "JoeBloggs@local"), new Claim(ClaimTypes.Name, "JoeBloggs"));
+            Assert.AreEqual("JoeBloggs", user.Username());
+        }
+
+        private static ClaimsPrincipal MakeUserWithClaims(params Claim[] claims)
+        {
+            var id = new ClaimsIdentity();
+            foreach (var claim in claims)
+            {
+                id.AddClaim(claim);
+            }
+            return new ClaimsPrincipal(id);
         }
     }
 }
