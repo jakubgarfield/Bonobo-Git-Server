@@ -38,7 +38,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

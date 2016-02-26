@@ -67,8 +67,8 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 var git = String.Format(GitPath, version);
                 if (File.Exists(git))
                 {
-                    var resources = new MsysgitResources(version);
-                    installedgits.Add(Tuple.Create(git, resources));
+                    var resource = new MsysgitResources(version);
+                    installedgits.Add(Tuple.Create(git, resource));
                     any_git_installed = true;
                 }
                 else
@@ -91,25 +91,25 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
                 Directory.CreateDirectory(WorkingDirectory);
                 var git = gitresource.Item1;
-                var resources = gitresource.Item2;
+                var resource = gitresource.Item2;
 
                 try
                 {
                     Guid repo_id = CreateRepositoryOnWebInterface();
-                    CloneEmptyRepositoryAndEnterRepo(git, resources);
+                    CloneEmptyRepositoryAndEnterRepo(git, resource);
                     CreateIdentity(git);
-                    PushFiles(git, resources);
-                    PushTag(git, resources);
-                    PushBranch(git, resources);
+                    CreateAndPushFiles(git, resource);
+                    PushTag(git, resource);
+                    PushBranch(git, resource);
 
                     DeleteDirectory(RepositoryDirectory);
-                    CloneRepository(git, resources);
+                    CloneRepository(git, resource);
 
                     DeleteDirectory(RepositoryDirectory);
                     Directory.CreateDirectory(RepositoryDirectory);
-                    InitAndPullRepository(git, resources);
-                    PullTag(git, resources);
-                    PullBranch(git, resources);
+                    InitAndPullRepository(git, resource);
+                    PullTag(git, resource);
+                    PullBranch(git, resource);
                     DeleteRepository(repo_id);
                 }
                 finally
@@ -130,12 +130,13 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 var resource = gitres.Item2;
                 try
                 {
-                    Guid repo = CreateRepositoryOnWebInterface();
+                    Guid repo_id = CreateRepositoryOnWebInterface();
                     old_helper = DisableCredentialHelper(git);
-                    AllowAnonRepoClone(repo, false);
+                    AllowAnonRepoClone(repo_id, false);
                     CloneRepoAnon(git, resource, false);
-                    AllowAnonRepoClone(repo, true);
+                    AllowAnonRepoClone(repo_id, true);
                     CloneRepoAnon(git, resource, true);
+                    DeleteRepository(repo_id);
                 }
                 finally
                 {
@@ -154,10 +155,11 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             Directory.CreateDirectory(WorkingDirectory);
 
             try{
-                var repo = CreateRepositoryOnWebInterface();
+                var repo_id = CreateRepositoryOnWebInterface();
                 CloneEmptyRepositoryAndEnterRepo(git, resource);
                 CreateIdentity(git);
                 CreateAndAddTestFiles(git, 2000);
+                DeleteRepository(repo_id);
             }
             finally
             {
@@ -281,56 +283,56 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             return new Guid(repo_item.GetAttribute("data-repo-id"));
         }
 
-        private void PullBranch(string git, MsysgitResources resources)
+        private void PullBranch(string git, MsysgitResources resource)
         {
             var result = RunGitOnRepo(git, "pull origin TestBranch");
 
             Assert.AreEqual("Already up-to-date.\n", result.Item1);
-            Assert.AreEqual(String.Format(resources[MsysgitResources.Definition.PullBranchError], RepositoryUrlWithoutCredentials), result.Item2);
+            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PullBranchError], RepositoryUrlWithoutCredentials), result.Item2);
         }
 
-        private void PullTag(string git, MsysgitResources resources)
+        private void PullTag(string git, MsysgitResources resource)
         {
             var result = RunGitOnRepo(git, "fetch");
 
-            Assert.AreEqual(String.Format(resources[MsysgitResources.Definition.PullTagError], RepositoryUrlWithoutCredentials), result.Item2);
+            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PullTagError], RepositoryUrlWithoutCredentials), result.Item2);
         }
 
-        private void InitAndPullRepository(string git, MsysgitResources resources)
+        private void InitAndPullRepository(string git, MsysgitResources resource)
         {
 
             RunGitOnRepo(git, "init");
             RunGitOnRepo(git, String.Format("remote add origin {0}", RepositoryUrlWithCredentials));
             var result = RunGitOnRepo(git, "pull origin master");
 
-            Assert.AreEqual(String.Format(resources[MsysgitResources.Definition.PullRepositoryError], RepositoryUrlWithoutCredentials), result.Item2);
+            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PullRepositoryError], RepositoryUrlWithoutCredentials), result.Item2);
         }
 
-        private void CloneRepository(string git, MsysgitResources resources)
+        private void CloneRepository(string git, MsysgitResources resource)
         {
             var result = RunGit(git, String.Format(String.Format("clone {0}", RepositoryUrlWithCredentials), RepositoryName), WorkingDirectory);
 
-            Assert.AreEqual(resources[MsysgitResources.Definition.CloneRepositoryOutput], result.Item1);
-            Assert.AreEqual(resources[MsysgitResources.Definition.CloneRepositoryError], result.Item2);
+            Assert.AreEqual(resource[MsysgitResources.Definition.CloneRepositoryOutput], result.Item1);
+            Assert.AreEqual(resource[MsysgitResources.Definition.CloneRepositoryError], result.Item2);
         }
 
-        private void PushBranch(string git, MsysgitResources resources)
+        private void PushBranch(string git, MsysgitResources resource)
         {
             RunGitOnRepo(git, "checkout -b \"TestBranch\"");
             var result = RunGitOnRepo(git, "push origin TestBranch");
 
-            Assert.AreEqual(String.Format(resources[MsysgitResources.Definition.PushBranchError], RepositoryUrlWithCredentials), result.Item2);
+            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PushBranchError], RepositoryUrlWithCredentials), result.Item2);
         }
 
-        private void PushTag(string git, MsysgitResources resources)
+        private void PushTag(string git, MsysgitResources resource)
         {
             RunGitOnRepo(git, "tag -a v1.4 -m \"my version 1.4\"");
             var result = RunGitOnRepo(git, "push --tags origin");
             
-            Assert.AreEqual(String.Format(resources[MsysgitResources.Definition.PushTagError], RepositoryUrlWithCredentials), result.Item2);
+            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PushTagError], RepositoryUrlWithCredentials), result.Item2);
         }
 
-        private void PushFiles(string git, MsysgitResources resources)
+        private void CreateAndPushFiles(string git, MsysgitResources resource)
         {
             CreateRandomFile(Path.Combine(RepositoryDirectory, "1.dat"), 10);
             CreateRandomFile(Path.Combine(RepositoryDirectory, "2.dat"), 1);
@@ -342,15 +344,15 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             RunGitOnRepo(git, "commit -m \"Test Files Added\"");
             var result = RunGitOnRepo(git, "push origin master");
 
-            Assert.AreEqual(String.Format(resources[MsysgitResources.Definition.PushFilesError], RepositoryUrlWithCredentials), result.Item2);
+            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PushFilesSuccessError], RepositoryUrlWithCredentials), result.Item2);
         }
 
-        private void CloneEmptyRepositoryAndEnterRepo(string git, MsysgitResources resources)
+        private void CloneEmptyRepositoryAndEnterRepo(string git, MsysgitResources resource)
         {
             var result = RunGit(git, String.Format(String.Format("clone {0}", RepositoryUrlWithCredentials), RepositoryName), WorkingDirectory);
             
-            Assert.AreEqual(resources[MsysgitResources.Definition.CloneEmptyRepositoryOutput], result.Item1);
-            Assert.AreEqual(resources[MsysgitResources.Definition.CloneEmptyRepositoryError], result.Item2);
+            Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryOutput], result.Item1);
+            Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryError], result.Item2);
         }
 
 
