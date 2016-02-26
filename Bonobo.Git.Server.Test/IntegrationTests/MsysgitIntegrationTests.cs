@@ -52,7 +52,6 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         public static void Cleanup()
         {
             app.Browser.Close();
-            app.Browser.Dispose();
         }
 
         [TestInitialize]
@@ -354,7 +353,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         {
             var result = RunGitOnRepo(git, "pull origin TestBranch");
 
-            Assert.AreEqual("Already up-to-date.\n", result.Item1);
+            Assert.AreEqual("Already up-to-date.\r\n", result.Item1);
             Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PullBranchError], RepositoryUrlWithoutCredentials), result.Item2);
         }
 
