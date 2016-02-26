@@ -34,6 +34,8 @@ namespace Bonobo.Git.Server.Security
             try
             {
                 string domain = GetDomainFromUsername(username);
+                username = username.StripDomain();
+
                 if (String.IsNullOrEmpty(domain))
                 {
                     domain = Configuration.ActiveDirectorySettings.DefaultDomain;
@@ -94,14 +96,13 @@ namespace Bonobo.Git.Server.Security
         public UserModel GetUserModel(string username)
         {
             string domain = GetDomainFromUsername(username);
-            if (!IsUserPrincipalName(username))
+            username = username.StripDomain();
+
+            using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain))
+            using (UserPrincipal user = UserPrincipal.FindByIdentity(principalContext, username))
             {
-                using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain))
-                using (UserPrincipal user = UserPrincipal.FindByIdentity(principalContext, username))
-                {
-                    // assuming all users has a guid on AD
-                    return ADBackend.Instance.Users.FirstOrDefault(n => n.Id == user.Guid.Value);
-                }
+                // assuming all users has a guid on AD
+                return ADBackend.Instance.Users.FirstOrDefault(n => n.Id == user.Guid.Value);
             }
             else if (!string.IsNullOrEmpty(username))
             {
