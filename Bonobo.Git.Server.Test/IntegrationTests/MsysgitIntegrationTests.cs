@@ -165,7 +165,87 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             {
                 DeleteDirectory(WorkingDirectory);
             }
+        }
 
+        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        public void AnonPush()
+        {
+
+            var gitres = installedgits.Last();
+            var git = gitres.Item1;
+            var resource = gitres.Item2;
+            string old_helper = null;
+            Directory.CreateDirectory(WorkingDirectory);
+
+            try
+            {
+                var repo_id = CreateRepositoryOnWebInterface();
+                old_helper = DisableCredentialHelper(git);
+                AllowAnonRepoClone(repo_id, true);
+                CloneRepoAnon(git, resource, true);
+                CreateIdentity(git);
+                SetAnonPush(git, false);
+                CreateRandomFile(Path.Combine(RepositoryDirectory, "file.txt"), 0);
+                RunGitOnRepo(git, "add .");
+                RunGitOnRepo(git, "commit -m\"Aw yeah!\"");
+                PushFiles(git, resource, false);
+                SetAnonPush(git, true);
+                PushFiles(git, resource, true);
+                DeleteRepository(repo_id);
+            }
+            finally
+            {
+                if (old_helper != null){
+                    RestoreCredentialHelper(git, old_helper);
+                }
+                DeleteDirectory(WorkingDirectory);
+            }
+
+        }
+
+        private void PushFiles(string git, MsysgitResources resource, bool success)
+        {
+            var res = RunGitOnRepo(git, "push origin master");
+            if (success)
+            {
+                Assert.AreEqual(string.Format(resource[MsysgitResources.Definition.PushFilesSuccessError], RepositoryUrlWithoutCredentials + ".git"), res.Item2);
+            }
+            else
+            {
+                Assert.AreEqual(string.Format(resource[MsysgitResources.Definition.PushFilesFailError], RepositoryUrlWithoutCredentials), res.Item2);
+            }
+        } 
+
+        private void RemoveCredentialsFromCloneUrl(string git)
+        {
+            RunGitOnRepo(git, "remote set-url origin " + Url + RepositoryName + ".git");
+        }
+
+        private void SetCheckbox<T>(FluentField<T, bool> field, bool select) where T : class
+        {
+            if (select)
+            {
+                if (!field.Field.Selected)
+                {
+                    field.Click();
+                }
+            }
+            else
+            {
+                if(field.Field.Selected)
+                {
+                    field.Click();
+                }
+            }
+        }
+
+        private void SetAnonPush(string git, bool allowAnonymousPush)
+        {
+            app.NavigateTo<SettingsController>(c => c.Index());
+            var form = app.FindFormFor<GlobalSettingsModel>();
+            var field =  form.Field(f => f.AllowAnonymousPush);
+            SetCheckbox(field, allowAnonymousPush);
+            form.Submit();
         }
 
         private void CreateAndAddTestFiles(string git, int count)
@@ -222,20 +302,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             app.NavigateTo<RepositoryController>(c => c.Edit(repo));
             var form = app.FindFormFor<RepositoryDetailModel>();
             var repo_clone = form.Field(f => f.AllowAnonymous);
-            if (allow)
-            {
-                if (!repo_clone.Field.Selected)
-                {
-                    repo_clone.Field.Click();
-                }
-            }
-            else
-            {
-                if (repo_clone.Field.Selected)
-                {
-                    repo_clone.Field.Click();
-                }
-            }
+            SetCheckbox(repo_clone, allow);
             form.Submit();
         }
 

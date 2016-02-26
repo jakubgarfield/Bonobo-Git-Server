@@ -12,7 +12,8 @@ namespace Bonobo.Git.Server.Test
         {
             CloneEmptyRepositoryOutput,
             CloneEmptyRepositoryError,
-            PushFilesError,
+            PushFilesSuccessError,
+            PushFilesFailError,
             PushTagError,
             PullBranchError,
             PullTagError,
@@ -42,7 +43,7 @@ namespace Bonobo.Git.Server.Test
             {
                 { Definition.CloneEmptyRepositoryOutput, "Cloning into Integration...\r\n" },
                 { Definition.CloneEmptyRepositoryError, "warning: You appear to have cloned an empty repository.\r\n" },
-                { Definition.PushFilesError, "To {0}\r\n * [new branch]      master -> master\r\n" },
+                { Definition.PushFilesSuccessError, "To {0}\r\n * [new branch]      master -> master\r\n" },
                 { Definition.PushTagError, "To {0}\r\n * [new tag]         v1.4 -> v1.4\r\n" },
                 { Definition.PullBranchError, "From {0}\r\n * branch            TestBranch -> FETCH_HEAD\r\n" },
                 { Definition.PullTagError, "From {0}\r\n * [new branch]      TestBranch -> origin/TestBranch\r\n * [new branch]      master     -> origin/master\r\n * [new tag]         v1.4       -> v1.4\r\n" },
@@ -66,6 +67,7 @@ namespace Bonobo.Git.Server.Test
             if (String.Equals(version, "1.9.5")
              || String.Equals(version, "2.6.1"))
             {
+                _resources[Definition.PushFilesFailError] = "fatal: {0}.git/info/refs not valid: is this a git repository?\r\n";
                 _resources[Definition.CloneEmptyRepositoryOutput] = "";
                 _resources[Definition.CloneEmptyRepositoryError] = "Cloning into 'Integration'...\r\nwarning: You appear to have cloned an empty repository.\r\n";
                 _resources[Definition.CloneRepositoryOutput] = "";
