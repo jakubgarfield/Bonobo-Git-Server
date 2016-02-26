@@ -80,11 +80,23 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             {
                 Assert.Fail(string.Format("Please ensure that you have at least one git installation in '{0}'.", string.Join("', '", not_found.Select(n => Path.GetFullPath(n)))));
             }
+            EnsureCredentialHelperStore(installedgits.Last());
+        }
+
+        private void EnsureCredentialHelperStore(Tuple<string, MsysgitResources> tuple)
+        {
+            Directory.CreateDirectory(WorkingDirectory);
+            var git = tuple.Item1;
+            var res = RunGit(git, "config --get credential.helper", WorkingDirectory);
+
+            Assert.AreEqual("store --file=bonobo.randomstring.credentials.txt\r\n", res.Item1);
+            DeleteDirectory(WorkingDirectory);
         }
 
         [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
         public void RunGitTests()
         {
+
             foreach (var gitresource in installedgits)
             {
 
@@ -124,13 +136,12 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             foreach (var gitres in installedgits)
             {
                 Directory.CreateDirectory(WorkingDirectory);
-                string old_helper = null;
                 var git = gitres.Item1;
                 var resource = gitres.Item2;
                 try
                 {
                     Guid repo_id = CreateRepositoryOnWebInterface();
-                    old_helper = DisableCredentialHelper(git);
+                    RemoveStoredCredentials(git);
                     AllowAnonRepoClone(repo_id, false);
                     CloneRepoAnon(git, resource, false);
                     AllowAnonRepoClone(repo_id, true);
@@ -139,7 +150,6 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 }
                 finally
                 {
-                    RestoreCredentialHelper(git, old_helper);
                     DeleteDirectory(WorkingDirectory);
                 }
             }
@@ -173,13 +183,12 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             var gitres = installedgits.Last();
             var git = gitres.Item1;
             var resource = gitres.Item2;
-            string old_helper = null;
             Directory.CreateDirectory(WorkingDirectory);
 
             try
             {
                 var repo_id = CreateRepositoryOnWebInterface();
-                old_helper = DisableCredentialHelper(git);
+                RemoveStoredCredentials(git);
                 AllowAnonRepoClone(repo_id, true);
                 CloneRepoAnon(git, resource, true);
                 CreateIdentity(git);
@@ -194,9 +203,6 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             }
             finally
             {
-                if (old_helper != null){
-                    RestoreCredentialHelper(git, old_helper);
-                }
                 DeleteDirectory(WorkingDirectory);
             }
 
@@ -257,27 +263,9 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             RunGitOnRepo(git, "commit -m \"Commit me!\"");
         }
 
-        private void RestoreCredentialHelper(string git, string old_helper)
+        private void RemoveStoredCredentials(string git)
         {
-            if (old_helper != null)
-            {
-                var helper_location = string.Format("credential.{0}.helper", Url);
-                RunGit(git, "config " + helper_location + " " + old_helper, WorkingDirectory);
-            }
-        }
-
-        private string DisableCredentialHelper(string git)
-        {
-            var helper_location = string.Format("credential.{0}.helper", Url);
-            var result = RunGit(git, "config --get " + helper_location, WorkingDirectory);
-            RunGit(git, "config " + helper_location + " \"\"", WorkingDirectory);
-            var current_helper = result.Item1;
-            var last_newline = current_helper.LastIndexOf('\n');
-            if (last_newline != -1)
-            {
-                current_helper = current_helper.Substring(0, last_newline);
-            }
-            return current_helper;
+            File.Delete("Bonobo.randomstring.credentials.txt");
         }
 
         private void CloneRepoAnon(string git, MsysgitResources resource, bool success)
@@ -429,6 +417,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
         private Tuple<string, string> RunGit(string git, string arguments, string workingDirectory, int timeout = 30000 /* milliseconds */)
         {
+            arguments = "-c credential.helper=\"store --file=bonobo.randomstring.credentials.txt\" " + arguments;
             Console.WriteLine("About to run '{0}' with args '{1}' in '{2}'", git, arguments, workingDirectory);
             Debug.WriteLine("About to run '{0}' with args '{1}' in '{2}'", git, arguments, workingDirectory);
 
