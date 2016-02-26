@@ -37,6 +37,7 @@ pre code { font-family: Consolas, monospace; }
 .pure-form.detail label { color: silver; }
 textarea.medium, input.medium { width: 30em; }
 textarea.large, input.large { width: 40em;height: 17em; }
+div.pure-control-group.checkboxlist>span { display: inline-block; }
 
 
 

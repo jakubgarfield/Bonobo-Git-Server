@@ -1,4 +1,5 @@
-﻿@model Bonobo.Git.Server.Models.TeamEditModel
+﻿@using MvcCheckBoxList.Model
+@model Bonobo.Git.Server.Models.TeamEditModel
 @{    
     ViewBag.Title = Resources.Team_Create_Title;
 }
@@ -20,7 +21,9 @@
         </div> 
         <div class="pure-control-group checkboxlist">
             @Html.LabelFor(m => m.AllUsers)
-            @Html.CheckBoxListFor(m => m.PostedSelectedUsers, m => m.AllUsers, m => m.Id, m => m.DisplayName, m => m.SelectedUsers)
+            <span>
+                @Html.CheckBoxListFor(m => m.PostedSelectedUsers, m => m.AllUsers, m => m.Id, m => m.DisplayName, m => m.SelectedUsers, Position.Vertical)
+            </span>
         </div>
 
         <div class="pure-controls">
