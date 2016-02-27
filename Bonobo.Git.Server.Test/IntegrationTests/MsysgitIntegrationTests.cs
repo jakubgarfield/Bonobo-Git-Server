@@ -133,6 +133,13 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
         public void AnonRepoClone()
         {
+            /* This test can fail if you have any credential.helper setup on your system.
+             * This is because it is a multi-value configuration which cannot (yet) be
+             * unset on the command line or any other way. I have reported it and
+             * maybe a new git version will be able to do it.
+             * See http://article.gmane.org/gmane.comp.version-control.git/287538
+             * and patch status http://article.gmane.org/gmane.comp.version-control.git/287565
+             */
             foreach (var gitres in installedgits)
             {
                 Directory.CreateDirectory(WorkingDirectory);
@@ -156,7 +163,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         }
 
         [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
-        public void NoDeadlockLargeOutput()
+        public void NoDeadlockOnLargeOutput()
         {
             var gitres = installedgits.Last();
             var git = gitres.Item1;
@@ -192,13 +199,16 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 AllowAnonRepoClone(repo_id, true);
                 CloneRepoAnon(git, resource, true);
                 CreateIdentity(git);
-                SetAnonPush(git, false);
                 CreateRandomFile(Path.Combine(RepositoryDirectory, "file.txt"), 0);
                 RunGitOnRepo(git, "add .");
                 RunGitOnRepo(git, "commit -m\"Aw yeah!\"");
+
+                SetAnonPush(git, false);
                 PushFiles(git, resource, false);
+
                 SetAnonPush(git, true);
                 PushFiles(git, resource, true);
+
                 DeleteRepository(repo_id);
             }
             finally
