@@ -48,6 +48,9 @@ namespace Bonobo.Git.Server.Controllers
                                             .AsEnumerable();
             }
 
+            foreach(var item in firstList){
+                SetGitUrls(item);
+            }
             var list = firstList
                     .GroupBy(x => x.Group)
                     .OrderBy(x => x.Key, string.IsNullOrEmpty(sortGroup) || sortGroup.Equals("ASC"))
