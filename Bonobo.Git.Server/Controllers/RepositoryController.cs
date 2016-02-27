@@ -75,7 +75,16 @@ namespace Bonobo.Git.Server.Controllers
             {
                 if (model.PostedSelectedAdministrators.Contains(User.Id()))
                 {
-                    RepositoryRepository.Update(ConvertRepositoryDetailModel(model));
+                    var repo = RepositoryRepository.GetRepository(model.Id);
+                    MoveRepo(repo, ConvertRepositoryDetailModel(model));
+                    try
+                    {
+                        RepositoryRepository.Update(ConvertRepositoryDetailModel(model));
+                    }
+                    catch (System.Data.Entity.Infrastructure.DbUpdateException)
+                    {
+                        MoveRepo(ConvertRepositoryDetailModel(model), repo);
+                    }
                     ViewBag.UpdateSuccess = true;
                 }
                 else
@@ -85,6 +94,23 @@ namespace Bonobo.Git.Server.Controllers
             }
             PopulateCheckboxListData(ref model);
             return View(model);
+        }
+
+        private void MoveRepo(RepositoryModel repo, RepositoryModel model)
+        {
+            if (repo.Name != model.Name)
+            {
+                string old_path = Path.Combine(UserConfiguration.Current.Repositories, repo.Name);
+                string new_path = Path.Combine(UserConfiguration.Current.Repositories, model.Name);
+                try
+                {
+                    Directory.Move(old_path, new_path);
+                }
+                catch (IOException exc)
+                {
+                    ModelState.AddModelError("Name", exc.Message);
+                }
+            }
         }
 
         [WebAuthorize]

@@ -29,9 +29,24 @@ namespace Bonobo.Git.Server.Data
             return ADBackend.Instance.Repositories.ToList();
         }
 
-        public RepositoryModel GetRepository(string name)
+        public override RepositoryModel GetRepository(string name, bool caseSensitive = true)
         {
-            return ADBackend.Instance.Repositories.FirstOrDefault(o => o.Name == name);
+            if (caseSensitive)
+            {
+                var repos = GetAllRepositories();
+                foreach (var repo in repos)
+                {
+                    if (repo.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return repo;
+                    }
+                }
+                return null;
+            }
+            else
+            {
+                return ADBackend.Instance.Repositories.FirstOrDefault(o => o.Name == name);
+            }
         }
         
         public RepositoryModel GetRepository(Guid id)

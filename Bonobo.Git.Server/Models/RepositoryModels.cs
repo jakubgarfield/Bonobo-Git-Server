@@ -75,6 +75,7 @@ namespace Bonobo.Git.Server.Models
     {
         public Guid Id { get; set; }
 
+        [UniqueRepoName]
         [RegularExpression(RepositoryModel.NameValidityRegex, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_FileName_Regex")]
         [FileName(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_FileName")]
         [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]

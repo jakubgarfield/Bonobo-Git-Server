@@ -48,13 +48,33 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public RepositoryModel GetRepository(string name)
+        public override RepositoryModel GetRepository(string name, bool caseSensitive)
         {
             if (name == null) throw new ArgumentNullException("name");
 
             using (var db = CreateContext())
             {
-                return ConvertToModel(db.Repositories.FirstOrDefault(i => i.Name == name));
+                /* The straight-forward solution of using FindFirstOrDefault with
+                 * string.Equal does not work. Even name.Equals with OrdinalIgnoreCase does not
+                 * as it seems to get translated into some specific SQL syntax and EF does not
+                 * provide case insensitive matching :( */
+                if (caseSensitive)
+                {
+                    var repos = GetAllRepositories();
+                    foreach (var repo in repos)
+                    {
+                        if (repo.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return repo;
+                        }
+                    }
+                    return null;
+                }
+                else
+                {
+
+                    return ConvertToModel(db.Repositories.FirstOrDefault(i => i.Name == name));
+                }
             }
         }
 

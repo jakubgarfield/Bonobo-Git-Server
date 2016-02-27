@@ -1521,6 +1521,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A repository with this name already exists!.
+        /// </summary>
+        public static string Repository_Duplicate_Name {
+            get {
+                return ResourceManager.GetString("Repository_Duplicate_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string Repository_Edit_Back {

@@ -605,6 +605,9 @@
   <data name="Repository_Detail_Yes" xml:space="preserve">
     <value>[Ÿęş !!! !!!]</value>
   </data>
+  <data name="Repository_Duplicate_Name" xml:space="preserve">
+    <value>[Å řępőşįŧőřy ŵįŧĥ ŧĥįş ŉämę äľřęäđy ęχįşŧş! !!! !!!]</value>
+  </data>
   <data name="Repository_Edit_Back" xml:space="preserve">
     <value>[ßäčĸ !!! !!! !!!]</value>
   </data>
