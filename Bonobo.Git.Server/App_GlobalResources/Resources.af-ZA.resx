@@ -626,6 +626,9 @@
   <data name="Repository_Git_Url_Copy" xml:space="preserve">
     <value>[Cőpy řępőşįŧőřy ŮŖĿ !!! !!!]</value>
   </data>
+  <data name="Repository_Go_To_Dropdown" xml:space="preserve">
+    <value>[Ğő ŧő řępőşįŧőřy !!! !!!]</value>
+  </data>
   <data name="Repository_History_Title" xml:space="preserve">
     <value>[Ħįşŧőřy !!! !!! !!! !!! !!! !!!]</value>
   </data>
@@ -664,6 +667,9 @@
   </data>
   <data name="Repository_Needs_Administrator" xml:space="preserve">
     <value>[Ŗępőşįŧőřy řęqūįřęş äŧ ľęäşŧ őŉę äđmįŉįşŧřäŧőř. !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_No_Group" xml:space="preserve">
+    <value>[Ńő Ğřőūp !!! !!! !!! !!! !!! !!! !!!]</value>
   </data>
   <data name="Repository_Personal_Git_Url_Copy" xml:space="preserve">
     <value>[Cőpy pęřşőŉäľ řępőşįŧőřy ŮŖĿ !!! !!!]</value>

@@ -53,6 +53,7 @@ table.repositories button.copy-to-clip-button { margin-left: 5px; border-radius:
 .navigation li a:hover,
 .navigation li a:focus { background: none; color: #AECFE5; text-decoration: none; }
 .Repository .navigation .repository, .Account .navigation .users, .Team .navigation .teams, .Settings .navigation .settings { color: #AECFE5; }
+.Repository select.repositories {margin-left: 20px; }
 
 
 .main { min-height: 100%; position: relative; }

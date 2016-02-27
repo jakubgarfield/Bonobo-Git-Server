@@ -883,6 +883,9 @@
   <data name="Repository_Git_Url_Copy" xml:space="preserve">
     <value>Copy repository URL</value>
   </data>
+  <data name="Repository_No_Group" xml:space="preserve">
+    <value>No Group</value>
+  </data>
   <data name="Repository_Personal_Git_Url_Copy" xml:space="preserve">
     <value>Copy personal repository URL</value>
   </data>
@@ -891,5 +894,8 @@
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>
+  </data>
+  <data name="Repository_Go_To_Dropdown" xml:space="preserve">
+    <value>Go to repository</value>
   </data>
 </root>

@@ -9,6 +9,10 @@ else
 {  
     <text>
     <h1>@Model.Name</h1>
+    @{
+        var items = (IEnumerable<SelectListItem>)Html.ViewBag.Repositories;
+        @Html.DropDownList("Repositories", items, Resources.Repository_Go_To_Dropdown, new { @class="repositories", @onChange = "javascript:location.href=this.options[this.selectedIndex].value;" });
+    }
     <div class="pure-menu pure-menu-open pure-menu-horizontal repository-menu">
         <ul>
             <li><a href="@Url.Action("Detail", new { id = ViewBag.ID })" class="detail"><i class="fa fa-hdd-o"></i> @Resources.Repository_Detail_Detail</a></li>

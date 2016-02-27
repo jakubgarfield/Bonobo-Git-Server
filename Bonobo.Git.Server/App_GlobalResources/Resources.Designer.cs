@@ -1584,6 +1584,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Go to repository.
+        /// </summary>
+        public static string Repository_Go_To_Dropdown {
+            get {
+                return ResourceManager.GetString("Repository_Go_To_Dropdown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to History.
         /// </summary>
         public static string Repository_History_Title {
@@ -1697,6 +1706,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Repository_Needs_Administrator {
             get {
                 return ResourceManager.GetString("Repository_Needs_Administrator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Group.
+        /// </summary>
+        public static string Repository_No_Group {
+            get {
+                return ResourceManager.GetString("Repository_No_Group", resourceCulture);
             }
         }
         
