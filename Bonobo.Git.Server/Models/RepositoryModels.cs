@@ -14,6 +14,7 @@ using Bonobo.Git.Server.Attributes;
 using Bonobo.Git.Server.Data;
 
 using LibGit2Sharp;
+using System.Web.Mvc;
 
 namespace Bonobo.Git.Server.Models
 {
@@ -80,10 +81,12 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Name")]
         public string Name { get; set; }
 
+        [AllowHtml]
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Group")]
         [StringLength(255, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
         public string Group { get; set; }
 
+        [AllowHtml]
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Description")]
         [StringLength(255, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
         public string Description { get; set; }

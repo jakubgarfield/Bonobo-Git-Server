@@ -93,8 +93,8 @@
             {
                 <div class="pure-u-1">
                     <h2 class="group">
-                        <span class="toggle" data-group="@(model.Key)"></span>
-                        @Html.Raw(model.Key)
+                        <span class="toggle" data-group="@Html.Encode(model.Key)"></span>
+                        @(model.Key)
                     </h2>
                 </div>
             }
