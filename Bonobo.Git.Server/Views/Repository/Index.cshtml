@@ -50,7 +50,7 @@
         }
         @if (User.IsInRole(Definitions.Roles.Administrator))
         {
-            <form action="@Url.Action("Rescan", new { id = "x" })" method="post" class="inline-form"><button type="submit" class="pure-button pure-button-primary"><i class="fa fa-refresh"></i> Rescan Directory</button></form>
+            <form action="@Url.Action("Rescan", new { id = "x" })" method="post" class="inline-form"><button type="submit" class="pure-button pure-button-primary"><i class="fa fa-refresh"></i>@Resources.Repository_Rescan_Directory</button></form>
         }
     </div>
 </div>
@@ -78,8 +78,8 @@
 @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "pure-form" }))
 {
     <p>
-        Search : @Html.TextBox("SearchString")
-        <input type="submit" value="Search" class="pure-button pure-button-primary" />
+        @Html.TextBox("SearchString")
+        <input type="submit" value="@Resources.Search" class="pure-button pure-button-primary" />
     </p>
 }
 

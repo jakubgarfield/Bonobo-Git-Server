@@ -877,4 +877,19 @@
   <data name="Repository_Needs_Administrator" xml:space="preserve">
     <value>Repository requires at least one administrator.</value>
   </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Repository_Git_Url_Copy" xml:space="preserve">
+    <value>Copy repository URL</value>
+  </data>
+  <data name="Repository_Personal_Git_Url_Copy" xml:space="preserve">
+    <value>Copy personal repository URL</value>
+  </data>
+  <data name="Repository_Rescan_Directory" xml:space="preserve">
+    <value>Rescan directory</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
 </root>

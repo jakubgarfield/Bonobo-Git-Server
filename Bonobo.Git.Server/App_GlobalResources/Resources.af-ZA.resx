@@ -252,6 +252,9 @@
   <data name="Confirm" xml:space="preserve">
     <value>[Cőŉƒįřm !!! !!! !!! !!! !!! !!!]</value>
   </data>
+  <data name="Copy" xml:space="preserve">
+    <value>[Cőpy !!! !!! !!!]</value>
+  </data>
   <data name="Delete_Back" xml:space="preserve">
     <value>[ßäčĸ !!! !!! !!!]</value>
   </data>
@@ -620,6 +623,9 @@
   <data name="Repository_Edit_UpdateSuccess" xml:space="preserve">
     <value>[Ŗępőşįŧőřy ŵäş ūpđäŧęđ şūččęşşƒūľľy. !!! !!!]</value>
   </data>
+  <data name="Repository_Git_Url_Copy" xml:space="preserve">
+    <value>[Cőpy řępőşįŧőřy ŮŖĿ !!! !!!]</value>
+  </data>
   <data name="Repository_History_Title" xml:space="preserve">
     <value>[Ħįşŧőřy !!! !!! !!! !!! !!! !!!]</value>
   </data>
@@ -658,6 +664,12 @@
   </data>
   <data name="Repository_Needs_Administrator" xml:space="preserve">
     <value>[Ŗępőşįŧőřy řęqūįřęş äŧ ľęäşŧ őŉę äđmįŉįşŧřäŧőř. !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Personal_Git_Url_Copy" xml:space="preserve">
+    <value>[Cőpy pęřşőŉäľ řępőşįŧőřy ŮŖĿ !!! !!!]</value>
+  </data>
+  <data name="Repository_Rescan_Directory" xml:space="preserve">
+    <value>[Ŗęşčäŉ đįřęčŧőřy !!! !!!]</value>
   </data>
   <data name="Repository_SwitchBranch" xml:space="preserve">
     <value>[Ŝŵįŧčĥ čūřřęŉŧ þřäŉčĥ !!! !!!]</value>
@@ -701,14 +713,14 @@
   <data name="Repository_Tree_Zip" xml:space="preserve">
     <value>[Đőŵŉľőäđ !!! !!! !!! !!! !!! !!! !!!]</value>
   </data>
-  <data name="Repository_Url_Copy" xml:space="preserve">
-    <value>[Cőpy !!! !!! !!!]</value>
-  </data>
   <data name="Repository_UsersHint" xml:space="preserve">
     <value>[Ůşęřş ĥävę äččęşş ŧő ŧĥę řępőşįŧőřy. Ŧĥęy čäŉ čľőŉę, pūşĥ őř pūľľ äŉđ vįęŵ řępőşįŧőřy męŧäđäŧä. !!! !!! !!! !!! !!! !!!]</value>
   </data>
   <data name="Reset" xml:space="preserve">
     <value>[Ŗęşęŧ !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>[Ŝęäřčĥ !!! !!! !!! !!! !!!]</value>
   </data>
   <data name="Settings_Global_AllowAnonymousPush" xml:space="preserve">
     <value>[Åľľőŵ pūşĥ ƒőř äŉőŉymőūş řępőşįŧőřįęş !!! !!!]</value>

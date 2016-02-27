@@ -525,6 +525,9 @@
     <Content Include="App_Data\Git\wish85.exe" />
     <Content Include="App_Data\Git\xargs.exe" />
     <Content Include="App_Data\Repositories\note.txt" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.af-ZA.resx">
+      <LastGenOutput>Resources.af-ZA.designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <Content Include="bin\NativeBinaries\amd64\git2-e0902fb.dll" />
     <Content Include="bin\NativeBinaries\x86\git2-e0902fb.dll" />
     <Content Include="bin\x64\SQLite.Interop.dll">
