@@ -585,7 +585,7 @@ namespace Bonobo.Git.Server.Controllers
                 Users = model.Users,
                 Administrators = model.Administrators,
                 Teams = model.Teams,
-                IsCurrentUserAdministrator = model.Administrators.Select(x => x.Username).Contains(User.Username(), StringComparer.OrdinalIgnoreCase),
+                IsCurrentUserAdministrator = model.Administrators.Select(x => x.Id).Contains(User.Id()),
                 AllowAnonymous = model.AnonymousAccess,
                 Status = GetRepositoryStatus(model),
                 AuditPushUser = model.AuditPushUser,

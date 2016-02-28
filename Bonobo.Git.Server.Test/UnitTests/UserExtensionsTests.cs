@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Bonobo.Git.Server.Test.UnitTests
 {
     [TestClass]
-    public class HelperTests
+    public class UserExtensionsTests
     {
         const string domainslashusername = @"domain.alsodomain\username";
         const string usernameatdomain = "username@domain.alsodomain";

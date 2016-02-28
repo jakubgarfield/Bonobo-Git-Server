@@ -146,8 +146,8 @@ namespace Bonobo.Git.Server.Data
         {
             foreach(RepositoryModel repository in Repositories)
             {
-                UserModel[] usersToRemove = repository.Users.Where(x => !Users.Select(u => u.Username).Contains(x.Username, StringComparer.OrdinalIgnoreCase)).ToArray();
-                TeamModel[] teamsToRemove = repository.Teams.Where(x => !Teams.Select(u => u.Name).Contains(x.Name, StringComparer.OrdinalIgnoreCase)).ToArray();
+                UserModel[] usersToRemove = repository.Users.Where(repoUser => !Users.Select(u => u.Id).Contains(repoUser.Id)).ToArray();
+                TeamModel[] teamsToRemove = repository.Teams.Where(repoTeam => !Teams.Select(team => team.Id).Contains(repoTeam.Id)).ToArray();
                 repository.Users = repository.Users.Except(usersToRemove).ToArray();
                 repository.Teams = repository.Teams.Except(teamsToRemove).ToArray();
                 if (usersToRemove.Length > 0 || teamsToRemove.Length > 0)
