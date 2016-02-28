@@ -143,23 +143,25 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="MembershipTests\ADBackendStoreTest.cs" />
-    <Compile Include="MembershipTests\ADMembershipServiceTest.cs" />
-    <Compile Include="MembershipTests\ADMembershipServiceTestFacade.cs" />
-    <Compile Include="MembershipTests\ADRepositoryRepositoryServiceTest.cs" />
-    <Compile Include="MembershipTests\ADTestSupport.cs" />
-    <Compile Include="MembershipTests\EFPermissionServiceTest.cs" />
+    <Compile Include="MembershipTests\ADTests\ADBackendStoreTest.cs" />
+    <Compile Include="MembershipTests\ADTests\ADMembershipServiceTest.cs" />
+    <Compile Include="MembershipTests\ADTests\ADMembershipServiceTestFacade.cs" />
+    <Compile Include="MembershipTests\ADTests\ADPermissionServiceTest.cs" />
+    <Compile Include="MembershipTests\ADTests\ADRepositoryRepositoryServiceTest.cs" />
+    <Compile Include="MembershipTests\ADTests\ADTestSupport.cs" />
+    <Compile Include="MembershipTests\EFTests\EFPermissionServiceTest.cs" />
     <Compile Include="IntegrationTests\Controller\RepositoryControllerTests.cs" />
-    <Compile Include="MembershipTests\EFRepositoryRepositoryTest.cs" />
+    <Compile Include="MembershipTests\EFTests\EFRepositoryRepositoryTest.cs" />
+    <Compile Include="MembershipTests\PermissionServiceTestBase.cs" />
     <Compile Include="MembershipTests\RepositoryRepositoryTestBase.cs" />
-    <Compile Include="MembershipTests\EFRoleProviderTest.cs" />
-    <Compile Include="MembershipTests\EFMembershipServiceTest.cs" />
-    <Compile Include="MembershipTests\EFSqliteMembershipServiceTest.cs" />
-    <Compile Include="MembershipTests\EFSqlServerMembershipServiceTest.cs" />
-    <Compile Include="MembershipTests\EFTeamRepositoryTests.cs" />
+    <Compile Include="MembershipTests\EFTests\EFRoleProviderTest.cs" />
+    <Compile Include="MembershipTests\EFTests\EFMembershipServiceTest.cs" />
+    <Compile Include="MembershipTests\EFTests\EFSqliteMembershipServiceTest.cs" />
+    <Compile Include="MembershipTests\EFTests\EFSqlServerMembershipServiceTest.cs" />
+    <Compile Include="MembershipTests\EFTests\EFTeamRepositoryTests.cs" />
     <Compile Include="MembershipTests\MembershipServiceTestBase.cs" />
-    <Compile Include="MembershipTests\SqliteTestConnection.cs" />
-    <Compile Include="MembershipTests\SqlServerTestConnection.cs" />
+    <Compile Include="MembershipTests\EFTests\SqliteTestConnection.cs" />
+    <Compile Include="MembershipTests\EFTests\SqlServerTestConnection.cs" />
     <Compile Include="IntegrationTests\AssemblyStartup.cs" />
     <Compile Include="IntegrationTests\Controller\AccountControllerTests.cs" />
     <Compile Include="IntegrationTests\MsysgitIntegrationTests.cs" />

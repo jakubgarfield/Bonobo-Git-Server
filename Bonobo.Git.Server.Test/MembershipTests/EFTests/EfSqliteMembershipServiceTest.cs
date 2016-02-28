@@ -1,9 +1,6 @@
-using Bonobo.Git.Server.Data;
-using Bonobo.Git.Server.Data.Update;
-using Bonobo.Git.Server.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bonobo.Git.Server.Test.MembershipTests
+namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 {
     /// <summary>
     /// EF Membership tests using in-memory Sqlite

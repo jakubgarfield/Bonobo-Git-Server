@@ -7,7 +7,7 @@ using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bonobo.Git.Server.Test.MembershipTests
+namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 {
     [TestClass]
     public class EFSqliteTeamRepositoryTests : EFTeamRepositoryTests

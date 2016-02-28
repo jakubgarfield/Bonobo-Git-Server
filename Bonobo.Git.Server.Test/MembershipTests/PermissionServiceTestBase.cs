@@ -1,48 +1,17 @@
-﻿using System;
+using System;
 using Bonobo.Git.Server.Data;
-using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bonobo.Git.Server.Test.MembershipTests
 {
-    [TestClass]
-    public class EFSqlitePermissionServiceTest : EFPermissionServiceTest
+    public abstract class PermissionServiceTestBase
     {
-        [TestInitialize]
-        public void Initialize()
-        {
-            _connection = new SqliteTestConnection();
-            InitialiseTestObjects();
-        }
-        [TestCleanup]
-        public void Cleanup()
-        {
-            _connection.Dispose();
-        }
-    }
-
-    [TestClass]
-    public class EfSqlServerPermissionServiceTest : EFPermissionServiceTest
-    {
-        [TestInitialize]
-        public void Initialize()
-        {
-            _connection = new SqlServerTestConnection();
-            InitialiseTestObjects();
-        }
-        [TestCleanup]
-        public void Cleanup()
-        {
-            _connection.Dispose();
-        }
-    }
-
-    public abstract class EFPermissionServiceTest
-    {
-        protected IDatabaseTestConnection _connection;
-        private IRepositoryPermissionService _service;
+        protected IRepositoryPermissionService _service;
+        protected ITeamRepository _teams;
+        protected IMembershipService _users;
+        protected IRepositoryRepository _repos;
 
         [TestMethod]
         public void NonExistentRepositoryByNameReturnsFalse()
@@ -114,8 +83,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
 
             // Add the member to the team
             team.Members = new[] {user};
-            EFTeamRepository teams = new EFTeamRepository { CreateContext = GetContext };
-            teams.Update(team);
+            UpdateTeam(team);
 
             Assert.IsTrue(CheckPermission(user.Id, repoId));
         }
@@ -175,23 +143,22 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         private bool CheckPermission(Guid userId, Guid repoId)
         {
             bool byGuid = _service.HasPermission(userId, repoId);
-            EFRepositoryRepository repoRepo = new EFRepositoryRepository { CreateContext = GetContext };
-            bool byName = _service.HasPermission(userId, repoRepo.GetRepository(repoId).Name);
+            bool byName = _service.HasPermission(userId, _repos.GetRepository(repoId).Name);
             Assert.IsTrue(byGuid == byName);
             return byGuid;
         }
 
-        private Guid AddRepo(string name)
+        private UserModel AddUser()
         {
-            var newRepo = new RepositoryModel();
-            newRepo.Name = name;
-            newRepo.Users = new UserModel[0];
-            newRepo.Administrators = new UserModel[0];
-            newRepo.Teams = new TeamModel[0];
+            _users.CreateUser("fred", "letmein", "Fred", "FredBlogs", "fred@aol");
+            return _users.GetUserModel("fred");
+        }
 
-            EFRepositoryRepository repoRepo = new EFRepositoryRepository { CreateContext = GetContext };
-            Assert.IsTrue(repoRepo.Create(newRepo));
-            return newRepo.Id;
+        protected abstract TeamModel CreateTeam();
+
+        private Guid GetAdminId()
+        {
+            return _users.GetUserModel("Admin").Id;
         }
 
         private void AddUserToRepo(Guid repoId, UserModel user)
@@ -209,48 +176,25 @@ namespace Bonobo.Git.Server.Test.MembershipTests
             UpdateRepo(repoId, repo => repo.Teams = new[] { team });
         }
 
-        private void UpdateRepo(Guid repoId, Action<RepositoryModel> transform)
+        protected abstract void UpdateTeam(TeamModel team);
+
+        protected virtual void UpdateRepo(Guid repoId, Action<RepositoryModel> transform)
         {
-            EFRepositoryRepository repoRepo = new EFRepositoryRepository { CreateContext = GetContext };
-            var repo = repoRepo.GetRepository(repoId);
+            var repo = _repos.GetRepository(repoId);
             transform(repo);
-            repoRepo.Update(repo);
+            _repos.Update(repo);
         }
 
-        private UserModel AddUser()
+        protected virtual Guid AddRepo(string name)
         {
-            EFMembershipService memberService = new EFMembershipService { CreateContext = GetContext };
-            memberService.CreateUser("fred", "letmein", "Fred", "FredBlogs", "fred@aol");
-            return memberService.GetUserModel("fred");
-        }
+            var newRepo = new RepositoryModel();
+            newRepo.Name = name;
+            newRepo.Users = new UserModel[0];
+            newRepo.Administrators = new UserModel[0];
+            newRepo.Teams = new TeamModel[0];
 
-        private TeamModel CreateTeam()
-        {
-            EFTeamRepository teams = new EFTeamRepository { CreateContext = GetContext };
-            var newTeam = new TeamModel { Name = "Team1" };
-            teams.Create(newTeam);
-            return newTeam;
-        }
-
-        private Guid GetAdminId()
-        {
-            EFMembershipService memberService = new EFMembershipService { CreateContext = GetContext };
-            return memberService.GetUserModel("Admin").Id;
-        }
-
-        protected void InitialiseTestObjects()
-        {
-            _service = new EFRepositoryPermissionService
-            {
-                CreateContext = () => _connection.GetContext(),
-                Repository = new EFRepositoryRepository {CreateContext = () => _connection.GetContext()}
-            };
-            new AutomaticUpdater().RunWithContext(_connection.GetContext());
-        }
-
-        private BonoboGitServerContext GetContext()
-        {
-            return _connection.GetContext();
+            Assert.IsTrue(_repos.Create(newRepo));
+            return newRepo.Id;
         }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
 
@@ -21,30 +18,42 @@ namespace Bonobo.Git.Server.Security
         [Dependency]
         public ITeamRepository TeamRepository { get; set; }
         
-        [Dependency]
-        public IMembershipService MemberShipService { get; set; } 
-
         public bool AllowsAnonymous(string repositoryName)
         {
-            return Repository.GetRepository(repositoryName).AnonymousAccess;
+            var repository = Repository.GetRepository(repositoryName);
+            return repository != null && repository.AnonymousAccess;
         }
 
         public bool AllowsAnonymous(Guid repositoryId)
         {
-            return Repository.GetRepository(repositoryId).AnonymousAccess;
+            try
+            {
+                return Repository.GetRepository(repositoryId).AnonymousAccess;
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
         }
 
         public bool HasPermission(Guid userId, string repositoryName)
         {
-            return HasPermission(userId, Repository.GetRepository(repositoryName).Id);
+            var repository = Repository.GetRepository(repositoryName);
+            return repository != null && HasPermission(userId, repository.Id);
         }
 
         public bool HasPermission(Guid userId, Guid repositoryId)
         {
             bool result = false;
-
-            RepositoryModel repositoryModel = Repository.GetRepository(repositoryId);
-            UserModel user = MemberShipService.GetUserModel(userId);
+            RepositoryModel repositoryModel;
+            try
+            {
+                repositoryModel = Repository.GetRepository(repositoryId);
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
 
             result |= repositoryModel.Users.Any(x => x.Id == userId);
             result |= repositoryModel.Administrators.Any(x => x.Id == userId);

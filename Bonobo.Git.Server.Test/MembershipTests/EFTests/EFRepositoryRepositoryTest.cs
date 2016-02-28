@@ -1,13 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using Bonobo.Git.Server.Data;
+﻿using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bonobo.Git.Server.Test.MembershipTests
+namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 {
     [TestClass]
     public class EFSqliteRepositoryRepositoryTest : EFRepositoryRepositoryTest

@@ -4,8 +4,9 @@ using System.Linq;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bonobo.Git.Server.Test.MembershipTests
+namespace Bonobo.Git.Server.Test.MembershipTests.ADTests
 {
     /// <summary>
     ///  This is a wrapper on the ADMembershipService which implements various functions
@@ -21,6 +22,10 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         {
             _service = service;
             _testSupport = testSupport;
+
+            ADBackend.Instance.Users.Add(new UserModel() { Username = "admin", Id = Guid.NewGuid() });
+            ADBackend.Instance.Roles.Add(new RoleModel() { Name  = "Administrator", Id = Guid.NewGuid(), Members = new[] { "admin"}});
+            Assert.AreEqual(1, ADBackend.Instance.Users.Count());
         }
 
         public bool IsReadOnly()

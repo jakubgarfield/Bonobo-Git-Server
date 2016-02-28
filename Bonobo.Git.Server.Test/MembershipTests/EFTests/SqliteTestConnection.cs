@@ -2,7 +2,7 @@ using System;
 using System.Data.Common;
 using Bonobo.Git.Server.Data;
 
-namespace Bonobo.Git.Server.Test.MembershipTests
+namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 {
     public interface IDatabaseTestConnection : IDisposable
     {

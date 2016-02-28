@@ -3,7 +3,7 @@ using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bonobo.Git.Server.Test.MembershipTests
+namespace Bonobo.Git.Server.Test.MembershipTests.ADTests
 {
     [TestClass]
     public class ADRepositoryRepositoryServiceTest : RepositoryRepositoryTestBase

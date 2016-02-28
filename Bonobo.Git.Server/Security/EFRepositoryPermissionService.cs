@@ -31,7 +31,7 @@ namespace Bonobo.Git.Server.Security
                 var repository = database.Repositories.FirstOrDefault(i => i.Id == repositoryId);
                 if (user != null && repository != null)
                 {
-                    if (user.Roles.FirstOrDefault(i => i.Name == Definitions.Roles.Administrator) != null
+                    if (user.Roles.Any(i => i.Name == Definitions.Roles.Administrator)
                      || user.Repositories.FirstOrDefault(i => i.Id == repositoryId) != null
                      || user.AdministratedRepositories.FirstOrDefault(i => i.Id == repositoryId) != null
                      || user.Teams.Select(i => i.Name).FirstOrDefault(t => repository.Teams.Select(i => i.Name).Contains(t)) != null)

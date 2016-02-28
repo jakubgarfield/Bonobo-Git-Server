@@ -5,7 +5,7 @@ using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bonobo.Git.Server.Test.MembershipTests
+namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 {
     [TestClass]
     public class EFSqliteRoleProviderTest : EFRoleProviderTest
