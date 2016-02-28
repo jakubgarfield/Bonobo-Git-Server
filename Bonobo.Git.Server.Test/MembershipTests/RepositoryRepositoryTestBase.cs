@@ -35,6 +35,13 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         }
 
         [TestMethod]
+        public void RepoNameDifferentCaseCannotBeCreated()
+        {
+            Assert.IsTrue(_repo.Create(MakeRepo("name")));
+            Assert.IsFalse(_repo.Create(MakeRepo("NAME")));
+        }
+
+        [TestMethod]
         public void RespositoryWithUsersCanBeAdded()
         {
             var newRepo = MakeRepo("Repo1");

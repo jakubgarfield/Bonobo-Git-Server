@@ -15,7 +15,8 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
                         [Id] Char(36) PRIMARY KEY NOT NULL,
                         [Name] VarChar(255) Not Null UNIQUE,
                         [Description] VarChar(255) Null,
-                        [Anonymous] Bit Not Null
+                        [Anonymous] Bit Not Null,
+                        UNIQUE ([Name] COLLATE NOCASE)
                     );
 
                     CREATE TABLE IF NOT EXISTS [Role] (
