@@ -93,7 +93,7 @@
             {
                 <div class="pure-u-1">
                     <h2 class="group">
-                        <span class="toggle" data-group="@Html.Encode(model.Key)"></span>
+                        <span class="toggle" data-group="@(model.Key)"></span>
                         @(model.Key)
                     </h2>
                 </div>
@@ -103,7 +103,6 @@
                 @{
                     var permitted = new WebGrid(source: model.Value, defaultSort: "Name", rowsPerPage: 15);
 
-                    var groupColumn = new [] { permitted.Column(format: (item) => Html.Raw(string.Empty), style: "action") };
                     var columns = permitted.Columns(
                         permitted.Column(
                             format: item => Html.Raw(item.Logo.Exists ? string.Format("<img src='data:image/png;base64,{0}' class='repo-logo' />", item.Logo.Base64Image) : ""),
@@ -111,9 +110,7 @@
                         ),
                         permitted.Column("Name",
                             header: typeof (RepositoryDetailModel).GetDisplayValue("Name"),
-                            format: (item) =>
-                                {
-                                var text = Html.ActionLink(
+                            format: (item) => Html.ActionLink(
                                     GetNameToDisplay((string) item.Name, (RepositoryDetailStatus) item.Status),
                                                                     
                                     "Detail",
@@ -123,21 +120,19 @@
                                         @class = "RepositoryName detail" + (item.Logo.Exists ? " customLogo" : ""),
                                         @id = "repo_" + item.Id,
                                     }
-                                    ).ToHtmlString() + 
-                                    Html.Raw("<button class=\"pure-button copy-to-clip-button\" data-clipboard-text=\""+Html.Encode(item.GitUrl)+"\"><i class=\"fa fa-copy\" title=\""+Resources.Repository_Git_Url_Copy+"\"></i></button>") +
-                                    Html.Raw("<button class=\"pure-button copy-to-clip-button\" data-clipboard-text=\""+Html.Encode(item.PersonalGitUrl)+"\"><i class=\"fa fa-copy\" title=\""+Resources.Repository_Personal_Git_Url_Copy+"\"></i></button>");
-                                    return Html.Raw(text);
-                                }
+                                    )
                         ),
                         
                         permitted.Column("Description", typeof (RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string) item.Description).Length > 100)) ? ((string) item.Description).Substring(0, 100) + " ... " : item.Description, style: "description"),
+                        permitted.Column(format: (item) => Html.Raw("<button class=\"pure-button pure-button-primary copy-to-clip-button\" title=\""+Resources.Repository_Git_Url_Copy+"\" data-clipboard-text=\""+Html.Encode(item.GitUrl)+"\"><i class=\"fa fa-copy\" ></i></button>"), style: "action"),
+                        permitted.Column(format: (item) => Html.Raw("<button class=\"pure-button pure-button-primary copy-to-clip-button\" title=\""+Resources.Repository_Personal_Git_Url_Copy+"\" data-clipboard-text=\""+Html.Encode(item.PersonalGitUrl)+"\"><i class=\"fa fa-user\"></i><i class=\"fa fa-copy\"></i></button>"), style: "action"),
                         permitted.Column(format: (item) => Html.ActionLink(" ", "Edit", new {id = item.Id}, new {@class = "edit", title = Resources.Grid_Edit}), style: "action"),
                         permitted.Column(format: (item) => Html.ActionLink(" ", "Delete", new {id = item.Id}, new {@class = "delete", title = Resources.Grid_Delete}), style: "action")
                         );
 
                     @permitted.GetHtml(
                         tableStyle: "pure-table repositories",
-                        columns: (emptyGroup) ? columns : groupColumn.Concat(columns),
+                        columns: columns,
                         htmlAttributes: new { @Id = "Repositories" }
                         )
                 }

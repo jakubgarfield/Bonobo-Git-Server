@@ -41,7 +41,7 @@ div.pure-control-group.checkboxlist>span { display: inline-block; }
 
 
 /*table.repositories a.detail { padding-right: 10px }*/
-table.repositories button.copy-to-clip-button { margin-left: 5px; border-radius: 5px; }
+table.repositories button.copy-to-clip-button { margin-left: 0px; border-radius: 5px; }
 
 .navigation { padding: 0.5em 0; text-align: right;}
 .navigation.pure-menu a.pure-menu-heading { color: white; font-weight: 300; font-size: 1.2em; background: url('images/git-logo.png') no-repeat 0 4px; padding-left: 40px; float: left; margin-left: 0.5em;}
