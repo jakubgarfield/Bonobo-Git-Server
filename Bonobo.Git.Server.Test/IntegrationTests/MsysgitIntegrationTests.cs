@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 
 using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
+using OpenQA.Selenium.Support.UI;
 
 namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 {
@@ -347,6 +348,8 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             var form = app.FindFormFor<GlobalSettingsModel>();
             var field =  form.Field(f => f.AllowAnonymousPush);
             SetCheckbox(field, allowAnonymousPush);
+            var languages = new SelectElement(form.Field(f => f.DefaultLanguage).Field);
+            languages.SelectByValue("en-US");
             form.Submit();
         }
 
