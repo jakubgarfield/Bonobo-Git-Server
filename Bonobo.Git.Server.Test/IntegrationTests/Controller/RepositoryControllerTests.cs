@@ -6,47 +6,13 @@ using SpecsFor.Mvc;
 
 using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
-
-
-namespace Bonobo.Git.Server
-{
-    public static class UserExtensions
-    {
-
-        // http://stackoverflow.com/questions/915745/thoughts-on-foreach-with-enumerable-range-vs-traditional-for-loop
-        public static IEnumerable<int> To(this int from, int to)
-        {
-            if (from < to)
-            {
-                while (from <= to)
-                {
-                    yield return from++;
-                }
-            }
-            else
-            {
-                while (from >= to)
-                {
-                    yield return from--;
-                }
-            }
-        }
-
-        public static IEnumerable<T> Step<T>(this IEnumerable<T> source, int step)
-        {
-            if (step == 0)
-            {
-                throw new ArgumentOutOfRangeException("step", "Param cannot be zero.");
-            }
-
-            return source.Where((x, i) => (i % step) == 0);
-        }
-    }
-}
-
+using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
+    using ITH = IntegrationTestHelpers;
+    using OpenQA.Selenium.Support.UI; 
+
     [TestClass]
     public class RepositoryControllerTests
     {
@@ -55,7 +21,6 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         [ClassInitialize]
         public static void MyClassInitialize(TestContext testContext)
         {
-            //arrange
             app = new MvcWebApp();
         }
 
@@ -68,7 +33,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void EnsureCheckboxesStayCheckOnCreateError()
         {
-            CreateUsers(1);
+            ITH.CreateUsers(app, 1);
             app.NavigateTo<RepositoryController>(c => c.Create());
             var form = app.FindFormFor<RepositoryDetailModel>();
             var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("form.pure-form>fieldset>div.pure-control-group.checkboxlist>input");
@@ -91,25 +56,106 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             
         }
 
-        public IEnumerable<Guid> CreateUsers(int count = 1, int start = 0){
-            var guids = new List<Guid>();
-            foreach (int i in start.To(start + count - 1))
-            {
-                var index = i.ToString();
-                app.NavigateTo<AccountController>(c => c.Create());
-                app.FindFormFor<UserCreateModel>()
-                    .Field(f => f.Username).SetValueTo("TestUser" + index)
-                    .Field(f => f.Name).SetValueTo("Uname" + index)
-                    .Field(f => f.Surname).SetValueTo("Surname" + index)
-                    .Field(f => f.Email).SetValueTo("mail" + index + "@domain.com")
-                    .Field(f => f.Password).SetValueTo("aaa")
-                    .Field(f => f.ConfirmPassword).SetValueTo("aaa")
-                    .Submit();
-                var item = app.Browser.FindElementByXPath("//div[@class='summary-success']/p");
-                string id = item.GetAttribute("id");
-                guids.Add(new Guid(id));
-            }
-            return guids;
+        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        public void CreateDuplicateRepoNameDifferentCaseNotAllowed()
+        {
+            var reponame = "A_Nice_Repo";
+            var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame);
+
+            app.NavigateTo<RepositoryController>(c => c.Create());
+            app.FindFormFor<RepositoryDetailModel>()
+                .Field(f => f.Name).SetValueTo(reponame.ToUpper())
+                .Submit();
+
+            app.FindFormFor<RepositoryDetailModel>()
+                .Field(f => f.Name).ShouldBeInvalid();
+
+            ITH.DeleteRepository(app, id1);
+
+        }
+
+        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        public void CreateDuplicateRepoNameNotAllowed()
+        {
+            var reponame = "A_Nice_Repo";
+            var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame);
+
+            app.NavigateTo<RepositoryController>(c => c.Create());
+            app.FindFormFor<RepositoryDetailModel>()
+                .Field(f => f.Name).SetValueTo(reponame)
+                .Submit();
+
+            app.FindFormFor<RepositoryDetailModel>()
+                .Field(f => f.Name).ShouldBeInvalid();
+
+            ITH.DeleteRepository(app, id1);
+
+        }
+
+        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        public void RenameRepoToExistingRepoNameNotAllowed()
+        {
+            var reponame = "A_Nice_Repo";
+            var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame);
+            var id2 = ITH.CreateRepositoryOnWebInterface(app, "other_name");
+
+            app.NavigateTo<RepositoryController>(c => c.Edit(id2));
+            app.FindFormFor<RepositoryDetailModel>()
+                .Field(f => f.Name).SetValueTo(reponame)
+                .Submit();
+
+            app.FindFormFor<RepositoryDetailModel>()
+                .Field(f => f.Name).ShouldBeInvalid();
+
+            ITH.DeleteRepository(app, id1);
+            ITH.DeleteRepository(app, id2);
+
+        }
+
+        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        public void RenameRepoToExistingRepoNameNotAllowedDifferentCase()
+        {
+            var reponame = "A_Nice_Repo";
+            var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame);
+            var id2 = ITH.CreateRepositoryOnWebInterface(app, "other_name");
+
+            app.NavigateTo<RepositoryController>(c => c.Edit(id2));
+            app.FindFormFor<RepositoryDetailModel>()
+                .Field(f => f.Name).SetValueTo(reponame.ToUpper())
+                .Submit();
+
+            app.FindFormFor<RepositoryDetailModel>()
+                .Field(f => f.Name).ShouldBeInvalid();
+
+            ITH.DeleteRepository(app, id1);
+            ITH.DeleteRepository(app, id2);
+
+        }
+
+        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        public void DropdownNavigationWorks()
+        {
+            var reponame = "A_Nice_Repo";
+            var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame);
+            var id2 = ITH.CreateRepositoryOnWebInterface(app, "other_name");
+
+            app.NavigateTo<RepositoryController>(c => c.Detail(id2));
+
+            var element = app.Browser.FindElementByCssSelector("select#Repositories");
+            var dropdown = new SelectElement(element);
+            dropdown.SelectByText(reponame);
+
+            app.UrlMapsTo<RepositoryController>(c => c.Detail(id1));
+
+
+            dropdown = new SelectElement(app.Browser.FindElementByCssSelector("select#Repositories"));
+            dropdown.SelectByText("other_name");
+
+            app.UrlMapsTo<RepositoryController>(c => c.Detail(id2));
+
+            ITH.DeleteRepository(app, id1);
+            ITH.DeleteRepository(app, id2);
+
         }
 
     }

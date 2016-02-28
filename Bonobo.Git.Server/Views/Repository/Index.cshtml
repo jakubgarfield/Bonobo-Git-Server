@@ -120,9 +120,8 @@
                                     new { id = item.Id },
                                     new
                                     {
-                                        @class = "detail" + (item.Logo.Exists ? " customLogo" : ""),
-                                        @id = "Name",
-                                        @data_repo_id = item.Id
+                                        @class = "RepositoryName detail" + (item.Logo.Exists ? " customLogo" : ""),
+                                        @id = "repo_" + item.Id,
                                     }
                                     ).ToHtmlString() + 
                                     Html.Raw("<button class=\"pure-button copy-to-clip-button\" data-clipboard-text=\""+Html.Encode(item.GitUrl)+"\"><i class=\"fa fa-copy\" title=\""+Resources.Repository_Git_Url_Copy+"\"></i></button>") +
