@@ -7,6 +7,7 @@ using SpecsFor.Mvc;
 using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
+using Bonobo.Git.Server.Test.IntegrationTests;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
@@ -28,6 +29,12 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         public static void Cleanup()
         {
             app.Browser.Close();
+        }
+
+        [TestInitialize]
+        public void InitTests()
+        {
+            ITH.Login(app);
         }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]

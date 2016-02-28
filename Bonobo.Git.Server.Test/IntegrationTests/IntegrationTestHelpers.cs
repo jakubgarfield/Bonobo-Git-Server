@@ -49,6 +49,16 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
 {
     static class IntegrationTestHelpers
     {
+        public static void Login(MvcWebApp app)
+        {
+            app.NavigateTo<HomeController>(c => c.LogOn("/Account"));
+            app.FindFormFor<LogOnModel>()
+                .Field(f => f.Username).SetValueTo("admin")
+                .Field(f => f.Password).SetValueTo("admin")
+                .Submit();
+            app.UrlMapsTo<AccountController>(c => c.Index());
+        }
+
         public static Guid CreateRepositoryOnWebInterface(MvcWebApp app, string name)
         {
             app.NavigateTo<RepositoryController>(c => c.Create());

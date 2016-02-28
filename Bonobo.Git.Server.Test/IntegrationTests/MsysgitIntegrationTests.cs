@@ -94,6 +94,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         public void Initialize()
         {
             DeleteDirectory(WorkingDirectory);
+            IntegrationTestHelpers.Login(app);
         }
 
         [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]

@@ -15,18 +15,6 @@ namespace Bonobo.Git.Server.IntegrationTests
     {
         private static SpecsForIntegrationHost _host;
 
-        class AuthHandler : SpecsFor.Mvc.Authentication.IHandleAuthentication
-        {
-            public void Authenticate(MvcWebApp app)
-            {
-                app.NavigateTo<HomeController>(c => c.LogOn("/Account"));
-                app.FindFormFor<LogOnModel>()
-                    .Field(f => f.Username).SetValueTo("admin")
-                    .Field(f => f.Password).SetValueTo("admin")
-                    .Submit();
-            }
-        }
-
         [AssemblyInitialize()]
         static public void AssemblyInit(TestContext tc)
         {
@@ -49,7 +37,11 @@ namespace Bonobo.Git.Server.IntegrationTests
             //for Chrome is planned for a future release.
             config.UseBrowser(BrowserDriver.InternetExplorer);
 
-            config.AuthenticateBeforeEachTestUsing<AuthHandler>();
+            // We cannot use the authenticate before each step helper
+            // because it is only executed once per class.
+            // So if class A test1 runs, then class B test2 (this leaves us logged out)
+            // then class A test2 (which assumes we are logged in). It will fail
+            //config.AuthenticateBeforeEachTestUsing<AuthHandler>();
 
             //Does your application send E-mails?  Well, SpecsFor.Mvc can intercept
             //those while your specifications are executing, enabling you to write
