@@ -16,7 +16,7 @@ namespace Bonobo.Git.Server.Test.Integration.Web
             private static MvcWebApp app;
 
             [ClassInitialize]
-            public static void MyClassInitialize(TestContext testContext)
+            public static void ClassInit(TestContext testContext)
             {
                 app = new MvcWebApp();
             }
