@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
+using System.Linq;
 
 using Bonobo.Git.Server.Models;
 
@@ -31,9 +31,10 @@ namespace Bonobo.Git.Server.Security
             if (user != null)
             {
                 result = new List<Claim>();
-                result.Add(new Claim(ClaimTypes.Name, user.DisplayName));
-                result.Add(new Claim(ClaimTypes.Upn, user.Id.ToString()));
-                result.Add(new Claim(ClaimTypes.NameIdentifier, user.Username));
+                result.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+                result.Add(new Claim(ClaimTypes.Name, user.Username));
+                result.Add(new Claim(ClaimTypes.GivenName, user.GivenName));
+                result.Add(new Claim(ClaimTypes.Surname, user.Surname));
                 result.Add(new Claim(ClaimTypes.Email, user.Email));
                 result.Add(new Claim(ClaimTypes.Role, Definitions.Roles.Member));
                 result.AddRange(RoleProvider.GetRolesForUser(user.Id).Select(x => new Claim(ClaimTypes.Role, x)));
