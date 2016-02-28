@@ -28,7 +28,7 @@ namespace Bonobo.Git.Server.Data
         }
 
         public abstract RepositoryModel GetRepository(Guid id);
-        public abstract RepositoryModel GetRepository(string Name, bool caseSenitive = false);
+        public abstract RepositoryModel GetRepository(string Name, StringComparison compType = StringComparison.OrdinalIgnoreCase);
         public abstract bool Create(RepositoryModel repository);
         public abstract void Update(RepositoryModel repository);
         public abstract void Delete(Guid id);
