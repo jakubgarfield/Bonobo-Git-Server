@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
@@ -55,6 +56,12 @@ namespace Bonobo.Git.Server.Security
                 return false;
             }
 
+            if (repositoryModel.AnonymousAccess)
+            {
+                // Don't try and check any user stuff if we allow anon access
+                return true;
+            }
+
             result |= repositoryModel.Users.Any(x => x.Id == userId);
             result |= repositoryModel.Administrators.Any(x => x.Id == userId);
             result |= RoleProvider.GetRolesForUser(userId).Contains(Definitions.Roles.Administrator);
@@ -72,5 +79,11 @@ namespace Bonobo.Git.Server.Security
 
             return result;
         }
+
+        public IEnumerable<RepositoryModel> GetAllPermittedRepositories(Guid userId)
+        {
+            return Repository.GetAllRepositories().Where(repo => HasPermission(userId, repo.Id));
+        }
+
     }
 }

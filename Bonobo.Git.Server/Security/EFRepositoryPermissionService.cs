@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using Bonobo.Git.Server.Data;
 using System;
+using System.Collections.Generic;
+using Bonobo.Git.Server.Models;
 using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Security
@@ -12,6 +14,10 @@ namespace Bonobo.Git.Server.Security
 
         [Dependency]
         public IRepositoryRepository Repository { get; set; }
+
+        [Dependency]
+        public ITeamRepository TeamRepository { get; set; }
+
 
         public bool HasPermission(Guid userId, string repositoryName)
         {
@@ -27,16 +33,23 @@ namespace Bonobo.Git.Server.Security
         {
             using (var database = CreateContext())
             {
-                var user = database.Users.FirstOrDefault(i => i.Id == userId);
                 var repository = database.Repositories.FirstOrDefault(i => i.Id == repositoryId);
-                if (user != null && repository != null)
+                if (repository != null)
                 {
-                    if (user.Roles.Any(i => i.Name == Definitions.Roles.Administrator)
-                     || user.Repositories.FirstOrDefault(i => i.Id == repositoryId) != null
-                     || user.AdministratedRepositories.FirstOrDefault(i => i.Id == repositoryId) != null
-                     || user.Teams.Select(i => i.Name).FirstOrDefault(t => repository.Teams.Select(i => i.Name).Contains(t)) != null)
+                    if (repository.Anonymous)
                     {
                         return true;
+                    }
+                    var user = database.Users.FirstOrDefault(i => i.Id == userId);
+                    if (user != null)
+                    {
+                        if (user.Roles.Any(i => i.Name == Definitions.Roles.Administrator)
+                            || user.Repositories.FirstOrDefault(i => i.Id == repositoryId) != null
+                            || user.AdministratedRepositories.FirstOrDefault(i => i.Id == repositoryId) != null
+                            || user.Teams.Select(i => i.Name).FirstOrDefault(t => repository.Teams.Select(i => i.Name).Contains(t)) != null)
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -74,5 +87,11 @@ namespace Bonobo.Git.Server.Security
                 return isRepoAdmin;
             }
         }
+
+        public IEnumerable<RepositoryModel> GetAllPermittedRepositories(Guid userId)
+        {
+            return Repository.GetAllRepositories().Where(repo => HasPermission(userId, repo.Id));
+        }
+
     }
 }

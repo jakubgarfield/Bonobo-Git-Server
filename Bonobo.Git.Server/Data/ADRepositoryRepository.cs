@@ -59,23 +59,9 @@ namespace Bonobo.Git.Server.Data
             ADBackend.Instance.Repositories.Update(SanitizeModel(repository));
         }
 
-        private RepositoryModel SanitizeModel(RepositoryModel model)
+        private static RepositoryModel SanitizeModel(RepositoryModel model)
         {
-            if (model.Administrators == null)
-            {
-                model.Administrators = new UserModel[0];
-            }
-
-            if (model.Users == null)
-            {
-                model.Users = new UserModel[0];
-            }
-
-            if (model.Teams == null)
-            {
-                model.Teams = new TeamModel[0];
-            }
-
+            model.EnsureCollectionsAreValid();
             return model;
         }
     }

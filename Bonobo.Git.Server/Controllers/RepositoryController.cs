@@ -561,17 +561,7 @@ namespace Bonobo.Git.Server.Controllers
 
         private IEnumerable<RepositoryDetailModel> GetIndexModel()
         {
-            IEnumerable<RepositoryModel> repositoryModels;
-            if (User.IsInRole(Definitions.Roles.Administrator))
-            {
-                repositoryModels = RepositoryRepository.GetAllRepositories();
-            }
-            else
-            {
-                var userTeams = TeamRepository.GetTeams(User.Id()).Select(i => i.Id).ToArray();
-                repositoryModels = RepositoryRepository.GetPermittedRepositories(User.Id(), userTeams);
-            }
-            return repositoryModels.Select(ConvertRepositoryModel).ToList();
+            return RepositoryPermissionService.GetAllPermittedRepositories(User.Id()).Select(ConvertRepositoryModel).ToList();
         }
 
         private RepositoryDetailModel ConvertRepositoryModel(RepositoryModel model)

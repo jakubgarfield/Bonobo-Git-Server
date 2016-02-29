@@ -42,7 +42,6 @@ namespace Bonobo.Git.Server.Test.MembershipTests.ADTests
             var newTeam = new TeamModel { Name = "Team1" };
             newTeam.Members = new UserModel[0];
             ADBackend.Instance.Teams.Add(newTeam);
-            //_teams.Create(newTeam);
             return newTeam;
         }
 

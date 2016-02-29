@@ -1,5 +1,4 @@
-﻿using System;
-using Bonobo.Git.Server.Data;
+﻿using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
@@ -43,27 +42,6 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
     {
         protected IDatabaseTestConnection _connection;
 
-        protected override Guid AddRepo(string name)
-        {
-            var newRepo = new RepositoryModel();
-            newRepo.Name = name;
-            newRepo.Users = new UserModel[0];
-            newRepo.Administrators = new UserModel[0];
-            newRepo.Teams = new TeamModel[0];
-
-            EFRepositoryRepository repoRepo = new EFRepositoryRepository { CreateContext = GetContext };
-            Assert.IsTrue(repoRepo.Create(newRepo));
-            return newRepo.Id;
-        }
-
-        protected override void UpdateRepo(Guid repoId, Action<RepositoryModel> transform)
-        {
-            EFRepositoryRepository repoRepo = new EFRepositoryRepository { CreateContext = GetContext };
-            var repo = repoRepo.GetRepository(repoId);
-            transform(repo);
-            repoRepo.Update(repo);
-        }
-
         protected void InitialiseTestObjects()
         {
             _teams = new EFTeamRepository { CreateContext = () => _connection.GetContext() };
@@ -73,15 +51,11 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
             _service = new EFRepositoryPermissionService
             {
                 CreateContext = () => _connection.GetContext(),
-                Repository = _repos
+                Repository = _repos,
+                TeamRepository = _teams
             };
 
             new AutomaticUpdater().RunWithContext(_connection.GetContext());
-        }
-
-        private BonoboGitServerContext GetContext()
-        {
-            return _connection.GetContext();
         }
 
         protected override TeamModel CreateTeam()

@@ -4,6 +4,7 @@ using System.Linq;
 using Bonobo.Git.Server.Models;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
 using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Data
@@ -88,6 +89,7 @@ namespace Bonobo.Git.Server.Data
 
             using (var database = CreateContext())
             {
+                model.EnsureCollectionsAreValid();
                 model.Id = Guid.NewGuid();
                 var repository = new Repository
                 {
@@ -105,8 +107,9 @@ namespace Bonobo.Git.Server.Data
                 {
                     database.SaveChanges();
                 }
-                catch (DbUpdateException)
+                catch (DbUpdateException ex)
                 {
+                    Trace.TraceWarning("Failed to create repo {0} - {1}", model.Name, ex);
                     return false;
                 }
                 catch (UpdateException)
@@ -127,6 +130,8 @@ namespace Bonobo.Git.Server.Data
                 var repo = db.Repositories.FirstOrDefault(i => i.Id == model.Id);
                 if (repo != null)
                 {
+                    model.EnsureCollectionsAreValid();
+
                     repo.Name = model.Name;
                     repo.Group = model.Group;
                     repo.Description = model.Description;

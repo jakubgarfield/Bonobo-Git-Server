@@ -7,16 +7,6 @@ namespace Bonobo.Git.Server.Data
 {
     public abstract class RepositoryRepositoryBase : IRepositoryRepository
     {
-        public IList<RepositoryModel> GetPermittedRepositories(Guid userId, Guid[] userTeamsId)
-        {
-            if (userId == Guid.Empty) throw new ArgumentException("Do not pass invalid userId", "userId");
-            return GetAllRepositories().Where(repo =>
-                repo.Users.Any(user => user.Id == userId) ||
-                repo.Administrators.Any(admin => admin.Id == userId) ||
-                repo.Teams.Any(team => userTeamsId.Contains(team.Id)) ||
-                repo.AnonymousAccess).ToList();
-        }
-
         public virtual IList<RepositoryModel> GetTeamRepositories(Guid[] teamsId)
         {
             return GetAllRepositories().Where(repo => repo.Teams.Any(team => teamsId.Contains(team.Id))).ToList();

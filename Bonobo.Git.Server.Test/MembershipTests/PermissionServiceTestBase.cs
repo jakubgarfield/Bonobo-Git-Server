@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
@@ -137,6 +138,78 @@ namespace Bonobo.Git.Server.Test.MembershipTests
             Assert.IsTrue(_service.AllowsAnonymous("TestRepo"));
         }
 
+        [TestMethod]
+        public void GetAllPermittedReturnsOnlyRepositoriesPermittedForUser()
+        {
+            var user = AddUser();
+            var repo1 = AddRepo("TestRepo1");
+            var repo2 = AddRepo("TestRepo2");
+            var repo3 = AddRepo("TestRepo3");
+            AddUserToRepo(repo1, user);
+            AddUserToRepo(repo3, user);
+
+            CollectionAssert.AreEqual(new[] { "TestRepo1", "TestRepo3" },
+                _service.GetAllPermittedRepositories(user.Id).Select(r => r.Name).OrderBy(r => r).ToArray());
+        }
+
+        [TestMethod]
+        public void GetAllPermittedReturnsAllRepositoriesToSystemAdmin()
+        {
+            AddRepo("TestRepo1");
+            AddRepo("TestRepo2");
+            AddRepo("TestRepo3");
+
+            CollectionAssert.AreEqual(new[] { "TestRepo1", "TestRepo2", "TestRepo3" },
+                _service.GetAllPermittedRepositories(GetAdminId()).Select(r => r.Name).OrderBy(r => r).ToArray());
+        }
+
+        [TestMethod]
+        public void AnonymousRepoIsPermittedToAnybody()
+        {
+            var repo = MakeRepo("Repo1");
+            repo.AnonymousAccess = true;
+            Assert.IsTrue(_repos.Create(repo));
+
+            var anonymousUser = Guid.Empty;
+            Assert.AreEqual("Repo1", _service.GetAllPermittedRepositories(anonymousUser).Single().Name);
+        }
+
+        [TestMethod]
+        public void RepositoryIsPermittedToUser()
+        {
+            var user = AddUser();
+            var repoWithUser = MakeRepo("Repo1");
+            repoWithUser.Users = new[] { user };
+            Assert.IsTrue(_repos.Create(repoWithUser));
+            AddRepo("Repo2");
+            
+            Assert.AreEqual("Repo1", _service.GetAllPermittedRepositories(user.Id).Single().Name);
+        }
+
+        [TestMethod]
+        public void NewRepositoryNotPermittedToUnknownUser()
+        {
+            var user = AddUser();
+            var repoWithUser = MakeRepo("Repo1");
+            repoWithUser.Users = new[] { user };
+            Assert.IsTrue(_repos.Create(repoWithUser));
+
+            var unknownUserId = Guid.Empty;
+            Assert.IsFalse(_service.GetAllPermittedRepositories(unknownUserId).Any());
+        }
+
+        [TestMethod]
+        public void RepositoryIsPermittedToRepoAdministrator()
+        {
+            var user = AddUser();
+            var repoWithAdmin = MakeRepo("Repo1");
+            repoWithAdmin.Administrators = new[] { user };
+            Assert.IsTrue(_repos.Create(repoWithAdmin));
+            AddRepo("Repo2");
+
+            Assert.AreEqual("Repo1", _service.GetAllPermittedRepositories(user.Id).Single().Name);
+        }
+
         /// <summary>
         /// A check-permission routine which runs checks by both name and Guid, and makes sure they agree
         /// </summary>
@@ -178,23 +251,25 @@ namespace Bonobo.Git.Server.Test.MembershipTests
 
         protected abstract void UpdateTeam(TeamModel team);
 
-        protected virtual void UpdateRepo(Guid repoId, Action<RepositoryModel> transform)
+        void UpdateRepo(Guid repoId, Action<RepositoryModel> transform)
         {
             var repo = _repos.GetRepository(repoId);
             transform(repo);
             _repos.Update(repo);
         }
 
-        protected virtual Guid AddRepo(string name)
+        Guid AddRepo(string name)
+        {
+            var newRepo = MakeRepo(name);
+            Assert.IsTrue(_repos.Create(newRepo));
+            return newRepo.Id;
+        }
+
+        RepositoryModel MakeRepo(string name)
         {
             var newRepo = new RepositoryModel();
             newRepo.Name = name;
-            newRepo.Users = new UserModel[0];
-            newRepo.Administrators = new UserModel[0];
-            newRepo.Teams = new TeamModel[0];
-
-            Assert.IsTrue(_repos.Create(newRepo));
-            return newRepo.Id;
+            return newRepo;
         }
     }
 }

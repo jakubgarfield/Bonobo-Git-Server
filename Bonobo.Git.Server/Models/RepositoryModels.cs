@@ -49,6 +49,24 @@ namespace Bonobo.Git.Server.Models
             }
         }
 
+        public void EnsureCollectionsAreValid()
+        {
+            if (Administrators == null)
+            {
+                Administrators = new UserModel[0];
+            }
+
+            if (Users == null)
+            {
+                Users = new UserModel[0];
+            }
+
+            if (Teams == null)
+            {
+                Teams = new TeamModel[0];
+            }
+        }
+
         public const string NameValidityRegex = @"([\w\.-])*([\w])$";
     }
 
