@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Bonobo.Git.Server.Data;
+using System;
+using System.Collections.Generic;
 using Bonobo.Git.Server.Models;
-
 using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Security
 {
-    public class ADRepositoryPermissionService : IRepositoryPermissionService
+    public class RepositoryPermissionService : IRepositoryPermissionService
     {
         [Dependency]
         public IRepositoryRepository Repository { get; set; }
@@ -27,14 +26,7 @@ namespace Bonobo.Git.Server.Security
 
         public bool AllowsAnonymous(Guid repositoryId)
         {
-            try
-            {
-                return Repository.GetRepository(repositoryId).AnonymousAccess;
-            }
-            catch (InvalidOperationException)
-            {
-                return false;
-            }
+            return Repository.GetRepository(repositoryId).AnonymousAccess;
         }
 
         public bool HasPermission(Guid userId, string repositoryName)
@@ -46,15 +38,7 @@ namespace Bonobo.Git.Server.Security
         public bool HasPermission(Guid userId, Guid repositoryId)
         {
             bool result = false;
-            RepositoryModel repositoryModel;
-            try
-            {
-                repositoryModel = Repository.GetRepository(repositoryId);
-            }
-            catch (InvalidOperationException)
-            {
-                return false;
-            }
+            var repositoryModel = Repository.GetRepository(repositoryId);
 
             if (repositoryModel.AnonymousAccess)
             {
@@ -64,7 +48,7 @@ namespace Bonobo.Git.Server.Security
 
             result |= repositoryModel.Users.Any(x => x.Id == userId);
             result |= repositoryModel.Administrators.Any(x => x.Id == userId);
-            result |= RoleProvider.GetRolesForUser(userId).Contains(Definitions.Roles.Administrator);
+            result |= IsSystemAdministrator(userId);
             result |= TeamRepository.GetTeams(userId).Any(x => repositoryModel.Teams.Select(y => y.Name).Contains(x.Name, StringComparer.OrdinalIgnoreCase));
 
             return result;
@@ -75,7 +59,7 @@ namespace Bonobo.Git.Server.Security
             bool result = false;
 
             result |= Repository.GetRepository(repositoryId).Administrators.Any(x => x.Id == userId);
-            result |= RoleProvider.GetRolesForUser(userId).Contains(Definitions.Roles.Administrator);
+            result |= IsSystemAdministrator(userId);
 
             return result;
         }
@@ -85,5 +69,9 @@ namespace Bonobo.Git.Server.Security
             return Repository.GetAllRepositories().Where(repo => HasPermission(userId, repo.Id));
         }
 
+        private bool IsSystemAdministrator(Guid userId)
+        {
+            return RoleProvider.GetRolesForUser(userId).Contains(Definitions.Roles.Administrator);
+        }
     }
 }

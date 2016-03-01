@@ -13,6 +13,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         protected ITeamRepository _teams;
         protected IMembershipService _users;
         protected IRepositoryRepository _repos;
+        protected IRoleProvider _roles;
 
         [TestMethod]
         public void NonExistentRepositoryByNameReturnsFalse()
@@ -22,7 +23,8 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         }
 
         [TestMethod]
-        public void NonExistentRepositoryByGuidReturnsFalse()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void NonExistentRepositoryByGuidThrowsException()
         {
             var adminId = GetAdminId();
             Assert.IsFalse(_service.HasPermission(adminId, Guid.NewGuid()));
@@ -123,10 +125,16 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         }
 
         [TestMethod]
-        public void UnknownRepositoryDoesNotAllowAnonAccess()
+        public void UnknownRepositoryByNameDoesNotAllowAnonAccess()
+        {
+            Assert.IsFalse(_service.AllowsAnonymous("UnknownRepo"));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void UnknownRepositoryByGuidThrowsException()
         {
             Assert.IsFalse(_service.AllowsAnonymous(Guid.NewGuid()));
-            Assert.IsFalse(_service.AllowsAnonymous("UnknownRepo"));
         }
 
         [TestMethod]

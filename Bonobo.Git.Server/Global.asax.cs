@@ -106,14 +106,14 @@ namespace Bonobo.Git.Server
                     container.RegisterType<IRoleProvider, ADRoleProvider>();
                     container.RegisterType<ITeamRepository, ADTeamRepository>();
                     container.RegisterType<IRepositoryRepository, ADRepositoryRepository>();
-                    container.RegisterType<IRepositoryPermissionService, ADRepositoryPermissionService>();
+                    container.RegisterType<IRepositoryPermissionService, RepositoryPermissionService>();
                     break;
                 case "internal":
                     container.RegisterType<IMembershipService, EFMembershipService>();
                     container.RegisterType<IRoleProvider, EFRoleProvider>();
                     container.RegisterType<ITeamRepository, EFTeamRepository>();
                     container.RegisterType<IRepositoryRepository, EFRepositoryRepository>();
-                    container.RegisterType<IRepositoryPermissionService, EFRepositoryPermissionService>();
+                    container.RegisterType<IRepositoryPermissionService, RepositoryPermissionService>();
                     break;
                 default:
                     throw new ArgumentException("Missing declaration in web.config", "MembershipService");

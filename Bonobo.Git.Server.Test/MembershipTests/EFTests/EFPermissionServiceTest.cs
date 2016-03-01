@@ -47,12 +47,13 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
             _teams = new EFTeamRepository { CreateContext = () => _connection.GetContext() };
             _users = new EFMembershipService { CreateContext = () => _connection.GetContext() };
             _repos = new EFRepositoryRepository { CreateContext = () => _connection.GetContext() };
+            _roles = new EFRoleProvider { CreateContext = () => _connection.GetContext() };
 
-            _service = new EFRepositoryPermissionService
+            _service = new RepositoryPermissionService
             {
-                CreateContext = () => _connection.GetContext(),
                 Repository = _repos,
-                TeamRepository = _teams
+                TeamRepository = _teams,
+                RoleProvider = _roles
             };
 
             new AutomaticUpdater().RunWithContext(_connection.GetContext());

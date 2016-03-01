@@ -9,7 +9,6 @@ namespace Bonobo.Git.Server.Test.MembershipTests.ADTests
     public class ADPermissionServiceTest : PermissionServiceTestBase
     {
         private ADTestSupport _testSupport;
-        private ADRoleProvider _roles;
 
         [TestInitialize]
         public void Initialize()
@@ -31,7 +30,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests.ADTests
             _users = new ADMembershipServiceTestFacade(new ADMembershipService(), _testSupport);
             _repos = new ADRepositoryRepository();
 
-            _service = new ADRepositoryPermissionService
+            _service = new RepositoryPermissionService
             {
                 Repository = _repos, RoleProvider = _roles, TeamRepository = _teams
             };
