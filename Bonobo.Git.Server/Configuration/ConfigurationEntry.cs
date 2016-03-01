@@ -55,5 +55,10 @@ namespace Bonobo.Git.Server.Configuration
                 }
             }
         }
+
+        public static void InitialiseForTest()
+        {
+            _current = new Entry();
+        }
     }
 }

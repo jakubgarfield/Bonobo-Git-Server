@@ -2,6 +2,7 @@
 using Bonobo.Git.Server.Data;
 using System;
 using System.Collections.Generic;
+using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Models;
 using Microsoft.Practices.Unity;
 
@@ -18,55 +19,91 @@ namespace Bonobo.Git.Server.Security
         [Dependency]
         public ITeamRepository TeamRepository { get; set; }
         
-        public bool AllowsAnonymous(string repositoryName)
+        public bool HasPermission(Guid userId, string repositoryName, RepositoryAccessLevel requiredLevel)
         {
             var repository = Repository.GetRepository(repositoryName);
-            return repository != null && repository.AnonymousAccess;
+            return repository != null && HasPermission(userId, repository.Id, requiredLevel);
         }
 
-        public bool AllowsAnonymous(Guid repositoryId)
+        public bool HasPermission(Guid userId, Guid repositoryId, RepositoryAccessLevel requiredLevel)
         {
-            return Repository.GetRepository(repositoryId).AnonymousAccess;
-        }
-
-        public bool HasPermission(Guid userId, string repositoryName)
-        {
-            var repository = Repository.GetRepository(repositoryName);
-            return repository != null && HasPermission(userId, repository.Id);
-        }
-
-        public bool HasPermission(Guid userId, Guid repositoryId)
-        {
-            bool result = false;
             var repositoryModel = Repository.GetRepository(repositoryId);
 
-            if (repositoryModel.AnonymousAccess)
+            if (userId == Guid.Empty)
             {
-                // Don't try and check any user stuff if we allow anon access
-                return true;
+                // This is an anonymous user, the rules are different
+                return CheckAnonymousPermission(repositoryModel, requiredLevel);
             }
-
-            result |= repositoryModel.Users.Any(x => x.Id == userId);
-            result |= repositoryModel.Administrators.Any(x => x.Id == userId);
-            result |= IsSystemAdministrator(userId);
-            result |= TeamRepository.GetTeams(userId).Any(x => repositoryModel.Teams.Select(y => y.Name).Contains(x.Name, StringComparer.OrdinalIgnoreCase));
-
-            return result;
+            else
+            {
+                return CheckNamedUserPermission(userId, repositoryModel, requiredLevel);
+            }
         }
 
-        public bool IsRepositoryAdministrator(Guid userId, Guid repositoryId)
+        public bool HasCreatePermission(Guid userId)
+        {
+            return IsSystemAdministrator(userId) || UserConfiguration.Current.AllowUserRepositoryCreation;
+        }
+
+        public IEnumerable<RepositoryModel> GetAllPermittedRepositories(Guid userId, RepositoryAccessLevel requiredLevel)
+        {
+            return Repository.GetAllRepositories().Where(repo => HasPermission(userId, repo.Id, requiredLevel));
+        }
+
+        private bool CheckAnonymousPermission(RepositoryModel repository, RepositoryAccessLevel requiredLevel)
+        {
+            if (!repository.AnonymousAccess)
+            {
+                // There's no anon access at all to this repo
+                return false;
+            }
+
+            switch (requiredLevel)
+            {
+                case RepositoryAccessLevel.Pull:
+                    return true;
+                case RepositoryAccessLevel.Push:
+                    return UserConfiguration.Current.AllowAnonymousPush;
+                case RepositoryAccessLevel.Administer:
+                    // No anonymous administrators ever
+                    return false;
+                default:
+                    throw new ArgumentOutOfRangeException("requiredLevel", requiredLevel, null);
+            }
+        }
+
+        private bool CheckNamedUserPermission(Guid userId, RepositoryModel repository, RepositoryAccessLevel requiredLevel)
+        {
+            bool userIsAnAdministrator = IsAnAdminstrator(userId, repository);
+            var userIsATeamMember =
+                TeamRepository.GetTeams(userId)
+                    .Any(x => repository.Teams.Select(y => y.Name).Contains(x.Name, StringComparer.OrdinalIgnoreCase));
+            var userIsARepoUser = repository.Users.Any(x => x.Id == userId);
+
+            switch (requiredLevel)
+            {
+                case RepositoryAccessLevel.Push:
+                case RepositoryAccessLevel.Pull:
+                    return userIsARepoUser || userIsATeamMember || userIsAnAdministrator;
+
+                case RepositoryAccessLevel.Administer:
+                    return userIsAnAdministrator;
+                default:
+                    throw new ArgumentOutOfRangeException("requiredLevel", requiredLevel, null);
+            }
+        }
+
+        /// <summary>
+        /// Check if a user can administer this repo - either by being sysAdmin, or by being on the repo's own admin list
+        /// </summary>
+        private bool IsAnAdminstrator(Guid userId, RepositoryModel repositoryModel)
         {
             bool result = false;
 
-            result |= Repository.GetRepository(repositoryId).Administrators.Any(x => x.Id == userId);
+            result |= repositoryModel.Administrators.Any(x => x.Id == userId);
             result |= IsSystemAdministrator(userId);
 
             return result;
-        }
-
-        public IEnumerable<RepositoryModel> GetAllPermittedRepositories(Guid userId)
-        {
-            return Repository.GetAllRepositories().Where(repo => HasPermission(userId, repo.Id));
         }
 
         private bool IsSystemAdministrator(Guid userId)

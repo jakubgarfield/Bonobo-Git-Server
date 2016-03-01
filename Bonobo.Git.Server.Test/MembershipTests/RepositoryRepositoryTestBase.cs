@@ -57,22 +57,6 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         }
 
         [TestMethod]
-        public void RespositoriesAdministeredAreFound()
-        {
-            var administator = AddUserFred();
-
-            var newRepo1 = MakeRepo("Repo1");
-            newRepo1.Administrators = new[] { administator };
-            _repo.Create(newRepo1);
-
-            var newRepo2 = MakeRepo("Repo2");
-            _repo.Create(newRepo2);
-
-            // Only one repo is administered by our user
-            Assert.AreEqual("Repo1", _repo.GetAdministratedRepositories(administator.Id).Single().Name);
-        }
-
-        [TestMethod]
         public void NewRepoCanBeRetrievedById()
         {
             var newRepo1 = MakeRepo("Repo1");

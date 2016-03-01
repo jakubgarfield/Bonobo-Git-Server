@@ -5,9 +5,9 @@ using Bonobo.Git.Server.Models;
 
 namespace Bonobo.Git.Server.Data
 {
-    public class ADRepositoryRepository : RepositoryRepositoryBase
+    public class ADRepositoryRepository : IRepositoryRepository
     {
-        public override bool Create(RepositoryModel repository)
+        public bool Create(RepositoryModel repository)
         {
             // Make sure we don't already have a repo with this name
             if (GetRepository(repository.Name) != null)
@@ -19,22 +19,22 @@ namespace Bonobo.Git.Server.Data
             return ADBackend.Instance.Repositories.Add(SanitizeModel(repository));
         }
 
-        public override void Delete(Guid id)
+        public void Delete(Guid id)
         {
             ADBackend.Instance.Repositories.Remove(id);
         }
 
-        public override IList<RepositoryModel> GetAllRepositories()
+        public IList<RepositoryModel> GetAllRepositories()
         {
             return ADBackend.Instance.Repositories.ToList();
         }
 
-        public override RepositoryModel GetRepository(string name)
+        public RepositoryModel GetRepository(string name)
         {
             return ADBackend.Instance.Repositories.FirstOrDefault(o => o.Name == name);
         }
         
-        public override RepositoryModel GetRepository(Guid id)
+        public RepositoryModel GetRepository(Guid id)
         {
             var result = ADBackend.Instance.Repositories[id];
             if (result == null)
@@ -45,7 +45,7 @@ namespace Bonobo.Git.Server.Data
             return result;
         }
 
-        public override void Update(RepositoryModel repository)
+        public void Update(RepositoryModel repository)
         {
             if (repository.RemoveLogo)
             {
@@ -63,6 +63,11 @@ namespace Bonobo.Git.Server.Data
         {
             model.EnsureCollectionsAreValid();
             return model;
+        }
+
+        public IList<RepositoryModel> GetTeamRepositories(Guid[] teamsId)
+        {
+            return GetAllRepositories().Where(repo => repo.Teams.Any(team => teamsId.Contains(team.Id))).ToList();
         }
     }
 }

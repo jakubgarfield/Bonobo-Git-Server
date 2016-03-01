@@ -46,8 +46,11 @@ namespace Bonobo.Git.Server
             string incomingRepoName = GetRepoPath(httpContext.Request.Path, httpContext.Request.ApplicationPath);
             string repo = Repository.NormalizeRepositoryName(incomingRepoName, RepositoryRepository);
 
-            // check if repo allows anonymous pulls
-            if (RepositoryPermissionService.AllowsAnonymous(repo))
+            // check if repo allows anonymous access - if we need more access than 'Pull', this will be checked later anyway
+            //WD - I think there may be a problem here - if the repo is anon-pull, but permission-push, then short-circuiting
+            // the auth at this stage will prevent the client from ever being told to authorise
+            // We probably need get the isPush test up out of the GitController in some way
+            if (RepositoryPermissionService.HasPermission(Guid.Empty, repo, RepositoryAccessLevel.Pull))
             {
                 return;
             }

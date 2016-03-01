@@ -9,12 +9,12 @@ using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Data
 {
-    public class EFRepositoryRepository : RepositoryRepositoryBase
+    public class EFRepositoryRepository : IRepositoryRepository
     {
         [Dependency]
         public Func<BonoboGitServerContext> CreateContext { get; set; }
 
-        public override IList<RepositoryModel> GetAllRepositories()
+        public IList<RepositoryModel> GetAllRepositories()
         {
             using (var db = CreateContext())
             {
@@ -48,7 +48,7 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public override RepositoryModel GetRepository(string name)
+        public RepositoryModel GetRepository(string name)
         {
             if (name == null) throw new ArgumentNullException("name");
 
@@ -58,7 +58,7 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public override RepositoryModel GetRepository(Guid id)
+        public RepositoryModel GetRepository(Guid id)
         {
             using (var db = CreateContext())
             {
@@ -66,7 +66,7 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public override void Delete(Guid id)
+        public void Delete(Guid id)
         {
             using (var db = CreateContext())
             {
@@ -82,7 +82,7 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public override bool Create(RepositoryModel model)
+        public bool Create(RepositoryModel model)
         {
             if (model == null) throw new ArgumentException("model");
             if (model.Name == null) throw new ArgumentException("name");
@@ -120,7 +120,7 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public override void Update(RepositoryModel model)
+        public void Update(RepositoryModel model)
         {
             if (model == null) throw new ArgumentException("model");
             if (model.Name == null) throw new ArgumentException("name");
@@ -218,5 +218,9 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
+        public IList<RepositoryModel> GetTeamRepositories(Guid[] teamsId)
+        {
+            return GetAllRepositories().Where(repo => repo.Teams.Any(team => teamsId.Contains(team.Id))).ToList();
+        }
     }
 }

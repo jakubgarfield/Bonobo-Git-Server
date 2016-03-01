@@ -10,7 +10,6 @@ namespace Bonobo.Git.Server.Data
     {
         IList<RepositoryModel> GetAllRepositories();
         IList<RepositoryModel> GetTeamRepositories(Guid[] teamsId);
-        IList<RepositoryModel> GetAdministratedRepositories(Guid userId);
         RepositoryModel GetRepository(Guid id);
         RepositoryModel GetRepository(string Name);
         bool Create(RepositoryModel repository);
