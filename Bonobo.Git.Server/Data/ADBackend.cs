@@ -241,7 +241,7 @@ namespace Bonobo.Git.Server.Data
                 {
                     Id = group.Guid.Value,
                     Name = roleName,
-                    Members = group.GetMembers(true).Where(x => x is UserPrincipal).Select(x => x.UserPrincipalName).ToArray()
+                    Members = group.GetMembers(true).Where(x => x is UserPrincipal).Select(x => x.Guid.Value).ToArray()
                 };
                 Roles.AddOrUpdate(roleModel);
             }

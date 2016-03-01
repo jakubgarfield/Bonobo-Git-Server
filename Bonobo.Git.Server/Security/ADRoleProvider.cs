@@ -1,10 +1,6 @@
 ﻿using Bonobo.Git.Server.Data;
 using System;
-using System.Collections.Generic;
-using System.DirectoryServices.AccountManagement;
 using System.Linq;
-using System.Web;
-using System.Web.Security;
 using Bonobo.Git.Server.Models;
 
 namespace Bonobo.Git.Server.Security
@@ -32,13 +28,6 @@ namespace Bonobo.Git.Server.Security
             return false;
         }
 
-        public string[] FindUsersInRole(string roleName, string usernameToMatch)
-        {
-            if (String.IsNullOrEmpty(usernameToMatch)) throw new ArgumentException("Value cannot be null or empty.", "usernameToMatch");
-
-            return String.IsNullOrEmpty(usernameToMatch) ? GetRoleByName(roleName).Members : GetRoleByName(roleName).Members.Where(x => x.Contains(usernameToMatch)).ToArray();
-        }
-
         public string[] GetAllRoles()
         {
             return ADBackend.Instance.Roles.Select(x => x.Name).ToArray();
@@ -47,10 +36,10 @@ namespace Bonobo.Git.Server.Security
         public string[] GetRolesForUser(Guid userId)
         {
             var user = ADBackend.Instance.Users.First(x => x.Id == userId);
-            return ADBackend.Instance.Roles.Where(x => x.Members.Contains(user.Username, StringComparer.OrdinalIgnoreCase)).Select(x => x.Name).ToArray();
+            return ADBackend.Instance.Roles.Where(x => x.Members.Contains(user.Id)).Select(x => x.Name).ToArray();
         }
 
-        public string[] GetUsersInRole(string roleName)
+        public Guid[] GetUsersInRole(string roleName)
         {
             return GetRoleByName(roleName).Members;
         }
@@ -58,7 +47,7 @@ namespace Bonobo.Git.Server.Security
         public bool IsUserInRole(Guid userId, string roleName)
         {
             var user = ADBackend.Instance.Users.First(x => x.Id == userId);
-            return GetRoleByName(roleName).Members.Contains(user.Username, StringComparer.OrdinalIgnoreCase);
+            return GetRoleByName(roleName).Members.Contains(user.Id);
         }
 
         public void RemoveUserFromRoles(Guid userId, string[] roleNames)

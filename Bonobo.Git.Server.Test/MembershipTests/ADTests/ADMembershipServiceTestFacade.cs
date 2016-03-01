@@ -23,8 +23,9 @@ namespace Bonobo.Git.Server.Test.MembershipTests.ADTests
             _service = service;
             _testSupport = testSupport;
 
-            ADBackend.Instance.Users.Add(new UserModel() { Username = "admin", Id = Guid.NewGuid() });
-            ADBackend.Instance.Roles.Add(new RoleModel() { Name  = "Administrator", Id = Guid.NewGuid(), Members = new[] { "admin"}});
+            var adminId = Guid.NewGuid();
+            ADBackend.Instance.Users.Add(new UserModel() { Username = "admin", Id = adminId });
+            ADBackend.Instance.Roles.Add(new RoleModel() { Name  = "Administrator", Id = Guid.NewGuid(), Members = new[] { adminId } });
             Assert.AreEqual(1, ADBackend.Instance.Users.Count());
         }
 

@@ -61,7 +61,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
         public void TestAdminRoleHasOneMember()
         {
             var users = _provider.GetUsersInRole("Administrator");
-            CollectionAssert.AreEqual(new [] {"admin" }, users);
+            CollectionAssert.AreEqual(new [] { GetAdminId() }, users);
         }
 
         [TestMethod]
@@ -69,7 +69,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
         {
             _provider.AddUserToRoles(Guid.NewGuid(), new[] { "Administrator" });
             var users = _provider.GetUsersInRole("Administrator");
-            CollectionAssert.AreEqual(new[] { "admin" }, users);
+            CollectionAssert.AreEqual(new[] { GetAdminId() }, users);
         }
 
         [TestMethod]
@@ -78,7 +78,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
             var userId = AddUserFred();
             _provider.AddUserToRoles(userId, new[] { "Administrator" });
             var users = _provider.GetUsersInRole("Administrator");
-            CollectionAssert.AreEqual(new[] { "admin", "fred" }, users.OrderBy(user => user).ToArray());
+            CollectionAssert.AreEqual(new[] { GetAdminId(), userId }.OrderBy(id => id).ToArray(), users.OrderBy(user => user).ToArray());
         }
 
         [TestMethod]
@@ -107,8 +107,8 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
             var fredId = AddUserFred();
             _provider.AddUserToRoles(fredId, new[] { "Programmer", "Administrator" });
             CollectionAssert.AreEqual(new[] { "Administrator", "Programmer" }, _provider.GetRolesForUser(fredId).OrderBy(role => role).ToArray());
-            CollectionAssert.AreEqual(new[] { "admin", "fred" }, _provider.GetUsersInRole("Administrator").OrderBy(name => name).ToArray());
-            CollectionAssert.AreEqual(new[] { "fred" }, _provider.GetUsersInRole("Programmer"));
+            CollectionAssert.AreEqual(new[] { GetAdminId(), fredId }.OrderBy(u => u).ToArray(), _provider.GetUsersInRole("Administrator").OrderBy(name => name).ToArray());
+            CollectionAssert.AreEqual(new[] { fredId }, _provider.GetUsersInRole("Programmer"));
         }
 
         [TestMethod]

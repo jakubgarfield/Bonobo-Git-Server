@@ -103,13 +103,13 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        public string[] GetUsersInRole(string roleName)
+        public Guid[] GetUsersInRole(string roleName)
         {
             using (var database = CreateContext())
             {
                 var users = database.Users
                     .Where(us => us.Roles.Any(role => role.Name == roleName))
-                    .Select(us => us.Username)
+                    .Select(us => us.Id)
                     .ToArray();
                 return users;
             }

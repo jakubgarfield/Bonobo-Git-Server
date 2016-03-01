@@ -17,7 +17,7 @@ namespace Bonobo.Git.Server.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string[] Members { get; set; }
+        public Guid[] Members { get; set; }
         public string DisplayName
         {
             get
