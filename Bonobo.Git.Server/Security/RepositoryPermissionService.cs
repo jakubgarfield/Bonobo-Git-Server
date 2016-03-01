@@ -74,6 +74,8 @@ namespace Bonobo.Git.Server.Security
 
         private bool CheckNamedUserPermission(Guid userId, RepositoryModel repository, RepositoryAccessLevel requiredLevel)
         {
+            if (userId == Guid.Empty) { throw new ArgumentException("Do not pass anonymous user id", "userId"); }
+
             bool userIsAnAdministrator = IsAnAdminstrator(userId, repository);
             var userIsATeamMember =
                 TeamRepository.GetTeams(userId)

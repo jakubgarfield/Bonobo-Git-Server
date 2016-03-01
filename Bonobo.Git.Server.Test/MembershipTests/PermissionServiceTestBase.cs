@@ -132,10 +132,17 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         public void DefaultRepositoryDoesNotAllowAnonAccess()
         {
             var repoId = AddRepo("TestRepo");
+            Assert.IsFalse(_service.HasPermission(Guid.Empty, repoId, RepositoryAccessLevel.Pull));
+            Assert.IsFalse(_service.HasPermission(Guid.Empty, "TestRepo", RepositoryAccessLevel.Pull));
+        }
+
+        [TestMethod]
+        public void AllowAnonymousPushDoesNotAffectDefaultRepository()
+        {
+            var repoId = AddRepo("TestRepo");
             // Allow anon push gobally - it shouldn't have any effect because the repo is not enabled for anon access
             UserConfiguration.Current.AllowAnonymousPush = true;
             Assert.IsFalse(_service.HasPermission(Guid.Empty, repoId, RepositoryAccessLevel.Pull));
-            Assert.IsFalse(_service.HasPermission(Guid.Empty, "TestRepo", RepositoryAccessLevel.Pull));
         }
 
         [TestMethod]
