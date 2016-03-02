@@ -35,7 +35,12 @@ namespace Bonobo.Git.Server.Security
 
         public string[] GetRolesForUser(Guid userId)
         {
-            var user = ADBackend.Instance.Users.First(x => x.Id == userId);
+            var user = ADBackend.Instance.Users.FirstOrDefault(x => x.Id == userId);
+            if (user == null)
+            {
+                // This is how the EF provider works
+                return new string[0];
+            }
             return ADBackend.Instance.Roles.Where(x => x.Members.Contains(user.Id)).Select(x => x.Name).ToArray();
         }
 

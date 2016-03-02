@@ -30,13 +30,11 @@ namespace Bonobo.Git.Server.Controllers
                 return new HttpNotFoundResult();
             }
 
-            bool allowAnonClone = RepositoryPermissionService.AllowsAnonymous(repositoryName);
-            bool hasPermission = RepositoryPermissionService.HasPermission(User.Id(), repositoryName);
-            bool isClone = String.Equals("git-upload-pack", service, StringComparison.OrdinalIgnoreCase);
             bool isPush = String.Equals("git-receive-pack", service, StringComparison.OrdinalIgnoreCase);
-            bool allowAnonPush = UserConfiguration.Current.AllowAnonymousPush;
 
-            if (hasPermission || (allowAnonClone && isClone) || (allowAnonPush && isPush))
+            var requiredLevel = isPush ? RepositoryAccessLevel.Push : RepositoryAccessLevel.Pull;
+
+            if (RepositoryPermissionService.HasPermission(User.Id(), repositoryName, requiredLevel))
             {
                 return GetInfoRefs(repositoryName, service);
             }
@@ -54,8 +52,7 @@ namespace Bonobo.Git.Server.Controllers
                 return new HttpNotFoundResult();
             }
 
-            if (RepositoryPermissionService.HasPermission(User.Id(), repositoryName)
-                || RepositoryPermissionService.AllowsAnonymous(repositoryName))
+            if (RepositoryPermissionService.HasPermission(User.Id(), repositoryName, RepositoryAccessLevel.Pull))
             {
                 return ExecuteUploadPack(repositoryName);
             }
@@ -73,8 +70,7 @@ namespace Bonobo.Git.Server.Controllers
                 return new HttpNotFoundResult();
             }
 
-            if (RepositoryPermissionService.HasPermission(User.Id(), repositoryName)
-                || (RepositoryPermissionService.AllowsAnonymous(repositoryName) && UserConfiguration.Current.AllowAnonymousPush))
+            if (RepositoryPermissionService.HasPermission(User.Id(), repositoryName, RepositoryAccessLevel.Push))
             {
                 return ExecuteReceivePack(repositoryName);
             }

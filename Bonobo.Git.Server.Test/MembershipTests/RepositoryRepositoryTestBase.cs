@@ -57,22 +57,6 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         }
 
         [TestMethod]
-        public void RespositoriesAdministeredAreFound()
-        {
-            var administator = AddUserFred();
-
-            var newRepo1 = MakeRepo("Repo1");
-            newRepo1.Administrators = new[] { administator };
-            _repo.Create(newRepo1);
-
-            var newRepo2 = MakeRepo("Repo2");
-            _repo.Create(newRepo2);
-
-            // Only one repo is administered by our user
-            Assert.AreEqual("Repo1", _repo.GetAdministratedRepositories(administator.Id).Single().Name);
-        }
-
-        [TestMethod]
         public void NewRepoCanBeRetrievedById()
         {
             var newRepo1 = MakeRepo("Repo1");
@@ -225,86 +209,6 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         }
 
         [TestMethod]
-        public void AnonymousRepoIsPermittedToAnybody()
-        {
-            var repo = MakeRepo("Repo1");
-            repo.AnonymousAccess = true;
-            _repo.Create(repo);
-
-            var randomUserId = Guid.NewGuid();
-            Assert.AreEqual("Repo1", _repo.GetPermittedRepositories(randomUserId, null).Single().Name);
-        }
-
-        [TestMethod]
-        public void RepositoryIsPermittedToUser()
-        {
-            var repoWithUser = MakeRepo("Repo1");
-            var user = AddUserFred();
-            repoWithUser.Users = new[] { user };
-            _repo.Create(repoWithUser);
-            var repoWithoutUser = MakeRepo("Repo2");
-            _repo.Create(repoWithoutUser);
-
-            Assert.AreEqual("Repo1", _repo.GetPermittedRepositories(user.Id, null).Single().Name);
-        }
-
-        [TestMethod]
-        public void NewRepositoryNotPermittedToUnknownUser()
-        {
-            var repoWithUser = MakeRepo("Repo1");
-            var user = AddUserFred();
-            repoWithUser.Users = new[] { user };
-            _repo.Create(repoWithUser);
-
-            var unknownUserId = Guid.NewGuid();
-            Assert.IsFalse(_repo.GetPermittedRepositories(unknownUserId, null).Any());
-        }
-
-        [TestMethod]
-        public void RepositoryIsPermittedToAdministrator()
-        {
-            var repoWithAdmin = MakeRepo("Repo1");
-            var user = AddUserFred();
-            repoWithAdmin.Administrators = new[] { user };
-            _repo.Create(repoWithAdmin);
-            var repoWithoutUser = MakeRepo("Repo2");
-            _repo.Create(repoWithoutUser);
-
-            Assert.AreEqual("Repo1", _repo.GetPermittedRepositories(user.Id, null).Single().Name);
-        }
-
-        [TestMethod]
-        public void RepositoryIsPermittedToTeamEvenWhenUserIsNotInTeam()
-        {
-            //Normally one would not pass in a list of teams which the specified user wasn't a member of
-            //However, this test checks what happens if the user doesn't have access to a repo, but one of the teams does
-
-            var user = AddUserFred();
-            var team = AddTeam();
-            var repoWithTeam = MakeRepo("Repo1");
-            repoWithTeam.Teams = new[] { team };
-            _repo.Create(repoWithTeam);
-            var repoWithoutTeam = MakeRepo("Repo2");
-            _repo.Create(repoWithoutTeam);
-
-            Assert.AreEqual("Repo1", _repo.GetPermittedRepositories(user.Id, new[] { team.Id }).Single().Name);
-        }
-
-        [TestMethod]
-        public void RepositoryIsNotPermittedIfTeamIsWrong()
-        {
-            var user = AddUserFred();
-            var team = AddTeam();
-            var repoWithTeam = MakeRepo("Repo1");
-            repoWithTeam.Teams = new[] { team };
-            _repo.Create(repoWithTeam);
-            var repoWithoutTeam = MakeRepo("Repo2");
-            _repo.Create(repoWithoutTeam);
-
-            Assert.AreEqual(0, _repo.GetPermittedRepositories(user.Id, new[] { Guid.NewGuid() }).Count);
-        }
-
-        [TestMethod]
         public void RepositoryIsReportedAsAccessibleToTeam()
         {
             var team = AddTeam();
@@ -336,9 +240,6 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         {
             var newRepo = new RepositoryModel();
             newRepo.Name = name;
-            newRepo.Users = new UserModel[0];
-            newRepo.Administrators = new UserModel[0];
-            newRepo.Teams = new TeamModel[0];
             return newRepo;
         }
     }

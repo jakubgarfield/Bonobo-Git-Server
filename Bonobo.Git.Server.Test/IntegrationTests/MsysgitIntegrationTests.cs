@@ -32,6 +32,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         private readonly static string RepositoryUrlWithoutCredentials = String.Format(RepositoryUrl, String.Empty, String.Empty, RepositoryName);
         private readonly static string RepositoryUrlWithCredentials = String.Format(RepositoryUrl, Credentials, ".git", RepositoryName);
         private readonly static string Url = string.Format(RepositoryUrl, string.Empty, string.Empty, string.Empty);
+        private readonly static string BareUrl = Url.TrimEnd('/');
 
         List<Tuple<string, MsysgitResources>> installedgits = new List<Tuple<string, MsysgitResources>>();
 
@@ -215,7 +216,53 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             {
                 DeleteDirectory(WorkingDirectory);
             }
+        }
 
+        /// <summary>
+        /// This does an authorized push to a repo that allows anon clone
+        /// At the time of writing, this demonstrates an issue which breaks authorised push if the repo allows anon pull
+        /// </summary>
+        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        public void NamedPushToAnonRepo()
+        {
+            ForAllGits((git, resource) =>
+            {
+                Guid repo_id = CreateRepositoryOnWebInterface();
+
+                // Clone the repo
+                RemoveStoredCredentials(git);
+                AllowAnonRepoClone(repo_id, true);
+                CloneEmptyRepositoryAndEnterRepo(git, resource);
+
+                CreateIdentity(git);
+                // I want to do a push *with* a username
+                CreateAndPushFiles(git, resource);
+
+                DeleteRepository(repo_id);
+            });
+        }
+
+        
+        /// <summary>
+        /// Helper to run a test for every installed Git instance
+        /// </summary>
+        /// <param name="action"></param>
+        private void ForAllGits(Action<string, MsysgitResources> action)
+        {
+            foreach (var gitres in installedgits)
+            {
+                Directory.CreateDirectory(WorkingDirectory);
+                try
+                {
+                    var git = gitres.Item1;
+                    var resource = gitres.Item2;
+                    action(git, resource);
+                }
+                finally
+                {
+                    DeleteDirectory(WorkingDirectory);
+                }
+            }
         }
 
         private void PushFiles(string git, MsysgitResources resource, bool success)
@@ -227,7 +274,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             }
             else
             {
-                Assert.AreEqual(string.Format(resource[MsysgitResources.Definition.PushFilesFailError], RepositoryUrlWithoutCredentials), res.Item2);
+                Assert.AreEqual(string.Format(resource[MsysgitResources.Definition.PushFilesFailError], BareUrl), res.Item2);
             }
         } 
 
@@ -289,7 +336,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             else
             {
                 Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryOutput], result.Item1);
-                Assert.AreEqual(string.Format(resource[MsysgitResources.Definition.CloneRepositoryFailRequiresAuthError], Url.Substring(0, Url.Length - 1)), result.Item2);
+                Assert.AreEqual(string.Format(resource[MsysgitResources.Definition.CloneRepositoryFailRequiresAuthError], BareUrl), result.Item2);
             }
 
         }

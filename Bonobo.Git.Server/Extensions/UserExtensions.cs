@@ -40,11 +40,7 @@ namespace Bonobo.Git.Server
             }
             else if (String.IsNullOrEmpty(id))
             {
-                // I think this is a disaster if we don't have this claim and we should probably throw an exception here
-                // But anyway, for now I'm going to return Guid.Empty, and someone else can suffer later
-                // I'm going to log it, so that when they have a NullReferenceException later, they'll be able to see that
-                // this was a precursor
-                Trace.TraceError("User did not have NameIdentififer claim!!!");
+                // This is the anonymous user
                 return Guid.Empty;
             }
             else

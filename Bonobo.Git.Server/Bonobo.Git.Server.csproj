@@ -274,7 +274,6 @@
     <Compile Include="Data\ADRepositoryRepository.cs" />
     <Compile Include="Data\ADTeamRepository.cs" />
     <Compile Include="Data\INameProperty.cs" />
-    <Compile Include="Data\RepositoryRepositoryBase.cs" />
     <Compile Include="Data\Update\Sqlite\AddGroup.cs" />
     <Compile Include="Data\Update\Sqlite\AddGuidColumn.cs" />
     <Compile Include="Data\Update\Sqlite\AddRepositoryLogo.cs" />
@@ -311,7 +310,6 @@
     <Compile Include="Owin\WindowsAuthenticationOptions.cs" />
     <Compile Include="Owin\WindowsAuthenticationToken.cs" />
     <Compile Include="Security\ADMembershipService.cs" />
-    <Compile Include="Security\ADRepositoryPermissionService.cs" />
     <Compile Include="Security\ADRoleProvider.cs" />
     <Compile Include="Security\AuthenticationProvider.cs" />
     <Compile Include="Security\CookieAuthenticationProvider.cs" />
@@ -386,7 +384,7 @@
     <Compile Include="Attributes\WebAuthorizeRepositoryAttribute.cs" />
     <Compile Include="RepositoryBrowser.cs" />
     <Compile Include="Security\EFMembershipService.cs" />
-    <Compile Include="Security\EFRepositoryPermissionService.cs" />
+    <Compile Include="Security\RepositoryPermissionService.cs" />
     <Compile Include="Controllers\GitController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

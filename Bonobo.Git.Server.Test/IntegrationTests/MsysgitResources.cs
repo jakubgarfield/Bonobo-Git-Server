@@ -67,7 +67,7 @@ namespace Bonobo.Git.Server.Test
             if (String.Equals(version, "1.9.5")
              || String.Equals(version, "2.6.1"))
             {
-                _resources[Definition.PushFilesFailError] = "fatal: {0}.git/info/refs not valid: is this a git repository?\r\n";
+                _resources[Definition.PushFilesFailError] = "bash: /dev/tty: No such device or address\r\nerror: failed to execute prompt script (exit code 1)\r\nfatal: could not read Username for '{0}': Invalid argument\r\n";
                 _resources[Definition.CloneEmptyRepositoryOutput] = "";
                 _resources[Definition.CloneEmptyRepositoryError] = "Cloning into 'Integration'...\r\nwarning: You appear to have cloned an empty repository.\r\n";
                 _resources[Definition.CloneRepositoryOutput] = "";

@@ -87,7 +87,7 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorize]
         public ActionResult Create()
         {
-            if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfiguration.Current.AllowUserRepositoryCreation)
+            if (!RepositoryPermissionService.HasCreatePermission(User.Id()))
             {
                 return RedirectToAction("Unauthorized", "Home");
             }
@@ -104,7 +104,7 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorize]
         public ActionResult Create(RepositoryDetailModel model)
         {
-            if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfiguration.Current.AllowUserRepositoryCreation)
+            if (!RepositoryPermissionService.HasCreatePermission(User.Id()))
             {
                 return RedirectToAction("Unauthorized", "Home");
             }
@@ -179,7 +179,7 @@ namespace Bonobo.Git.Server.Controllers
             var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id));
             if (model != null)
             {
-                model.IsCurrentUserAdministrator = User.IsInRole(Definitions.Roles.Administrator) || RepositoryPermissionService.IsRepositoryAdministrator(User.Id(), model.Id);
+                model.IsCurrentUserAdministrator = RepositoryPermissionService.HasPermission(User.Id(), model.Id, RepositoryAccessLevel.Administer);
                 SetGitUrls(model);
             }
             using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, model.Name)))
@@ -420,7 +420,7 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorize]
         public ActionResult Clone(Guid id)
         {
-            if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfiguration.Current.AllowUserRepositoryCreation)
+            if (!RepositoryPermissionService.HasCreatePermission(User.Id()))
             {
                 return RedirectToAction("Unauthorized", "Home");
             }
@@ -437,7 +437,7 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorizeRepository]
         public ActionResult Clone(Guid id, RepositoryDetailModel model)
         {
-            if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfiguration.Current.AllowUserRepositoryCreation)
+            if (!RepositoryPermissionService.HasCreatePermission(User.Id()))
             {
                 return RedirectToAction("Unauthorized", "Home");
             }
@@ -561,17 +561,7 @@ namespace Bonobo.Git.Server.Controllers
 
         private IEnumerable<RepositoryDetailModel> GetIndexModel()
         {
-            IEnumerable<RepositoryModel> repositoryModels;
-            if (User.IsInRole(Definitions.Roles.Administrator))
-            {
-                repositoryModels = RepositoryRepository.GetAllRepositories();
-            }
-            else
-            {
-                var userTeams = TeamRepository.GetTeams(User.Id()).Select(i => i.Id).ToArray();
-                repositoryModels = RepositoryRepository.GetPermittedRepositories(User.Id(), userTeams);
-            }
-            return repositoryModels.Select(ConvertRepositoryModel).ToList();
+            return RepositoryPermissionService.GetAllPermittedRepositories(User.Id(), RepositoryAccessLevel.Pull).Select(ConvertRepositoryModel).ToList();
         }
 
         private RepositoryDetailModel ConvertRepositoryModel(RepositoryModel model)

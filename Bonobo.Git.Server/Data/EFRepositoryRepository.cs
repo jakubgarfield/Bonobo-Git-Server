@@ -4,16 +4,17 @@ using System.Linq;
 using Bonobo.Git.Server.Models;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
 using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Data
 {
-    public class EFRepositoryRepository : RepositoryRepositoryBase
+    public class EFRepositoryRepository : IRepositoryRepository
     {
         [Dependency]
         public Func<BonoboGitServerContext> CreateContext { get; set; }
 
-        public override IList<RepositoryModel> GetAllRepositories()
+        public IList<RepositoryModel> GetAllRepositories()
         {
             using (var db = CreateContext())
             {
@@ -47,7 +48,7 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public override RepositoryModel GetRepository(string name)
+        public RepositoryModel GetRepository(string name)
         {
             if (name == null) throw new ArgumentNullException("name");
 
@@ -57,7 +58,7 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public override RepositoryModel GetRepository(Guid id)
+        public RepositoryModel GetRepository(Guid id)
         {
             using (var db = CreateContext())
             {
@@ -65,7 +66,7 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public override void Delete(Guid id)
+        public void Delete(Guid id)
         {
             using (var db = CreateContext())
             {
@@ -81,13 +82,14 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public override bool Create(RepositoryModel model)
+        public bool Create(RepositoryModel model)
         {
             if (model == null) throw new ArgumentException("model");
             if (model.Name == null) throw new ArgumentException("name");
 
             using (var database = CreateContext())
             {
+                model.EnsureCollectionsAreValid();
                 model.Id = Guid.NewGuid();
                 var repository = new Repository
                 {
@@ -105,8 +107,9 @@ namespace Bonobo.Git.Server.Data
                 {
                     database.SaveChanges();
                 }
-                catch (DbUpdateException)
+                catch (DbUpdateException ex)
                 {
+                    Trace.TraceWarning("Failed to create repo {0} - {1}", model.Name, ex);
                     return false;
                 }
                 catch (UpdateException)
@@ -117,7 +120,7 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public override void Update(RepositoryModel model)
+        public void Update(RepositoryModel model)
         {
             if (model == null) throw new ArgumentException("model");
             if (model.Name == null) throw new ArgumentException("name");
@@ -127,6 +130,8 @@ namespace Bonobo.Git.Server.Data
                 var repo = db.Repositories.FirstOrDefault(i => i.Id == model.Id);
                 if (repo != null)
                 {
+                    model.EnsureCollectionsAreValid();
+
                     repo.Name = model.Name;
                     repo.Group = model.Group;
                     repo.Description = model.Description;
@@ -213,5 +218,9 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
+        public IList<RepositoryModel> GetTeamRepositories(Guid[] teamsId)
+        {
+            return GetAllRepositories().Where(repo => repo.Teams.Any(team => teamsId.Contains(team.Id))).ToList();
+        }
     }
 }
