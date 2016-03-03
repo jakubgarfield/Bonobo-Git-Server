@@ -4,6 +4,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using SpecsFor.Mvc;
 using OpenQA.Selenium;
 
@@ -11,7 +12,7 @@ using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
 using System.Text;
 using System.Threading;
-
+using Bonobo.Git.Server.Test.IntegrationTests;
 using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
 using OpenQA.Selenium.Support.UI;
 
@@ -39,6 +40,8 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         private readonly static string BareUrl = Url.TrimEnd('/');
 
         private static List<Tuple<string, MsysgitResources>> installedgits = new List<Tuple<string, MsysgitResources>>();
+        // Horrible hack while we talk about the best way to avoid this
+        private static MsysgitResources _currentResources;
 
         private static MvcWebApp app;
 
@@ -163,12 +166,12 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                  * So we need to check the value. The good part is that if it is not set anywhere we get an empty string. If
                  * it is set somewhere the string contains at least "\r\n".
                  * See the bug report here http://article.gmane.org/gmane.comp.version-control.git/287740 */
-                if (exists.Item3 == 0 && exists.Item1 != "")
+                if (exists.ExitCode == 0 && exists.StdOut != "")
                 {
-                    Console.Write(string.Format("Stdout: {0}", exists.Item1));
-                    Console.Write(string.Format("Stderr: {0}", exists.Item2));
-                    Debug.Write(string.Format("Stdout: {0}", exists.Item1));
-                    Debug.Write(string.Format("Stderr: {0}", exists.Item2));
+                    Console.Write(string.Format("Stdout: {0}", exists.StdOut));
+                    Console.Write(string.Format("Stderr: {0}", exists.StdErr));
+                    Debug.Write(string.Format("Stdout: {0}", exists.StdOut));
+                    Debug.Write(string.Format("Stderr: {0}", exists.StdErr));
                     return true;
                 }
             }
@@ -211,10 +214,10 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 RunGitOnRepo(git, "add .");
                 RunGitOnRepo(git, "commit -m\"Aw yeah!\"");
 
-                SetAnonPush(git, false);
+                SetAnonPush(false);
                 PushFiles(git, resource, false);
 
-                SetAnonPush(git, true);
+                SetAnonPush(true);
                 PushFiles(git, resource, true);
 
                 IntegrationTestHelpers.DeleteRepository(app, repo_id);
@@ -243,22 +246,43 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 ITH.DeleteRepository(app, repo_id);
             });
         }
-
         [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
         public void PushToCreateIsNotNormallyAllowed()
         {
             ForAllGits((git, resource) =>
             {
                 // Create a repo locally
-                CreateIdentity(git);
-
                 Directory.CreateDirectory(RepositoryDirectory);
-                InitAndPushRepository(git, resource);
+                InitRepository(git);
+                Environment.CurrentDirectory = RepositoryDirectory;
+                CreateIdentity(git);
+                CreateAndAddFiles(git);
 
-
-//                DeleteRepository(repo_id);
+                RunGitOnRepo(git, "push origin master").ErrorMustMatch(MsysgitResources.Definition.RepositoryNotFoundError, RepositoryUrlWithCredentials);
             });
         }
+
+        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        public void PushToCreateIsAllowedIfOptionIsSet()
+        {
+            ForAllGits((git, resource) =>
+            {
+                // Create a repo locally
+                Directory.CreateDirectory(RepositoryDirectory);
+                InitRepository(git);
+                Environment.CurrentDirectory = RepositoryDirectory;
+                CreateIdentity(git);
+                CreateAndAddFiles(git);
+
+                // Enable the push-to-create option
+                SetGlobalSetting(x => x.AllowPushToCreate, true);
+
+    //            Thread.Sleep(12000000);
+
+                RunGitOnRepo(git, "push origin master").ExpectSuccess();
+            });
+        }
+
 
 
         /// <summary>
@@ -274,10 +298,13 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 {
                     var git = gitres.Item1;
                     var resource = gitres.Item2;
+                    _currentResources = resource;
                     action(git, resource);
                 }
                 finally
                 {
+                    // Make sure we're not in the working directory when we try to delete it
+                    Environment.CurrentDirectory = Path.Combine(WorkingDirectory, "..");
                     DeleteDirectory(WorkingDirectory);
                 }
             }
@@ -294,11 +321,11 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             var res = RunGitOnRepo(git, "push origin master");
             if (success)
             {
-                Assert.AreEqual(string.Format(resource[MsysgitResources.Definition.PushFilesSuccessError], RepositoryUrlWithoutCredentials + ".git"), res.Item2);
+                Assert.AreEqual(string.Format(resource[MsysgitResources.Definition.PushFilesSuccessError], RepositoryUrlWithoutCredentials + ".git"), res.StdErr);
             }
             else
             {
-                Assert.AreEqual(string.Format(resource[MsysgitResources.Definition.PushFilesFailError], BareUrl), res.Item2);
+                Assert.AreEqual(string.Format(resource[MsysgitResources.Definition.PushFilesFailError], BareUrl), res.StdErr);
             }
         } 
 
@@ -320,15 +347,9 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             }
         }
 
-        private void SetAnonPush(string git, bool allowAnonymousPush)
+        private void SetAnonPush(bool allowAnonymousPush)
         {
-            app.NavigateTo<SettingsController>(c => c.Index());
-            var form = app.FindFormFor<GlobalSettingsModel>();
-            var field =  form.Field(f => f.AllowAnonymousPush);
-            SetCheckbox(field, allowAnonymousPush);
-            var languages = new SelectElement(form.Field(f => f.DefaultLanguage).Field);
-            languages.SelectByValue("en-US");
-            form.Submit();
+            SetGlobalSetting(f => f.AllowAnonymousPush, allowAnonymousPush);
         }
 
         private void CreateAndAddTestFiles(string git, int count)
@@ -346,13 +367,13 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             var result = RunGit(git, string.Format("clone {0}.git", RepositoryUrlWithoutCredentials), WorkingDirectory);
             if (success)
             {
-                Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryOutput], result.Item1);
-                Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryError], result.Item2);
+                Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryOutput], result.StdOut);
+                Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryError], result.StdErr);
             }
             else
             {
-                Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryOutput], result.Item1);
-                Assert.AreEqual(string.Format(resource[MsysgitResources.Definition.CloneRepositoryFailRequiresAuthError], BareUrl), result.Item2);
+                Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryOutput], result.StdOut);
+                Assert.AreEqual(string.Format(resource[MsysgitResources.Definition.CloneRepositoryFailRequiresAuthError], BareUrl), result.StdErr);
             }
 
         }
@@ -366,25 +387,33 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             form.Submit();
         }
 
+        private void SetGlobalSetting(Expression<Func<GlobalSettingsModel, bool>> optionExpression, bool value)
+        {
+            app.NavigateTo<SettingsController>(c => c.Index());
+            var form = app.FindFormFor<GlobalSettingsModel>();
+            SetCheckbox(form.Field(optionExpression), value);
+            form.Submit();
+        }
+
         private void CreateIdentity(string git)
         {
-            RunGitOnRepo(git, "config user.name \"McFlono McFloonyloo\"");
-            RunGitOnRepo(git, "config user.email \"DontBotherMe@home.never\"");
+            RunGitOnRepo(git, "config user.name \"McFlono McFloonyloo\"").ExpectSuccess();
+            RunGitOnRepo(git, "config user.email \"DontBotherMe@home.never\"").ExpectSuccess();
         }
 
         private void PullBranch(string git, MsysgitResources resource)
         {
             var result = RunGitOnRepo(git, "pull origin TestBranch");
 
-            Assert.AreEqual("Already up-to-date.\r\n", result.Item1);
-            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PullBranchError], RepositoryUrlWithoutCredentials), result.Item2);
+            Assert.AreEqual("Already up-to-date.\r\n", result.StdOut);
+            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PullBranchError], RepositoryUrlWithoutCredentials), result.StdErr);
         }
 
         private void PullTag(string git, MsysgitResources resource)
         {
             var result = RunGitOnRepo(git, "fetch");
 
-            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PullTagError], RepositoryUrlWithoutCredentials), result.Item2);
+            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PullTagError], RepositoryUrlWithoutCredentials), result.StdErr);
         }
 
         private void InitAndPullRepository(string git, MsysgitResources resource)
@@ -394,24 +423,31 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             RunGitOnRepo(git, String.Format("remote add origin {0}", RepositoryUrlWithCredentials));
             var result = RunGitOnRepo(git, "pull origin master");
 
-            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PullRepositoryError], RepositoryUrlWithoutCredentials), result.Item2);
+            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PullRepositoryError], RepositoryUrlWithoutCredentials), result.StdErr);
         }
 
+
+        private void InitRepository(string git)
+        {
+            RunGitOnRepo(git, "init").ExpectSuccess();
+            RunGitOnRepo(git, String.Format("remote add origin {0}", RepositoryUrlWithCredentials)).ExpectSuccess();
+        }
+		
         private void InitAndPushRepository(string git, MsysgitResources resource)
         {
             RunGitOnRepo(git, "init");
             RunGitOnRepo(git, String.Format("remote add origin {0}", RepositoryUrlWithCredentials));
             var result = RunGitOnRepo(git, "push origin master");
 
-            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PullRepositoryError], RepositoryUrlWithoutCredentials), result.Item2);
+            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PullRepositoryError], RepositoryUrlWithoutCredentials), result.StdErr);
         }
 
         private void CloneRepository(string git, MsysgitResources resource)
         {
             var result = RunGit(git, String.Format(String.Format("clone {0}", RepositoryUrlWithCredentials), RepositoryName), WorkingDirectory);
 
-            Assert.AreEqual(resource[MsysgitResources.Definition.CloneRepositoryOutput], result.Item1);
-            Assert.AreEqual(resource[MsysgitResources.Definition.CloneRepositoryError], result.Item2);
+            Assert.AreEqual(resource[MsysgitResources.Definition.CloneRepositoryOutput], result.StdOut);
+            Assert.AreEqual(resource[MsysgitResources.Definition.CloneRepositoryError], result.StdErr);
         }
 
         private void PushBranch(string git, MsysgitResources resource)
@@ -419,7 +455,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             RunGitOnRepo(git, "checkout -b \"TestBranch\"");
             var result = RunGitOnRepo(git, "push origin TestBranch");
 
-            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PushBranchError], RepositoryUrlWithCredentials), result.Item2);
+            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PushBranchError], RepositoryUrlWithCredentials), result.StdErr);
         }
 
         private void PushTag(string git, MsysgitResources resource)
@@ -427,10 +463,18 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             RunGitOnRepo(git, "tag -a v1.4 -m \"my version 1.4\"");
             var result = RunGitOnRepo(git, "push --tags origin");
             
-            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PushTagError], RepositoryUrlWithCredentials), result.Item2);
+            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PushTagError], RepositoryUrlWithCredentials), result.StdErr);
         }
 
         private void CreateAndPushFiles(string git, MsysgitResources resource)
+        {
+            CreateAndAddFiles(git);
+            var result = RunGitOnRepo(git, "push origin master");
+
+            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PushFilesSuccessError], RepositoryUrlWithCredentials), result.StdErr);
+        }
+
+        private void CreateAndAddFiles(string git)
         {
             CreateRandomFile(Path.Combine(RepositoryDirectory, "1.dat"), 10);
             CreateRandomFile(Path.Combine(RepositoryDirectory, "2.dat"), 1);
@@ -438,28 +482,25 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             CreateRandomFile(Path.Combine(RepositoryDirectory, "Subdirectory", "3.dat"), 20);
             CreateRandomFile(Path.Combine(RepositoryDirectory, "Subdirectory", "4.dat"), 15);
 
-            RunGitOnRepo(git, "add .");
-            RunGitOnRepo(git, "commit -m \"Test Files Added\"");
-            var result = RunGitOnRepo(git, "push origin master");
-
-            Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PushFilesSuccessError], RepositoryUrlWithCredentials), result.Item2);
+            RunGitOnRepo(git, "add .").ExpectSuccess();
+            RunGitOnRepo(git, "commit -m \"Test Files Added\"").ExpectSuccess();
         }
 
         private void CloneEmptyRepositoryWithCredentials(string git, MsysgitResources resource)
         {
             var result = RunGit(git, String.Format(String.Format("clone {0}", RepositoryUrlWithCredentials), RepositoryName), WorkingDirectory);
             
-            Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryOutput], result.Item1);
-            Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryError], result.Item2);
+            Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryOutput], result.StdOut);
+            Assert.AreEqual(resource[MsysgitResources.Definition.CloneEmptyRepositoryError], result.StdErr);
         }
 
 
-        private static Tuple<string, string, int> RunGitOnRepo(string git, string arguments, int timeout = 30000 /* milliseconds */)
+        private GitResult RunGitOnRepo(string git, string arguments, int timeout = 30000 /* milliseconds */)
         {
             return RunGit(git, arguments, RepositoryDirectory, timeout);
         }
 
-        private static Tuple<string, string, int> RunGit(string git, string arguments, string workingDirectory, int timeout = 30000 /* milliseconds */)
+        private static GitResult RunGit(string git, string arguments, string workingDirectory, int timeout = 30000 /* milliseconds */)
         {
             // When a git version supports overwriting multi-value config files values this should be uncommented to make
             // all tests runnable on systems that have a credential.helper configured.
@@ -521,12 +562,12 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                         Console.WriteLine("Stdout: {0}", output);
                         Console.WriteLine("Stderr: {0}", error);
 
-                        return Tuple.Create(strout, strerr, process.ExitCode);
+                        return new GitResult {StdErr = strerr, StdOut = strout, ExitCode = process.ExitCode, Resources = _currentResources };
                     }
                     else
                     {
                         Assert.Fail(string.Format("Runing command '{0} {1}' timed out! Timeout {2} seconds.", git, arguments, timeout));
-                        return Tuple.Create<string, string, int>(null, null, -1);
+                        return new GitResult() { StdErr = null, StdOut = null, ExitCode = -1 };
                     }
                 }
             }
@@ -553,13 +594,30 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             if (!Directory.Exists(directoryPath))
                 return;
 
-            var directory = new DirectoryInfo(directoryPath) { Attributes = FileAttributes.Normal };
-            foreach (var item in directory.GetFiles("*.*", SearchOption.AllDirectories))
+            // We have to tolerate intermittent errors during directory deletion, because
+            // other parts of Windows sometimes hold locks on files briefly
+            // Multiple tries normally fixes it
+            for (int attempt = 10; attempt >= 0; attempt--)
             {
-                item.Attributes = FileAttributes.Normal;
+                try
+                {
+                    var directory = new DirectoryInfo(directoryPath) {Attributes = FileAttributes.Normal};
+                    foreach (var item in directory.GetFiles("*.*", SearchOption.AllDirectories))
+                    {
+                        item.Attributes = FileAttributes.Normal;
+                    }
+                    directory.Delete(true);
+                    return;
+                }
+                catch
+                {
+                    if (attempt == 0)
+                    {
+                        throw;
+                    }
+                    Thread.Sleep(1000);
+                }
             }
-            directory.Delete(true);
         }
-
     }
 }

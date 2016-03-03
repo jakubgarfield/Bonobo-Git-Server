@@ -38,10 +38,12 @@ namespace Bonobo.Git.Server.Controllers
             if (!RepositoryIsValid(repositoryName))
             {
                 // This isn't a real repo - but we might consider allowing creation
-                if (isPush && 
-                    UserConfiguration.Current.AllowPushToCreate && 
-                    RepositoryPermissionService.HasCreatePermission(User.Id()))
+                if (isPush && UserConfiguration.Current.AllowPushToCreate)
                 {
+                    if (!RepositoryPermissionService.HasCreatePermission(User.Id()))
+                    {
+                        return UnauthorizedResult();
+                    }
                     if (!TryCreateOnPush(repositoryName))
                     {
                         return UnauthorizedResult();
