@@ -103,14 +103,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         public void RunGitTests()
         {
 
-            foreach (var gitresource in installedgits)
-            {
-
-                Directory.CreateDirectory(WorkingDirectory);
-                var git = gitresource.Item1;
-                var resource = gitresource.Item2;
-
-                try
+            ForAllGits((git, resource) =>
                 {
                     Guid repo_id = IntegrationTestHelpers.CreateRepositoryOnWebInterface(app, RepositoryName);
                     CloneEmptyRepositoryWithCredentials(git, resource);
@@ -128,12 +121,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                     PullTag(git, resource);
                     PullBranch(git, resource);
                     IntegrationTestHelpers.DeleteRepository(app, repo_id);
-                }
-                finally
-                {
-                    DeleteDirectory(WorkingDirectory);
-                }
-            }
+                });
         }
 
         [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
@@ -146,25 +134,15 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
              * See http://article.gmane.org/gmane.comp.version-control.git/287538
              * and patch status http://article.gmane.org/gmane.comp.version-control.git/287565
              */
-            foreach (var gitres in installedgits)
+            ForAllGits((git, resource) =>
             {
-                Directory.CreateDirectory(WorkingDirectory);
-                var git = gitres.Item1;
-                var resource = gitres.Item2;
-                try
-                {
-                    Guid repo_id = IntegrationTestHelpers.CreateRepositoryOnWebInterface(app, RepositoryName);
-                    AllowAnonRepoClone(repo_id, false);
-                    CloneRepoAnon(git, resource, false);
-                    AllowAnonRepoClone(repo_id, true);
-                    CloneRepoAnon(git, resource, true);
-                    IntegrationTestHelpers.DeleteRepository(app, repo_id);
-                }
-                finally
-                {
-                    DeleteDirectory(WorkingDirectory);
-                }
-            }
+                Guid repo_id = IntegrationTestHelpers.CreateRepositoryOnWebInterface(app, RepositoryName);
+                AllowAnonRepoClone(repo_id, false);
+                CloneRepoAnon(git, resource, false);
+                AllowAnonRepoClone(repo_id, true);
+                CloneRepoAnon(git, resource, true);
+                IntegrationTestHelpers.DeleteRepository(app, repo_id);
+            });
         }
 
         private static bool AnyCredentialHelperExists(string git)
@@ -223,40 +201,24 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         public void AnonPush()
         {
 
-            var gitres = installedgits.Last();
-            var git = gitres.Item1;
-            var resource = gitres.Item2;
-            Directory.CreateDirectory(WorkingDirectory);
-
-            try
+            ForAllGits((git, resource) =>
             {
-                if (AnyCredentialHelperExists(git))
-                {
-                    Assert.Inconclusive("Cannot run this test if any credential helper is configured!");
-                }
-                else
-                {
-                    var repo_id = IntegrationTestHelpers.CreateRepositoryOnWebInterface(app, RepositoryName);
-                    AllowAnonRepoClone(repo_id, true);
-                    CloneRepoAnon(git, resource, true);
-                    CreateIdentity(git);
-                    CreateRandomFile(Path.Combine(RepositoryDirectory, "file.txt"), 0);
-                    RunGitOnRepo(git, "add .");
-                    RunGitOnRepo(git, "commit -m\"Aw yeah!\"");
+                var repo_id = IntegrationTestHelpers.CreateRepositoryOnWebInterface(app, RepositoryName);
+                AllowAnonRepoClone(repo_id, true);
+                CloneRepoAnon(git, resource, true);
+                CreateIdentity(git);
+                CreateRandomFile(Path.Combine(RepositoryDirectory, "file.txt"), 0);
+                RunGitOnRepo(git, "add .");
+                RunGitOnRepo(git, "commit -m\"Aw yeah!\"");
 
-                    SetAnonPush(git, false);
-                    PushFiles(git, resource, false);
+                SetAnonPush(git, false);
+                PushFiles(git, resource, false);
 
-                    SetAnonPush(git, true);
-                    PushFiles(git, resource, true);
+                SetAnonPush(git, true);
+                PushFiles(git, resource, true);
 
-                    IntegrationTestHelpers.DeleteRepository(app, repo_id);
-                }
-            }
-            finally
-            {
-                DeleteDirectory(WorkingDirectory);
-            }
+                IntegrationTestHelpers.DeleteRepository(app, repo_id);
+            });
         }
 
         /// <summary>
