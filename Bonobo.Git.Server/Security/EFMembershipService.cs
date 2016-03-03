@@ -171,20 +171,18 @@ namespace Bonobo.Git.Server.Security
         {
             using (var db = CreateContext())
             {
-                foreach (var user in db.Users)
+                var user = db.Users.FirstOrDefault(u => u.Id == id);
+                if (user != null)
                 {
-                    if (user.Id == id)
-                    {
-                        user.AdministratedRepositories.Clear();
-                        user.Roles.Clear();
-                        user.Repositories.Clear();
-                        user.Teams.Clear();
-                        db.Users.Remove(user);
-                        db.SaveChanges();
-                    }
+                    user.AdministratedRepositories.Clear();
+                    user.Roles.Clear();
+                    user.Repositories.Clear();
+                    user.Teams.Clear();
+                    db.Users.Remove(user);
+                    db.SaveChanges();
                 }
             }
-        }
+        } 
 
         private void SetPassword(User user, string password)
         {
