@@ -29,7 +29,7 @@ namespace Bonobo.Git.Server.Data
             return ADBackend.Instance.Repositories.ToList();
         }
 
-        public override RepositoryModel GetRepository(string name, StringComparison compType = StringComparison.OrdinalIgnoreCase)
+        public RepositoryModel GetRepository(string name, StringComparison compType = StringComparison.OrdinalIgnoreCase)
         {
             var repos = GetAllRepositories();
             foreach (var repo in repos)

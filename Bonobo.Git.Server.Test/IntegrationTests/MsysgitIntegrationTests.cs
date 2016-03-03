@@ -17,6 +17,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 {
+    using ITH = IntegrationTestHelpers;
     /// <summary>
     /// This is a regression test for msysgit clients. It can be run against installed version of Bonobo Git Server.
     /// </summary>
@@ -267,18 +268,17 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         {
             ForAllGits((git, resource) =>
             {
-                Guid repo_id = CreateRepositoryOnWebInterface();
+                Guid repo_id = ITH.CreateRepositoryOnWebInterface(app, RepositoryName);
 
                 // Clone the repo
-                RemoveStoredCredentials(git);
                 AllowAnonRepoClone(repo_id, true);
-                CloneEmptyRepositoryAndEnterRepo(git, resource);
+                CloneEmptyRepositoryWithCredentials(git, resource);
 
                 CreateIdentity(git);
                 // I want to do a push *with* a username
                 CreateAndPushFiles(git, resource);
 
-                DeleteRepository(repo_id);
+                ITH.DeleteRepository(app, repo_id);
             });
         }
 

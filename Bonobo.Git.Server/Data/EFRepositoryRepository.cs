@@ -48,7 +48,7 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public override RepositoryModel GetRepository(string name, StringComparison compType)
+        public RepositoryModel GetRepository(string name, StringComparison compType)
         {
             if (name == null) throw new ArgumentNullException("name");
 
