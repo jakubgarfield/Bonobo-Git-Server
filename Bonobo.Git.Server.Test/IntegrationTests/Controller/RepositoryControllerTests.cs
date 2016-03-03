@@ -139,32 +139,6 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
-        public void DropdownNavigationWorks()
-        {
-            var reponame = "A_Nice_Repo";
-            var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame);
-            var id2 = ITH.CreateRepositoryOnWebInterface(app, "other_name");
-
-            app.NavigateTo<RepositoryController>(c => c.Detail(id2));
-
-            var element = app.Browser.FindElementByCssSelector("select#Repositories");
-            var dropdown = new SelectElement(element);
-            dropdown.SelectByText(reponame);
-
-            app.UrlMapsTo<RepositoryController>(c => c.Detail(id1));
-
-
-            dropdown = new SelectElement(app.Browser.FindElementByCssSelector("select#Repositories"));
-            dropdown.SelectByText("other_name");
-
-            app.UrlMapsTo<RepositoryController>(c => c.Detail(id2));
-
-            ITH.DeleteRepository(app, id1);
-            ITH.DeleteRepository(app, id2);
-
-        }
-
     }
 }
 
