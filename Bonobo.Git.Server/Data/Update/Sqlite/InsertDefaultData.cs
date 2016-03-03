@@ -24,5 +24,7 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
         {
             get { return @"SELECT Count(*) = 0 FROM [User]"; }
         }
+
+        public void CodeAction(BonoboGitServerContext context) { }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Bonobo.Git.Server.Data.Update
+﻿using System;
+
+namespace Bonobo.Git.Server.Data.Update
 {
     public class UsernamesToLower : IUpdateScript
     {
@@ -16,5 +18,8 @@
         {
             get { return null; }
         }
+
+        public void CodeAction(BonoboGitServerContext context) { }
+
     }
 }

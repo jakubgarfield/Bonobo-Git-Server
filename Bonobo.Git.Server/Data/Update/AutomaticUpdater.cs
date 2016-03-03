@@ -49,27 +49,21 @@ namespace Bonobo.Git.Server.Data.Update
                     }
                 }
 
-                try
+                if (!string.IsNullOrEmpty(item.Command))
                 {
-                    ctxAdapter.ObjectContext.ExecuteStoreCommand(item.Command);
+                    try
+                    {
+                        ctxAdapter.ObjectContext.ExecuteStoreCommand(item.Command);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.TraceError("Exception while processing upgrade script {0}\r\n{1}", item.Command, ex);
+                        throw;
+                    }
                 }
-                catch(Exception ex)
-                {
-                    Trace.TraceError("Exception while processing upgrade script {0}\r\n{1}", item.Command, ex);
-                    throw;
-                }
-            }
-            // the current pattern does not cut it anymore for adding the guid column
 
-            if (connectiontype.Equals("SQLiteConnection"))
-            {
-                new Sqlite.AddGuidColumn(ctx);
+                item.CodeAction(ctx);
             }
-            else
-            {
-                new SqlServer.AddGuidColumn(ctx);
-            }
-
         }
     }
 }

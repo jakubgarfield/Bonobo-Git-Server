@@ -1,4 +1,6 @@
-﻿namespace Bonobo.Git.Server.Data.Update.Sqlite
+﻿using System;
+
+namespace Bonobo.Git.Server.Data.Update.Sqlite
 {
     public class AddAuditPushUser : IUpdateScript
     {
@@ -20,5 +22,8 @@
                 return "SELECT Count(AuditPushUser) = -1 FROM [Repository]";
             }
         }
+
+        public void CodeAction(BonoboGitServerContext context) {}
+
     }
 }

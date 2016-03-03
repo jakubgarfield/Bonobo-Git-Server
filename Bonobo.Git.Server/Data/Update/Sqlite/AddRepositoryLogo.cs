@@ -1,4 +1,6 @@
-﻿namespace Bonobo.Git.Server.Data.Update.Sqlite
+﻿using System;
+
+namespace Bonobo.Git.Server.Data.Update.Sqlite
 {
     public class AddRepositoryLogo : IUpdateScript
     {
@@ -17,5 +19,8 @@
                 return "SELECT Count([Logo]) = -1 FROM Repository";
             }
         }
+
+        public void CodeAction(BonoboGitServerContext context) { }
+
     }
 }

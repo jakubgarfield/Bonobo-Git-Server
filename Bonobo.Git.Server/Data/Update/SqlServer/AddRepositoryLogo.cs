@@ -1,4 +1,6 @@
-﻿namespace Bonobo.Git.Server.Data.Update.SqlServer
+﻿using System;
+
+namespace Bonobo.Git.Server.Data.Update.SqlServer
 {
     public class AddRepositoryLogo : IUpdateScript
     {
@@ -22,5 +24,8 @@
 ";
             }
         }
+
+        public void CodeAction(BonoboGitServerContext context) { }
+
     }
 }

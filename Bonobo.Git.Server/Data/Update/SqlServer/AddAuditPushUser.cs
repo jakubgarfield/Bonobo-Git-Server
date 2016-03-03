@@ -32,5 +32,7 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
 ";
             }
         }
+
+        public void CodeAction(BonoboGitServerContext context) { }
     }
 }

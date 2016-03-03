@@ -8,15 +8,18 @@ using System.Data.SQLite;
 
 namespace Bonobo.Git.Server.Data.Update.Sqlite
 {
-    public class AddGuidColumn
+    public class AddGuidColumn : IUpdateScript
     {
-        readonly IAuthenticationProvider AuthProvider;
-        readonly Database _db;
+        private readonly IAuthenticationProvider AuthProvider;
+        private Database _db;
 
-        public AddGuidColumn(BonoboGitServerContext context)
+        public AddGuidColumn()
         {
             AuthProvider = DependencyResolver.Current.GetService<IAuthenticationProvider>();
+        }
 
+        public void CodeAction(BonoboGitServerContext context)
+        {
             _db = context.Database;
 
             if (UpgradeHasAlreadyBeenRun())
@@ -415,5 +418,8 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
 
             ");
         }
+
+        public string Command { get { return null; } }
+        public string Precondition { get { return null; } }
     }
 }

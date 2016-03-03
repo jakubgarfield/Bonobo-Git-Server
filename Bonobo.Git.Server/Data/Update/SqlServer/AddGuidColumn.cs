@@ -5,18 +5,23 @@ using System.Collections.Generic;
 using System;
 using System.Data.Entity;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace Bonobo.Git.Server.Data.Update.SqlServer
 {
-    public class AddGuidColumn
-    {
-        readonly IAuthenticationProvider AuthProvider;
-        readonly Database _db;
+    public class AddGuidColumn : IUpdateScript
 
-        public AddGuidColumn(BonoboGitServerContext context)
+    {
+        private readonly IAuthenticationProvider AuthProvider;
+        private Database _db;
+
+        public AddGuidColumn()
         {
             AuthProvider = DependencyResolver.Current.GetService<IAuthenticationProvider>();
+        }
 
+        public void CodeAction(BonoboGitServerContext context)
+        {
             _db = context.Database;
 
             if (UpgradeHasAlreadyBeenRun())
@@ -60,32 +65,6 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
                 // the column does not exist!
                 return false;
             }
-        }
-
-        void UpdateUserTable()
-        {
-            AddGuidKey("User");
-            _db.ExecuteSqlCommand(
-                @"ALTER TABLE [User] ADD [PasswordSalt] NVARCHAR(255) NOT NULL DEFAULT 'x';
-                ");
-            _db.ExecuteSqlCommand(
-                @"UPDATE [User] SET [PasswordSalt] = [Name];
-                ");
-        }
-
-        private void AddGuidKey(string tableName)
-        {
-            _db.ExecuteSqlCommand(string.Format(
-                @"ALTER TABLE [{0}] ADD [Id] uniqueidentifier NOT NULL DEFAULT NEWID();",
-                tableName));
-        }
-
-        private void SetGuidPrimaryKey(string tableName)
-        {
-            _db.ExecuteSqlCommand(string.Format(
-                @"ALTER TABLE [{0}] DROP CONSTRAINT PK_{0};
-                ALTER TABLE [{0}] ADD PRIMARY KEY (Id);",
-                tableName));
         }
 
         void RenameTables()
@@ -283,7 +262,7 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
 
         private void CopyUsers()
         {
-            var users = _db.SqlQuery<OldUser>("Select * from oUser;");
+            var users = _db.SqlQuery<OldUser>("Select * from oUser;").ToList();
             Dictionary<string, PrincipalContext> domains = new Dictionary<string, PrincipalContext>();
             foreach (var entry in users)
             {
@@ -292,7 +271,7 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
                 {
                     var domain = entry.Username.GetDomain(); // not sure what to do if domain is not found...
                     PrincipalContext dc;
-                    ;
+                    
                     if (!domains.TryGetValue(domain, out dc))
                     {
                         dc = new PrincipalContext(ContextType.Domain, domain);
@@ -339,7 +318,7 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
 
         private void CopyTeams()
         {
-            var teams = _db.SqlQuery<NameDesc>("Select * from oTeam");
+            var teams = _db.SqlQuery<NameDesc>("Select * from oTeam").ToList();
             foreach (var team in teams)
             {
                 _db.ExecuteSqlCommand("INSERT INTO Team VALUES ({0}, {1}, {2})",
@@ -349,7 +328,7 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
 
         private void CopyRoles()
         {
-            var roles = _db.SqlQuery<NameDesc>("Select * from oRole");
+            var roles = _db.SqlQuery<NameDesc>("Select * from oRole").ToList();
             foreach (var role in roles)
             {
                 _db.ExecuteSqlCommand("INSERT INTO Role VALUES ({0}, {1}, {2})",
@@ -361,7 +340,7 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
 
         private void CopyRepositories()
         {
-            var repos = _db.SqlQuery<OldRepo>("SELECT * FROM oRepo");
+            var repos = _db.SqlQuery<OldRepo>("SELECT * FROM oRepo").ToList();
             foreach (var repo in repos)
             {
                 _db.ExecuteSqlCommand("INSERT INTO Repository VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6})",
@@ -436,5 +415,8 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
 
             ");
         }
+
+        public string Command { get { return null; } }
+        public string Precondition { get { return null; } }
     }
 }

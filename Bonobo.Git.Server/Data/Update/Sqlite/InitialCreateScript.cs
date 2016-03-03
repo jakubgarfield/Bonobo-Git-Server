@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Bonobo.Git.Server.Data.Update.Sqlite
 {
     public class InitialCreateScript : IUpdateScript
@@ -86,5 +88,7 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
         {
             get { return null; }
         }
+
+        public void CodeAction(BonoboGitServerContext context) { }
     }
 }

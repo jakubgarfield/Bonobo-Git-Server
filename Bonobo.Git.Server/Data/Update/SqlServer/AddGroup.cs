@@ -1,4 +1,6 @@
-﻿namespace Bonobo.Git.Server.Data.Update.SqlServer
+﻿using System;
+
+namespace Bonobo.Git.Server.Data.Update.SqlServer
 {
     public class AddGroup : IUpdateScript
     {
@@ -22,5 +24,8 @@
 ";
             }
         }
+
+        public void CodeAction(BonoboGitServerContext context) { }
+
     }
 }

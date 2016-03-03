@@ -81,8 +81,9 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
                     _databaseName);
                 cmd.ExecuteNonQuery();*/
 
-                var cmd2 = connection.CreateCommand();
-                cmd2.CommandText = string.Format(@"
+                using (var cmd2 = connection.CreateCommand())
+                {
+                    cmd2.CommandText = string.Format(@"
 
                     DECLARE @FILENAME AS VARCHAR(255)
                     SET @FILENAME = CONVERT(VARCHAR(255), '{1}');
@@ -93,8 +94,9 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 		                SIZE = 5MB, 
 		                MAXSIZE = 10MB, 
 		                FILEGROWTH = 5MB )')",
-                    _databaseName, fileName);
-                cmd2.ExecuteNonQuery();
+                        _databaseName, fileName);
+                    cmd2.ExecuteNonQuery();
+                }
 
                 Exec(connection, string.Format(@"ALTER DATABASE [{0}] SET AUTO_CLOSE ON;", _databaseName));
 //                Exec(connection, string.Format(@"ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", _databaseName));
@@ -103,9 +105,11 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 
         private void Exec(SqlConnection connection, string commandText)
         {
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = commandText;
-            cmd.ExecuteNonQuery();
+            using (var cmd = connection.CreateCommand())
+            {
+                cmd.CommandText = commandText;
+                cmd.ExecuteNonQuery();
+            }
         }
 
         public void Dispose()
