@@ -24,6 +24,7 @@ using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 using System.Runtime.Caching;
+using Bonobo.Git.Server.Attributes;
 using Microsoft.Practices.Unity.Mvc;
 
 namespace Bonobo.Git.Server
@@ -73,6 +74,7 @@ namespace Bonobo.Git.Server
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             UserConfiguration.Initialize();
             RegisterDependencyResolver();
+            GlobalFilters.Filters.Add((AllViewsFilter)DependencyResolver.Current.GetService<AllViewsFilter>());
 
             try
             {

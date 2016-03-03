@@ -205,8 +205,6 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult Detail(Guid id)
         {
             ViewBag.ID = id;
-            List<SelectListItem> items = PopulateRepoGoToList(id);
-            ViewBag.Repositories = items;
 
             var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id));
             if (model != null)
@@ -222,42 +220,6 @@ namespace Bonobo.Git.Server.Controllers
             }
 
             return View(model);
-        }
-
-        private List<SelectListItem> PopulateRepoGoToList(Guid id)
-        {
-            var firstList = this.GetIndexModel()
-                    .OrderBy(x => x.Name.ToLowerInvariant())
-                    .GroupBy(x => x.Group == null ? Resources.Repository_No_Group : x.Group);
-            List<SelectListItem> items = new List<SelectListItem>();
-            var u = new UrlHelper(ControllerContext.RequestContext);
-            var groups = new Dictionary<string, SelectListGroup>();
-            foreach (var grouped in firstList)
-            {
-                SelectListGroup group = null;
-                string key = grouped.Key;
-                if (!groups.TryGetValue(key, out group))
-                {
-                    group = new SelectListGroup();
-                    group.Name = key;
-                    groups[key] = group;
-                }
-                foreach (var item in grouped)
-                {
-                    var slt = new SelectListItem
-                    {
-                        Text = item.Name,
-                        Value = u.Action("Detail", "Repository", new { id = item.Id }),
-                        Group = group,
-                        /* This does not seem to work.
-                         * If someone can figure out why we can remove the "Go to repository"
-                         * from the drop down creation. */
-                        Selected = item.Id == id,
-                    };
-                    items.Add(slt);
-                }
-            }
-            return items;
         }
 
         /// <summary>
@@ -288,8 +250,6 @@ namespace Bonobo.Git.Server.Controllers
             bool includeDetails = Request.IsAjaxRequest(); 
 
             ViewBag.ID = id;
-            List<SelectListItem> items = PopulateRepoGoToList(id);
-            ViewBag.Repositories = items;
             var name = PathEncoder.Decode(encodedName);
             var path = PathEncoder.Decode(encodedPath);
 
@@ -334,8 +294,6 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult Blob(Guid id, string encodedName, string encodedPath)
         {
             ViewBag.ID = id;
-            List<SelectListItem> items = PopulateRepoGoToList(id);
-            ViewBag.Repositories = items;
             var repo = RepositoryRepository.GetRepository(id);
             using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))
             {
@@ -354,8 +312,6 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult Raw(Guid id, string encodedName, string encodedPath, bool display = false)
         {
             ViewBag.ID = id;
-            List<SelectListItem> items = PopulateRepoGoToList(id);
-            ViewBag.Repositories = items;
 
             var repo = RepositoryRepository.GetRepository(id);
             using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))
@@ -386,8 +342,6 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult Blame(Guid id, string encodedName, string encodedPath)
         {
             ViewBag.ID = id;
-            List<SelectListItem> items = PopulateRepoGoToList(id);
-            ViewBag.Repositories = items;
             ViewBag.ShowShortMessageOnly = true;
             var repo = RepositoryRepository.GetRepository(id);
             using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))
@@ -465,8 +419,6 @@ namespace Bonobo.Git.Server.Controllers
             page = page >= 1 ? page : 1;
             
             ViewBag.ID = id;
-            List<SelectListItem> items = PopulateRepoGoToList(id);
-            ViewBag.Repositories = items;
             ViewBag.ShowShortMessageOnly = true;
             var repo = RepositoryRepository.GetRepository(id);
             using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))
@@ -485,8 +437,6 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult Commit(Guid id, string commit)
         {
             ViewBag.ID = id;
-            List<SelectListItem> items = PopulateRepoGoToList(id);
-            ViewBag.Repositories = items;
             ViewBag.ShowShortMessageOnly = false;
             var repo = RepositoryRepository.GetRepository(id);
             using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))
@@ -509,8 +459,6 @@ namespace Bonobo.Git.Server.Controllers
             model.Name = "";
             PopulateCheckboxListData(ref model);
             ViewBag.ID = id;
-            List<SelectListItem> items = PopulateRepoGoToList(id);
-            ViewBag.Repositories = items;
             return View(model);
         }
 
@@ -576,8 +524,6 @@ namespace Bonobo.Git.Server.Controllers
             }
 
             ViewBag.ID = id;
-            List<SelectListItem> items = PopulateRepoGoToList(id);
-            ViewBag.Repositories = items;
             PopulateCheckboxListData(ref model);
             return View(model);
         }
@@ -586,8 +532,6 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult History(Guid id, string encodedPath, string encodedName)
         {
             ViewBag.ID = id;
-            List<SelectListItem> items = PopulateRepoGoToList(id);
-            ViewBag.Repositories = items;
             ViewBag.ShowShortMessageOnly = true;
             var repo = RepositoryRepository.GetRepository(id);
             using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))

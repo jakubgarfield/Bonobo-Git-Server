@@ -261,6 +261,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\AllViewsAttribute.cs" />
     <Compile Include="Attributes\FileExtensionsCustom.cs" />
     <Compile Include="Attributes\RepositoryNameNormalizerAttribute.cs" />
     <Compile Include="Attributes\UniqueRepoNameAttribute.cs" />
