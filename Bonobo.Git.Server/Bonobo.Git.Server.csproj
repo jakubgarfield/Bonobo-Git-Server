@@ -261,8 +261,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\UnityConfig.cs" />
-    <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Attributes\FileExtensionsCustom.cs" />
     <Compile Include="Attributes\RepositoryNameNormalizerAttribute.cs" />
     <Compile Include="Attributes\UniqueRepoNameAttribute.cs" />
@@ -320,8 +318,6 @@
     <Compile Include="Security\ValidationResult.cs" />
     <Compile Include="Security\WindowsAuthenticationProvider.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="UnityDecoratorBuildStrategy.cs" />
-    <Compile Include="UnityDecoratorContainerExtension.cs" />
     <Compile Include="Git\ConfigurationBasedRepositoryLocator.cs" />
     <Compile Include="Git\GitService\IGitService.cs" />
     <Compile Include="Git\GitService\ExecutionOptions.cs" />
@@ -398,7 +394,6 @@
     <Compile Include="Security\IRepositoryPermissionService.cs" />
     <Compile Include="FileDisplayHandler.cs" />
     <Compile Include="Security\PasswordService.cs" />
-    <Compile Include="UnityDependencyResolver.cs" />
     <Compile Include="FilterProviders\UnityFilterAttributeFilterProvider.cs" />
   </ItemGroup>
   <ItemGroup>
