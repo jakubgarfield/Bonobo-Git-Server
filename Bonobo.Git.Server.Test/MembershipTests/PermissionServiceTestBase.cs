@@ -273,11 +273,18 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         }
 
         [TestMethod]
-        public void UserCanCreateRepoWithGlobalOptionSet()
+        public void NamedUserCanCreateRepoWithGlobalOptionSet()
         {
             var user = AddUser();
             UserConfiguration.Current.AllowUserRepositoryCreation = true;
             Assert.IsTrue(_service.HasCreatePermission(user.Id));
+        }
+
+        [TestMethod]
+        public void AnonUserCannotCreateRepoWithGlobalOptionSet()
+        {
+            UserConfiguration.Current.AllowUserRepositoryCreation = true;
+            Assert.IsFalse(_service.HasCreatePermission(Guid.Empty));
         }
 
 

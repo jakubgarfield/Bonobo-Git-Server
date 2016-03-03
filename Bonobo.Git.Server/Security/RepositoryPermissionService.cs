@@ -42,6 +42,11 @@ namespace Bonobo.Git.Server.Security
 
         public bool HasCreatePermission(Guid userId)
         {
+            if (userId == Guid.Empty)
+            {
+                // Anonymous users cannot create repos
+                return false;
+            }
             return IsSystemAdministrator(userId) || UserConfiguration.Current.AllowUserRepositoryCreation;
         }
 
