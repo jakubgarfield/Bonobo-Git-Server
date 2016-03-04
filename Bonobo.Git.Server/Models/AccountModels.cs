@@ -39,13 +39,38 @@ namespace Bonobo.Git.Server.Models
         {
             get
             {
-                return String.Format("{0} {1}", GivenName, Surname);
+                var compositeName = String.Format("{0} {1}", GivenName, Surname).Trim();
+                if (String.IsNullOrEmpty(compositeName))
+                {
+                    // Return the username if we don't have a GivenName or Surname
+                    return Username;
+                }
+                else
+                {
+                    return compositeName;
+                }
             }
         }
 
         string INameProperty.Name
         {
             get { return Username; }
+        }
+
+        /// <summary>
+        /// This is the name we'd sort users by
+        /// </summary>
+        public string SortName
+        {
+            get
+            {
+                var compositeName = Surname + GivenName;
+                if (String.IsNullOrEmpty(compositeName))
+                {
+                    return Username;
+                }
+                return compositeName;
+            }
         }
     }
 
