@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
+using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
 
 namespace Bonobo.Git.Server.Test.Integration.Web
 {
@@ -15,9 +16,8 @@ namespace Bonobo.Git.Server.Test.Integration.Web
             private static MvcWebApp app;
 
             [ClassInitialize]
-            public static void MyClassInitialize(TestContext testContext)
+            public static void ClassInit(TestContext testContext)
             {
-                //arrange
                 app = new MvcWebApp();
             }
 
@@ -25,6 +25,12 @@ namespace Bonobo.Git.Server.Test.Integration.Web
             public static void Cleanup()
             {
                 app.Browser.Close();
+            }
+
+            [TestInitialize]
+            public void InitTest()
+            {
+                IntegrationTestHelpers.Login(app);
             }
 
             [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]

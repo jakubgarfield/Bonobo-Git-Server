@@ -40,6 +40,8 @@ textarea.large, input.large { width: 40em;height: 17em; }
 div.pure-control-group.checkboxlist>span { display: inline-block; }
 
 
+/*table.repositories a.detail { padding-right: 10px }*/
+table.repositories button.copy-to-clip-button { margin-left: 0px; border-radius: 5px; }
 
 .navigation { padding: 0.5em 0; text-align: right;}
 .navigation.pure-menu a.pure-menu-heading { color: white; font-weight: 300; font-size: 1.2em; background: url('images/git-logo.png') no-repeat 0 4px; padding-left: 40px; float: left; margin-left: 0.5em;}
@@ -51,6 +53,7 @@ div.pure-control-group.checkboxlist>span { display: inline-block; }
 .navigation li a:hover,
 .navigation li a:focus { background: none; color: #AECFE5; text-decoration: none; }
 .Repository .navigation .repository, .Account .navigation .users, .Team .navigation .teams, .Settings .navigation .settings { color: #AECFE5; }
+.Repository select.repositories {margin-left: 20px; }
 
 
 .main { min-height: 100%; position: relative; }

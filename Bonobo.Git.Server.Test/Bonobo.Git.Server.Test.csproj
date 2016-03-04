@@ -143,6 +143,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="IntegrationTests\SharedLayoutTests.cs" />
     <Compile Include="MembershipTests\ADTests\ADBackendStoreTest.cs" />
     <Compile Include="MembershipTests\ADTests\ADMembershipServiceTest.cs" />
     <Compile Include="MembershipTests\ADTests\ADMembershipServiceTestFacade.cs" />
@@ -150,6 +151,8 @@
     <Compile Include="MembershipTests\ADTests\ADRepositoryRepositoryServiceTest.cs" />
     <Compile Include="MembershipTests\ADTests\ADTestSupport.cs" />
     <Compile Include="MembershipTests\EFTests\EFPermissionServiceTest.cs" />
+    <Compile Include="IntegrationTests\Controller\SettingsControllerTests.cs" />
+    <Compile Include="IntegrationTests\IntegrationTestHelpers.cs" />
     <Compile Include="IntegrationTests\Controller\RepositoryControllerTests.cs" />
     <Compile Include="MembershipTests\EFTests\EFRepositoryRepositoryTest.cs" />
     <Compile Include="MembershipTests\PermissionServiceTestBase.cs" />

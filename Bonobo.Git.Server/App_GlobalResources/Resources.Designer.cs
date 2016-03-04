@@ -466,6 +466,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy.
+        /// </summary>
+        public static string Copy {
+            get {
+                return ResourceManager.GetString("Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string Delete_Back {
@@ -1512,6 +1521,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A repository with this name already exists!.
+        /// </summary>
+        public static string Repository_Duplicate_Name {
+            get {
+                return ResourceManager.GetString("Repository_Duplicate_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string Repository_Edit_Back {
@@ -1562,6 +1580,24 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Repository_Edit_UpdateSuccess {
             get {
                 return ResourceManager.GetString("Repository_Edit_UpdateSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy repository URL.
+        /// </summary>
+        public static string Repository_Git_Url_Copy {
+            get {
+                return ResourceManager.GetString("Repository_Git_Url_Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go to repository.
+        /// </summary>
+        public static string Repository_Go_To_Dropdown {
+            get {
+                return ResourceManager.GetString("Repository_Go_To_Dropdown", resourceCulture);
             }
         }
         
@@ -1679,6 +1715,33 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Repository_Needs_Administrator {
             get {
                 return ResourceManager.GetString("Repository_Needs_Administrator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Group.
+        /// </summary>
+        public static string Repository_No_Group {
+            get {
+                return ResourceManager.GetString("Repository_No_Group", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy personal repository URL.
+        /// </summary>
+        public static string Repository_Personal_Git_Url_Copy {
+            get {
+                return ResourceManager.GetString("Repository_Personal_Git_Url_Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rescan directory.
+        /// </summary>
+        public static string Repository_Rescan_Directory {
+            get {
+                return ResourceManager.GetString("Repository_Rescan_Directory", resourceCulture);
             }
         }
         
@@ -1823,6 +1886,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Reset {
             get {
                 return ResourceManager.GetString("Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         

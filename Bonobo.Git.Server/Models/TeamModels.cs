@@ -10,6 +10,7 @@ using Bonobo.Git.Server.Data;
 namespace Bonobo.Git.Server.Models
 {
     using IdName = Tuple<int, string, string>;
+    using System.Web.Mvc;
 
     public class TeamModel : INameProperty 
     {
@@ -30,11 +31,13 @@ namespace Bonobo.Git.Server.Models
     {
         public Guid Id { get; set; }
 
+        [AllowHtml]
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
         [StringLength(40, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
         [Display(ResourceType = typeof(Resources), Name = "Team_Detail_Name")]
         public string Name { get; set; }
 
+        [AllowHtml]
         [Display(ResourceType = typeof(Resources), Name = "Team_Detail_Description")]
         public string Description { get; set; }
 

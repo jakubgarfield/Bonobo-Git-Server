@@ -24,6 +24,8 @@ using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 using System.Runtime.Caching;
+using Bonobo.Git.Server.Attributes;
+using Microsoft.Practices.Unity.Mvc;
 
 namespace Bonobo.Git.Server
 {
@@ -72,6 +74,7 @@ namespace Bonobo.Git.Server
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             UserConfiguration.Initialize();
             RegisterDependencyResolver();
+            GlobalFilters.Filters.Add((AllViewsFilter)DependencyResolver.Current.GetService<AllViewsFilter>());
 
             try
             {
@@ -87,7 +90,7 @@ namespace Bonobo.Git.Server
 
         private static void RegisterDependencyResolver()
         {
-            var container = new UnityContainer().AddExtension(new UnityDecoratorContainerExtension());
+            var container = new UnityContainer();
 
             /* 
                 The UnityDecoratorContainerExtension breaks resolving named type registrations, like:
@@ -269,9 +272,5 @@ namespace Bonobo.Git.Server
                 HttpContext.Current.Server.MapPath(path);
         }
 
-        public static void RegisterGlobalFilterst(GlobalFilterCollection filters)
-        {
-            filters.Add(new HandleErrorAttribute { View = "Home/Error" });
-        }
     }
 }

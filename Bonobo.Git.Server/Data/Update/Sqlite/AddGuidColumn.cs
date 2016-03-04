@@ -103,7 +103,7 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
                                            UNIQUE,
                     Password VARCHAR (255) NOT NULL,
                     PasswordSalt VARCHAR (255) NOT NULL,
-                    Email    VARCHAR (255) NOT NULL
+                    Email    VARCHAR (255) NOT NULL,
                 );
 
                 CREATE TABLE Team (
@@ -124,7 +124,8 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
                     AuditPushUser BIT           NOT NULL
                                                 DEFAULT ('0'),
                     [Group]       VARCHAR (255) DEFAULT (NULL),
-                    Logo          BLOB          DEFAULT (NULL) 
+                    Logo          BLOB          DEFAULT (NULL),
+                    UNIQUE ([Name] COLLATE NOCASE)
                 );
 
                 CREATE TABLE [Role] (

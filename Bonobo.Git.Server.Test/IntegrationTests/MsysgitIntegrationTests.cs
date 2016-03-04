@@ -12,8 +12,12 @@ using Bonobo.Git.Server.Models;
 using System.Text;
 using System.Threading;
 
+using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
+using OpenQA.Selenium.Support.UI;
+
 namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 {
+    using ITH = IntegrationTestHelpers;
     /// <summary>
     /// This is a regression test for msysgit clients. It can be run against installed version of Bonobo Git Server.
     /// </summary>
@@ -28,13 +32,13 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         private readonly static string ServerRepositoryBackupPath = Path.Combine(@"..\..\..\Tests\", RepositoryName, "Backup");
         private readonly static string[] GitVersions = { "1.7.4", "1.7.6", "1.7.7.1", "1.7.8", "1.7.9", "1.8.0", "1.8.1.2", "1.8.3", "1.9.5", "2.6.1" };
         private readonly static string Credentials = "admin:admin@";
-        private readonly static string RepositoryUrl = "http://{0}localhost:20000/{2}{1}";
-        private readonly static string RepositoryUrlWithoutCredentials = String.Format(RepositoryUrl, String.Empty, String.Empty, RepositoryName);
-        private readonly static string RepositoryUrlWithCredentials = String.Format(RepositoryUrl, Credentials, ".git", RepositoryName);
-        private readonly static string Url = string.Format(RepositoryUrl, string.Empty, string.Empty, string.Empty);
+        private readonly static string RepositoryUrlTemplate = "http://{0}localhost:20000/{2}{1}";
+        private readonly static string RepositoryUrlWithoutCredentials = String.Format(RepositoryUrlTemplate, String.Empty, String.Empty, RepositoryName);
+        private readonly static string RepositoryUrlWithCredentials = String.Format(RepositoryUrlTemplate, Credentials, ".git", RepositoryName);
+        private readonly static string Url = string.Format(RepositoryUrlTemplate, string.Empty, string.Empty, string.Empty);
         private readonly static string BareUrl = Url.TrimEnd('/');
 
-        List<Tuple<string, MsysgitResources>> installedgits = new List<Tuple<string, MsysgitResources>>();
+        private static List<Tuple<string, MsysgitResources>> installedgits = new List<Tuple<string, MsysgitResources>>();
 
         private static MvcWebApp app;
 
@@ -46,19 +50,6 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             GitPath = Path.GetFullPath(GitPath);
             RepositoryDirectory = Path.Combine(WorkingDirectory, RepositoryName);
             
-            app = new MvcWebApp();
-        }
-
-        [ClassCleanup]
-        public static void Cleanup()
-        {
-            app.Browser.Close();
-        }
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            DeleteDirectory(WorkingDirectory);
             bool any_git_installed = false;
             List<string> not_found = new List<string>();
 
@@ -81,34 +72,41 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             {
                 Assert.Fail(string.Format("Please ensure that you have at least one git installation in '{0}'.", string.Join("', '", not_found.Select(n => Path.GetFullPath(n)))));
             }
-            EnsureCredentialHelperStore(installedgits.Last());
+
+            Directory.CreateDirectory(WorkingDirectory);
+            if (AnyCredentialHelperExists(installedgits.Last().Item1))
+            {
+                /* At the moment there is no reliable way of overriding credential.helper on a global basis.
+                 * See the other comments for all the other bugs found so far.
+                 * Having a credential helper set makes it impossible to check in non authorized login
+                 * after a login with username and password has been done. */
+                Assert.Fail("Cannot have any credential.helpers configured for integration tests.");
+            }
+
+            app = new MvcWebApp();
         }
 
-        private void EnsureCredentialHelperStore(Tuple<string, MsysgitResources> tuple)
+        [ClassCleanup]
+        public static void Cleanup()
         {
-            Directory.CreateDirectory(WorkingDirectory);
-            var git = tuple.Item1;
-            var res = RunGit(git, "config --get credential.helper", WorkingDirectory);
+            app.Browser.Close();
+        }
 
-            Assert.AreEqual("store --file=bonobo.randomstring.credentials.txt\r\n", res.Item1);
+        [TestInitialize]
+        public void Initialize()
+        {
             DeleteDirectory(WorkingDirectory);
+            IntegrationTestHelpers.Login(app);
         }
 
         [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
         public void RunGitTests()
         {
 
-            foreach (var gitresource in installedgits)
-            {
-
-                Directory.CreateDirectory(WorkingDirectory);
-                var git = gitresource.Item1;
-                var resource = gitresource.Item2;
-
-                try
+            ForAllGits((git, resource) =>
                 {
-                    Guid repo_id = CreateRepositoryOnWebInterface();
-                    CloneEmptyRepositoryAndEnterRepo(git, resource);
+                    Guid repo_id = IntegrationTestHelpers.CreateRepositoryOnWebInterface(app, RepositoryName);
+                    CloneEmptyRepositoryWithCredentials(git, resource);
                     CreateIdentity(git);
                     CreateAndPushFiles(git, resource);
                     PushTag(git, resource);
@@ -122,13 +120,8 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                     InitAndPullRepository(git, resource);
                     PullTag(git, resource);
                     PullBranch(git, resource);
-                    DeleteRepository(repo_id);
-                }
-                finally
-                {
-                    DeleteDirectory(WorkingDirectory);
-                }
-            }
+                    IntegrationTestHelpers.DeleteRepository(app, repo_id);
+                });
         }
 
         [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
@@ -141,26 +134,46 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
              * See http://article.gmane.org/gmane.comp.version-control.git/287538
              * and patch status http://article.gmane.org/gmane.comp.version-control.git/287565
              */
-            foreach (var gitres in installedgits)
+            ForAllGits((git, resource) =>
             {
-                Directory.CreateDirectory(WorkingDirectory);
-                var git = gitres.Item1;
-                var resource = gitres.Item2;
-                try
+                Guid repo_id = IntegrationTestHelpers.CreateRepositoryOnWebInterface(app, RepositoryName);
+                AllowAnonRepoClone(repo_id, false);
+                CloneRepoAnon(git, resource, false);
+                AllowAnonRepoClone(repo_id, true);
+                CloneRepoAnon(git, resource, true);
+                IntegrationTestHelpers.DeleteRepository(app, repo_id);
+            });
+        }
+
+        private static bool AnyCredentialHelperExists(string git)
+        {
+            IEnumerable<string> urls = new List<string>
+            {
+                string.Format(RepositoryUrlTemplate, string.Empty, string.Empty, string.Empty),
+                string.Format(RepositoryUrlTemplate, Credentials, string.Empty, string.Empty),
+            };
+
+            foreach (var url in urls)
+            {
+                var exists = RunGit(git, string.Format("config --get-urlmatch credential.helper {0}", url), WorkingDirectory);
+                /* Credential.helper is a multi-valued configuration setting. This means it you cannot rely on the value returned by any of the calls
+                 * as it might return an empty value, which is a valid(! altough pointless) value where there is a second configured value
+                 * in the same config file. But you can rely on the exit code. 0 means it found this key. */
+                /* There seems to be a bug in git config --get-urlmatch where it will retun 0 eventhough there was no match.
+                 * So we need to check the value. The good part is that if it is not set anywhere we get an empty string. If
+                 * it is set somewhere the string contains at least "\r\n".
+                 * See the bug report here http://article.gmane.org/gmane.comp.version-control.git/287740 */
+                if (exists.Item3 == 0 && exists.Item1 != "")
                 {
-                    Guid repo_id = CreateRepositoryOnWebInterface();
-                    RemoveStoredCredentials(git);
-                    AllowAnonRepoClone(repo_id, false);
-                    CloneRepoAnon(git, resource, false);
-                    AllowAnonRepoClone(repo_id, true);
-                    CloneRepoAnon(git, resource, true);
-                    DeleteRepository(repo_id);
-                }
-                finally
-                {
-                    DeleteDirectory(WorkingDirectory);
+                    Console.Write(string.Format("Stdout: {0}", exists.Item1));
+                    Console.Write(string.Format("Stderr: {0}", exists.Item2));
+                    Debug.Write(string.Format("Stdout: {0}", exists.Item1));
+                    Debug.Write(string.Format("Stderr: {0}", exists.Item2));
+                    return true;
                 }
             }
+
+            return false;
         }
 
         [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
@@ -172,11 +185,11 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             Directory.CreateDirectory(WorkingDirectory);
 
             try{
-                var repo_id = CreateRepositoryOnWebInterface();
-                CloneEmptyRepositoryAndEnterRepo(git, resource);
+                var repo_id = IntegrationTestHelpers.CreateRepositoryOnWebInterface(app, RepositoryName);
+                CloneEmptyRepositoryWithCredentials(git, resource);
                 CreateIdentity(git);
                 CreateAndAddTestFiles(git, 2000);
-                DeleteRepository(repo_id);
+                IntegrationTestHelpers.DeleteRepository(app, repo_id);
             }
             finally
             {
@@ -188,15 +201,9 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         public void AnonPush()
         {
 
-            var gitres = installedgits.Last();
-            var git = gitres.Item1;
-            var resource = gitres.Item2;
-            Directory.CreateDirectory(WorkingDirectory);
-
-            try
+            ForAllGits((git, resource) =>
             {
-                var repo_id = CreateRepositoryOnWebInterface();
-                RemoveStoredCredentials(git);
+                var repo_id = IntegrationTestHelpers.CreateRepositoryOnWebInterface(app, RepositoryName);
                 AllowAnonRepoClone(repo_id, true);
                 CloneRepoAnon(git, resource, true);
                 CreateIdentity(git);
@@ -210,12 +217,8 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 SetAnonPush(git, true);
                 PushFiles(git, resource, true);
 
-                DeleteRepository(repo_id);
-            }
-            finally
-            {
-                DeleteDirectory(WorkingDirectory);
-            }
+                IntegrationTestHelpers.DeleteRepository(app, repo_id);
+            });
         }
 
         /// <summary>
@@ -227,18 +230,17 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         {
             ForAllGits((git, resource) =>
             {
-                Guid repo_id = CreateRepositoryOnWebInterface();
+                Guid repo_id = ITH.CreateRepositoryOnWebInterface(app, RepositoryName);
 
                 // Clone the repo
-                RemoveStoredCredentials(git);
                 AllowAnonRepoClone(repo_id, true);
-                CloneEmptyRepositoryAndEnterRepo(git, resource);
+                CloneEmptyRepositoryWithCredentials(git, resource);
 
                 CreateIdentity(git);
                 // I want to do a push *with* a username
                 CreateAndPushFiles(git, resource);
 
-                DeleteRepository(repo_id);
+                ITH.DeleteRepository(app, repo_id);
             });
         }
 
@@ -265,6 +267,12 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             }
         }
 
+        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        public void NavigateReposWithDropdown()
+        {
+            
+        }
+
         private void PushFiles(string git, MsysgitResources resource, bool success)
         {
             var res = RunGitOnRepo(git, "push origin master");
@@ -277,11 +285,6 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 Assert.AreEqual(string.Format(resource[MsysgitResources.Definition.PushFilesFailError], BareUrl), res.Item2);
             }
         } 
-
-        private void RemoveCredentialsFromCloneUrl(string git)
-        {
-            RunGitOnRepo(git, "remote set-url origin " + Url + RepositoryName + ".git");
-        }
 
         private void SetCheckbox<T>(FluentField<T, bool> field, bool select) where T : class
         {
@@ -307,6 +310,8 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             var form = app.FindFormFor<GlobalSettingsModel>();
             var field =  form.Field(f => f.AllowAnonymousPush);
             SetCheckbox(field, allowAnonymousPush);
+            var languages = new SelectElement(form.Field(f => f.DefaultLanguage).Field);
+            languages.SelectByValue("en-US");
             form.Submit();
         }
 
@@ -318,11 +323,6 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             }
             RunGitOnRepo(git, "add .");
             RunGitOnRepo(git, "commit -m \"Commit me!\"");
-        }
-
-        private void RemoveStoredCredentials(string git)
-        {
-            File.Delete("Bonobo.randomstring.credentials.txt");
         }
 
         private void CloneRepoAnon(string git, MsysgitResources resource, bool success)
@@ -354,44 +354,6 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         {
             RunGitOnRepo(git, "config user.name \"McFlono McFloonyloo\"");
             RunGitOnRepo(git, "config user.email \"DontBotherMe@home.never\"");
-        }
-
-        private void DeleteRepository(Guid guid)
-        {
-            app.NavigateTo<RepositoryController>(c => c.Delete(guid));
-            app.FindFormFor<RepositoryDetailModel>().Submit();
-
-            // make sure it no longer is listed
-            app.NavigateTo<RepositoryController>(c => c.Index(null, null));
-            try
-            {
-                var ele = app.Browser.FindElement(By.Id("Repositories"));
-                Assert.Fail("Table should not exist without repositories!");
-            }
-            catch (NoSuchElementException exc)
-            {
-                if (!exc.Message.Contains(" == Repositories"))
-                {
-                    throw;
-                }
-            }
-        }
-
-        private Guid CreateRepositoryOnWebInterface()
-        {
-            app.NavigateTo<RepositoryController>(c => c.Create());
-            app.FindFormFor<RepositoryDetailModel>()
-                .Field(f => f.Name).SetValueTo("Integration")
-                .Submit();
-
-            // ensure it appears on the listing
-            app.NavigateTo<RepositoryController>(c => c.Index(null, null));
-
-            var rpm = app.FindDisplayFor<IEnumerable<RepositoryDetailModel>>();
-            //var l_to = app.FindLinkTo<RepositoryController>(c => c.Detail(Guid.NewGuid()));
-            var repo_item = rpm.DisplayFor(s => s.First().Name);
-            Assert.AreEqual(repo_item.Text, "Integration");
-            return new Guid(repo_item.GetAttribute("data-repo-id"));
         }
 
         private void PullBranch(string git, MsysgitResources resource)
@@ -458,7 +420,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             Assert.AreEqual(String.Format(resource[MsysgitResources.Definition.PushFilesSuccessError], RepositoryUrlWithCredentials), result.Item2);
         }
 
-        private void CloneEmptyRepositoryAndEnterRepo(string git, MsysgitResources resource)
+        private void CloneEmptyRepositoryWithCredentials(string git, MsysgitResources resource)
         {
             var result = RunGit(git, String.Format(String.Format("clone {0}", RepositoryUrlWithCredentials), RepositoryName), WorkingDirectory);
             
@@ -467,14 +429,16 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         }
 
 
-        private Tuple<string, string> RunGitOnRepo(string git, string arguments, int timeout = 30000 /* milliseconds */)
+        private static Tuple<string, string, int> RunGitOnRepo(string git, string arguments, int timeout = 30000 /* milliseconds */)
         {
             return RunGit(git, arguments, RepositoryDirectory, timeout);
         }
 
-        private Tuple<string, string> RunGit(string git, string arguments, string workingDirectory, int timeout = 30000 /* milliseconds */)
+        private static Tuple<string, string, int> RunGit(string git, string arguments, string workingDirectory, int timeout = 30000 /* milliseconds */)
         {
-            arguments = "-c credential.helper=\"store --file=bonobo.randomstring.credentials.txt\" " + arguments;
+            // When a git version supports overwriting multi-value config files values this should be uncommented to make
+            // all tests runnable on systems that have a credential.helper configured.
+            // arguments = "-c credential.helper=\"store --file=bonobo.randomstring.credentials.txt\" " + arguments;
             Console.WriteLine("About to run '{0}' with args '{1}' in '{2}'", git, arguments, workingDirectory);
             Debug.WriteLine("About to run '{0}' with args '{1}' in '{2}'", git, arguments, workingDirectory);
 
@@ -529,15 +493,15 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                         var strout = output.ToString();
                         var strerr = error.ToString();
 
-                        Console.WriteLine("Output: {0}", output);
-                        Console.WriteLine("Errors: {0}", error);
+                        Console.WriteLine("Stdout: {0}", output);
+                        Console.WriteLine("Stderr: {0}", error);
 
-                        return Tuple.Create(strout, strerr);
+                        return Tuple.Create(strout, strerr, process.ExitCode);
                     }
                     else
                     {
                         Assert.Fail(string.Format("Runing command '{0} {1}' timed out! Timeout {2} seconds.", git, arguments, timeout));
-                        return Tuple.Create<string, string>(null, null);
+                        return Tuple.Create<string, string, int>(null, null, -1);
                     }
                 }
             }

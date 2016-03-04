@@ -48,14 +48,23 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public RepositoryModel GetRepository(string name)
+        public RepositoryModel GetRepository(string name, StringComparison compType)
         {
             if (name == null) throw new ArgumentNullException("name");
 
-            using (var db = CreateContext())
+            /* The straight-forward solution of using FindFirstOrDefault with
+             * string.Equal does not work. Even name.Equals with OrdinalIgnoreCase does not
+             * as it seems to get translated into some specific SQL syntax and EF does not
+             * provide case insensitive matching :( */
+            var repos = GetAllRepositories();
+            foreach (var repo in repos)
             {
-                return ConvertToModel(db.Repositories.FirstOrDefault(i => i.Name == name));
+                if (repo.Name.Equals(name, compType))
+                {
+                    return repo;
+                }
             }
+            return null;
         }
 
         public RepositoryModel GetRepository(Guid id)

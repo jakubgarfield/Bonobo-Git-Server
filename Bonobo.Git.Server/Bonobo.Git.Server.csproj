@@ -261,10 +261,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\UnityConfig.cs" />
-    <Compile Include="App_Start\UnityMvcActivator.cs" />
+    <Compile Include="Attributes\AllViewsAttribute.cs" />
     <Compile Include="Attributes\FileExtensionsCustom.cs" />
     <Compile Include="Attributes\RepositoryNameNormalizerAttribute.cs" />
+    <Compile Include="Attributes\UniqueRepoNameAttribute.cs" />
     <Compile Include="Configuration\ActiveDirectorySettings.cs" />
     <Compile Include="Configuration\AuthenticationSettings.cs" />
     <Compile Include="Configuration\DiagnosticReporter.cs" />
@@ -319,8 +319,6 @@
     <Compile Include="Security\ValidationResult.cs" />
     <Compile Include="Security\WindowsAuthenticationProvider.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="UnityDecoratorBuildStrategy.cs" />
-    <Compile Include="UnityDecoratorContainerExtension.cs" />
     <Compile Include="Git\ConfigurationBasedRepositoryLocator.cs" />
     <Compile Include="Git\GitService\IGitService.cs" />
     <Compile Include="Git\GitService\ExecutionOptions.cs" />
@@ -397,7 +395,6 @@
     <Compile Include="Security\IRepositoryPermissionService.cs" />
     <Compile Include="FileDisplayHandler.cs" />
     <Compile Include="Security\PasswordService.cs" />
-    <Compile Include="UnityDependencyResolver.cs" />
     <Compile Include="FilterProviders\UnityFilterAttributeFilterProvider.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -525,6 +522,9 @@
     <Content Include="App_Data\Git\wish85.exe" />
     <Content Include="App_Data\Git\xargs.exe" />
     <Content Include="App_Data\Repositories\note.txt" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.af-ZA.resx">
+      <LastGenOutput>Resources.af-ZA.designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <Content Include="bin\NativeBinaries\amd64\git2-e0902fb.dll" />
     <Content Include="bin\NativeBinaries\x86\git2-e0902fb.dll" />
     <Content Include="bin\x64\SQLite.Interop.dll">
