@@ -907,4 +907,10 @@
   <data name="Repository_Duplicate_Name" xml:space="preserve">
     <value>A repository with this name already exists!</value>
   </data>
+  <data name="Repository_Detail_AllowAnonymousPush" xml:space="preserve">
+    <value>Anonymous push</value>
+  </data>
+  <data name="Repository_AllowAnonymousPushHint" xml:space="preserve">
+    <value>Allows anonymous users to push to this repository if anonymous acces is granted. If "Global" is selected the option set under your global settings is used.</value>
+  </data>
 </root>

@@ -4,6 +4,13 @@ using System.Linq;
 
 namespace Bonobo.Git.Server.Data
 {
+    public enum RepositoryPushMode
+    {
+        No = 0,
+        Yes,
+        Global,
+    }
+
     public partial class Repository
     {
         private ICollection<Team> _teams;
@@ -16,6 +23,7 @@ namespace Bonobo.Git.Server.Data
         public string Description { get; set; }
         public bool Anonymous { get; set; }
         public byte[] Logo { get; set; }
+        public RepositoryPushMode AllowAnonymousPush { get; set; }
 
         public virtual ICollection<Team> Teams
         {
@@ -54,8 +62,7 @@ namespace Bonobo.Git.Server.Data
         }
 
         public bool AuditPushUser { get; set; }
-
-
+        
         /// <summary>
         /// Correct a repository name have the same case as it has in the database
         /// If the repo is not in the database, then the name is returned unchanged

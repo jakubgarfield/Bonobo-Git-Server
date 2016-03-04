@@ -11,7 +11,7 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
         {
             get
             {
-                return "ALTER TABLE Repository ADD [AllowAnonymousPush] TinyInt NOT NULL CONSTRAINT Def_Var_AAP Default 3";
+                return "ALTER TABLE Repository ADD [AllowAnonymousPush] Integer NOT NULL CONSTRAINT Def_Var_AAP Default 3";
             }
         }
 

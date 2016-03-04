@@ -29,6 +29,7 @@ namespace Bonobo.Git.Server.Data
                     Teams = repo.Teams,
                     Administrators = repo.Administrators,
                     AuditPushUser = repo.AuditPushUser,
+                    AllowAnonPush = repo.AllowAnonymousPush,
                     Logo = repo.Logo
                 }).ToList();
 
@@ -43,6 +44,7 @@ namespace Bonobo.Git.Server.Data
                     Teams = repo.Teams.Select(TeamToTeamModel).ToArray(),
                     Administrators = repo.Administrators.Select(user => user.ToModel()).ToArray(),
                     AuditPushUser = repo.AuditPushUser,
+                    AllowAnonymousPush = repo.AllowAnonPush,
                     Logo = repo.Logo
                 }).ToList();
             }
@@ -108,6 +110,7 @@ namespace Bonobo.Git.Server.Data
                     Group = model.Group,
                     Description = model.Description,
                     Anonymous = model.AnonymousAccess,
+                    AllowAnonymousPush = model.AllowAnonymousPush,
                     AuditPushUser = model.AuditPushUser,
                 };
                 database.Repositories.Add(repository);
@@ -146,6 +149,7 @@ namespace Bonobo.Git.Server.Data
                     repo.Description = model.Description;
                     repo.Anonymous = model.AnonymousAccess;
                     repo.AuditPushUser = model.AuditPushUser;
+                    repo.AllowAnonymousPush = model.AllowAnonymousPush;
 
                     if (model.Logo != null)
                         repo.Logo = model.Logo;
@@ -193,6 +197,7 @@ namespace Bonobo.Git.Server.Data
                 Teams = item.Teams.Select(TeamToTeamModel).ToArray(),
                 Administrators = item.Administrators.Select(user => user.ToModel()).ToArray(),
                 AuditPushUser = item.AuditPushUser,
+                AllowAnonymousPush = item.AllowAnonymousPush,
                 Logo = item.Logo
             };
         }
