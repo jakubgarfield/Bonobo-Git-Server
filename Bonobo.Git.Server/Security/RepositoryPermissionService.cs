@@ -68,7 +68,7 @@ namespace Bonobo.Git.Server.Security
                 case RepositoryAccessLevel.Pull:
                     return true;
                 case RepositoryAccessLevel.Push:
-                    return UserConfiguration.Current.AllowAnonymousPush;
+                    return repository.AllowAnonymousPush == RepositoryPushMode.Yes || (repository.AllowAnonymousPush == RepositoryPushMode.Global && UserConfiguration.Current.AllowAnonymousPush);
                 case RepositoryAccessLevel.Administer:
                     // No anonymous administrators ever
                     return false;
