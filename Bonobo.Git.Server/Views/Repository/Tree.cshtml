@@ -27,9 +27,13 @@
                             {
                                 <span class="directory">@item.Name</span>
                             }
-                            else
+                            else if (item.IsTree)
                             {
-                                @Html.ActionLink(item.Name, item.IsTree ? "Tree" : "Blob", new { encodedPath = PathEncoder.Encode(item.Path, allowSlash: true) }, new { @class = item.IsTree ? "directory" : item.IsImage ? "image" : "file" })
+                                @Html.ActionLink(item.Name, "Tree", new { id= ViewBag.ID, encodedPath = PathEncoder.Encode(item.Path, allowSlash: true) }, new { @class = "directory" })
+                            }
+                            else 
+                            {
+                                @Html.ActionLink(item.Name, "Blob", new { id = ViewBag.ID, encodedPath = PathEncoder.Encode(item.Path, allowSlash: true) }, new { @class = item.IsImage ? "image" : "file" })
                             }
                         </td>
                         <td class="message"></td>
