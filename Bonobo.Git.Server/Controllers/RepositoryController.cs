@@ -73,17 +73,19 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (model.PostedSelectedAdministrators.Contains(User.Id()))
+                var currentUserIsInAdminList = model.PostedSelectedAdministrators != null && model.PostedSelectedAdministrators.Contains(User.Id());
+                if (currentUserIsInAdminList || User.IsInRole(Definitions.Roles.Administrator))
                 {
-                    var repo = RepositoryRepository.GetRepository(model.Id);
-                    MoveRepo(repo, ConvertRepositoryDetailModel(model));
+                    var existingRepo = RepositoryRepository.GetRepository(model.Id);
+                    var repoModel = ConvertRepositoryDetailModel(model);
+                    MoveRepo(existingRepo, repoModel);
                     try
                     {
-                        RepositoryRepository.Update(ConvertRepositoryDetailModel(model));
+                        RepositoryRepository.Update(repoModel);
                     }
                     catch (System.Data.Entity.Infrastructure.DbUpdateException)
                     {
-                        MoveRepo(ConvertRepositoryDetailModel(model), repo);
+                        MoveRepo(repoModel, existingRepo);
                     }
                     ViewBag.UpdateSuccess = true;
                 }
@@ -96,12 +98,12 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        private void MoveRepo(RepositoryModel repo, RepositoryModel model)
+        private void MoveRepo(RepositoryModel oldRepo, RepositoryModel newRepo)
         {
-            if (repo.Name != model.Name)
+            if (oldRepo.Name != newRepo.Name)
             {
-                string old_path = Path.Combine(UserConfiguration.Current.Repositories, repo.Name);
-                string new_path = Path.Combine(UserConfiguration.Current.Repositories, model.Name);
+                string old_path = Path.Combine(UserConfiguration.Current.Repositories, oldRepo.Name);
+                string new_path = Path.Combine(UserConfiguration.Current.Repositories, newRepo.Name);
                 try
                 {
                     Directory.Move(old_path, new_path);
@@ -550,15 +552,15 @@ namespace Bonobo.Git.Server.Controllers
             model.AllAdministrators = MembershipService.GetAllUsers().ToArray();
             model.AllUsers = MembershipService.GetAllUsers().ToArray();
             model.AllTeams = TeamRepository.GetAllTeams().ToArray();
-            if (model.PostedSelectedUsers != null && model.PostedSelectedUsers.Count() > 0)
+            if (model.PostedSelectedUsers != null && model.PostedSelectedUsers.Any())
             {
                 model.Users = model.PostedSelectedUsers.Select(x => MembershipService.GetUserModel(x)).ToArray();
             }
-            if (model.PostedSelectedTeams != null && model.PostedSelectedTeams.Count() > 0)
+            if (model.PostedSelectedTeams != null && model.PostedSelectedTeams.Any())
             {
                 model.Teams = model.PostedSelectedTeams.Select(x => TeamRepository.GetTeam(x)).ToArray();
             }
-            if (model.PostedSelectedAdministrators != null && model.PostedSelectedAdministrators.Count() > 0)
+            if (model.PostedSelectedAdministrators != null && model.PostedSelectedAdministrators.Any())
             {
                 model.Administrators = model.PostedSelectedAdministrators.Select(x => MembershipService.GetUserModel(x)).ToArray();
             }

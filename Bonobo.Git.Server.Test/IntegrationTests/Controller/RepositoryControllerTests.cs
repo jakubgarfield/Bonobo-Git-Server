@@ -139,6 +139,21 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 
         }
 
+/*
+        [TestMethod]
+        public void RepositoryCanBeSavedBySysAdminWithoutHavingAnyRepoAdmins()
+        {
+            var repoId = ITH.CreateRepositoryOnWebInterface(app, "Repo");
+
+            app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
+            // TODO - need to find all the admin checkboxes here and turn them off
+            app.FindFormFor<RepositoryDetailModel>()
+                .Field(f => f.PostedSelectedAdministrators).SetValueTo("0")
+                .Submit();
+
+        }
+*/
+
     }
 }
 
