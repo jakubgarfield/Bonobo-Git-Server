@@ -187,7 +187,7 @@ namespace Bonobo.Git.Server.Configuration
 
             if (AppSetting("MembershipService") == "Internal")
             {
-                SafelyReport("User count", () => new EFMembershipService().GetAllUsers().Count);
+                SafelyReport("User count", () => new EFMembershipService { CreateContext = () => new BonoboGitServerContext() }.GetAllUsers().Count);
             }
             else
             {
