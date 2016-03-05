@@ -15,6 +15,7 @@ using Bonobo.Git.Server.Test.MembershipTests.ADTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using System.Runtime.CompilerServices;
+using System.Linq.Expressions;
 
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
@@ -248,7 +249,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
         }
 
         /* The default is to use the default calling methods name */
-        public string MakeName([CallerMemberName] string name = "", int maxLen = 50)
+        public static string MakeName([CallerMemberName] string name = "", int maxLen = 50)
         {
             // Prefer beginning + end from user as this make it possible to use
             // Curname + extension as uniqueness
@@ -259,5 +260,23 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             }
             return name;
         }
-    }
+
+        public void SetGlobalSetting<T>(Expression<Func<GlobalSettingsModel, T>> optionExpression, string value)
+        {
+            _app.NavigateTo<SettingsController>(c => c.Index());
+            var form = _app.FindFormFor<GlobalSettingsModel>();
+            var field = form.Field(optionExpression);
+            field.SetValueTo(value);
+            form.Submit();
+        }
+
+        public void SetGlobalSetting<T>(Expression<Func<GlobalSettingsModel, T>> optionExpression, bool value)
+        {
+            _app.NavigateTo<SettingsController>(c => c.Index());
+            var form = _app.FindFormFor<GlobalSettingsModel>();
+            var field = form.Field(optionExpression);
+            SetCheckbox(field.Field, (bool)value);
+            form.Submit();
+        }
+     }
 }

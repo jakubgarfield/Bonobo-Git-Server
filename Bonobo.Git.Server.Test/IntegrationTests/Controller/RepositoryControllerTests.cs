@@ -2,11 +2,13 @@
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Data;
 using System.Linq;
+using OpenQA.Selenium.Support.UI;
+using Microsoft.VisualStudio.TestTools.UnitTesting; 
+using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
-    using OpenQA.Selenium.Support.UI;
-    using Microsoft.VisualStudio.TestTools.UnitTesting; 
+    using ITH = IntegrationTestHelpers;
 
     [TestClass]
     public class RepositoryControllerTests : IntegrationTestBase
@@ -160,6 +162,33 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             var select = new SelectElement(form.Field(f => f.AllowAnonymousPush).Field);
 
             Assert.AreEqual(RepositoryPushMode.Global.ToString("D"), select.SelectedOption.GetAttribute("value"));
+        }
+
+        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        public void SettingsAcceptEmptyStringForRegex()
+        {
+            ITH.SetGlobalSetting(g => g.LinksRegex, "some_value");
+            app.NavigateTo<SettingsController>(c => c.Index());
+            app.FindFormFor<GlobalSettingsModel>()
+                .Field(f => f.LinksRegex).SetValueTo("")
+                .Submit();
+
+            var field = app.FindFormFor<GlobalSettingsModel>()
+                .Field(f => f.LinksRegex);
+            field.ValueShouldEqual("");
+            Assert.AreEqual(false, field.Field.GetAttribute("class").Contains("valid"));
+        }
+
+        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        public void DoesNotAcceptBrokenRegexForLinks()
+        {
+            app.NavigateTo<SettingsController>(c => c.Index());
+            app.FindFormFor<GlobalSettingsModel>()
+                .Field(f => f.LinksRegex).SetValueTo("\\")
+                .Submit();
+
+            app.FindFormFor<GlobalSettingsModel>()
+                .Field(f => f.LinksRegex).ShouldBeInvalid();
         }
     }
 }

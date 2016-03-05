@@ -10,6 +10,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests
     using OpenQA.Selenium.Support.UI;
     using OpenQA.Selenium;
     using System.Threading;
+    using ITH = IntegrationTestHelpers;
 
     [TestClass]
     public class SharedLayoutTests : IntegrationTestBase
