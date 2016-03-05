@@ -18,6 +18,7 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 * *.ts and *.json formatting support for file display #455
 * New diagnostic page at /home/diagnostics to help with support
 * Claims names are now more consistent with typical ADFS usage #488
+* Added following environment variables: `AUTH_USER_TEAMS`, `AUTH_USER_ROLES`, and `AUTH_USER_DISPLAYNAME`. See the FAQ for more information. #495
 
 ### Bugfixes
 

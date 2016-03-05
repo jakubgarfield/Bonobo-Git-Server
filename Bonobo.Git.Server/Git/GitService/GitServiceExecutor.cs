@@ -1,6 +1,12 @@
-﻿using System.Diagnostics;
+﻿using Bonobo.Git.Server.Data;
+using Bonobo.Git.Server.Security;
+using System.Diagnostics;
 using System.IO;
 using System.Web;
+using System.Web.Mvc;
+using System.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace Bonobo.Git.Server.Git.GitService
 {
@@ -53,9 +59,31 @@ namespace Bonobo.Git.Server.Git.GitService
             };
 
             SetHomePath(info);
-            var userid = HttpContext.Current.User.Username();
-            info.EnvironmentVariables.Add("AUTH_USER", userid);
-            info.EnvironmentVariables.Add("REMOTE_USER", userid);
+
+            var username = HttpContext.Current.User.Username();
+            var teamsstr = "";
+            var rolesstr = "";
+            var displayname = "";
+            if(!string.IsNullOrEmpty(username)){
+                ITeamRepository tr = DependencyResolver.Current.GetService<ITeamRepository>();
+                var userId = HttpContext.Current.User.Id();
+                var teams = tr.GetTeams(userId);
+                teamsstr = UserExtensions.StringlistToEscapedStringForEnvVar(teams.Select(x => x.Name));
+
+                IRoleProvider rp = DependencyResolver.Current.GetService<IRoleProvider>();
+                rolesstr = UserExtensions.StringlistToEscapedStringForEnvVar(rp.GetRolesForUser(userId));
+
+                IMembershipService ms = DependencyResolver.Current.GetService<IMembershipService>();
+                displayname = ms.GetUserModel(userId).DisplayName;
+
+            }
+            // If anonymous option is set then these will always be empty
+            info.EnvironmentVariables.Add("AUTH_USER", username);
+            info.EnvironmentVariables.Add("REMOTE_USER", username);
+            info.EnvironmentVariables.Add("AUTH_USER_TEAMS", teamsstr);
+            info.EnvironmentVariables.Add("AUTH_USER_ROLES", rolesstr);
+            info.EnvironmentVariables.Add("AUTH_USER_DISPLAYNAME", displayname);
+
 
             using (var process = Process.Start(info))
             {

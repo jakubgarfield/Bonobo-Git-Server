@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
@@ -140,6 +141,11 @@ namespace Bonobo.Git.Server
             }
 
             return string.Empty;
+        }
+        public static string StringlistToEscapedStringForEnvVar(IEnumerable<string> items, string separator = ",")
+        {
+            var y = items.Select(x => x.Replace(@"\", @"\\").Replace(separator, @"\"+separator));
+            return string.Join(separator, y);
         }
     }
 }
