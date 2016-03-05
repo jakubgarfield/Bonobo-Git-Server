@@ -257,13 +257,10 @@
     <Compile Include="Data\Update\Sqlite\AddGroup.cs" />
     <Compile Include="Data\Update\Sqlite\AddGuidColumn.cs" />
     <Compile Include="Data\Update\Sqlite\AddRepoPushColumn.cs" />
-    <Compile Include="Data\Update\Sqlite\AddRepositoryLogo.cs" />
     <Compile Include="Data\Update\SqlServer\AddGroup.cs" />
-    <Compile Include="Data\Update\SqlServer\AddGuidColumn.cs" />
     <Compile Include="Data\Update\SqlServer\AddRepoPushColumn.cs" />
     <Compile Include="Data\Update\Sqlite\AddRepoLinksColumns.cs" />
     <Compile Include="Data\Update\Sqlite\AddRepositoryLogo.cs" />
-    <Compile Include="Data\Update\SqlServer\AddGroup.cs" />
     <Compile Include="Data\Update\SqlServer\AddGuidColumn.cs" />
     <Compile Include="Data\Update\SqlServer\AddRepoLinksColumns.cs" />
     <Compile Include="Data\Update\SqlServer\AddRepositoryLogo.cs" />

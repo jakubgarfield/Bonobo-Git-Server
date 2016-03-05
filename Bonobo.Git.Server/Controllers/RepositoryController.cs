@@ -613,6 +613,9 @@ namespace Bonobo.Git.Server.Controllers
                 Status = GetRepositoryStatus(model),
                 AuditPushUser = model.AuditPushUser,
                 Logo = new RepositoryLogoDetailModel(model.Logo),
+                LinksUseGlobal = model.LinksUseGlobal,
+                LinksRegex = model.LinksRegex,
+                LinksUrl = model.LinksUrl,
             };
         }
 
@@ -644,7 +647,10 @@ namespace Bonobo.Git.Server.Controllers
                 AuditPushUser = model.AuditPushUser,
                 Logo = model.Logo != null ? model.Logo.BinaryData : null,
                 AllowAnonymousPush = model.AllowAnonymousPush,
-                RemoveLogo = model.Logo != null && model.Logo.RemoveLogo
+                RemoveLogo = model.Logo != null && model.Logo.RemoveLogo,
+                LinksUseGlobal = model.LinksUseGlobal,
+                LinksRegex = model.LinksRegex ?? "",
+                LinksUrl = model.LinksUrl ?? ""
             };
         }
 

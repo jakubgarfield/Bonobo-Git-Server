@@ -32,10 +32,16 @@ namespace Bonobo.Git.Server.Models
         public bool AuditPushUser { get; set; }
         public byte[] Logo { get; set; }
         public bool RemoveLogo { get; set; }
+        public string LinksRegex { get; set; }
+        public string LinksUrl { get; set; }
+        public bool LinksUseGlobal { get; set; }
 
         public RepositoryModel()
         {
             AllowAnonymousPush = RepositoryPushMode.Global;
+            LinksUseGlobal = true;
+            LinksUrl = "";
+            LinksRegex = "";
         }
 
         public bool NameIsValid
@@ -82,6 +88,7 @@ namespace Bonobo.Git.Server.Models
         public RepositoryDetailModel()
         {
             AllowAnonymousPush = RepositoryPushMode.Global;
+            LinksUseGlobal = true;
         }
 
         public Guid Id { get; set; }
@@ -137,6 +144,13 @@ namespace Bonobo.Git.Server.Models
         public RepositoryLogoDetailModel Logo { get; set; }
         public string GitUrl { get; set; }
         public string PersonalGitUrl { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Settings_Global_LinksRegex")]
+        public string LinksRegex { get; set; }
+        [Display(ResourceType = typeof(Resources), Name = "Settings_Global_LinksUrl")]
+        public string LinksUrl { get; set; }
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_LinksUseGlobal")]
+        public bool LinksUseGlobal { get; set; }
     }
 
     public enum RepositoryDetailStatus

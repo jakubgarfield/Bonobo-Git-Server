@@ -79,6 +79,25 @@ else
                     <i class="fa fa-info-circle" title="@Resources.Repository_AuditPushUserHint"></i>
                 </div>
             }
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.LinksUseGlobal)
+                @Html.CheckBoxFor(m => m.LinksUseGlobal, new { @onClick = "document.getElementById('LinksRegex').disabled = this.checked; document.getElementById('LinksUrl').disabled = this.checked" })
+            </div>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.LinksRegex)
+                @{
+                    attribs = new { @class = "medium" };
+                    if (Model.LinksUseGlobal){
+                        attribs = new { @class = "medium", disabled = "" };
+                    }
+                    @Html.TextBoxFor(m => m.LinksRegex, attribs);
+                }
+            </div>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.LinksUrl)
+                @Html.TextBoxFor(m => m.LinksUrl, attribs)
+                <i class="fa fa-info-circle" title="@Resources.Settings_Global_LinksUrl_Hint"></i>
+            </div>
             <div class="pure-control-group checkboxlist">
                 @Html.LabelFor(m => m.Users)
                 <span>

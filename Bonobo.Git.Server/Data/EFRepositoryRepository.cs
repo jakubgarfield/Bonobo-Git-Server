@@ -112,6 +112,9 @@ namespace Bonobo.Git.Server.Data
                     Anonymous = model.AnonymousAccess,
                     AllowAnonymousPush = model.AllowAnonymousPush,
                     AuditPushUser = model.AuditPushUser,
+                    LinksUseGlobal = model.LinksUseGlobal,
+                    LinksUrl = model.LinksUrl,
+                    LinksRegex = model.LinksRegex 
                 };
                 database.Repositories.Add(repository);
                 AddMembers(model.Users.Select(x => x.Id), model.Administrators.Select(x => x.Id), model.Teams.Select(x => x.Id), repository, database);
@@ -150,6 +153,9 @@ namespace Bonobo.Git.Server.Data
                     repo.Anonymous = model.AnonymousAccess;
                     repo.AuditPushUser = model.AuditPushUser;
                     repo.AllowAnonymousPush = model.AllowAnonymousPush;
+                    repo.LinksRegex = model.LinksRegex;
+                    repo.LinksUrl = model.LinksUrl;
+                    repo.LinksUseGlobal = model.LinksUseGlobal;
 
                     if (model.Logo != null)
                         repo.Logo = model.Logo;
@@ -198,7 +204,11 @@ namespace Bonobo.Git.Server.Data
                 Administrators = item.Administrators.Select(user => user.ToModel()).ToArray(),
                 AuditPushUser = item.AuditPushUser,
                 AllowAnonymousPush = item.AllowAnonymousPush,
-                Logo = item.Logo
+                Logo = item.Logo,
+                LinksRegex = item.LinksRegex,
+                LinksUrl = item.LinksUrl,
+                LinksUseGlobal = item.LinksUseGlobal
+
             };
         }
 

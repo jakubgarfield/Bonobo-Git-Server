@@ -1458,6 +1458,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use global linkify settings.
+        /// </summary>
+        public static string Repository_Detail_LinksUseGlobal {
+            get {
+                return ResourceManager.GetString("Repository_Detail_LinksUseGlobal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Git URL.
         /// </summary>
         public static string Repository_Detail_Location {

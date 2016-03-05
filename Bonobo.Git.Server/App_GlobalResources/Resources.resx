@@ -922,4 +922,7 @@
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="Repository_Detail_LinksUseGlobal" xml:space="preserve">
+    <value>Use global linkify settings</value>
+  </data>
 </root>
