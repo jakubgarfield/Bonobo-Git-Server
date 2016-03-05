@@ -63,18 +63,30 @@
                 @Html.DisplayEnum(Model.AllowAnonymousPush)
             </div>
 
-            @if (AppSettings.IsPushAuditEnabled) {
             <div class="pure-control-group">
-                @Html.LabelFor(m => m.AuditPushUser)
-                @if (Model.AuditPushUser)
-                {
-                    @Resources.Repository_Detail_Yes
-                }
-                else
-                {
-                    @Resources.Repository_Detail_No
-                }
+                @Html.LabelFor(m => m.LinksUseGlobal)
+                @Html.CheckBoxFor(m => m.LinksUseGlobal, new { disabled=""})
             </div>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.LinksRegex)
+                @Html.TextBoxFor(m => m.LinksRegex, new { @readonly=""})
+            </div>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.LinksUrl)
+                @Html.TextBoxFor(m => m.LinksUrl, new { @readonly=""})
+            </div>
+            @if (AppSettings.IsPushAuditEnabled) {
+                <div class="pure-control-group">
+                    @Html.LabelFor(m => m.AuditPushUser)
+                    @if (Model.AuditPushUser)
+                    {
+                        @Resources.Repository_Detail_Yes
+                    }
+                    else
+                    {
+                        @Resources.Repository_Detail_No
+                    }
+                </div>
             }
                 <div class="pure-control-group">
                 @Html.LabelFor(m => m.Users)

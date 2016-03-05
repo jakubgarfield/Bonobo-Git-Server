@@ -287,19 +287,12 @@ namespace Bonobo.Git.Server
             return tag.Target as Commit;
         }
 
-        private RepositoryCommitModel ToModel(Commit commit, bool withDiff = false)
+        private RepositoryCommitModel ToModel(Commit commit, bool withDiff = false)//, Tuple<bool, string, string> linkify)
         {
             string tagsString = string.Empty;
             var tags = _repository.Tags.Where(o => o.Target.Sha == commit.Sha).Select(o => o.Name).ToList();
 
             var shortMessageDetails = RepositoryCommitModelHelpers.MakeCommitMessage(commit.Message, 50);
-
-            IEnumerable<string> links = null;
-            if (UserConfiguration.Current.HasLinks)
-            {
-                links = Regex.Matches(commit.Message, UserConfiguration.Current.LinksRegex).OfType<Match>().Select(m => m.Value);
-            }
-
 
             var model = new RepositoryCommitModel
             {
@@ -314,7 +307,7 @@ namespace Bonobo.Git.Server
                 Parents = commit.Parents.Select(i => i.Sha).ToArray(),
                 Tags = tags,
                 Notes = (from n in commit.Notes select new RepositoryCommitNoteModel(n.Message, n.Namespace)).ToList(),
-                Links = links
+                Links = null
             };
 
             if (!withDiff)

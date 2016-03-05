@@ -20,7 +20,7 @@
 
             @foreach (var link in Model.Links)
             {
-                <a target="_blank" href="@string.Format(UserConfiguration.Current.LinksUrl, link)">@link</a>
+                <a target="_blank" class="linkified" href="@link">@link</a>
             }
         </span>
         }

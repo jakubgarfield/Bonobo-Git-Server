@@ -431,6 +431,43 @@ namespace Bonobo.Git.Server.Controllers
                 var commits = browser.GetCommits(name, page, 10, out referenceName, out totalCount);
                 PopulateBranchesData(browser, referenceName);
                 ViewBag.TotalCount = totalCount;
+
+                var linksreg = repo.LinksUseGlobal ? UserConfiguration.Current.LinksRegex : repo.LinksRegex;
+                var linksurl = repo.LinksUseGlobal ? UserConfiguration.Current.LinksUrl : repo.LinksUrl;
+                foreach (var commit in commits)
+                {
+                    var links = new List<string>();
+                    if (!string.IsNullOrEmpty(linksreg))
+                    {
+                        try
+                        {
+                            var matches = Regex.Matches(commit.Message, linksreg);
+                            if (matches.Count > 0)
+                            {
+                                foreach (Match match in matches)
+                                {
+                                    IEnumerable<Group> groups = match.Groups.Cast<Group>();
+                                    var link = "";
+                                    try
+                                    {
+                                        var m = groups.Select(x => x.ToString()).ToArray();
+                                        link = string.Format(linksurl, m);
+                                    }
+                                    catch (FormatException e)
+                                    {
+                                        link = "An error occured while trying to format the link. Exception: " + e.Message;
+                                    }
+                                    links.Add(link);
+                                }
+                            }
+                        }
+                        catch (ArgumentException e)
+                        {
+                            links.Add("An error occured while trying to match the regualar expression. Error: " + e.Message);
+                        }
+                    }
+                    commit.Links = links;
+                }
                 return View(new RepositoryCommitsModel { Commits = commits, Name = repo.Name });
             }
         }
