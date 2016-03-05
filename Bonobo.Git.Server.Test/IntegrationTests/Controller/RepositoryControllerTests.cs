@@ -46,10 +46,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("form.pure-form>fieldset>div.pure-control-group.checkboxlist>input");
             foreach (var chk in chkboxes)
             {
-                if (!chk.Selected)
-                {
-                    chk.Click();
-                }
+                ITH.SetCheckbox(chk, true);
             }
             form.Submit();
 
@@ -139,21 +136,50 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 
         }
 
-/*
-        [TestMethod]
+        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void RepositoryCanBeSavedBySysAdminWithoutHavingAnyRepoAdmins()
         {
             var repoId = ITH.CreateRepositoryOnWebInterface(app, "Repo");
 
             app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
-            // TODO - need to find all the admin checkboxes here and turn them off
-            app.FindFormFor<RepositoryDetailModel>()
-                .Field(f => f.PostedSelectedAdministrators).SetValueTo("0")
-                .Submit();
+            var form = app.FindFormFor<RepositoryDetailModel>();
 
+            // Turn off all the admin checkboxes and save the form 
+            var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("input[name=PostedSelectedAdministrators]");
+            ITH.SetCheckboxes(chkboxes, false);
+
+            form.Submit();
+            ITH.AssertThatNoValidationErrorOccurred(app);
         }
-*/
 
+        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        public void RepoAdminCannotRemoveThemselves()
+        {
+            var userId = ITH.CreateUsers(app).Single();
+
+            var repoId = ITH.CreateRepositoryOnWebInterface(app, "Repo");
+
+            app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
+            var form = app.FindFormFor<RepositoryDetailModel>();
+
+            // Set User0 to be admin for this repo
+            var adminBox = form.WebApp.Browser.FindElementsByCssSelector(string.Format("input[name=PostedSelectedAdministrators][value=\"{0}\"]", userId)).Single();
+            ITH.SetCheckbox(adminBox, true);
+            form.Submit();
+            ITH.AssertThatNoValidationErrorOccurred(app);
+
+            // Now, log in as the ordinary user
+            ITH.LoginAsNumberedUser(app, 0);
+
+            app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
+            form = app.FindFormFor<RepositoryDetailModel>();
+
+            var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("input[name=PostedSelectedAdministrators]");
+            ITH.SetCheckboxes(chkboxes, false);
+
+            form.Submit();
+            ITH.AssertThatValidationErrorContains(app, "You can't remove yourself from administrators");
+        }
     }
 }
 
