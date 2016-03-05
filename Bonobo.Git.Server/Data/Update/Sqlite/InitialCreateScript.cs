@@ -17,6 +17,9 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
                         [Description] VarChar(255) Null,
                         [Anonymous] Bit Not Null,
                         [AllowAnonymousPush] Integer NULL Default 3,
+                        [LinksRegex] VarChar(255) Not Null,
+                        [LinksUrl] VarChar(255) Not Null,
+                        [LinksUseGlobal] Bit default 1 Not Null,
                         UNIQUE ([Name] COLLATE NOCASE)
                     );
 

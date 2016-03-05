@@ -53,6 +53,9 @@ namespace Bonobo.Git.Server.Data.Mapping
             Property(t => t.Anonymous).HasColumnName("Anonymous");
             Property(t => t.AuditPushUser).HasColumnName("AuditPushUser");
             Property(t => t.AllowAnonymousPush).HasColumnName("AllowAnonymousPush");
+            Property(t => t.LinksRegex).HasColumnName("LinksRegex");
+            Property(t => t.LinksUrl).HasColumnName("LinksUrl");
+            Property(t => t.LinksUseGlobal).HasColumnName("LinksUseGlobal");
         }
 
         private void SetProperties()
