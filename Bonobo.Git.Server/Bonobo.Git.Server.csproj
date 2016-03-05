@@ -243,6 +243,7 @@
     <Compile Include="Attributes\AllViewsAttribute.cs" />
     <Compile Include="Attributes\FileExtensionsCustom.cs" />
     <Compile Include="Attributes\RepositoryNameNormalizerAttribute.cs" />
+    <Compile Include="Attributes\IsValidRegexAttribute.cs" />
     <Compile Include="Attributes\UniqueRepoNameAttribute.cs" />
     <Compile Include="Configuration\ActiveDirectorySettings.cs" />
     <Compile Include="Configuration\AuthenticationSettings.cs" />

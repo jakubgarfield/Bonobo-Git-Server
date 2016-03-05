@@ -2448,6 +2448,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The provided regex has an error. {0}.
+        /// </summary>
+        public static string Validation_Invalid_Regex {
+            get {
+                return ResourceManager.GetString("Validation_Invalid_Regex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &quot;{0}&quot; is mandatory..
         /// </summary>
         public static string Validation_Required {
