@@ -275,6 +275,9 @@
   <data name="Email_PasswordReset_Title" xml:space="preserve">
     <value>[ßőŉőþő - Päşşŵőřđ Ŗęşęŧ Ŗęqūęşŧ !!! !!!]</value>
   </data>
+  <data name="Global" xml:space="preserve">
+    <value>[Ğľőþäľ !!! !!! !!! !!! !!!]</value>
+  </data>
   <data name="Grid_Delete" xml:space="preserve">
     <value>[Đęľęŧę !!! !!! !!! !!! !!!]</value>
   </data>
@@ -425,6 +428,9 @@
   <data name="Layout_Title" xml:space="preserve">
     <value>[ßőŉőþő Ğįŧ Ŝęřvęř !!! !!!]</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>[Ńő !!! !!!]</value>
+  </data>
   <data name="Repository_AddressBar_Root" xml:space="preserve">
     <value>[Ħőmę !!! !!! !!!]</value>
   </data>
@@ -433,6 +439,9 @@
   </data>
   <data name="Repository_AllowAnonymousHint" xml:space="preserve">
     <value>[Ĩƒ äŉőŉymőūş äččęşş įş äľľőŵęđ, ęvęřyőŉę čäŉ pūľľ őř čľőŉę ŧĥę řępőşįŧőřy äŉđ vįęŵ řępőşįŧőřy męŧäđäŧä. Pūşĥ įş äväįľäþľę őŉľy įƒ şęŧ įŉ Ğľőþäľ Ŝęŧŧįŉģş. !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_AllowAnonymousPushHint" xml:space="preserve">
+    <value>[Åľľőŵş äŉőŉymőūş ūşęřş ŧő pūşĥ ŧő ŧĥįş řępőşįŧőřy įƒ äŉőŉymőūş äččęş įş ģřäŉŧęđ. Ĩƒ "Ğľőþäľ" įş şęľęčŧęđ ŧĥę őpŧįőŉ şęŧ ūŉđęř yőūř ģľőþäľ şęŧŧįŉģş įş ūşęđ. !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!]</value>
   </data>
   <data name="Repository_AuditPushUserHint" xml:space="preserve">
     <value>[Ŗęčőřđ ūşęř ŧĥäŧ pūşĥęđ čőmmįŧş ŧő ŧĥę şęřvęř !!! !!!]</value>
@@ -544,6 +553,9 @@
   </data>
   <data name="Repository_Detail_Administrators" xml:space="preserve">
     <value>[Åđmįŉįşŧřäŧőřş !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_AllowAnonymousPush" xml:space="preserve">
+    <value>[Åŉőŉymőūş pūşĥ !!! !!!]</value>
   </data>
   <data name="Repository_Detail_Anonymous" xml:space="preserve">
     <value>[Åŉőŉymőūş !!! !!! !!! !!! !!! !!! !!! !!!]</value>
@@ -898,5 +910,8 @@
   </data>
   <data name="Validation_StringLength" xml:space="preserve">
     <value>["{0}" şĥőūľđ þę şĥőřŧęř ŧĥäŉ {1} čĥäřäčŧęřş. !!! !!!]</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>[Ÿęş !!! !!!]</value>
   </data>
 </root>

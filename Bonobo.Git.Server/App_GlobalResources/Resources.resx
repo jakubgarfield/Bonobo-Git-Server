@@ -913,4 +913,13 @@
   <data name="Repository_AllowAnonymousPushHint" xml:space="preserve">
     <value>Allows anonymous users to push to this repository if anonymous acces is granted. If "Global" is selected the option set under your global settings is used.</value>
   </data>
+  <data name="Global" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
 </root>

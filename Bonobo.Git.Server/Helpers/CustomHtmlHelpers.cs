@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Html;
 using System.Reflection;
 using System.Text;
 using System.Web.Routing;
 using System.Linq.Expressions;
 using Bonobo.Git.Server.Models;
 using MarkdownDeep;
+using System.ComponentModel.DataAnnotations;
 
 namespace Bonobo.Git.Server.Helpers
 {
@@ -25,5 +27,22 @@ namespace Bonobo.Git.Server.Helpers
             return MvcHtmlString.Create(markdown.Transform(markdownText));
         }
 
+        public static MvcHtmlString DisplayEnum(this HtmlHelper helper, Enum e)
+        {
+            string result = "[[" + e.ToString() + "]]";
+
+            var display = e.GetType()
+                       .GetMember(e.ToString()).First()
+                       .GetCustomAttributes(false)
+                       .OfType<DisplayAttribute>()
+                       .LastOrDefault();
+
+            if (display != null)
+            {
+                result = display.GetName();
+            }
+
+            return MvcHtmlString.Create(result);
+        }
     }
 }

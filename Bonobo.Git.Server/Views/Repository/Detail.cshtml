@@ -60,7 +60,7 @@
             </div>
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.AllowAnonymousPush)
-                @Model.AllowAnonymousPush
+                @Html.DisplayEnum(Model.AllowAnonymousPush)
             </div>
 
             @if (AppSettings.IsPushAuditEnabled) {
