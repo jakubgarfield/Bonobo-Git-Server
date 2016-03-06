@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests
 {
@@ -29,21 +30,9 @@ namespace Bonobo.Git.Server.Test.IntegrationTests
 
         public void ErrorMustMatch(MsysgitResources.Definition resource, params object[] args)
         {
-            string matchString;
-            if (args.Length > 0)
-            {
-                matchString = string.Format(Resources[resource], args);
-            }
-            else
-            {
-                matchString = Resources[resource];
-            }
-            var expected = matchString.Trim();
+            var expected = string.Format(Resources[resource], args).Trim();
             var actual = StdErr.Trim();
-            if (expected != actual)
-            {
-                Assert.Fail("Git operation StdErr mismatch - expected '{0}', was '{1}'", expected, actual);
-            }
+            Assert.AreEqual(expected, actual, "Git operation StdErr mismatch");
         }
     }
 }
