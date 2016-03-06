@@ -11,6 +11,7 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 ### Features
 
 * A new global option allows a repository to be created by pushing at a non-existent repo name
+* Repositories do not need to have an explicit repository administator
 
 ### Bugfixes
 
