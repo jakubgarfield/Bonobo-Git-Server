@@ -22,6 +22,8 @@ namespace Bonobo.Git.Server.Test
             CloneRepositoryError,
             PushBranchError,
             CloneRepositoryFailRequiresAuthError,
+            AuthenticationFailedError,
+            RepositoryNotFoundError
         }
 
 
@@ -51,6 +53,8 @@ namespace Bonobo.Git.Server.Test
                 { Definition.CloneRepositoryOutput, "Cloning into Integration...\r\n" },
                 { Definition.CloneRepositoryError,"" },
                 { Definition.PushBranchError, "To {0}\r\n * [new branch]      TestBranch -> TestBranch\r\n" },
+                { Definition.AuthenticationFailedError, "fatal: Authentication failed" },
+                { Definition.RepositoryNotFoundError, "fatal: repository '{0}/' not found" }
             };
 
             if (String.Equals(version, "1.7.8") 

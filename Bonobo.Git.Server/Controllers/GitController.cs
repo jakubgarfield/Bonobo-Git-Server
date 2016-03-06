@@ -4,12 +4,14 @@ using System.IO;
 using System.Net;
 using System.Web.Mvc;
 using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Git;
 using Bonobo.Git.Server.Git.GitService;
+using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 using Ionic.Zlib;
-using LibGit2Sharp;
 using Microsoft.Practices.Unity;
+using Repository = LibGit2Sharp.Repository;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -19,21 +21,41 @@ namespace Bonobo.Git.Server.Controllers
     {
         [Dependency]
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
-        
+
+        [Dependency]
+        public IRepositoryRepository RepositoryRepository { get; set; }
+
+        [Dependency]
+        public IMembershipService MembershipService { get; set; }
+
         [Dependency]
         public IGitService GitService { get; set; }
 
         public ActionResult SecureGetInfoRefs(String repositoryName, String service)
         {
-            if (!RepositoryIsValid(repositoryName))
-            {
-                return new HttpNotFoundResult();
-            }
-
             bool isPush = String.Equals("git-receive-pack", service, StringComparison.OrdinalIgnoreCase);
 
-            var requiredLevel = isPush ? RepositoryAccessLevel.Push : RepositoryAccessLevel.Pull;
+            if (!RepositoryIsValid(repositoryName))
+            {
+                // This isn't a real repo - but we might consider allowing creation
+                if (isPush && UserConfiguration.Current.AllowPushToCreate)
+                {
+                    if (!RepositoryPermissionService.HasCreatePermission(User.Id()))
+                    {
+                        return UnauthorizedResult();
+                    }
+                    if (!TryCreateOnPush(repositoryName))
+                    {
+                        return UnauthorizedResult();
+                    }
+                }
+                else
+                {
+                    return new HttpNotFoundResult();
+                }
+            }
 
+            var requiredLevel = isPush ? RepositoryAccessLevel.Push : RepositoryAccessLevel.Pull;
             if (RepositoryPermissionService.HasPermission(User.Id(), repositoryName, requiredLevel))
             {
                 return GetInfoRefs(repositoryName, service);
@@ -79,6 +101,36 @@ namespace Bonobo.Git.Server.Controllers
                 return UnauthorizedResult();
             }
         }
+
+        private bool TryCreateOnPush(string repositoryName)
+        {
+            DirectoryInfo directory = GetDirectoryInfo(repositoryName);
+            if (directory.Exists)
+            {
+                // We can't create a new repo - there's already a directory with that name
+                return false;
+            }
+            RepositoryModel repository = new RepositoryModel();
+            repository.Name = repositoryName;
+            if (!repository.NameIsValid)
+            {
+                // We don't like this name
+                return false;
+            }
+            var user = MembershipService.GetUserModel(User.Id());
+            repository.Description = "Auto-created by push for " + user.DisplayName;
+            repository.AnonymousAccess = false;
+            repository.Administrators = new[] {user};
+            if (!RepositoryRepository.Create(repository))
+            {
+                // We can't add this to the repo store
+                return false;
+            }
+
+            Repository.Init(Path.Combine(UserConfiguration.Current.Repositories, repository.Name), true);
+            return true;
+        }
+
 
         /// <summary>
         /// This is the action invoked if you browse to a .git URL

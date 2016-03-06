@@ -144,6 +144,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="IntegrationTests\SharedLayoutTests.cs" />
+    <Compile Include="IntegrationTests\GitResult.cs" />
     <Compile Include="MembershipTests\ADTests\ADBackendStoreTest.cs" />
     <Compile Include="MembershipTests\ADTests\ADMembershipServiceTest.cs" />
     <Compile Include="MembershipTests\ADTests\ADMembershipServiceTestFacade.cs" />
