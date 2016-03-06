@@ -370,7 +370,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         {
             app.NavigateTo<SettingsController>(c => c.Index());
             var form = app.FindFormFor<GlobalSettingsModel>();
-            SetCheckbox(form.Field(optionExpression), value);
+            ITH.SetCheckbox(form.Field(optionExpression).Field, value);
             form.Submit();
         }
 
