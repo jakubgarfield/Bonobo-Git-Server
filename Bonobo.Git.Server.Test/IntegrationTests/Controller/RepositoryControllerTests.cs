@@ -40,24 +40,31 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void EnsureCheckboxesStayCheckOnCreateError()
         {
-            ITH.CreateUsers(app, 1);
-            app.NavigateTo<RepositoryController>(c => c.Create());
-            var form = app.FindFormFor<RepositoryDetailModel>();
-            var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("form.pure-form>fieldset>div.pure-control-group.checkboxlist>input");
-            foreach (var chk in chkboxes)
+            var userId = ITH.CreateUsers(app, 1).Single();
+            try
             {
-                ITH.SetCheckbox(chk, true);
-            }
-            form.Submit();
+                app.NavigateTo<RepositoryController>(c => c.Create());
+                var form = app.FindFormFor<RepositoryDetailModel>();
+            	var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("form.pure-form>fieldset>div.pure-control-group.checkboxlist>input");
+                foreach (var chk in chkboxes)
+                {
+                    ITH.SetCheckbox(chk, true);
+                }
+                form.Submit();
 
 
-            form = app.FindFormFor<RepositoryDetailModel>();
-            chkboxes = form.WebApp.Browser.FindElementsByCssSelector("form.pure-form>fieldset>div.pure-control-group.checkboxlist>input");
-            foreach (var chk in chkboxes)
-            {
-                Assert.AreEqual(true, chk.Selected, "A message box was unselected eventhough we selected all!");
+                form = app.FindFormFor<RepositoryDetailModel>();
+            	chkboxes = form.WebApp.Browser.FindElementsByCssSelector("form.pure-form>fieldset>div.pure-control-group.checkboxlist>input");
+                foreach (var chk in chkboxes)
+                {
+                    Assert.AreEqual(true, chk.Selected, "A message box was unselected eventhough we selected all!");
+                }
             }
-            
+            finally
+            {
+                ITH.DeleteUser(app, userId);
+            }
+
         }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
@@ -157,28 +164,36 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         {
             var userId = ITH.CreateUsers(app).Single();
 
-            var repoId = ITH.CreateRepositoryOnWebInterface(app, "Repo");
+            try
+            {
+                var repoId = ITH.CreateRepositoryOnWebInterface(app, "Repo");
 
-            app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
-            var form = app.FindFormFor<RepositoryDetailModel>();
+                app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
+                var form = app.FindFormFor<RepositoryDetailModel>();
 
-            // Set User0 to be admin for this repo
-            var adminBox = form.WebApp.Browser.FindElementsByCssSelector(string.Format("input[name=PostedSelectedAdministrators][value=\"{0}\"]", userId)).Single();
-            ITH.SetCheckbox(adminBox, true);
-            form.Submit();
-            ITH.AssertThatNoValidationErrorOccurred(app);
+	            // Set User0 to be admin for this repo
+	            var adminBox = form.WebApp.Browser.FindElementsByCssSelector(string.Format("input[name=PostedSelectedAdministrators][value=\"{0}\"]", userId)).Single();
+	            ITH.SetCheckbox(adminBox, true);
+	            form.Submit();
+	            ITH.AssertThatNoValidationErrorOccurred(app);
 
-            // Now, log in as the ordinary user
-            ITH.LoginAsNumberedUser(app, 0);
+                // Now, log in as the ordinary user
+                ITH.LoginAsNumberedUser(app, 0);
 
-            app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
-            form = app.FindFormFor<RepositoryDetailModel>();
+                app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
+                form = app.FindFormFor<RepositoryDetailModel>();
 
-            var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("input[name=PostedSelectedAdministrators]");
-            ITH.SetCheckboxes(chkboxes, false);
+                var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("input[name=PostedSelectedAdministrators]");
+                ITH.SetCheckboxes(chkboxes, false);
 
-            form.Submit();
-            ITH.AssertThatValidationErrorContains(app, "You can't remove yourself from administrators");
+                form.Submit();
+                ITH.AssertThatValidationErrorContains(app, "You can't remove yourself from administrators");
+            }
+            finally
+            {
+                ITH.Login(app);
+                ITH.DeleteUser(app, userId);
+            }
         }
     }
 }

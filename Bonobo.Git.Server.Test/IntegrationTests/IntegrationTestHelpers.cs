@@ -94,6 +94,11 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             return new Guid(element.GetAttribute("id").Substring(5));
         }
 
+        public static void DeleteUser(MvcWebApp app, Guid userId)
+        {
+            app.NavigateTo<AccountController>(c => c.Delete(userId));
+            app.FindFormFor<UserModel>().Submit();
+        }
 
         public static IEnumerable<Guid> CreateUsers(MvcWebApp app, int count = 1, int start = 0)
         {
