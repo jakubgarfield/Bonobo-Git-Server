@@ -326,24 +326,6 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             }
         } 
 
-        private void SetCheckbox<T>(FluentField<T, bool> field, bool select) where T : class
-        {
-            if (select)
-            {
-                if (!field.Field.Selected)
-                {
-                    field.Click();
-                }
-            }
-            else
-            {
-                if(field.Field.Selected)
-                {
-                    field.Click();
-                }
-            }
-        }
-
         private void SetAnonPush(bool allowAnonymousPush)
         {
             SetGlobalSetting(f => f.AllowAnonymousPush, allowAnonymousPush);
@@ -380,7 +362,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             app.NavigateTo<RepositoryController>(c => c.Edit(repo));
             var form = app.FindFormFor<RepositoryDetailModel>();
             var repo_clone = form.Field(f => f.AllowAnonymous);
-            SetCheckbox(repo_clone, allow);
+            ITH.SetCheckbox(repo_clone.Field, allow);
             form.Submit();
         }
 
@@ -388,7 +370,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         {
             app.NavigateTo<SettingsController>(c => c.Index());
             var form = app.FindFormFor<GlobalSettingsModel>();
-            SetCheckbox(form.Field(optionExpression), value);
+            ITH.SetCheckbox(form.Field(optionExpression).Field, value);
             form.Submit();
         }
 
