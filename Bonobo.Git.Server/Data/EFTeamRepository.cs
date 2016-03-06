@@ -41,7 +41,7 @@ namespace Bonobo.Git.Server.Data
             return GetAllTeams().Where(i => i.Members.Any(x => x.Id == UserId)).ToList();
         }
 
-        private TeamModel GetTeam(Team team)
+        private TeamModel GetTeamModel(Team team)
         {
                 return team == null ? null : new TeamModel
                 {
@@ -57,8 +57,21 @@ namespace Bonobo.Git.Server.Data
             using (var db = CreateContext())
             {
                 var team = db.Teams.FirstOrDefault(i => i.Id == id);
-                return GetTeam(team);
+                return GetTeamModel(team);
             }
+        }
+
+        public TeamModel GetTeam(string name, StringComparison compType)
+        {
+            var teams = GetAllTeams();
+            foreach (var team in teams)
+            {
+                if (team.Name.Equals(name, compType))
+                {
+                    return team;
+                }
+            }
+            return null;
         }
 
         public void Delete(Guid teamId)

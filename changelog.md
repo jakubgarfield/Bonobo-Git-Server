@@ -20,6 +20,8 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 * Claims names are now more consistent with typical ADFS usage #488
 * Added following environment variables: `AUTH_USER_TEAMS`, `AUTH_USER_ROLES`, and `AUTH_USER_DISPLAYNAME`. See the FAQ for more information. #495
 * The linkify option for commit messages can now be set on a per repo basis
+* Verifies that username, repository and team names are unique as you type them
+* Verifies as you type regex entered for linkification
 
 ### Bugfixes
 
