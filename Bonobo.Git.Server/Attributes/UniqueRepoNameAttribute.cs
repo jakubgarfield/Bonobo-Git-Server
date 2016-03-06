@@ -29,7 +29,7 @@ namespace Bonobo.Git.Server.Attributes
             {
                 return ValidationResult.Success;
             }
-            return new ValidationResult(Resources.Repository_Duplicate_Name);
+            return new ValidationResult(Resources.Validation_Duplicate_Name);
         }
     }
 }

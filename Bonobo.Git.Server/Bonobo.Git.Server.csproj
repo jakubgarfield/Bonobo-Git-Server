@@ -269,6 +269,7 @@
     <Compile Include="Configuration\AuthenticationSettings.cs" />
     <Compile Include="Configuration\DiagnosticReporter.cs" />
     <Compile Include="Configuration\FederationSettings.cs" />
+    <Compile Include="Controllers\ValidationController.cs" />
     <Compile Include="Data\ADBackend.cs" />
     <Compile Include="Data\ADBackendStore.cs" />
     <Compile Include="Data\ADRepositoryRepository.cs" />
@@ -714,6 +715,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Recovery\" />
+    <Folder Include="Views\Validation\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

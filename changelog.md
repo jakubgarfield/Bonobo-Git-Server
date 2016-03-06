@@ -13,6 +13,7 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 * A new global option allows a repository to be created by pushing at a non-existent repo name
 * Repositories do not need to have an explicit repository administator
 * Allow push for anonymous user can now be set on a per repo basis
+* Verifies that username, repository and team names are unique as you type them
 
 ### Bugfixes
 

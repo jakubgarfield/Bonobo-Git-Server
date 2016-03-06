@@ -78,6 +78,7 @@ namespace Bonobo.Git.Server.Models
     {
         public Guid Id { get; set; }
 
+        [Remote("UniqueNameUser", "Validation", AdditionalFields="Id", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Duplicate_Name")]
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
         [Display(ResourceType = typeof(Resources), Name = "Account_Edit_Username")]
         public string Username { get; set; }
@@ -143,6 +144,7 @@ namespace Bonobo.Git.Server.Models
 
     public class UserCreateModel
     {
+        [Remote("UniqueNameUser", "Validation", AdditionalFields="Id", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Duplicate_Name")]
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
         [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
         [Display(ResourceType = typeof(Resources), Name = "Account_Create_Username")]
