@@ -1,37 +1,17 @@
 ﻿using System;
-using SpecsFor.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
+using Bonobo.Git.Server.Test.IntegrationTests;
 
 namespace Bonobo.Git.Server.Test.Integration.Web
 {
     public class HomeControllerSpecs
     {
         [TestClass]
-        public class AccountControllerTests
+        public class AccountControllerTests : IntegrationTestBase
         {
-            private static MvcWebApp app;
-
-            [ClassInitialize]
-            public static void ClassInit(TestContext testContext)
-            {
-                app = new MvcWebApp();
-            }
-
-            [ClassCleanup]
-            public static void Cleanup()
-            {
-                app.Browser.Close();
-            }
-
-            [TestInitialize]
-            public void InitTest()
-            {
-                IntegrationTestHelpers.Login(app);
-            }
 
             [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
             public void UserDetailRequiresLogin()
