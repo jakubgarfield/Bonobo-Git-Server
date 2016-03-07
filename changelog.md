@@ -19,7 +19,7 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 * Addition of automated test framework for testing web application
 * Rework of repository permissions Code
-
+* Abort startup if `BinaryGUID=False` is not set in Sqlite connections. 
 
 ## Version 5.1.1
 

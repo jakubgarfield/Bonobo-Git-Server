@@ -26,6 +26,7 @@ using Microsoft.Practices.Unity;
 using System.Runtime.Caching;
 using Bonobo.Git.Server.Attributes;
 using Microsoft.Practices.Unity.Mvc;
+using System.Web.Configuration;
 
 namespace Bonobo.Git.Server
 {
@@ -75,6 +76,15 @@ namespace Bonobo.Git.Server
             UserConfiguration.Initialize();
             RegisterDependencyResolver();
             GlobalFilters.Filters.Add((AllViewsFilter)DependencyResolver.Current.GetService<AllViewsFilter>());
+
+            var connectionstring = WebConfigurationManager.ConnectionStrings["BonoboGitServerContext"];
+            if (connectionstring.ProviderName.ToLower() == "system.data.sqlite")
+            {
+                if(!connectionstring.ConnectionString.ToLower().Contains("binaryguid=false")){
+                    Trace.WriteLine("Please ensure that the sqlite connection string contains 'BinaryGUID=false;'.");
+                    throw new ConfigurationErrorsException("Please ensure that the sqlite connection string contains 'BinaryGUID=false;'.");
+                }
+            }
 
             try
             {
