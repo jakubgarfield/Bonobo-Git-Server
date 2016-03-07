@@ -25,24 +25,9 @@ namespace Bonobo.Git.Server.Controllers
         [Dependency]
         public ITeamRepository TeamRepo { get; set; }
 
-        public ActionResult UniqueNameRepo(string name, string id)
+        public ActionResult UniqueNameRepo(string name, Guid id)
         {
-            // I have no idea why key is not being filled properly
-            id = Request.QueryString["Id"];
-            if (id == null)
-            {
-                // something odd happened here. We should always have the key attribute.
-                // But we will allow as there should be server side authentication.
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-
-            RepositoryDetailModel existing_repo = new RepositoryDetailModel();
-            Guid g = Guid.Empty;
-            Guid.TryParse(id, out g);
-            if (g != Guid.Empty)
-            {
-                existing_repo = RepositoryController.ConvertRepositoryModel(RepoRepo.GetRepository(g), User);
-            }
+            var existing_repo = RepositoryController.ConvertRepositoryModel(RepoRepo.GetRepository(id), User);
             var validationContext = new ValidationContext(existing_repo);
             // This will do two repository lookups at least but keeps the
             // logic behind the validation the same.
@@ -51,39 +36,17 @@ namespace Bonobo.Git.Server.Controllers
             return Json(result == System.ComponentModel.DataAnnotations.ValidationResult.Success, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult UniqueNameUser(string Username, string id)
+        public ActionResult UniqueNameUser(string Username, Guid id)
         {
-            // I have no idea why key is not being filled properly
-            id = Request.QueryString["Id"];
-            if (id == null)
-            {
-                // something odd happened here. We should always have the key attribute.
-                // But we will allow as there should be server side authentication.
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-
-            Guid model_being_edited_id;
-            Guid.TryParse(id, out model_being_edited_id);
             var possibly_existent_user = MembershipService.GetUserModel(Username);
-            bool exists = (possibly_existent_user != null) && (model_being_edited_id != possibly_existent_user.Id);
+            bool exists = (possibly_existent_user != null) && (id != possibly_existent_user.Id);
             return Json(!exists, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult UniqueNameTeam(string name, string id)
+        public ActionResult UniqueNameTeam(string name, Guid id)
         {
-            // I have no idea why key is not being filled properly
-            id = Request.QueryString["Id"];
-            if (id == null)
-            {
-                // something odd happened here. We should always have the key attribute.
-                // But we will allow as there should be server side authentication.
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-
             var possibly_existing_team = TeamRepo.GetTeam(name);
-            Guid model_being_edited_id;
-            Guid.TryParse(id, out model_being_edited_id);
-            bool exists = (possibly_existing_team != null) && (model_being_edited_id != possibly_existing_team.Id);
+            bool exists = (possibly_existing_team != null) && (id != possibly_existing_team.Id);
             // false when repo exists!
             return Json(!exists, JsonRequestBehavior.AllowGet);
         }
