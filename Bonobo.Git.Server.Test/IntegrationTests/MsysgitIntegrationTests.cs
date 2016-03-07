@@ -232,11 +232,11 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         public void RepoAnonPushYesOverridesGlobalSettings()
         {
 
-            ForAllGits((git, resource) =>
+            ForAllGits(git =>
             {
                 var repo_id = ITH.CreateRepositoryOnWebInterface(app, RepositoryName);
                 AllowAnonRepoClone(repo_id, true);
-                CloneRepoAnon(git, resource, true);
+                CloneRepoAnon(git, true);
                 CreateIdentity(git);
                 SetRepoPushTo(repo_id, RepositoryPushMode.Yes);
 
@@ -245,7 +245,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 RunGitOnRepo(git, "commit -m\"Aw yeah!\"");
 
                 SetGlobalAnonPush(git, false);
-                PushFiles(git, resource, true);
+                PushFiles(git, true);
 
                 ITH.DeleteRepository(app, repo_id);
             });
@@ -255,11 +255,11 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         public void RepoAnonPushNoOverridesGlobalSettings()
         {
 
-            ForAllGits((git, resource) =>
+            ForAllGits(git =>
             {
                 var repo_id = ITH.CreateRepositoryOnWebInterface(app, RepositoryName);
                 AllowAnonRepoClone(repo_id, true);
-                CloneRepoAnon(git, resource, true);
+                CloneRepoAnon(git, true);
                 CreateIdentity(git);
                 SetRepoPushTo(repo_id, RepositoryPushMode.No);
 
@@ -268,7 +268,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 RunGitOnRepo(git, "commit -m\"Aw yeah!\"");
 
                 SetGlobalAnonPush(git, true);
-                PushFiles(git, resource, false);
+                PushFiles(git, false);
 
                 ITH.DeleteRepository(app, repo_id);
             });
@@ -390,18 +390,18 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             SetGlobalSetting(f => f.AllowAnonymousPush, allowAnonymousPush);
         }
 
-        private void SetGlobalAnonPush(string git, bool allowAnonymousPush)
+        private void SetGlobalAnonPush(GitInstance git, bool allowAnonymousPush)
         {
             app.NavigateTo<SettingsController>(c => c.Index());
             var form = app.FindFormFor<GlobalSettingsModel>();
             var field =  form.Field(f => f.AllowAnonymousPush);
-            SetCheckbox(field, allowAnonymousPush);
+            ITH.SetCheckbox(field.Field, allowAnonymousPush);
             var languages = new SelectElement(form.Field(f => f.DefaultLanguage).Field);
             languages.SelectByValue("en-US");
             form.Submit();
         }
 
-        private void CreateAndAddTestFiles(string git, int count)
+        private void CreateAndAddTestFiles(GitInstance git, int count)
         {
             foreach (var i in 0.To(count - 1))
             {
