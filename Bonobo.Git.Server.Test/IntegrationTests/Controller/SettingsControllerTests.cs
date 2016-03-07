@@ -6,32 +6,13 @@ using Bonobo.Git.Server.Controllers;
 using OpenQA.Selenium.Support.UI;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Test.Integration.Web;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
     [TestClass]
-    public class SettingsControllerTests
+    public class SettingsControllerTests : IntegrationTestBase
     {
-        private static MvcWebApp app;
-
-        [ClassInitialize]
-        public static void ClassInit(TestContext testContext)
-        {
-            app = new MvcWebApp();
-        }
-
-        [ClassCleanup]
-        public static void Cleanup()
-        {
-            app.Browser.Close();
-        }
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            IntegrationTestHelpers.Login(app);
-        }
-
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void EnsureSelectedLanguageIsSaved()
         {

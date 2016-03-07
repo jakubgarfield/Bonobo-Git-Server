@@ -27,6 +27,10 @@
             @Html.ValidationMessageFor(m => m.RememberMe)
         </div>
         @Html.HiddenFor(m => m.ReturnUrl)
+        @if (Model.DatabaseResetCode != 0)
+        {
+            @Html.TextBoxFor(m => m.DatabaseResetCode)
+        }
         <div class="pure-controls">
             <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-sign-in"></i> @Resources.Home_LogOn_LogOn</button>
         </div>

@@ -161,6 +161,8 @@ namespace Bonobo.Git.Server
                     RepositoriesDirPath = UserConfiguration.Current.Repositories,
                 });
 
+            container.RegisterType<IDatabaseResetManager, DatabaseResetManager>();
+
             if (AppSettings.IsPushAuditEnabled)
             {
                 EnablePushAuditAnalysis(container);
