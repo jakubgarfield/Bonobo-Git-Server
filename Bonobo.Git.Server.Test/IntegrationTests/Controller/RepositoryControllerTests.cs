@@ -8,6 +8,7 @@ using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
 using Bonobo.Git.Server.Test.IntegrationTests;
+using Bonobo.Git.Server.Data;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
@@ -194,6 +195,16 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
                 ITH.Login(app);
                 ITH.DeleteUser(app, userId);
             }
+				}
+
+        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        public void RepoAnonPushDefaultSettingsForRepoCreationShouldBeGlobal()
+        {
+            app.NavigateTo<RepositoryController>(c => c.Create());
+            var form = app.FindFormFor<RepositoryDetailModel>();
+            var select = new SelectElement(form.Field(f => f.AllowAnonymousPush).Field);
+
+            Assert.AreEqual(RepositoryPushMode.Global.ToString("D"), select.SelectedOption.GetAttribute("value"));
         }
     }
 }

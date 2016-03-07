@@ -10,11 +10,13 @@ using OpenQA.Selenium;
 
 using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
+	using Bonobo.Git.Server.Data;
 using System.Text;
 using System.Threading;
 using Bonobo.Git.Server.Test.IntegrationTests;
-using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
 using OpenQA.Selenium.Support.UI;
+
+using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
 
 namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 {
@@ -201,15 +203,17 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         }
 
         [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
-        public void AnonPush()
+        public void RepoAnonPushRespectsGlobalSettings()
         {
 
             ForAllGits(git =>
             {
-                var repo_id = IntegrationTestHelpers.CreateRepositoryOnWebInterface(app, RepositoryName);
+                var repo_id = ITH.CreateRepositoryOnWebInterface(app, RepositoryName);
                 AllowAnonRepoClone(repo_id, true);
                 CloneRepoAnon(git, true);
                 CreateIdentity(git);
+                SetRepoPushTo(repo_id, RepositoryPushMode.Global);
+
                 CreateRandomFile(Path.Combine(RepositoryDirectory, "file.txt"), 0);
                 RunGitOnRepo(git, "add .").ExpectSuccess();
                 RunGitOnRepo(git, "commit -m\"Aw yeah!\"").ExpectSuccess();
@@ -220,8 +224,63 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 SetAnonPush(true);
                 PushFiles(git, true);
 
-                IntegrationTestHelpers.DeleteRepository(app, repo_id);
+                ITH.DeleteRepository(app, repo_id);
             });
+        }
+
+        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        public void RepoAnonPushYesOverridesGlobalSettings()
+        {
+
+            ForAllGits(git =>
+            {
+                var repo_id = ITH.CreateRepositoryOnWebInterface(app, RepositoryName);
+                AllowAnonRepoClone(repo_id, true);
+                CloneRepoAnon(git, true);
+                CreateIdentity(git);
+                SetRepoPushTo(repo_id, RepositoryPushMode.Yes);
+
+                CreateRandomFile(Path.Combine(RepositoryDirectory, "file.txt"), 0);
+                RunGitOnRepo(git, "add .");
+                RunGitOnRepo(git, "commit -m\"Aw yeah!\"");
+
+                SetGlobalAnonPush(git, false);
+                PushFiles(git, true);
+
+                ITH.DeleteRepository(app, repo_id);
+            });
+        }
+
+        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        public void RepoAnonPushNoOverridesGlobalSettings()
+        {
+
+            ForAllGits(git =>
+            {
+                var repo_id = ITH.CreateRepositoryOnWebInterface(app, RepositoryName);
+                AllowAnonRepoClone(repo_id, true);
+                CloneRepoAnon(git, true);
+                CreateIdentity(git);
+                SetRepoPushTo(repo_id, RepositoryPushMode.No);
+
+                CreateRandomFile(Path.Combine(RepositoryDirectory, "file.txt"), 0);
+                RunGitOnRepo(git, "add .");
+                RunGitOnRepo(git, "commit -m\"Aw yeah!\"");
+
+                SetGlobalAnonPush(git, true);
+                PushFiles(git, false);
+
+                ITH.DeleteRepository(app, repo_id);
+            });
+        }
+
+        private void SetRepoPushTo(Guid repo_id, RepositoryPushMode repositoryPushStatus)
+        {
+            app.NavigateTo<RepositoryController>(c => c.Edit(repo_id));
+            var form = app.FindFormFor<RepositoryDetailModel>();
+            var select = new SelectElement(form.Field(f => f.AllowAnonymousPush).Field);
+            select.SelectByValue(repositoryPushStatus.ToString("D"));
+            form.Submit();
         }
 
         /// <summary>
@@ -329,6 +388,17 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         private void SetAnonPush(bool allowAnonymousPush)
         {
             SetGlobalSetting(f => f.AllowAnonymousPush, allowAnonymousPush);
+        }
+
+        private void SetGlobalAnonPush(GitInstance git, bool allowAnonymousPush)
+        {
+            app.NavigateTo<SettingsController>(c => c.Index());
+            var form = app.FindFormFor<GlobalSettingsModel>();
+            var field =  form.Field(f => f.AllowAnonymousPush);
+            ITH.SetCheckbox(field.Field, allowAnonymousPush);
+            var languages = new SelectElement(form.Field(f => f.DefaultLanguage).Field);
+            languages.SelectByValue("en-US");
+            form.Submit();
         }
 
         private void CreateAndAddTestFiles(GitInstance git, int count)

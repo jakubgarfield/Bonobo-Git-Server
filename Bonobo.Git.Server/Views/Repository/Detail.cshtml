@@ -58,6 +58,11 @@
                     @Resources.Repository_Detail_No
                 }
             </div>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.AllowAnonymousPush)
+                @Html.DisplayEnum(Model.AllowAnonymousPush)
+            </div>
+
             @if (AppSettings.IsPushAuditEnabled) {
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.AuditPushUser)

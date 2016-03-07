@@ -21,7 +21,8 @@ namespace Bonobo.Git.Server.Data.Update
                         new Sqlite.AddAuditPushUser(),
                         new Sqlite.AddGroup(),
                         new Sqlite.AddRepositoryLogo(),
-                        new Sqlite.AddGuidColumn()
+                        new Sqlite.AddGuidColumn(),
+                        new Sqlite.AddRepoPushColumn()
                     };
                 case "SqlConnection":
                     return new List<IUpdateScript>
@@ -32,7 +33,8 @@ namespace Bonobo.Git.Server.Data.Update
                         new SqlServer.AddAuditPushUser(),
                         new SqlServer.AddGroup(),
                         new SqlServer.AddRepositoryLogo(),
-                        new SqlServer.AddGuidColumn()
+                        new SqlServer.AddGuidColumn(),
+                        new SqlServer.AddRepoPushColumn()
                     };
                 default:
                     throw new NotImplementedException(string.Format("The provider '{0}' is not supported yet", sqlProvider));

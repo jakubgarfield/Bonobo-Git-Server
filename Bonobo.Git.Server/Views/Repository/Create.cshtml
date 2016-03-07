@@ -32,8 +32,20 @@
 
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.AllowAnonymous)
-                @Html.CheckBoxFor(m => m.AllowAnonymous)
+                @Html.CheckBoxFor(m => m.AllowAnonymous, new { @onClick = "document.getElementById('AllowAnonymousPush').disabled = !this.checked" })
                 <i class="fa fa-info-circle" title="@Resources.Repository_AllowAnonymousHint"></i>
+            </div>
+
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.AllowAnonymousPush)
+                @{
+                    object attribs = new { @id = "AllowAnonymousPush" };
+                    if (!Model.AllowAnonymous){
+                        attribs = new { @id = "AllowAnonymousPush", @disabled = "" }; 
+                    }
+                }
+                @Html.EnumDropDownListFor(m => m.AllowAnonymousPush, attribs)
+                <i class="fa fa-info-circle" title="@Resources.Repository_AllowAnonymousPushHint"></i>
             </div>
             <div class="pure-control-group checkboxlist">
                 @Html.LabelFor(m => m.Users)

@@ -55,6 +55,20 @@
     </div>
 </div>
 
+@{
+    object RepoNotFoundObj;
+    bool RepoNotFound = false;
+    if (TempData.TryGetValue("RepositoryNotFound", out RepoNotFoundObj))
+    {
+        RepoNotFound = (bool)RepoNotFoundObj;
+    }
+    if (RepoNotFound)
+    {
+        <div class="pure-u-2-5">
+            @Html.Partial("~/Views/Shared/_ItemNotFound.cshtml")
+        </div>
+    }
+}
 @if (TempData["CreateSuccess"] as bool? == true)
 {
     <div class="summary-success">

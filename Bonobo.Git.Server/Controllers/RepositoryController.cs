@@ -609,6 +609,7 @@ namespace Bonobo.Git.Server.Controllers
                 Teams = model.Teams,
                 IsCurrentUserAdministrator = model.Administrators.Select(x => x.Id).Contains(User.Id()),
                 AllowAnonymous = model.AnonymousAccess,
+                AllowAnonymousPush = model.AllowAnonymousPush,
                 Status = GetRepositoryStatus(model),
                 AuditPushUser = model.AuditPushUser,
                 Logo = new RepositoryLogoDetailModel(model.Logo),
@@ -642,6 +643,7 @@ namespace Bonobo.Git.Server.Controllers
                 AnonymousAccess = model.AllowAnonymous,
                 AuditPushUser = model.AuditPushUser,
                 Logo = model.Logo != null ? model.Logo.BinaryData : null,
+                AllowAnonymousPush = model.AllowAnonymousPush,
                 RemoveLogo = model.Logo != null && model.Logo.RemoveLogo
             };
         }
