@@ -50,7 +50,7 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public RepositoryModel GetRepository(string name, StringComparison compType)
+        public RepositoryModel GetRepository(string name)
         {
             if (name == null) throw new ArgumentNullException("name");
 
@@ -61,7 +61,7 @@ namespace Bonobo.Git.Server.Data
             var repos = GetAllRepositories();
             foreach (var repo in repos)
             {
-                if (repo.Name.Equals(name, compType))
+                if (repo.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                 {
                     return repo;
                 }

@@ -29,17 +29,11 @@ namespace Bonobo.Git.Server.Data
             return ADBackend.Instance.Repositories.ToList();
         }
 
-        public RepositoryModel GetRepository(string name, StringComparison compType = StringComparison.OrdinalIgnoreCase)
+        public RepositoryModel GetRepository(string name)
         {
-            var repos = GetAllRepositories();
-            foreach (var repo in repos)
-            {
-                if (repo.Name.Equals(name, compType))
-                {
-                    return repo;
-                }
-            }
-            return null;
+            return
+                ADBackend.Instance.Repositories.FirstOrDefault(
+                    repo => repo.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
         
         public RepositoryModel GetRepository(Guid id)

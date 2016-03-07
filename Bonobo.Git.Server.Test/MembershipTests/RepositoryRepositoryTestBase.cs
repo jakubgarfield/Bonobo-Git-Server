@@ -42,12 +42,13 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         }
 
         [TestMethod]
-        public void GetRepoWithDifferentCases()
+        public void GetRepoIsCaseInsensitive()
         {
             var model = MakeRepo("aaa");
             Assert.IsTrue(_repo.Create(model));
             Assert.AreEqual(model.Id, _repo.GetRepository("aaa").Id);
             Assert.AreEqual(model.Id, _repo.GetRepository("aAa").Id);
+            Assert.AreEqual(model.Id, _repo.GetRepository("AAA").Id);
         }
 
         [TestMethod]

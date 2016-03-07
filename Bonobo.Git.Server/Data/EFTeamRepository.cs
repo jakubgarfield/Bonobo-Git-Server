@@ -61,12 +61,12 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public TeamModel GetTeam(string name, StringComparison compType)
+        public TeamModel GetTeam(string name)
         {
             var teams = GetAllTeams();
             foreach (var team in teams)
             {
-                if (team.Name.Equals(name, compType))
+                if (team.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                 {
                     return team;
                 }
