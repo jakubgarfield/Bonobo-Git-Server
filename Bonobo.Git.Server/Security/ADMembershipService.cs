@@ -33,7 +33,7 @@ namespace Bonobo.Git.Server.Security
 
             try
             {
-                string domain = GetDomainFromUsername(username);
+                string domain = username.GetDomain();
                 if (String.IsNullOrEmpty(domain))
                 {
                     domain = Configuration.ActiveDirectorySettings.DefaultDomain;
@@ -133,28 +133,6 @@ namespace Bonobo.Git.Server.Security
         public string GenerateResetToken(string username)
         {
             throw new NotImplementedException();
-        }
-
-        private string GetDomainFromUsername(string username)
-        {
-            string result = null;
-
-            int length = username.Length;
-            int separatorPosition = username.IndexOf('\\');
-            if (separatorPosition > 0 && separatorPosition < length)
-            {
-                result = username.Substring(0, separatorPosition);
-            }
-            else
-            {
-                separatorPosition = username.IndexOf('@');
-                if (separatorPosition > 0 && separatorPosition < length)
-                {
-                    result = username.Substring(separatorPosition + 1);
-                }
-            }
-
-            return result;
         }
     }
 }
