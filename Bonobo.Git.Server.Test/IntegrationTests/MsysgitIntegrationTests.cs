@@ -333,13 +333,15 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 // Enable the push-to-create option
                 SetGlobalSetting(x => x.AllowPushToCreate, true);
 
-    //            Thread.Sleep(12000000);
-
                 RunGitOnRepo(git, "push origin master").ExpectSuccess();
+
+                // Ensure repo is created with same name as was pushed
+                Guid repoId = ITH.FindRepository(app, RepositoryName);
+                Assert.AreNotEqual(Guid.Empty, repoId);
+
+                ITH.DeleteRepositoryUsingWebsite(app, repoId);
             });
         }
-
-
 
         /// <summary>
         /// Helper to run a test for every installed Git instance

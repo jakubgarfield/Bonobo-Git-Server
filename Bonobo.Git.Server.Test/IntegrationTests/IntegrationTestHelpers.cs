@@ -69,29 +69,33 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             app.UrlMapsTo<AccountController>(c => c.Index());
         }
 
+        public static Guid FindRepository(MvcWebApp app, string name)
+        {
+
+            // ensure it appears on the listing
+            app.NavigateTo<RepositoryController>(c => c.Index(null, null));
+
+            var repo_links = app.Browser.FindElementsByCssSelector("table.repositories a.RepositoryName");
+            foreach (var item in repo_links)
+            {
+                if (item.Text == name)
+                {
+                    return new Guid(item.GetAttribute("id"));
+                }
+            }
+            return Guid.Empty;
+        }
+
         public static Guid CreateRepositoryOnWebInterface(MvcWebApp app, string name)
         {
             app.NavigateTo<RepositoryController>(c => c.Create());
             app.FindFormFor<RepositoryDetailModel>()
                 .Field(f => f.Name).SetValueTo(name)
                 .Submit();
+            Guid repoId = FindRepository(app, name);
 
-            // ensure it appears on the listing
-            app.NavigateTo<RepositoryController>(c => c.Index(null, null));
-
-            bool has_name = false;
-            var repo_links = app.Browser.FindElementsByCssSelector("table.repositories a.RepositoryName");
-            IWebElement element = null;
-            foreach (var item in repo_links)
-            {
-                if (item.Text == name)
-                {
-                    element = item;
-                    has_name = true;
-                }
-            }
-            Assert.AreEqual(true, has_name, string.Format("Repository {0} not found in Index after creation!", name));
-            return new Guid(element.GetAttribute("id").Substring(5));
+            Assert.IsTrue(repoId != Guid.Empty, string.Format("Repository {0} not found in Index after creation!", name));
+            return repoId;
         }
 
         public static void DeleteUser(MvcWebApp app, Guid userId)
