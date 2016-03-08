@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using SpecsFor.Mvc;
-
+﻿using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
+using SpecsFor.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace Bonobo.Git.Server
 {
@@ -63,7 +65,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
         {
             app.NavigateTo<HomeController>(c => c.LogOn("/Account"));
             app.FindFormFor<LogOnModel>()
-                .Field(f => f.Username).SetValueTo("TestUser"+index)
+                .Field(f => f.Username).SetValueTo("TestUser" + index)
                 .Field(f => f.Password).SetValueTo("aaa")
                 .Submit();
             app.UrlMapsTo<AccountController>(c => c.Index());
@@ -86,8 +88,12 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             return Guid.Empty;
         }
 
-        public static Guid CreateRepositoryOnWebInterface(MvcWebApp app, string name)
+        public static TestRepo CreateRepositoryOnWebInterface(MvcWebApp app, [CallerMemberName] string name = "", bool truncateLongName = true)
         {
+            if (truncateLongName && name.Length > 50)
+            {
+                name = name.Substring(0, 20) + "..." + name.Substring(name.Length - 20, 20);
+            }
             app.NavigateTo<RepositoryController>(c => c.Create());
             app.FindFormFor<RepositoryDetailModel>()
                 .Field(f => f.Name).SetValueTo(name)
@@ -95,7 +101,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             Guid repoId = FindRepository(app, name);
 
             Assert.IsTrue(repoId != Guid.Empty, string.Format("Repository {0} not found in Index after creation!", name));
-            return repoId;
+            return new TestRepo(repoId, name, app);
         }
 
         public static void DeleteUser(MvcWebApp app, Guid userId)
@@ -104,9 +110,33 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             app.FindFormFor<UserModel>().Submit();
         }
 
-        public static IEnumerable<Guid> CreateUsers(MvcWebApp app, int count = 1, int start = 0)
+        public static IEnumerable<TestTeam> CreateTeams(MvcWebApp app, int count = 1, int start = 0)
         {
-            var guids = new List<Guid>();
+            var testteams = new List<TestTeam>();
+            foreach (int i in start.To(start + count - 1))
+            {
+                app.NavigateTo<TeamController>(c => c.Create());
+                app.FindFormFor<TeamEditModel>()
+                    .Field(f => f.Name).SetValueTo("Team" + i)
+                    .Field(f => f.Description).SetValueTo("Nice team number " + i)
+                    .Submit();
+                app.UrlShouldMapTo<TeamController>(c => c.Index());
+                var item = app.Browser.FindElementByXPath("//div[@class='summary-success']/p");
+                string id = item.GetAttribute("id");
+                testteams.Add(new TestTeam(new Guid(id), "Team" + i, app));
+            }
+            return testteams;
+        }
+
+        public static void DeleteTeam(MvcWebApp app, Guid Id)
+        {
+            app.NavigateTo<TeamController>(c => c.Delete(Id));
+            app.FindFormFor<TeamEditModel>().Submit();
+        }
+
+        public static IEnumerable<TestUser> CreateUsers(MvcWebApp app, int count = 1, int start = 0)
+        {
+            var testusers = new List<TestUser>();
             foreach (int i in start.To(start + count - 1))
             {
                 var index = i.ToString();
@@ -119,11 +149,12 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
                     .Field(f => f.Password).SetValueTo("aaa")
                     .Field(f => f.ConfirmPassword).SetValueTo("aaa")
                     .Submit();
+                app.UrlShouldMapTo<AccountController>(c => c.Index());
                 var item = app.Browser.FindElementByXPath("//div[@class='summary-success']/p");
                 string id = item.GetAttribute("id");
-                guids.Add(new Guid(id));
+                testusers.Add(new TestUser(new Guid(id), "TestUser" + index, app));
             }
-            return guids;
+            return testusers;
         }
 
         public static void DeleteRepositoryUsingWebsite(MvcWebApp app, Guid guid)
@@ -192,5 +223,82 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             }
         }
 
+        public class TestRepo : IDisposable
+        {
+            public TestRepo(Guid id, string name, MvcWebApp app)
+            {
+                Id = id;
+                this.App = app;
+                this.Name = name;
+            }
+
+            public void Dispose()
+            {
+                Debug.Write(string.Format("Disposing repo '{0}'", Name));
+                Console.Write(string.Format("Disposing repo '{0}'", Name));
+                DeleteRepositoryUsingWebsite(App, Id);
+            }
+
+            public Guid Id;
+            public string Name;
+            public MvcWebApp App;
+
+            public static implicit operator Guid(TestRepo wr)
+            {
+                return wr.Id;
+            }
+        }
+
+        public class TestTeam : IDisposable
+        {
+            public Guid Id { get; set; }
+            public string Name { get; set; }
+            public MvcWebApp App { get; set; }
+
+            public TestTeam(Guid guid, string name, MvcWebApp app)
+            {
+                Id = guid;
+                Name = name;
+                this.App = app;
+            }
+
+            public void Dispose()
+            {
+                Debug.Write(string.Format("Disposing team '{0}'.", Name));
+                Console.Write(string.Format("Disposing team '{0}'.", Name));
+                DeleteTeam(App, Id);
+            }
+
+            public static implicit operator Guid(TestTeam tt)
+            {
+                return tt.Id;
+            }
+        }
+
+        public class TestUser : IDisposable
+        {
+            public Guid Id;
+            public string Username;
+            public MvcWebApp App;
+
+            public TestUser(Guid guid, string Username, MvcWebApp app)
+            {
+                Id = guid;
+                this.Username = Username;
+                this.App = app;
+            }
+
+            public void Dispose()
+            {
+                Debug.Write(string.Format("Disposing user '{0}'.", Username));
+                Console.Write(string.Format("Disposing user '{0}'.", Username));
+                DeleteUser(App, Id);
+            }
+
+            public static implicit operator Guid(TestUser tu)
+            {
+                return tu.Id;
+            }
+        }
     }
 }
