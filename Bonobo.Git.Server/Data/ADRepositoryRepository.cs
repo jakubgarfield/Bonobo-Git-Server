@@ -24,6 +24,12 @@ namespace Bonobo.Git.Server.Data
             ADBackend.Instance.Repositories.Remove(id);
         }
 
+        public bool NameIsUnique(string newName, Guid ignoreRepoId)
+        {
+            var existingRepo = GetRepository(newName);
+            return existingRepo == null || existingRepo.Id == ignoreRepoId;
+        }
+
         public IList<RepositoryModel> GetAllRepositories()
         {
             return ADBackend.Instance.Repositories.ToList();
