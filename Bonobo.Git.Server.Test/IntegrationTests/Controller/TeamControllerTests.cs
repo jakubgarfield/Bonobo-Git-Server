@@ -1,14 +1,16 @@
-﻿using Bonobo.Git.Server.Controllers;
+﻿using Bonobo.Git.Server.App_GlobalResources;
+using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.Test.IntegrationTests;
 using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
+using System;
 using System.Linq;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
     using ITH = IntegrationTestHelpers;
-    public class TeamControllerSpecs
+    public class HomeControllerSpecs
     {
         [TestClass]
         public class TeamControllerTests : IntegrationTestBase
@@ -39,6 +41,8 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
                     .Field(f => f.Name).SetValueTo(id1.Name)
                     .Field(f => f.Description).Click(); // Set focus
 
+                var validation = app.WaitForElementToBeVisible(By.CssSelector("input#Name~span.field-validation-error>span"), TimeSpan.FromSeconds(1), true);
+                Assert.AreEqual(Resources.Validation_Duplicate_Name, validation.Text);
 
                 var input = app.Browser.FindElementByCssSelector("input#Name");
                 Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));

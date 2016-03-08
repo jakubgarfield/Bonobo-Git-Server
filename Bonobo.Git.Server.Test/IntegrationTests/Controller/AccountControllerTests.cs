@@ -1,16 +1,16 @@
-﻿using System;
-using System.Linq;
-using SpecsFor.Mvc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+﻿using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.Test.IntegrationTests;
-using System.Collections.Generic;
+using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
+using System;
+using System.Linq;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
-    using ITH = Bonobo.Git.Server.Test.IntegrationTests.Helpers.IntegrationTestHelpers;
+    using ITH = IntegrationTestHelpers;
+
     public class AccountControllerSpecs
     {
         [TestClass]
@@ -52,6 +52,9 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
                     .Field(f => f.Username).SetValueTo(id1.Username)
                     .Field(f => f.Name).Click(); // Set focus
 
+                var validation = app.WaitForElementToBeVisible(By.CssSelector("input#Username~span.field-validation-error>span"), TimeSpan.FromSeconds(1), true);
+                Assert.AreEqual(Resources.Validation_Duplicate_Name, validation.Text);
+
                 var input = app.Browser.FindElementByCssSelector("input#Username");
                 Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
             }
@@ -67,6 +70,8 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
                     .Field(f => f.Username).SetValueTo(id1.Username)
                     .Field(f => f.Name).Click(); // Set focus
 
+                var validation = app.WaitForElementToBeVisible(By.CssSelector("input#Username~span.field-validation-error>span"), TimeSpan.FromSeconds(1), true);
+                Assert.AreEqual(Resources.Validation_Duplicate_Name, validation.Text);
 
                 var input = app.Browser.FindElementByCssSelector("input#Username");
                 Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));

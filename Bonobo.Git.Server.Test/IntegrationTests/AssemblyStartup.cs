@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Bonobo.Git.Server;
 using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
+using Bonobo.Git.Server.App_GlobalResources;
 
 namespace Bonobo.Git.Server.IntegrationTests
 {
@@ -20,6 +21,9 @@ namespace Bonobo.Git.Server.IntegrationTests
         [AssemblyInitialize()]
         static public void AssemblyInit(TestContext tc)
         {
+            // so we can use the resources in our test even if your language is not en-US
+            Resources.Culture = new System.Globalization.CultureInfo("en-US");
+
             var config = new SpecsForMvcConfig();
             //SpecsFor.Mvc can spin up an instance of IIS Express to host your app 
             //while the specs are executing.  
