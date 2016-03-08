@@ -80,7 +80,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             {
                 if (item.Text == name)
                 {
-                    return new Guid(item.GetAttribute("id"));
+                    return new Guid(item.GetAttribute("id").Substring(5));
                 }
             }
             return Guid.Empty;
