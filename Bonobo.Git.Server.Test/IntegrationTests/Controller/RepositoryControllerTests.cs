@@ -157,39 +157,37 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void RepoAdminCannotRemoveThemselves()
         {
-            var userId = ITH.CreateUsers(app).Single();
+            var user = ITH.CreateUsers(app).Single();
+            var repoId = ITH.CreateRepositoryOnWebInterface(app);
 
             try
             {
-                using (var repoId = ITH.CreateRepositoryOnWebInterface(app))
-                {
+                app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
+                var form = app.FindFormFor<RepositoryDetailModel>();
 
-                    app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
-                    var form = app.FindFormFor<RepositoryDetailModel>();
+                // Set User0 to be admin for this repo
+                var adminBox = form.WebApp.Browser.FindElementsByCssSelector(string.Format("input[name=PostedSelectedAdministrators][value=\"{0}\"]", user.Id)).Single();
+                ITH.SetCheckbox(adminBox, true);
+                form.Submit();
+                ITH.AssertThatNoValidationErrorOccurred(app);
 
-                    // Set User0 to be admin for this repo
-                    var adminBox = form.WebApp.Browser.FindElementsByCssSelector(string.Format("input[name=PostedSelectedAdministrators][value=\"{0}\"]", userId)).Single();
-                    ITH.SetCheckbox(adminBox, true);
-                    form.Submit();
-                    ITH.AssertThatNoValidationErrorOccurred(app);
+                // Now, log in as the ordinary user
+                ITH.LoginAsNumberedUser(app, 0);
 
-                    // Now, log in as the ordinary user
-                    ITH.LoginAsNumberedUser(app, 0);
+                app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
+                form = app.FindFormFor<RepositoryDetailModel>();
 
-                    app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
-                    form = app.FindFormFor<RepositoryDetailModel>();
+                var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("input[name=PostedSelectedAdministrators]");
+                ITH.SetCheckboxes(chkboxes, false);
 
-                    var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("input[name=PostedSelectedAdministrators]");
-                    ITH.SetCheckboxes(chkboxes, false);
-
-                    form.Submit();
-                    ITH.AssertThatValidationErrorContains(app, "You can't remove yourself from administrators");
-                }
+                form.Submit();
+                ITH.AssertThatValidationErrorContains(app, "You can't remove yourself from administrators");
             }
             finally
             {
+                // we are logged in as user.
+                // Relog in as admin to ensure we can delete the repo and user.
                 ITH.Login(app);
-                ITH.DeleteUser(app, userId);
             }
         }
 
