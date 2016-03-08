@@ -135,6 +135,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="IntegrationTests\IntegrationTestBase.cs" />
+    <Compile Include="IntegrationTests\Controller\TeamControllerTests.cs" />
     <Compile Include="IntegrationTests\SharedLayoutTests.cs" />
     <Compile Include="IntegrationTests\GitResult.cs" />
     <Compile Include="MembershipTests\ADTests\ADBackendStoreTest.cs" />
