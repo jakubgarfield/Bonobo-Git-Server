@@ -7,6 +7,7 @@
 
 @using (Html.BeginForm("Create", "Account", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
 {    
+    @Html.AntiForgeryToken()
     @Html.ValidationSummary(false, Resources.Account_Create_Unsuccessfull)
     
     <fieldset> 

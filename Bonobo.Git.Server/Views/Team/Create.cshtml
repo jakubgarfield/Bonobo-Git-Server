@@ -6,6 +6,7 @@
 
 @using (Html.BeginForm("Create", "Team", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
 {
+    @Html.AntiForgeryToken()
     @Html.ValidationSummary(false, Resources.Team_Create_Fail)
     
     <fieldset>

@@ -58,6 +58,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [WebAuthorizeRepository(RequiresRepositoryAdministrator = true)]
         public ActionResult Edit(RepositoryDetailModel model)
         {
@@ -95,6 +96,7 @@ namespace Bonobo.Git.Server.Controllers
 
         [HttpPost]
         [WebAuthorize]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(RepositoryDetailModel model)
         {
             if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfiguration.Current.AllowUserRepositoryCreation)
@@ -150,6 +152,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [WebAuthorizeRepository(RequiresRepositoryAdministrator = true)]
         public ActionResult Delete(RepositoryDetailModel model)
         {
@@ -426,6 +429,7 @@ namespace Bonobo.Git.Server.Controllers
         [HttpPost]
         [WebAuthorize]
         [WebAuthorizeRepository]
+        [ValidateAntiForgeryToken]
         public ActionResult Clone(string id, RepositoryDetailModel model)
         {
             if (!User.IsInRole(Definitions.Roles.Administrator) && !UserConfiguration.Current.AllowUserRepositoryCreation)

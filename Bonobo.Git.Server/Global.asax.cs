@@ -24,6 +24,8 @@ using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 using System.Runtime.Caching;
+using System.Security.Claims;
+using System.Web.Helpers;
 
 namespace Bonobo.Git.Server
 {
@@ -71,6 +73,8 @@ namespace Bonobo.Git.Server
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             UserConfiguration.Initialize();
             RegisterDependencyResolver();
+
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Upn;
 
             new AutomaticUpdater().Run();
             new RepositorySynchronizer().Run();

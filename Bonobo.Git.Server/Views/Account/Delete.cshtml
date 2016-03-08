@@ -9,6 +9,7 @@
 
 @using (Html.BeginForm("Delete", "Account", FormMethod.Post, new { @class = "pure-form" }))
 {
+    @Html.AntiForgeryToken()
     <fieldset class="deleteForm">
         @Html.HiddenFor(m => m.Username)
         <div class="pure-controls">

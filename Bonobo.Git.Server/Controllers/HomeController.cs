@@ -50,18 +50,29 @@ namespace Bonobo.Git.Server.Controllers
             return View();
         }
 
+        private string CheckForPasswordResetUsername(string digest)
+        {
+            var cacheObj = MvcApplication.Cache[HttpUtility.UrlDecode(digest)];
+            if (cacheObj == null)
+            {
+                return null;
+            }
+            return cacheObj.ToString();
+        }
+
         public ActionResult ResetPassword(string digest)
         {
-            string username;
-            digest = HttpUtility.UrlDecode(digest);
-            var cacheObj = MvcApplication.Cache[digest];
-            if ( cacheObj != null )
+            string username = CheckForPasswordResetUsername(digest);
+            if (username != null )
             {
                 using (var db = new BonoboGitServerContext())
                 {
-                    username = cacheObj.ToString();
                     var user = db.Users.FirstOrDefault(x => x.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
-                    return View(new ResetPasswordModel { Username = username });
+                    if (user == null)
+                    {
+                        throw new UnauthorizedAccessException("Unknown user " + username);
+                    }
+                    return View(new ResetPasswordModel { Username = username, Digest = digest});
                 }
             }
             else
@@ -72,10 +83,16 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ResetPassword(ResetPasswordModel model)
         {
             if (ModelState.IsValid)
             {
+                var cachedUsername = CheckForPasswordResetUsername(model.Digest);
+                if (cachedUsername == null || cachedUsername != model.Username)
+                {
+                    throw new UnauthorizedAccessException("Invalid password reset form");
+                }
                 using (var db = new BonoboGitServerContext())
                 {
                     var user = db.Users.FirstOrDefault(x => x.Username.Equals(model.Username, StringComparison.OrdinalIgnoreCase));
@@ -100,6 +117,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ForgotPassword(ForgotPasswordModel model)
         {
             if (ModelState.IsValid)
@@ -147,6 +165,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult LogOn(LogOnModel model)
         {
             if (ModelState.IsValid)

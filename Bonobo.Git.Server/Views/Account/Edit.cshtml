@@ -20,6 +20,7 @@ else
 
     @using (Html.BeginForm("Edit", "Account", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
     {   
+        @Html.AntiForgeryToken()
         @Html.ValidationSummary(false, Resources.Account_Edit_Unsuccessfull)
         @Html.HiddenFor(m => m.Username)
         
