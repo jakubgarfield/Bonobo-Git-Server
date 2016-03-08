@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using SpecsFor.Mvc;
-
+﻿using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
+using SpecsFor.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace Bonobo.Git.Server
 {
@@ -86,8 +88,37 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             return Guid.Empty;
         }
 
-        public static Guid CreateRepositoryOnWebInterface(MvcWebApp app, string name)
+        public class TestRepo : IDisposable
         {
+            public TestRepo(MvcWebApp app, Guid id, string name)
+            {
+                Id = id;
+                this.app = app;
+                this.name = name;
+            }
+
+            public void Dispose()
+            {
+                Debug.Write(string.Format("Disposing repo '{0}'", name));
+                Console.Write(string.Format("Disposing repo '{0}'", name));
+                DeleteRepositoryUsingWebsite(app, Id);
+            }
+
+            public Guid Id;
+            public MvcWebApp app;
+            public string name;
+
+            public static implicit operator Guid(TestRepo wr){
+                return wr.Id;
+            }
+        }
+
+        public static TestRepo CreateRepositoryOnWebInterface(MvcWebApp app, [CallerMemberName] string name = "", bool truncateLongName = true)
+        {
+            if (truncateLongName && name.Length > 50)
+            {
+                name = name.Substring(0, 20) + "..." + name.Substring(name.Length - 20, 20);
+            }
             app.NavigateTo<RepositoryController>(c => c.Create());
             app.FindFormFor<RepositoryDetailModel>()
                 .Field(f => f.Name).SetValueTo(name)
@@ -95,7 +126,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             Guid repoId = FindRepository(app, name);
 
             Assert.IsTrue(repoId != Guid.Empty, string.Format("Repository {0} not found in Index after creation!", name));
-            return repoId;
+            return new TestRepo(app, repoId, name);
         }
 
         public static void DeleteUser(MvcWebApp app, Guid userId)
