@@ -71,9 +71,11 @@ namespace Bonobo.Git.Server.Controllers
 
             if (ModelState.IsValid)
             {
-                if (TeamRepository.Create(ConvertTeamDetailModel(model)))
+                var teammodel = ConvertTeamDetailModel(model);
+                if (TeamRepository.Create(teammodel))
                 {
                     TempData["CreateSuccess"] = true;
+                    TempData["NewTeamId"] = teammodel.Id;
                     return RedirectToAction("Index");
                 }
                 else

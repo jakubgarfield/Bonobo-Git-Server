@@ -89,6 +89,17 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
         }
 
         [TestMethod]
+        public void TestGetTeamByName()
+        {
+            var createResult = _repo.Create(new TeamModel { Name = "Team1" });
+            Assert.IsTrue(createResult);
+            ITeamRepository repo = _repo;
+            Assert.AreEqual("Team1", repo.GetTeam("Team1").Name);
+            Assert.AreEqual("Team1", repo.GetTeam("team1").Name);
+            Assert.AreEqual(null, repo.GetTeam("team1", StringComparison.Ordinal));
+        }
+
+        [TestMethod]
         public void TestMultipleTeamsCanHaveDifferentTeamNames()
         {
             var createResult1 = _repo.Create(new TeamModel { Name = "Team1" });

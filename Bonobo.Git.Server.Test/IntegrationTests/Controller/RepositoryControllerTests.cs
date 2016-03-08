@@ -173,6 +173,56 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 
             Assert.AreEqual(RepositoryPushMode.Global.ToString("D"), select.SelectedOption.GetAttribute("value"));
         }
+
+        public void RepoNameEnsureDuplicationDetectionAsYouTypeWorksOnCreation()
+        {
+            var reponame = MethodBase.GetCurrentMethod().Name;
+            using (var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame))
+            {
+                app.NavigateTo<RepositoryController>(c => c.Create());
+                var form = app.FindFormFor<RepositoryDetailModel>()
+                    .Field(f => f.Name).SetValueTo(id1.Name)
+                    .Field(f => f.Description).Click(); // Set focus
+
+
+                var input = app.Browser.FindElementByCssSelector("input#Name");
+                Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
+
+            }
+        }
+
+        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        public void RepoNameEnsureDuplicationDetectionAsYouTypeWorksOnEdit()
+        {
+            var reponame = MethodBase.GetCurrentMethod().Name;
+            using (var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame))
+            using (var id2 = ITH.CreateRepositoryOnWebInterface(app, reponame + "_other"))
+            {
+                app.NavigateTo<RepositoryController>(c => c.Edit(id2));
+                var form = app.FindFormFor<RepositoryDetailModel>()
+                    .Field(f => f.Name).SetValueTo(id1.Name)
+                    .Field(f => f.Description).Click(); // Set focus
+
+
+                var input = app.Browser.FindElementByCssSelector("input#Name");
+                Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
+            }
+        }
+
+        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        public void RepoNameEnsureDuplicationDetectionStillAllowsEditOtherProperties()
+        {
+            using (var repo = ITH.CreateRepositoryOnWebInterface(app))
+            {
+                app.NavigateTo<RepositoryController>(c => c.Edit(repo));
+                app.FindFormFor<RepositoryDetailModel>()
+                    .Field(f => f.Description).SetValueTo(repo.Name + "_other")
+                    .Submit();
+
+                app.NavigateTo<RepositoryController>(c => c.Edit(repo)); // force refresh
+                app.FindFormFor<RepositoryDetailModel>()
+                    .Field(f => f.Description).ValueShouldEqual(repo.Name + "_other");
+            }
+        }
     }
 }
-
