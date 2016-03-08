@@ -184,7 +184,7 @@ namespace Bonobo.Git.Server.Controllers
             {
                 //TODO Is this legit? Could an AD user ever not have a Guid
                 var userId = adUser.Guid.GetValueOrDefault(Guid.NewGuid());
-                if (MembershipService.CreateUser(credentials, "AD_PASSWORD", adUser.GivenName, adUser.Surname, adUser.EmailAddress, userId))
+                if (MembershipService.CreateUser(credentials, Guid.NewGuid().ToString(), adUser.GivenName, adUser.Surname, adUser.EmailAddress, userId))
                 {
                     if (MembershipService is EFMembershipService)
                     {
