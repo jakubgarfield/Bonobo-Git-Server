@@ -1,93 +1,57 @@
-﻿using System;
-using System.Linq;
-using SpecsFor.Mvc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+﻿using System.Linq;
 using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bonobo.Git.Server.Test.Integration.Web
+namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
-    using ITH = IntegrationTestHelpers;
-    using System.Collections.Generic;
-    public class HomeControllerSpecs
+    public class TeamControllerSpecs
     {
         [TestClass]
-        public class TeamControllerTests
+        public class TeamControllerTests : IntegrationTestBase
         {
-            private static MvcWebApp app;
-
-            [ClassInitialize]
-            public static void ClassInit(TestContext testContext)
-            {
-                app = new MvcWebApp();
-            }
-
-            [ClassCleanup]
-            public static void Cleanup()
-            {
-                app.Browser.Close();
-            }
-
-            [TestInitialize]
-            public void InitTest()
-            {
-                IntegrationTestHelpers.Login(app);
-            }
-
             [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
             public void TeamNameEnsureDuplicationDetectionAsYouTypeWorksOnCreation()
             {
-                using (var id1 = ITH.CreateTeams(app, 1).Single())
-                {
-                    app.NavigateTo<TeamController>(c => c.Create());
-                    var form = app.FindFormFor<TeamEditModel>()
-                        .Field(f => f.Name).SetValueTo(id1.Name)
-                        .Field(f => f.Description).Click(); // Set focus
+                var id1 = ITH.CreateTeams(1).Single();
+                app.NavigateTo<TeamController>(c => c.Create());
+                app.FindFormFor<TeamEditModel>()
+                    .Field(f => f.Name).SetValueTo(id1.Name)
+                    .Field(f => f.Description).Click(); // Set focus
 
-
-                    var input = app.Browser.FindElementByCssSelector("input#Name");
-                    Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
-                }
+                var input = app.Browser.FindElementByCssSelector("input#Name");
+                Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
             }
 
             [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
             public void TeamNameEnsureDuplicationDetectionAsYouTypeWorksOnEdit()
             {
-                var ids = ITH.CreateTeams(app, 2).ToList();
-                using (var id1 = ids[0])
-                using (var id2 = ids[1])
-                {
+                var teams = ITH.CreateTeams(2).ToList();
+                var id1 = teams[0];
+                var id2 = teams[1].Id;
                     app.NavigateTo<TeamController>(c => c.Edit(id2));
-                    var form = app.FindFormFor<TeamEditModel>()
+                    app.FindFormFor<TeamEditModel>()
                         .Field(f => f.Name).SetValueTo(id1.Name)
                         .Field(f => f.Description).Click(); // Set focus
 
 
                     var input = app.Browser.FindElementByCssSelector("input#Name");
                     Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
-
-                }
-                ids.Clear();
             }
 
             [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
             public void TeamNameEnsureDuplicationDetectionStillAllowsEditOtherProperties()
             {
-                var ids = ITH.CreateTeams(app, 1).ToList();
-                using(var id1 = ids[0])
-                {
-                    app.NavigateTo<TeamController>(c => c.Edit(id1));
-                    app.FindFormFor<TeamEditModel>()
-                        .Field(f => f.Description).SetValueTo("somename")
-                        .Submit();
+                var ids = ITH.CreateTeams(1).ToList();
+                var id1 = ids[0].Id;
+                app.NavigateTo<TeamController>(c => c.Edit(id1));
+                app.FindFormFor<TeamEditModel>()
+                    .Field(f => f.Description).SetValueTo("somename")
+                    .Submit();
 
-                    app.NavigateTo<TeamController>(c => c.Edit(id1)); // force refresh
-                    app.FindFormFor<TeamEditModel>()
-                        .Field(f => f.Description).ValueShouldEqual("somename");
-                }
-                ids.Clear();
+                app.NavigateTo<TeamController>(c => c.Edit(id1)); // force refresh
+                app.FindFormFor<TeamEditModel>()
+                    .Field(f => f.Description).ValueShouldEqual("somename");
             }
         }
     }

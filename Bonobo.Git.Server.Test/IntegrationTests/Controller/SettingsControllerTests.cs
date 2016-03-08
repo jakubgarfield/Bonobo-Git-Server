@@ -6,7 +6,6 @@ using Bonobo.Git.Server.Controllers;
 using OpenQA.Selenium.Support.UI;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Configuration;
-using Bonobo.Git.Server.Test.Integration.Web;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {

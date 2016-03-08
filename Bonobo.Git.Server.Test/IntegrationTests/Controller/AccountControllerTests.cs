@@ -1,11 +1,10 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using System.Linq;
 using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.Test.IntegrationTests;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bonobo.Git.Server.Test.Integration.Web
+namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
  
     public class AccountControllerSpecs
@@ -43,11 +42,11 @@ namespace Bonobo.Git.Server.Test.Integration.Web
             [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
             public void UsernameEnsureDuplicationDetectionAsYouTypeWorksOnCreation()
             {
-                using (var id1 = ITH.CreateUsers(app, 1).Single())
+                var id1 = ITH.CreateUsers(1).Single();
                 {
                     app.NavigateTo<AccountController>(c => c.Create());
                     var form = app.FindFormFor<UserCreateModel>()
-                        .Field(f => f.Username).SetValueTo(id1.Username)
+                        .Field(f => f.Username).SetValueTo("TestUser0")
                         .Field(f => f.Name).Click(); // Set focus
 
 
@@ -59,38 +58,34 @@ namespace Bonobo.Git.Server.Test.Integration.Web
             [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
             public void UsernameEnsureDuplicationDetectionAsYouTypeWorksOnEdit()
             {
-                var ids = ITH.CreateUsers(app, 2).ToList();
-                using(var id1 = ids[0])
-                using(var id2 = ids[1])
+                var ids = ITH.CreateUsers(2).ToList();
+                var id1 = ids[0];
+                var id2 = ids[1];
                 {
                     app.NavigateTo<AccountController>(c => c.Edit(id2));
                     var form = app.FindFormFor<UserCreateModel>()
-                        .Field(f => f.Username).SetValueTo(id1.Username)
+                        .Field(f => f.Username).SetValueTo("TestUser0")
                         .Field(f => f.Name).Click(); // Set focus
 
 
                     var input = app.Browser.FindElementByCssSelector("input#Username");
                     Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
                 }
-                ids.Clear();
             }
 
             [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
             public void UsernameEnsureDuplicationDetectionStillAllowsEditOtherProperties()
             {
-                var ids = ITH.CreateUsers(app, 1).ToList();
-                using(var id1 = ids[0])
-                {
-                    app.NavigateTo<AccountController>(c => c.Edit(id1));
-                    app.FindFormFor<UserCreateModel>()
-                        .Field(f => f.Name).SetValueTo("somename")
-                        .Submit();
+                var ids = ITH.CreateUsers(1).ToList();
+                var id1 = ids[0];
+                app.NavigateTo<AccountController>(c => c.Edit(id1));
+                app.FindFormFor<UserCreateModel>()
+                    .Field(f => f.Name).SetValueTo("somename")
+                    .Submit();
 
-                    app.NavigateTo<AccountController>(c => c.Edit(id1)); // force refresh
-                    app.FindFormFor<UserCreateModel>()
-                        .Field(f => f.Name).ValueShouldEqual("somename");
-                }
-                ids.Clear();
+                app.NavigateTo<AccountController>(c => c.Edit(id1)); // force refresh
+                app.FindFormFor<UserCreateModel>()
+                    .Field(f => f.Name).ValueShouldEqual("somename");
             }
         }
     }

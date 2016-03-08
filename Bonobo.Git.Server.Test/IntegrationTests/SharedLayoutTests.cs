@@ -1,9 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Bonobo.Git.Server.Controllers;
-using Bonobo.Git.Server.Test.Integration.Web;
-using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
-using SpecsFor.Mvc;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests
 {
