@@ -90,7 +90,9 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             _app.FindFormFor<RepositoryDetailModel>()
                 .Field(f => f.Name).SetValueTo(name)
                 .Submit();
-            AssertThatNoValidationErrorOccurred();
+            AssertThatNoValidationErrorOccurred(); // ensure no error on page but can still be on old page
+            // this ensures we have a message on the index page
+            _app.WaitForElementToBeVisible(By.XPath("//div[@class='summary-success']/p"), TimeSpan.FromSeconds(1), true);
             Guid repoId = FindRepository(name);
 
             Assert.IsTrue(repoId != Guid.Empty, string.Format("Repository {0} not found in Index after creation!", name));
@@ -151,7 +153,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             var testteams = new List<TeamModel>();
             foreach (int i in start.To(start + count - 1))
             {
-                var team = new TeamModel {Name = baseTeamname + i, Description = "Some team " + i};
+                var team = new TeamModel { Name = baseTeamname + i, Description = "Some team " + i };
                 _app.NavigateTo<TeamController>(c => c.Create());
                 _app.FindFormFor<TeamEditModel>()
                     .Field(f => f.Name).SetValueTo(team.Name)
