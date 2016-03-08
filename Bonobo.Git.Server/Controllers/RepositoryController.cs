@@ -15,6 +15,7 @@ using Bonobo.Git.Server.Security;
 using Ionic.Zip;
 using Microsoft.Practices.Unity;
 using MimeTypes;
+using System.Security.Principal;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -62,7 +63,7 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorizeRepository(RequiresRepositoryAdministrator = true)]
         public ActionResult Edit(Guid id)
         {
-            var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id));
+            var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id), User);
             PopulateCheckboxListData(ref model);
             return View(model);
         }
@@ -182,7 +183,7 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorizeRepository(RequiresRepositoryAdministrator = true)]
         public ActionResult Delete(Guid id)
         {
-            return View(ConvertRepositoryModel(RepositoryRepository.GetRepository(id)));
+            return View(ConvertRepositoryModel(RepositoryRepository.GetRepository(id), User));
         }
 
         [HttpPost]
@@ -208,7 +209,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             ViewBag.ID = id;
 
-            var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id));
+            var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id), User);
             if (model != null)
             {
                 model.IsCurrentUserAdministrator = RepositoryPermissionService.HasPermission(User.Id(), model.Id, RepositoryAccessLevel.Administer);
@@ -457,7 +458,7 @@ namespace Bonobo.Git.Server.Controllers
                 return RedirectToAction("Unauthorized", "Home");
             }
 
-            var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id));
+            var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id), User);
             model.Name = "";
             PopulateCheckboxListData(ref model);
             ViewBag.ID = id;
@@ -548,7 +549,7 @@ namespace Bonobo.Git.Server.Controllers
 
         private void PopulateCheckboxListData(ref RepositoryDetailModel model)
         {
-            model = model.Id != Guid.Empty ? ConvertRepositoryModel(RepositoryRepository.GetRepository(model.Id)) : model;
+            model = model.Id != Guid.Empty ? ConvertRepositoryModel(RepositoryRepository.GetRepository(model.Id), User) : model;
             model.AllAdministrators = MembershipService.GetAllUsers().ToArray();
             model.AllUsers = MembershipService.GetAllUsers().ToArray();
             model.AllTeams = TeamRepository.GetAllTeams().ToArray();
@@ -593,10 +594,10 @@ namespace Bonobo.Git.Server.Controllers
 
         private IEnumerable<RepositoryDetailModel> GetIndexModel()
         {
-            return RepositoryPermissionService.GetAllPermittedRepositories(User.Id(), RepositoryAccessLevel.Pull).Select(ConvertRepositoryModel).ToList();
+            return RepositoryPermissionService.GetAllPermittedRepositories(User.Id(), RepositoryAccessLevel.Pull).Select(x => ConvertRepositoryModel(x, User)).ToList();
         }
 
-        private RepositoryDetailModel ConvertRepositoryModel(RepositoryModel model)
+        public static RepositoryDetailModel ConvertRepositoryModel(RepositoryModel model, IPrincipal User)
         {
             return model == null ? null : new RepositoryDetailModel
             {
@@ -616,7 +617,7 @@ namespace Bonobo.Git.Server.Controllers
             };
         }
 
-        private RepositoryDetailStatus GetRepositoryStatus(RepositoryModel model)
+        private static RepositoryDetailStatus GetRepositoryStatus(RepositoryModel model)
         {
             string path = Path.Combine(UserConfiguration.Current.Repositories, model.Name);
             if (!Directory.Exists(path))

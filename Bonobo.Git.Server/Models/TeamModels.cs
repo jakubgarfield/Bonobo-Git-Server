@@ -31,6 +31,7 @@ namespace Bonobo.Git.Server.Models
     {
         public Guid Id { get; set; }
 
+        [Remote("UniqueNameTeam", "Validation", AdditionalFields="Id", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Duplicate_Name")]
         [AllowHtml]
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
         [StringLength(40, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]

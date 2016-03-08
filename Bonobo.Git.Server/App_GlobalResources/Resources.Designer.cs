@@ -1557,15 +1557,6 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A repository with this name already exists!.
-        /// </summary>
-        public static string Repository_Duplicate_Name {
-            get {
-                return ResourceManager.GetString("Repository_Duplicate_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string Repository_Edit_Back {
@@ -2408,6 +2399,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Validation_Compare {
             get {
                 return ResourceManager.GetString("Validation_Compare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This name has already been taken..
+        /// </summary>
+        public static string Validation_Duplicate_Name {
+            get {
+                return ResourceManager.GetString("Validation_Duplicate_Name", resourceCulture);
             }
         }
         

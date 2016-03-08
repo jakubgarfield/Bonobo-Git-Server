@@ -1,16 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.DirectoryServices.AccountManagement;
 using System.Linq;
-using System.Threading;
-using System.Web;
-
-using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.Security;
-
-using Microsoft.Practices.Unity;
-using System.Threading.Tasks;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -41,6 +32,19 @@ namespace Bonobo.Git.Server.Data
         public TeamModel GetTeam(Guid TeamId)
         {
             return ADBackend.Instance.Teams[TeamId];
+        }
+
+        public TeamModel GetTeam(string name)
+        {
+            var teams = GetAllTeams();
+            foreach (var team in teams)
+            {
+                if (name.Equals(team.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return team;
+                }
+            }
+            return null;
         }
 
         public IList<TeamModel> GetTeams(Guid userId)

@@ -904,8 +904,8 @@
   <data name="Repository_Go_To_Dropdown" xml:space="preserve">
     <value>Go to repository</value>
   </data>
-  <data name="Repository_Duplicate_Name" xml:space="preserve">
-    <value>A repository with this name already exists!</value>
+  <data name="Validation_Duplicate_Name" xml:space="preserve">
+    <value>This name has already been taken.</value>
   </data>
   <data name="Repository_Detail_AllowAnonymousPush" xml:space="preserve">
     <value>Anonymous push</value>

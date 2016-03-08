@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Reflection;
+using System.Threading;
 using SpecsFor.Mvc;
 
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Controllers;
+using Bonobo.Git.Server.IntegrationTests;
+using Bonobo.Git.Server.Test.MembershipTests.ADTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 
@@ -47,37 +54,62 @@ namespace Bonobo.Git.Server
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
 {
-    static class IntegrationTestHelpers
+    public class IntegrationTestHelpers
     {
-        public static void Login(MvcWebApp app)
+        private readonly MvcWebApp _app;
+
+        public IntegrationTestHelpers(MvcWebApp app)
         {
-            app.NavigateTo<HomeController>(c => c.LogOn("/Account"));
-            app.FindFormFor<LogOnModel>()
+            _app = app;
+        }
+
+        public void Login()
+        {
+            _app.NavigateTo<HomeController>(c => c.LogOn("/Account"));
+            _app.FindFormFor<LogOnModel>()
                 .Field(f => f.Username).SetValueTo("admin")
                 .Field(f => f.Password).SetValueTo("admin")
                 .Submit();
-            app.UrlMapsTo<AccountController>(c => c.Index());
+            _app.UrlMapsTo<AccountController>(c => c.Index());
         }
 
-        public static void LoginAsNumberedUser(MvcWebApp app, int index)
+        public void LoginAndResetDatabase()
         {
-            app.NavigateTo<HomeController>(c => c.LogOn("/Account"));
-            app.FindFormFor<LogOnModel>()
+            _app.NavigateTo<HomeController>(c => c.LogOnWithResetOption("/Account"));
+            _app.FindFormFor<LogOnModel>()
+                .Field(f => f.Username).SetValueTo("admin")
+                .Field(f => f.Password).SetValueTo("admin")
+                .Field(f => f.DatabaseResetCode).SetValueTo("1")
+                .Submit();
+            _app.UrlMapsTo<AccountController>(c => c.Index());
+
+            // Remote an repo directories
+            var repoRoot = Path.Combine(AssemblyStartup.WebApplicationDirectory, @"app_data\Repositories");
+            foreach (var folder in Directory.GetDirectories(repoRoot))
+            {
+                DeleteDirectory(folder);
+            }
+        }
+
+        public void LoginAsNumberedUser(int index)
+        {
+            _app.NavigateTo<HomeController>(c => c.LogOn("/Account"));
+            _app.FindFormFor<LogOnModel>()
                 .Field(f => f.Username).SetValueTo("TestUser"+index)
                 .Field(f => f.Password).SetValueTo("aaa")
                 .Submit();
-            app.UrlMapsTo<AccountController>(c => c.Index());
+            _app.UrlMapsTo<AccountController>(c => c.Index());
         }
 
-        public static Guid FindRepository(MvcWebApp app, string name)
+        public Guid FindRepository(string name)
         {
-
             // ensure it appears on the listing
-            app.NavigateTo<RepositoryController>(c => c.Index(null, null));
+            _app.NavigateTo<RepositoryController>(c => c.Index(null, null));
 
-            var repo_links = app.Browser.FindElementsByCssSelector("table.repositories a.RepositoryName");
+            var repo_links = _app.Browser.FindElementsByCssSelector("table.repositories a.RepositoryName");
             foreach (var item in repo_links)
             {
+                Debug.Print("Found repo name '{0}'", item.Text);
                 if (item.Text == name)
                 {
                     return new Guid(item.GetAttribute("id").Substring(5));
@@ -86,32 +118,33 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             return Guid.Empty;
         }
 
-        public static Guid CreateRepositoryOnWebInterface(MvcWebApp app, string name)
+        public Guid CreateRepositoryOnWebInterface(string name)
         {
-            app.NavigateTo<RepositoryController>(c => c.Create());
-            app.FindFormFor<RepositoryDetailModel>()
+            _app.NavigateTo<RepositoryController>(c => c.Create());
+            _app.FindFormFor<RepositoryDetailModel>()
                 .Field(f => f.Name).SetValueTo(name)
                 .Submit();
-            Guid repoId = FindRepository(app, name);
+            AssertThatNoValidationErrorOccurred();
+            Guid repoId = FindRepository(name);
 
             Assert.IsTrue(repoId != Guid.Empty, string.Format("Repository {0} not found in Index after creation!", name));
             return repoId;
         }
 
-        public static void DeleteUser(MvcWebApp app, Guid userId)
+        public void DeleteUser(Guid userId)
         {
-            app.NavigateTo<AccountController>(c => c.Delete(userId));
-            app.FindFormFor<UserModel>().Submit();
+            _app.NavigateTo<AccountController>(c => c.Delete(userId));
+            _app.FindFormFor<UserModel>().Submit();
         }
 
-        public static IEnumerable<Guid> CreateUsers(MvcWebApp app, int count = 1, int start = 0)
+        public IEnumerable<Guid> CreateUsers(int count = 1, int start = 0)
         {
             var guids = new List<Guid>();
             foreach (int i in start.To(start + count - 1))
             {
                 var index = i.ToString();
-                app.NavigateTo<AccountController>(c => c.Create());
-                app.FindFormFor<UserCreateModel>()
+                _app.NavigateTo<AccountController>(c => c.Create());
+                _app.FindFormFor<UserCreateModel>()
                     .Field(f => f.Username).SetValueTo("TestUser" + index)
                     .Field(f => f.Name).SetValueTo("Uname" + index)
                     .Field(f => f.Surname).SetValueTo("Surname" + index)
@@ -119,21 +152,39 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
                     .Field(f => f.Password).SetValueTo("aaa")
                     .Field(f => f.ConfirmPassword).SetValueTo("aaa")
                     .Submit();
-                var item = app.Browser.FindElementByXPath("//div[@class='summary-success']/p");
+                var item = _app.Browser.FindElementByXPath("//div[@class='summary-success']/p");
                 string id = item.GetAttribute("id");
                 guids.Add(new Guid(id));
             }
             return guids;
         }
 
-        public static void DeleteRepositoryUsingWebsite(MvcWebApp app, Guid guid)
+        public IEnumerable<TeamModel> CreateTeams(int count = 1, int start = 0)
         {
-            app.NavigateTo<RepositoryController>(c => c.Delete(guid));
-            app.FindFormFor<RepositoryDetailModel>().Submit();
+            var testteams = new List<TeamModel>();
+            foreach (int i in start.To(start + count - 1))
+            {
+                _app.NavigateTo<TeamController>(c => c.Create());
+                _app.FindFormFor<TeamEditModel>()
+                    .Field(f => f.Name).SetValueTo("Team" + i)
+                    .Field(f => f.Description).SetValueTo("Nice team number " + i)
+                    .Submit();
+                _app.UrlShouldMapTo<TeamController>(c => c.Index());
+                var item = _app.Browser.FindElementByXPath("//div[@class='summary-success']/p");
+                string id = item.GetAttribute("id");
+                testteams.Add(new TeamModel { Id= new Guid(id), Name = "Team" + i});
+            }
+            return testteams;
+        }
+
+        public void DeleteRepositoryUsingWebsite(Guid guid)
+        {
+            _app.NavigateTo<RepositoryController>(c => c.Delete(guid));
+            _app.FindFormFor<RepositoryDetailModel>().Submit();
 
             // make sure it no longer is listed
             bool has_repo = false;
-            var repo_links = app.Browser.FindElementsByCssSelector("table.repositories a.RepositoryName");
+            var repo_links = _app.Browser.FindElementsByCssSelector("table.repositories a.RepositoryName");
             foreach (var item in repo_links)
             {
                 if (item.GetAttribute("id") == "repo_" + guid.ToString())
@@ -144,7 +195,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             Assert.AreEqual(false, has_repo, string.Format("Repository {0} still in Index after deleting!", guid));
         }
 
-        public static void SetCheckbox(IWebElement field, bool select)
+        public void SetCheckbox(IWebElement field, bool select)
         {
             if (select != field.Selected)
             {
@@ -152,7 +203,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             }
         }
 
-        public static void SetCheckboxes(IEnumerable<IWebElement> fields, bool select)
+        public void SetCheckboxes(IEnumerable<IWebElement> fields, bool select)
         {
             foreach (var field in fields)
             {
@@ -160,12 +211,15 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             }
         }
 
-        public static void AssertThatNoValidationErrorOccurred(MvcWebApp app)
+        public void AssertThatNoValidationErrorOccurred()
         {
+            // There may be a delay in the summary appearing, if there's client-side web-based validation
+            Thread.Sleep(1000);
+
             IWebElement validationSummary;
             try
             {
-                validationSummary = app.ValidationSummary;
+                validationSummary = _app.ValidationSummary;
             }
             catch (NoSuchElementException)
             {
@@ -176,21 +230,64 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             Assert.Fail("Form submission error occurred, ValidationSummary " + summaryText);
         }
 
-        public static void AssertThatValidationErrorContains(MvcWebApp app, string matchText)
+        public void AssertThatValidationErrorContains(string matchText)
         {
-            try
+            for (int attempt = 0; attempt < 3; attempt++)
             {
-                var summaryText = app.ValidationSummary.Text;
-                if (!summaryText.Contains(matchText))
+                try
                 {
-                    Assert.Fail("Form submission validation error should have contained '{0}' but was '{1}'", matchText, summaryText);
+                    var summaryText = _app.ValidationSummary.Text;
+                    if (!summaryText.Contains(matchText))
+                    {
+                        Assert.Fail("Form submission validation error should have contained '{0}' but was '{1}'",
+                            matchText, summaryText);
+                    }
+                    return;
+                }
+                catch (NoSuchElementException)
+                {
+                    Debug.Print("Retrying ValidationSummary check");
+                    Thread.Sleep(1000);
                 }
             }
-            catch (NoSuchElementException)
+            Assert.Fail("No validation summary found on page");
+        }
+
+        public void DeleteDirectory(string directoryPath)
+        {
+            if (!Directory.Exists(directoryPath))
+                return;
+
+            // We have to tolerate intermittent errors during directory deletion, because
+            // other parts of Windows sometimes hold locks on files briefly
+            // Multiple tries normally fixes it
+            for (int attempt = 10; attempt >= 0; attempt--)
             {
-                Assert.Fail("No validation summary found on page");
+                try
+                {
+                    var directory = new DirectoryInfo(directoryPath) { Attributes = FileAttributes.Normal };
+                    foreach (var item in directory.GetFiles("*.*", SearchOption.AllDirectories))
+                    {
+                        item.Attributes = FileAttributes.Normal;
+                    }
+                    directory.Delete(true);
+                    return;
+                }
+                catch
+                {
+                    if (attempt == 0)
+                    {
+                        throw;
+                    }
+                    Thread.Sleep(1000);
+                }
             }
         }
 
+        public string MakeRepoName(MethodBase currentMethod)
+        {
+            var methodName = currentMethod.Name;
+            return methodName.Substring(0, Math.Min(40, methodName.Length));
+        }
     }
 }
