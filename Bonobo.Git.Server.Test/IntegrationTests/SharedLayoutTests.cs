@@ -55,8 +55,8 @@ namespace Bonobo.Git.Server.Test.IntegrationTests
 
             app.UrlMapsTo<RepositoryController>(c => c.Detail(id2));
 
-            ITH.DeleteRepository(app, id1);
-            ITH.DeleteRepository(app, id2);
+            ITH.DeleteRepositoryUsingWebsite(app, id1);
+            ITH.DeleteRepositoryUsingWebsite(app, id2);
 
         }
 

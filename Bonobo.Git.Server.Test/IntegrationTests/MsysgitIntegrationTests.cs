@@ -1,22 +1,19 @@
-﻿using System;
+﻿using Bonobo.Git.Server.Controllers;
+using Bonobo.Git.Server.Data;
+using Bonobo.Git.Server.Models;
+using Bonobo.Git.Server.Test.IntegrationTests;
+using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
-using System.Diagnostics;
+using OpenQA.Selenium.Support.UI;
+using SpecsFor.Mvc;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using SpecsFor.Mvc;
-using OpenQA.Selenium;
-
-using Bonobo.Git.Server.Controllers;
-using Bonobo.Git.Server.Models;
-	using Bonobo.Git.Server.Data;
 using System.Text;
 using System.Threading;
-using Bonobo.Git.Server.Test.IntegrationTests;
-using OpenQA.Selenium.Support.UI;
-
-using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
 
 namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 {
@@ -127,7 +124,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                     InitAndPullRepository(git);
                     PullTag(git);
                     PullBranch(git);
-                    IntegrationTestHelpers.DeleteRepository(app, repo_id);
+                    IntegrationTestHelpers.DeleteRepositoryUsingWebsite(app, repo_id);
                 });
         }
 
@@ -148,7 +145,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 CloneRepoAnon(git, false);
                 AllowAnonRepoClone(repo_id, true);
                 CloneRepoAnon(git, true);
-                IntegrationTestHelpers.DeleteRepository(app, repo_id);
+                IntegrationTestHelpers.DeleteRepositoryUsingWebsite(app, repo_id);
             });
         }
 
@@ -190,11 +187,11 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             Directory.CreateDirectory(WorkingDirectory);
 
             try{
-                var repo_id = IntegrationTestHelpers.CreateRepositoryOnWebInterface(app, RepositoryName);
+                var repo_id = ITH.CreateRepositoryOnWebInterface(app, RepositoryName);
                 CloneEmptyRepositoryWithCredentials(git);
                 CreateIdentity(git);
                 CreateAndAddTestFiles(git, 2000);
-                IntegrationTestHelpers.DeleteRepository(app, repo_id);
+                ITH.DeleteRepositoryUsingWebsite(app, repo_id);
             }
             finally
             {
@@ -224,7 +221,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 SetAnonPush(true);
                 PushFiles(git, true);
 
-                ITH.DeleteRepository(app, repo_id);
+                ITH.DeleteRepositoryUsingWebsite(app, repo_id);
             });
         }
 
@@ -247,7 +244,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 SetGlobalAnonPush(git, false);
                 PushFiles(git, true);
 
-                ITH.DeleteRepository(app, repo_id);
+                ITH.DeleteRepositoryUsingWebsite(app, repo_id);
             });
         }
 
@@ -270,7 +267,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 SetGlobalAnonPush(git, true);
                 PushFiles(git, false);
 
-                ITH.DeleteRepository(app, repo_id);
+                ITH.DeleteRepositoryUsingWebsite(app, repo_id);
             });
         }
 
@@ -302,7 +299,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 // I want to do a push *with* a username
                 CreateAndPushFiles(git);
 
-                ITH.DeleteRepository(app, repo_id);
+                ITH.DeleteRepositoryUsingWebsite(app, repo_id);
             });
         }
         [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]

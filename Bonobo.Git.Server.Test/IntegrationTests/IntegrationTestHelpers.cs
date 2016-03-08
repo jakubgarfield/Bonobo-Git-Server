@@ -122,7 +122,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             return guids;
         }
 
-        public static void DeleteRepository(MvcWebApp app, Guid guid)
+        public static void DeleteRepositoryUsingWebsite(MvcWebApp app, Guid guid)
         {
             app.NavigateTo<RepositoryController>(c => c.Delete(guid));
             app.FindFormFor<RepositoryDetailModel>().Submit();

@@ -1,19 +1,15 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Linq;
-using SpecsFor.Mvc;
-
-using Bonobo.Git.Server.Controllers;
+﻿using Bonobo.Git.Server.Controllers;
+using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
-using Bonobo.Git.Server.Test.IntegrationTests;
-using Bonobo.Git.Server.Data;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium.Support.UI;
+using SpecsFor.Mvc;
+using System.Linq;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
     using ITH = IntegrationTestHelpers;
-    using OpenQA.Selenium.Support.UI; 
 
     [TestClass]
     public class RepositoryControllerTests
@@ -82,7 +78,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             app.FindFormFor<RepositoryDetailModel>()
                 .Field(f => f.Name).ShouldBeInvalid();
 
-            ITH.DeleteRepository(app, id1);
+            ITH.DeleteRepositoryUsingWebsite(app, id1);
 
         }
 
@@ -100,7 +96,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             app.FindFormFor<RepositoryDetailModel>()
                 .Field(f => f.Name).ShouldBeInvalid();
 
-            ITH.DeleteRepository(app, id1);
+            ITH.DeleteRepositoryUsingWebsite(app, id1);
 
         }
 
@@ -119,8 +115,8 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             app.FindFormFor<RepositoryDetailModel>()
                 .Field(f => f.Name).ShouldBeInvalid();
 
-            ITH.DeleteRepository(app, id1);
-            ITH.DeleteRepository(app, id2);
+            ITH.DeleteRepositoryUsingWebsite(app, id1);
+            ITH.DeleteRepositoryUsingWebsite(app, id2);
 
         }
 
@@ -139,15 +135,15 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             app.FindFormFor<RepositoryDetailModel>()
                 .Field(f => f.Name).ShouldBeInvalid();
 
-            ITH.DeleteRepository(app, id1);
-            ITH.DeleteRepository(app, id2);
+            ITH.DeleteRepositoryUsingWebsite(app, id1);
+            ITH.DeleteRepositoryUsingWebsite(app, id2);
 
         }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void RepositoryCanBeSavedBySysAdminWithoutHavingAnyRepoAdmins()
         {
-            var repoId = ITH.CreateRepositoryOnWebInterface(app, "Repo");
+            var repoId = ITH.CreateRepositoryOnWebInterface(app, "RepositoryCanBeSavedBySysAdminWithoutHavingAnyRepoAdmins");
 
             app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
             var form = app.FindFormFor<RepositoryDetailModel>();
@@ -158,6 +154,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 
             form.Submit();
             ITH.AssertThatNoValidationErrorOccurred(app);
+            ITH.DeleteRepositoryUsingWebsite(app, repoId);
         }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
@@ -189,13 +186,14 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 
                 form.Submit();
                 ITH.AssertThatValidationErrorContains(app, "You can't remove yourself from administrators");
+                ITH.DeleteRepositoryUsingWebsite(app, repoId);
             }
             finally
             {
                 ITH.Login(app);
                 ITH.DeleteUser(app, userId);
             }
-				}
+        }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void RepoAnonPushDefaultSettingsForRepoCreationShouldBeGlobal()
