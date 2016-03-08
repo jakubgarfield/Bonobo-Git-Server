@@ -68,93 +68,90 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         public void CreateDuplicateRepoNameDifferentCaseNotAllowed()
         {
             var reponame = "A_Nice_Repo";
-            var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame);
+            using (var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame))
+            {
 
-            app.NavigateTo<RepositoryController>(c => c.Create());
-            app.FindFormFor<RepositoryDetailModel>()
-                .Field(f => f.Name).SetValueTo(reponame.ToUpper())
-                .Submit();
+                app.NavigateTo<RepositoryController>(c => c.Create());
+                app.FindFormFor<RepositoryDetailModel>()
+                    .Field(f => f.Name).SetValueTo(reponame.ToUpper())
+                    .Submit();
 
-            app.FindFormFor<RepositoryDetailModel>()
-                .Field(f => f.Name).ShouldBeInvalid();
+                app.FindFormFor<RepositoryDetailModel>()
+                    .Field(f => f.Name).ShouldBeInvalid();
 
-            ITH.DeleteRepositoryUsingWebsite(app, id1);
-
+            }
         }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void CreateDuplicateRepoNameNotAllowed()
         {
             var reponame = "A_Nice_Repo";
-            var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame);
+            using (var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame))
+            {
 
-            app.NavigateTo<RepositoryController>(c => c.Create());
-            app.FindFormFor<RepositoryDetailModel>()
-                .Field(f => f.Name).SetValueTo(reponame)
-                .Submit();
+                app.NavigateTo<RepositoryController>(c => c.Create());
+                app.FindFormFor<RepositoryDetailModel>()
+                    .Field(f => f.Name).SetValueTo(reponame)
+                    .Submit();
 
-            app.FindFormFor<RepositoryDetailModel>()
-                .Field(f => f.Name).ShouldBeInvalid();
+                app.FindFormFor<RepositoryDetailModel>()
+                    .Field(f => f.Name).ShouldBeInvalid();
 
-            ITH.DeleteRepositoryUsingWebsite(app, id1);
-
+            }
         }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void RenameRepoToExistingRepoNameNotAllowed()
         {
             var reponame = "A_Nice_Repo";
-            var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame);
-            var id2 = ITH.CreateRepositoryOnWebInterface(app, "other_name");
+            using (var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame))
+            using (var id2 = ITH.CreateRepositoryOnWebInterface(app, "other_name"))
+            {
+                app.NavigateTo<RepositoryController>(c => c.Edit(id2));
+                app.FindFormFor<RepositoryDetailModel>()
+                    .Field(f => f.Name).SetValueTo(reponame)
+                    .Submit();
 
-            app.NavigateTo<RepositoryController>(c => c.Edit(id2));
-            app.FindFormFor<RepositoryDetailModel>()
-                .Field(f => f.Name).SetValueTo(reponame)
-                .Submit();
+                app.FindFormFor<RepositoryDetailModel>()
+                    .Field(f => f.Name).ShouldBeInvalid();
 
-            app.FindFormFor<RepositoryDetailModel>()
-                .Field(f => f.Name).ShouldBeInvalid();
-
-            ITH.DeleteRepositoryUsingWebsite(app, id1);
-            ITH.DeleteRepositoryUsingWebsite(app, id2);
-
+            }
         }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void RenameRepoToExistingRepoNameNotAllowedDifferentCase()
         {
             var reponame = "A_Nice_Repo";
-            var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame);
-            var id2 = ITH.CreateRepositoryOnWebInterface(app, "other_name");
+            using (var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame))
+            using (var id2 = ITH.CreateRepositoryOnWebInterface(app, "other_name"))
+            {
 
-            app.NavigateTo<RepositoryController>(c => c.Edit(id2));
-            app.FindFormFor<RepositoryDetailModel>()
-                .Field(f => f.Name).SetValueTo(reponame.ToUpper())
-                .Submit();
+                app.NavigateTo<RepositoryController>(c => c.Edit(id2));
+                app.FindFormFor<RepositoryDetailModel>()
+                    .Field(f => f.Name).SetValueTo(reponame.ToUpper())
+                    .Submit();
 
-            app.FindFormFor<RepositoryDetailModel>()
-                .Field(f => f.Name).ShouldBeInvalid();
+                app.FindFormFor<RepositoryDetailModel>()
+                    .Field(f => f.Name).ShouldBeInvalid();
 
-            ITH.DeleteRepositoryUsingWebsite(app, id1);
-            ITH.DeleteRepositoryUsingWebsite(app, id2);
-
+            }
         }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void RepositoryCanBeSavedBySysAdminWithoutHavingAnyRepoAdmins()
         {
-            var repoId = ITH.CreateRepositoryOnWebInterface(app, "RepositoryCanBeSavedBySysAdminWithoutHavingAnyRepoAdmins");
+            using (var repoId = ITH.CreateRepositoryOnWebInterface(app))
+            {
+                app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
+                var form = app.FindFormFor<RepositoryDetailModel>();
 
-            app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
-            var form = app.FindFormFor<RepositoryDetailModel>();
+                // Turn off all the admin checkboxes and save the form 
+                var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("input[name=PostedSelectedAdministrators]");
+                ITH.SetCheckboxes(chkboxes, false);
 
-            // Turn off all the admin checkboxes and save the form 
-            var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("input[name=PostedSelectedAdministrators]");
-            ITH.SetCheckboxes(chkboxes, false);
-
-            form.Submit();
-            ITH.AssertThatNoValidationErrorOccurred(app);
-            ITH.DeleteRepositoryUsingWebsite(app, repoId);
+                form.Submit();
+                ITH.AssertThatNoValidationErrorOccurred(app);
+            }
         }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
@@ -164,29 +161,30 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 
             try
             {
-                var repoId = ITH.CreateRepositoryOnWebInterface(app, "Repo");
+                using (var repoId = ITH.CreateRepositoryOnWebInterface(app))
+                {
 
-                app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
-                var form = app.FindFormFor<RepositoryDetailModel>();
+                    app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
+                    var form = app.FindFormFor<RepositoryDetailModel>();
 
-	            // Set User0 to be admin for this repo
-	            var adminBox = form.WebApp.Browser.FindElementsByCssSelector(string.Format("input[name=PostedSelectedAdministrators][value=\"{0}\"]", userId)).Single();
-	            ITH.SetCheckbox(adminBox, true);
-	            form.Submit();
-	            ITH.AssertThatNoValidationErrorOccurred(app);
+                    // Set User0 to be admin for this repo
+                    var adminBox = form.WebApp.Browser.FindElementsByCssSelector(string.Format("input[name=PostedSelectedAdministrators][value=\"{0}\"]", userId)).Single();
+                    ITH.SetCheckbox(adminBox, true);
+                    form.Submit();
+                    ITH.AssertThatNoValidationErrorOccurred(app);
 
-                // Now, log in as the ordinary user
-                ITH.LoginAsNumberedUser(app, 0);
+                    // Now, log in as the ordinary user
+                    ITH.LoginAsNumberedUser(app, 0);
 
-                app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
-                form = app.FindFormFor<RepositoryDetailModel>();
+                    app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
+                    form = app.FindFormFor<RepositoryDetailModel>();
 
-                var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("input[name=PostedSelectedAdministrators]");
-                ITH.SetCheckboxes(chkboxes, false);
+                    var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("input[name=PostedSelectedAdministrators]");
+                    ITH.SetCheckboxes(chkboxes, false);
 
-                form.Submit();
-                ITH.AssertThatValidationErrorContains(app, "You can't remove yourself from administrators");
-                ITH.DeleteRepositoryUsingWebsite(app, repoId);
+                    form.Submit();
+                    ITH.AssertThatValidationErrorContains(app, "You can't remove yourself from administrators");
+                }
             }
             finally
             {
