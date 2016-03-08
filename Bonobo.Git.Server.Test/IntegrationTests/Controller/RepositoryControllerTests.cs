@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium.Support.UI;
 using SpecsFor.Mvc;
 using System.Linq;
+using System.Reflection;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
@@ -67,13 +68,12 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void CreateDuplicateRepoNameDifferentCaseNotAllowed()
         {
-            var reponame = "A_Nice_Repo";
-            using (var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame))
+            using (var id1 = ITH.CreateRepositoryOnWebInterface(app))
             {
 
                 app.NavigateTo<RepositoryController>(c => c.Create());
                 app.FindFormFor<RepositoryDetailModel>()
-                    .Field(f => f.Name).SetValueTo(reponame.ToUpper())
+                    .Field(f => f.Name).SetValueTo(id1.Name.ToUpper())
                     .Submit();
 
                 app.FindFormFor<RepositoryDetailModel>()
@@ -85,27 +85,25 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void CreateDuplicateRepoNameNotAllowed()
         {
-            var reponame = "A_Nice_Repo";
-            using (var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame))
+            using (var id1 = ITH.CreateRepositoryOnWebInterface(app))
             {
 
                 app.NavigateTo<RepositoryController>(c => c.Create());
                 app.FindFormFor<RepositoryDetailModel>()
-                    .Field(f => f.Name).SetValueTo(reponame)
+                    .Field(f => f.Name).SetValueTo(id1.Name)
                     .Submit();
 
                 app.FindFormFor<RepositoryDetailModel>()
                     .Field(f => f.Name).ShouldBeInvalid();
-
             }
         }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void RenameRepoToExistingRepoNameNotAllowed()
         {
-            var reponame = "A_Nice_Repo";
+            var reponame = MethodBase.GetCurrentMethod().Name;
             using (var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame))
-            using (var id2 = ITH.CreateRepositoryOnWebInterface(app, "other_name"))
+            using (var id2 = ITH.CreateRepositoryOnWebInterface(app, reponame + "_other"))
             {
                 app.NavigateTo<RepositoryController>(c => c.Edit(id2));
                 app.FindFormFor<RepositoryDetailModel>()
@@ -121,9 +119,9 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void RenameRepoToExistingRepoNameNotAllowedDifferentCase()
         {
-            var reponame = "A_Nice_Repo";
+            var reponame = MethodBase.GetCurrentMethod().Name;
             using (var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame))
-            using (var id2 = ITH.CreateRepositoryOnWebInterface(app, "other_name"))
+            using (var id2 = ITH.CreateRepositoryOnWebInterface(app, reponame + "_other"))
             {
 
                 app.NavigateTo<RepositoryController>(c => c.Edit(id2));
