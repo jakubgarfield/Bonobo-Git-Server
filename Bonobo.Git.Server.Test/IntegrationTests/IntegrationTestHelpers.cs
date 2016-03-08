@@ -135,9 +135,84 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             app.FindFormFor<UserModel>().Submit();
         }
 
-        public static IEnumerable<Guid> CreateUsers(MvcWebApp app, int count = 1, int start = 0)
+        public class TestTeam : IDisposable
         {
-            var guids = new List<Guid>();
+            public Guid Id {get; set;}
+            public string Name {get; set;}
+            public MvcWebApp app {get; set;}
+
+            public TestTeam(Guid guid, string name, MvcWebApp app)
+            {
+                Id = guid;
+                Name = name;
+                this.app = app;
+            }
+
+            public void Dispose()
+            {
+                Debug.Write(string.Format("Disposing team '{0}'.", Name));
+                Console.Write(string.Format("Disposing team '{0}'.", Name));
+                DeleteTeam(app, Id);
+            }
+
+            public static implicit operator Guid(TestTeam tt)
+            {
+                return tt.Id;
+            }
+        }
+
+        public static IEnumerable<TestTeam> CreateTeams(MvcWebApp app, int count = 1, int start = 0)
+        {
+            var testteams = new List<TestTeam>();
+            foreach (int i in start.To(start + count - 1))
+            {
+                app.NavigateTo<TeamController>(c => c.Create());
+                app.FindFormFor<TeamEditModel>()
+                    .Field(f => f.Name).SetValueTo("Team" + i)
+                    .Field(f => f.Description).SetValueTo("Nice team number " + i)
+                    .Submit();
+                app.UrlShouldMapTo<TeamController>(c => c.Index());
+                var item = app.Browser.FindElementByXPath("//div[@class='summary-success']/p");
+                string id = item.GetAttribute("id");
+                testteams.Add(new TestTeam(new Guid(id), "Team" + i, app));
+            }
+            return testteams;
+        }
+
+        public static void DeleteTeam(MvcWebApp app, Guid Id)
+        {
+            app.NavigateTo<TeamController>(c => c.Delete(Id));
+            app.FindFormFor<TeamEditModel>().Submit();
+        }
+
+        public class TestUser : IDisposable
+        {
+            public Guid Id;
+            public string Username;
+            public MvcWebApp app;
+
+            public TestUser(Guid guid, string Username, MvcWebApp app){
+                Id = guid;
+                this.Username = Username;
+                this.app = app;
+            }
+
+            public void Dispose()
+            {
+                Debug.Write(string.Format("Disposing user '{0}'.", Username));
+                Console.Write(string.Format("Disposing user '{0}'.", Username));
+                DeleteUser(app, Id);
+            }
+
+            public static implicit operator Guid(TestUser tu)
+            {
+                return tu.Id;
+            }
+        }
+
+        public static IEnumerable<TestUser> CreateUsers(MvcWebApp app, int count = 1, int start = 0)
+        {
+            var testusers = new List<TestUser>();
             foreach (int i in start.To(start + count - 1))
             {
                 var index = i.ToString();
@@ -150,11 +225,12 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
                     .Field(f => f.Password).SetValueTo("aaa")
                     .Field(f => f.ConfirmPassword).SetValueTo("aaa")
                     .Submit();
+                app.UrlShouldMapTo<AccountController>(c => c.Index());
                 var item = app.Browser.FindElementByXPath("//div[@class='summary-success']/p");
                 string id = item.GetAttribute("id");
-                guids.Add(new Guid(id));
+                testusers.Add(new TestUser(new Guid(id), "TestUser" + index, app));
             }
-            return guids;
+            return testusers;
         }
 
         public static void DeleteRepositoryUsingWebsite(MvcWebApp app, Guid guid)
@@ -222,6 +298,5 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
                 Assert.Fail("No validation summary found on page");
             }
         }
-
     }
 }
