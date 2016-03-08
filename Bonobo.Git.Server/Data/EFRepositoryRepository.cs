@@ -93,6 +93,12 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
+        public bool NameIsUnique(string newName, Guid ignoreRepoId)
+        {
+            var repo = GetRepository(newName);
+            return repo == null || repo.Id == ignoreRepoId;
+        }
+
         public bool Create(RepositoryModel model)
         {
             if (model == null) throw new ArgumentException("model");

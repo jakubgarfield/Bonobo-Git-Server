@@ -23,9 +23,7 @@ namespace Bonobo.Git.Server.Attributes
             }
 
             IRepositoryRepository RepositoryRepository = DependencyResolver.Current.GetService<IRepositoryRepository>();
-
-            var poss_repo = RepositoryRepository.GetRepository(value.ToString());
-            if(poss_repo == null || (poss_repo.Id == ((RepositoryDetailModel)context.ObjectInstance).Id))
+            if (RepositoryRepository.NameIsUnique(value.ToString(), ((RepositoryDetailModel)context.ObjectInstance).Id))
             {
                 return ValidationResult.Success;
             }
