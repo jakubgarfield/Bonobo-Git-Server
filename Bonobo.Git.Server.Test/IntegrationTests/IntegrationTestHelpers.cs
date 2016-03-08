@@ -65,7 +65,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
         {
             app.NavigateTo<HomeController>(c => c.LogOn("/Account"));
             app.FindFormFor<LogOnModel>()
-                .Field(f => f.Username).SetValueTo("TestUser"+index)
+                .Field(f => f.Username).SetValueTo("TestUser" + index)
                 .Field(f => f.Password).SetValueTo("aaa")
                 .Submit();
             app.UrlMapsTo<AccountController>(c => c.Index());
@@ -88,31 +88,6 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             return Guid.Empty;
         }
 
-        public class TestRepo : IDisposable
-        {
-            public TestRepo(MvcWebApp app, Guid id, string name)
-            {
-                Id = id;
-                this.app = app;
-                this.name = name;
-            }
-
-            public void Dispose()
-            {
-                Debug.Write(string.Format("Disposing repo '{0}'", name));
-                Console.Write(string.Format("Disposing repo '{0}'", name));
-                DeleteRepositoryUsingWebsite(app, Id);
-            }
-
-            public Guid Id;
-            public MvcWebApp app;
-            public string name;
-
-            public static implicit operator Guid(TestRepo wr){
-                return wr.Id;
-            }
-        }
-
         public static TestRepo CreateRepositoryOnWebInterface(MvcWebApp app, [CallerMemberName] string name = "", bool truncateLongName = true)
         {
             if (truncateLongName && name.Length > 50)
@@ -126,39 +101,13 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             Guid repoId = FindRepository(app, name);
 
             Assert.IsTrue(repoId != Guid.Empty, string.Format("Repository {0} not found in Index after creation!", name));
-            return new TestRepo(app, repoId, name);
+            return new TestRepo(repoId, name, app);
         }
 
         public static void DeleteUser(MvcWebApp app, Guid userId)
         {
             app.NavigateTo<AccountController>(c => c.Delete(userId));
             app.FindFormFor<UserModel>().Submit();
-        }
-
-        public class TestTeam : IDisposable
-        {
-            public Guid Id {get; set;}
-            public string Name {get; set;}
-            public MvcWebApp app {get; set;}
-
-            public TestTeam(Guid guid, string name, MvcWebApp app)
-            {
-                Id = guid;
-                Name = name;
-                this.app = app;
-            }
-
-            public void Dispose()
-            {
-                Debug.Write(string.Format("Disposing team '{0}'.", Name));
-                Console.Write(string.Format("Disposing team '{0}'.", Name));
-                DeleteTeam(app, Id);
-            }
-
-            public static implicit operator Guid(TestTeam tt)
-            {
-                return tt.Id;
-            }
         }
 
         public static IEnumerable<TestTeam> CreateTeams(MvcWebApp app, int count = 1, int start = 0)
@@ -183,31 +132,6 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
         {
             app.NavigateTo<TeamController>(c => c.Delete(Id));
             app.FindFormFor<TeamEditModel>().Submit();
-        }
-
-        public class TestUser : IDisposable
-        {
-            public Guid Id;
-            public string Username;
-            public MvcWebApp app;
-
-            public TestUser(Guid guid, string Username, MvcWebApp app){
-                Id = guid;
-                this.Username = Username;
-                this.app = app;
-            }
-
-            public void Dispose()
-            {
-                Debug.Write(string.Format("Disposing user '{0}'.", Username));
-                Console.Write(string.Format("Disposing user '{0}'.", Username));
-                DeleteUser(app, Id);
-            }
-
-            public static implicit operator Guid(TestUser tu)
-            {
-                return tu.Id;
-            }
         }
 
         public static IEnumerable<TestUser> CreateUsers(MvcWebApp app, int count = 1, int start = 0)
@@ -296,6 +220,84 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             catch (NoSuchElementException)
             {
                 Assert.Fail("No validation summary found on page");
+            }
+        }
+
+        public class TestRepo : IDisposable
+        {
+            public TestRepo(Guid id, string name, MvcWebApp app)
+            {
+                Id = id;
+                this.App = app;
+                this.Name = name;
+            }
+
+            public void Dispose()
+            {
+                Debug.Write(string.Format("Disposing repo '{0}'", Name));
+                Console.Write(string.Format("Disposing repo '{0}'", Name));
+                DeleteRepositoryUsingWebsite(App, Id);
+            }
+
+            public Guid Id;
+            public string Name;
+            public MvcWebApp App;
+
+            public static implicit operator Guid(TestRepo wr)
+            {
+                return wr.Id;
+            }
+        }
+
+        public class TestTeam : IDisposable
+        {
+            public Guid Id { get; set; }
+            public string Name { get; set; }
+            public MvcWebApp App { get; set; }
+
+            public TestTeam(Guid guid, string name, MvcWebApp app)
+            {
+                Id = guid;
+                Name = name;
+                this.App = app;
+            }
+
+            public void Dispose()
+            {
+                Debug.Write(string.Format("Disposing team '{0}'.", Name));
+                Console.Write(string.Format("Disposing team '{0}'.", Name));
+                DeleteTeam(App, Id);
+            }
+
+            public static implicit operator Guid(TestTeam tt)
+            {
+                return tt.Id;
+            }
+        }
+
+        public class TestUser : IDisposable
+        {
+            public Guid Id;
+            public string Username;
+            public MvcWebApp App;
+
+            public TestUser(Guid guid, string Username, MvcWebApp app)
+            {
+                Id = guid;
+                this.Username = Username;
+                this.App = app;
+            }
+
+            public void Dispose()
+            {
+                Debug.Write(string.Format("Disposing user '{0}'.", Username));
+                Console.Write(string.Format("Disposing user '{0}'.", Username));
+                DeleteUser(App, Id);
+            }
+
+            public static implicit operator Guid(TestUser tu)
+            {
+                return tu.Id;
             }
         }
     }
