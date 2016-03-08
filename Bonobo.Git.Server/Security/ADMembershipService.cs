@@ -93,20 +93,20 @@ namespace Bonobo.Git.Server.Security
 
         public UserModel GetUserModel(string username)
         {
-            if (!IsUserPrincipalName(username))
+            if (!UsernameContainsDomain(username))
             {
                 using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain))
                 using (UserPrincipal user = UserPrincipal.FindByIdentity(principalContext, username))
                 {
-                    // assuming all users has a guid on AD
+                    // assuming all users have a guid on AD
                     return ADBackend.Instance.Users.FirstOrDefault(n => n.Id == user.Guid.Value);
                 }
             }
             else if (!string.IsNullOrEmpty(username))
             {
-                return ADBackend.Instance.Users.Where(x => x.Username == username).FirstOrDefault();
+                return ADBackend.Instance.Users.Where(x => x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
             }
-            // Not found
+
             return null;
         }
 
@@ -115,17 +115,9 @@ namespace Bonobo.Git.Server.Security
             return ADBackend.Instance.Users[id];
         }
 
-        private static bool IsUserPrincipalName(string username)
+        private static bool UsernameContainsDomain(string username)
         {
-            bool result = false;
-
-            if (!String.IsNullOrEmpty(username))
-            {
-                int atIndex = username.IndexOf('@');
-                result = atIndex > 0 && atIndex < username.Length - 1;
-            }
-
-            return result;
+            return String.IsNullOrEmpty(username) && !string.IsNullOrEmpty(username.GetDomain());
         }
 
         public void UpdateUser(Guid id, string username, string givenName, string surname, string email, string password)
