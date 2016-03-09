@@ -68,22 +68,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
                     new SqlConnection(string.Format(@"Data Source=(LocalDb)\{0};Initial Catalog=Master;Integrated Security=True", _instanceName)))
             {
                 connection.Open();
-
-/*                var cmd = connection.CreateCommand();
-                cmd.CommandText = string.Format(@"
-	                IF EXISTS(SELECT * FROM sys.databases WHERE name='{0}')
-	                BEGIN
-		                ALTER DATABASE [{0}]
-		                SET SINGLE_USER
-		                WITH ROLLBACK IMMEDIATE
-		                DROP DATABASE [{0}]
-	                END",
-                    _databaseName);
-                cmd.ExecuteNonQuery();*/
-
-                using (var cmd2 = connection.CreateCommand())
-                {
-                    cmd2.CommandText = string.Format(@"
+                Exec(connection, string.Format(@"
 
                     DECLARE @FILENAME AS VARCHAR(255)
                     SET @FILENAME = CONVERT(VARCHAR(255), '{1}');
@@ -94,12 +79,9 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 		                SIZE = 5MB, 
 		                MAXSIZE = 10MB, 
 		                FILEGROWTH = 5MB )')",
-                        _databaseName, fileName);
-                    cmd2.ExecuteNonQuery();
-                }
+                    _databaseName, fileName));
 
                 Exec(connection, string.Format(@"ALTER DATABASE [{0}] SET AUTO_CLOSE ON;", _databaseName));
-//                Exec(connection, string.Format(@"ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", _databaseName));
             }
         }
 

@@ -10,13 +10,13 @@ using Bonobo.Git.Server.Models;
 
 namespace Bonobo.Git.Server.IntegrationTests
 {
-#if !NCRUNCH
     [TestClass]
     public class AssemblyStartup
     {
         private static SpecsForIntegrationHost _host;
         public static string WebApplicationDirectory;
 
+#if !NCRUNCH
         [AssemblyInitialize()]
         static public void AssemblyInit(TestContext tc)
         {
@@ -70,6 +70,6 @@ namespace Bonobo.Git.Server.IntegrationTests
         {
             _host.Shutdown();
         }
-    }
 #endif // !NCRUNCH
+    }
 }

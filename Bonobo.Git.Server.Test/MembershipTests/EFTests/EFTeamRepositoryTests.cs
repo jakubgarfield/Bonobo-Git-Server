@@ -26,7 +26,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
     }
 
     [TestClass]
-    public class EFSQlServerTeamRepositoryTests : EFTeamRepositoryTests
+    public class EFSqlServerTeamRepositoryTests : EFTeamRepositoryTests
     {
         [TestInitialize]
         public void Initialize()
