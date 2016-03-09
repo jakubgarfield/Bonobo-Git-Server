@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using SpecsFor;
 using SpecsFor.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,6 +15,7 @@ namespace Bonobo.Git.Server.IntegrationTests
     public class AssemblyStartup
     {
         private static SpecsForIntegrationHost _host;
+        public static string WebApplicationDirectory;
 
         [AssemblyInitialize()]
         static public void AssemblyInit(TestContext tc)
@@ -47,6 +49,10 @@ namespace Bonobo.Git.Server.IntegrationTests
             //those while your specifications are executing, enabling you to write
             //tests against the contents of sent messages.
             //config.InterceptEmailMessagesOnPort(13565);
+
+
+            // If we set a WithPublishDirectory above, then this would change
+            WebApplicationDirectory = Path.Combine(Directory.GetCurrentDirectory(), "SpecsForMvc.TestSite");
 
             //The host takes our configuration and performs all the magic.  We
             //need to keep a reference to it so we can shut it down after all
