@@ -16,42 +16,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using System.Runtime.CompilerServices;
 
-namespace Bonobo.Git.Server
-{
-    public static class UserExtensions
-    {
-
-        // http://stackoverflow.com/questions/915745/thoughts-on-foreach-with-enumerable-range-vs-traditional-for-loop
-        public static IEnumerable<int> To(this int from, int to)
-        {
-            if (from < to)
-            {
-                while (from <= to)
-                {
-                    yield return from++;
-                }
-            }
-            else
-            {
-                while (from >= to)
-                {
-                    yield return from--;
-                }
-            }
-        }
-
-        public static IEnumerable<T> Step<T>(this IEnumerable<T> source, int step)
-        {
-            if (step == 0)
-            {
-                throw new ArgumentOutOfRangeException("step", "Param cannot be zero.");
-            }
-
-            return source.Where((x, i) => (i % step) == 0);
-        }
-    }
-}
-
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
 {
