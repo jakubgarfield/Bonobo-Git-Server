@@ -263,6 +263,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             var select = new SelectElement(form.Field(f => f.AllowAnonymousPush).Field);
             select.SelectByValue(repositoryPushStatus.ToString("D"));
             form.Submit();
+            ITH.AssertThatNoValidationErrorOccurred();
         }
 
         /// <summary>
@@ -379,6 +380,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             var languages = new SelectElement(form.Field(f => f.DefaultLanguage).Field);
             languages.SelectByValue("en-US");
             form.Submit();
+            ITH.AssertThatNoValidationErrorOccurred();
         }
 
         private void CreateAndAddTestFiles(GitInstance git, int count)
@@ -414,6 +416,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             var repo_clone = form.Field(f => f.AllowAnonymous);
             ITH.SetCheckbox(repo_clone.Field, allow);
             form.Submit();
+            ITH.AssertThatNoValidationErrorOccurred();
         }
 
         private void SetGlobalSetting(Expression<Func<GlobalSettingsModel, bool>> optionExpression, bool value)
@@ -422,6 +425,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             var form = app.FindFormFor<GlobalSettingsModel>();
             ITH.SetCheckbox(form.Field(optionExpression).Field, value);
             form.Submit();
+            ITH.AssertThatNoValidationErrorOccurred();
         }
 
         private void CreateIdentity(GitInstance git)
