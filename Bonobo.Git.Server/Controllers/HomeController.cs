@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -19,6 +20,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Practices.Unity;
 using Bonobo.Git.Server.Owin.Windows;
+using System.Configuration;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -29,6 +31,9 @@ namespace Bonobo.Git.Server.Controllers
 
         [Dependency]
         public IAuthenticationProvider AuthenticationProvider { get; set; }
+
+        [Dependency]
+        public IDatabaseResetManager ResetManager { get; set; }
 
         [WebAuthorize]
         public ActionResult Index()
@@ -140,6 +145,11 @@ namespace Bonobo.Git.Server.Controllers
             return View(new LogOnModel { ReturnUrl = returnUrl });
         }
 
+        public ActionResult LogOnWithResetOption(string returnUrl)
+        {
+            return View("LogOn", new LogOnModel { ReturnUrl = returnUrl, DatabaseResetCode = -1 });
+        }
+
         [HttpPost]
         public ActionResult LogOn(LogOnModel model)
         {
@@ -151,6 +161,10 @@ namespace Bonobo.Git.Server.Controllers
                     case ValidationResult.Success:
                         AuthenticationProvider.SignIn(model.Username, Url.IsLocalUrl(model.ReturnUrl) ? model.ReturnUrl : Url.Action("Index", "Home"));
                         Response.AppendToLog("SUCCESS");
+                        if (Request.IsLocal && model.DatabaseResetCode > 0 && model.Username == "admin" && ConfigurationManager.AppSettings["AllowDBReset"] == "true" )
+                        {
+                            ResetManager.DoReset(model.DatabaseResetCode);
+                        }
                         return new EmptyResult();
                     case ValidationResult.NotAuthorized:
                         return new RedirectResult("~/Home/Unauthorized");
@@ -193,5 +207,6 @@ namespace Bonobo.Git.Server.Controllers
                 return Content("You can only run the diagnostics locally to the server");
             }
         }
+
     }
 }

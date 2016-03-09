@@ -24,6 +24,8 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Home_LogOn_RememberMe")]
         public bool RememberMe { get; set; }
 
+        public int DatabaseResetCode { get; set; }
+
         public string ReturnUrl { get; set; }
     }
 

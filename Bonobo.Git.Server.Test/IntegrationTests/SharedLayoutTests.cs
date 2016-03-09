@@ -1,63 +1,42 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Bonobo.Git.Server.Controllers;
+using Bonobo.Git.Server.Test.Integration.Web;
 using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
 using SpecsFor.Mvc;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests
 {
-    using ITH = IntegrationTestHelpers;
     using OpenQA.Selenium.Support.UI;
     using OpenQA.Selenium;
+    using System.Threading;
 
     [TestClass]
-    public class SharedLayoutTests
+    public class SharedLayoutTests : IntegrationTestBase
     {
-        private static MvcWebApp app;
-
-        [ClassInitialize]
-        public static void ClassInit(TestContext testContext)
-        {
-            app = new MvcWebApp();
-        }
-
-        [ClassCleanup]
-        public static void Cleanup()
-        {
-            app.Browser.Close();
-        }
-
-        [TestInitialize]
-        public void InitTest()
-        {
-            IntegrationTestHelpers.Login(app);
-        }
-
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void DropdownNavigationWorks()
         {
-            var reponame = "A_Nice_Repo";
-            var id1 = ITH.CreateRepositoryOnWebInterface(app, reponame);
-            var id2 = ITH.CreateRepositoryOnWebInterface(app, "other_name");
+            var reponame = ITH.MakeName();
+            var otherreponame = ITH.MakeName(reponame + "_other");
+            var repoId = ITH.CreateRepositoryOnWebInterface(reponame);
+            var otherrepoId = ITH.CreateRepositoryOnWebInterface(otherreponame);
 
-            app.NavigateTo<RepositoryController>(c => c.Detail(id2));
+            app.NavigateTo<RepositoryController>(c => c.Detail(otherrepoId));
 
             var element = app.Browser.FindElementByCssSelector("select#Repositories");
             var dropdown = new SelectElement(element);
             dropdown.SelectByText(reponame);
+            Thread.Sleep(2000);
 
-            app.UrlMapsTo<RepositoryController>(c => c.Detail(id1));
-
+            app.UrlMapsTo<RepositoryController>(c => c.Detail(repoId));
 
             app.WaitForElementToBeVisible(By.CssSelector("select#Repositories"), TimeSpan.FromSeconds(10));
             dropdown = new SelectElement(app.Browser.FindElementByCssSelector("select#Repositories"));
-            dropdown.SelectByText("other_name");
+            dropdown.SelectByText(otherreponame);
+            Thread.Sleep(2000);
 
-            app.UrlMapsTo<RepositoryController>(c => c.Detail(id2));
-
-            ITH.DeleteRepositoryUsingWebsite(app, id1);
-            ITH.DeleteRepositoryUsingWebsite(app, id2);
-
+            app.UrlMapsTo<RepositoryController>(c => c.Detail(otherrepoId));
         }
 
     }
