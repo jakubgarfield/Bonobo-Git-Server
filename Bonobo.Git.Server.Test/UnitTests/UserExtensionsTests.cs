@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Security.Claims;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Bonobo.Git.Server.Test.UnitTests
 {
@@ -90,6 +92,32 @@ namespace Bonobo.Git.Server.Test.UnitTests
         {
             var user = MakeUserWithClaims(new Claim(ClaimTypes.Upn, "JoeBloggs@local"), new Claim(ClaimTypes.Name, "JoeBloggs"));
             Assert.AreEqual("JoeBloggs", user.Username());
+        }
+
+        [TestMethod]
+        public void EscapeStringlistAsInFAQ()
+        {
+            Assert.AreEqual(@"Editors\\ Architects,Programmers\,Testers", UserExtensions.StringlistToEscapedStringForEnvVar(new List<string>{@"Editors\ Architects", "Programmers,Testers"}));
+        }
+        
+        [TestMethod]
+        public void EscapeStringlistReturnsEmptyStringforEmptyLists()
+        {
+            Assert.AreEqual("", UserExtensions.StringlistToEscapedStringForEnvVar(new List<string> { "" }));
+            Assert.AreEqual("", UserExtensions.StringlistToEscapedStringForEnvVar(new List<string>()));
+            Assert.AreEqual("", UserExtensions.StringlistToEscapedStringForEnvVar(Enumerable.Empty<string>()));
+        }
+
+        [TestMethod]
+        public void EscapeStringlistWithCustomSeparatorMultiChar()
+        {
+            Assert.AreEqual(@"Editors\\ Architects<>Programmers\<>Testers", UserExtensions.StringlistToEscapedStringForEnvVar(new List<string>{@"Editors\ Architects", "Programmers<>Testers"}, "<>"));
+        }
+
+        [TestMethod]
+        public void EscapeStringlistWithCustomSeparatorSingleChar()
+        {
+            Assert.AreEqual(@"Editors\\ Architects|Programmers\|Testers", UserExtensions.StringlistToEscapedStringForEnvVar(new List<string>{@"Editors\ Architects", "Programmers|Testers"}, "|"));
         }
 
         private static ClaimsPrincipal MakeUserWithClaims(params Claim[] claims)
