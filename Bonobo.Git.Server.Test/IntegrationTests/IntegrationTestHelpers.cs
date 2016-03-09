@@ -64,7 +64,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             _app = app;
         }
 
-        public void Login()
+        public void LoginAsAdmin()
         {
             _app.NavigateTo<HomeController>(c => c.LogOn("/Account"));
             _app.FindFormFor<LogOnModel>()
@@ -92,12 +92,12 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             }
         }
 
-        public void LoginAsNumberedUser(int index)
+        public void LoginAsUser(UserModel user, string password = "aaa")
         {
             _app.NavigateTo<HomeController>(c => c.LogOn("/Account"));
             _app.FindFormFor<LogOnModel>()
-                .Field(f => f.Username).SetValueTo("TestUser"+index)
-                .Field(f => f.Password).SetValueTo("aaa")
+                .Field(f => f.Username).SetValueTo(user.Username)
+                .Field(f => f.Password).SetValueTo(password)
                 .Submit();
             _app.UrlMapsTo<AccountController>(c => c.Index());
         }
