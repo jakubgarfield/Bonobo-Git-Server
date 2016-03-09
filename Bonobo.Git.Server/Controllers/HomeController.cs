@@ -20,6 +20,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Practices.Unity;
 using Bonobo.Git.Server.Owin.Windows;
+using System.Configuration;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -160,7 +161,7 @@ namespace Bonobo.Git.Server.Controllers
                     case ValidationResult.Success:
                         AuthenticationProvider.SignIn(model.Username, Url.IsLocalUrl(model.ReturnUrl) ? model.ReturnUrl : Url.Action("Index", "Home"));
                         Response.AppendToLog("SUCCESS");
-                        if (Request.IsLocal && model.DatabaseResetCode > 0 && model.Username == "admin")
+                        if (Request.IsLocal && model.DatabaseResetCode > 0 && model.Username == "admin" && ConfigurationManager.AppSettings["AllowDBReset"] == "true" )
                         {
                             ResetManager.DoReset(model.DatabaseResetCode);
                         }

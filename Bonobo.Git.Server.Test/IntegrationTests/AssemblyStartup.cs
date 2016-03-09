@@ -24,10 +24,10 @@ namespace Bonobo.Git.Server.IntegrationTests
             config.UseIISExpress()
                 //To do that, it needs to know the name of the project to test...
                 .With(Project.Named("Bonobo.Git.Server"))
-                .UsePort(20000);
+                .UsePort(20000)
                 //And optionally, it can apply Web.config transformations if you want 
                 //it to.
-                //.ApplyWebConfigTransformForConfig("Test");
+                .ApplyWebConfigTransformForConfig("Test");
 
             //In order to leverage the strongly-typed helpers in SpecsFor.Mvc,
             //you need to tell it about your routes.  Here we are just calling
