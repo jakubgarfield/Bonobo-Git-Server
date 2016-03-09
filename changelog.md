@@ -10,17 +10,34 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 ### Features
 
-* A new global option allows a repository to be created by pushing at a non-existent repo name
-* Repositories do not need to have an explicit repository administator
+* A new global option allows a repository to be created by pushing at a non-existent repo name #504
+* Repositories do not need to have an explicit repository administator #505
 * Allow push for anonymous user can now be set on a per repo basis
+* Repository details screen now has copy-to-clipboard buttons for Git URLs #453
+* 'Rescan' button on Repository index screen allows new file-system repos to be discovered without restarting application #454
+* *.ts and *.json formatting support for file display #455
+* New diagnostic page at /home/diagnostics to help with support
+* Claims names are now more consistent with typical ADFS usage #488
 
 ### Bugfixes
+
+* NullReferenceException in EFRepositoryPermissionService HasPermission  #441
+* Inconsistent repo name case-sensitivity (now consistently case-insensitve) #443
+* Correct error reported to Git clients for access to non-existent repo #447
+* Bonobo can start enough to allow access to settings if git directory is mis-configured #451
+* Bonobo doesn't run on systems with particular machine.config RoleManager settings #486
 
 ### Code improvements
 
 * Addition of automated test framework for testing web application
-* Rework of repository permissions Code
+* Rework of repository permissions Code #492
 * Abort startup if `BinaryGUID=False` is not set in Sqlite connections. 
+* Improved exception handling in GitController #444
+* Upgrade all web.config files to MVC5 #457
+* Password salt now randomly generated at password update #462
+* Resharper settings provided so that Resharper suggested style matches project #465
+* UserModel and User entity class name properties made more consistent #470
+* Far fewer catch-all claueses silently swallowing exceptions
 
 ## Version 5.1.1
 
