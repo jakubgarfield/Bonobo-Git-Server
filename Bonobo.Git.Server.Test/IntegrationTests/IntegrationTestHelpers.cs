@@ -138,16 +138,17 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             _app.FindFormFor<UserModel>().Submit();
         }
 
-        public IEnumerable<UserModel> CreateUsers(int count = 1, int start = 0)
+        public IEnumerable<UserModel> CreateUsers(int count = 1, int start = 0, [CallerMemberName] string baseuname = "")
         {
+            baseuname = MakeName(baseuname);
             var users = new List<UserModel>();
             foreach (int i in start.To(start + count - 1))
             {
                 var index = i.ToString();
                 var user = new UserModel
                 {
-                    Username = "TestUser" + index,
-                    GivenName = "Uname" + index,
+                    Username = baseuname + index,
+                    GivenName = "GivenName" + index,
                     Surname = "Surname" + index,
                     Email = index + "mail@domain.com"
                 };
@@ -169,12 +170,13 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             return users;
         }
 
-        public IEnumerable<TeamModel> CreateTeams(int count = 1, int start = 0)
+        public IEnumerable<TeamModel> CreateTeams(int count = 1, int start = 0, [CallerMemberName] string baseTeamname = "")
         {
+            baseTeamname = MakeName(baseTeamname);
             var testteams = new List<TeamModel>();
             foreach (int i in start.To(start + count - 1))
             {
-                var team = new TeamModel {Name = "Team" + i, Description = "Some team " + i};
+                var team = new TeamModel {Name = baseTeamname + i, Description = "Some team " + i};
                 _app.NavigateTo<TeamController>(c => c.Create());
                 _app.FindFormFor<TeamEditModel>()
                     .Field(f => f.Name).SetValueTo(team.Name)
