@@ -1,10 +1,12 @@
 ﻿using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Data;
+using System.Linq;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
-    using OpenQA.Selenium.Support.UI; 
+    using OpenQA.Selenium.Support.UI;
+    using Microsoft.VisualStudio.TestTools.UnitTesting; 
 
     [TestClass]
     public class RepositoryControllerTests : IntegrationTestBase
@@ -12,37 +14,29 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void EnsureCheckboxesStayCheckOnCreateError()
         {
-            var userId = ITH.CreateUsers(1).Single();
-            try
+            var user = ITH.CreateUsers(1).Single();
+            app.NavigateTo<RepositoryController>(c => c.Create());
+            var form = app.FindFormFor<RepositoryDetailModel>();
+            var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("form.pure-form>fieldset>div.pure-control-group.checkboxlist>input");
+            foreach (var chk in chkboxes)
             {
-                app.NavigateTo<RepositoryController>(c => c.Create());
-                var form = app.FindFormFor<RepositoryDetailModel>();
-            	var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("form.pure-form>fieldset>div.pure-control-group.checkboxlist>input");
-                foreach (var chk in chkboxes)
-                {
-                    ITH.SetCheckbox(chk, true);
-                }
-                form.Submit();
-
-
-                form = app.FindFormFor<RepositoryDetailModel>();
-            	chkboxes = form.WebApp.Browser.FindElementsByCssSelector("form.pure-form>fieldset>div.pure-control-group.checkboxlist>input");
-                foreach (var chk in chkboxes)
-                {
-                    Assert.AreEqual(true, chk.Selected, "A message box was unselected eventhough we selected all!");
-                }
+                ITH.SetCheckbox(chk, true);
             }
-            finally
+            form.Submit();
+
+
+            form = app.FindFormFor<RepositoryDetailModel>();
+            chkboxes = form.WebApp.Browser.FindElementsByCssSelector("form.pure-form>fieldset>div.pure-control-group.checkboxlist>input");
+            foreach (var chk in chkboxes)
             {
-       //         ITH.DeleteUser(userId);
+                Assert.AreEqual(true, chk.Selected, "A message box was unselected eventhough we selected all!");
             }
-
         }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void CreateDuplicateRepoNameDifferentCaseNotAllowed()
         {
-            var reponame = "A_Nice_Repo";
+            var reponame = ITH.MakeName();
             var id1 = ITH.CreateRepositoryOnWebInterface(reponame);
 
             app.NavigateTo<RepositoryController>(c => c.Create());
@@ -60,7 +54,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void CreateDuplicateRepoNameNotAllowed()
         {
-            var reponame = "A_Nice_Repo";
+            var reponame = ITH.MakeName();
             var id1 = ITH.CreateRepositoryOnWebInterface(reponame);
 
             app.NavigateTo<RepositoryController>(c => c.Create());
@@ -77,9 +71,10 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void RenameRepoToExistingRepoNameNotAllowed()
         {
-            var reponame = "A_Nice_Repo";
+            var reponame = ITH.MakeName();
+            var otherreponame = ITH.MakeName(reponame + "_other");
             var id1 = ITH.CreateRepositoryOnWebInterface(reponame);
-            var id2 = ITH.CreateRepositoryOnWebInterface("other_name");
+            var id2 = ITH.CreateRepositoryOnWebInterface(otherreponame);
 
             app.NavigateTo<RepositoryController>(c => c.Edit(id2));
             app.FindFormFor<RepositoryDetailModel>()
@@ -95,9 +90,10 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void RenameRepoToExistingRepoNameNotAllowedDifferentCase()
         {
-            var reponame = "A_Nice_Repo";
+            var reponame = ITH.MakeName();
+            var otherreponame = ITH.MakeName(reponame + "_other");
             var id1 = ITH.CreateRepositoryOnWebInterface(reponame);
-            var id2 = ITH.CreateRepositoryOnWebInterface("other_name");
+            var id2 = ITH.CreateRepositoryOnWebInterface(otherreponame);
 
             app.NavigateTo<RepositoryController>(c => c.Edit(id2));
             app.FindFormFor<RepositoryDetailModel>()
@@ -112,7 +108,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void RepositoryCanBeSavedBySysAdminWithoutHavingAnyRepoAdmins()
         {
-            var repoId = ITH.CreateRepositoryOnWebInterface(app, "Repo");
+            var repoId = ITH.CreateRepositoryOnWebInterface(ITH.MakeName());
 
             app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
             var form = app.FindFormFor<RepositoryDetailModel>();
@@ -128,40 +124,32 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void RepoAdminCannotRemoveThemselves()
         {
-            var userId = ITH.CreateUsers().Single();
+            var user = ITH.CreateUsers().Single();
 
-            try
-            {
-                var repoId = ITH.CreateRepositoryOnWebInterface("Repo");
+            var repoId = ITH.CreateRepositoryOnWebInterface(ITH.MakeName());
 
-                app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
-                var form = app.FindFormFor<RepositoryDetailModel>();
+            app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
+            var form = app.FindFormFor<RepositoryDetailModel>();
 
-                // Set User0 to be admin for this repo
-                var adminBox =
-                    form.WebApp.Browser.FindElementsByCssSelector(
-                        string.Format("input[name=PostedSelectedAdministrators][value=\"{0}\"]", userId)).Single();
-                ITH.SetCheckbox(adminBox, true);
-                form.Submit();
-                ITH.AssertThatNoValidationErrorOccurred();
+            // Set User0 to be admin for this repo
+            var adminBox =
+                form.WebApp.Browser.FindElementsByCssSelector(
+                    string.Format("input[name=PostedSelectedAdministrators][value=\"{0}\"]", user.Id)).Single();
+            ITH.SetCheckbox(adminBox, true);
+            form.Submit();
+            ITH.AssertThatNoValidationErrorOccurred();
 
-                // Now, log in as the ordinary user
-                ITH.LoginAsNumberedUser(0);
+            // Now, log in as the ordinary user
+            ITH.LoginAsUser(user);
 
-                app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
-                form = app.FindFormFor<RepositoryDetailModel>();
+            app.NavigateTo<RepositoryController>(c => c.Edit(repoId));
+            form = app.FindFormFor<RepositoryDetailModel>();
 
-                var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("input[name=PostedSelectedAdministrators]");
-                ITH.SetCheckboxes(chkboxes, false);
+            var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("input[name=PostedSelectedAdministrators]");
+            ITH.SetCheckboxes(chkboxes, false);
 
-                form.Submit();
-                ITH.AssertThatValidationErrorContains("You can't remove yourself from administrators");
-            }
-            finally
-            {
-                ITH.Login();
-               // ITH.DeleteUser(userId);
-            }
+            form.Submit();
+            ITH.AssertThatValidationErrorContains("You can't remove yourself from administrators");
         }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]

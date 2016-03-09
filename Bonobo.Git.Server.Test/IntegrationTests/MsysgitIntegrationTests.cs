@@ -124,7 +124,6 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                     InitAndPullRepository(git);
                     PullTag(git);
                     PullBranch(git);
-                    IntegrationTestHelpers.DeleteRepository(app, repo_id);
                 });
         }
 
@@ -145,7 +144,6 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 CloneRepoAnon(git, false);
                 AllowAnonRepoClone(repo_id, true);
                 CloneRepoAnon(git, true);
-                IntegrationTestHelpers.DeleteRepository(app, repo_id);
             });
         }
 
@@ -321,7 +319,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 RunGitOnRepo(git, "push origin master").ExpectSuccess();
 
                 // Ensure repo is created with same name as was pushed
-                Guid repoId = ITH.FindRepository(app, RepositoryName);
+                Guid repoId = ITH.FindRepository(RepositoryName);
                 Assert.AreNotEqual(Guid.Empty, repoId);
             });
         }
