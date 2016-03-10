@@ -99,7 +99,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         [TestInitialize]
         public void Initialize()
         {
-            DeleteDirectory(WorkingDirectory);
+            ITH.DeleteDirectory(WorkingDirectory);
             ITH.LoginAndResetDatabase();
         }
 
@@ -116,10 +116,10 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                     PushTag(git);
                     PushBranch(git);
 
-                    DeleteDirectory(RepositoryDirectory);
+                    ITH.DeleteDirectory(RepositoryDirectory);
                     CloneRepository(git);
 
-                    DeleteDirectory(RepositoryDirectory);
+                    ITH.DeleteDirectory(RepositoryDirectory);
                     Directory.CreateDirectory(RepositoryDirectory);
                     InitAndPullRepository(git);
                     PullTag(git);
@@ -447,7 +447,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 {
                     // Make sure we're not in the working directory when we try to delete it
                     Environment.CurrentDirectory = Path.Combine(WorkingDirectory, "..");
-                    DeleteDirectory(WorkingDirectory);
+                    ITH.DeleteDirectory(WorkingDirectory);
                 }
             }
         }
@@ -554,7 +554,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             RunGitOnRepo(git, "init").ExpectSuccess();
             RunGitOnRepo(git, String.Format("remote add origin {0}", RepositoryUrlWithCredentials)).ExpectSuccess();
         }
-		
+        
         private void InitAndPushRepository(GitInstance git)
         {
             RunGitOnRepo(git, "init").ExpectSuccess();
@@ -711,35 +711,5 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             }
         }
 
-        private void DeleteDirectory(string directoryPath)
-        {
-            if (!Directory.Exists(directoryPath))
-                return;
-
-            // We have to tolerate intermittent errors during directory deletion, because
-            // other parts of Windows sometimes hold locks on files briefly
-            // Multiple tries normally fixes it
-            for (int attempt = 10; attempt >= 0; attempt--)
-            {
-                try
-                {
-                    var directory = new DirectoryInfo(directoryPath) {Attributes = FileAttributes.Normal};
-                    foreach (var item in directory.GetFiles("*.*", SearchOption.AllDirectories))
-                    {
-                        item.Attributes = FileAttributes.Normal;
-                    }
-                    directory.Delete(true);
-                    return;
-                }
-                catch
-                {
-                    if (attempt == 0)
-                    {
-                        throw;
-                    }
-                    Thread.Sleep(1000);
-                }
-            }
-        }
     }
 }

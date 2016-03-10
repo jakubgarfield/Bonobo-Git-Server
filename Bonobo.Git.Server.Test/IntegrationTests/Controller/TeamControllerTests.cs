@@ -5,7 +5,7 @@ using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
-namespace Bonobo.Git.Server.Test.Integration.Web
+namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
     using ITH = IntegrationTestHelpers;
     public class TeamControllerSpecs

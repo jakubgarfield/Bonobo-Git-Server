@@ -1,10 +1,10 @@
 ﻿using Bonobo.Git.Server.Controllers;
-using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Data;
-using System.Linq;
-using OpenQA.Selenium.Support.UI;
-using Microsoft.VisualStudio.TestTools.UnitTesting; 
+using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium.Support.UI;
+using System.Linq;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
@@ -16,7 +16,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void EnsureCheckboxesStayCheckOnCreateError()
         {
-            var user = ITH.CreateUsers(1).Single();
+            ITH.CreateUsers(1);
             app.NavigateTo<RepositoryController>(c => c.Create());
             var form = app.FindFormFor<RepositoryDetailModel>();
             var chkboxes = form.WebApp.Browser.FindElementsByCssSelector("form.pure-form>fieldset>div.pure-control-group.checkboxlist>input");
@@ -25,7 +25,6 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
                 ITH.SetCheckbox(chk, true);
             }
             form.Submit();
-
 
             form = app.FindFormFor<RepositoryDetailModel>();
             chkboxes = form.WebApp.Browser.FindElementsByCssSelector("form.pure-form>fieldset>div.pure-control-group.checkboxlist>input");
@@ -39,7 +38,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         public void CreateDuplicateRepoNameDifferentCaseNotAllowed()
         {
             var reponame = ITH.MakeName();
-            var id1 = ITH.CreateRepositoryOnWebInterface(reponame);
+            ITH.CreateRepositoryOnWebInterface(reponame);
 
             app.NavigateTo<RepositoryController>(c => c.Create());
             app.FindFormFor<RepositoryDetailModel>()
@@ -48,16 +47,13 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 
             app.FindFormFor<RepositoryDetailModel>()
                 .Field(f => f.Name).ShouldBeInvalid();
-
-     //       ITH.DeleteRepository(id1);
-
         }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
         public void CreateDuplicateRepoNameNotAllowed()
         {
             var reponame = ITH.MakeName();
-            var id1 = ITH.CreateRepositoryOnWebInterface(reponame);
+            ITH.CreateRepositoryOnWebInterface(reponame);
 
             app.NavigateTo<RepositoryController>(c => c.Create());
             app.FindFormFor<RepositoryDetailModel>()
@@ -66,8 +62,6 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 
             app.FindFormFor<RepositoryDetailModel>()
                 .Field(f => f.Name).ShouldBeInvalid();
-
-      //      ITH.DeleteRepository(id1);
         }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
@@ -75,18 +69,16 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         {
             var reponame = ITH.MakeName();
             var otherreponame = ITH.MakeName(reponame + "_other");
-            var id1 = ITH.CreateRepositoryOnWebInterface(reponame);
+            ITH.CreateRepositoryOnWebInterface(reponame);
             var id2 = ITH.CreateRepositoryOnWebInterface(otherreponame);
 
             app.NavigateTo<RepositoryController>(c => c.Edit(id2));
             app.FindFormFor<RepositoryDetailModel>()
                 .Field(f => f.Name).SetValueTo(reponame)
                 .Submit();
-
+            
             app.FindFormFor<RepositoryDetailModel>()
                 .Field(f => f.Name).ShouldBeInvalid();
-
-
         }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
@@ -94,7 +86,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         {
             var reponame = ITH.MakeName();
             var otherreponame = ITH.MakeName(reponame + "_other");
-            var id1 = ITH.CreateRepositoryOnWebInterface(reponame);
+            ITH.CreateRepositoryOnWebInterface(reponame);
             var id2 = ITH.CreateRepositoryOnWebInterface(otherreponame);
 
             app.NavigateTo<RepositoryController>(c => c.Edit(id2));
@@ -104,7 +96,6 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 
             app.FindFormFor<RepositoryDetailModel>()
                 .Field(f => f.Name).ShouldBeInvalid();
-
         }
 
         [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
@@ -137,6 +128,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             var adminBox =
                 form.WebApp.Browser.FindElementsByCssSelector(
                     string.Format("input[name=PostedSelectedAdministrators][value=\"{0}\"]", user.Id)).Single();
+
             ITH.SetCheckbox(adminBox, true);
             form.Submit();
             ITH.AssertThatNoValidationErrorOccurred();
@@ -195,9 +187,10 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         public void RepoNameEnsureDuplicationDetectionAsYouTypeWorksOnCreation()
         {
             var reponame = ITH.MakeName();
-            var id1 = ITH.CreateRepositoryOnWebInterface(reponame);
+            ITH.CreateRepositoryOnWebInterface(reponame);
+
             app.NavigateTo<RepositoryController>(c => c.Create());
-            var form = app.FindFormFor<RepositoryDetailModel>()
+            app.FindFormFor<RepositoryDetailModel>()
                 .Field(f => f.Name).SetValueTo(reponame)
                 .Field(f => f.Description).Click(); // Set focus
 

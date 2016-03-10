@@ -8,7 +8,7 @@ using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Test.IntegrationTests;
 using System.Collections.Generic;
 
-namespace Bonobo.Git.Server.Test.Integration.Web
+namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
     using ITH = Bonobo.Git.Server.Test.IntegrationTests.Helpers.IntegrationTestHelpers;
     public class AccountControllerSpecs
