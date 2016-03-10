@@ -1,14 +1,16 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SpecsFor.Mvc;
-using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
+﻿using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Controllers;
-using OpenQA.Selenium.Support.UI;
 using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using System;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
+    using ITH = IntegrationTestHelpers;
+
     [TestClass]
     public class SettingsControllerTests : IntegrationTestBase
     {
@@ -30,6 +32,23 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             langs = new SelectElement(form.Field(f => f.DefaultLanguage).Field);
             langs.SelectByValue("en-US");
             form.Submit();
+        }
+
+        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        public void InvalidLinkifyRegexAsYouTypeInSettings()
+        {
+            var brokenRegex = @"\";
+
+            app.NavigateTo<SettingsController>(c => c.Index());
+            app.FindFormFor<GlobalSettingsModel>()
+                .Field(f => f.LinksRegex).SetValueTo(brokenRegex)
+                .Field(f => f.LinksUrl).Click(); // Set focus
+
+            var validation = app.WaitForElementToBeVisible(By.CssSelector("input#LinksRegex~span.field-validation-error>span"), TimeSpan.FromSeconds(1), true);
+            Assert.IsTrue(validation.Text.Contains(Resources.Validation_Invalid_Regex.Replace("{0}", "")));
+
+            var input = app.Browser.FindElementByCssSelector("input#LinksRegex");
+            Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
         }
     }
 }

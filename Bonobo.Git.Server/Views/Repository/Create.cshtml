@@ -59,6 +59,7 @@
                     attribs = new { @class = "medium", disabled = "" };
                 }
                 @Html.TextBoxFor(m => m.LinksRegex, attribs);
+                @Html.ValidationMessageFor(m => m.LinksRegex);
             }
         </div>
         <div class="pure-control-group">

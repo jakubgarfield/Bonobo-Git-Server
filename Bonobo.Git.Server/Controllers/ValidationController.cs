@@ -1,7 +1,9 @@
-﻿using Bonobo.Git.Server.Data;
+﻿using Bonobo.Git.Server.Attributes;
+using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using System.Web.UI;
 
@@ -38,6 +40,18 @@ namespace Bonobo.Git.Server.Controllers
             bool exists = (possibly_existing_team != null) && (id != possibly_existing_team.Id);
             // false when repo exists!
             return Json(!exists, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult IsValidRegex(string LinksRegex)
+        {
+            var validationContext = new ValidationContext(Request.RequestContext);
+            var isvalidregexattr = new IsValidRegexAttribute();
+            var result = isvalidregexattr.GetValidationResult(LinksRegex, validationContext);
+            if (result == System.ComponentModel.DataAnnotations.ValidationResult.Success)
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            return Json(result.ErrorMessage, JsonRequestBehavior.AllowGet);
         }
     }
 }

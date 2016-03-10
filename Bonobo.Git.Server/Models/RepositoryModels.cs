@@ -146,6 +146,7 @@ namespace Bonobo.Git.Server.Models
         public string GitUrl { get; set; }
         public string PersonalGitUrl { get; set; }
 
+        [Remote("IsValidRegex", "Validation")]
         [IsValidRegex]
         [Display(ResourceType = typeof(Resources), Name = "Settings_Global_LinksRegex")]
         public string LinksRegex { get; set; }

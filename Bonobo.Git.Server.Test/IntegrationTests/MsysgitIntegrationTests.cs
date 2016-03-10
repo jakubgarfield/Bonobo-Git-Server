@@ -397,7 +397,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
         }
         [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
-        public void LinkifyRepoEmptyGeneratesNoLinks()
+        public void LinkifyRepoRegexEmptyGeneratesNoLinks()
         {
 
             ForAllGits(git =>

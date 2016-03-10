@@ -249,5 +249,25 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             app.FindFormFor<RepositoryDetailModel>()
                 .Field(f => f.Description).ValueShouldEqual(reponame + "_other");
         }
+
+        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        public void InvalidLinkifyRegexAsYouTypeInRepository()
+        {
+            var reponame = ITH.MakeName();
+            var repo_id = ITH.CreateRepositoryOnWebInterface(reponame);
+            var brokenRegex = @"\";
+
+            app.NavigateTo<RepositoryController>(c => c.Edit(repo_id));
+            app.FindFormFor<RepositoryDetailModel>()
+                .Field(f => f.LinksUseGlobal).Click()
+                .Field(f => f.LinksRegex).SetValueTo(brokenRegex)
+                .Field(f => f.Description).Click(); // Set focus
+
+            var validation = app.WaitForElementToBeVisible(By.CssSelector("input#LinksRegex~span.field-validation-error>span"), TimeSpan.FromSeconds(1), true);
+            Assert.IsTrue(validation.Text.Contains(Resources.Validation_Invalid_Regex.Replace("{0}", "")));
+
+            var input = app.Browser.FindElementByCssSelector("input#LinksRegex");
+            Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
+        }
     }
 }
