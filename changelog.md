@@ -8,6 +8,12 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 **TBD March 2016**
 
+### Compatibility issues
+
+* This version adds column to several tables in the database. This makes it
+incompatible with previous versions of Bonobo. Please ensure that you have a 
+backup of your App_Data folder before you update.
+
 ### Features
 
 * A new global option allows a repository to be created by pushing at a non-existent repo name #504
