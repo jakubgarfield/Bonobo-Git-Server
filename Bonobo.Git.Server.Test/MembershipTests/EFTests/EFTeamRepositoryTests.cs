@@ -16,6 +16,8 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
         public void Initialize()
         {
             _connection = new SqliteTestConnection();
+
+
             InitialiseTestObjects();
         }
         [TestCleanup]
@@ -41,99 +43,51 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
         }
     }
 
-    public abstract class EFTeamRepositoryTests
+    public abstract class EFTeamRepositoryTests : TeamRepositoryTestsBase
     {
         protected IDatabaseTestConnection _connection;
-        private EFTeamRepository _repo;
 
-        [TestMethod]
-        public void TestRepositoryIsCreated()
+        protected void InitialiseTestObjects()
         {
-            Assert.IsNotNull(_repo);
+            _repo = new EFTeamRepository {CreateContext = () => _connection.GetContext()};
+            _membershipService = new EFMembershipService { CreateContext = () => _connection.GetContext() };
+            new AutomaticUpdater().RunWithContext(_connection.GetContext());
+        }
+
+        protected override bool CreateTeam(TeamModel team)
+        {
+            return _repo.Create(team);
         }
 
         [TestMethod]
-        public void TestNewRepositoryIsEmpty()
+        public void DeletingMissingTeamIsSilentlyIgnored()
         {
-            Assert.AreEqual(0, _repo.GetAllTeams().Count);
+            var team1 = new TeamModel { Name = "Team1", Description = "Test Team" };
+            CreateTeam(team1);
+
+            _repo.Delete(Guid.NewGuid());
+
+            Assert.AreEqual("Team1", _repo.GetAllTeams().Single().Name);
         }
 
         [TestMethod]
-        public void TestNewTeamCanBeAddedWithNoMembers()
+        public void TeamCanBeDeleted()
         {
-            var createResult = _repo.Create(new TeamModel { Name = "Team1", Description = "Test Team" });
+            var team1 = new TeamModel { Name = "Team1", Description = "Test Team" };
+            CreateTeam(team1);
+            var team2 = new TeamModel { Name = "Team2", Description = "Test Team" };
+            CreateTeam(team2);
 
-            Assert.IsTrue(createResult);
-            var addedTeam = _repo.GetAllTeams().Single();
-            Assert.AreEqual("Team1", addedTeam.Name);
-            Assert.AreEqual("Test Team", addedTeam.Description);
-        }
+            _repo.Delete(team1.Id);
 
-        [TestMethod]
-        public void TestNewTeamCanBeRetrievedByIs()
-        {
-            _repo.Create(new TeamModel { Name = "Team1", Description = "Test Team" });
-            var addedTeamId = _repo.GetAllTeams().Single().Id;
-            var addedTeam = _repo.GetTeam(addedTeamId);
-            Assert.AreEqual("Team1", addedTeam.Name);
-        }
-        
-        [TestMethod]
-        public void TestMultipleTeamsCannotHaveSameTeamName()
-        {
-            var createResult1 = _repo.Create(new TeamModel { Name = "Team1" });
-            var createResult2 = _repo.Create(new TeamModel { Name = "Team1" });
-
-            Assert.IsTrue(createResult1);
-            Assert.IsFalse(createResult2);
-        }
-
-        [TestMethod]
-        public void TestMultipleTeamsCanHaveDifferentTeamNames()
-        {
-            var createResult1 = _repo.Create(new TeamModel { Name = "Team1" });
-            var createResult2 = _repo.Create(new TeamModel { Name = "Team2" });
-
-            Assert.IsTrue(createResult1);
-            Assert.IsTrue(createResult2);
-            Assert.AreEqual(2, _repo.GetAllTeams().Count);
-        }
-
-        [TestMethod]
-        public void TestNewTeamCanBeAddedWithAMember()
-        {
-            var newMember = AddUserFred();
-            var createResult1 = _repo.Create(new TeamModel {Name = "Team1", Members = new[] {newMember}});
-            var createResult = createResult1;
-
-            Assert.IsTrue(createResult);
-            var addedTeam = _repo.GetAllTeams().Single();
-            Assert.AreEqual("Team1", addedTeam.Name);
-            CollectionAssert.AreEqual(new[] { "fred"}, addedTeam.Members.Select(user => user.Username).ToArray());
-        }
-
-        [TestMethod]
-        public void DuplicateMemberIsSilentlyIgnored()
-        {
-            var newMember = AddUserFred();
-            var createResult = _repo.Create(new TeamModel { Name = "Team1", Members = new[] { newMember, newMember } });
-
-            Assert.IsTrue(createResult);
-            Assert.AreEqual(1, _repo.GetAllTeams().Single().Members.Length);
-        }
-
-        [TestMethod]
-        public void NewUserIsNotATeamMember()
-        {
-            var newMember = AddUserFred();
-            Assert.AreEqual(0, _repo.GetTeams(newMember.Id).Count);
+            Assert.AreEqual("Team2", _repo.GetAllTeams().Single().Name);
         }
 
         [TestMethod]
         public void TeamCanBeUpdatedToIncludeAUser()
         {
             var team1 = new TeamModel { Name = "Team1", Description = "Test Team" };
-            _repo.Create(team1);
+            CreateTeam(team1);
 
             var newUser = AddUserFred();
 
@@ -147,7 +101,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
         public void TeamCanBeUpdatedToChangeName()
         {
             var teamModel = new TeamModel { Name = "Team1", Description = "Test Team" };
-            _repo.Create(teamModel);
+            CreateTeam(teamModel);
 
             teamModel.Name = "SonOfTeam1";
             _repo.Update(teamModel);
@@ -156,45 +110,23 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
         }
 
         [TestMethod]
-        public void TeamCanBeDeleted()
+        public void TestMultipleTeamsCannotHaveSameTeamName()
         {
-            var team1 = new TeamModel { Name = "Team1", Description = "Test Team" };
-            _repo.Create(team1);
-            var team2 = new TeamModel { Name = "Team2", Description = "Test Team" };
-            _repo.Create(team2);
+            var createResult1 = CreateTeam(new TeamModel { Name = "Team1" });
+            var createResult2 = CreateTeam(new TeamModel { Name = "Team1" });
 
-            _repo.Delete(team1.Id);
-
-            Assert.AreEqual("Team2", _repo.GetAllTeams().Single().Name);
+            Assert.IsTrue(createResult1);
+            Assert.IsFalse(createResult2);
         }
 
         [TestMethod]
-        public void DeletingMissingTeamIsSilentlyIgnored()
+        public void DuplicateMemberIsSilentlyIgnored()
         {
-            var team1 = new TeamModel { Name = "Team1", Description = "Test Team" };
-            _repo.Create(team1);
+            var newMember = AddUserFred();
+            var createResult = CreateTeam(new TeamModel { Name = "Team1", Members = new[] { newMember, newMember } });
 
-            _repo.Delete(Guid.NewGuid());
-
-            Assert.AreEqual("Team1", _repo.GetAllTeams().Single().Name);
-        }
-
-        private UserModel AddUserFred()
-        {
-            EFMembershipService memberService = new EFMembershipService { CreateContext = GetContext };
-            memberService.CreateUser("fred", "letmein", "Fred", "FredBlogs", "fred@aol");
-            return memberService.GetUserModel("fred");
-        }
-
-        private BonoboGitServerContext GetContext()
-        {
-            return _connection.GetContext();
-        }
-
-        protected void InitialiseTestObjects()
-        {
-            _repo = new EFTeamRepository {CreateContext = () => _connection.GetContext()};
-            new AutomaticUpdater().RunWithContext(_connection.GetContext());
+            Assert.IsTrue(createResult);
+            Assert.AreEqual(1, _repo.GetAllTeams().Single().Members.Length);
         }
     }
 }

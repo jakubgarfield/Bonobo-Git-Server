@@ -42,12 +42,35 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         }
 
         [TestMethod]
-        public void GetRepoWithDifferentCases()
+        public void NewRepoNameIsUnique()
+        {
+            _repo.Create(MakeRepo("abc"));
+            Assert.IsTrue(_repo.NameIsUnique("x", Guid.Empty));
+        }
+
+        [TestMethod]
+        public void DuplicateRepoNameIsNotUniqueEvenIfCaseDiffers()
+        {
+            _repo.Create(MakeRepo("abc"));
+            Assert.IsFalse(_repo.NameIsUnique("ABC", Guid.Empty));
+        }
+
+        [TestMethod]
+        public void DuplicateRepoNameIsAllowedIfCurrentRepo()
+        {
+            var repo = MakeRepo("abc");
+            _repo.Create(repo);
+            Assert.IsTrue(_repo.NameIsUnique("ABC", repo.Id));
+        }
+
+        [TestMethod]
+        public void GetRepoIsCaseInsensitive()
         {
             var model = MakeRepo("aaa");
             Assert.IsTrue(_repo.Create(model));
             Assert.AreEqual(model.Id, _repo.GetRepository("aaa").Id);
             Assert.AreEqual(model.Id, _repo.GetRepository("aAa").Id);
+            Assert.AreEqual(model.Id, _repo.GetRepository("AAA").Id);
         }
 
         [TestMethod]

@@ -12,6 +12,7 @@
 {
     <fieldset class="deleteForm">
         @Html.HiddenFor(m => m.Name)
+        @Html.HiddenFor(m => m.Id)
         <div class="pure-controls">
             <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Delete_Back</a>
             <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-trash-o"></i> @Resources.Delete_Confirm</button>

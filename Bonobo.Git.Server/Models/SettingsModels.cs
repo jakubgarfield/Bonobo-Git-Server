@@ -5,6 +5,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Attributes;
+using System.Web.Mvc;
 
 namespace Bonobo.Git.Server.Models
 {
@@ -44,6 +45,7 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Settings_Global_LinksUrl")]
         public string LinksUrl { get; set; }
 
+        [Remote("IsValidRegex", "Validation")]
         [IsValidRegex]
         [Display(ResourceType = typeof(Resources), Name = "Settings_Global_LinksRegex")]
         public string LinksRegex { get; set; }

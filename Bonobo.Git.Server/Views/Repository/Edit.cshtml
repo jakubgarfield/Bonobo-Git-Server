@@ -28,11 +28,13 @@ else
     @using (Html.BeginForm("Edit", "Repository", FormMethod.Post, new { @class = "pure-form pure-form-aligned", enctype = "multipart/form-data" }))
     {
         @Html.ValidationSummary(false, Resources.Repository_Edit_Fail)
-
+        @Html.HiddenFor(m => m.Id)
+        
         <fieldset>
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.Name)
                 @Html.TextBoxFor(m => m.Name)
+                @Html.ValidationMessageFor(m => m.Name)
             </div>
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.Group)
@@ -91,6 +93,7 @@ else
                         attribs = new { @class = "medium", disabled = "" };
                     }
                     @Html.TextBoxFor(m => m.LinksRegex, attribs);
+                    @Html.ValidationMessageFor(m => m.LinksRegex);
                 }
             </div>
             <div class="pure-control-group">

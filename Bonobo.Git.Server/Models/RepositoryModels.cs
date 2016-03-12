@@ -93,6 +93,7 @@ namespace Bonobo.Git.Server.Models
 
         public Guid Id { get; set; }
 
+        [Remote("UniqueNameRepo", "Validation", AdditionalFields="Id", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Duplicate_Name")]
         [UniqueRepoName]
         [RegularExpression(RepositoryModel.NameValidityRegex, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_FileName_Regex")]
         [FileName(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_FileName")]
@@ -145,6 +146,7 @@ namespace Bonobo.Git.Server.Models
         public string GitUrl { get; set; }
         public string PersonalGitUrl { get; set; }
 
+        [Remote("IsValidRegex", "Validation")]
         [IsValidRegex]
         [Display(ResourceType = typeof(Resources), Name = "Settings_Global_LinksRegex")]
         public string LinksRegex { get; set; }

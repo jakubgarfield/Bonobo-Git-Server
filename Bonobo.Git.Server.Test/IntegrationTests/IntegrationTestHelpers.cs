@@ -101,6 +101,8 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
         {
             _app.NavigateTo<AccountController>(c => c.Delete(userId));
             _app.FindFormFor<UserModel>().Submit();
+            _app.WaitForElementToBeVisible(By.CssSelector("div.summary-success"), TimeSpan.FromSeconds(1));
+            _app.UrlShouldMapTo<AccountController>(c => c.Index());
         }
 
         public IEnumerable<UserModel> CreateUsers(int count = 1, int start = 0, [CallerMemberName] string baseuname = "")
@@ -135,6 +137,14 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             return users;
         }
 
+        public static void DeleteTeam(MvcWebApp app, Guid Id)
+        {
+            app.NavigateTo<TeamController>(c => c.Delete(Id));
+            app.FindFormFor<TeamEditModel>().Submit();
+            app.WaitForElementToBeVisible(By.CssSelector("div.summary-success"), TimeSpan.FromSeconds(1));
+            app.UrlShouldMapTo<TeamController>(c => c.Index());
+        }
+
         public IEnumerable<TeamModel> CreateTeams(int count = 1, int start = 0, [CallerMemberName] string baseTeamname = "")
         {
             baseTeamname = MakeName(baseTeamname);
@@ -160,6 +170,10 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
         {
             _app.NavigateTo<RepositoryController>(c => c.Delete(guid));
             _app.FindFormFor<RepositoryDetailModel>().Submit();
+
+            _app.WaitForElementToBeVisible(By.CssSelector("div.summary-success"), TimeSpan.FromSeconds(1));
+
+            _app.UrlShouldMapTo<RepositoryController>(c => c.Index(null, null));
 
             // make sure it no longer is listed
             bool has_repo = false;
