@@ -315,7 +315,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 CreateAndAddFiles(git);
 
                 // Enable the push-to-create option
-                SetGlobalSetting(x => x.AllowPushToCreate, true);
+                ITH.SetGlobalSetting(x => x.AllowPushToCreate, true);
 
                 RunGitOnRepo(git, "push origin master").ExpectSuccess();
 
@@ -325,6 +325,111 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             });
         }
 
+        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        public void LinkifyGlobalWorks()
+        {
+
+            ForAllGits(git =>
+            {
+
+                var repo_id = ITH.CreateRepositoryOnWebInterface(RepositoryName);
+                ITH.SetGlobalSetting(m => m.LinksRegex, @"#(\d)(\d+)");
+                ITH.SetGlobalSetting(m => m.LinksUrl, @"http://some.url/{0}{1}{2}");
+                app.NavigateTo<RepositoryController>(c => c.Edit(repo_id));
+                var form = app.FindFormFor<RepositoryDetailModel>();
+                ITH.SetCheckbox(form.Field(f => f.LinksUseGlobal).Field, true);
+                form.Submit();
+
+
+                CloneEmptyRepositoryWithCredentials(git);
+                CreateIdentity(git);
+                CreateAndAddTestFiles(git, 1);
+                RunGitOnRepo(git, "push origin master").ExpectSuccess();
+
+                app.NavigateTo<RepositoryController>(c => c.Commits(repo_id, null, 1));
+                var display = app.FindDisplayFor<RepositoryCommitsModel>();
+                var links = app.Browser.FindElementsByCssSelector("a.linkified");
+                foreach (var link in links)
+                {
+                    Assert.AreEqual("http://some.url/#12341234", link.GetAttribute("href"));
+                }
+
+                ITH.DeleteRepositoryUsingWebsite(repo_id);
+            });
+
+        }
+
+        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        public void LinkifyRepoOverridesGlobal()
+        {
+
+            ForAllGits(git =>
+            {
+
+                ITH.SetGlobalSetting(m => m.LinksRegex, @"#(\d)(\d+)");
+                ITH.SetGlobalSetting(m => m.LinksUrl, @"http://some.url/{0}{1}{2}");
+
+                var repo_id = ITH.CreateRepositoryOnWebInterface(RepositoryName);
+
+                app.NavigateTo<RepositoryController>(c => c.Edit(repo_id));
+                var form = app.FindFormFor<RepositoryDetailModel>();
+                ITH.SetCheckbox(form.Field(f => f.LinksUseGlobal).Field, false);
+                form.Field(f => f.LinksRegex).SetValueTo(@"#\d+");
+                form.Field(f => f.LinksUrl).SetValueTo(@"http://otherurl.here/{0}");
+                form.Submit();
+
+
+                CloneEmptyRepositoryWithCredentials(git);
+                CreateIdentity(git);
+                CreateAndAddTestFiles(git, 1);
+                RunGitOnRepo(git, "push origin master").ExpectSuccess();
+
+                app.NavigateTo<RepositoryController>(c => c.Commits(repo_id, null, 1));
+                var display = app.FindDisplayFor<RepositoryCommitsModel>();
+                var links = app.Browser.FindElementsByCssSelector("a.linkified");
+                foreach (var link in links)
+                {
+                    Assert.AreEqual("http://otherurl.here/#1234", link.GetAttribute("href"));
+                }
+
+                ITH.DeleteRepositoryUsingWebsite(repo_id);
+            });
+
+        }
+        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        public void LinkifyRepoEmptyGeneratesNoLinks()
+        {
+
+            ForAllGits(git =>
+            {
+
+                ITH.SetGlobalSetting(m => m.LinksRegex, @"#(\d)(\d+)");
+                ITH.SetGlobalSetting(m => m.LinksUrl, @"http://some.url/{0}{1}{2}");
+
+                var repo_id = ITH.CreateRepositoryOnWebInterface(RepositoryName);
+
+                app.NavigateTo<RepositoryController>(c => c.Edit(repo_id));
+                var form = app.FindFormFor<RepositoryDetailModel>();
+                ITH.SetCheckbox(form.Field(f => f.LinksUseGlobal).Field, false);
+                form.Field(f => f.LinksRegex).SetValueTo("");
+                form.Field(f => f.LinksUrl).SetValueTo("");
+                form.Submit();
+
+
+                CloneEmptyRepositoryWithCredentials(git);
+                CreateIdentity(git);
+                CreateAndAddTestFiles(git, 1);
+                RunGitOnRepo(git, "push origin master").ExpectSuccess();
+
+                app.NavigateTo<RepositoryController>(c => c.Commits(repo_id, null, 1));
+                var display = app.FindDisplayFor<RepositoryCommitsModel>();
+                var links = app.Browser.FindElementsByCssSelector("a.linkified");
+                Assert.AreEqual(0, links.Count);
+                ITH.DeleteRepositoryUsingWebsite(repo_id);
+            });
+
+        }
+        
         /// <summary>
         /// Helper to run a test for every installed Git instance
         /// </summary>
@@ -347,12 +452,6 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             }
         }
 
-        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
-        public void NavigateReposWithDropdown()
-        {
-            
-        }
-
         private void PushFiles(GitInstance git, bool success)
         {
             var res = RunGitOnRepo(git, "push origin master");
@@ -368,7 +467,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
         private void SetAnonPush(bool allowAnonymousPush)
         {
-            SetGlobalSetting(f => f.AllowAnonymousPush, allowAnonymousPush);
+            ITH.SetGlobalSetting(f => f.AllowAnonymousPush, allowAnonymousPush);
         }
 
         private void SetGlobalAnonPush(GitInstance git, bool allowAnonymousPush)
@@ -390,7 +489,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 CreateRandomFile(Path.Combine(RepositoryDirectory, "file" + i), 0);
             }
             RunGitOnRepo(git, "add .").ExpectSuccess();
-            RunGitOnRepo(git, "commit -m \"Commit me!\"").ExpectSuccess();
+            RunGitOnRepo(git, "commit -m \"Commit me! For linikfy tests: #1234\"").ExpectSuccess();
         }
 
         private void CloneRepoAnon(GitInstance git, bool success)
@@ -415,15 +514,6 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             var form = app.FindFormFor<RepositoryDetailModel>();
             var repo_clone = form.Field(f => f.AllowAnonymous);
             ITH.SetCheckbox(repo_clone.Field, allow);
-            form.Submit();
-            ITH.AssertThatNoValidationErrorOccurred();
-        }
-
-        private void SetGlobalSetting(Expression<Func<GlobalSettingsModel, bool>> optionExpression, bool value)
-        {
-            app.NavigateTo<SettingsController>(c => c.Index());
-            var form = app.FindFormFor<GlobalSettingsModel>();
-            ITH.SetCheckbox(form.Field(optionExpression).Field, value);
             form.Submit();
             ITH.AssertThatNoValidationErrorOccurred();
         }

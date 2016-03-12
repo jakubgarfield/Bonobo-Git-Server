@@ -66,8 +66,18 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
+        public Repository()
+        {
+            LinksUseGlobal = true;
+        }
+
         public bool AuditPushUser { get; set; }
-        
+
+        public string LinksRegex { get; set; }
+        public string LinksUrl { get; set; }
+        public bool LinksUseGlobal { get; set; }
+
+
         /// <summary>
         /// Correct a repository name have the same case as it has in the database
         /// If the repo is not in the database, then the name is returned unchanged
@@ -100,5 +110,6 @@ namespace Bonobo.Git.Server.Data
             // our job to worry about that
             return incomingRepositoryName;
         }
+
     }
 }

@@ -25,6 +25,7 @@ backup of your App_Data folder before you update.
 * New diagnostic page at /home/diagnostics to help with support
 * Claims names are now more consistent with typical ADFS usage #488
 * Added following environment variables: `AUTH_USER_TEAMS`, `AUTH_USER_ROLES`, and `AUTH_USER_DISPLAYNAME`. See the FAQ for more information. #495
+* The linkify option for commit messages can now be set on a per repo basis
 
 ### Bugfixes
 

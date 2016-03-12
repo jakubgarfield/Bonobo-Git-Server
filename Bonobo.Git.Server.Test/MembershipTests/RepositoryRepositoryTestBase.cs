@@ -48,7 +48,6 @@ namespace Bonobo.Git.Server.Test.MembershipTests
             Assert.IsTrue(_repo.Create(model));
             Assert.AreEqual(model.Id, _repo.GetRepository("aaa").Id);
             Assert.AreEqual(model.Id, _repo.GetRepository("aAa").Id);
-            Assert.AreEqual(null, _repo.GetRepository("aAa", StringComparison.Ordinal));
         }
 
         [TestMethod]

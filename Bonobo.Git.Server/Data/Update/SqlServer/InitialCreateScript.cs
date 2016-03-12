@@ -16,6 +16,9 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
                             [Description] VarChar(255) Null,
                             [Anonymous] Bit Not Null,
                             [AllowAnonymousPush] Integer Default 3 Not Null,
+                            [LinksRegex] VarChar(255) Not Null,
+                            [LinksUrl] VarChar(255) Not Null,
+                            [LinksUseGlobal] Bit Default 1 Not Null,
                             Constraint [PK_Repository] Primary Key ([Name])
                         );
                     END

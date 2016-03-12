@@ -1458,6 +1458,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use global linkify settings.
+        /// </summary>
+        public static string Repository_Detail_LinksUseGlobal {
+            get {
+                return ResourceManager.GetString("Repository_Detail_LinksUseGlobal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Git URL.
         /// </summary>
         public static string Repository_Detail_Location {
@@ -2435,6 +2444,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Validation_FileName_Regex {
             get {
                 return ResourceManager.GetString("Validation_FileName_Regex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The provided regex has an error. {0}.
+        /// </summary>
+        public static string Validation_Invalid_Regex {
+            get {
+                return ResourceManager.GetString("Validation_Invalid_Regex", resourceCulture);
             }
         }
         
