@@ -102,7 +102,9 @@ nav.branches ul li:hover ul { z-index: 99999; display: list-item; position: abso
 nav.branches ul li:hover ul li { float: none; }
 .Commits nav.branches ul li { display: inline-block; float: none;}
 .Commits nav.branches ul li:hover ul li { display: block; float: none;}
-.tag a:before, .branches a.tag:before { content: '\f02b'; font-family: FontAwesome; margin-right: 0.25em; margin-left: 0.5em; }
+.tag a:before, .branches a.tag:before { content: '\f02b'; font-family: FontAwesome; margin-right: 0.25em; margin-left: 0.5em; white-space:nowrap; }
+Tags .tag a { background-color: rgba(148, 190, 214, 1); border-radius: 5px; color: white; font-size: 1.2em; font-weight: bold; padding-right: 0.5em; margin-right: 0.25em; margin-top: 0.2em; display: inline-block; }
+
 
 .links a { color: maroon; }
 .links a:before { content: '\f0c1'; font-family: FontAwesome; margin-right: 0.25em; margin-left: 0.5em; }
@@ -155,7 +157,7 @@ nav.branches ul li:hover ul li { float: none; }
 .commit .metadata { text-align: right;}
 .commit h2 {width: 780px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .commit h2 a:hover { text-decoration: none; color: #777;}
-.commit { border-bottom: 1px solid #f6f6f6; }
+.commit { border-bottom: 1px solid #a6a6a6; padding-bottom: 3px; }
 
 .Commit em { font-style: normal;}
 .Commit .item { font-family: Consolas, monospace; font-size: 0.8em;}

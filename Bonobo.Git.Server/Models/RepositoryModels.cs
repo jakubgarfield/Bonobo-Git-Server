@@ -233,6 +233,11 @@ namespace Bonobo.Git.Server.Models
 
     public class RepositoryCommitModel
     {
+        public RepositoryCommitModel()
+        {
+            Links = new List<string>();
+        }
+
         public string Name { get; set; }
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_ID")]
