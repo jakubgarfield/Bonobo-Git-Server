@@ -20,19 +20,21 @@ namespace Bonobo.Git.Server.Test.IntegrationTests
             get { return !Succeeded && StdErr.Contains(Resources[MsysgitResources.Definition.AuthenticationFailedError]); }
         }
 
-        public void ExpectSuccess()
+        public GitResult ExpectSuccess()
         {
             if (!Succeeded)
             {
                 Assert.Fail("Git operation failed with exit code {0}, stderr {1}", ExitCode, StdErr);
             }
+            return this;
         }
 
-        public void ErrorMustMatch(MsysgitResources.Definition resource, params object[] args)
+        public GitResult ErrorMustMatch(MsysgitResources.Definition resource, params object[] args)
         {
             var expected = string.Format(Resources[resource], args).Trim();
             var actual = StdErr.Trim();
             Assert.AreEqual(expected, actual, "Git operation StdErr mismatch");
+            return this;
         }
     }
 }
