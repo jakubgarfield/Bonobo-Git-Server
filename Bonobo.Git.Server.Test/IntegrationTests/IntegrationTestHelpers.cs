@@ -16,6 +16,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using System.Runtime.CompilerServices;
 using System.Linq.Expressions;
+using System.Web.Mvc;
 
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
@@ -292,5 +293,13 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             SetCheckbox(field.Field, (bool)value);
             form.Submit();
         }
-     }
+
+        internal static void SetElementAttribute(IWebElement element, string attName, string attValue)
+        {
+            MvcWebApp.Driver.GetDriver()
+                .ExecuteScript("arguments[0].setAttribute(arguments[1], arguments[2]);", 
+                element, attName, attValue);
+        }
+    }
+
 }

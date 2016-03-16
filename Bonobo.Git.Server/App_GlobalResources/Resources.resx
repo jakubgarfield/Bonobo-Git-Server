@@ -928,4 +928,7 @@
   <data name="Validation_Invalid_Regex" xml:space="preserve">
     <value>The provided regex has an error. {0}</value>
   </data>
+  <data name="Repository_Edit_InvalidAnonymousPushMode" xml:space="preserve">
+    <value>Invalid value provided.</value>
+  </data>
 </root>
