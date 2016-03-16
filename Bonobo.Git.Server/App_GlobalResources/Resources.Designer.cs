@@ -1593,6 +1593,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid value provided..
+        /// </summary>
+        public static string Repository_Edit_InvalidAnonymousPushMode {
+            get {
+                return ResourceManager.GetString("Repository_Edit_InvalidAnonymousPushMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Repository_Edit_Submit {

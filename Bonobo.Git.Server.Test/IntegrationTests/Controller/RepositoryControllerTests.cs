@@ -269,5 +269,41 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             var input = app.Browser.FindElementByCssSelector("input#LinksRegex");
             Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
         }
+
+        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        public void AnonymousPushModeNotAcceptInvalidValueWhenEditingRepo()
+        {
+
+            var repo_id = ITH.CreateRepositoryOnWebInterface(ITH.MakeName());
+            app.NavigateTo<RepositoryController>(c => c.Edit(repo_id));
+            var form = app.FindFormFor<RepositoryDetailModel>();
+            ITH.SetCheckbox(form.Field(f => f.AllowAnonymous).Field, true);
+            var select = new SelectElement(form.Field(f => f.AllowAnonymousPush).Field);
+
+            select.SelectByValue(((int)RepositoryPushMode.Global).ToString());
+
+            ITH.SetElementAttribute(select.Options[(int)RepositoryPushMode.Global], "value", "47");
+            form.Submit();
+
+            ITH.AssertThatValidationErrorContains(Resources.Repository_Edit_InvalidAnonymousPushMode);
+        }
+
+        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        public void AnonymousPushModeNotAcceptInvalidValueWhenCreatingRepo()
+        {
+
+            app.NavigateTo<RepositoryController>(c => c.Create());
+            var form = app.FindFormFor<RepositoryDetailModel>();
+            form.Field(f => f.Name).SetValueTo(ITH.MakeName());
+            ITH.SetCheckbox(form.Field(f => f.AllowAnonymous).Field, true);
+            var select = new SelectElement(form.Field(f => f.AllowAnonymousPush).Field);
+
+            select.SelectByValue(((int)RepositoryPushMode.Global).ToString());
+
+            ITH.SetElementAttribute(select.Options[(int)RepositoryPushMode.Global], "value", "47");
+            form.Submit();
+
+            ITH.AssertThatValidationErrorContains(Resources.Repository_Edit_InvalidAnonymousPushMode);
+        }
     }
 }

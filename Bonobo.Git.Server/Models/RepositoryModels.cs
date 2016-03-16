@@ -133,6 +133,7 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Anonymous")]
         public bool AllowAnonymous { get; set; }
 
+        [EnumDataType(typeof(RepositoryPushMode), ErrorMessageResourceType=typeof(Resources), ErrorMessageResourceName="Repository_Edit_InvalidAnonymousPushMode")]
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_AllowAnonymousPush")]
         public RepositoryPushMode AllowAnonymousPush { get; set; }
 
