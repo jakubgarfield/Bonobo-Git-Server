@@ -4,6 +4,17 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 5.2
+
+**17 March 2016**
+
+### Security
+
+This is an important security release adding a CSRF protection to POST actions in the app. Also, it fixes a token validation on password reset function and adds the CSRF protection there as well.
+
+* add form antiforgery protection - Will Dean
+
+
 ## Version 5.1.1
 
 **12 January 2016**
