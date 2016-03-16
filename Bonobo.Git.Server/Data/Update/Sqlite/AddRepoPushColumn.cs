@@ -11,7 +11,7 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
         {
             get
             {
-                return "ALTER TABLE Repository ADD COLUMN [AllowAnonymousPush] INTEGER DEFAULT(3)";
+                return string.Format("ALTER TABLE Repository ADD COLUMN [AllowAnonymousPush] INTEGER DEFAULT({0})", (int)RepositoryPushMode.Global);
             }
         }
 
