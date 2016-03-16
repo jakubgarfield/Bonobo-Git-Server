@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="~/favicon.ico?v=2" type="image/x-icon" />
     <title>@ViewBag.Title :: @UserConfiguration.Current.GetSiteTitle()</title>
-    @Styles.Render("~/Content/bundled.css")
+    @Styles.Render("~/Content/bundledCss")
     @if (UserConfiguration.Current.HasCustomSiteLogo)
     {
     <style>
@@ -71,7 +71,7 @@
         </div>
     </div>
 
-    @Scripts.Render("~/bundled.js")
+    @Scripts.Render("~/bundledJs")
     @RenderSection("scripts", required: false)
 </body>
 </html>
