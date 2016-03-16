@@ -19,10 +19,6 @@ namespace Bonobo.Git.Server.Git.GitService
                 {
                     throw new Exception("Unexpected number of bytes read");
                 }
-                if (outputStream.Read(buff5, 0, buff5.Length) != buff5.Length)
-                {
-                    throw new Exception("Unexpected number of bytes read");
-                }
 
                 var firstChars = Encoding.ASCII.GetString(buff5);
                 hasError = firstChars == "error";
