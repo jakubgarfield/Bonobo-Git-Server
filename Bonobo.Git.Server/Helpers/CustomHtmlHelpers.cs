@@ -30,16 +30,17 @@ namespace Bonobo.Git.Server.Helpers
         public static MvcHtmlString DisplayEnum(this HtmlHelper helper, Enum e)
         {
             string result = "[[" + e.ToString() + "]]";
-
-            var display = e.GetType()
-                       .GetMember(e.ToString()).First()
-                       .GetCustomAttributes(false)
-                       .OfType<DisplayAttribute>()
-                       .LastOrDefault();
-
-            if (display != null)
+            var memberInfo = e.GetType().GetMember(e.ToString()).FirstOrDefault();
+            if (memberInfo != null)
             {
-                result = display.GetName();
+                var display = memberInfo.GetCustomAttributes(false)
+                    .OfType<DisplayAttribute>()
+                    .LastOrDefault();
+
+                if (display != null)
+                {
+                    result = display.GetName();
+                }
             }
 
             return MvcHtmlString.Create(result);
