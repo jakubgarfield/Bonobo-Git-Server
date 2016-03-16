@@ -36,6 +36,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index(GlobalSettingsModel model)
         {

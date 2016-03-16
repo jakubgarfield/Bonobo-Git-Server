@@ -37,6 +37,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Edit(TeamEditModel model)
         {           
@@ -61,6 +62,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Create(TeamEditModel model)
         {
@@ -94,6 +96,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(TeamEditModel model)
         {

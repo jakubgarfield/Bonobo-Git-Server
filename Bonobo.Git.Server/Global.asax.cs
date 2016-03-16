@@ -27,6 +27,8 @@ using System.Runtime.Caching;
 using Bonobo.Git.Server.Attributes;
 using Microsoft.Practices.Unity.Mvc;
 using System.Web.Configuration;
+using System.Security.Claims;
+using System.Web.Helpers;
 
 namespace Bonobo.Git.Server
 {
@@ -88,6 +90,8 @@ namespace Bonobo.Git.Server
 
             try
             {
+                AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Upn;
+
                 new AutomaticUpdater().Run();
                 new RepositorySynchronizer().Run();
             }
@@ -233,7 +237,7 @@ namespace Bonobo.Git.Server
         }
 
 
-#if true ||  !DEBUG
+#if !DEBUG
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception exception = Server.GetLastError();

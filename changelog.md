@@ -49,6 +49,18 @@ backup of your App_Data folder before you update.
 * UserModel and User entity class name properties made more consistent #470
 * Far fewer catch-all claueses silently swallowing exceptions
 
+
+## Version 5.2
+
+**17 March 2016**
+
+### Security
+
+This is an important security release adding a CSRF protection to POST actions in the app. Also, it fixes a token validation on password reset function and adds the CSRF protection there as well.
+
+* add form antiforgery protection - Will Dean
+
+
 ## Version 5.1.1
 
 **12 January 2016**

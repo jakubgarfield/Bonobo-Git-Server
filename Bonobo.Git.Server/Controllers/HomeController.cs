@@ -56,14 +56,30 @@ namespace Bonobo.Git.Server.Controllers
             return View();
         }
 
+        private string CheckForPasswordResetUsername(string digest)
+        {
+            var cacheObj = MvcApplication.Cache[HttpUtility.UrlDecode(digest)];
+            if (cacheObj == null)
+            {
+                return null;
+            }
+            return cacheObj.ToString();
+        }
+
         public ActionResult ResetPassword(string digest)
         {
-            digest = HttpUtility.UrlDecode(digest, Encoding.UTF8);
-            var cacheObj = MvcApplication.Cache[digest];
-            if (cacheObj != null)
+            string username = CheckForPasswordResetUsername(digest);
+            if (username != null )
             {
-                var username = cacheObj.ToString();
-                return View(new ResetPasswordModel {Username = username});
+                using (var db = new BonoboGitServerContext())
+                {
+                    var user = db.Users.FirstOrDefault(x => x.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+                    if (user == null)
+                    {
+                        throw new UnauthorizedAccessException("Unknown user " + username);
+                    }
+                    return View(new ResetPasswordModel { Username = username, Digest = digest});
+                }
             }
             else
             {
@@ -73,20 +89,29 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ResetPassword(ResetPasswordModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = MembershipService.GetUserModel(model.Username);
-                if (user == null)
+                var cachedUsername = CheckForPasswordResetUsername(model.Digest);
+                if (cachedUsername == null || cachedUsername != model.Username)
                 {
-                    TempData["ResetSuccess"] = false;
-                    Response.AppendToLog("FAILURE");
+                    throw new UnauthorizedAccessException("Invalid password reset form");
                 }
-                else
+                using (var db = new BonoboGitServerContext())
                 {
-                    MembershipService.UpdateUser(user.Id, null, null, null, null, model.Password);
-                    TempData["ResetSuccess"] = true;
+                    var user = db.Users.FirstOrDefault(x => x.Username.Equals(model.Username, StringComparison.OrdinalIgnoreCase));
+                    if (user == null)
+                    {
+                        TempData["ResetSuccess"] = false;
+                        Response.AppendToLog("FAILURE");
+                    }
+                    else
+                    {
+                        MembershipService.UpdateUser(user.Id, null, null, null, null, model.Password);
+                        TempData["ResetSuccess"] = true;
+                    }
                 }
             }
             return View(model);
@@ -98,6 +123,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ForgotPassword(ForgotPasswordModel model)
         {
             if (ModelState.IsValid)
@@ -151,6 +177,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult LogOn(LogOnModel model)
         {
             if (ModelState.IsValid)

@@ -56,5 +56,8 @@ namespace Bonobo.Git.Server.Models
         [DataType(DataType.Password)]
         [Display(ResourceType = typeof(Resources), Name = "Home_ResetPassword_ConfirmPassword")]
         public string ConfirmPassword { get; set; }
+
+        [HiddenInput]
+        public string Digest { get; set; }
     }
 }

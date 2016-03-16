@@ -6,6 +6,7 @@
 
 @using (Html.BeginForm("Clone", "Repository", new { id = ViewBag.ID }, FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
 {    
+    @Html.AntiForgeryToken()
     @Html.ValidationSummary(false, Resources.Repository_Clone_Fail)
     
     <fieldset>

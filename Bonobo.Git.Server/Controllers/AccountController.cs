@@ -65,6 +65,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(UserDetailModel model)
         {
@@ -123,6 +124,7 @@ namespace Bonobo.Git.Server.Controllers
 
         [HttpPost]
         [WebAuthorize]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(UserEditModel model)
         {
             if (User.Id() != model.Id && !User.IsInRole(Definitions.Roles.Administrator))
@@ -221,6 +223,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(UserCreateModel model)
         {
             if ((Request.IsAuthenticated && !User.IsInRole(Definitions.Roles.Administrator)) || (!Request.IsAuthenticated && !UserConfiguration.Current.AllowAnonymousRegistration))
