@@ -90,8 +90,6 @@ namespace Bonobo.Git.Server
 
             try
             {
-                AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Upn;
-
                 new AutomaticUpdater().Run();
                 new RepositorySynchronizer().Run();
             }
