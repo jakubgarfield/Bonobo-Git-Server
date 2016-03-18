@@ -1755,6 +1755,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tags.
+        /// </summary>
+        public static string Repository_Layout_Tags {
+            get {
+                return ResourceManager.GetString("Repository_Layout_Tags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Repository requires at least one administrator..
         /// </summary>
         public static string Repository_Needs_Administrator {
@@ -1796,6 +1805,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Repository_SwitchBranch {
             get {
                 return ResourceManager.GetString("Repository_SwitchBranch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tags.
+        /// </summary>
+        public static string Repository_Tags_Title {
+            get {
+                return ResourceManager.GetString("Repository_Tags_Title", resourceCulture);
             }
         }
         

@@ -14,6 +14,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
+using System.Web.Mvc;
 
 namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 {
@@ -428,6 +429,44 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 ITH.DeleteRepositoryUsingWebsite(repo_id);
             });
 
+        }
+
+        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        public void CheckTagLinksWorkInViews()
+        {
+            ForAllGits(git =>
+            {
+                var repo_id = ITH.CreateRepositoryOnWebInterface(RepositoryName);
+                CloneEmptyRepositoryWithCredentials(git);
+                CreateIdentity(git);
+                CreateAndAddFiles(git);
+                RunGitOnRepo(git, "push origin master").ExpectSuccess();
+                RunGitOnRepo(git, "tag a HEAD").ExpectSuccess();
+                RunGitOnRepo(git, "push --tags").ExpectSuccess();
+
+                var gitresult = RunGitOnRepo(git, "rev-parse HEAD").ExpectSuccess();
+                var commit_id = gitresult.StdOut.TrimEnd();
+                // check link in Commits
+                app.NavigateTo<RepositoryController>(c => c.Commits(repo_id, string.Empty, 1));
+                var link = app.Browser.FindElementByCssSelector("span.tag a");
+                link.Click();
+                
+                app.UrlShouldMapTo<RepositoryController>(c => c.Commits(repo_id, "a", 1)); 
+
+                // check link in tags
+                app.NavigateTo<RepositoryController>(c => c.Tags(repo_id, string.Empty, 1));
+                link = app.Browser.FindElementByCssSelector("div.tag a");
+                link.Click();
+                app.UrlShouldMapTo<RepositoryController>(c => c.Commits(repo_id, "a", 1)); 
+
+                // check link in single commit
+                app.NavigateTo<RepositoryController>(c => c.Commit(repo_id, commit_id));
+                link = app.Browser.FindElementByCssSelector("span.tag a");
+                link.Click();
+                app.UrlShouldMapTo<RepositoryController>(c => c.Commits(repo_id, "a", 1));
+
+                ITH.DeleteRepositoryUsingWebsite(repo_id);
+            });
         }
         
         /// <summary>

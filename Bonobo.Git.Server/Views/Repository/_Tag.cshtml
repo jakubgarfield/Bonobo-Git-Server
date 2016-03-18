@@ -1,6 +1,12 @@
 ﻿@model RepositoryCommitModel
 @using System.Globalization
 @using Bonobo.Git.Server.Extensions
+<div class="tag" style="margin-top: 0.5em">
+    @foreach (var stag in Model.Tags)
+    {
+        @Html.ActionLink(stag, "Commits", new { id = ViewBag.ID, encodedName = stag, encodedPath = string.Empty })
+    }
+</div>
 <div class="commit pure-g">
     <div class="pure-u-3-5">
         <h2>
@@ -10,31 +16,22 @@
                 <a class="more-commit-info-toggler" onclick="$('#more@(Model.ID)').toggle();">&hellip;</a>
             }
         </h2>
-
         <div class="commitdate">
             @Model.Date.ToString(CultureInfo.InstalledUICulture)
         </div>
         @if (UserConfiguration.Current.HasLinks)
         {
-        <span class="links">
-
-            @foreach (var link in Model.Links)
-            {
-                <a target="_blank" class="linkified" href="@link">@link</a>
-            }
-        </span>
+            <span class="links">
+                @foreach (var link in Model.Links)
+                {
+                    <a target="_blank" href="@string.Format(UserConfiguration.Current.LinksUrl, link)">@link</a>
+                }
+            </span>
         }
-        <span class="tag">
-            @foreach (var stag in Model.Tags)
-            {
-                @Html.ActionLink(stag, "Commits", new { id = ViewBag.ID, encodedName = stag, encodedPath = String.Empty })
-            }
-        </span>
         @if (!string.IsNullOrEmpty(Model.MessageShort))
         {
             <pre style="display:none;" id="more@(Model.ID)">@Model.MessageShort</pre>
         }
-
         <div class="notes">
             @foreach (var note in Model.Notes)
             {

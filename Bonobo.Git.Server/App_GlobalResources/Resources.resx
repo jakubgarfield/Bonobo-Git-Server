@@ -931,4 +931,10 @@
   <data name="Repository_Edit_InvalidAnonymousPushMode" xml:space="preserve">
     <value>Invalid value provided.</value>
   </data>
+  <data name="Repository_Tags_Title" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="Repository_Layout_Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
 </root>

@@ -1,0 +1,22 @@
+﻿@using Bonobo.Git.Server.Extensions
+@model RepositoryCommitsModel
+@{
+    Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
+    ViewBag.Title = Resources.Repository_Tags_Title;
+}
+@if (Model != null)
+{
+    <div class="repositoryContent">
+        @Html.Partial("_BranchSwitcher")
+        @if (Model.Commits != null)
+        {
+            var grid = new WebGrid(rowsPerPage: 10, canPage:true, canSort:false);
+            grid.Bind(Model.Commits, null, false, (int)(ViewBag.TotalCount ?? 0));
+            @grid.GetHtml(displayHeader: false, mode: WebGridPagerModes.All, 
+                columns: grid.Columns(
+                    grid.Column(format: item => Html.Partial("_Tag", (RepositoryCommitModel)item.Value))
+                    )
+                )
+        }
+    </div>
+}

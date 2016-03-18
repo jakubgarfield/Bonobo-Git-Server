@@ -58,6 +58,28 @@ namespace Bonobo.Git.Server
             return commitLogQuery.Select(s => ToModel(s)).ToList();
         }
 
+
+        internal IEnumerable<RepositoryCommitModel> GetTags(string name, int page, int p, out string referenceName, out int totalCount)
+        {
+            var commit = GetCommitByName(name, out referenceName);
+            if (commit == null)
+            {
+                totalCount = 0;
+                return Enumerable.Empty<RepositoryCommitModel>();
+            }
+            var tags = _repository.Tags;
+            var commits = new HashSet<RepositoryCommitModel>(AnonymousComparer.Create<RepositoryCommitModel>((x, y) => x.ID == y.ID, obj => obj.ID.GetHashCode()));
+            foreach (var tag in tags)
+            {
+                var c = _repository.Lookup(tag.Target.Id) as Commit;
+                commits.Add(ToModel(c));
+
+            }
+            totalCount = commits.Count();
+
+            return commits.OrderByDescending(x => x, (x, y) => x.Date.CompareTo(y.Date));
+        }
+
         public RepositoryCommitModel GetCommitDetail(string name)
         {
             string referenceName;
@@ -306,8 +328,7 @@ namespace Bonobo.Git.Server
                 TreeID = commit.Tree.Sha,
                 Parents = commit.Parents.Select(i => i.Sha).ToArray(),
                 Tags = tags,
-                Notes = (from n in commit.Notes select new RepositoryCommitNoteModel(n.Message, n.Namespace)).ToList(),
-                Links = null
+                Notes = (from n in commit.Notes select new RepositoryCommitNoteModel(n.Message, n.Namespace)).ToList()
             };
 
             if (!withDiff)

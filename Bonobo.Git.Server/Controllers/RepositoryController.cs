@@ -420,7 +420,27 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Commits(Guid id, string encodedName, int page = 1)
+        public ActionResult Tags(Guid id, string encodedName, int page = 1)
+        {
+            page = page >= 1 ? page : 1;
+            
+            ViewBag.ID = id;
+            ViewBag.ShowShortMessageOnly = true;
+            var repo = RepositoryRepository.GetRepository(id);
+            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))
+            {
+                var name = PathEncoder.Decode(encodedName);
+                string referenceName;
+                int totalCount;
+                var commits = browser.GetTags(name, page, 10, out referenceName, out totalCount);
+                PopulateBranchesData(browser, referenceName);
+                ViewBag.TotalCount = totalCount;
+                return View(new RepositoryCommitsModel { Commits = commits, Name = repo.Name });
+            }
+        }
+
+        [WebAuthorizeRepository]
+        public ActionResult Commits(Guid id, string encodedName, int page)
         {
             page = page >= 1 ? page : 1;
             
