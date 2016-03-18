@@ -283,6 +283,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             var field = form.Field(optionExpression);
             field.SetValueTo(value);
             form.Submit();
+            AssertSuccessMessageIsDisplayed();
         }
 
         public void SetGlobalSetting<T>(Expression<Func<GlobalSettingsModel, T>> optionExpression, bool value)
@@ -292,13 +293,19 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             var field = form.Field(optionExpression);
             SetCheckbox(field.Field, (bool)value);
             form.Submit();
+            AssertSuccessMessageIsDisplayed();
         }
 
-        internal static void SetElementAttribute(IWebElement element, string attName, string attValue)
+        public static void SetElementAttribute(IWebElement element, string attName, string attValue)
         {
             MvcWebApp.Driver.GetDriver()
                 .ExecuteScript("arguments[0].setAttribute(arguments[1], arguments[2]);", 
                 element, attName, attValue);
+        }
+
+        public void AssertSuccessMessageIsDisplayed(int timeoutSeconds = 1)
+        {
+            _app.WaitForElementToBeVisible(By.CssSelector("div.summary-success"), TimeSpan.FromSeconds(timeoutSeconds));
         }
     }
 
