@@ -1,7 +1,7 @@
 Bonobo Git Server
 ==============================================
 
-[![Build status](https://ci.appveyor.com/api/projects/status/4vyllwtb5i645lrt?svg=true)](https://ci.appveyor.com/project/jakubgarfield/bonobo-git-server)
+[![Build status](https://ci.appveyor.com/api/projects/status/4vyllwtb5i645lrt/branch/master?svg=true)](https://ci.appveyor.com/project/jakubgarfield/bonobo-git-server)
 
 Thank you for downloading Bonobo Git Server. For more information please visit [http://bonobogitserver.com](http://bonobogitserver.com).
 
