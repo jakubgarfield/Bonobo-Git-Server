@@ -7,7 +7,7 @@ using Bonobo.Git.Server.Data;
 namespace Bonobo.Git.Server.Test.UnitTests
 {
     [TestClass]
-    public class DatabaseUpdateTests
+    public class DatabaseUpdateTestsSqlite
     {
         protected IDatabaseTestConnection _connection;
 

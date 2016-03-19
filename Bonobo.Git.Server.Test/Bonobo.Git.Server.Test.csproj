@@ -166,12 +166,13 @@
     <Compile Include="IntegrationTests\MsysgitIntegrationTests.cs" />
     <Compile Include="IntegrationTests\MsysgitResources.cs" />
     <Compile Include="UnitTests\CustomHtmlHelperTest.cs" />
+    <Compile Include="UnitTests\DatabaseUpdateTestsSqlite.cs" />
+    <Compile Include="UnitTests\DatabaseUpdateTestsSqlServer.cs" />
     <Compile Include="UnitTests\PathEncoderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestCategories.cs" />
     <Compile Include="UnitTests\PasswordServiceTest.cs" />
     <Compile Include="UnitTests\GitAuthorizeAttributeTest.cs" />
-    <Compile Include="UnitTests\DatabaseUpdateTests.cs" />
     <Compile Include="UnitTests\UserExtensionsTests.cs" />
     <Compile Include="UnitTests\UserModelTest.cs" />
   </ItemGroup>
@@ -182,7 +183,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="AllowDBResetWeb.config" />
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
