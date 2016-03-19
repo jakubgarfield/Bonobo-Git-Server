@@ -237,7 +237,6 @@ namespace Bonobo.Git.Server
         }
 
 
-#if !DEBUG
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception exception = Server.GetLastError();
@@ -279,7 +278,6 @@ namespace Bonobo.Git.Server
                 errorController.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
             }
         }
-#endif
 
         private static string GetRootPath(string path)
         {
