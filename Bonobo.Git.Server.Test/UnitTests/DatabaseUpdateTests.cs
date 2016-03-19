@@ -17,7 +17,6 @@ namespace Bonobo.Git.Server.Test.UnitTests
             _connection = new SqliteTestConnection();
         }
 
-        [Ignore]
         [TestMethod]
         public void RunUpdateOn_v1_2_0_25ddf80()
         {
