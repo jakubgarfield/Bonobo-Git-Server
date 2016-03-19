@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
-    <value>Account with this username already exists.</value>
+    <value>Ya existe una cuenta con ese nombre de usuario.</value>
   </data>
   <data name="Account_Create_AccountInformation" xml:space="preserve">
     <value>Información de la cuenta</value>
@@ -580,10 +580,10 @@
     <value>Reinicializar</value>
   </data>
   <data name="Settings_Global_AllowAnonymousPush" xml:space="preserve">
-    <value>Permitir a los usuarios anonimos empujar este repositorio.</value>
+    <value>Permitir a los usuarios anónimos hacer push a este repositorio.</value>
   </data>
   <data name="Settings_Global_AllowAnonymousRegistration" xml:space="preserve">
-    <value>Permitir registro anonimo.</value>
+    <value>Permitir registro anónimo.</value>
   </data>
   <data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
     <value>Si la casilla no está marcada sólo administrador puede agregar nuevos usuarios y el registro de usuario anónimo está desactivado.</value>
@@ -592,7 +592,7 @@
     <value>Permitir la creación de repositorios a los usuarios.</value>
   </data>
   <data name="Settings_Global_AllowUserRepositoryCreation_Hint" xml:space="preserve">
-    <value>Si la casilla está marcada sólo el administrador puede crear repositorios.</value>
+    <value>Si la casilla no está marcada sólo el administrador puede crear repositorios.</value>
   </data>
   <data name="Settings_Global_DirectoryHint" xml:space="preserve">
     <value>Todos los repositorios git se almacenan en este directorio.</value>
@@ -617,6 +617,42 @@
   </data>
   <data name="Settings_RepositoryPathUnauthorized" xml:space="preserve">
     <value>Tú no tienes privilegios suficientes para escribir en esta carpeta. Por favor selecciona otra carpeta.</value>
+  </data>
+  <data name="Settings_Global_AllowPushToCreate" xml:space="preserve">
+    <value>Permitir push para crear repositorios</value>
+  </data>
+  <data name="Settings_Global_AllowPushToCreate_Hint" xml:space="preserve">
+    <value>Si la casilla está marcada, los aministradores pueden hacer push para crear nuevos repositorios.</value>
+  </data>
+  <data name="Settings_Global_IsCommitAuthorAvatarVisible" xml:space="preserve">
+    <value>Mostrar avatar del autor de los commits.</value>
+  </data>
+  <data name="Settings_Global_LinksRegex" xml:space="preserve">
+    <value>Expresión regular de enlace</value>
+  </data>
+  <data name="Settings_Global_LinksUrl" xml:space="preserve">
+    <value>URL de enlace</value>
+  </data>
+  <data name="Settings_Global_LinksUrl_Hint" xml:space="preserve">
+    <value>Establecer expresión regular para parsear los mensajes de commits a URLs.</value>
+  </data>
+  <data name="Settings_Global_SiteFooterMessage" xml:space="preserve">
+    <value>Mensaje del footer</value>
+  </data>
+  <data name="Settings_Global_SiteFooterMessage_Hint" xml:space="preserve">
+    <value>Mensaje que se muestra en el footer de la página.</value>
+  </data>
+  <data name="Settings_Global_SiteLogoUrl" xml:space="preserve">
+    <value>URL del logo</value>
+  </data>
+  <data name="Settings_Global_SiteLogoUrl_Hint" xml:space="preserve">
+    <value>URL del logo que se utilizará en este sitio. Se pueden utilizar rutas relativas (~).</value>
+  </data>
+  <data name="Settings_Global_SiteTitle" xml:space="preserve">
+    <value>Título del sitio</value>
+  </data>
+  <data name="Settings_Global_SiteTitle_Hint" xml:space="preserve">
+    <value>Título para este sitio.</value>
   </data>
   <data name="Team_Create_Back" xml:space="preserve">
     <value>Volver a la lista</value>
