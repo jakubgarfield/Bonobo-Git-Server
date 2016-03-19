@@ -9,6 +9,7 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
         {
             get 
             {
+                // If you modify this scheme make sure to introduce an unit test for the new scheme.
                 return string.Format(@"
 
                     CREATE TABLE IF NOT EXISTS [Repository] (
