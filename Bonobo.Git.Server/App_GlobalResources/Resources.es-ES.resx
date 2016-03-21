@@ -374,7 +374,7 @@
     <value>Los administradores tienen acceso completo al repositorio. También pueden modificar o eliminar metadatos repositorio repositorio.</value>
   </data>
   <data name="Repository_AllowAnonymousHint" xml:space="preserve">
-    <value>Si se permite el acceso anónimo a todo el mundo puede tirar o clonar el repositorio y ver los metadatos del repositorio. El empuje sólo está disponible si es especificado en la Configuración global.</value>
+    <value>Si se permite el acceso anónimo todo el mundo puede tirar o clonar el repositorio y ver los metadatos del repositorio. El empuje sólo está disponible si es especificado en la Configuración global.</value>
   </data>
   <data name="Repository_Commits_Title" xml:space="preserve">
     <value>Cambios</value>
@@ -460,7 +460,7 @@
     <value>Administradores</value>
   </data>
   <data name="Repository_Detail_Anonymous" xml:space="preserve">
-    <value>Anonimo</value>
+    <value>Anónimo</value>
   </data>
   <data name="Repository_Detail_Back" xml:space="preserve">
     <value>Volver a la lista</value>
@@ -749,5 +749,26 @@
   </data>
   <data name="Validation_FileName_Regex" xml:space="preserve">
     <value>Only characters, numbers, minus and underscore are allowed for "{0}".</value>
+  </data>
+  <data name="Repository_Detail_AllowAnonymousPush" xml:space="preserve">
+    <value>Push anónimo</value>
+  </data>
+  <data name="Repository_Detail_Group" xml:space="preserve">
+    <value>Grupo</value>
+  </data>
+  <data name="Repository_Go_To_Dropdown" xml:space="preserve">
+    <value>Ir a repositorio</value>
+  </data>
+  <data name="Repository_Index_SortGroup" xml:space="preserve">
+    <value>Orden</value>
+  </data>
+  <data name="Repository_Rescan_Directory" xml:space="preserve">
+    <value>Reescanear directorio</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Buscar</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sí</value>
   </data>
 </root>
