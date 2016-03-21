@@ -308,15 +308,15 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         {
             ForAllGits(git =>
             {
+                // Enable the push-to-create option
+                ITH.SetGlobalSetting(x => x.AllowPushToCreate, true);
+
                 // Create a repo locally
                 Directory.CreateDirectory(RepositoryDirectory);
                 InitRepository(git);
                 Environment.CurrentDirectory = RepositoryDirectory;
                 CreateIdentity(git);
                 CreateAndAddFiles(git);
-
-                // Enable the push-to-create option
-                ITH.SetGlobalSetting(x => x.AllowPushToCreate, true);
 
                 RunGitOnRepo(git, "push origin master").ExpectSuccess();
 
