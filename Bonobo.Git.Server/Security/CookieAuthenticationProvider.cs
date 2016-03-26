@@ -24,7 +24,7 @@ namespace Bonobo.Git.Server.Security
             {
                 AuthenticationType = CookieAuthenticationDefaults.AuthenticationType,
                 LoginPath = new PathString("/Home/LogOn"),
-                ExpireTimeSpan = TimeSpan.FromHours(1),
+                ExpireTimeSpan = TimeSpan.FromDays(3),
                 SlidingExpiration = true,
                 Provider = new Microsoft.Owin.Security.Cookies.CookieAuthenticationProvider
                 {
@@ -42,7 +42,8 @@ namespace Bonobo.Git.Server.Security
         public override void SignIn(string username, string returnUrl = null)
         {
             ClaimsIdentity identity = new ClaimsIdentity(GetClaimsForUser(username), CookieAuthenticationDefaults.AuthenticationType);
-            HttpContext.Current.GetOwinContext().Authentication.SignIn(identity);
+            var authprop = new AuthenticationProperties { IsPersistent = true, RedirectUri = returnUrl };
+            HttpContext.Current.GetOwinContext().Authentication.SignIn(authprop, identity);
             if (!String.IsNullOrEmpty(returnUrl))
             {
                 HttpContext.Current.Response.Redirect(returnUrl, false);

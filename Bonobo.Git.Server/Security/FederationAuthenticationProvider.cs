@@ -53,7 +53,12 @@ namespace Bonobo.Git.Server.Security
 
         public override void SignIn(string username, string returnUrl)
         {
-            HttpContext.Current.GetOwinContext().Authentication.Challenge(new AuthenticationProperties { RedirectUri = returnUrl }, WsFederationAuthenticationDefaults.AuthenticationType);
+            var authprop = new AuthenticationProperties { IsPersistent = true, RedirectUri = returnUrl };
+            HttpContext.Current.GetOwinContext().Authentication.Challenge(authprop, WsFederationAuthenticationDefaults.AuthenticationType);
+            if (!String.IsNullOrEmpty(returnUrl))
+            {
+                HttpContext.Current.Response.Redirect(returnUrl, false);
+            }
         }
 
         public override void SignOut()
