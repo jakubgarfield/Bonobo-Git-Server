@@ -166,6 +166,8 @@
     <Compile Include="IntegrationTests\MsysgitIntegrationTests.cs" />
     <Compile Include="IntegrationTests\MsysgitResources.cs" />
     <Compile Include="UnitTests\CustomHtmlHelperTest.cs" />
+    <Compile Include="UnitTests\DatabaseUpdateTestsSqlite.cs" />
+    <Compile Include="UnitTests\DatabaseUpdateTestsSqlServer.cs" />
     <Compile Include="UnitTests\PathEncoderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestCategories.cs" />
@@ -181,7 +183,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="AllowDBResetWeb.config" />
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>

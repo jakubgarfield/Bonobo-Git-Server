@@ -8,6 +8,7 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
         {
             get
             {
+                // If you modify this scheme make sure to introduce an unit test for the new scheme.
                 return string.Format(@"
                     IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  TABLE_NAME = 'Repository'))
                     BEGIN

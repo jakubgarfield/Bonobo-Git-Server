@@ -103,7 +103,7 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
                                            UNIQUE,
                     Password VARCHAR (255) NOT NULL,
                     PasswordSalt VARCHAR (255) NOT NULL,
-                    Email    VARCHAR (255) NOT NULL,
+                    Email    VARCHAR (255) NOT NULL
                 );
 
                 CREATE TABLE Team (
