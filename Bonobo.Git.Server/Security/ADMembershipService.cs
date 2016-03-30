@@ -41,7 +41,7 @@ namespace Bonobo.Git.Server.Security
 
                 using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, domain))
                 {
-                    if (principalContext.ValidateCredentials(username, password))
+                    if (principalContext.ValidateCredentials(username, password, ContextOptions.Negotiate))
                     {
                         using (UserPrincipal user = UserPrincipal.FindByIdentity(principalContext, username))
                         {

@@ -118,7 +118,7 @@ namespace Bonobo.Git.Server
                     var adUser = UserPrincipal.FindByIdentity(pc, username);
                     if (adUser != null)
                     {
-                        if (pc.ValidateCredentials(username, password))
+                        if (pc.ValidateCredentials(username, password, ContextOptions.Negotiate))
                         {
                             httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username.Replace("\\", "!"))));
                             return true;
