@@ -39,10 +39,10 @@ namespace Bonobo.Git.Server.Security
             });
         }
 
-        public override void SignIn(string username, string returnUrl = null)
+        public override void SignIn(string username, string returnUrl = null, bool rememberMe = false)
         {
             ClaimsIdentity identity = new ClaimsIdentity(GetClaimsForUser(username), CookieAuthenticationDefaults.AuthenticationType);
-            var authprop = new AuthenticationProperties { IsPersistent = true, RedirectUri = returnUrl };
+            var authprop = new AuthenticationProperties { IsPersistent = rememberMe, RedirectUri = returnUrl };
             HttpContext.Current.GetOwinContext().Authentication.SignIn(authprop, identity);
             if (!String.IsNullOrEmpty(returnUrl))
             {

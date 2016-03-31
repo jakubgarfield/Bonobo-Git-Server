@@ -51,9 +51,9 @@ namespace Bonobo.Git.Server.Security
             });
         }
 
-        public override void SignIn(string username, string returnUrl)
+        public override void SignIn(string username, string returnUrl, bool rememberMe)
         {
-            var authprop = new AuthenticationProperties { IsPersistent = true, RedirectUri = returnUrl };
+            var authprop = new AuthenticationProperties { IsPersistent = rememberMe, RedirectUri = returnUrl };
             HttpContext.Current.GetOwinContext().Authentication.Challenge(authprop, WsFederationAuthenticationDefaults.AuthenticationType);
             if (!String.IsNullOrEmpty(returnUrl))
             {

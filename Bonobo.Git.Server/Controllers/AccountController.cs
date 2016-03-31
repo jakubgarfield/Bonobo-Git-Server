@@ -248,7 +248,7 @@ namespace Bonobo.Git.Server.Controllers
                     }
                     else
                     {
-                        AuthenticationProvider.SignIn(model.Username, Url.Action("Index", "Home"));
+                        AuthenticationProvider.SignIn(model.Username, Url.Action("Index", "Home"), false);
                         return new EmptyResult();
                     }
                 }
