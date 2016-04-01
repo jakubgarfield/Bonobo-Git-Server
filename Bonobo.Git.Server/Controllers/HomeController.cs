@@ -186,7 +186,7 @@ namespace Bonobo.Git.Server.Controllers
                 switch (result)
                 {
                     case ValidationResult.Success:
-                        AuthenticationProvider.SignIn(model.Username, Url.IsLocalUrl(model.ReturnUrl) ? model.ReturnUrl : Url.Action("Index", "Home"));
+                        AuthenticationProvider.SignIn(model.Username, Url.IsLocalUrl(model.ReturnUrl) ? model.ReturnUrl : Url.Action("Index", "Home"), model.RememberMe);
                         Response.AppendToLog("SUCCESS");
                         if (Request.IsLocal && model.DatabaseResetCode > 0 && model.Username == "admin" && ConfigurationManager.AppSettings["AllowDBReset"] == "true" )
                         {
