@@ -1,6 +1,7 @@
 ﻿@using Bonobo.Git.Server.Extensions
 @using System.Web.Mvc.Html
 @using Bonobo.Git.Server.Models
+@using Bonobo.Git.Server.Data
 
 @model Dictionary<string, RepositoryDetailModel[]>
 @{
@@ -73,7 +74,7 @@
 {
     <div class="summary-success">
         <p>@Resources.Repository_Create_Success</p>
-				<p>@Html.ActionLink(string.Format(@Resources.Repository_Create_Success_Go_To, TempData["SuccessfullyCreatedRepositoryName"].ToString()), "Detail", new { id = TempData["SuccessfullyCreatedRepositoryId"].ToString() })</p>
+                <p>@Html.ActionLink(string.Format(@Resources.Repository_Create_Success_Go_To, TempData["SuccessfullyCreatedRepositoryName"].ToString()), "Detail", new { id = TempData["SuccessfullyCreatedRepositoryId"].ToString() })</p>
     </div>
 }
 @if (TempData["CloneSuccess"] as bool? == true)
@@ -112,38 +113,64 @@
                     </h2>
                 </div>
             }
-
+            // https://dusted.codes/making-font-awesome-awesome-using-icons-without-i-tags
             <div class="pure-u-1">
                 @{
                     var permitted = new WebGrid(source: model.Value, defaultSort: "Name", rowsPerPage: 15);
 
-                    var columns = permitted.Columns(
-                        permitted.Column(
-                            format: item => Html.Raw(item.Logo.Exists ? string.Format("<img src='data:image/png;base64,{0}' class='repo-logo' />", item.Logo.Base64Image) : ""),
-                            style: "logo"
-                        ),
-                        permitted.Column("Name",
-                            header: typeof (RepositoryDetailModel).GetDisplayValue("Name"),
-                            format: (item) => Html.ActionLink(
-                                    GetNameToDisplay((string) item.Name, (RepositoryDetailStatus) item.Status),
-                                                                    
-                                    "Detail",
-                                    new { id = item.Id },
-                                    new
-                                    {
-                                        @class = "RepositoryName detail" + (item.Logo.Exists ? " customLogo" : ""),
-                                        @id = "repo_" + item.Id,
-                                    }
-                                    )
-                        ),
-                        
-                        permitted.Column("Description", typeof (RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string) item.Description).Length > 100)) ? ((string) item.Description).Substring(0, 100) + " ... " : item.Description, style: "description"),
-                        permitted.Column(format: (item) => Html.Raw("<button class=\"pure-button pure-button-primary copy-to-clip-button\" title=\""+Resources.Repository_Git_Url_Copy+"\" data-clipboard-text=\""+Html.Encode(item.GitUrl)+"\"><i class=\"fa fa-copy\" ></i></button>"), style: "action"),
-                        permitted.Column(format: (item) => Html.Raw("<button class=\"pure-button pure-button-primary copy-to-clip-button\" title=\""+Resources.Repository_Personal_Git_Url_Copy+"\" data-clipboard-text=\""+Html.Encode(item.PersonalGitUrl)+"\"><i class=\"fa fa-user\"></i><i class=\"fa fa-copy\"></i></button>"), style: "action"),
-                        permitted.Column(format: (item) => Html.ActionLink(" ", "Edit", new {id = item.Id}, new {@class = "edit", title = Resources.Grid_Edit}), style: "action"),
-                        permitted.Column(format: (item) => Html.ActionLink(" ", "Delete", new {id = item.Id}, new {@class = "delete", title = Resources.Grid_Delete}), style: "action")
-                        );
 
+                    var columns = new List<WebGridColumn>();
+                    columns.Add(permitted.Column(
+                        format: item => Html.Raw(item.Logo.Exists ? string.Format("<img src='data:image/png;base64,{0}' class='repo-logo' />", item.Logo.Base64Image) : ""),
+                        style: "logo"
+                    ));
+                    columns.Add(permitted.Column("Name",
+                        header: typeof(RepositoryDetailModel).GetDisplayValue("Name"),
+                        format: (item) => Html.ActionLink(
+                                GetNameToDisplay((string)item.Name, (RepositoryDetailStatus)item.Status),
+
+                                "Detail",
+                                new { id = item.Id },
+                                new
+                                {
+                                    @class = "RepositoryName detail" + (item.Logo.Exists ? " customLogo" : ""),
+                                    @id = "repo_" + item.Id,
+                                }
+                                )));
+
+                    if (User.IsInRole(Definitions.Roles.Administrator))
+                    {
+                        columns.Add(permitted.Column(
+                            format: (item) =>
+                            {
+                                var repo = (RepositoryDetailModel)item.Value;
+                                var anonColor = repo.AllowAnonymous ? "rgba(0, 120, 230, 1)" : "lightblue";
+                                var anonTitle = Resources.Repository_Detail_Anonymous + ": " + (repo.AllowAnonymous ? Resources.Yes : Resources.No);
+
+                                var pushSetting = UserConfiguration.Current.AllowAnonymousPush;
+                                if(repo.AllowAnonymousPush != RepositoryPushMode.Global){
+                                    pushSetting = repo.AllowAnonymousPush == RepositoryPushMode.Yes;
+                                }
+                                
+                                var pushIcon = repo.AllowAnonymousPush == RepositoryPushMode.Global ? "fa-globe" : "fa-sign-in";
+                                var pushTitle = Resources.Repository_Detail_AllowAnonymousPush + ": " + (pushSetting ? Resources.Yes : Resources.No); 
+                                var pushColor = pushSetting ? "rgba(0, 120, 230, 1)" : "lightblue";
+                                var ret = Html.Raw("<span class='fa-fw'>").ToHtmlString();
+                                ret += Html.Raw("<div class='fa fa-sign-out' style='display: block; color: " + anonColor + "' title='" + anonTitle + "'></div>").ToHtmlString();
+                                ret += Html.Raw("<div class='fa " + pushIcon + "' style='display: block; color: " + pushColor + "' title='" + pushTitle + "'></div>").ToHtmlString();
+                                ret += Html.Raw("</span>").ToHtmlString();
+                                return Html.Raw(ret);
+                            }
+                        ));
+                    }
+
+                    columns.Add(permitted.Column("Description", typeof(RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string)item.Description).Length > 100)) ? ((string)item.Description).Substring(0, 100) + " ... " : item.Description, style: "description"));
+                    columns.Add(permitted.Column(format: (item) => Html.Raw("<button class=\"pure-button pure-button-primary copy-to-clip-button\" title=\"" + Resources.Repository_Git_Url_Copy + "\" data-clipboard-text=\"" + Html.Encode(item.GitUrl) + "\"><i class=\"fa fa-copy\" ></i></button>"), style: "action"));
+                    columns.Add(permitted.Column(format: (item) => Html.Raw("<button class=\"pure-button pure-button-primary copy-to-clip-button\" title=\"" + Resources.Repository_Personal_Git_Url_Copy + "\" data-clipboard-text=\"" + Html.Encode(item.PersonalGitUrl) + "\"><i class=\"fa fa-user\"></i><i class=\"fa fa-copy\"></i></button>"), style: "action"));
+                    columns.Add(permitted.Column(format: (item) => Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @class = "edit", title = Resources.Grid_Edit }), style: "action"));
+                    columns.Add(permitted.Column(format: (item) => Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @class = "delete", title = Resources.Grid_Delete }), style: "action"));
+
+                    permitted.Columns(columns.ToArray());
                     @permitted.GetHtml(
                         tableStyle: "pure-table repositories",
                         columns: columns,

@@ -28,6 +28,7 @@ backup of your App_Data folder before you update.
 * The linkify option for commit messages can now be set on a per repo basis
 * Verifies that username, repository and team names are unique as you type them
 * Verifies as you type regex entered for linkification
+* Added icons to repository listing indicating anonymous push/pull status
 
 ### Bugfixes
 
