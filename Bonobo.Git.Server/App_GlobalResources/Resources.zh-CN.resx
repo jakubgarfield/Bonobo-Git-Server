@@ -682,6 +682,12 @@
   <data name="Settings_Global_AllowUserRepositoryCreation_Hint" xml:space="preserve">
     <value>如果复选框未被选中，只有管理员可以建立资料库</value>
   </data>
+  <data name="Settings_Global_AllowPushToCreate" xml:space="preserve">
+    <value>允许推送并建立资料库</value>
+  </data>
+  <data name="Settings_Global_AllowPushToCreate_Hint" xml:space="preserve">
+    <value>如果复选框被选中，管理员可以推送一个新的资料库 </value>
+  </data>
   <data name="Delete_Back" xml:space="preserve">
     <value>返回</value>
   </data>
@@ -858,5 +864,77 @@
   </data>
   <data name="Repository_Detail_RemoveLogo" xml:space="preserve">
     <value>移除标志</value>
+  </data>
+  <data name="Settings_Global_LinksRegex" xml:space="preserve">
+    <value>链接正则表达式</value>
+  </data>
+  <data name="Settings_Global_LinksUrl" xml:space="preserve">
+    <value>链接 URL 地址</value>
+  </data>
+  <data name="Settings_Global_LinksUrl_Hint" xml:space="preserve">
+    <value>设置正则表达式以解析用于提交信息中的链接和 URL 地址的发起</value>
+  </data>
+  <data name="Account_Edit_Username" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+  <data name="Repository_Create_Success_Go_To" xml:space="preserve">
+    <value>跳转到“{0}”</value>
+  </data>
+  <data name="Repository_Needs_Administrator" xml:space="preserve">
+    <value>资料库最起码需要一位管理员。</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="Repository_Git_Url_Copy" xml:space="preserve">
+    <value>复制资料库 URL 地址</value>
+  </data>
+  <data name="Repository_No_Group" xml:space="preserve">
+    <value>没有分组</value>
+  </data>
+  <data name="Repository_Personal_Git_Url_Copy" xml:space="preserve">
+    <value>复制个人资料库 URL 地址</value>
+  </data>
+  <data name="Repository_Rescan_Directory" xml:space="preserve">
+    <value>重新扫描目录</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="Repository_Go_To_Dropdown" xml:space="preserve">
+    <value>调转到资料库</value>
+  </data>
+  <data name="Validation_Duplicate_Name" xml:space="preserve">
+    <value>该名称已经被使用。</value>
+  </data>
+  <data name="Repository_Detail_AllowAnonymousPush" xml:space="preserve">
+    <value>匿名推送</value>
+  </data>
+  <data name="Repository_AllowAnonymousPushHint" xml:space="preserve">
+    <value>如果在你使用的全局设置选项集下“全局的”被选中，而且匿名被授权访问，则允许匿名用户推送到该资料库。</value>
+  </data>
+  <data name="Global" xml:space="preserve">
+    <value>全局的</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>否</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>是</value>
+  </data>
+  <data name="Repository_Detail_LinksUseGlobal" xml:space="preserve">
+    <value>使用全局的链接化设置</value>
+  </data>
+  <data name="Validation_Invalid_Regex" xml:space="preserve">
+    <value>提供的正则表达式有一个错误。 {0}</value>
+  </data>
+  <data name="Repository_Edit_InvalidAnonymousPushMode" xml:space="preserve">
+    <value>提供了无效的值。</value>
+  </data>
+  <data name="Repository_Tags_Title" xml:space="preserve">
+    <value>标签</value>
+  </data>
+  <data name="Repository_Layout_Tags" xml:space="preserve">
+    <value>标签</value>
   </data>
 </root>
