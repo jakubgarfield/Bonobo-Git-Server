@@ -872,7 +872,12 @@
     <value>Link Url</value>
   </data>
   <data name="Settings_Global_LinksUrl_Hint" xml:space="preserve">
-    <value>Set Regex to parse commit message for links and url to launch</value>
+    <value>This uses the C# regex library to parse the provided regex. Capturing groups are supported.
+
+The pattern is {0} for the whole regex match.
+{1} onwards is each capturing group.
+
+The regulare C# string formatting rules apply: To get {} in your link you need to write {{}}.</value>
   </data>
   <data name="Account_Edit_Username" xml:space="preserve">
     <value>Username</value>

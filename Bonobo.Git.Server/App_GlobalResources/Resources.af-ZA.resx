@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
     <value>[Åččőūŉŧ ŵįŧĥ ŧĥįş ūşęřŉämę äľřęäđy ęχįşŧş. !!! !!!]</value>
@@ -584,6 +584,9 @@
   <data name="Repository_Detail_IsCurrentUserAdmin" xml:space="preserve">
     <value>[Åđmįŉ !!! !!! !!! !!!]</value>
   </data>
+  <data name="Repository_Detail_LinksUseGlobal" xml:space="preserve">
+    <value>[Ůşę ģľőþäľ ľįŉĸįƒy şęŧŧįŉģş !!! !!!]</value>
+  </data>
   <data name="Repository_Detail_Location" xml:space="preserve">
     <value>[Ğįŧ ŮŖĿ !!! !!! !!! !!! !!! !!!]</value>
   </data>
@@ -617,9 +620,6 @@
   <data name="Repository_Detail_Yes" xml:space="preserve">
     <value>[Ÿęş !!! !!!]</value>
   </data>
-  <data name="Repository_Duplicate_Name" xml:space="preserve">
-    <value>[Å řępőşįŧőřy ŵįŧĥ ŧĥįş ŉämę äľřęäđy ęχįşŧş! !!! !!!]</value>
-  </data>
   <data name="Repository_Edit_Back" xml:space="preserve">
     <value>[ßäčĸ !!! !!! !!!]</value>
   </data>
@@ -628,6 +628,9 @@
   </data>
   <data name="Repository_Edit_Fail" xml:space="preserve">
     <value>[Ŗępőşįŧőřy ūpđäŧę ŵäş ūŉşūččęşşƒūľ. Pľęäşę čőřřęčŧ ŧĥę ęřřőřş äŉđ ŧřy äģäįŉ. !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Edit_InvalidAnonymousPushMode" xml:space="preserve">
+    <value>[Ĩŉväľįđ väľūę přővįđęđ. !!! !!!]</value>
   </data>
   <data name="Repository_Edit_Submit" xml:space="preserve">
     <value>[Ŝävę !!! !!! !!!]</value>
@@ -680,6 +683,9 @@
   <data name="Repository_Layout_Commits" xml:space="preserve">
     <value>[Cőmmįŧş !!! !!! !!! !!! !!! !!!]</value>
   </data>
+  <data name="Repository_Layout_Tags" xml:space="preserve">
+    <value>[Ŧäģş !!! !!! !!!]</value>
+  </data>
   <data name="Repository_Needs_Administrator" xml:space="preserve">
     <value>[Ŗępőşįŧőřy řęqūįřęş äŧ ľęäşŧ őŉę äđmįŉįşŧřäŧőř. !!! !!! !!!]</value>
   </data>
@@ -694,6 +700,9 @@
   </data>
   <data name="Repository_SwitchBranch" xml:space="preserve">
     <value>[Ŝŵįŧčĥ čūřřęŉŧ þřäŉčĥ !!! !!!]</value>
+  </data>
+  <data name="Repository_Tags_Title" xml:space="preserve">
+    <value>[Ŧäģş !!! !!! !!!]</value>
   </data>
   <data name="Repository_TeamsHint" xml:space="preserve">
     <value>[Ŧęämş ĥävę äččęşş ŧő ŧĥę řępőşįŧőřy. Ŧĥęy čäŉ čľőŉę, pūşĥ őř pūľľ äŉđ vįęŵ řępőşįŧőřy męŧäđäŧä. Åľľ ūşęřş įŉ ŧĥę ŧęäm čäŉ äččęşş ŧĥįş řępőşįŧőřy. !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!]</value>
@@ -752,6 +761,12 @@
   <data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
     <value>[Ĩƒ čĥęčĸþőχ įş ūŉčĥęčĸęđ, őŉľy äđmįŉįşŧřäŧőřş čäŉ äđđ ŉęŵ ūşęřş äŉđ äŉőŉymőūş ūşęř řęģįşŧřäŧįőŉ įş đįşäþľęđ. !!! !!! !!! !!! !!! !!! !!!]</value>
   </data>
+  <data name="Settings_Global_AllowPushToCreate" xml:space="preserve">
+    <value>[Åľľőŵ pūşĥ ŧő čřęäŧę řępőşįŧőřįęş !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_AllowPushToCreate_Hint" xml:space="preserve">
+    <value>[Ĩƒ čĥęčĸþőχ įş čĥęčĸęđ, Åđmįŉįşŧřäŧőřş čäŉ pūşĥ ä ŉęŵ řępőşįŧőřy  !!! !!! !!! !!!]</value>
+  </data>
   <data name="Settings_Global_AllowUserRepositoryCreation" xml:space="preserve">
     <value>[Åľľőŵ ūşęř řępőşįŧőřy čřęäŧįőŉ !!! !!!]</value>
   </data>
@@ -777,7 +792,12 @@
     <value>[Ŀįŉĸ Ůřľ !!! !!! !!! !!! !!! !!! !!!]</value>
   </data>
   <data name="Settings_Global_LinksUrl_Hint" xml:space="preserve">
-    <value>[Ŝęŧ Ŗęģęχ ŧő päřşę čőmmįŧ męşşäģę ƒőř ľįŉĸş äŉđ ūřľ ŧő ľäūŉčĥ !!! !!! !!! !!!]</value>
+    <value>[Ŧĥįş ūşęş ŧĥę C# řęģęχ ľįþřäřy ŧő päřşę ŧĥę přővįđęđ řęģęχ. Cäpŧūřįŉģ ģřőūpş äřę şūppőřŧęđ.
+
+Ŧĥę päŧŧęřŉ įş {0} ƒőř ŧĥę ŵĥőľę řęģęχ mäŧčĥ.
+{1} őŉŵäřđş įş ęäčĥ čäpŧūřįŉģ ģřőūp.
+
+Ŧĥę řęģūľäřę C# şŧřįŉģ ƒőřmäŧŧįŉģ řūľęş äppľy: Ŧő ģęŧ {} įŉ yőūř ľįŉĸ yőū ŉęęđ ŧő ŵřįŧę {{}}. !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!]</value>
   </data>
   <data name="Settings_Global_RepositoryPath" xml:space="preserve">
     <value>[Ŗępőşįŧőřy Đįřęčŧőřy !!! !!!]</value>
@@ -896,6 +916,9 @@
   <data name="Validation_Compare" xml:space="preserve">
     <value>["{0}" äŉđ "{1}" mūşŧ ĥävę ŧĥę şämę väľūę. !!! !!!]</value>
   </data>
+  <data name="Validation_Duplicate_Name" xml:space="preserve">
+    <value>[Ŧĥįş ŉämę ĥäş äľřęäđy þęęŉ ŧäĸęŉ. !!! !!!]</value>
+  </data>
   <data name="Validation_Email" xml:space="preserve">
     <value>["{0}" įş ŉőŧ ä väľįđ ęmäįľ äđđřęşş. !!! !!!]</value>
   </data>
@@ -904,6 +927,9 @@
   </data>
   <data name="Validation_FileName_Regex" xml:space="preserve">
     <value>[Øŉľy čĥäřäčŧęřş, ŉūmþęřş, đőŧş, mįŉūş äŉđ ūŉđęřşčőřę äřę äľľőŵęđ ƒőř "{0}". !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Validation_Invalid_Regex" xml:space="preserve">
+    <value>[Ŧĥę přővįđęđ řęģęχ ĥäş äŉ ęřřőř. {0} !!! !!!]</value>
   </data>
   <data name="Validation_Required" xml:space="preserve">
     <value>["{0}" įş mäŉđäŧőřy. !!! !!!]</value>

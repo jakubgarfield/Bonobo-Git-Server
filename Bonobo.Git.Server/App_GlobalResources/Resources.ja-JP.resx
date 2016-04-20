@@ -664,7 +664,7 @@
     <value>ユーザ名</value>
   </data>
   <data name="Account_Index_Create" xml:space="preserve">
-  <value>新しいユーザを作成</value>
+    <value>新しいユーザを作成</value>
   </data>
   <data name="Account_Index_Users" xml:space="preserve">
     <value>ユーザ</value>
@@ -810,7 +810,6 @@
     <value>メールを送信しました</value>
   </data>
   <data name="Home_ForgotPassword_Failed" xml:space="preserve">
-    <value>Forgotten Password Failed. Please correct errors and try again.</value>
     <value>パスワードリセット要求に失敗しました。再実行するか、システム管理者へ連絡して下さい。</value>
   </data>
   <data name="Home_ForgotPassword_ForgotPassword" xml:space="preserve">
@@ -870,8 +869,5 @@
   </data>
   <data name="Settings_Global_LinksUrl" xml:space="preserve">
     <value>リンクURL</value>
-  </data>
-  <data name="Settings_Global_LinksUrl_Hint" xml:space="preserve">
-    <value>コミットメッセージをパースしてリンクやURLを開く為に用いる正規表現を設定</value>
   </data>
 </root>

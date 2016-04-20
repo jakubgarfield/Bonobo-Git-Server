@@ -871,9 +871,6 @@
   <data name="Settings_Global_LinksUrl" xml:space="preserve">
     <value>链接 URL 地址</value>
   </data>
-  <data name="Settings_Global_LinksUrl_Hint" xml:space="preserve">
-    <value>设置正则表达式以解析用于提交信息中的链接和 URL 地址的发起</value>
-  </data>
   <data name="Account_Edit_Username" xml:space="preserve">
     <value>用户名</value>
   </data>
