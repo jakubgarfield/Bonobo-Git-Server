@@ -22,7 +22,7 @@
                 }
                 else
                 {
-                    @Html.ActionLink(dirs[i], "Tree", new { encodedPath = PathEncoder.Encode(currentPath, allowSlash: true), id = ViewBag.ID })
+                    @Html.ActionLink(dirs[i], "Tree", new { encodedName = PathEncoder.Encode((string)ViewData["referenceName"]), encodedPath = PathEncoder.Encode(currentPath, allowSlash: true), id = ViewBag.ID })
                 }
 
                 if (i + 1 != dirs.Length)

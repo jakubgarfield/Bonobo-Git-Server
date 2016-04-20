@@ -4,6 +4,8 @@ using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Test.IntegrationTests;
 using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using SpecsFor.Mvc;
 using System;
@@ -484,6 +486,51 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             });
         }
         
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
+        public void CanNavigateIntoBranchesFolder()
+        {
+            ForAllGits(git =>
+            {
+                var repo = ITH.CreateRepositoryOnWebInterface(RepositoryName);
+                CloneEmptyRepositoryWithCredentials(git);
+                CreateIdentity(git);
+                CreateAndAddTestFiles(git, 1);
+                RunGitOnRepo(git, "branch branchX");
+                Directory.CreateDirectory(Path.Combine(RepositoryDirectory, "dir1"));
+                File.Create(Path.Combine(RepositoryDirectory, "dir1", "file1.txt")).Close();
+                RunGitOnRepo(git, "add dir1").ExpectSuccess();
+                RunGitOnRepo(git, "commit -m\"dir1 on master\"").ExpectSuccess();
+                RunGitOnRepo(git, "push --set-upstream origin master").ExpectSuccess();
+                RunGitOnRepo(git, "checkout branchX").ExpectSuccess();
+                Directory.CreateDirectory(Path.Combine(RepositoryDirectory, "dir2"));
+                File.Create(Path.Combine(RepositoryDirectory, "dir2", "file2.txt")).Close();
+                RunGitOnRepo(git, "add dir2").ExpectSuccess();
+                RunGitOnRepo(git, "commit -m\"dir2 on branchX\"").ExpectSuccess();
+                RunGitOnRepo(git, "push --set-upstream origin branchX").ExpectSuccess();
+
+                app.NavigateTo<RepositoryController>(c => c.Tree(repo, null, null));
+                var elements = app.Browser.FindElementsByCssSelector("table#files td.path a.directory");
+                Assert.AreEqual(1, elements.Count);
+                Assert.AreEqual("dir1", elements[0].Text);
+                elements[0].Click();
+                app.WaitForElementToBeVisible(By.CssSelector("nav.branches"), TimeSpan.FromSeconds(1));
+                app.UrlShouldMapTo<RepositoryController>(c => c.Tree(repo, null, "dir1"));
+
+                app.NavigateTo<RepositoryController>(c => c.Tree(repo, "branchX", null));
+                app.WaitForElementToBeVisible(By.CssSelector("nav.branches"), TimeSpan.FromSeconds(1));
+                app.UrlShouldMapTo<RepositoryController>(c => c.Tree(repo, "branchX", null));
+                elements = app.Browser.FindElementsByCssSelector("table#files td.path a.directory");
+                Assert.AreEqual(1, elements.Count);
+                Assert.AreEqual("dir2", elements[0].Text);
+                elements[0].Click();
+                app.WaitForElementToBeVisible(By.CssSelector("nav.branches"), TimeSpan.FromSeconds(1));
+                app.UrlShouldMapTo<RepositoryController>(c => c.Tree(repo, "branchX", "dir2"));
+
+                ITH.DeleteRepositoryUsingWebsite(repo);
+            });
+
+        }
+
         /// <summary>
         /// Helper to run a test for every installed Git instance
         /// </summary>
