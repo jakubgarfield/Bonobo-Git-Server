@@ -1,15 +1,12 @@
 ﻿using System;
 using System.IO;
-using SpecsFor;
+using System.Collections.Generic;
 using SpecsFor.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-using Bonobo.Git.Server;
-using Bonobo.Git.Server.Controllers;
-using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.App_GlobalResources;
+using Newtonsoft.Json;
 
-namespace Bonobo.Git.Server.IntegrationTests
+namespace Bonobo.Git.Server.Test.IntegrationTests
 {
     [TestClass]
     public class AssemblyStartup
@@ -17,12 +14,33 @@ namespace Bonobo.Git.Server.IntegrationTests
         private static SpecsForIntegrationHost _host;
         public static string WebApplicationDirectory;
 
+        private readonly static string ConfigFile = Path.GetFullPath(@"..\..\config.json");
+
+        public static LoadedConfig LoadedConfig; 
+
+        public static LoadedConfig LoadConfiguration()
+        {
+            var creds = new Dictionary<string, Dictionary<string, string>>
+            {
+                {"admin", new Dictionary<string, string>{{ "username", "admin" }, {"password", "admin"} } },
+                {"user", new Dictionary<string, string>{{"username", "user"}, { "password", "uiae"} } }
+            };
+            if (File.Exists(ConfigFile))
+            {
+                creds = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(File.ReadAllText(ConfigFile));
+            }
+            return new LoadedConfig(creds);
+        }
+
+
 #if !NCRUNCH
         [AssemblyInitialize()]
         static public void AssemblyInit(TestContext tc)
         {
             // so we can use the resources in our test even if your language is not en-US
             Resources.Culture = new System.Globalization.CultureInfo("en-US");
+
+            LoadedConfig = LoadConfiguration();
 
             var config = new SpecsForMvcConfig();
             //SpecsFor.Mvc can spin up an instance of IIS Express to host your app 
