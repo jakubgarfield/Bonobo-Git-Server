@@ -10,6 +10,7 @@ using System.Linq;
 namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
     using ITH = IntegrationTestHelpers;
+    using TC = TestCategories;
 
     public class AccountControllerSpecs
     {
@@ -17,7 +18,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         public class AccountControllerTests : IntegrationTestBase
         {
 
-            [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+            [TestMethod, TestCategory(TC.IntegrationTest), TestCategory(TC.StorageInternal)]
             public void UserDetailRequiresLogin()
             {
                 app.NavigateTo<HomeController>(c => c.LogOff());
@@ -28,7 +29,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
                 app.UrlShouldMapTo<HomeController>(c => c.LogOn("/Account/Detail/7479fc09-2c0b-4e93-a2cf-5e4bbf6bab4f"));
             }
 
-            [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+            [TestMethod, TestCategory(TC.IntegrationTest), TestCategory(TC.AuthForms)]
             public void LoginWithoutCredentialFailsWithInvalidMessages()
             {
                 app.NavigateTo<HomeController>(c => c.LogOn("/"));
@@ -43,7 +44,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
                     .Field(f => f.Password).ShouldBeInvalid();
             }
 
-            [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+            [TestMethod, TestCategory(TC.IntegrationTest), TestCategory(TC.StorageInternal)]
             public void UsernameEnsureDuplicationDetectionAsYouTypeWorksOnCreation()
             {
                 var id1 = ITH.CreateUsers().Single();
@@ -59,7 +60,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
                 Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
             }
 
-            [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+            [TestMethod, TestCategory(TC.IntegrationTest), TestCategory(TC.StorageInternal)]
             public void UsernameEnsureDuplicationDetectionAsYouTypeWorksOnEdit()
             {
                 var ids = ITH.CreateUsers(2).ToList();
@@ -77,7 +78,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
                 Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
             }
 
-            [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+            [TestMethod, TestCategory(TC.IntegrationTest), TestCategory(TC.StorageInternal)]
             public void UsernameEnsureDuplicationDetectionStillAllowsEditOtherProperties()
             {
                 var ids = ITH.CreateUsers().ToList();

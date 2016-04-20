@@ -16,7 +16,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
         public class TeamControllerTests : IntegrationTestBase
         {
 
-            [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+            [TestMethod, TestCategory(TestCategories.IntegrationTest)]
             public void TeamNameEnsureDuplicationDetectionAsYouTypeWorksOnCreation()
             {
                 var id1 = ITH.CreateTeams().Single();
@@ -30,7 +30,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
                 Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
             }
 
-            [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+            [TestMethod, TestCategory(TestCategories.IntegrationTest)]
             public void TeamNameEnsureDuplicationDetectionAsYouTypeWorksOnEdit()
             {
                 var teams = ITH.CreateTeams(2).ToList();
@@ -48,7 +48,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
                 Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
             }
 
-            [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+            [TestMethod, TestCategory(TestCategories.IntegrationTest)]
             public void TeamNameEnsureDuplicationDetectionStillAllowsEditOtherProperties()
             {
                 var ids = ITH.CreateTeams().ToList();

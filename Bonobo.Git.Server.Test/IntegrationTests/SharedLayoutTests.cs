@@ -13,7 +13,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests
     [TestClass]
     public class SharedLayoutTests : IntegrationTestBase
     {
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
         public void DropdownNavigationWorks()
         {
             var reponame = ITH.MakeName();

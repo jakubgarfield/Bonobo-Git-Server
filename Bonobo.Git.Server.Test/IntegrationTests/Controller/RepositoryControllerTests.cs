@@ -12,11 +12,12 @@ using System.Linq;
 namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 {
     using ITH = IntegrationTestHelpers;
+    using TC = TestCategories;
 
     [TestClass]
     public class RepositoryControllerTests : IntegrationTestBase
     {
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest), TestCategory(TC.StorageInternal)]
         public void EnsureCheckboxesStayCheckOnCreateError()
         {
             ITH.CreateUsers(1);
@@ -37,7 +38,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             }
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest)]
         public void CreateDuplicateRepoNameDifferentCaseNotAllowed()
         {
             var reponame = ITH.MakeName();
@@ -54,7 +55,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             Assert.AreEqual(Resources.Validation_Duplicate_Name, field.HasValidationMessage().Text);
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest)]
         public void CreateDuplicateRepoNameNotAllowed()
         {
             var reponame = ITH.MakeName();
@@ -71,7 +72,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             Assert.AreEqual(Resources.Validation_Duplicate_Name, field.HasValidationMessage().Text);
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest)]
         public void RenameRepoToExistingRepoNameNotAllowed()
         {
             var reponame = ITH.MakeName();
@@ -91,7 +92,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             Assert.AreEqual(Resources.Validation_Duplicate_Name, validationmsg.Text);
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest)]
         public void RenameRepoToExistingRepoNameNotAllowedDifferentCase()
         {
             var reponame = ITH.MakeName();
@@ -110,7 +111,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             Assert.AreEqual(Resources.Validation_Duplicate_Name, field.HasValidationMessage().Text);
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest)]
         public void RepositoryCanBeSavedBySysAdminWithoutHavingAnyRepoAdmins()
         {
             var repoId = ITH.CreateRepositoryOnWebInterface(ITH.MakeName());
@@ -126,7 +127,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             ITH.AssertThatNoValidationErrorOccurred();
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest)]
         public void RepoAdminCannotRemoveThemselves()
         {
             var user = ITH.CreateUsers().Single();
@@ -159,7 +160,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             ITH.AssertThatValidationErrorContains(Resources.Repository_Edit_CantRemoveYourself);
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest)]
         public void RepoAnonPushDefaultSettingsForRepoCreationShouldBeGlobal()
         {
             app.NavigateTo<RepositoryController>(c => c.Create());
@@ -169,7 +170,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             Assert.AreEqual(RepositoryPushMode.Global.ToString("D"), select.SelectedOption.GetAttribute("value"));
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest)]
         public void SettingsAcceptEmptyStringForRegex()
         {
             ITH.SetGlobalSetting(g => g.LinksRegex, "some_value");
@@ -184,7 +185,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             Assert.AreEqual(false, field.Field.GetAttribute("class").Contains("valid"));
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest)]
         public void DoesNotAcceptBrokenRegexForLinks()
         {
             app.NavigateTo<SettingsController>(c => c.Index());
@@ -196,7 +197,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
                 .Field(f => f.LinksRegex).ShouldBeInvalid();
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest)]
         public void RepoNameEnsureDuplicationDetectionAsYouTypeWorksOnCreation()
         {
             var reponame = ITH.MakeName();
@@ -214,7 +215,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest)]
         public void RepoNameEnsureDuplicationDetectionAsYouTypeWorksOnEdit()
         {
             var reponame = ITH.MakeName();
@@ -234,7 +235,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest)]
         public void RepoNameEnsureDuplicationDetectionStillAllowsEditOtherProperties()
         {
             var reponame = ITH.MakeName();
@@ -250,7 +251,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
                 .Field(f => f.Description).ValueShouldEqual(reponame + "_other");
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest)]
         public void InvalidLinkifyRegexAsYouTypeInRepository()
         {
             var reponame = ITH.MakeName();
@@ -270,7 +271,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             Assert.IsTrue(input.GetAttribute("class").Contains("input-validation-error"));
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest)]
         public void AnonymousPushModeNotAcceptInvalidValueWhenEditingRepo()
         {
 
@@ -288,7 +289,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             ITH.AssertThatValidationErrorContains(Resources.Repository_Edit_InvalidAnonymousPushMode);
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest)]
         public void AnonymousPushModeNotAcceptInvalidValueWhenCreatingRepo()
         {
 

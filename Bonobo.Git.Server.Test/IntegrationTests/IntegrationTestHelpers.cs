@@ -1,22 +1,15 @@
-﻿using System;
+﻿using Bonobo.Git.Server.Controllers;
+using Bonobo.Git.Server.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
+using SpecsFor.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Threading;
-using SpecsFor.Mvc;
-
-using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.Controllers;
-using Bonobo.Git.Server.IntegrationTests;
-using Bonobo.Git.Server.Test.MembershipTests.ADTests;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium;
-using System.Runtime.CompilerServices;
 using System.Linq.Expressions;
-using System.Web.Mvc;
+using System.Runtime.CompilerServices;
+using System.Threading;
 
 
 namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
@@ -24,28 +17,32 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
     public class IntegrationTestHelpers
     {
         private readonly MvcWebApp _app;
+        private readonly LoadedConfig _lc;
 
-        public IntegrationTestHelpers(MvcWebApp app)
+        public IntegrationTestHelpers(MvcWebApp app, LoadedConfig cc)
         {
             _app = app;
+            _lc = cc;
         }
 
         public void LoginAsAdmin()
         {
+            var cred = _lc.getCredentials("admin");
             _app.NavigateTo<HomeController>(c => c.LogOn("/Account"));
             _app.FindFormFor<LogOnModel>()
-                .Field(f => f.Username).SetValueTo("admin")
-                .Field(f => f.Password).SetValueTo("admin")
+                .Field(f => f.Username).SetValueTo(cred.Item1)
+                .Field(f => f.Password).SetValueTo(cred.Item2)
                 .Submit();
             _app.UrlMapsTo<AccountController>(c => c.Index());
         }
 
         public void LoginAndResetDatabase()
         {
+            var cred = _lc.getCredentials("admin");
             _app.NavigateTo<HomeController>(c => c.LogOnWithResetOption("/Account"));
             _app.FindFormFor<LogOnModel>()
-                .Field(f => f.Username).SetValueTo("admin")
-                .Field(f => f.Password).SetValueTo("admin")
+                .Field(f => f.Username).SetValueTo(cred.Item1)
+                .Field(f => f.Password).SetValueTo(cred.Item2)
                 .Field(f => f.DatabaseResetCode).SetValueTo("1")
                 .Submit();
             _app.UrlMapsTo<AccountController>(c => c.Index());
