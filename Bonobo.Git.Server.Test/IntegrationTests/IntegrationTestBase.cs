@@ -10,6 +10,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests
     {
         protected static MvcWebApp app;
         protected static IntegrationTestHelpers ITH;
+        protected static LoadedConfig lc;
 
         [ClassCleanup]
         public static void Cleanup()
@@ -24,7 +25,8 @@ namespace Bonobo.Git.Server.Test.IntegrationTests
             if (app == null)
             {
                 app = new MvcWebApp();
-                ITH = new IntegrationTestHelpers(app);
+                lc = AssemblyStartup.LoadedConfig;
+                ITH = new IntegrationTestHelpers(app, lc);
             }
             Console.WriteLine("TestInit");
             ITH.LoginAndResetDatabase();

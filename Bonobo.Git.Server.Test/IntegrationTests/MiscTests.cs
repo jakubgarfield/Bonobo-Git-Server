@@ -8,10 +8,11 @@ using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
 
 namespace Bonobo.Git.Server.Test.IntegrationTests
 {
+    using TC = TestCategories;
     [TestClass]
     public class MiscTests : IntegrationTestBase
     {
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TC.IntegrationTest), TestCategory(TC.AuthForms)]
         public void EnsureCookiePersistBetweenBrowserRestart()
         {
             app.NavigateTo<HomeController>(c => c.LogOff()); // in case the cookie is set
@@ -50,7 +51,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests
 
             MvcWebApp.Driver.Shutdown();
             app = new MvcWebApp();
-            ITH = new IntegrationTestHelpers(app);
+            ITH = new IntegrationTestHelpers(app, lc);
 
             app.NavigateTo<RepositoryController>(c => c.Index(null, null));
             app.UrlShouldMapTo<HomeController>(c => c.LogOn("/Repository/Index"));
