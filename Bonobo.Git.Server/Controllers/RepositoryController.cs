@@ -279,8 +279,9 @@ namespace Bonobo.Git.Server.Controllers
                     Name = repo.Name,
                     Branch = name,
                     Path = path,
-                    Files = files.OrderByDescending(i => i.IsTree).ThenBy(i => i.Name), 
-                    Readme = readmeTxt
+                    Readme = readmeTxt,
+                    Logo = new RepositoryLogoDetailModel(repo.Logo),
+                    Files = files.OrderByDescending(i => i.IsTree).ThenBy(i => i.Name)
                 };
 
                 if (includeDetails)
@@ -307,6 +308,7 @@ namespace Bonobo.Git.Server.Controllers
                 var path = PathEncoder.Decode(encodedPath);
                 string referenceName;
                 var model = browser.BrowseBlob(name, path, out referenceName);
+                model.Logo = new RepositoryLogoDetailModel(repo.Logo);
                 PopulateBranchesData(browser, referenceName);
                 PopulateAddressBarData(path);
 
@@ -326,6 +328,7 @@ namespace Bonobo.Git.Server.Controllers
                 var path = PathEncoder.Decode(encodedPath);
                 string referenceName;
                 var model = browser.BrowseBlob(name, path, out referenceName);
+                model.Logo = new RepositoryLogoDetailModel(repo.Logo);
 
                 if (!display)
                 {
@@ -356,6 +359,7 @@ namespace Bonobo.Git.Server.Controllers
                 var path = PathEncoder.Decode(encodedPath);
                 string referenceName;
                 var model = browser.GetBlame(name, path, out referenceName);
+                model.Logo = new RepositoryLogoDetailModel(repo.Logo);
                 PopulateBranchesData(browser, referenceName);
                 PopulateAddressBarData(path);
 
@@ -435,7 +439,11 @@ namespace Bonobo.Git.Server.Controllers
                 var commits = browser.GetTags(name, page, 10, out referenceName, out totalCount);
                 PopulateBranchesData(browser, referenceName);
                 ViewBag.TotalCount = totalCount;
-                return View(new RepositoryCommitsModel { Commits = commits, Name = repo.Name });
+                return View(new RepositoryCommitsModel {
+                    Commits = commits,
+                    Name = repo.Name,
+                    Logo = new RepositoryLogoDetailModel(repo.Logo)
+                });
             }
         }
 
@@ -492,7 +500,11 @@ namespace Bonobo.Git.Server.Controllers
                     }
                     commit.Links = links;
                 }
-                return View(new RepositoryCommitsModel { Commits = commits, Name = repo.Name });
+                return View(new RepositoryCommitsModel {
+                    Commits = commits,
+                    Name = repo.Name,
+                    Logo = new RepositoryLogoDetailModel(repo.Logo)
+                });
             }
         }
 
@@ -506,6 +518,7 @@ namespace Bonobo.Git.Server.Controllers
             {
                 var model = browser.GetCommitDetail(commit);
                 model.Name = repo.Name;
+                model.Logo = new RepositoryLogoDetailModel(repo.Logo);
                 return View(model);
             }
         }
@@ -604,7 +617,11 @@ namespace Bonobo.Git.Server.Controllers
                 var name = PathEncoder.Decode(encodedName);
                 string referenceName;
                 var commits = browser.GetHistory(path, name, out referenceName);
-                return View(new RepositoryCommitsModel { Commits = commits, Name = repo.Name });
+                return View(new RepositoryCommitsModel {
+                    Commits = commits,
+                    Name = repo.Name,
+                    Logo = new RepositoryLogoDetailModel(repo.Logo)
+                });
             }
         }
 

@@ -37,6 +37,7 @@ backup of your App_Data folder before you update.
 * Correct error reported to Git clients for access to non-existent repo #447
 * Bonobo can start enough to allow access to settings if git directory is mis-configured #451
 * Bonobo doesn't run on systems with particular machine.config RoleManager settings #486
+* The repository logo was not visible in all views
 
 ### Code improvements
 

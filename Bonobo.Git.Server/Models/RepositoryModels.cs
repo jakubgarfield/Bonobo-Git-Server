@@ -189,6 +189,7 @@ namespace Bonobo.Git.Server.Models
         public string Text { get; set; }
         public string TextBrush { get; set; }
         public Encoding Encoding { get; set; }
+        public RepositoryLogoDetailModel Logo { get; set; }
     }
 
     public class RepositoryTreeModel
@@ -197,12 +198,14 @@ namespace Bonobo.Git.Server.Models
         public string Branch { get; set; }
         public string Path { get; set; }
         public string Readme { get; set; }
+        public RepositoryLogoDetailModel Logo { get; set; }
         public IEnumerable<RepositoryTreeDetailModel> Files { get; set; }
     }
 
     public class RepositoryCommitsModel
     {
         public string Name { get; set; }
+        public RepositoryLogoDetailModel Logo { get; set; }
         public IEnumerable<RepositoryCommitModel> Commits { get; set; }
     }
 
@@ -239,6 +242,7 @@ namespace Bonobo.Git.Server.Models
         }
 
         public string Name { get; set; }
+        public RepositoryLogoDetailModel Logo { get; set; }
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_ID")]
         public string ID { get; set; }
@@ -299,6 +303,7 @@ namespace Bonobo.Git.Server.Models
     {
         public string Name { get; set; }
         public string Path { get; set; }
+        public RepositoryLogoDetailModel Logo { get; set; }
         public long FileSize { get; set; }
         public long LineCount { get; set; }
         public IEnumerable<RepositoryBlameHunkModel> Hunks { get; set; }
