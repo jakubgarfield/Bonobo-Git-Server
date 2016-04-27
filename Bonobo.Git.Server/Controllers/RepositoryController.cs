@@ -34,14 +34,39 @@ namespace Bonobo.Git.Server.Controllers
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
 
         [WebAuthorize]
-        public ActionResult Index(string sortGroup = null)
+        public ActionResult Index(string search = "", int page = 1, int pageSize = 10, string column = "Name", string group = "", string sort = "desc")
         {
-            var list = GetIndexModel()
-                    .GroupBy(x => x.Group)
-                    .OrderBy(x => x.Key, string.IsNullOrEmpty(sortGroup) || sortGroup.Equals("ASC"))
-                    .ToDictionary(x => x.Key ?? string.Empty, x => x.ToArray());
+            var results = (
+                from repo in GetIndexModel()
+                where (
+                    string.IsNullOrWhiteSpace(search) ||
+                    (
+                        repo.Name.ToLower().Contains(search.ToLower()) || repo.Description.ToLower().Contains(search.ToLower())
+                    )
+                ) && (
+                    string.IsNullOrWhiteSpace(@group) || (!string.IsNullOrWhiteSpace(repo.Group) && repo.Group.Contains(@group))
+                )
+                 select repo
+            );
 
-            return View(list);
+            if (!string.IsNullOrWhiteSpace(column) && typeof(RepositoryDetailModel).GetProperties().Any(x=>x.Name == column))
+                if (sort == "desc")
+                    results = results.OrderByDescending(x => x.GetType().GetProperty(column).GetValue(x, null));
+                else if (sort == "asc")
+                    results = results.OrderBy(x => x.GetType().GetProperty(column).GetValue(x, null));
+
+            var pagedResult = new PagedResult<RepositoryDetailModel>()
+            {
+                AllResults = results,
+                Result = results.Skip((page - 1) * pageSize).Take(pageSize),
+                CurrentPage = page <= 0 ? 1 : page,
+                PageSize = pageSize <= 0 ? 10 : pageSize,
+                TotalPages = (int)Math.Ceiling((double)results.Count() / pageSize)
+            };
+
+            PopulateIndexData(group);
+
+            return View(pagedResult);
         }
 
         [WebAuthorizeRepository(RequiresRepositoryAdministrator = true)]
@@ -521,6 +546,21 @@ namespace Bonobo.Git.Server.Controllers
             ViewData["referenceName"] = referenceName;
             ViewData["branches"] = browser.GetBranches();
             ViewData["tags"] = browser.GetTags();
+        }
+
+        private void PopulateIndexData(string selectedGroup)
+        {
+            var selectList = new List<SelectListItem>();
+
+            var distinctGroups = GetIndexModel()
+                .Where(repo => !string.IsNullOrWhiteSpace(repo.Group))
+                .Select(repo => repo.Group)
+                .Distinct();
+
+            foreach (var g in distinctGroups)
+                selectList.Add(new SelectListItem() { Selected = g == selectedGroup, Text = g, Value = g });
+
+            ViewData["groups"] = selectList;
         }
 
         private void PopulateEditData()

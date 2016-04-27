@@ -2,9 +2,126 @@
 @using System.Web.Mvc.Html
 @using Bonobo.Git.Server.Models
 
-@model Dictionary<string, RepositoryDetailModel[]>
+@model PagedResult<RepositoryDetailModel>
 @{
     ViewBag.Title = Resources.Repository_Index_Title;
+}
+
+<div class="pure-g">
+    <div class="pure-u-2-5">
+        <h1>
+            @Resources.Repository_Index_Title
+        </h1>
+    </div>
+    <div class="pure-u-3-5 add">
+        @if (User.IsInRole(Definitions.Roles.Administrator) || UserConfiguration.Current.AllowUserRepositoryCreation)
+        {
+            <a class="pure-button pure-button-primary" href="@Url.Action("Create")"><i class="fa fa-plus-circle"></i> @Resources.Repository_Index_CreateNew</a>
+        }
+    </div>
+</div>
+
+@if (TempData["CreateSuccess"] as bool? == true)
+{
+    <div class="summary-success">
+        <p>@Resources.Repository_Create_Success</p>
+        <p>@Html.ActionLink("Go to repository : " + TempData["SuccessfullyCreatedRepositoryName"].ToString(), "Detail", new { id = TempData["SuccessfullyCreatedRepositoryName"].ToString() })</p>
+
+    </div>
+}
+@if (TempData["CloneSuccess"] as bool? == true)
+{
+    <div class="summary-success">
+        <p>@Resources.Repository_Clone_Success</p>
+    </div>
+}
+@if (TempData["DeleteSuccess"] as bool? == true)
+{
+    <div class="summary-success">
+        <p>@Resources.Repository_Delete_Success</p>
+    </div>
+}
+<div class="pure-g">
+    @{
+
+        <div class="pure-u-1">
+            <form action="/Repository/Index" method="get" class="pure-form">
+                <input type="text" name="search" value="@(Request.QueryString["q"] as string)" placeholder="Type to search" />
+                @Html.DropDownList("group", (IEnumerable<SelectListItem>)ViewData["groups"], "Choose a group", new { onchange="this.form.submit();" }) 
+                <input type="hidden" name="pageSize" value="@Model.PageSize" />
+                <input type="hidden" name="page" value="@Model.CurrentPage" />
+            </form>
+            @*@{
+                var grid = new WebGrid(source: Model.Result, defaultSort: "Name", rowsPerPage: 15);
+
+                var groupColumn = new[] { grid.Column(format: (item) => Html.Raw(string.Empty), style: "action") };
+                var columns = grid.Columns(
+                    grid.Column(
+                        format: item => Html.Raw(item.Logo.Exists ? string.Format("<img src='data:image/png;base64,{0}' class='repo-logo' />", item.Logo.Base64Image) : ""),
+                        style: "logo"
+                    ),
+                    grid.Column("Name",
+                        header: typeof(RepositoryDetailModel).GetDisplayValue("Name"),
+                        format: (item) =>
+                            Html.ActionLink(
+                                GetNameToDisplay((string)item.Name, (RepositoryDetailStatus)item.Status),
+                                "Detail",
+                                new { id = item.Name },
+                                new { @class = "detail" + (item.Logo.Exists ? " customLogo" : "") }
+                            )
+                    ),
+
+                    grid.Column("Description", typeof(RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string)item.Description).Length > 100)) ? ((string)item.Description).Substring(0, 100) + " ... " : item.Description, style: "description"),
+                    grid.Column(format: (item) => Html.ActionLink(" ", "Edit", new { id = item.Name }, new { @class = "edit", title = Resources.Grid_Edit }), style: "action"),
+                    grid.Column(format: (item) => Html.ActionLink(" ", "Delete", new { id = item.Name }, new { @class = "delete", title = Resources.Grid_Delete }), style: "action")
+                    );
+
+                @grid.GetHtml(
+                        tableStyle: "pure-table repositories",
+                        columns: columns
+                    )
+            }*@
+
+            <table class="pure-table pure-table-horizontal">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>@typeof(RepositoryDetailModel).GetDisplayValue("Name")</th>
+                        <th>@typeof(RepositoryDetailModel).GetDisplayValue("Description")</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach(var repo in Model.Result) { 
+                    <tr>
+                        <td class="logo">@Html.Raw(repo.Logo.Exists ? string.Format("<img src='data:image/png;base64,{0}' class='repo-logo' />", repo.Logo.Base64Image) : "")</td>
+                        <td class="name">@Html.ActionLink(
+                                GetNameToDisplay((string)repo.Name, (RepositoryDetailStatus)repo.Status),
+                                "Detail",
+                                new { id = repo.Name },
+                                new { @class = "detail" + (repo.Logo.Exists ? " customLogo" : "") }
+                            )</td>
+                        <td class="description">@(Html.Truncate(repo.Description, 100, true))</td>
+                        <td>
+                            @Html.ActionLink(" ", "Edit", new { id = repo.Name }, new { @class = "edit", title = Resources.Grid_Edit })
+                            @Html.ActionLink(" ", "Delete", new { id = repo.Name }, new { @class = "delete", title = Resources.Grid_Delete })
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+
+            <ul class="pure-paginator">
+                <li><a href="Html.ModifyQueryString()"></a></li>
+                <li></li>
+            </ul>
+        </div>
+    }
+</div>
+
+@section scripts{
+    <script src="~/Scripts/RepositoryGroupToggle.js" defer="defer"></script>
 }
 
 @functions
@@ -24,106 +141,4 @@
                 return name + " (Status Unknown)";
         }
     }
-}
-
-<div class="pure-g">
-    <div class="pure-u-2-5">
-        <h1>
-            @Resources.Repository_Index_Title
-        </h1>
-    </div>
-    <div class="pure-u-3-5 add">
-        @{
-            var sortGroupQuery = Request.QueryString["sortGroup"];
-
-            var sortGroup = new
-            {
-                sortGroup = string.IsNullOrEmpty(sortGroupQuery) ? "DESC" : ((sortGroupQuery.Equals("ASC") ? "DESC" : "ASC"))
-            };
-        }
-
-        <a class="pure-button pure-button-primary" href="@Url.Action("Index", sortGroup)"><i class="fa fa-sort"></i> @Resources.Repository_Index_SortGroup</a>
-
-        @if (User.IsInRole(Definitions.Roles.Administrator) || UserConfiguration.Current.AllowUserRepositoryCreation)
-        {
-            <a class="pure-button pure-button-primary" href="@Url.Action("Create")"><i class="fa fa-plus-circle"></i> @Resources.Repository_Index_CreateNew</a>
-        }
-    </div>
-</div>
-
-@if (TempData["CreateSuccess"] as bool? == true)
-{
-    <div class="summary-success">
-	    <p>@Resources.Repository_Create_Success</p>
-		<p>@Html.ActionLink("Go to repository : " + TempData["SuccessfullyCreatedRepositoryName"].ToString(), "Detail", new { id = TempData["SuccessfullyCreatedRepositoryName"].ToString() })</p>
-
-    </div>
-}
-@if (TempData["CloneSuccess"] as bool? == true)
-{
-    <div class="summary-success">
-        <p>@Resources.Repository_Clone_Success</p>
-    </div>
-}
-@if (TempData["DeleteSuccess"] as bool? == true)
-{
-    <div class="summary-success">
-        <p>@Resources.Repository_Delete_Success</p>
-    </div>
-}
-
-<div class="pure-g">
-    @{
-        foreach (KeyValuePair<string, RepositoryDetailModel[]> model in Model)
-        {
-            bool emptyGroup = string.IsNullOrEmpty(model.Key);
-
-            if (!emptyGroup)
-            {
-                <div class="pure-u-1">
-                    <h2 class="group">
-                        <span class="toggle" data-group="@(model.Key)"></span>
-                        @Html.Raw(model.Key)
-                    </h2>
-                </div>
-            }
-
-            <div class="pure-u-1">
-                @{
-                    var permitted = new WebGrid(source: model.Value, defaultSort: "Name", rowsPerPage: 15);
-
-                    var groupColumn = new [] { permitted.Column(format: (item) => Html.Raw(string.Empty), style: "action") };
-                    var columns = permitted.Columns(
-                        permitted.Column(
-                            format: item => Html.Raw(item.Logo.Exists ? string.Format("<img src='data:image/png;base64,{0}' class='repo-logo' />", item.Logo.Base64Image) : ""),
-                            style: "logo"
-                        ),
-                        permitted.Column("Name",
-                            header: typeof (RepositoryDetailModel).GetDisplayValue("Name"),
-                            format: (item) =>
-                                Html.ActionLink(
-                                    GetNameToDisplay((string) item.Name, (RepositoryDetailStatus) item.Status),
-                                    "Detail",
-                                    new { id = item.Name },
-                                    new { @class = "detail" + (item.Logo.Exists ? " customLogo" : "") }
-                                )
-                        ),
-
-                        permitted.Column("Description", typeof (RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string) item.Description).Length > 100)) ? ((string) item.Description).Substring(0, 100) + " ... " : item.Description, style: "description"),
-                        permitted.Column(format: (item) => Html.ActionLink(" ", "Edit", new {id = item.Name}, new {@class = "edit", title = Resources.Grid_Edit}), style: "action"),
-                        permitted.Column(format: (item) => Html.ActionLink(" ", "Delete", new {id = item.Name}, new {@class = "delete", title = Resources.Grid_Delete}), style: "action")
-                        );
-
-                    @permitted.GetHtml(
-                        tableStyle: "pure-table repositories",
-                        columns: (emptyGroup) ? columns : groupColumn.Concat(columns)
-                        )
-                }
-            </div>
-        }
-    }
-</div>
-
-@section scripts{
-    <script src="~/Scripts/RepositoryGroupToggle.js" defer="defer"></script>
 }

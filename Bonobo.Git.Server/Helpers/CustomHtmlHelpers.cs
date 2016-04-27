@@ -76,5 +76,11 @@ namespace Bonobo.Git.Server.Helpers
         {
             return CheckboxListFor<TModel, TValue>(helper, expression, selectList, null);
         }
+
+        public static IHtmlString Truncate(this HtmlHelper helper, string s, int length, bool ellipses = true)
+        {
+            string truncated = ((!string.IsNullOrWhiteSpace(s) && s.Length > length)) ? s.Substring(0, length) + " ... " : s;
+            return new HtmlString(truncated);
+        }
     }
 }
