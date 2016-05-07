@@ -27,8 +27,11 @@ namespace Bonobo.Git.Server.Security
 
         public bool HasPermission(Guid userId, Guid repositoryId, RepositoryAccessLevel requiredLevel)
         {
-            var repositoryModel = Repository.GetRepository(repositoryId);
+            return HasPermission(userId, TeamRepository.GetTeams(userId), Repository.GetRepository(repositoryId), requiredLevel);
+        }
 
+        private bool HasPermission(Guid userId, IList<TeamModel> userTeams, RepositoryModel repositoryModel, RepositoryAccessLevel requiredLevel)
+        {
             if (userId == Guid.Empty)
             {
                 // This is an anonymous user, the rules are different
@@ -36,7 +39,7 @@ namespace Bonobo.Git.Server.Security
             }
             else
             {
-                return CheckNamedUserPermission(userId, repositoryModel, requiredLevel);
+                return CheckNamedUserPermission(userId, userTeams, repositoryModel, requiredLevel);
             }
         }
 
@@ -52,7 +55,11 @@ namespace Bonobo.Git.Server.Security
 
         public IEnumerable<RepositoryModel> GetAllPermittedRepositories(Guid userId, RepositoryAccessLevel requiredLevel)
         {
-            return Repository.GetAllRepositories().Where(repo => HasPermission(userId, repo.Id, requiredLevel));
+            // This is just an optimisation to avoid expensive permission checks which will always pass for sysadmins
+            // Even if it was removed, the correct rules would be applied in HasPermission, but the IsSysAdmin check would need to be done for every repo
+            var isSystemAdministrator = IsSystemAdministrator(userId);
+            var userTeams = TeamRepository.GetTeams(userId);
+            return Repository.GetAllRepositories().Where(repo => isSystemAdministrator || HasPermission(userId, userTeams, repo, requiredLevel));
         }
 
         private bool CheckAnonymousPermission(RepositoryModel repository, RepositoryAccessLevel requiredLevel)
@@ -77,21 +84,19 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
-        private bool CheckNamedUserPermission(Guid userId, RepositoryModel repository, RepositoryAccessLevel requiredLevel)
+        private bool CheckNamedUserPermission(Guid userId, IList<TeamModel> userTeams, RepositoryModel repository, RepositoryAccessLevel requiredLevel)
         {
             if (userId == Guid.Empty) { throw new ArgumentException("Do not pass anonymous user id", "userId"); }
 
             bool userIsAnAdministrator = IsAnAdminstrator(userId, repository);
-            var userIsATeamMember =
-                TeamRepository.GetTeams(userId)
-                    .Any(x => repository.Teams.Select(y => y.Name).Contains(x.Name, StringComparer.OrdinalIgnoreCase));
-            var userIsARepoUser = repository.Users.Any(x => x.Id == userId);
 
             switch (requiredLevel)
             {
                 case RepositoryAccessLevel.Push:
                 case RepositoryAccessLevel.Pull:
-                    return userIsARepoUser || userIsATeamMember || userIsAnAdministrator;
+                    return userIsAnAdministrator || 
+                        UserIsARepoUser(userId, repository) || 
+                        UserIsATeamMember(userTeams, repository);
 
                 case RepositoryAccessLevel.Administer:
                     return userIsAnAdministrator;
@@ -100,17 +105,24 @@ namespace Bonobo.Git.Server.Security
             }
         }
 
+        private static bool UserIsARepoUser(Guid userId, RepositoryModel repository)
+        {
+            return repository.Users.Any(x => x.Id == userId);
+        }
+
+        private static bool UserIsATeamMember(IList<TeamModel> userTeams, RepositoryModel repository)
+        {
+            return userTeams
+                .Any(x => repository.Teams.Select(y => y.Name).Contains(x.Name, StringComparer.OrdinalIgnoreCase));
+        }
+
         /// <summary>
         /// Check if a user can administer this repo - either by being sysAdmin, or by being on the repo's own admin list
         /// </summary>
         private bool IsAnAdminstrator(Guid userId, RepositoryModel repositoryModel)
         {
-            bool result = false;
-
-            result |= repositoryModel.Administrators.Any(x => x.Id == userId);
-            result |= IsSystemAdministrator(userId);
-
-            return result;
+            return repositoryModel.Administrators.Any(x => x.Id == userId)
+                || IsSystemAdministrator(userId);
         }
 
         private bool IsSystemAdministrator(Guid userId)
