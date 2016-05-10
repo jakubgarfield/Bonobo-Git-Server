@@ -173,8 +173,8 @@ namespace Bonobo.Git.Server.Data
 
                 foreach (var domain in allDomains)
                 {
-                    var gitUsers = (gitUsersByDomain.Contains(domain) ? gitUsersByDomain[domain].ToArray() : new UserModel[] {}).ToDictionary(x=>x.Username, StringComparer.OrdinalIgnoreCase);
-                    var groupUsers = new HashSet<string>(groupUsersByDomain.Contains(domain) ? groupUsersByDomain[domain].ToArray() : new string[] {});
+                    var gitUsers = gitUsersByDomain[domain].ToDictionary(x=>x.Username, StringComparer.OrdinalIgnoreCase);
+                    var groupUsers = new HashSet<string>(groupUsersByDomain[domain], StringComparer.OrdinalIgnoreCase);
 
                     foreach (var gitUser in gitUsers.Values.Where(x=>!groupUsers.Contains(x.Username)))
                     {
