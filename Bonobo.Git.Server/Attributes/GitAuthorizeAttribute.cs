@@ -110,17 +110,17 @@ namespace Bonobo.Git.Server
         private bool IsWindowsUserAuthorized(HttpContextBase httpContext, string username, string password)
         {
             var domain = username.GetDomain();
-            username = username.StripDomain();
+            var justUsername = username.StripDomain();
             try
             {
                 using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain))
                 {
-                    var adUser = UserPrincipal.FindByIdentity(pc, username);
+                    var adUser = UserPrincipal.FindByIdentity(pc, justUsername);
                     if (adUser != null)
                     {
-                        if (pc.ValidateCredentials(username, password, ContextOptions.Negotiate))
+                        if (pc.ValidateCredentials(justUsername, password, ContextOptions.Negotiate))
                         {
-                            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username.Replace("\\", "!"))));
+                            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
                             return true;
                         }
                     }
