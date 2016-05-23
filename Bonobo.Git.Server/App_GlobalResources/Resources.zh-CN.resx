@@ -934,4 +934,16 @@
   <data name="Repository_Layout_Tags" xml:space="preserve">
     <value>标签</value>
   </data>
+  <data name="Repository_Create_Back" xml:space="preserve">
+    <value>返回</value>
+  </data>
+  <data name="Home_About_Title" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="Home_About_Thanks" xml:space="preserve">
+    <value>感谢你！</value>
+  </data>
+  <data name="Home_About_Thanks_p" xml:space="preserve">
+    <value>Bonobo Git Server 使用了一些免费和开放原始码的项目。 感谢所有的作者和贡献者，感谢他们的努力和付出。</value>
+  </data>
 </root>
