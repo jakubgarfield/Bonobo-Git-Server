@@ -145,7 +145,7 @@
     <value>姓</value>
   </data>
   <data name="Account_Detail_Title" xml:space="preserve">
-    <value>用戶詳細資訊</value>
+    <value>使用者詳細資訊</value>
   </data>
   <data name="Account_Detail_Username" xml:space="preserve">
     <value>帳戶名稱</value>
@@ -163,7 +163,7 @@
     <value>確認密碼</value>
   </data>
   <data name="Account_Edit_CurrentPassword" xml:space="preserve">
-    <value>當前密碼</value>
+    <value>舊密碼</value>
   </data>
   <data name="Account_Edit_Email" xml:space="preserve">
     <value>電子郵件</value>
@@ -175,16 +175,16 @@
     <value>新密碼</value>
   </data>
   <data name="Account_Edit_OldPasswordEmpty" xml:space="preserve">
-    <value>當前密碼不可為空</value>
+    <value>舊密碼不能為空白</value>
   </data>
   <data name="Account_Edit_OldPasswordIncorrect" xml:space="preserve">
-    <value>當前密碼不正確</value>
+    <value>舊密碼不正確</value>
   </data>
   <data name="Account_Edit_Roles" xml:space="preserve">
     <value>角色</value>
   </data>
   <data name="Account_Edit_RolesHint" xml:space="preserve">
-    <value>管理群組的成員可以瀏覽所有的儲存庫，並可以對儲存庫、用戶、團隊進行任何操作。</value>
+    <value>管理成員可以瀏覽所有儲存庫，並可以對儲存庫、用戶及團隊進行任何操作。</value>
   </data>
   <data name="Account_Edit_Submit" xml:space="preserve">
     <value>儲存</value>
@@ -193,7 +193,7 @@
     <value>姓</value>
   </data>
   <data name="Account_Edit_Title" xml:space="preserve">
-    <value>編輯用戶帳號</value>
+    <value>編輯用戶</value>
   </data>
   <data name="Account_Edit_Unsuccessfull" xml:space="preserve">
     <value>用戶編輯失敗，請修正錯誤，再重試。</value>
@@ -202,7 +202,7 @@
     <value>用戶已更新</value>
   </data>
   <data name="Account_Index_Title" xml:space="preserve">
-    <value>用戶管理</value>
+    <value>使用者</value>
   </data>
   <data name="Grid_Delete" xml:space="preserve">
     <value>刪除</value>
@@ -211,10 +211,10 @@
     <value>編輯</value>
   </data>
   <data name="Home_About_Thanks" xml:space="preserve">
-    <value>謝謝你！</value>
+    <value>感謝你！</value>
   </data>
   <data name="Home_About_Thanks_p" xml:space="preserve">
-    <value>Bonobo Git Server 使用了一些免費項目和開放原始碼專案，感謝所有的作者和貢獻者，感謝他們的努力和付出。</value>
+    <value>Bonobo Git Server 使用了一些免費項目和開放原始碼的專案。感謝所有的作者和貢獻者，感謝他們的努力和付出。</value>
   </data>
   <data name="Home_About_Title" xml:space="preserve">
     <value>關於</value>
@@ -289,10 +289,10 @@
     <value>團隊</value>
   </data>
   <data name="Layout_AdministrationUsers" xml:space="preserve">
-    <value>用戶</value>
+    <value>使用者</value>
   </data>
   <data name="Layout_Footer_Copyright" xml:space="preserve">
-    <value>保留所有版權</value>
+    <value>版權所有</value>
   </data>
   <data name="Layout_Home" xml:space="preserve">
     <value>主頁</value>
@@ -316,19 +316,19 @@
     <value>根目錄</value>
   </data>
   <data name="Repository_AdministratorsHint" xml:space="preserve">
-    <value>管理員組對儲存庫具有完全訪問權限，可以對資料做出任何修改。</value>
+    <value>管理員擁有所有儲存庫的所有權限，可以對資料做出任何修改。</value>
   </data>
   <data name="Repository_AllowAnonymousHint" xml:space="preserve">
-    <value>如果允許匿名訪問，則未登錄用戶可以檢出或更新儲存庫資料。提交操作需要在系統設定中允許匿名訪問後才可操作。</value>
+    <value>如果允許匿名存取，則未登入的使用者可以檢出或複製儲存庫及其中繼資料。提交則需要在系統設定中特別允許匿名提交才可操作。</value>
   </data>
   <data name="Repository_Commits_Title" xml:space="preserve">
     <value>提交資訊</value>
   </data>
   <data name="Repository_Commit_Added" xml:space="preserve">
-    <value>已增加</value>
+    <value>已新增</value>
   </data>
   <data name="Repository_Commit_Author" xml:space="preserve">
-    <value>作者</value>
+    <value>提交者</value>
   </data>
   <data name="Repository_Commit_AuthorEmail" xml:space="preserve">
     <value>電子郵件</value>
@@ -349,7 +349,7 @@
     <value>提交詳情</value>
   </data>
   <data name="Repository_Commit_ID" xml:space="preserve">
-    <value>提交識別碼</value>
+    <value>提交</value>
   </data>
   <data name="Repository_Commit_Message" xml:space="preserve">
     <value>資訊</value>
@@ -364,7 +364,7 @@
     <value>重新命名</value>
   </data>
   <data name="Repository_Commit_TreeID" xml:space="preserve">
-    <value>樹識別碼</value>
+    <value>樹</value>
   </data>
   <data name="Repository_Commit_TypeChanged" xml:space="preserve">
     <value>類型已改變</value>
@@ -373,7 +373,7 @@
     <value>返回</value>
   </data>
   <data name="Repository_Create_DirectoryExists" xml:space="preserve">
-    <value>同名目錄已經存在。刪除這個目錄或選擇一個不同的目錄名並重試。</value>
+    <value>相同的目錄已經存在。請刪除這個目錄或選擇一個不同的目錄並重試。</value>
   </data>
   <data name="Repository_Create_Fail" xml:space="preserve">
     <value>建立儲存庫失敗，請檢查錯誤並重試。</value>
@@ -391,13 +391,13 @@
     <value>建立</value>
   </data>
   <data name="Repository_Create_Success" xml:space="preserve">
-    <value>成功建立儲存庫。</value>
+    <value>已成功建立儲存庫。</value>
   </data>
   <data name="Repository_Create_Title" xml:space="preserve">
     <value>建立新儲存庫</value>
   </data>
   <data name="Repository_Delete_Success" xml:space="preserve">
-    <value>儲存庫已成功刪除</value>
+    <value>已成功刪除儲存庫。</value>
   </data>
   <data name="Repository_Detail_Administrators" xml:space="preserve">
     <value>管理員</value>
@@ -424,7 +424,7 @@
     <value>管理權限</value>
   </data>
   <data name="Repository_Detail_Location" xml:space="preserve">
-    <value>Git 儲存庫網址</value>
+    <value>儲存庫網址</value>
   </data>
   <data name="Repository_Detail_Name" xml:space="preserve">
     <value>名稱</value>
@@ -436,7 +436,7 @@
     <value>團隊</value>
   </data>
   <data name="Repository_Detail_Title" xml:space="preserve">
-    <value>儲存庫詳細資訊</value>
+    <value>儲存庫資訊</value>
   </data>
   <data name="Repository_Detail_Users" xml:space="preserve">
     <value>貢獻者</value>
@@ -478,7 +478,7 @@
     <value>儲存庫</value>
   </data>
   <data name="Repository_Index_Title" xml:space="preserve">
-    <value>儲存庫管理</value>
+    <value>儲存庫</value>
   </data>
   <data name="Repository_Index_Yes" xml:space="preserve">
     <value>是</value>
@@ -493,10 +493,10 @@
     <value>切換目前分支</value>
   </data>
   <data name="Repository_TeamsHint" xml:space="preserve">
-    <value>團隊成員可以存取當前儲存庫，並可以更新、提交資料及查看元資料。團隊中的所有成員都擁有存取的權限。</value>
+    <value>團隊成員可以存取當前儲存庫，並可以更新、提交及查看中繼資料。團隊中的所有成員都擁有存取的權限。</value>
   </data>
   <data name="Repository_Tree_Author" xml:space="preserve">
-    <value>作者</value>
+    <value>提交者</value>
   </data>
   <data name="Repository_Tree_CommitDate" xml:space="preserve">
     <value>日期</value>
@@ -514,13 +514,13 @@
     <value>儲存庫成員可以存取當前儲存庫，並可以更新、提交資料及查看元資料。</value>
   </data>
   <data name="Settings_Global_AllowAnonymousPush" xml:space="preserve">
-    <value>允許匿名用戶提交</value>
+    <value>允許匿名提交</value>
   </data>
   <data name="Settings_Global_RepositoryPath" xml:space="preserve">
     <value>儲存庫目錄</value>
   </data>
   <data name="Settings_Index_Failed" xml:space="preserve">
-    <value>設置更新失敗，請更正錯誤並重試。</value>
+    <value>設定更新失敗，請更正錯誤並重試。</value>
   </data>
   <data name="Settings_Index_Save" xml:space="preserve">
     <value>儲存</value>
@@ -529,28 +529,28 @@
     <value>系統設定</value>
   </data>
   <data name="Settings_Index_UpdateSuccess" xml:space="preserve">
-    <value>系統設定更新成功</value>
+    <value>已成功更新設定。</value>
   </data>
   <data name="Settings_RepositoryPathNotExists" xml:space="preserve">
-    <value>選擇的路徑不存在，請更改路徑或建立目錄。</value>
+    <value>指定的路徑不存在，請先建立該目錄或更改路徑。</value>
   </data>
   <data name="Settings_RepositoryPathUnauthorized" xml:space="preserve">
-    <value>您沒有權限寫入指定的資料夾，請選擇不同的路徑。</value>
+    <value>系統沒有足夠權限寫入指定的路徑，請選擇不同的路徑。</value>
   </data>
   <data name="Team_Create_Back" xml:space="preserve">
-    <value>返回。</value>
+    <value>返回</value>
   </data>
   <data name="Team_Create_Fail" xml:space="preserve">
     <value>團隊建立失敗，請更正錯誤並重試。</value>
   </data>
   <data name="Team_Create_Failure" xml:space="preserve">
-    <value>同名團隊已存在，尚未進行操作。</value>
+    <value>同名團隊已存在，操作尚未執行。</value>
   </data>
   <data name="Team_Create_Submit" xml:space="preserve">
     <value>儲存</value>
   </data>
   <data name="Team_Create_Success" xml:space="preserve">
-    <value>團隊已成功建立</value>
+    <value>已成功建立團隊。</value>
   </data>
   <data name="Team_Create_TeamInformations" xml:space="preserve">
     <value>團隊資訊</value>
@@ -559,7 +559,7 @@
     <value>建立團隊</value>
   </data>
   <data name="Team_Delete_Success" xml:space="preserve">
-    <value>團隊已刪除</value>
+    <value>團隊已刪除。</value>
   </data>
   <data name="Team_Detail_Back" xml:space="preserve">
     <value>返回</value>
@@ -598,7 +598,7 @@
     <value>編輯團隊</value>
   </data>
   <data name="Team_Edit_UpdateSuccess" xml:space="preserve">
-    <value>團隊更新成功</value>
+    <value>團隊更新成功。</value>
   </data>
   <data name="Team_Index_CreateNew" xml:space="preserve">
     <value>建立團隊</value>
@@ -607,31 +607,31 @@
     <value>團隊</value>
   </data>
   <data name="Team_Index_Title" xml:space="preserve">
-    <value>團隊管理</value>
+    <value>團隊</value>
   </data>
   <data name="Validation_Compare" xml:space="preserve">
-    <value>"{0}" 和 "{1}" 必須有相同的值。</value>
+    <value>"{0}" 和 "{1}" 必須相同。</value>
   </data>
   <data name="Validation_Email" xml:space="preserve">
-    <value>"{0}" 不是一個有效的電子郵件地址。</value>
+    <value>"{0}" 不是有效的電郵地址。</value>
   </data>
   <data name="Validation_Required" xml:space="preserve">
-    <value>"{0}" 是必要項。</value>
+    <value>"{0}" 為必填。</value>
   </data>
   <data name="Reset" xml:space="preserve">
     <value>重設</value>
   </data>
   <data name="Settings_Global_DirectoryHint" xml:space="preserve">
-    <value>指定儲存庫儲存的目錄位置</value>
+    <value>指定所有儲存庫資料的存放目錄</value>
   </data>
   <data name="Validation_FileName" xml:space="preserve">
-    <value>"{0}" 包含不能用於文件路徑的字元。</value>
+    <value>"{0}" 包含不能用於檔案路徑的字元。</value>
   </data>
   <data name="Validation_StringLength" xml:space="preserve">
     <value>"{0}" 長度不得超過 {1} 字元。</value>
   </data>
   <data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
-    <value>用戶名已經被使用</value>
+    <value>帳戶名稱已被其他人使用。</value>
   </data>
   <data name="Account_Create_AccountInformation" xml:space="preserve">
     <value>帳戶資訊</value>
@@ -640,7 +640,7 @@
     <value>確認密碼</value>
   </data>
   <data name="Account_Create_Email" xml:space="preserve">
-    <value>電子郵件</value>
+    <value>電郵地址</value>
   </data>
   <data name="Account_Create_Name" xml:space="preserve">
     <value>名</value>
@@ -649,7 +649,7 @@
     <value>密碼</value>
   </data>
   <data name="Account_Create_Submit" xml:space="preserve">
-    <value>建立新帳戶</value>
+    <value>建立</value>
   </data>
   <data name="Account_Create_Surname" xml:space="preserve">
     <value>姓</value>
@@ -658,22 +658,22 @@
     <value>註冊</value>
   </data>
   <data name="Account_Create_Unsuccessfull" xml:space="preserve">
-    <value>建立用戶失敗，請更正錯誤並重試</value>
+    <value>建立帳戶失敗，請更正錯誤並重試。</value>
   </data>
   <data name="Account_Create_Username" xml:space="preserve">
     <value>帳戶名稱</value>
   </data>
   <data name="Account_Index_Create" xml:space="preserve">
-    <value>建立新用戶</value>
+    <value>建立新帳戶</value>
   </data>
   <data name="Account_Index_Users" xml:space="preserve">
-    <value>用戶</value>
+    <value>使用者</value>
   </data>
   <data name="Delete_ConfirmationText" xml:space="preserve">
-    <value>你真的要刪除{0}?</value>
+    <value>你真的要刪除 {0} ？</value>
   </data>
   <data name="Account_Create_Success" xml:space="preserve">
-    <value>用戶已成功建立</value>
+    <value>已成功建立帳戶</value>
   </data>
   <data name="Repository_Tree_Download" xml:space="preserve">
     <value>下載</value>
@@ -682,7 +682,7 @@
     <value>允許匿名註冊</value>
   </data>
   <data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
-    <value>如果沒有選取，只有管理員可以新增用戶並禁止用​​匿名用戶註冊</value>
+    <value>如果沒有選取，將禁止匿名註冊並只有管理員可以新增用戶。</value>
   </data>
   <data name="Settings_Global_AllowUserRepositoryCreation" xml:space="preserve">
     <value>允許使用者建立儲存庫</value>
@@ -721,7 +721,7 @@
     <value>詳細資料</value>
   </data>
   <data name="Item_NotFound_Text" xml:space="preserve">
-    <value>找不到你要找的項目。</value>
+    <value>找不到項目。</value>
   </data>
   <data name="Confirm" xml:space="preserve">
     <value>確認</value>
@@ -754,19 +754,19 @@
     <value>顯示在網站頁尾區域的文字</value>
   </data>
   <data name="Settings_Global_SiteLogoUrl" xml:space="preserve">
-    <value>網站標誌位址</value>
+    <value>網站標誌圖片網址</value>
   </data>
   <data name="Settings_Global_SiteLogoUrl_Hint" xml:space="preserve">
-    <value>指向網站標誌的網址。支援相對路徑 (~) 。</value>
+    <value>指向網站標誌的網址。支援站台相對路徑 (~) 。</value>
   </data>
   <data name="Settings_Global_SiteTitle" xml:space="preserve">
-    <value>網站名稱</value>
+    <value>網站標題</value>
   </data>
   <data name="Settings_Global_SiteTitle_Hint" xml:space="preserve">
     <value>這個 Git 網站的名稱</value>
   </data>
   <data name="Repository_Commit_NoMessageDeclared" xml:space="preserve">
-    <value>未宣告</value>
+    <value>沒有信息</value>
   </data>
   <data name="Repository_Detail_AuditPushUser" xml:space="preserve">
     <value>推送審核</value>
@@ -775,7 +775,7 @@
     <value>記錄推送提交至伺服器的用戶</value>
   </data>
   <data name="Validation_FileName_Regex" xml:space="preserve">
-    <value>"{0}" 只允許英文字，數字，減號和底線</value>
+    <value>"{0}" 只允許英文字母，數字，減號和底線</value>
   </data>
   <data name="Repository_History_Title" xml:space="preserve">
     <value>歷史</value>
@@ -799,9 +799,9 @@
     <value>正常顯示</value>
   </data>
   <data name="Email_PasswordReset_Body" xml:space="preserve">
-    <value>&lt;p&gt;已收到重設密碼的請求。
-	如果您沒有提出這個要求，那麼請忽略此電子郵件。&lt;/p&gt;
-    &lt;p&gt;請點擊以下鏈接重設密碼：&lt;/p&gt;</value>
+    <value>&lt;p&gt;已收到重設密碼的要求。
+	如果您沒有提出這個要求，請你忽略此電子郵件。&lt;/p&gt;
+    &lt;p&gt;請瀏覽以下鏈接以重設密碼：&lt;/p&gt;</value>
   </data>
   <data name="Email_PasswordReset_Title" xml:space="preserve">
     <value>Bonobo - 密碼重設要求</value>
@@ -813,7 +813,7 @@
     <value>郵件已傳送</value>
   </data>
   <data name="Home_ForgotPassword_Failed" xml:space="preserve">
-    <value>忘記密碼失敗。請改正錯誤，然後重試。</value>
+    <value>操作失敗。請改正錯誤，然後重試。</value>
   </data>
   <data name="Home_ForgotPassword_ForgotPassword" xml:space="preserve">
     <value>忘記密碼</value>
@@ -843,7 +843,7 @@
     <value>重設密碼</value>
   </data>
   <data name="Home_ResetPassword_Success" xml:space="preserve">
-    <value>密碼已重設</value>
+    <value>密碼已重設。</value>
   </data>
   <data name="Home_ResetPassword_Title" xml:space="preserve">
     <value>重設密碼</value>
@@ -860,5 +860,97 @@
   <data name="Repository_Detail_Location_Personal" xml:space="preserve">
     <value>個人化網址</value>
     <comment>Example: http://admin@localhost/Bonobo.Git.Server/test.git</comment>
+  </data>
+  <data name="Settings_Global_AllowPushToCreate" xml:space="preserve">
+    <value>允許透過推送以建立新儲存庫</value>
+  </data>
+  <data name="Settings_Global_AllowPushToCreate_Hint" xml:space="preserve">
+    <value>如果選取，則管理員可以透過推送來建立新的儲存庫。</value>
+  </data>
+  <data name="Repository_Detail_Logo_PostedFile" xml:space="preserve">
+    <value>標誌 (36x36 px)</value>
+  </data>
+  <data name="Repository_Detail_RemoveLogo" xml:space="preserve">
+    <value>刪除標誌</value>
+  </data>
+  <data name="Settings_Global_LinksRegex" xml:space="preserve">
+    <value>鏈結規則運算式</value>
+  </data>
+  <data name="Settings_Global_LinksUrl" xml:space="preserve">
+    <value>鏈結網址</value>
+  </data>
+  <data name="Settings_Global_LinksUrl_Hint" xml:space="preserve">
+    <value>這將使用 C# 內建程式庫來解析所提供的規則運算式。支援擷取群組。
+
+樣式 {0} 為整個規則運算式的相符文字。
+從 {1} 開始為後續的擷取群組。
+
+註：需使用 C# 的字串格式規則，例如 "{}" 需寫成 "{{}}"。</value>
+  </data>
+  <data name="Account_Edit_Username" xml:space="preserve">
+    <value>帳戶名稱</value>
+  </data>
+  <data name="Repository_Create_Success_Go_To" xml:space="preserve">
+    <value>跳到 "{0}"</value>
+  </data>
+  <data name="Repository_Needs_Administrator" xml:space="preserve">
+    <value>儲存庫需要至少一個管理員。</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>複製</value>
+  </data>
+  <data name="Repository_Git_Url_Copy" xml:space="preserve">
+    <value>複製儲存庫網址</value>
+  </data>
+  <data name="Repository_No_Group" xml:space="preserve">
+    <value>沒有分組</value>
+  </data>
+  <data name="Repository_Personal_Git_Url_Copy" xml:space="preserve">
+    <value>複製個人網址</value>
+  </data>
+  <data name="Repository_Rescan_Directory" xml:space="preserve">
+    <value>重新掃描目錄</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>搜尋</value>
+  </data>
+  <data name="Repository_Go_To_Dropdown" xml:space="preserve">
+    <value>跳到儲存庫</value>
+  </data>
+  <data name="Validation_Duplicate_Name" xml:space="preserve">
+    <value>名稱已被使用。</value>
+  </data>
+  <data name="Repository_Detail_AllowAnonymousPush" xml:space="preserve">
+    <value>匿名推送</value>
+  </data>
+  <data name="Repository_AllowAnonymousPushHint" xml:space="preserve">
+    <value>允許匿名使用者推送到此儲存庫。若選擇全域設定，則使用系統設定中設置的選項。</value>
+  </data>
+  <data name="Global" xml:space="preserve">
+    <value>全域設定</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>否</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>是</value>
+  </data>
+  <data name="Repository_Detail_LinksUseGlobal" xml:space="preserve">
+    <value>使用全域的 Linkify 設定</value>
+  </data>
+  <data name="Validation_Invalid_Regex" xml:space="preserve">
+    <value>指定的規則運算式有錯誤：{0}</value>
+  </data>
+  <data name="Repository_Edit_InvalidAnonymousPushMode" xml:space="preserve">
+    <value>提供的值無效。</value>
+  </data>
+  <data name="Repository_Tags_Title" xml:space="preserve">
+    <value>標籤</value>
+  </data>
+  <data name="Repository_Layout_Tags" xml:space="preserve">
+    <value>標籤</value>
+  </data>
+  <data name="Repository_Create_Back" xml:space="preserve">
+    <value>返回</value>
   </data>
 </root>
