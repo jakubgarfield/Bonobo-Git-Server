@@ -549,12 +549,6 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Content\components\markdowndeep\images\mdd_ajax_loader.gif" />
-    <Content Include="Content\components\markdowndeep\images\mdd_gripper.png" />
-    <Content Include="Content\components\markdowndeep\mdd_help.htm" />
-    <Content Include="Content\components\markdowndeep\images\mdd_modal_background.png" />
-    <Content Include="Content\components\markdowndeep\css\mdd_styles.css" />
-    <Content Include="Content\components\markdowndeep\images\mdd_toolbar.png" />
     <Content Include="Scripts\MicrosoftAjax.debug.js" />
     <Content Include="Scripts\MicrosoftAjax.js" />
     <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
