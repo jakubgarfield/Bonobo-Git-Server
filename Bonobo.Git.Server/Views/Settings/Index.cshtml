@@ -46,7 +46,7 @@
             @Html.DropDownListFor(m => m.DefaultLanguage, 
                 CultureInfo.GetCultures(CultureTypes.SpecificCultures).Select(
                     cultureInfo => new SelectListItem() {
-                        Text = cultureInfo.DisplayName,
+                        Text = String.Format("{0} - {1}", cultureInfo.Name, cultureInfo.DisplayName),
                         Value = cultureInfo.Name,
                         Selected = Model.DefaultLanguage == null ? "en-US" == cultureInfo.Name : Model.DefaultLanguage == cultureInfo.Name }
                     ).OrderBy(i => i.Text))
