@@ -877,7 +877,7 @@
 The pattern is {0} for the whole regex match.
 {1} onwards is each capturing group.
 
-The regulare C# string formatting rules apply: To get {} in your link you need to write {{}}.</value>
+The regular C# string formatting rules apply: To get {} in your link you need to write {{}}.</value>
   </data>
   <data name="Account_Edit_Username" xml:space="preserve">
     <value>Username</value>
@@ -916,7 +916,7 @@ The regulare C# string formatting rules apply: To get {} in your link you need t
     <value>Anonymous push</value>
   </data>
   <data name="Repository_AllowAnonymousPushHint" xml:space="preserve">
-    <value>Allows anonymous users to push to this repository if anonymous acces is granted. If "Global" is selected the option set under your global settings is used.</value>
+    <value>Allows anonymous users to push to this repository if anonymous access is granted. If "Global" is selected the option set under your global settings is used.</value>
   </data>
   <data name="Global" xml:space="preserve">
     <value>Global</value>
