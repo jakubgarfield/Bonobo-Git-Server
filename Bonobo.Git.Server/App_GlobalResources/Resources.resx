@@ -942,4 +942,13 @@ The regular C# string formatting rules apply: To get {} in your link you need to
   <data name="Repository_Layout_Tags" xml:space="preserve">
     <value>Tags</value>
   </data>
+  <data name="Home_About_Thanks" xml:space="preserve">
+    <value>Thanks!</value>
+  </data>
+  <data name="Repository_Create_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Home_About_Title" xml:space="preserve">
+    <value>About</value>
+  </data>
 </root>
