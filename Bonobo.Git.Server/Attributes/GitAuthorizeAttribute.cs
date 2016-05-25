@@ -110,6 +110,7 @@ namespace Bonobo.Git.Server
         private bool IsWindowsUserAuthorized(HttpContextBase httpContext, string username, string password)
         {
             var domain = username.GetDomain();
+            if (String.IsNullOrWhiteSpace(domain)) domain = ActiveDirectorySettings.DefaultDomain;
             var justUsername = username.StripDomain();
             try
             {
