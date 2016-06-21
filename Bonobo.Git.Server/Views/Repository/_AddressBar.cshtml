@@ -2,7 +2,7 @@
     var path = ViewData["path"] as string;
 
     <p class="breadcrumbs">
-        <em>@Html.ActionLink(Resources.Repository_AddressBar_Root, "Tree", new { id = ViewBag.ID, encodedPath = "" })</em>
+        <em>@Html.ActionLink(Resources.Repository_AddressBar_Root, "Tree", new { id = ViewBag.ID, encodedPath = "" , encodedName = (string)ViewData["ReferenceName"]})</em>
         @if (path != null)
         {
             <text>/</text>
