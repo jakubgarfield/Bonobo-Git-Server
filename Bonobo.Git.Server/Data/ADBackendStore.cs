@@ -12,6 +12,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Web.Hosting;
 using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Helpers;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -40,7 +41,7 @@ namespace Bonobo.Git.Server.Data
 
         public ADBackendStore(string rootpath, string name)
         {
-            _storagePath = Path.Combine(GetRootPath(rootpath), name);
+            _storagePath = Path.Combine(PathEncoder.GetRootPath(rootpath), name);
             _content = LoadContent();
         }
 
@@ -144,11 +145,6 @@ namespace Bonobo.Git.Server.Data
             }
 
             return result;
-        }
-
-        private string GetRootPath(string path)
-        {
-            return Path.IsPathRooted(path) ? path : HostingEnvironment.MapPath(path);
         }
 
         private string GetItemFilename(T item)
