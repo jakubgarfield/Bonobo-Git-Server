@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Data.Update.ADBackendUpdate;
+using System;
 using System.Data.Entity.Infrastructure;
 using System.Diagnostics;
 using System.Linq;
@@ -9,7 +11,14 @@ namespace Bonobo.Git.Server.Data.Update
     {
         public void Run()
         {
-            UpdateDatabase();
+            if (AuthenticationSettings.MembershipService.ToLowerInvariant() == "activedirectory")
+            {
+                Pre600UpdateTo600.UpdateADBackend();
+            }
+            else
+            {
+                UpdateDatabase();
+            }
         }
 
         public void RunWithContext(BonoboGitServerContext context)

@@ -126,6 +126,7 @@
       <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
@@ -257,6 +258,8 @@
     <Compile Include="Data\ADTeamRepository.cs" />
     <Compile Include="Data\DatabaseResetManager.cs" />
     <Compile Include="Data\INameProperty.cs" />
+    <Compile Include="Data\Update\ADBackend\ADBackendPre6.0.0Models.cs" />
+    <Compile Include="Data\Update\ADBackend\UpdateADBackend.cs" />
     <Compile Include="Data\Update\Sqlite\AddGroup.cs" />
     <Compile Include="Data\Update\Sqlite\AddGuidColumn.cs" />
     <Compile Include="Data\Update\Sqlite\AddRepoPushColumn.cs" />
