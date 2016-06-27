@@ -17,11 +17,11 @@
                     var action = ViewContext.RouteData.Values["Action"].ToString() == "Blob" ? "Tree" : ViewContext.RouteData.Values["Action"].ToString();
                     foreach (var item in branches)
                     {
-                        <li class="@(String.Equals(ViewData["referenceName"], item) ? "branch active" : "branch")">@Html.ActionLink(item as string, action, new { encodedName = PathEncoder.Encode(item), encodedPath = String.Empty })</li>
+                        <li class="@(String.Equals(ViewData["referenceName"], item) ? "branch active" : "branch")">@Html.ActionLink(item as string, action, new { id = ViewContext.RouteData.Values["id"], encodedName = PathEncoder.Encode(item), encodedPath = String.Empty })</li>
                     }
                     foreach (var item in tags)
                     {
-                        <li class="@(String.Equals(ViewData["referenceName"], item) ? "tag active" : "tag")">@Html.ActionLink(item as string, action, new { encodedName = PathEncoder.Encode(item), encodedPath = String.Empty })</li>
+                        <li class="@(String.Equals(ViewData["referenceName"], item) ? "tag active" : "tag")">@Html.ActionLink(item as string, action, new { id = ViewContext.RouteData.Values["id"], encodedName = PathEncoder.Encode(item), encodedPath = String.Empty })</li>
                     }
                         }
                     </ul>

@@ -306,5 +306,6 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
 
             ITH.AssertThatValidationErrorContains(Resources.Repository_Edit_InvalidAnonymousPushMode);
         }
+
     }
 }

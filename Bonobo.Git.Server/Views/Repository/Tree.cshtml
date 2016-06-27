@@ -29,11 +29,11 @@
                             }
                             else if (item.IsTree)
                             {
-                                @Html.ActionLink(item.Name, "Tree", new { id= ViewBag.ID, encodedPath = PathEncoder.Encode(item.Path, allowSlash: true) }, new { @class = "directory" })
+                                @Html.ActionLink(item.Name, "Tree", new { id= ViewBag.ID, encodedName = PathEncoder.Encode(Model.Branch), encodedPath = PathEncoder.Encode(item.Path, allowSlash: true) }, new { @class = "directory" })
                             }
                             else 
                             {
-                                @Html.ActionLink(item.Name, "Blob", new { id = ViewBag.ID, encodedPath = PathEncoder.Encode(item.Path, allowSlash: true) }, new { @class = item.IsImage ? "image" : "file" })
+                                @Html.ActionLink(item.Name, "Blob", new { id = ViewBag.ID, encodedName = PathEncoder.Encode(Model.Branch), encodedPath = PathEncoder.Encode(item.Path, allowSlash: true) }, new { @class = item.IsImage ? "image" : "file" })
                             }
                         </td>
                         <td class="message"></td>
@@ -50,7 +50,7 @@
 
         <div class="pure-menu pure-menu-open pure-menu-horizontal repository-menu">
             <ul>
-                <li><a href="@Url.Action("Download", new { encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true) })"><i class="fa fa-download"></i>@Resources.Repository_Tree_Zip</a></li>
+                <li><a href="@Url.Action("Download", new { encodedName = PathEncoder.Encode(Model.Branch), encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true) })"><i class="fa fa-download"></i>@Resources.Repository_Tree_Zip</a></li>
             </ul>
         </div>
     </div>

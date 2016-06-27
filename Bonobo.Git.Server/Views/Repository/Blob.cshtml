@@ -13,10 +13,10 @@
         @{
             <div class="controls">
                 <span>@(Model.IsText ? Model.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None).Length + " lines |" : "") @FileDisplayHandler.GetFileSizeString(Model.Data.LongLength)</span>
-                <a href="@Url.Action("Blame", new { id=ViewBag.ID, encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true)})"><i class="fa fa-comments"></i> @Resources.Repository_Tree_Blame</a>
-                <a href="@Url.Action("History", new { id=ViewBag.ID, encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true)})"><i class="fa fa-history"></i> @Resources.Repository_Tree_History</a>
-                <a href="@Url.Action("Raw", new { id=ViewBag.ID, encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true), display = true })"><i class="fa fa-file-text"></i> @Resources.Repository_Tree_RawDisplay</a>
-                <a href="@Url.Action("Raw", new { id=ViewBag.ID, encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true) })"><i class="fa fa-download"></i> @Resources.Repository_Tree_Download</a>
+                <a href="@Url.Action("Blame", new { id=ViewBag.ID, encodedName = PathEncoder.Encode(Model.TreeName), encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true)})"><i class="fa fa-comments"></i> @Resources.Repository_Tree_Blame</a>
+                <a href="@Url.Action("History", new { id=ViewBag.ID, encodedName = PathEncoder.Encode(Model.TreeName), encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true)})"><i class="fa fa-history"></i> @Resources.Repository_Tree_History</a>
+                <a href="@Url.Action("Raw", new { id=ViewBag.ID, encodedName = PathEncoder.Encode(Model.TreeName), encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true), display = true })"><i class="fa fa-file-text"></i> @Resources.Repository_Tree_RawDisplay</a>
+                <a href="@Url.Action("Raw", new { id=ViewBag.ID, encodedName = PathEncoder.Encode(Model.TreeName), encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true) })"><i class="fa fa-download"></i> @Resources.Repository_Tree_Download</a>
             </div>
         }
         @if (Model.IsImage)
