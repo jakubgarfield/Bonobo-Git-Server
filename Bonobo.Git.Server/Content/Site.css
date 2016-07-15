@@ -1,4 +1,4 @@
-﻿html, button, input, select, textarea, .pure-g [class *= "pure-u"], .pure-g-r [class *= "pure-u"] { font-family: OpenSans, sans-serif; }
+html, button, input, select, textarea, .pure-g [class *= "pure-u"], .pure-g-r [class *= "pure-u"] { font-family: OpenSans, sans-serif; }
 
 html { font-size: 16px; color: #333; text-rendering: optimizeLegibility; }
 html, body { margin: 0; padding: 0; height: 100%; min-width: 1100px;}
@@ -155,7 +155,7 @@ Tags .tag a { background-color: rgba(148, 190, 214, 1); border-radius: 5px; colo
 .commit .metadata p { margin: 0; font-size: 0.8em; font-family: Consolas, monospace;}
 .commit .metadata h4 { margin-bottom: 0.5em;}
 .commit .metadata { text-align: right;}
-.commit h2 {width: 780px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.commit h2 {width: 780px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 0; position:relative;}
 .commit h2 a:hover { text-decoration: none; color: #777;}
 .commit { border-bottom: 1px solid #a6a6a6; padding-bottom: 3px; }
 
@@ -167,14 +167,11 @@ Tags .tag a { background-color: rgba(148, 190, 214, 1); border-radius: 5px; colo
 .Commit .diff h3 { margin-top: 1.5em; }
 
 .commit .notes p { font-size: 0.7em; }
-.commit h2{ margin-bottom: 0; position:relative; }
 .commit .commitdate { font-size: 0.7em}
 
 .pure-u-2-5.metadata div { z-index:11; position:relative; }
 
-.commit h2 { margin-bottom: 0; position: relative; }
 .commit h2 a.commit-url { display: inline-block; max-width: 90%; overflow: hidden; text-overflow: ellipsis; }
-.commit .commitdate { font-size: 0.7em; }
 .more-commit-info-toggler { background-color: silver; border: 1px solid #a39e9e; border-radius: 1px; color: #827a7a; display: inline-block; font-size: 14px; font-weight: bold; height: 12px; line-height: 6px; padding: 0 6px 1px; position: relative; top: -9px; vertical-align: middle; }
 
 .repositories { margin: 0 0 1em 0; }
