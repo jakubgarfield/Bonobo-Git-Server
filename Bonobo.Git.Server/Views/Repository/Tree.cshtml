@@ -72,4 +72,8 @@
             }
         });
     </script>
+
+    @if (!string.IsNullOrEmpty(Model.Readme)) {
+        <script>hljs.configure({ tabReplace: '    ' }); hljs.initHighlightingOnLoad();</script>
+    }
 }

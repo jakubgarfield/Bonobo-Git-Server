@@ -9,7 +9,6 @@ using System.Text;
 using System.Web.Routing;
 using System.Linq.Expressions;
 using Bonobo.Git.Server.Models;
-using MarkdownDeep;
 using System.ComponentModel.DataAnnotations;
 
 namespace Bonobo.Git.Server.Helpers
@@ -23,8 +22,7 @@ namespace Bonobo.Git.Server.Helpers
 
         public static IHtmlString MarkdownToHtml(this HtmlHelper helper, string markdownText)
         {
-            Markdown markdown = new Markdown() { ExtraMode = true, SafeMode = true };
-            return MvcHtmlString.Create(markdown.Transform(markdownText));
+            return MvcHtmlString.Create(CommonMark.CommonMarkConverter.Convert(markdownText));
         }
 
         public static MvcHtmlString DisplayEnum(this HtmlHelper helper, Enum e)
