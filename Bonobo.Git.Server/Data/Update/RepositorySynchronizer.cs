@@ -1,5 +1,6 @@
 ﻿using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Models;
+using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,6 +21,12 @@ namespace Bonobo.Git.Server.Data.Update
 
         private void CheckForNewRepositories()
         {
+            if (!Directory.Exists(UserConfiguration.Current.Repositories))
+            {
+                // We don't want an exception if the repo dir no longer exists, 
+                // as this would make it impossible to start the server
+                return;
+            }
             IEnumerable<string> directories = Directory.EnumerateDirectories(UserConfiguration.Current.Repositories);
             foreach (string directory in directories)
             {
@@ -28,11 +35,21 @@ namespace Bonobo.Git.Server.Data.Update
                 RepositoryModel repository = _repositoryRepository.GetRepository(name);
                 if (repository == null)
                 {
-                    repository = new RepositoryModel();
-                    repository.Description = "Discovered in file system.";
-                    repository.Name = name;
-                    repository.AnonymousAccess = false;
-                    _repositoryRepository.Create(repository);
+                    if (LibGit2Sharp.Repository.IsValid(directory))
+                    {
+                        repository = new RepositoryModel();
+                        repository.Id = Guid.NewGuid();
+                        repository.Description = "Discovered in file system.";
+                        repository.Name = name;
+                        repository.AnonymousAccess = false;
+                        repository.Users = new UserModel[0];
+                        repository.Teams = new TeamModel[0];
+                        repository.Administrators = new UserModel[0];
+                        if (repository.NameIsValid)
+                        {
+                            _repositoryRepository.Create(repository);
+                        }
+                    }
                 }
             }
         }

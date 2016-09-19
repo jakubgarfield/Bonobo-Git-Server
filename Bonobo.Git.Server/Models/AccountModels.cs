@@ -7,21 +7,80 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+
 using Bonobo.Git.Server.App_GlobalResources;
+using Bonobo.Git.Server.Data;
 
 namespace Bonobo.Git.Server.Models
 {
-    public class UserModel
+    public class RoleModel : INameProperty
     {
-        public string Username { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
+        public Guid[] Members { get; set; }
+        public string DisplayName
+        {
+            get
+            {
+                return Name;
+            }
+        }
+    }
+
+    public class UserModel : INameProperty
+    {
+        public Guid Id { get; set; }
+        public string Username { get; set; }
+        public string GivenName { get; set; }
         public string Surname { get; set; }
         public string Email { get; set; }
-        public string[] Roles { get; set; }
+
+        public string DisplayName
+        {
+            get
+            {
+                var compositeName = String.Format("{0} {1}", GivenName, Surname).Trim();
+                if (String.IsNullOrEmpty(compositeName))
+                {
+                    // Return the username if we don't have a GivenName or Surname
+                    return Username;
+                }
+                else
+                {
+                    return compositeName;
+                }
+            }
+        }
+
+        string INameProperty.Name
+        {
+            get { return Username; }
+        }
+
+        /// <summary>
+        /// This is the name we'd sort users by
+        /// </summary>
+        public string SortName
+        {
+            get
+            {
+                var compositeName = Surname + GivenName;
+                if (String.IsNullOrEmpty(compositeName))
+                {
+                    return Username;
+                }
+                return compositeName;
+            }
+        }
     }
 
     public class UserEditModel
     {
+        public Guid Id { get; set; }
+
+        [Remote("UniqueNameUser", "Validation", AdditionalFields="Id", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Duplicate_Name")]
+        [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
+        [Display(ResourceType = typeof(Resources), Name = "Account_Edit_Username")]
         public string Username { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
@@ -52,10 +111,15 @@ namespace Bonobo.Git.Server.Models
 
         [Display(ResourceType = typeof(Resources), Name = "Account_Edit_Roles")]
         public string[] Roles { get; set; }
-    }    
+
+        public string[] SelectedRoles { get; set; }
+        public string[] PostedSelectedRoles { get; set; }
+    }
 
     public class UserDetailModel
     {
+        public Guid Id { get; set; }
+
         [Display(ResourceType = typeof(Resources), Name = "Account_Detail_Username")]
         public string Username { get; set; }
 
@@ -70,10 +134,17 @@ namespace Bonobo.Git.Server.Models
 
         [Display(ResourceType = typeof(Resources), Name = "Account_Detail_Roles")]
         public string[] Roles { get; set; }
+        public bool IsReadOnly { get; set; }
+    }
+
+    public class UserDetailModelList : List<UserDetailModel>
+    {
+        public bool IsReadOnly { get; set; }
     }
 
     public class UserCreateModel
     {
+        [Remote("UniqueNameUser", "Validation", AdditionalFields="Id", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Duplicate_Name")]
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
         [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
         [Display(ResourceType = typeof(Resources), Name = "Account_Create_Username")]

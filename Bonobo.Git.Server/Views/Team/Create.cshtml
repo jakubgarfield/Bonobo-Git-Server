@@ -1,4 +1,5 @@
-﻿@model Bonobo.Git.Server.Models.TeamDetailModel
+﻿@using MvcCheckBoxList.Model
+@model Bonobo.Git.Server.Models.TeamEditModel
 @{    
     ViewBag.Title = Resources.Team_Create_Title;
 }
@@ -6,6 +7,7 @@
 
 @using (Html.BeginForm("Create", "Team", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
 {
+    @Html.AntiForgeryToken()
     @Html.ValidationSummary(false, Resources.Team_Create_Fail)
     
     <fieldset>
@@ -19,14 +21,10 @@
             @Html.TextAreaFor(m => m.Description, new { @class = "medium" })
         </div> 
         <div class="pure-control-group checkboxlist">
-            @{
-                var users = (from u in ViewData["AvailableUsers"] as string[]
-                             orderby u
-                             select new SelectListItem() { Value = u, Text = u }).ToArray();
-            }
-
-            @Html.LabelFor(m => m.Members)
-            @Html.CheckboxListFor(m => m.Members, users)
+            @Html.LabelFor(m => m.AllUsers)
+            <span>
+                @Html.CheckBoxListFor(m => m.PostedSelectedUsers, m => m.AllUsers, m => m.Id, m => m.DisplayName, m => m.SelectedUsers, Position.Vertical)
+            </span>
         </div>
 
         <div class="pure-controls">

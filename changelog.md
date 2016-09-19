@@ -4,6 +4,310 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 6.0.0
+
+**TBD March 2016**
+
+### Compatibility issues
+
+* This version adds column to several tables in the database. This makes it
+incompatible with previous versions of Bonobo. Please ensure that you have a 
+backup of your App_Data folder before you update.
+
+### Features
+
+* A new global option allows a repository to be created by pushing at a non-existent repo name #504
+* Repositories do not need to have an explicit repository administator #505
+* Allow push for anonymous user can now be set on a per repo basis
+* Repository details screen now has copy-to-clipboard buttons for Git URLs #453
+* 'Rescan' button on Repository index screen allows new file-system repos to be discovered without restarting application #454
+* *.ts and *.json formatting support for file display #455
+* New diagnostic page at /home/diagnostics to help with support
+* Claims names are now more consistent with typical ADFS usage #488
+* Added following environment variables: `AUTH_USER_TEAMS`, `AUTH_USER_ROLES`, and `AUTH_USER_DISPLAYNAME`. See the FAQ for more information. #495
+* The linkify option for commit messages can now be set on a per repo basis
+* Verifies that username, repository and team names are unique as you type them
+* Verifies as you type regex entered for linkification
+* Added icons to repository listing indicating anonymous push/pull status
+
+### Bugfixes
+
+* NullReferenceException in EFRepositoryPermissionService HasPermission  #441
+* Inconsistent repo name case-sensitivity (now consistently case-insensitve) #443
+* Correct error reported to Git clients for access to non-existent repo #447
+* Bonobo can start enough to allow access to settings if git directory is mis-configured #451
+* Bonobo doesn't run on systems with particular machine.config RoleManager settings #486
+* The repository logo was not visible in all views
+* Fixed inability to browse folders in branches other then master #541
+
+### Code improvements
+
+* Addition of automated test framework for testing web application
+* Rework of repository permissions Code #492
+* Abort startup if `BinaryGUID=False` is not set in Sqlite connections. 
+* Improved exception handling in GitController #444
+* Upgrade all web.config files to MVC5 #457
+* Password salt now randomly generated at password update #462
+* Resharper settings provided so that Resharper suggested style matches project #465
+* UserModel and User entity class name properties made more consistent #470
+* Far fewer catch-all claueses silently swallowing exceptions
+
+
+## Version 5.2
+
+**17 March 2016**
+
+### Security
+
+This is an important security release adding a CSRF protection to POST actions in the app. Also, it fixes a token validation on password reset function and adds the CSRF protection there as well.
+
+* add form antiforgery protection - Will Dean
+
+
+## Version 5.1.1
+
+**12 January 2016**
+
+### Bug Fixes
+
+* add Sqlite.Interop.dll to the project so it is part of the release
+
+## Version 5.1
+
+**11 January 2016**
+
+### Features
+
+* display general and personal repository URL as links - padremortius
+* add Danish translation - larshg
+* add Italian translation - Andrea Capigiri
+* improve Japanese translation - mattn
+* improve Chinese translation - StarryLibra
+* improve French translation - latop2604
+* Active Directory updates - Matt Bodily
+	* use nested groups for permissions
+	* allow logging in without specifying the AD domain (should use the default for all AD look-ups if one is not specified)
+	* update so username at login is not case sensitive when retrieving roles
+* External links functionality - kabongsteve
+* increase repository logo quality by using PNG - mischalandwehr
+
+### Bug Fixes
+
+* exporting correct user environment variable for AD - BIPrc
+* removing confidence requirement for file type - larshg
+* fixed subfolder application redirection to root - Alex Moran
+* fix error when changing URL - Alex Moran
+* prevent repository buttons breaking - mischalandwehr
+* fix multiple tags support - kabongsteve
+
+### Code improvements
+
+* install SQLite from nuget - padremortius
+* start using MediaTypeMap - padremortius
+* improve .gitignore - n.kochnev
+
+## Version 5.0.1
+
+**5 November 2015**
+
+### Features
+
+* add go to repository after creation - erdemyavuzyildiz
+
+## Bug Fixes
+
+* ADRepository username handling - larshg
+* cookie authentication issue fix - bogusz
+* don't strip domain in AD membership service - larshg
+* fix teams and AD - larshg
+* fix team deletation - BurhanEyimaya
+
+
+## Version 5.0.0
+
+**22 October 2015**
+
+This is a major release as Ollienator simplified and consolidated authorization and also added new providers, but your current web.config could be out of date and might need an update. Check out the new docs and update your web.config accordingly.
+
+### Features
+
+* major rework of authentication and authorization - ollienator
+* simplification of Active Directory integration (no need to run 2 servers) - ollienator
+* authentication through OWIN and ADFS - ollienator
+* updated nuget packages and libgit2sharp - amonomen
+* client based culture and brazil translation - darioajr
+* msysgit update 1.9.5 - larshg
+* remove origin branch after cloning - latop2604
+* allow relative repository path - lhko
+* better error handling - matt-17
+
+### Bug fixes
+
+* improved detection of windows-1252 encoding - larshg
+* fix typo errors - isaksson
+* using UI date time format - crowar
+* fix compile error:x64/SQLite.Interop.dll not found - myh
+
+
+## Version 4.0.0
+
+**11 Jun 2015**
+
+### Features
+
+* can run on Azure Website
+* email check supports new long tld - restartz
+* authenticated user name available on push - kholme2
+* add logo to repository - sansys
+* remove default port from repository view - ivanstus
+* add file info (line count, size) - lkho
+
+### Bug fixes
+
+* fix incorrect encoding in blob preview - colinniu
+* improved project infrastructure - robbforce
+* fix bug with edit/view non-domain users with enabled domain integration - padremortius
+* fix problem with not possible edit/delete account with domain authorization - padremortius
+* fix errors in highlight.js - padremortius
+* fix git clone depth 1 - silvanperego
+
+## Version 3.6.0
+
+**2 Apr 2015**
+
+### Features
+
+* new commit message format - alexkuznetsov
+* french translation - glacasa
+* show personalised URL - sansys
+* added support for grouping repositories - lennardf1989
+* minimize group - sansys
+* link to commited changes - spoiledtechie
+
+### Bug fixes
+
+* fixed history and blame page - igoryk-zp
+* fixed back link - igoryk-zp
+* fixed russian translation - sansys
+
+## Version 3.5.0
+
+**19 Feb 2015**
+
+### Features
+
+* Remember me checkbox - whosa
+* zh-HK, zh-CHT translation and improved encoding - lkho
+* Improved commit layout - whosa
+* Repository allows dot and underscore in the name - mbedded
+* Convert tabs into spaces in blob and commit view - jafp
+* Enable password reset - kengibous
+* Add tags to commit view - heringeidaniel
+
+### Bug fixes
+
+* Fix #207 Remove the home variable from process info before adding it
+* Rescuing from IdentityNotMap Exception for Windows Authentication - jshepler
+* Fix to allow email addresses as users names, Issue #163 #158 - kengibous
+* zh-TW improved - tooto
+
+
+## Version 3.4.3
+
+**14 Dec 2014**
+
+### Features
+
+* Display readme.md in repository browser - kengibous
+
+### Bug Fixes
+
+* Fix broken download link for files - latop2604
+
+
+## Version 3.4.2
+
+**11 Dec 2014**
+
+### Features
+
+* Support for large files and large repos - kfarnung
+* Displaying markdown in repo browser - kengibous
+
+### Bug Fixes
+
+* Disabling post commit auditing as it causes problems with certain clients - stanshillis
+
+## Version 3.4.1
+
+**2 Dec 2014**
+
+### Bug fixes
+
+* Made commit details parsing more robust for ReceivePackHook - kfarnung
+
+## Version 3.4
+
+**30 Nov 2014**
+
+### Features
+
+* Post commit hook - stanshillis
+* Commit auditing (username recording) - stashillis
+* Keep selected branch on all pages - stanshillis
+* Polish translation - Bartlomiej Kaminski
+* History view for files - Igor Nakonechnyi
+* Assembly version displayed in footer - Kyle Engibous
+* Display avatar in commits page - Igor Nakonechnyi
+* Blame for file - Igor Nakonechnyi
+
+### Bug Fixes
+
+* Disallow special characters for repository name - Matthias
+
+
+## Version 3.3
+
+**22 Aug 2014**
+
+### Features
+
+* Clone button for repositories in web management UI - latop2604
+* Support for custom title, logo, additional footer message - OttoNull
+* Add Active Directory group / Team synchronization - Louis-Charles Levasseur
+* Add audit logging of login success or failure - dnadle
+
+### Bug Fixes
+
+* Add missing french translation keys - latop2604
+* Add backwards compatible upgrade of method to store hashed passwords - embix
+* Fix crash when repo contain GitLink node - latop2604
+* Added generic message, if commit message is null or empty - SeitzDev
+* Fix #133 JSON body displayed when going back in repository view
+*
+
+## Version 3.2
+
+**19 May 2014**
+
+### Features
+
+* Repository browser performance improvement
+* Asynchronnous load of commit messages in browser
+* Better English localization
+* Improved deployment process
+* Nuget cleanup
+
+
+### Bug Fixes
+
+* Fixed #102 Create Team button is missing for Windows Authentication mode
+* Fixed #104 Missing highlight.pack.js
+* Fixed #117 Split commit messages
+
+
+<hr />
+
 ## Version 3.1
 
 **27 March 2014**
@@ -18,6 +322,8 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 * Fixed dissapearing menu
 * Fixed CSS Virtual Path (#99 and #100) - [kfarnung](https://github.com/kfarnung)
 
+
+<hr />
 
 ## Version 3.0
 
@@ -160,8 +466,8 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 ### Compatibility Issues
 
 * Password is not compatible with the previous version due to encoding change.
-    * For fixing this issue please use [sqlite administrator](http://sqliteadmin.orbmu2k.de/), open the database file located in App_Data and change your record in the table User and set the field Password to *21232F297A57A5A743894A0E4A801FC3* which means *admin*.
-    * You can run this sql statement `UPDATE User SET Password = '21232F297A57A5A743894A0E4A801FC3' WHERE Username = 'YOUR USERNAME'`
+    * For fixing this issue please use [sqlite administrator](http://sqliteadmin.orbmu2k.de/), open the database file located in App_Data and change your record in the table User and set the field Password to *0CC52C6751CC92916C138D8D714F003486BF8516933815DFC11D6C3E36894BFA044F97651E1F3EEBA26CDA928FB32DE0869F6ACFB787D5A33DACBA76D34473A3* which means *admin*.
+    * You can run this sql statement `UPDATE User SET Password = '0CC52C6751CC92916C138D8D714F003486BF8516933815DFC11D6C3E36894BFA044F97651E1F3EEBA26CDA928FB32DE0869F6ACFB787D5A33DACBA76D34473A3' WHERE Username = 'YOUR USERNAME'`
 * Database name changed from Bonobo.Git.Server.Release.db to Bonobo.Git.Server.db
     * Go to App_Data folder and rename the file
 * Windows Server 2003 is not supported because of the ASP.NET MVC 4.5 and .NET 4.5 versions

@@ -1,67 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Microsoft.Practices.Unity;
+
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 using Bonobo.Git.Server.App_GlobalResources;
+
+using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Controllers
 {
     public class TeamController : Controller
     {
         [Dependency]
-        public ITeamRepository TeamRepository { get; set; }
-
-        [Dependency]
         public IMembershipService MembershipService { get; set; }
 
+        [Dependency]
+        public IRepositoryRepository RepositoryRepository { get; set; }
 
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [Dependency]
+        public ITeamRepository TeamRepository { get; set; }
+
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index()
         {
             return View(ConvertTeamModels(TeamRepository.GetAllTeams()));
         }
 
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
-        public ActionResult Edit(string id)
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
+        public ActionResult Edit(Guid id)
         {
-            if (!String.IsNullOrEmpty(id))
-            {
-                var model = ConvertTeamModel(TeamRepository.GetTeam(id));
-                PopulateViewData();
-                return View(model);
-            }
-            return View();
+            var model = ConvertEditTeamModel(TeamRepository.GetTeam(id));
+            return View(model);
         }
 
         [HttpPost]
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
-        public ActionResult Edit(TeamDetailModel model)
+        [ValidateAntiForgeryToken]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
+        public ActionResult Edit(TeamEditModel model)
         {           
             if (ModelState.IsValid)
             {
                 TeamRepository.Update(ConvertTeamDetailModel(model));
                 ViewBag.UpdateSuccess = true;
             }
-            PopulateViewData();
+            model = ConvertEditTeamModel(TeamRepository.GetTeam(model.Id));
             return View(model);
         }
 
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Create()
         {
-            var model = new TeamDetailModel { };
-            PopulateViewData();
+            var model = new TeamEditModel 
+            {
+                AllUsers = MembershipService.GetAllUsers().ToArray(),
+                SelectedUsers = new UserModel[] { }
+            };
             return View(model);
         }
 
         [HttpPost]
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
-        public ActionResult Create(TeamDetailModel model)
+        [ValidateAntiForgeryToken]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
+        public ActionResult Create(TeamEditModel model)
         {
             while (!String.IsNullOrEmpty(model.Name) && model.Name.Last() == ' ')
             {
@@ -70,9 +73,11 @@ namespace Bonobo.Git.Server.Controllers
 
             if (ModelState.IsValid)
             {
-                if (TeamRepository.Create(ConvertTeamDetailModel(model)))
+                var teammodel = ConvertTeamDetailModel(model);
+                if (TeamRepository.Create(teammodel))
                 {
                     TempData["CreateSuccess"] = true;
+                    TempData["NewTeamId"] = teammodel.Id;
                     return RedirectToAction("Index");
                 }
                 else
@@ -81,80 +86,82 @@ namespace Bonobo.Git.Server.Controllers
                 }
             }
 
-            PopulateViewData();
             return View(model);
         }
 
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
-        public ActionResult Delete(string id)
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
+        public ActionResult Delete(Guid id)
         {
-            if (!String.IsNullOrEmpty(id))
-            {
-                return View(new TeamDetailModel { Name = id });
-            }
-
-            return RedirectToAction("Index");
+            return View(ConvertEditTeamModel(TeamRepository.GetTeam(id)));
         }
 
         [HttpPost]
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
-        public ActionResult Delete(TeamDetailModel model)
+        [ValidateAntiForgeryToken]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
+        public ActionResult Delete(TeamEditModel model)
         {
-            if (model != null && !String.IsNullOrEmpty(model.Name))
+            if (model != null && model.Id != null)
             {
-                TeamRepository.Delete(model.Name);
+                TeamModel team = TeamRepository.GetTeam(model.Id);
+                TeamRepository.Delete(team.Id);
                 TempData["DeleteSuccess"] = true;
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
         }
 
-        [WebAuthorizeAttribute]
-        public ActionResult Detail(string id)
+        [WebAuthorize]
+        public ActionResult Detail(Guid id)
         {
-            if (!String.IsNullOrEmpty(id))
-            {
-                return View(ConvertTeamModel(TeamRepository.GetTeam(id)));
-            }
-            return View();
+            return View(ConvertDetailTeamModel(TeamRepository.GetTeam(id)));
         }
 
 
-        private IEnumerable<TeamDetailModel> ConvertTeamModels(IEnumerable<TeamModel> models)
+        private TeamDetailModelList ConvertTeamModels(IEnumerable<TeamModel> models)
         {
-            var result = new List<TeamDetailModel>();
+            var result = new TeamDetailModelList();
+            result.IsReadOnly = MembershipService.IsReadOnly();
             foreach (var item in models)
             {
-                result.Add(ConvertTeamModel(item));
+                result.Add(ConvertDetailTeamModel(item));
             }
             return result;
         }
 
-        private TeamDetailModel ConvertTeamModel(TeamModel model)
+        private TeamEditModel ConvertEditTeamModel(TeamModel model)
+        {
+            return model == null ? null : new TeamEditModel
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Description = model.Description,
+                AllUsers = MembershipService.GetAllUsers().ToArray(),
+                SelectedUsers = model.Members.ToArray(),
+            };
+        }
+
+        private TeamDetailModel ConvertDetailTeamModel(TeamModel model)
         {
             return model == null ? null : new TeamDetailModel
             {
+                Id = model.Id,
                 Name = model.Name,
                 Description = model.Description,
-                Members = model.Members,
-                Repositories = model.Repositories,
+                Members = model.Members.ToArray(),
+                Repositories = RepositoryRepository.GetTeamRepositories(new[] { model.Id }).ToArray(),
+                IsReadOnly = MembershipService.IsReadOnly()
             };
         }
 
-        private TeamModel ConvertTeamDetailModel(TeamDetailModel model)
+        private TeamModel ConvertTeamDetailModel(TeamEditModel model)
         {
             return new TeamModel
             {
+                Id = model.Id,
                 Name = model.Name,
                 Description = model.Description,
-                Members = model.Members,
-                Repositories = model.Repositories,
+                Members = model.PostedSelectedUsers == null ? new UserModel[0] : model.PostedSelectedUsers.Select(x => MembershipService.GetUserModel(x)).ToArray(),
             };
-        }
-
-        private void PopulateViewData()
-        {
-            ViewData["AvailableUsers"] = MembershipService.GetAllUsers().Select(i => i.Username).ToArray();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿@model Bonobo.Git.Server.Models.UserEditModel
+﻿@using MvcCheckBoxList.Model
+@model Bonobo.Git.Server.Models.UserEditModel
 @{
     ViewBag.Title = Resources.Account_Edit_Title;
 }
@@ -20,10 +21,16 @@ else
 
     @using (Html.BeginForm("Edit", "Account", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
     {   
+        @Html.AntiForgeryToken()
         @Html.ValidationSummary(false, Resources.Account_Edit_Unsuccessfull)
-        @Html.HiddenFor(m => m.Username)
+        @Html.HiddenFor(m => m.Id)
         
         <fieldset>
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.Username)
+                @Html.TextBoxFor(m => m.Username)<em>*</em>
+                @Html.ValidationMessageFor(m => m.Username)
+            </div>
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.Name)
                 @Html.TextBoxFor(m => m.Name, new { autofocus = "" })<em>*</em>
@@ -39,7 +46,7 @@ else
                 @Html.TextBoxFor(m => m.Email, new { @class = "medium" })<em>*</em>
                 @Html.ValidationMessageFor(m => m.Email)
             </div>
-            @if (!WindowsActionFilterAttribute.IsWindowsModeActive)
+            @if (!User.IsWindowsAuthenticated())
             {
                 if (!User.IsInRole(Definitions.Roles.Administrator))
                 {
@@ -64,13 +71,9 @@ else
             {
                 <div class="pure-control-group checkboxlist">
                     @Html.LabelFor(m => m.Roles)
-                    @{
-                        var users = (from u in ViewData["AvailableRoles"] as string[]
-                                     orderby u
-                                     select new SelectListItem() { Value = u, Text = u }).ToArray();
-                    }
-
-                    @Html.CheckboxListFor(m => m.Roles, users)
+                    <span>
+                        @Html.CheckBoxListFor(m => m.PostedSelectedRoles, m => m.Roles, m => m, m => m, m => m.SelectedRoles, Position.Vertical)
+                    </span>
                     <i class="fa fa-info-circle" title="@Resources.Account_Edit_RolesHint"></i>
                 </div>
             }

@@ -1,0 +1,56 @@
+﻿@using Bonobo.Git.Server.Extensions
+@model RepositoryBlameModel
+@{
+    Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
+    ViewBag.Title = Resources.Repository_Blame_Title;
+}
+@if (Model != null)
+{
+    @Html.Partial("_BranchSwitcher")
+    @Html.Partial("_AddressBar")
+
+    <div class="blob">
+        @{
+            <div class="controls">
+                <span>@Model.LineCount lines | @FileDisplayHandler.GetFileSizeString(Model.FileSize)</span>
+                <a href="@Url.Action("Blob", new { id=ViewBag.ID, encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true)})"><i class="fa fa-code"></i> @Resources.Repository_Tree_Blob</a>
+                <a href="@Url.Action("History", new { id=ViewBag.ID, encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true)})"><i class="fa fa-history"></i> @Resources.Repository_Tree_History</a>
+                <a href="@Url.Action("Raw", new { id=ViewBag.ID, encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true), display = true })"><i class="fa fa-file-text"></i> @Resources.Repository_Tree_RawDisplay</a>
+                <a href="@Url.Action("Raw", new { id=ViewBag.ID, encodedPath = PathEncoder.Encode(Model.Path, allowSlash: true) })"><i class="fa fa-download"></i> @Resources.Repository_Tree_Download</a>
+            </div>
+            <div class="blame">
+                <table id="blame_table">
+                    <colgroup>
+                        <col width="1" />
+                        <col width="1" />
+                        <col />
+                    </colgroup>
+                    <tbody>
+                        @{ int line = 1; bool even = true; }
+                        @foreach (var hunk in Model.Hunks)
+                        {
+                            even = !even;
+                            for (int i = 0, length = hunk.Lines.Length; i < length; i++, line++)
+                            {
+                                <tr id="l@(line)" class="@(even ? "even" : "odd")">
+                                    @if (i == 0)
+                                    {
+                                        <td class="commit" rowspan="@length">
+                                            @Html.Partial("_Commit", hunk.Commit)
+                                        </td>
+                                    }
+                                    <td class="line_nr">
+                                        <a href="#l@(line)">@line</a>
+                                    </td>
+                                    <td class="line">
+                                        <pre>@hunk.Lines[i]</pre>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+}

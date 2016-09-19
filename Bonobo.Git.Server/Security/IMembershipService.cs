@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Bonobo.Git.Server.Data;
+﻿using System.Collections.Generic;
 using Bonobo.Git.Server.Models;
+using System;
 
 namespace Bonobo.Git.Server.Security
 {
     public interface IMembershipService
     {
-        bool ValidateUser(string username, string password);
-        bool CreateUser(string username, string password, string name, string surname, string email);
+        bool IsReadOnly();
+        ValidationResult ValidateUser(string username, string password);
+        bool CreateUser(string username, string password, string givenName, string surname, string email);
+        bool CreateUser(string username, string password, string givenName, string surname, string email, Guid id);
         IList<UserModel> GetAllUsers();
-        UserModel GetUser(string username);
-        void UpdateUser(string username, string name, string surname, string email, string password);
-        void DeleteUser(string username);
+        UserModel GetUserModel(Guid id);
+        UserModel GetUserModel(string username);
+        void UpdateUser(Guid id, string username, string givenName, string surname, string email, string password);
+        void DeleteUser(Guid id);
+        string GenerateResetToken(string username);
     }
 }

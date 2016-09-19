@@ -2,74 +2,86 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bonobo.Git.Server.Models;
-using System.Data;
+using System.Data.Entity.Core;
+using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
+using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Data
 {
     public class EFRepositoryRepository : IRepositoryRepository
     {
+        [Dependency]
+        public Func<BonoboGitServerContext> CreateContext { get; set; }
+
         public IList<RepositoryModel> GetAllRepositories()
         {
-            using (var db = new BonoboGitServerContext())
+            using (var db = CreateContext())
             {
                 var dbrepos = db.Repositories.Select(repo => new
                 {
+                    Id = repo.Id,
                     Name = repo.Name,
+                    Group = repo.Group,
                     Description = repo.Description,
                     AnonymousAccess = repo.Anonymous,
-                    Users = repo.Users.Select(i => i.Username),
-                    Teams = repo.Teams.Select(i => i.Name),
-                    Administrators = repo.Administrators.Select(i => i.Username),
+                    Users = repo.Users,
+                    Teams = repo.Teams,
+                    Administrators = repo.Administrators,
+                    AuditPushUser = repo.AuditPushUser,
+                    AllowAnonPush = repo.AllowAnonymousPush,
+                    Logo = repo.Logo
                 }).ToList();
 
                 return dbrepos.Select(repo => new RepositoryModel
                 {
+                    Id = repo.Id,
                     Name = repo.Name,
+                    Group = repo.Group,
                     Description = repo.Description,
                     AnonymousAccess = repo.AnonymousAccess,
-                    Users = repo.Users.ToArray(),
-                    Teams = repo.Teams.ToArray(),
-                    Administrators = repo.Administrators.ToArray(),
+                    Users = repo.Users.Select(user => user.ToModel()).ToArray(),
+                    Teams = repo.Teams.Select(TeamToTeamModel).ToArray(),
+                    Administrators = repo.Administrators.Select(user => user.ToModel()).ToArray(),
+                    AuditPushUser = repo.AuditPushUser,
+                    AllowAnonymousPush = repo.AllowAnonPush,
+                    Logo = repo.Logo
                 }).ToList();
             }
         }
 
-        public IList<RepositoryModel> GetPermittedRepositories(string username, string[] teams)
-        {
-            if (username == null) throw new ArgumentException("username");
-
-            username = username.ToLowerInvariant();
-            return GetAllRepositories().Where(i => i.Administrators.Contains(username)
-                || i.Users.Contains(username)
-                || i.Teams.FirstOrDefault(t => teams.Contains(t)) != null
-                || i.AnonymousAccess).ToList();
-        }
-
-        public IList<RepositoryModel> GetAdministratedRepositories(string username)
-        {
-            if (username == null) throw new ArgumentException("username");
-            
-            username = username.ToLowerInvariant();
-            return GetAllRepositories().Where(i => i.Administrators.Contains(username)).ToList();
-        }
-
         public RepositoryModel GetRepository(string name)
         {
-            if (name == null) throw new ArgumentException("name");
+            if (name == null) throw new ArgumentNullException("name");
 
-            using (var db = new BonoboGitServerContext())
+            /* The straight-forward solution of using FindFirstOrDefault with
+             * string.Equal does not work. Even name.Equals with OrdinalIgnoreCase does not
+             * as it seems to get translated into some specific SQL syntax and EF does not
+             * provide case insensitive matching :( */
+            var repos = GetAllRepositories();
+            foreach (var repo in repos)
             {
-                return ConvertToModel(db.Repositories.FirstOrDefault(i => i.Name == name));
+                if (repo.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return repo;
+                }
+            }
+            return null;
+        }
+
+        public RepositoryModel GetRepository(Guid id)
+        {
+            using (var db = CreateContext())
+            {
+                return ConvertToModel(db.Repositories.First(i => i.Id.Equals(id)));
             }
         }
 
-        public void Delete(string name)
+        public void Delete(Guid id)
         {
-            if (name == null) throw new ArgumentException("name");
-
-            using (var db = new BonoboGitServerContext())
+            using (var db = CreateContext())
             {
-                var repo = db.Repositories.FirstOrDefault(i => i.Name == name);
+                var repo = db.Repositories.FirstOrDefault(i => i.Id == id);
                 if (repo != null)
                 {
                     repo.Administrators.Clear();
@@ -81,32 +93,52 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
+        public bool NameIsUnique(string newName, Guid ignoreRepoId)
+        {
+            var repo = GetRepository(newName);
+            return repo == null || repo.Id == ignoreRepoId;
+        }
+
         public bool Create(RepositoryModel model)
         {
             if (model == null) throw new ArgumentException("model");
             if (model.Name == null) throw new ArgumentException("name");
 
-            using (var database = new BonoboGitServerContext())
+            using (var database = CreateContext())
             {
+                model.EnsureCollectionsAreValid();
+                model.Id = Guid.NewGuid();
                 var repository = new Repository
                 {
+                    Id = model.Id,
                     Name = model.Name,
+                    Logo = model.Logo,
+                    Group = model.Group,
                     Description = model.Description,
                     Anonymous = model.AnonymousAccess,
+                    AllowAnonymousPush = model.AllowAnonymousPush,
+                    AuditPushUser = model.AuditPushUser,
+                    LinksUseGlobal = model.LinksUseGlobal,
+                    LinksUrl = model.LinksUrl,
+                    LinksRegex = model.LinksRegex 
                 };
                 database.Repositories.Add(repository);
-                AddMembers(model.Users, model.Administrators, model.Teams, repository, database);
+                AddMembers(model.Users.Select(x => x.Id), model.Administrators.Select(x => x.Id), model.Teams.Select(x => x.Id), repository, database);
                 try
                 {
                     database.SaveChanges();
+                }
+                catch (DbUpdateException ex)
+                {
+                    Trace.TraceWarning("Failed to create repo {0} - {1}", model.Name, ex);
+                    return false;
                 }
                 catch (UpdateException)
                 {
                     return false;
                 }
+                return true;
             }
-
-            return true;
         }
 
         public void Update(RepositoryModel model)
@@ -114,23 +146,49 @@ namespace Bonobo.Git.Server.Data
             if (model == null) throw new ArgumentException("model");
             if (model.Name == null) throw new ArgumentException("name");
 
-            using (var db = new BonoboGitServerContext())
+            using (var db = CreateContext())
             {
-                var repo = db.Repositories.FirstOrDefault(i => i.Name == model.Name);
+                var repo = db.Repositories.FirstOrDefault(i => i.Id == model.Id);
                 if (repo != null)
                 {
+                    model.EnsureCollectionsAreValid();
+
+                    repo.Name = model.Name;
+                    repo.Group = model.Group;
                     repo.Description = model.Description;
                     repo.Anonymous = model.AnonymousAccess;
+                    repo.AuditPushUser = model.AuditPushUser;
+                    repo.AllowAnonymousPush = model.AllowAnonymousPush;
+                    repo.LinksRegex = model.LinksRegex;
+                    repo.LinksUrl = model.LinksUrl;
+                    repo.LinksUseGlobal = model.LinksUseGlobal;
+
+                    if (model.Logo != null)
+                        repo.Logo = model.Logo;
+
+                    if (model.RemoveLogo)
+                        repo.Logo = null;
 
                     repo.Users.Clear();
                     repo.Teams.Clear();
                     repo.Administrators.Clear();
 
-                    AddMembers(model.Users, model.Administrators, model.Teams, repo, db);
+                    AddMembers(model.Users.Select(x => x.Id), model.Administrators.Select(x => x.Id), model.Teams.Select(x => x.Id), repo, db);
 
                     db.SaveChanges();
                 }
             }
+        }
+
+        private TeamModel TeamToTeamModel(Team t)
+        {
+            return new TeamModel
+            {
+                Id = t.Id,
+                Name = t.Name,
+                Description = t.Description,
+                Members = t.Users.Select(user => user.ToModel()).ToArray()
+            };
         }
 
         private RepositoryModel ConvertToModel(Repository item)
@@ -142,20 +200,29 @@ namespace Bonobo.Git.Server.Data
 
             return new RepositoryModel
             {
+                Id = item.Id,
                 Name = item.Name,
+                Group = item.Group,
                 Description = item.Description,
                 AnonymousAccess = item.Anonymous,
-                Users = item.Users.Select(i => i.Username).ToArray(),
-                Teams = item.Teams.Select(i => i.Name).ToArray(),
-                Administrators = item.Administrators.Select(i => i.Username).ToArray(),
+                Users = item.Users.Select(user => user.ToModel()).ToArray(),
+                Teams = item.Teams.Select(TeamToTeamModel).ToArray(),
+                Administrators = item.Administrators.Select(user => user.ToModel()).ToArray(),
+                AuditPushUser = item.AuditPushUser,
+                AllowAnonymousPush = item.AllowAnonymousPush,
+                Logo = item.Logo,
+                LinksRegex = item.LinksRegex,
+                LinksUrl = item.LinksUrl,
+                LinksUseGlobal = item.LinksUseGlobal
+
             };
         }
 
-        private void AddMembers(IEnumerable<string> users, IEnumerable<string> admins, IEnumerable<string> teams, Repository repo, BonoboGitServerContext database)
+        private void AddMembers(IEnumerable<Guid> users, IEnumerable<Guid> admins, IEnumerable<Guid> teams, Repository repo, BonoboGitServerContext database)
         {
             if (admins != null)
             {
-                var administrators = database.Users.Where(i => admins.Contains(i.Username));
+                var administrators = database.Users.Where(i => admins.Contains(i.Id));
                 foreach (var item in administrators)
                 {
                     repo.Administrators.Add(item);
@@ -164,7 +231,7 @@ namespace Bonobo.Git.Server.Data
 
             if (users != null)
             {
-                var permittedUsers = database.Users.Where(i => users.Contains(i.Username));
+                var permittedUsers = database.Users.Where(i => users.Contains(i.Id));
                 foreach (var item in permittedUsers)
                 {
                     repo.Users.Add(item);
@@ -173,7 +240,7 @@ namespace Bonobo.Git.Server.Data
 
             if (teams != null)
             {
-                var permittedTeams = database.Teams.Where(i => teams.Contains(i.Name));
+                var permittedTeams = database.Teams.Where(i => teams.Contains(i.Id));
                 foreach (var item in permittedTeams)
                 {
                     repo.Teams.Add(item);
@@ -181,5 +248,9 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
+        public IList<RepositoryModel> GetTeamRepositories(Guid[] teamsId)
+        {
+            return GetAllRepositories().Where(repo => repo.Teams.Any(team => teamsId.Contains(team.Id))).ToList();
+        }
     }
 }

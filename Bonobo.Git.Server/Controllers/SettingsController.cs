@@ -15,34 +15,51 @@ namespace Bonobo.Git.Server.Controllers
 {
     public class SettingsController : Controller
     {
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index()
         {
             return View(new GlobalSettingsModel
             {
                 AllowAnonymousPush = UserConfiguration.Current.AllowAnonymousPush,
-                RepositoryPath = UserConfiguration.Current.Repositories,
+                RepositoryPath = UserConfiguration.Current.RepositoryPath,
                 AllowAnonymousRegistration = UserConfiguration.Current.AllowAnonymousRegistration,
                 AllowUserRepositoryCreation = UserConfiguration.Current.AllowUserRepositoryCreation,
+                AllowPushToCreate = UserConfiguration.Current.AllowPushToCreate,
                 DefaultLanguage = UserConfiguration.Current.DefaultLanguage,
+                SiteTitle = UserConfiguration.Current.SiteTitle,
+                SiteLogoUrl = UserConfiguration.Current.SiteLogoUrl,
+                SiteFooterMessage = UserConfiguration.Current.SiteFooterMessage,
+                IsCommitAuthorAvatarVisible = UserConfiguration.Current.IsCommitAuthorAvatarVisible,
+                LinksRegex = UserConfiguration.Current.LinksRegex,
+                LinksUrl = UserConfiguration.Current.LinksUrl,
             });
         }
 
         [HttpPost]
-        [WebAuthorizeAttribute(Roles = Definitions.Roles.Administrator)]
+        [ValidateAntiForgeryToken]
+        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index(GlobalSettingsModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (Directory.Exists(model.RepositoryPath))
+                    if (Directory.Exists(Path.IsPathRooted(model.RepositoryPath)
+                                         ? model.RepositoryPath
+                                         : HttpContext.Server.MapPath(model.RepositoryPath)))
                     {
                         UserConfiguration.Current.AllowAnonymousPush = model.AllowAnonymousPush;
-                        UserConfiguration.Current.Repositories = model.RepositoryPath;
+                        UserConfiguration.Current.RepositoryPath = model.RepositoryPath;
                         UserConfiguration.Current.AllowAnonymousRegistration = model.AllowAnonymousRegistration;
                         UserConfiguration.Current.AllowUserRepositoryCreation = model.AllowUserRepositoryCreation;
+                        UserConfiguration.Current.AllowPushToCreate = model.AllowPushToCreate;
                         UserConfiguration.Current.DefaultLanguage = model.DefaultLanguage;
+                        UserConfiguration.Current.SiteTitle = model.SiteTitle;
+                        UserConfiguration.Current.SiteLogoUrl = model.SiteLogoUrl;
+                        UserConfiguration.Current.SiteFooterMessage = model.SiteFooterMessage;
+                        UserConfiguration.Current.IsCommitAuthorAvatarVisible = model.IsCommitAuthorAvatarVisible;
+                        UserConfiguration.Current.LinksRegex = model.LinksRegex;
+                        UserConfiguration.Current.LinksUrl = model.LinksUrl;
                         UserConfiguration.Current.Save();
 
                         this.Session["Culture"] = new CultureInfo(model.DefaultLanguage);

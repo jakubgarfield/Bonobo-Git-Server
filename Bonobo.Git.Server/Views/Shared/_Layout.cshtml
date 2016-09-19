@@ -3,18 +3,28 @@
 <head>
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="~/favicon.ico?v=2" type="image/x-icon" />
-    <title>@ViewBag.Title :: Bonobo Git Server</title>
-    @Styles.Render("~/Content/bundled.css")
+    <title>@ViewBag.Title :: @UserConfiguration.Current.GetSiteTitle()</title>
+    @Styles.Render("~/Content/bundledCss")
+    @if (UserConfiguration.Current.HasCustomSiteLogo)
+    {
+    <style>
+        .navigation.pure-menu a.pure-menu-heading {
+            background: url('@Url.Content(UserConfiguration.Current.SiteLogoUrl)') no-repeat 0 4px;
+        }
+    </style>
+    }
 </head>
 <body class="@HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString() @HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString()">
     <div class="main">
         <div class="header">
             <div class="navigation pure-menu pure-menu-open pure-menu-horizontal">
-                @Html.ActionLink(Resources.Layout_Title, "", "", null, new { @class = "pure-menu-heading" })
+                @Html.ActionLink(UserConfiguration.Current.GetSiteTitle(), "", "", null, new { @class = "pure-menu-heading" })
 
                 <ul>
                     @if (Request.IsAuthenticated)
                     {
+                        var items = (IEnumerable<SelectListItem>)Html.ViewBag.PermittedRepositories;
+                        @Html.DropDownList("Repositories", items, Resources.Repository_Go_To_Dropdown, new { @class = "repositories", @onChange = "javascript:location.href=this.options[this.selectedIndex].value;" });
                         <li><a href="@Url.Action("Index", "Repository")" class="repository"><i class="fa fa-hdd-o"></i> @Resources.Layout_Repositories</a></li>
                     }
                     @if (User.IsInRole(Definitions.Roles.Administrator))
@@ -25,26 +35,18 @@
                     }
                     @if (Request.IsAuthenticated)
                     {
-                        if (!WindowsActionFilterAttribute.IsWindowsModeActive)
+                        <li class="separator"><a href="@Url.Action("Edit", "Account", new { id = User.Id() })"><i class="fa fa-male"></i> @User.DisplayName()</a></li>
+                        if (!User.IsWindowsAuthenticated())
                         {
-                            <li class="separator"><a href="@Url.Action("Edit", "Account", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) })"><i class="fa fa-male"></i> @Context.User.Identity.Name</a></li>
                             <li><a href="@Url.Action("LogOff", "Home")"><i class="fa fa-sign-out"></i> @Resources.Layout_LogOff</a></li>
-                        }
-                        else
-                        {
-                            <li class="separator"><a href="@Url.Action("Edit", "Account", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) })"><i class="fa fa-male"></i> @Context.User.Identity.Name</a></li>
                         }
                     }
                     else
                     {
+                        <li><a href="@Url.Action("LogOn", "Home", new { id = User.Id() })"><i class="fa fa-sign-in"></i> @Resources.Layout_LogOn</a></li>
                         if (UserConfiguration.Current.AllowAnonymousRegistration)
                         {
-                            <li><a href="@Url.Action("LogOn", "Home", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) })"><i class="fa fa-sign-in"></i> @Resources.Layout_LogOn</a></li>
                             <li><a href="@Url.Action("Create", "Account")"><i class="fa fa-pencil"></i> @Resources.Layout_Register</a></li>
-                        }
-                        else
-                        {
-                            <li><a href="@Url.Action("LogOn", "Home", new { id = UsernameUrl.Encode(User.Identity.Name.ToLowerInvariant()) })"><i class="fa fa-sign-in"></i> @Resources.Layout_LogOn</a></li>
                         }
                     }
                 </ul>
@@ -56,11 +58,20 @@
         </div>
 
         <div class="footer">
-            <p>&copy; 2014 <a href="http://www.chodounsky.net">Jakub Chodounský</a> &middot; <a href="http://bonobogitserver.com/">@Resources.Home</a> &middot; <a href="https://github.com/jakubgarfield/Bonobo-Git-Server">@Resources.Source</a></p>
+            <p>
+                @if (UserConfiguration.Current.HasSiteFooterMessage)
+                {
+                    @UserConfiguration.Current.SiteFooterMessage
+                    @:&middot;
+                }
+                Bonobo Git Server (@Html.AssemblyVersion()) &copy; 2015 <a href="http://www.chodounsky.net">Jakub Chodounský</a>
+                &middot; <a href="http://bonobogitserver.com/">@Resources.Home</a> 
+                &middot; <a href="https://github.com/jakubgarfield/Bonobo-Git-Server">@Resources.Source</a>
+            </p>
         </div>
     </div>
 
-    @Scripts.Render("~/bundled.js")
-    <script>hljs.initHighlightingOnLoad();</script>
+    @Scripts.Render("~/bundledJs")
+    @RenderSection("scripts", required: false)
 </body>
 </html>

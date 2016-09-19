@@ -18,6 +18,8 @@ th a:hover { text-decoration: none; color: #4183c4; }
 .pure-table thead { background: none; }
 .pure-table th { font-weight: 300; }
 
+pre code { font-family: Consolas, monospace; }
+
 .field-validation-error { color: #a94442; margin-left: 0.7em; }
 .field-validation-valid { display: none; }
 .input-validation-error { border: 1px solid #a94442 !important; background-color: #fdf7f7; }
@@ -34,8 +36,12 @@ th a:hover { text-decoration: none; color: #4183c4; }
 .pure-form.detail span { vertical-align: middle; line-height: 2em; }
 .pure-form.detail label { color: silver; }
 textarea.medium, input.medium { width: 30em; }
+textarea.large, input.large { width: 40em;height: 17em; }
+div.pure-control-group.checkboxlist>span { display: inline-block; }
 
 
+/*table.repositories a.detail { padding-right: 10px }*/
+table.repositories button.copy-to-clip-button { margin-left: 0px; border-radius: 5px; }
 
 .navigation { padding: 0.5em 0; text-align: right;}
 .navigation.pure-menu a.pure-menu-heading { color: white; font-weight: 300; font-size: 1.2em; background: url('images/git-logo.png') no-repeat 0 4px; padding-left: 40px; float: left; margin-left: 0.5em;}
@@ -47,11 +53,14 @@ textarea.medium, input.medium { width: 30em; }
 .navigation li a:hover,
 .navigation li a:focus { background: none; color: #AECFE5; text-decoration: none; }
 .Repository .navigation .repository, .Account .navigation .users, .Team .navigation .teams, .Settings .navigation .settings { color: #AECFE5; }
+.Repository select.repositories {margin-left: 20px; }
 
 
 .main { min-height: 100%; position: relative; }
 
 .content { width: 980px; margin: 0 auto; padding-bottom: 50px; }
+.content h1 { position:relative; }
+.content h1 img {   position: absolute; left: -54px; top: 6px; }
 
 .footer { color: #999; background-color: #000; font-size: 0.85em; width: 100%; position: absolute; bottom: 0; height: 50px; line-height: 1.7em; text-align: center; }
 .footer a { color: #999; text-decoration: none; }
@@ -74,15 +83,15 @@ tfoot td { text-align: center; border-bottom: none !important; }
 
 .repository-menu { margin-bottom: 0em; }
 .repository-menu a:hover { text-decoration: none; }
-.Detail .repository-menu .detail, .Tree .repository-menu .browser, .Blob .repository-menu .browser, .Commit .repository-menu .commits, .Commits .repository-menu .commits { color: #4183c4; }
+.Detail .repository-menu .detail, .Tree .repository-menu .browser, .Blame .repository-menu .browser, .Blob .repository-menu .browser, .Commit .repository-menu .commits, .Commits .repository-menu .commits { color: #4183c4; }
 
 .Repository div.detail { margin-top: 2em; }
+
 
 nav.branches a:hover { text-decoration: none; }
 nav.branches li.active a { color: #4183c4; }
 nav.branches li > a:after { content: '\f107'; font-family: FontAwesome; margin-left: 0.5em; }
 nav.branches li > a:only-child:after { content: ''; }
-nav.branches .tag a:before, .branches a.tag:before { content: '\f02b'; font-family: FontAwesome; margin-right: 0.5em; }
 nav.branches .branch a:before, .branches a.branch:before { content: '\f0e8'; font-family: FontAwesome; margin-right: 0.5em; display: inline-block; -webkit-transform: rotate(180deg); -moz-transform: rotate(180deg); -o-transform: rotate(180deg); -ms-transform: rotate(180deg); transform: rotate(180deg); }
 nav.branches li:hover { background-color: #eee; }
 nav.branches ul { padding: 0; margin: 0; }
@@ -93,28 +102,89 @@ nav.branches ul li:hover ul { z-index: 99999; display: list-item; position: abso
 nav.branches ul li:hover ul li { float: none; }
 .Commits nav.branches ul li { display: inline-block; float: none;}
 .Commits nav.branches ul li:hover ul li { display: block; float: none;}
+.tag a:before, .branches a.tag:before { content: '\f02b'; font-family: FontAwesome; margin-right: 0.25em; margin-left: 0.5em; white-space:nowrap; }
+Tags .tag a { background-color: rgba(148, 190, 214, 1); border-radius: 5px; color: white; font-size: 1.2em; font-weight: bold; padding-right: 0.5em; margin-right: 0.25em; margin-top: 0.2em; display: inline-block; }
+
+
+.links a { color: maroon; }
+.links a:before { content: '\f0c1'; font-family: FontAwesome; margin-right: 0.25em; margin-left: 0.5em; }
 
 .Tree .pure-table tbody { font-size: 0.8em; }
+.Tree #files .path { width: 230px;}
+.Tree #files .date { width: 150px;}
 .breadcrumbs { padding: 7px; margin: 0; }
 .breadcrumbs em { font-weight: bold; font-style: normal; }
+.inline-form { display: inline-block; }
 
 .blob { border: 1px solid #ddd; margin: 2em 0; }
-.blob .controls { border-bottom: 1px solid #ddd; text-align: right; text-shadow: 0 1px 0 #fff; background-image: linear-gradient(#fafafa, #eaeaea); background-repeat: repeat-x; padding-right: 1em;}
-.blob .controls a { color: #777; display: inline-block; padding: 0.5em;}
+.blob .controls { border-bottom: 1px solid #ddd; text-shadow: 0 1px 0 #fff; background-image: linear-gradient(#fafafa, #eaeaea); background-repeat: repeat-x; padding-right: 1em;}
+.blob .controls:after { content: ''; clear: both; display: block;}
+.blob .controls > * { color: #777; display: inline-block; padding: 0.5em;}
+.blob .controls a { float: right;}
 .blob .controls a:hover { color: #4183c4; text-decoration: none;}
 .blob pre, .diff pre { font-size: 0.8em; word-wrap:normal; overflow: auto; margin: 0; padding: 0;}
 .blob pre code, .diff pre code { white-space: pre; background: transparent; margin: 0.5em;}
 .blob img {margin: 1em auto; display: block;}
 
-.commit .metadata p { margin: 0; font-size: 0.8em; font-family: monospace, sans-serif;}
+.markdown { padding: 1em; }
+
+.blame { overflow-x: auto }
+#blame_table { margin: 0 0 -1px 0; }
+#blame_table td { border-top: 1px solid #eaeaea; border-bottom: 1px solid #eaeaea }
+#blame_table td.commit { border-right: 1px solid #eaeaea; vertical-align: top }
+#blame_table td.commit .commit { border-bottom: none; width: 500px }
+#blame_table td.commit .commit h2 { font-size: 1em; max-width: 100% }
+#blame_table td.commit .commit h4 { margin: 0 }
+#blame_table td.commit .commit .metadata .avatar { width: 65px; margin: 0 0 0 5px }
+#blame_table td.commit[rowspan="2"] .commit h2 { margin: 0 }
+#blame_table td.commit[rowspan="2"] .commit .metadata h4 + p { display: block }
+#blame_table td.commit[rowspan="2"] .commit .metadata p { display: none }
+#blame_table td.commit[rowspan="2"] .commit .metadata .avatar { display: none }
+#blame_table td.commit[rowspan="1"] .commit h2 { margin: 0 }
+#blame_table td.commit[rowspan="1"] .commit h4 { display: none }
+#blame_table td.commit[rowspan="1"] .commit .metadata h4 { display: block }
+#blame_table td.commit[rowspan="1"] .commit .metadata p { display: none }
+#blame_table td.commit[rowspan="1"] .commit .metadata .avatar { display: none }
+#blame_table td.line_nr { text-align: right; padding: 0 5px; border-right: 1px solid #eaeaea }
+#blame_table td.line { vertical-align: middle }
+#blame_table td.line pre { white-space: pre }
+#blame_table tr.even td.line { background-color: #eaeaea; border-top: 1px solid #fff; border-bottom: 1px solid #fff }
+
+.commit .metadata > div { float: right }
+.commit .metadata .avatar { margin: 20px 0 0 5px; }
+.commit .metadata p { margin: 0; font-size: 0.8em; font-family: Consolas, monospace;}
 .commit .metadata h4 { margin-bottom: 0.5em;}
 .commit .metadata { text-align: right;}
+.commit h2 {width: 780px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .commit h2 a:hover { text-decoration: none; color: #777;}
-.commit { border-bottom: 1px solid #f6f6f6; }
+.commit { border-bottom: 1px solid #a6a6a6; padding-bottom: 3px; }
 
 .Commit em { font-style: normal;}
-.Commit .item { font-family: monospace, sans-serif; font-size: 0.8em;}
+.Commit .item { font-family: Consolas, monospace; font-size: 0.8em;}
 .Commit .item .count { text-align: right;}
 .Commit .blob .controls { text-align: left;}
 .Commit .blob .controls p { margin: 0; padding: 0.5em 1em;}
 .Commit .diff h3 { margin-top: 1.5em; }
+
+.commit .notes p { font-size: 0.7em; }
+.commit h2{ margin-bottom: 0; position:relative; }
+.commit .commitdate { font-size: 0.7em}
+
+.pure-u-2-5.metadata div { z-index:11; position:relative; }
+
+.commit h2 { margin-bottom: 0; position: relative; }
+.commit h2 a.commit-url { display: inline-block; max-width: 90%; overflow: hidden; text-overflow: ellipsis; }
+.commit .commitdate { font-size: 0.7em; }
+.more-commit-info-toggler { background-color: silver; border: 1px solid #a39e9e; border-radius: 1px; color: #827a7a; display: inline-block; font-size: 14px; font-weight: bold; height: 12px; line-height: 6px; padding: 0 6px 1px; position: relative; top: -9px; vertical-align: middle; }
+
+.repositories { margin: 0 0 1em 0; }
+h2.group { margin: 0; }
+td.description { width: 50%; }
+td.logo { width: 36px; }
+
+h2.group .toggle:after { display: inline-block; font-family: FontAwesome; top: 0; content: "\f056"; height: 100%; width: 20px; cursor: pointer; color: #4183c4; }
+h2.group .toggle.on:after { content: "\f055"; }
+
+img.repo-logo { width:36px; height: auto; image-rendering: -moz-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; -ms-interpolation-mode: nearest-neighbor; }
+
+.copy-to-clip-button {font-size: 12px; padding: 4px; }

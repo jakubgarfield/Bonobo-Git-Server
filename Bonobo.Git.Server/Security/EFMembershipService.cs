@@ -2,45 +2,82 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bonobo.Git.Server.Data;
-using System.Data;
 using Bonobo.Git.Server.Models;
+using System.Security.Cryptography;
+using System.Data.Entity.Core;
+using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server.Security
 {
     public class EFMembershipService : IMembershipService
     {
-        public bool ValidateUser(string username, string password)
+        [Dependency]
+        public Func<BonoboGitServerContext> CreateContext { get; set; }
+
+        private readonly IPasswordService _passwordService;
+
+        public EFMembershipService()
         {
-            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "userName");
+            // set up dependencies
+            Action<string, string> updateUserPasswordHook =
+                (username, password) =>
+                {
+                    using (var db = CreateContext())
+                    {
+                        var user = db.Users.FirstOrDefault(i => i.Username == username);
+                        if (user != null)
+                        {
+                            UpdateUser(user.Id, null, null, null, null, password);
+                        }
+                    }
+                };
+            _passwordService = new PasswordService(updateUserPasswordHook);
+        }
+
+        public bool IsReadOnly()
+        {
+            return false;
+        }
+
+        public ValidationResult ValidateUser(string username, string password)
+        {
+            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
 
             username = username.ToLowerInvariant();
-            using (var database = new BonoboGitServerContext())
+            using (var database = CreateContext())
             {
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
-                return user != null && ComparePassword(password, user.Password);
+                return user != null && _passwordService.ComparePassword(password, username, user.PasswordSalt, user.Password) ? ValidationResult.Success : ValidationResult.Failure;
             }
         }
 
-        public bool CreateUser(string username, string password, string name, string surname, string email)
+        public bool CreateUser(string username, string password, string givenName, string surname, string email)
         {
-            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "userName");
+            return CreateUser(username, password, givenName, surname, email, Guid.NewGuid());
+        }
+
+        public bool CreateUser(string username, string password, string givenName, string surname, string email, Guid id)
+        {
+            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
-            if (String.IsNullOrEmpty(name)) throw new ArgumentException("Value cannot be null or empty.", "name");
+            if (String.IsNullOrEmpty(givenName)) throw new ArgumentException("Value cannot be null or empty.", "givenName");
             if (String.IsNullOrEmpty(surname)) throw new ArgumentException("Value cannot be null or empty.", "surname");
             if (String.IsNullOrEmpty(email)) throw new ArgumentException("Value cannot be null or empty.", "email");
+            if (id == Guid.Empty) throw new ArgumentException("Id must be a proper Guid", "id");
 
             username = username.ToLowerInvariant();
-            using (var database = new BonoboGitServerContext())
+            using (var database = CreateContext())
             {
                 var user = new User
                 {
+                    Id = id,
                     Username = username,
-                    Password = EncryptPassword(password),
-                    Name = name,
+                    GivenName = givenName,
                     Surname = surname,
                     Email = email,
                 };
+                SetPassword(user, password);
                 database.Users.Add(user);
                 try
                 {
@@ -57,86 +94,123 @@ namespace Bonobo.Git.Server.Security
 
         public IList<UserModel> GetAllUsers()
         {
-            using (var db = new BonoboGitServerContext())
+            using (var db = CreateContext())
             {
                 return db.Users.Include("Roles").ToList().Select(item => new UserModel
                 {
+                    Id = item.Id,
                     Username = item.Username,
-                    Name = item.Name,
+                    GivenName = item.GivenName,
                     Surname = item.Surname,
                     Email = item.Email,
-                    Roles = item.Roles.Select(i => i.Name).ToArray(),
                 }).ToList();
             }
         }
 
-        public UserModel GetUser(string username)
+        public int UserCount()
         {
-            if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
-
-            username = username.ToLowerInvariant();
-            using (var db = new BonoboGitServerContext())
+            using (var db = CreateContext())
             {
-                var user = db.Users.FirstOrDefault(i => i.Username == username);
-                return user == null ? null : new UserModel
-                {
-                    Username = user.Username,
-                    Name = user.Name,
-                    Surname = user.Surname,
-                    Email = user.Email,
-                    Roles = user.Roles.Select(i => i.Name).ToArray(),
-                 };
+                return db.Users.Count();
             }
         }
 
-        public void UpdateUser(string username, string name, string surname, string email, string password)
+        private UserModel GetUserModel(User user)
         {
-            using (var database = new BonoboGitServerContext())
+            return user == null ? null : new UserModel
+            {
+                Id = user.Id,
+                Username = user.Username,
+                GivenName = user.GivenName,
+                Surname = user.Surname,
+                Email = user.Email,
+             };
+        }
+
+        public UserModel GetUserModel(Guid id)
+        {
+            using (var db = CreateContext())
+            {
+                var user = db.Users.FirstOrDefault(i => i.Id == id);
+                return GetUserModel(user);
+            }
+        }
+
+        public UserModel GetUserModel(string username)
+        {
+            using (var db = CreateContext())
             {
                 username = username.ToLowerInvariant();
-                var user = database.Users.FirstOrDefault(i => i.Username == username);
+                var user = db.Users.FirstOrDefault(i => i.Username == username);
+                return GetUserModel(user);
+            }
+        }
+
+        public void UpdateUser(Guid id, string username, string givenName, string surname, string email, string password)
+        {
+            using (var db = CreateContext())
+            {
+                var user = db.Users.FirstOrDefault(i => i.Id == id);
                 if (user != null)
                 {
-                    user.Name = name ?? user.Name;
+                    var lowerUsername = username == null ? null : username.ToLowerInvariant();
+                    user.Username = lowerUsername ?? user.Username;
+                    user.GivenName = givenName ?? user.GivenName;
                     user.Surname = surname ?? user.Surname;
                     user.Email = email ?? user.Email;
-                    user.Password = password != null ? EncryptPassword(password) : user.Password;
-                    database.SaveChanges();
+                    if (password != null)
+                    {
+                        SetPassword(user, password);
+                    }
+                    db.SaveChanges();
                 }
             }
         }
 
-        public void DeleteUser(string username)
+        public void DeleteUser(Guid id)
         {
-            using (var database = new BonoboGitServerContext())
+            using (var db = CreateContext())
             {
-                username = username.ToLowerInvariant();
-                var user = database.Users.FirstOrDefault(i => i.Username == username);
+                var user = db.Users.FirstOrDefault(u => u.Id == id);
                 if (user != null)
                 {
                     user.AdministratedRepositories.Clear();
                     user.Roles.Clear();
                     user.Repositories.Clear();
                     user.Teams.Clear();
-                    database.Users.Remove(user);
-                    database.SaveChanges();
+                    db.Users.Remove(user);
+                    db.SaveChanges();
                 }
             }
+        } 
+
+        private void SetPassword(User user, string password)
+        {
+            if (user == null) throw new ArgumentNullException("user", "User cannot be null");
+            if (String.IsNullOrEmpty(password)) throw new ArgumentException("Password cannot be null or empty.", "password");
+
+            user.PasswordSalt = Guid.NewGuid().ToString();
+            user.Password = _passwordService.GetSaltedHash(password, user.PasswordSalt);
         }
 
-        private bool ComparePassword(string password, string hash)
-        {
-            return EncryptPassword(password) == hash;
-        }
+        private const int PBKDF2IterCount = 1000; // default for Rfc2898DeriveBytes
+        private const int PBKDF2SubkeyLength = 256 / 8; // 256 bits
+        private const int SaltSize = 128 / 8; // 128 bits
 
-        private string EncryptPassword(string password)
+        public string GenerateResetToken(string username)
         {
-            using (System.Security.Cryptography.MD5CryptoServiceProvider x = new System.Security.Cryptography.MD5CryptoServiceProvider())
+            byte[] salt;
+            byte[] subkey;
+            using (var deriveBytes = new Rfc2898DeriveBytes(username, SaltSize, PBKDF2IterCount))
             {
-                var data = System.Text.Encoding.UTF8.GetBytes(password);
-                data = x.ComputeHash(data);
-                return BitConverter.ToString(data).Replace("-", ""); 
+                salt = deriveBytes.Salt;
+                subkey = deriveBytes.GetBytes(PBKDF2SubkeyLength);
             }
-        }
+
+            byte[] outputBytes = new byte[1 + SaltSize + PBKDF2SubkeyLength];
+            Buffer.BlockCopy(salt, 0, outputBytes, 1, SaltSize);
+            Buffer.BlockCopy(subkey, 0, outputBytes, 1 + SaltSize, PBKDF2SubkeyLength);
+            return Convert.ToBase64String(outputBytes);
+        }        
     }
 }

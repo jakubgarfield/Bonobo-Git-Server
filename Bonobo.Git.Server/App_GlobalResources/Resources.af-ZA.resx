@@ -1,0 +1,943 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
+    <value>[Åččőūŉŧ ŵįŧĥ ŧĥįş ūşęřŉämę äľřęäđy ęχįşŧş. !!! !!!]</value>
+  </data>
+  <data name="Account_Create_AccountInformation" xml:space="preserve">
+    <value>[Åččőūŉŧ įŉƒőřmäŧįőŉ !!! !!!]</value>
+  </data>
+  <data name="Account_Create_ConfirmPassword" xml:space="preserve">
+    <value>[Cőŉƒįřm Päşşŵőřđ !!! !!!]</value>
+  </data>
+  <data name="Account_Create_Email" xml:space="preserve">
+    <value>[Ēmäįľ !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Create_Name" xml:space="preserve">
+    <value>[Ńämę !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Create_Password" xml:space="preserve">
+    <value>[Päşşŵőřđ !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Create_Submit" xml:space="preserve">
+    <value>[Cřęäŧę !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Create_Success" xml:space="preserve">
+    <value>[Ŧĥę ūşęř ŵäş čřęäŧęđ şūččęşşƒūľľy. !!! !!!]</value>
+  </data>
+  <data name="Account_Create_Surname" xml:space="preserve">
+    <value>[Ŝūřŉämę !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Create_Title" xml:space="preserve">
+    <value>[Cřęäŧę Ńęŵ Åččőūŉŧ !!! !!!]</value>
+  </data>
+  <data name="Account_Create_Unsuccessfull" xml:space="preserve">
+    <value>[Åččőūŉŧ čřęäŧįőŉ ŵäş ūŉşūččęşşƒūľ. Pľęäşę čőřřęčŧ ŧĥę ęřřőřş äŉđ ŧřy äģäįŉ. !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Create_Username" xml:space="preserve">
+    <value>[Ůşęřŉämę !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Delete_DeleteCurrentUser" xml:space="preserve">
+    <value>[Ÿőū čäŉ'ŧ đęľęŧę yőūřşęľƒ. !!! !!!]</value>
+  </data>
+  <data name="Account_Delete_Success" xml:space="preserve">
+    <value>[Ŧĥę ūşęř ŵäş đęľęŧęđ. !!! !!!]</value>
+  </data>
+  <data name="Account_Detail_Back" xml:space="preserve">
+    <value>[ßäčĸ !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Detail_Delete" xml:space="preserve">
+    <value>[Đęľęŧę !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Detail_Edit" xml:space="preserve">
+    <value>[Ēđįŧ !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Detail_Email" xml:space="preserve">
+    <value>[Ēmäįľ !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Detail_Name" xml:space="preserve">
+    <value>[Ńämę !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Detail_Roles" xml:space="preserve">
+    <value>[Ŗőľęş !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Detail_Surname" xml:space="preserve">
+    <value>[Ŝūřŉämę !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Detail_Title" xml:space="preserve">
+    <value>[Ůşęř Đęŧäįľ !!! !!!]</value>
+  </data>
+  <data name="Account_Detail_Username" xml:space="preserve">
+    <value>[Ůşęřŉämę !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_Back" xml:space="preserve">
+    <value>[ßäčĸ !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_Cancel" xml:space="preserve">
+    <value>[Cäŉčęľ !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_CannotRemoveYourselfFromAdminRole" xml:space="preserve">
+    <value>[Cäŉ'ŧ řęmővę yőūřşęľƒ ƒřőm äđmįŉįşŧřäŧőřş. !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_ConfirmPassword" xml:space="preserve">
+    <value>[Cőŉƒįřm Päşşŵőřđ !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_CurrentPassword" xml:space="preserve">
+    <value>[Cūřřęŉŧ Päşşŵőřđ !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_Email" xml:space="preserve">
+    <value>[Ēmäįľ !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_Name" xml:space="preserve">
+    <value>[Ńämę !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_NewPassword" xml:space="preserve">
+    <value>[Ńęŵ Päşşŵőřđ !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_OldPasswordEmpty" xml:space="preserve">
+    <value>[Cūřřęŉŧ päşşŵőřđ şĥőūľđ ŉőŧ þę ęmpŧy. !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_OldPasswordIncorrect" xml:space="preserve">
+    <value>[Päşşŵőřđ đőęş ŉőŧ mäŧčĥ ŧĥę čūřřęŉŧ päşşŵőřđ. !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_Roles" xml:space="preserve">
+    <value>[Ŗőľęş !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_RolesHint" xml:space="preserve">
+    <value>[Åđmįŉįşŧřäŧőřş ĥävę äččęşş ŧő äľľ řępőşįŧőřįęş äŉđ äřę äľľőŵęđ ŧő đő äľľ őpęřäŧįőŉş ŵįŧĥ řępőşįŧőřįęş, ŧęämş äŉđ ūşęřş. !!! !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_Submit" xml:space="preserve">
+    <value>[Ŝävę !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_Surname" xml:space="preserve">
+    <value>[Ŝūřŉämę !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_Title" xml:space="preserve">
+    <value>[Ēđįŧ Ůşęř Åččőūŉŧ !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_Unsuccessfull" xml:space="preserve">
+    <value>[Åččőūŉŧ ęđįŧ ŵäş ūŉşūččęşşƒūľ. Pľęäşę čőřřęčŧ ŧĥę ęřřőřş äŉđ ŧřy äģäįŉ. !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_UpdateSuccess" xml:space="preserve">
+    <value>[Ŧĥę äččőūŉŧ ŵäş ūpđäŧęđ şūččęşşƒūľľy. !!! !!!]</value>
+  </data>
+  <data name="Account_Edit_Username" xml:space="preserve">
+    <value>[Ůşęřŉämę !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Index_Create" xml:space="preserve">
+    <value>[Cřęäŧę ŉęŵ ūşęř !!! !!!]</value>
+  </data>
+  <data name="Account_Index_Title" xml:space="preserve">
+    <value>[Ůşęřş !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Account_Index_Users" xml:space="preserve">
+    <value>[Ůşęřş !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>[Cőŉƒįřm !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>[Cőpy !!! !!! !!!]</value>
+  </data>
+  <data name="Delete_Back" xml:space="preserve">
+    <value>[ßäčĸ !!! !!! !!!]</value>
+  </data>
+  <data name="Delete_Confirm" xml:space="preserve">
+    <value>[Đęľęŧę !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Delete_ConfirmationText" xml:space="preserve">
+    <value>[Đő yőū řęäľľy ŵäŉŧ ŧő đęľęŧę {0}? !!! !!!]</value>
+  </data>
+  <data name="Delete_Title" xml:space="preserve">
+    <value>[Đęľęŧę Cőŉƒįřmäŧįőŉ !!! !!!]</value>
+  </data>
+  <data name="Email_PasswordReset_Body" xml:space="preserve">
+    <value>[&lt;p&gt;Å řęqūęşŧ ĥäş þęęŉ řęčęįvęđ ŧő řęşęŧ yőūř päşşŵőřđ. 
+                           Ĩƒ yőū đįđ ŉőŧ įŉįŧįäŧę ŧĥę řęqūęşŧ, ŧĥęŉ pľęäşę įģŉőřę ŧĥįş ęmäįľ.&lt;/p&gt;
+                           &lt;p&gt;Pľęäşę čľįčĸ ŧĥę ƒőľľőŵįŉģ ľįŉĸ ŧő řęşęŧ yőūř päşşŵőřđ:&lt;/p&gt; !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Email_PasswordReset_Title" xml:space="preserve">
+    <value>[ßőŉőþő - Päşşŵőřđ Ŗęşęŧ Ŗęqūęşŧ !!! !!!]</value>
+  </data>
+  <data name="Global" xml:space="preserve">
+    <value>[Ğľőþäľ !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Grid_Delete" xml:space="preserve">
+    <value>[Đęľęŧę !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Grid_Edit" xml:space="preserve">
+    <value>[Ēđįŧ !!! !!! !!!]</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>[Øƒƒįčįäľ Päģę !!! !!!]</value>
+  </data>
+  <data name="Home_Error_Text" xml:space="preserve">
+    <value>[Åŉ ęřřőř őččūřřęđ ŵĥęŉ přőčęşşįŉģ yőūř řęqūęşŧ. Pľęäşę ŧřy äģäįŉ őř čőŉŧäčŧ ŧĥę şyşŧęm äđmįŉįşŧřäŧőř. !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Home_Error_Title" xml:space="preserve">
+    <value>[Åŉ Ēřřőř Øččūřřęđ !!! !!!]</value>
+  </data>
+  <data name="Home_ForgotPassword_EmailError" xml:space="preserve">
+    <value>[Ůŉäþľę ŧő şęŉđ ęmäįľ. Väľįđäŧę ŜMŦP şęŧŧįŉģş. !!! !!!]</value>
+  </data>
+  <data name="Home_ForgotPassword_EmailSuccess" xml:space="preserve">
+    <value>[Ēmäįľ şęŉŧ !!! !!!]</value>
+  </data>
+  <data name="Home_ForgotPassword_Failed" xml:space="preserve">
+    <value>[Főřģőŧŧęŉ Päşşŵőřđ Fäįľęđ. Pľęäşę čőřřęčŧ ęřřőřş äŉđ ŧřy äģäįŉ. !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Home_ForgotPassword_ForgotPassword" xml:space="preserve">
+    <value>[Főřģőŧ Päşşŵőřđ !!! !!!]</value>
+  </data>
+  <data name="Home_ForgotPassword_Title" xml:space="preserve">
+    <value>[Főřģőŧŧęŉ Päşşŵőřđ !!! !!!]</value>
+  </data>
+  <data name="Home_ForgotPassword_Username" xml:space="preserve">
+    <value>[Ůşęřŉämę !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Home_ForgotPassword_UserNameFailure" xml:space="preserve">
+    <value>[Cőūľđ ŉőŧ ƒįŉđ ūşęřŉämę !!! !!!]</value>
+  </data>
+  <data name="Home_LogOn_AccountInformation" xml:space="preserve">
+    <value>[Åččőūŉŧ Ĩŉƒőřmäŧįőŉ !!! !!!]</value>
+  </data>
+  <data name="Home_LogOn_Failed" xml:space="preserve">
+    <value>[Ŀőģįŉ ŵäş ūŉşūččęşşƒūľ. Pľęäşę čőřřęčŧ ŧĥę ęřřőřş äŉđ ŧřy äģäįŉ. !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Home_LogOn_ForgotPassword" xml:space="preserve">
+    <value>[Főřģőŧ Päşşŵőřđ? !!! !!!]</value>
+  </data>
+  <data name="Home_LogOn_LogOn" xml:space="preserve">
+    <value>[Ŝįģŉ Ĩŉ !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Home_LogOn_Password" xml:space="preserve">
+    <value>[Päşşŵőřđ !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Home_LogOn_RememberMe" xml:space="preserve">
+    <value>[Ŗęmęmþęř mę? !!! !!!]</value>
+  </data>
+  <data name="Home_LogOn_Title" xml:space="preserve">
+    <value>[Ŝįģŉ Ĩŉ !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Home_LogOn_Username" xml:space="preserve">
+    <value>[Ůşęřŉämę !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Home_LogOn_UsernamePasswordIncorrect" xml:space="preserve">
+    <value>[Ŧĥę ūşęřŉämę őř päşşŵőřđ přővįđęđ įş įŉčőřřęčŧ. !!! !!! !!!]</value>
+  </data>
+  <data name="Home_PageNotFound_Text" xml:space="preserve">
+    <value>[Ŧĥę päģę yőū ŵęřę ľőőĸįŉģ ƒőř ŵäşŉ'ŧ ƒőūŉđ. Pľęäşę ŧřy äģäįŉ őř čőŉŧäčŧ ŧĥę şyşŧęm äđmįŉįşŧřäŧőř. !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Home_PageNotFound_Title" xml:space="preserve">
+    <value>[404 Päģę Ńőŧ Főūŉđ !!! !!!]</value>
+  </data>
+  <data name="Home_ResetPassword_ConfirmPassword" xml:space="preserve">
+    <value>[Cőŉƒįřm Päşşŵőřđ !!! !!!]</value>
+  </data>
+  <data name="Home_ResetPassword_Failed" xml:space="preserve">
+    <value>[Ůŉäþľę ŧő řęşęŧ päşşŵőřđ !!! !!!]</value>
+  </data>
+  <data name="Home_ResetPassword_Password" xml:space="preserve">
+    <value>[Päşşŵőřđ !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Home_ResetPassword_ResetPassword" xml:space="preserve">
+    <value>[Ŗęşęŧ Päşşŵőřđ !!! !!!]</value>
+  </data>
+  <data name="Home_ResetPassword_Success" xml:space="preserve">
+    <value>[Päşşŵőřđ řęşęŧ !!! !!!]</value>
+  </data>
+  <data name="Home_ResetPassword_Title" xml:space="preserve">
+    <value>[Ŗęşęŧ Päşşŵőřđ !!! !!!]</value>
+  </data>
+  <data name="Home_ResetPassword_Username" xml:space="preserve">
+    <value>[Ůşęřŉämę !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Home_ServerError_Text" xml:space="preserve">
+    <value>[Å şęřvęř ęřřőř őččūřřęđ ŵĥęŉ přőčęşşįŉģ yőūř řęqūęşŧ. Pľęäşę ŧřy äģäįŉ őř čőŉŧäčŧ ŧĥę şyşŧęm äđmįŉįşŧřäŧőř. !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Home_ServerError_Title" xml:space="preserve">
+    <value>[500 Ŝęřvęř Ēřřőř !!! !!!]</value>
+  </data>
+  <data name="Home_Unauthorized_Text" xml:space="preserve">
+    <value>[Ÿőū đőŉ'ŧ ĥävę pęřmįşşįőŉ ƒőř ŧĥę şęľęčŧęđ äčŧįőŉ őř päģę. !!! !!! !!!]</value>
+  </data>
+  <data name="Home_Unauthorized_Title" xml:space="preserve">
+    <value>[Ůŉäūŧĥőřįžęđ !!! !!!]</value>
+  </data>
+  <data name="Item_NotFound" xml:space="preserve">
+    <value>[Ĩŧęm ŵäşŉ'ŧ ƒőūŉđ !!! !!!]</value>
+  </data>
+  <data name="Item_NotFound_Text" xml:space="preserve">
+    <value>[Ŧĥę įŧęm yőū ŵęřę ľőőĸįŉģ ƒőř ŵäşŉ'ŧ ƒőūŉđ. !!! !!!]</value>
+  </data>
+  <data name="Layout_About" xml:space="preserve">
+    <value>[Åþőūŧ !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Layout_AccountSettings" xml:space="preserve">
+    <value>[Åččőūŉŧ Ŝęŧŧįŉģş !!! !!!]</value>
+  </data>
+  <data name="Layout_Administration" xml:space="preserve">
+    <value>[Åđmįŉįşŧřäŧįőŉ !!! !!!]</value>
+  </data>
+  <data name="Layout_AdministrationGlobalSettings" xml:space="preserve">
+    <value>[Ŝęŧŧįŉģş !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Layout_AdministrationRepositories" xml:space="preserve">
+    <value>[Ŗępőşįŧőřįęş !!! !!!]</value>
+  </data>
+  <data name="Layout_AdministrationTeams" xml:space="preserve">
+    <value>[Ŧęämş !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Layout_AdministrationUsers" xml:space="preserve">
+    <value>[Ůşęřş !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Layout_Footer_Copyright" xml:space="preserve">
+    <value>[Åľľ řįģĥŧş řęşęřvęđ. !!! !!!]</value>
+  </data>
+  <data name="Layout_Home" xml:space="preserve">
+    <value>[Ħőmę !!! !!! !!!]</value>
+  </data>
+  <data name="Layout_LogOff" xml:space="preserve">
+    <value>[Ŝįģŉ Øūŧ !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Layout_LogOn" xml:space="preserve">
+    <value>[Ŝįģŉ Ĩŉ !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Layout_Register" xml:space="preserve">
+    <value>[Ŗęģįşŧęř !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Layout_Repositories" xml:space="preserve">
+    <value>[Ŗępőşįŧőřįęş !!! !!!]</value>
+  </data>
+  <data name="Layout_Title" xml:space="preserve">
+    <value>[ßőŉőþő Ğįŧ Ŝęřvęř !!! !!!]</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>[Ńő !!! !!!]</value>
+  </data>
+  <data name="Repository_AddressBar_Root" xml:space="preserve">
+    <value>[Ħőmę !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_AdministratorsHint" xml:space="preserve">
+    <value>[Åđmįŉįşŧřäŧőřş ĥävę ƒūľľ äččęşş ŧő ŧĥę řępőşįŧőřy. Ŧĥęy čäŉ mőđįƒy řępőşįŧőřy męŧäđäŧä őř đęľęŧę ŧĥę řępőşįŧőřy. !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_AllowAnonymousHint" xml:space="preserve">
+    <value>[Ĩƒ äŉőŉymőūş äččęşş įş äľľőŵęđ, ęvęřyőŉę čäŉ pūľľ őř čľőŉę ŧĥę řępőşįŧőřy äŉđ vįęŵ řępőşįŧőřy męŧäđäŧä. Pūşĥ įş äväįľäþľę őŉľy įƒ şęŧ įŉ Ğľőþäľ Ŝęŧŧįŉģş. !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_AllowAnonymousPushHint" xml:space="preserve">
+    <value>[Åľľőŵş äŉőŉymőūş ūşęřş ŧő pūşĥ ŧő ŧĥįş řępőşįŧőřy įƒ äŉőŉymőūş äččęş įş ģřäŉŧęđ. Ĩƒ "Ğľőþäľ" įş şęľęčŧęđ ŧĥę őpŧįőŉ şęŧ ūŉđęř yőūř ģľőþäľ şęŧŧįŉģş įş ūşęđ. !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_AuditPushUserHint" xml:space="preserve">
+    <value>[Ŗęčőřđ ūşęř ŧĥäŧ pūşĥęđ čőmmįŧş ŧő ŧĥę şęřvęř !!! !!!]</value>
+  </data>
+  <data name="Repository_Back" xml:space="preserve">
+    <value>[ßäčĸ !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Blame_Title" xml:space="preserve">
+    <value>[ßľämę !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Clone_Fail" xml:space="preserve">
+    <value>[Ŗępőşįŧőřy čľőŉįŉģ ŵäş ūŉşūččęşşƒūľ. Pľęäşę čőřřęčŧ ŧĥę ęřřőřş äŉđ ŧřy äģäįŉ. !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Clone_Submit" xml:space="preserve">
+    <value>[Cľőŉę !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Clone_Success" xml:space="preserve">
+    <value>[Ŗępőşįŧőřy ŵäş čľőŉęđ şūččęşşƒūľľy. !!! !!!]</value>
+  </data>
+  <data name="Repository_Clone_Title" xml:space="preserve">
+    <value>[Cľőŉę Ŗępőşįŧőřy !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_Added" xml:space="preserve">
+    <value>[Åđđęđ !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_Author" xml:space="preserve">
+    <value>[Åūŧĥőř !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_AuthorAvatar" xml:space="preserve">
+    <value>[Åväŧäř !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_AuthorEmail" xml:space="preserve">
+    <value>[Ēmäįľ !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_Changes" xml:space="preserve">
+    <value>[Cĥäŉģęş !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_Copied" xml:space="preserve">
+    <value>[Cőpįęđ !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_Date" xml:space="preserve">
+    <value>[Đäŧę !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_Deleted" xml:space="preserve">
+    <value>[Đęľęŧęđ !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_Detail" xml:space="preserve">
+    <value>[Cőmmįŧ Đęŧäįľ !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_Details" xml:space="preserve">
+    <value>[Đęŧäįľş !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_ID" xml:space="preserve">
+    <value>[Cőmmįŧ !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_Message" xml:space="preserve">
+    <value>[Męşşäģę !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_Modified" xml:space="preserve">
+    <value>[Mőđįƒįęđ !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_NoMessageDeclared" xml:space="preserve">
+    <value>[Ńőŧ đęčľäřęđ !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_Parents" xml:space="preserve">
+    <value>[Päřęŉŧş !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_Renamed" xml:space="preserve">
+    <value>[Ŗęŉämęđ !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_TreeID" xml:space="preserve">
+    <value>[Ŧřęę !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Commit_TypeChanged" xml:space="preserve">
+    <value>[Ŧypę Cĥäŉģęđ !!! !!!]</value>
+  </data>
+  <data name="Repository_Commits_Title" xml:space="preserve">
+    <value>[Cőmmįŧş !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Create_DirectoryExists" xml:space="preserve">
+    <value>[Å đįřęčŧőřy ŵįŧĥ ŧĥįş ŉämę äľřęäđy ęχįşŧş įŉ yőūř řępőşįŧőřy ƒőľđęř. Đęľęŧę ŧĥįş đįřęčŧőřy őř čĥőőşę äŉőŧĥęř ŉämę äŉđ ŧřy äģäįŉ. !!! !!! !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Create_Fail" xml:space="preserve">
+    <value>[Ŗępőşįŧőřy čřęäŧįőŉ ŵäş ūŉşūččęşşƒūľ. Pľęäşę čőřřęčŧ ŧĥę ęřřőřş äŉđ ŧřy äģäįŉ. !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Create_Failure" xml:space="preserve">
+    <value>[Ŗępőşįŧőřy ŵįŧĥ şęľęčŧęđ ŉämę äľřęäđy ęχįşŧş. !!! !!!]</value>
+  </data>
+  <data name="Repository_Create_Informations" xml:space="preserve">
+    <value>[Ŗępőşįŧőřy įŉƒőřmäŧįőŉ !!! !!!]</value>
+  </data>
+  <data name="Repository_Create_NameFailure" xml:space="preserve">
+    <value>["Ńämę" şĥőūľđŉ'ŧ čőŉŧäįŉ őŉľy ŵĥįŧęşpäčę čĥäřäčŧęřş. !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Create_Submit" xml:space="preserve">
+    <value>[Cřęäŧę !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Create_Success" xml:space="preserve">
+    <value>[Ŗępőşįŧőřy ŵäş čřęäŧęđ şūččęşşƒūľľy. !!! !!!]</value>
+  </data>
+  <data name="Repository_Create_Success_Go_To" xml:space="preserve">
+    <value>[Ğő ŧő "{0}" !!! !!!]</value>
+  </data>
+  <data name="Repository_Create_Title" xml:space="preserve">
+    <value>[Cřęäŧę Ńęŵ Ŗępőşįŧőřy !!! !!!]</value>
+  </data>
+  <data name="Repository_Delete_Success" xml:space="preserve">
+    <value>[Ŗępőşįŧőřy ŵäş đęľęŧęđ şūččęşşƒūľľy. !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Administrators" xml:space="preserve">
+    <value>[Åđmįŉįşŧřäŧőřş !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_AllowAnonymousPush" xml:space="preserve">
+    <value>[Åŉőŉymőūş pūşĥ !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Anonymous" xml:space="preserve">
+    <value>[Åŉőŉymőūş !!! !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_AuditPushUser" xml:space="preserve">
+    <value>[Åūđįŧ Pūşĥęş !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Back" xml:space="preserve">
+    <value>[ßäčĸ !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Delete" xml:space="preserve">
+    <value>[Đęľęŧę !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Description" xml:space="preserve">
+    <value>[Đęşčřįpŧįőŉ !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Detail" xml:space="preserve">
+    <value>[Đęŧäįľş !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Edit" xml:space="preserve">
+    <value>[Ēđįŧ !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Group" xml:space="preserve">
+    <value>[Ğřőūp !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_IsCurrentUserAdmin" xml:space="preserve">
+    <value>[Åđmįŉ !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_LinksUseGlobal" xml:space="preserve">
+    <value>[Ůşę ģľőþäľ ľįŉĸįƒy şęŧŧįŉģş !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Location" xml:space="preserve">
+    <value>[Ğįŧ ŮŖĿ !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Location_Personal" xml:space="preserve">
+    <value>[Pęřşőŉäľ ŮŖĿ !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Logo_PostedFile" xml:space="preserve">
+    <value>[Ŀőģő (36χ36) !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Name" xml:space="preserve">
+    <value>[Ńämę !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_No" xml:space="preserve">
+    <value>[Ńő !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_RemoveLogo" xml:space="preserve">
+    <value>[Ŗęmővę ľőģő !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Status" xml:space="preserve">
+    <value>[Ŝŧäŧūş !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Teams" xml:space="preserve">
+    <value>[Ŧęämş !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Title" xml:space="preserve">
+    <value>[Ŗępőşįŧőřy Đęŧäįľ !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Users" xml:space="preserve">
+    <value>[Cőŉŧřįþūŧőřş !!! !!!]</value>
+  </data>
+  <data name="Repository_Detail_Yes" xml:space="preserve">
+    <value>[Ÿęş !!! !!!]</value>
+  </data>
+  <data name="Repository_Edit_Back" xml:space="preserve">
+    <value>[ßäčĸ !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Edit_CantRemoveYourself" xml:space="preserve">
+    <value>[Ÿőū čäŉ'ŧ řęmővę yőūřşęľƒ ƒřőm äđmįŉįşŧřäŧőřş. !!! !!!]</value>
+  </data>
+  <data name="Repository_Edit_Fail" xml:space="preserve">
+    <value>[Ŗępőşįŧőřy ūpđäŧę ŵäş ūŉşūččęşşƒūľ. Pľęäşę čőřřęčŧ ŧĥę ęřřőřş äŉđ ŧřy äģäįŉ. !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Edit_InvalidAnonymousPushMode" xml:space="preserve">
+    <value>[Ĩŉväľįđ väľūę přővįđęđ. !!! !!!]</value>
+  </data>
+  <data name="Repository_Edit_Submit" xml:space="preserve">
+    <value>[Ŝävę !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Edit_Title" xml:space="preserve">
+    <value>[Ēđįŧ Ŗępőşįŧőřy !!! !!!]</value>
+  </data>
+  <data name="Repository_Edit_UpdateSuccess" xml:space="preserve">
+    <value>[Ŗępőşįŧőřy ŵäş ūpđäŧęđ şūččęşşƒūľľy. !!! !!!]</value>
+  </data>
+  <data name="Repository_Git_Url_Copy" xml:space="preserve">
+    <value>[Cőpy řępőşįŧőřy ŮŖĿ !!! !!!]</value>
+  </data>
+  <data name="Repository_Go_To_Dropdown" xml:space="preserve">
+    <value>[Ğő ŧő řępőşįŧőřy !!! !!!]</value>
+  </data>
+  <data name="Repository_History_Title" xml:space="preserve">
+    <value>[Ħįşŧőřy !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Index_AdministratedRepositories" xml:space="preserve">
+    <value>[Åđmįŉįşŧęřęđ Ŗępőşįŧőřįęş !!! !!!]</value>
+  </data>
+  <data name="Repository_Index_AllRepositories" xml:space="preserve">
+    <value>[Åľľ Ŗępőşįŧőřįęş !!! !!!]</value>
+  </data>
+  <data name="Repository_Index_CreateNew" xml:space="preserve">
+    <value>[Cřęäŧę ŉęŵ řępőşįŧőřy !!! !!!]</value>
+  </data>
+  <data name="Repository_Index_No" xml:space="preserve">
+    <value>[Ńő !!! !!!]</value>
+  </data>
+  <data name="Repository_Index_Repositories" xml:space="preserve">
+    <value>[Ŗępőşįŧőřįęş !!! !!!]</value>
+  </data>
+  <data name="Repository_Index_SortGroup" xml:space="preserve">
+    <value>[Ŝőřŧ Ğřőūp !!! !!!]</value>
+  </data>
+  <data name="Repository_Index_Title" xml:space="preserve">
+    <value>[Ŗępőşįŧőřįęş !!! !!!]</value>
+  </data>
+  <data name="Repository_Index_Yes" xml:space="preserve">
+    <value>[Ÿęş !!! !!!]</value>
+  </data>
+  <data name="Repository_Layout_Browse" xml:space="preserve">
+    <value>[Ŗępőşįŧőřy ßřőŵşęř !!! !!!]</value>
+  </data>
+  <data name="Repository_Layout_Clone" xml:space="preserve">
+    <value>[Cľőŉę !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Layout_Commits" xml:space="preserve">
+    <value>[Cőmmįŧş !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Layout_Tags" xml:space="preserve">
+    <value>[Ŧäģş !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Needs_Administrator" xml:space="preserve">
+    <value>[Ŗępőşįŧőřy řęqūįřęş äŧ ľęäşŧ őŉę äđmįŉįşŧřäŧőř. !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_No_Group" xml:space="preserve">
+    <value>[Ńő Ğřőūp !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Personal_Git_Url_Copy" xml:space="preserve">
+    <value>[Cőpy pęřşőŉäľ řępőşįŧőřy ŮŖĿ !!! !!!]</value>
+  </data>
+  <data name="Repository_Rescan_Directory" xml:space="preserve">
+    <value>[Ŗęşčäŉ đįřęčŧőřy !!! !!!]</value>
+  </data>
+  <data name="Repository_SwitchBranch" xml:space="preserve">
+    <value>[Ŝŵįŧčĥ čūřřęŉŧ þřäŉčĥ !!! !!!]</value>
+  </data>
+  <data name="Repository_Tags_Title" xml:space="preserve">
+    <value>[Ŧäģş !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_TeamsHint" xml:space="preserve">
+    <value>[Ŧęämş ĥävę äččęşş ŧő ŧĥę řępőşįŧőřy. Ŧĥęy čäŉ čľőŉę, pūşĥ őř pūľľ äŉđ vįęŵ řępőşįŧőřy męŧäđäŧä. Åľľ ūşęřş įŉ ŧĥę ŧęäm čäŉ äččęşş ŧĥįş řępőşįŧőřy. !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Tree_Author" xml:space="preserve">
+    <value>[Åūŧĥőř !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Tree_Blame" xml:space="preserve">
+    <value>[ßľämę !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Tree_Blob" xml:space="preserve">
+    <value>[ßľőþ !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Tree_CommitDate" xml:space="preserve">
+    <value>[Đäŧę !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Tree_CommitMessage" xml:space="preserve">
+    <value>[Męşşäģę !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Tree_Download" xml:space="preserve">
+    <value>[Đőŵŉľőäđ !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Tree_History" xml:space="preserve">
+    <value>[Ħįşŧőřy !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Tree_Name" xml:space="preserve">
+    <value>[Ńämę !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_Tree_PreviewNotSupported" xml:space="preserve">
+    <value>[Přęvįęŵ őƒ ŧĥįş ƒįľę įş ŉőŧ şūppőřŧęđ. !!! !!!]</value>
+  </data>
+  <data name="Repository_Tree_RawDisplay" xml:space="preserve">
+    <value>[Ŗäŵ !!! !!!]</value>
+  </data>
+  <data name="Repository_Tree_Title" xml:space="preserve">
+    <value>[ßřőŵşę Ŗępőşįŧőřy !!! !!!]</value>
+  </data>
+  <data name="Repository_Tree_Zip" xml:space="preserve">
+    <value>[Đőŵŉľőäđ !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Repository_UsersHint" xml:space="preserve">
+    <value>[Ůşęřş ĥävę äččęşş ŧő ŧĥę řępőşįŧőřy. Ŧĥęy čäŉ čľőŉę, pūşĥ őř pūľľ äŉđ vįęŵ řępőşįŧőřy męŧäđäŧä. !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>[Ŗęşęŧ !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>[Ŝęäřčĥ !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_AllowAnonymousPush" xml:space="preserve">
+    <value>[Åľľőŵ pūşĥ ƒőř äŉőŉymőūş řępőşįŧőřįęş !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_AllowAnonymousRegistration" xml:space="preserve">
+    <value>[Åľľőŵ äŉőŉymőūş řęģįşŧřäŧįőŉ !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
+    <value>[Ĩƒ čĥęčĸþőχ įş ūŉčĥęčĸęđ, őŉľy äđmįŉįşŧřäŧőřş čäŉ äđđ ŉęŵ ūşęřş äŉđ äŉőŉymőūş ūşęř řęģįşŧřäŧįőŉ įş đįşäþľęđ. !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_AllowPushToCreate" xml:space="preserve">
+    <value>[Åľľőŵ pūşĥ ŧő čřęäŧę řępőşįŧőřįęş !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_AllowPushToCreate_Hint" xml:space="preserve">
+    <value>[Ĩƒ čĥęčĸþőχ įş čĥęčĸęđ, Åđmįŉįşŧřäŧőřş čäŉ pūşĥ ä ŉęŵ řępőşįŧőřy  !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_AllowUserRepositoryCreation" xml:space="preserve">
+    <value>[Åľľőŵ ūşęř řępőşįŧőřy čřęäŧįőŉ !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_AllowUserRepositoryCreation_Hint" xml:space="preserve">
+    <value>[Ĩƒ čĥęčĸþőχ įş ūŉčĥęčĸęđ, őŉľy äđmįŉįşŧřäŧőřş čäŉ čřęäŧę řępőşįŧőřįęş. !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_DefaultLanguage" xml:space="preserve">
+    <value>[Ŀäŉģūäģę !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_DefaultLanguage_Hint" xml:space="preserve">
+    <value>[Ŀäŉģūäģę şęŧ þy đęƒäūľŧ įŉ ŧĥę äppľįčäŧįőŉ. !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_DirectoryHint" xml:space="preserve">
+    <value>[Åľľ řępőşįŧőřįęş äřę şŧőřęđ įŉ ŧĥįş đįřęčŧőřy. !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_IsCommitAuthorAvatarVisible" xml:space="preserve">
+    <value>[Ŝĥőŵ čőmmįŧ äūŧĥőř äväŧäř !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_LinksRegex" xml:space="preserve">
+    <value>[Ŀįŉĸ Ŗęģęχ !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_LinksUrl" xml:space="preserve">
+    <value>[Ŀįŉĸ Ůřľ !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_LinksUrl_Hint" xml:space="preserve">
+    <value>[Ŧĥįş ūşęş ŧĥę C# řęģęχ ľįþřäřy ŧő päřşę ŧĥę přővįđęđ řęģęχ. Cäpŧūřįŉģ ģřőūpş äřę şūppőřŧęđ.
+
+Ŧĥę päŧŧęřŉ įş {0} ƒőř ŧĥę ŵĥőľę řęģęχ mäŧčĥ.
+{1} őŉŵäřđş įş ęäčĥ čäpŧūřįŉģ ģřőūp.
+
+Ŧĥę řęģūľäřę C# şŧřįŉģ ƒőřmäŧŧįŉģ řūľęş äppľy: Ŧő ģęŧ {} įŉ yőūř ľįŉĸ yőū ŉęęđ ŧő ŵřįŧę {{}}. !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_RepositoryPath" xml:space="preserve">
+    <value>[Ŗępőşįŧőřy Đįřęčŧőřy !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_SiteFooterMessage" xml:space="preserve">
+    <value>[Ŝįŧę Főőŧęř Męşşäģę !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_SiteFooterMessage_Hint" xml:space="preserve">
+    <value>[Męşşäģę đįşpľäyęđ įŉ ƒőőŧęř äřęä őƒ şįŧę päģęş. !!! !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_SiteLogoUrl" xml:space="preserve">
+    <value>[Ŝįŧę Ŀőģő ŮŖĿ !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_SiteLogoUrl_Hint" xml:space="preserve">
+    <value>[ŮŖĿ ŧő ä ľőģő ŧő ūşę ƒőř ŧĥę şįŧę.  Ŝįŧę-řęľäŧįvę (~) päŧĥş äřę şūppőřŧęđ. !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_SiteTitle" xml:space="preserve">
+    <value>[Ŝįŧę Ŧįŧľę !!! !!!]</value>
+  </data>
+  <data name="Settings_Global_SiteTitle_Hint" xml:space="preserve">
+    <value>[Ŧįŧľę ƒőř ŧĥįş ģįŧ şįŧę. !!! !!!]</value>
+  </data>
+  <data name="Settings_Index_Failed" xml:space="preserve">
+    <value>[Ŝęŧŧįŉģş ūpđäŧę ŵäş ūŉşūččęşşƒūľ. Pľęäşę čőřřęčŧ ŧĥę ęřřőřş äŉđ ŧřy äģäįŉ. !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Settings_Index_Save" xml:space="preserve">
+    <value>[Ŝävę !!! !!! !!!]</value>
+  </data>
+  <data name="Settings_Index_Title" xml:space="preserve">
+    <value>[Ŝęŧŧįŉģş !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Settings_Index_UpdateSuccess" xml:space="preserve">
+    <value>[Ŝęŧŧįŉģş ūpđäŧęđ şūččęşşƒūľľy. !!! !!!]</value>
+  </data>
+  <data name="Settings_RepositoryPathNotExists" xml:space="preserve">
+    <value>[Ŝęľęčŧęđ päŧĥ đőęş ŉőŧ ęχįşŧ. Pľęäşę čřęäŧę ŧĥę ƒőľđęř őř čĥőőşę ä đįƒƒęřęŉŧ őŉę. !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Settings_RepositoryPathUnauthorized" xml:space="preserve">
+    <value>[Ÿőū đőŉ'ŧ ĥävę přįvįľęģęş ŧő ŵřįŧę ŧő ŧĥę ƒőľđęř. Pľęäşę čĥőőşę ä đįƒƒęřęŉŧ őŉę. !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>[Ğįŧĥūþ !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Team_Create_Back" xml:space="preserve">
+    <value>[ßäčĸ !!! !!! !!!]</value>
+  </data>
+  <data name="Team_Create_Fail" xml:space="preserve">
+    <value>[Ńęŵ ŧęäm čřęäŧįőŉ ŵäş ūŉşūččęşşƒūľ. Pľęäşę čőřřęčŧ ŧĥę ęřřőřş äŉđ ŧřy äģäįŉ. !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Team_Create_Failure" xml:space="preserve">
+    <value>[Ŧęäm ŵįŧĥ şęľęčŧęđ ŉämę äľřęäđy ęχįşŧş. Ŧęäm ŵäşŉ'ŧ čřęäŧęđ. !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Team_Create_Submit" xml:space="preserve">
+    <value>[Ŝävę !!! !!! !!!]</value>
+  </data>
+  <data name="Team_Create_Success" xml:space="preserve">
+    <value>[Ŧĥę ŧęäm ŵäş čřęäŧęđ şūččęşşƒūľľy. !!! !!!]</value>
+  </data>
+  <data name="Team_Create_TeamInformations" xml:space="preserve">
+    <value>[Ŧęäm įŉƒőřmäŧįőŉ !!! !!!]</value>
+  </data>
+  <data name="Team_Create_Title" xml:space="preserve">
+    <value>[Cřęäŧę Ńęŵ Ŧęäm !!! !!!]</value>
+  </data>
+  <data name="Team_Delete_Success" xml:space="preserve">
+    <value>[Ŧĥę ŧęäm ŵäş đęľęŧęđ. !!! !!!]</value>
+  </data>
+  <data name="Team_Detail_Back" xml:space="preserve">
+    <value>[ßäčĸ !!! !!! !!!]</value>
+  </data>
+  <data name="Team_Detail_Delete" xml:space="preserve">
+    <value>[Đęľęŧę !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Team_Detail_Description" xml:space="preserve">
+    <value>[Đęşčřįpŧįőŉ !!! !!!]</value>
+  </data>
+  <data name="Team_Detail_Edit" xml:space="preserve">
+    <value>[Ēđįŧ !!! !!! !!!]</value>
+  </data>
+  <data name="Team_Detail_Members" xml:space="preserve">
+    <value>[Męmþęřş !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Team_Detail_Name" xml:space="preserve">
+    <value>[Ńämę !!! !!! !!!]</value>
+  </data>
+  <data name="Team_Detail_Repositories" xml:space="preserve">
+    <value>[Ŗępőşįŧőřįęş !!! !!!]</value>
+  </data>
+  <data name="Team_Detail_Title" xml:space="preserve">
+    <value>[Ŧęäm Đęŧäįľ !!! !!!]</value>
+  </data>
+  <data name="Team_Edit_Back" xml:space="preserve">
+    <value>[ßäčĸ !!! !!! !!!]</value>
+  </data>
+  <data name="Team_Edit_Failure" xml:space="preserve">
+    <value>[Ŧęäm ūpđäŧę ŵäş ūŉşūččęşşƒūľ. Pľęäşę čőřřęčŧ ŧĥę ęřřőřş äŉđ ŧřy äģäįŉ. !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Team_Edit_Submit" xml:space="preserve">
+    <value>[Ůpđäŧę !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Team_Edit_Title" xml:space="preserve">
+    <value>[Ēđįŧ Ŧęäm !!! !!! !!! !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Team_Edit_UpdateSuccess" xml:space="preserve">
+    <value>[Ŧęäm ŵäş ūpđäŧęđ şūččęşşƒūľľy. !!! !!!]</value>
+  </data>
+  <data name="Team_Index_CreateNew" xml:space="preserve">
+    <value>[Cřęäŧę ŉęŵ ŧęäm !!! !!!]</value>
+  </data>
+  <data name="Team_Index_Teams" xml:space="preserve">
+    <value>[Ŧęämş !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Team_Index_Title" xml:space="preserve">
+    <value>[Ŧęämş !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Validation_Compare" xml:space="preserve">
+    <value>["{0}" äŉđ "{1}" mūşŧ ĥävę ŧĥę şämę väľūę. !!! !!!]</value>
+  </data>
+  <data name="Validation_Duplicate_Name" xml:space="preserve">
+    <value>[Ŧĥįş ŉämę ĥäş äľřęäđy þęęŉ ŧäĸęŉ. !!! !!!]</value>
+  </data>
+  <data name="Validation_Email" xml:space="preserve">
+    <value>["{0}" įş ŉőŧ ä väľįđ ęmäįľ äđđřęşş. !!! !!!]</value>
+  </data>
+  <data name="Validation_FileName" xml:space="preserve">
+    <value>["{0}" čőŉŧäįŉş čĥäřäčŧęřş ŧĥäŧ čäŉ'ŧ þę įŉ ä ƒįľę őř đįřęčŧőřy ŉämę. !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Validation_FileName_Regex" xml:space="preserve">
+    <value>[Øŉľy čĥäřäčŧęřş, ŉūmþęřş, đőŧş, mįŉūş äŉđ ūŉđęřşčőřę äřę äľľőŵęđ ƒőř "{0}". !!! !!! !!! !!! !!!]</value>
+  </data>
+  <data name="Validation_Invalid_Regex" xml:space="preserve">
+    <value>[Ŧĥę přővįđęđ řęģęχ ĥäş äŉ ęřřőř. {0} !!! !!!]</value>
+  </data>
+  <data name="Validation_Required" xml:space="preserve">
+    <value>["{0}" įş mäŉđäŧőřy. !!! !!!]</value>
+  </data>
+  <data name="Validation_StringLength" xml:space="preserve">
+    <value>["{0}" şĥőūľđ þę şĥőřŧęř ŧĥäŉ {1} čĥäřäčŧęřş. !!! !!!]</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>[Ÿęş !!! !!!]</value>
+  </data>
+</root>

@@ -1,6 +1,8 @@
 Bonobo Git Server
 ==============================================
 
+[![Build status](https://ci.appveyor.com/api/projects/status/4vyllwtb5i645lrt/branch/master?svg=true)](https://ci.appveyor.com/project/jakubgarfield/bonobo-git-server)
+
 Thank you for downloading Bonobo Git Server. For more information please visit [http://bonobogitserver.com](http://bonobogitserver.com).
 
 
@@ -15,11 +17,8 @@ Prerequisites
 * [.NET Framework 4.5](http://www.microsoft.com/en-us/download/details.aspx?id=30653)
     * Windows Vista SP2, Windows 7, Windows 8 and higher
     * Windows Server 2008 R2, Windows Server 2008 SP2, Windows Server 2012 and higher
-* [ASP.NET MVC 4](http://www.asp.net/mvc/mvc4)
-    * You can use the [standalone installer](http://www.microsoft.com/en-us/download/details.aspx?id=30683) even though it says it requires VS 2010 and higher.
-    * Don't forget to register MVC framework with your IIS
+    * Don't forget to register .NET framework with your IIS
         * Run `%windir%\Microsoft.NET\Framework\v4.0.30319\aspnet_regiis.exe -ir` with administrator privileges
-
 
 <hr />
 
@@ -109,3 +108,16 @@ For allowing anonymous push you have to modify global settings.
 * Go to **Global Settings**.
 * Check the value **Allow push for anonymous repositories**
 * Save changes.
+
+#### I'd like to use git hooks to restrict access. How do I access the web frontend usernam?
+
+Bonobo provides the following environment variables:
+
+* `AUTH_USER`: The username used to login. Empty if it was an anonymous operation (clone/push/pull)
+* `REMOTE_USER`: Same as `AUTH_USER`
+* `AUTH_USER_TEAMS`: A comma-separated list containing all the teams the user belongs to. Commas in teams name are escaped with a backslash. Backslashes are also escaped with a `\`. Example: Teams 'Editors\ Architects', 'Programmers,Testers' will become `Editors\\ Architects,Programmers\,Testers`.
+* `AUTH_USER_ROLES`: A comma-separated list containing all the roles the user belongs to. Commas in roles are escaped with a backslash. Backslashes are also escaped with a `\`.
+* `AUTH_USER_DISPLAYNAME`: Given Name + Surname if available. Else the username.
+
+**Beware that due to the way HTTP basic authentication works, if anonymous operations (push/pull) are enabled the variables above will always be empty!**
+

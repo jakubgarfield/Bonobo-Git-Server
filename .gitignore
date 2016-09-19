@@ -6,6 +6,16 @@
 *.user
 *.sln.docstates
 
+# Nuget
+.nuget
+packages
+
+#Deploy
+artifacts
+
+# Various git versions
+Gits/*.*
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -116,6 +126,8 @@ publish/
 # Publish Web Output
 *.[Pp]ublish.xml
 *.azurePubxml
+*.pubxml
+*.pubxml.user
 
 # NuGet Packages Directory
 ## TODO: If you have NuGet Package Restore enabled, uncomment the next line
@@ -169,6 +181,9 @@ App_Data/*.ldf
 # Microsoft Fakes
 FakesAssemblies/
 
+# Microsoft Roslyn
+*.sln.ide/
+
 # =========================
 # Windows detritus
 # =========================
@@ -191,3 +206,4 @@ $RECYCLE.BIN/
 
 */[Bb]in/*
 !*/[Bb]in/[Ww]eb.config
+.vs/

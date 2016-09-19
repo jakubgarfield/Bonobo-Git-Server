@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net;
+using System.Security.Claims;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using System.Text;
-using System.Security.Principal;
+using System.DirectoryServices.AccountManagement;
+using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
+
 using Microsoft.Practices.Unity;
 
 namespace Bonobo.Git.Server
@@ -15,46 +17,120 @@ namespace Bonobo.Git.Server
         [Dependency]
         public IMembershipService MembershipService { get; set; }
 
-        public override void OnAuthorization(AuthorizationContext filterContext)
-        {
-            if (IsWindowsUserAuthenticated(filterContext))
-            {
-                return;
-            }
+        [Dependency]
+        public IAuthenticationProvider AuthenticationProvider { get; set; }
 
+        [Dependency]
+        public IRepositoryPermissionService RepositoryPermissionService { get; set; }
+
+        [Dependency]
+        public IRepositoryRepository RepositoryRepository { get; set; }
+
+        public static string GetRepoPath(string path, string applicationPath)
+        {
+            var repo = path.Replace(applicationPath, "").Replace("/","");
+            return repo.Substring(0, repo.IndexOf(".git"));
+        }
+
+        public override void OnAuthorization(System.Web.Mvc.AuthorizationContext filterContext)
+        {
             if (filterContext == null)
             {
                 throw new ArgumentNullException("filterContext");
             }
 
-            string auth = filterContext.HttpContext.Request.Headers["Authorization"];
+            HttpContextBase httpContext = filterContext.HttpContext;
 
-            if (String.IsNullOrEmpty(auth))
+            string incomingRepoName = GetRepoPath(httpContext.Request.Path, httpContext.Request.ApplicationPath);
+            string repoName = Repository.NormalizeRepositoryName(incomingRepoName, RepositoryRepository);
+
+            // Add header to prevent redirection to login page even if we fail auth later (see IAuthenticationProvider.Configure)
+            // If we don't fail auth later, then this is benign
+            httpContext.Request.Headers.Add("AuthNoRedirect", "1");
+
+            if (httpContext.Request.IsAuthenticated && httpContext.User != null && httpContext.User.Identity is System.Security.Claims.ClaimsIdentity)
             {
+                // We already have a claims id, we don't need to worry about the rest of these checks
                 return;
             }
 
-            byte[] encodedDataAsBytes = Convert.FromBase64String(auth.Replace("Basic ", String.Empty));
-            string value = Encoding.ASCII.GetString(encodedDataAsBytes);
-            string username = value.Substring(0, value.IndexOf(':'));
-            string password = value.Substring(value.IndexOf(':') + 1);
+            string authHeader = httpContext.Request.Headers["Authorization"];
 
-            if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password) &&
-                MembershipService.ValidateUser(username, password))
+            if (String.IsNullOrEmpty(authHeader))
             {
-                filterContext.HttpContext.User = new GenericPrincipal(new GenericIdentity(username), null);
+                // We don't have an auth header, but if we're doing an anonymous operation, that's OK
+                if (RepositoryPermissionService.HasPermission(Guid.Empty, repoName, RepositoryAccessLevel.Pull))
+                {
+                    // Allow this through.  If it turns out they're actually trying to do an anon push and that's not allowed for this repo
+                    // then the GitController will reject them in there
+                    return;
+                }
+                else
+                {
+                    // If we're not even allowed to do an anonymous pull, then we should bounce this now, 
+                    // and tell the other end to try again with an auth header included next time
+                    httpContext.Response.Headers.Add("WWW-Authenticate", "Basic realm=\"Bonobo Git\"");
+                    filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+                    return;
+                }
             }
-            else
+
+            // Process the auth header and see if we've been given valid credentials
+            if (!IsUserAuthorized(authHeader, httpContext))
             {
-                filterContext.Result = new HttpStatusCodeResult(401);
+                filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
             }
         }
 
-
-        private static bool IsWindowsUserAuthenticated(ControllerContext context)
+        private bool IsUserAuthorized(string authHeader, HttpContextBase httpContext)
         {
-            var windowsIdentity = context.HttpContext.User.Identity as WindowsIdentity;
-            return windowsIdentity != null && windowsIdentity.IsAuthenticated;
+            byte[] encodedDataAsBytes = Convert.FromBase64String(authHeader.Replace("Basic ", String.Empty));
+            string value = Encoding.ASCII.GetString(encodedDataAsBytes);
+            string username = Uri.UnescapeDataString(value.Substring(0, value.IndexOf(':')));
+            string password = Uri.UnescapeDataString(value.Substring(value.IndexOf(':') + 1));
+
+            if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password))
+            {
+                if (AuthenticationProvider is WindowsAuthenticationProvider)
+                {
+                    return IsWindowsUserAuthorized(httpContext, username, password);
+                }
+                else
+                {
+                    if (MembershipService.ValidateUser(username, password) == ValidationResult.Success)
+                    {
+                        httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private bool IsWindowsUserAuthorized(HttpContextBase httpContext, string username, string password)
+        {
+            var domain = username.GetDomain();
+            username = username.StripDomain();
+            try
+            {
+                using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain))
+                {
+                    var adUser = UserPrincipal.FindByIdentity(pc, username);
+                    if (adUser != null)
+                    {
+                        if (pc.ValidateCredentials(username, password, ContextOptions.Negotiate))
+                        {
+                            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username.Replace("\\", "!"))));
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (PrincipalException)
+            {
+                // let it fail
+            }
+            return false;
         }
     }
 }

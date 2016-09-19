@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Bonobo.Git.Server.Models;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -10,11 +11,12 @@ namespace Bonobo.Git.Server.Data
         private ICollection<Role> _roles;
         private ICollection<Team> _teams;
 
-
-        public string Name { get; set; }
+        public Guid Id { get; set; }
+        public string GivenName { get; set; }
         public string Surname { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public string PasswordSalt { get; set; }
         public string Email { get; set; }
 
         public virtual ICollection<Repository> AdministratedRepositories
@@ -64,5 +66,19 @@ namespace Bonobo.Git.Server.Data
                 _teams = value;
             }
         }
+
+        public UserModel ToModel()
+        {
+            return new UserModel
+            {
+                Id = Id,
+                Username = Username,
+                GivenName = GivenName,
+                Surname = Surname,
+                Email = Email,
+            };
+        }
+
+
     }
 }

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -8,7 +8,7 @@
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{6129B3FE-B282-4F6F-8836-8AF66602F8DA}</ProjectGuid>
-    <ProjectTypeGuids>{e53f8fea-eae0-44a6-8774-ffd645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Bonobo.Git.Server</RootNamespace>
@@ -25,12 +25,14 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,75 +57,126 @@
     <ExcludeApp_Data>false</ExcludeApp_Data>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Update|AnyCPU'">
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Bonobo.Git.Server.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-    <ExcludeGeneratedDebugSymbol>true</ExcludeGeneratedDebugSymbol>
-    <ExcludeApp_Data>true</ExcludeApp_Data>
-    <PublishDatabases>false</PublishDatabases>
-    <PackageAsSingleFile>true</PackageAsSingleFile>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime">
-      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    <Reference Include="CommonMark, Version=0.1.0.0, Culture=neutral, PublicKeyToken=001ef8810438905d, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonMark.NET.0.12.0\lib\net45\CommonMark.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Ionic.Zip">
-      <HintPath>..\packages\DotNetZip.1.9.2\lib\net20\Ionic.Zip.dll</HintPath>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="LibGit2Sharp, Version=0.16.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.6.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.9.6\lib\net20\Ionic.Zip.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LibGit2Sharp, Version=0.21.0.176, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\LibGit2Sharp.0.16.0.0\lib\net35\LibGit2Sharp.dll</HintPath>
+      <HintPath>..\packages\LibGit2Sharp.0.21.0.176\lib\net40\LibGit2Sharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Practices.Unity, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Unity.3.0.1304.0\lib\Net45\Microsoft.Practices.Unity.dll</HintPath>
+    <Reference Include="Microsoft.IdentityModel.Protocol.Extensions, Version=1.0.2.33, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Protocol.Extensions.1.0.2.206221351\lib\net45\Microsoft.IdentityModel.Protocol.Extensions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Unity.3.0.1304.0\lib\Net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.WsFederation, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.WsFederation.3.0.1\lib\net45\Microsoft.Owin.Security.WsFederation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.Mvc.4.0.1\lib\net45\Microsoft.Practices.Unity.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="MimeTypeMap, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MediaTypeMap.2.1.0.0\lib\net40\MimeTypeMap.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MvcCheckBoxList, Version=1.4.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvcCheckBoxList.1.4.5\lib\net45\MvcCheckBoxList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Data.SQLite, Version=1.0.86.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\System.Data.SQLite.1.0.86.0\lib\net45\System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Data.SQLite, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.99.0\lib\net45\System.Data.SQLite.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.86.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\System.Data.SQLite.1.0.86.0\lib\net45\System.Data.SQLite.Linq.dll</HintPath>
+    <Reference Include="System.Data.SQLite.EF6, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.99.0\lib\net45\System.Data.SQLite.EF6.dll</HintPath>
+      <Private>True</Private>
     </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.99.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.99.0\lib\net45\System.Data.SQLite.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.ComponentModel.DataAnnotations">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=4.0.20622.1351, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.4.0.2.206221351\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
@@ -137,35 +190,36 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.Helpers.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
       <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.30506.0\lib\net40\System.Web.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Optimization">
-      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.2\lib\net40\System.Web.Optimization.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
       <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.30506.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Routing">
       <Private>False</Private>
     </Reference>
-    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
       <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
       <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
       <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -173,71 +227,100 @@
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Ude">
+    <Reference Include="Ude, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UDE.CSharp.1.1.0\lib\Ude.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Unity.Mvc4">
-      <HintPath>..\packages\Unity.Mvc4.1.1.0.0\lib\net40\Unity.Mvc4.dll</HintPath>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0.6\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="WebGrease">
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_GlobalResources\Resources.fr-FR.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.fr-FR.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Resources.sv-SE.designer.cs">
-      <DependentUpon>Resources.sv-SE.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="App_GlobalResources\Resources.ru-RU.designer.cs">
-      <DependentUpon>Resources.ru-RU.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="App_GlobalResources\Resources.es-ES.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.es-ES.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Resources.ja-JP.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.ja-JP.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Resources.tr-TR.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.tr-TR.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Resources.zh-CN.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-CN.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Resources.zh-TW.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-TW.resx</DependentUpon>
-    </Compile>
+    <Compile Include="AnonymousComparer.cs" />
+    <Compile Include="Attributes\AllViewsAttribute.cs" />
+    <Compile Include="Attributes\FileExtensionsCustom.cs" />
+    <Compile Include="Attributes\RepositoryNameNormalizerAttribute.cs" />
+    <Compile Include="Attributes\IsValidRegexAttribute.cs" />
+    <Compile Include="Attributes\UniqueRepoNameAttribute.cs" />
+    <Compile Include="Configuration\ActiveDirectorySettings.cs" />
+    <Compile Include="Configuration\AuthenticationSettings.cs" />
+    <Compile Include="Configuration\DiagnosticReporter.cs" />
+    <Compile Include="Configuration\FederationSettings.cs" />
+    <Compile Include="Controllers\ValidationController.cs" />
+    <Compile Include="Data\ADBackend.cs" />
+    <Compile Include="Data\ADBackendStore.cs" />
+    <Compile Include="Data\ADRepositoryRepository.cs" />
+    <Compile Include="Data\ADTeamRepository.cs" />
+    <Compile Include="Data\DatabaseResetManager.cs" />
+    <Compile Include="Data\INameProperty.cs" />
+    <Compile Include="Data\Update\Sqlite\AddGroup.cs" />
+    <Compile Include="Data\Update\Sqlite\AddGuidColumn.cs" />
+    <Compile Include="Data\Update\Sqlite\AddRepoPushColumn.cs" />
+    <Compile Include="Data\Update\SqlServer\AddGroup.cs" />
+    <Compile Include="Data\Update\SqlServer\AddRepoPushColumn.cs" />
+    <Compile Include="Data\Update\Sqlite\AddRepoLinksColumns.cs" />
+    <Compile Include="Data\Update\Sqlite\AddRepositoryLogo.cs" />
+    <Compile Include="Data\Update\SqlServer\AddGuidColumn.cs" />
+    <Compile Include="Data\Update\SqlServer\AddRepoLinksColumns.cs" />
+    <Compile Include="Data\Update\SqlServer\AddRepositoryLogo.cs" />
+    <Compile Include="Extensions\LinqExtensions.cs" />
+    <Compile Include="Extensions\SignatureExtensions.cs" />
+    <Compile Include="Configuration\AppSettings.cs" />
+    <Compile Include="Extensions\UserExtensions.cs" />
+    <Compile Include="Git\GitService\GitServiceResultParser.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\AutoCreateMissingRecoveryDirectories.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\OneFolderRecoveryFilePathBuilder.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\DurableGitServiceResult.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\IRecoveryFilePathBuilder.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\NamedArguments.cs" />
+    <Compile Include="Git\GitService\GitExecutionResult.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\GIT_OBJ_TYPE.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Durability\ReceivePackRecovery.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Hooks\AuditPusherToGitNotes.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommit.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommitSignature.cs" />
+    <Compile Include="Git\GitService\ReplicatingStream.cs" />
+    <Compile Include="Helpers\MembershipHelper.cs" />
+    <Compile Include="Helpers\RepositoryCommitModelHelpers.cs" />
+    <Compile Include="Models\RepositoryCommitTitle.cs" />
+    <Compile Include="Owin\NativeMethods.cs" />
+    <Compile Include="Owin\WindowsAuthenticationDefaults.cs" />
+    <Compile Include="Owin\WindowsAuthenticationExtensions.cs" />
+    <Compile Include="Owin\WindowsAuthenticationHandler.cs" />
+    <Compile Include="Owin\WindowsAuthenticationHandshake.cs" />
+    <Compile Include="Owin\WindowsAuthenticationHandshakeCache.cs" />
+    <Compile Include="Owin\WindowsAuthenticationMiddleware.cs" />
+    <Compile Include="Owin\WindowsAuthenticationOptions.cs" />
+    <Compile Include="Owin\WindowsAuthenticationToken.cs" />
+    <Compile Include="Security\ADMembershipService.cs" />
+    <Compile Include="Security\ADRoleProvider.cs" />
+    <Compile Include="Security\AuthenticationProvider.cs" />
+    <Compile Include="Security\CookieAuthenticationProvider.cs" />
+    <Compile Include="Security\FederationAuthenticationProvider.cs" />
+    <Compile Include="Security\IAuthenticationProvider.cs" />
+    <Compile Include="Security\IRoleProvider.cs" />
+    <Compile Include="Security\ValidationResult.cs" />
+    <Compile Include="Security\WindowsAuthenticationProvider.cs" />
+    <Compile Include="Startup.cs" />
+    <Compile Include="Git\ConfigurationBasedRepositoryLocator.cs" />
+    <Compile Include="Git\GitService\IGitService.cs" />
+    <Compile Include="Git\GitService\ExecutionOptions.cs" />
+    <Compile Include="Git\GitService\GitServiceExecutor.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_GlobalResources\Resources.de-DE.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.de-DE.resx</DependentUpon>
-    </Compile>
+    <Compile Include="Data\Update\Sqlite\AddAuditPushUser.cs" />
     <Compile Include="Data\Update\AutomaticUpdater.cs" />
     <Compile Include="Data\Update\RepositorySynchronizer.cs" />
+    <Compile Include="Data\Update\SqlServer\AddAuditPushUser.cs" />
     <Compile Include="Data\Update\SqlServer\InitialCreateScript.cs" />
     <Compile Include="Data\Update\SqlServer\InsertDefaultData.cs" />
     <Compile Include="Data\Update\UsernamesToLower.cs" />
     <Compile Include="Attributes\GitAuthorizeAttribute.cs" />
-    <Compile Include="Bootstrapper.cs" />
     <Compile Include="Configuration\ConfigurationEntry.cs" />
     <Compile Include="Configuration\UserConfiguration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -252,8 +335,8 @@
     <Compile Include="Data\Mapping\UserMap.cs" />
     <Compile Include="Data\Repository.cs" />
     <Compile Include="Data\Role.cs" />
-    <Compile Include="Data\Update\InitialCreateScript.cs" />
-    <Compile Include="Data\Update\InsertDefaultData.cs" />
+    <Compile Include="Data\Update\Sqlite\InitialCreateScript.cs" />
+    <Compile Include="Data\Update\Sqlite\InsertDefaultData.cs" />
     <Compile Include="Data\Update\IUpdateScript.cs" />
     <Compile Include="Data\Update\UpdateScriptRepository.cs" />
     <Compile Include="Data\Team.cs" />
@@ -267,7 +350,14 @@
     <Compile Include="FileActionResult.cs" />
     <Compile Include="Attributes\FileNameAttribute.cs" />
     <Compile Include="Attributes\WebAuthorizeAttribute.cs" />
-    <Compile Include="GitCmdResult.cs" />
+    <Compile Include="Git\GitCmdResult.cs" />
+    <Compile Include="Git\GitService\GitServiceExtensions.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\Hooks\NullReceivePackHook.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\IHookReceivePack.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ParsedReceivePack.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackPktLine.cs" />
+    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackParser.cs" />
+    <Compile Include="Git\IGitRepositoryLocator.cs" />
     <Compile Include="Helpers\ContentDispositionUtil.cs" />
     <Compile Include="Helpers\CssRewriteUrlTransformWrapper.cs" />
     <Compile Include="Helpers\CustomHtmlHelpers.cs" />
@@ -277,37 +367,23 @@
     <Compile Include="Models\SettingsModels.cs" />
     <Compile Include="Models\TeamModels.cs" />
     <Compile Include="Definitions.cs" />
-    <Compile Include="App_GlobalResources\Resources.cs-CZ.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.cs-CZ.resx</DependentUpon>
-    </Compile>
     <Compile Include="Attributes\WebAuthorizeRepositoryAttribute.cs" />
     <Compile Include="RepositoryBrowser.cs" />
     <Compile Include="Security\EFMembershipService.cs" />
-    <Compile Include="Security\EFRepositoryPermissionService.cs" />
+    <Compile Include="Security\RepositoryPermissionService.cs" />
     <Compile Include="Controllers\GitController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="App_GlobalResources\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Security\EFRoleProvider.cs" />
-    <Compile Include="Security\FormsAuthenticationService.cs" />
-    <Compile Include="Security\IFormsAuthenticationService.cs" />
     <Compile Include="Security\IMembershipService.cs" />
+    <Compile Include="Security\IPasswordService.cs" />
     <Compile Include="Security\IRepositoryPermissionService.cs" />
     <Compile Include="FileDisplayHandler.cs" />
-    <Compile Include="UnityDependencyResolver.cs" />
+    <Compile Include="Security\PasswordService.cs" />
     <Compile Include="FilterProviders\UnityFilterAttributeFilterProvider.cs" />
-    <Compile Include="Attributes\WindowsActionFilterAttribute.cs" />
-    <Compile Include="WindowsIdentityImporter.cs" />
-    <Compile Include="UsernameUrl.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\Git\antiword.exe" />
@@ -360,7 +436,6 @@
     <Content Include="App_Data\Git\libgsasl-7.def" />
     <Content Include="App_Data\Git\libgsasl-7.dll" />
     <Content Include="App_Data\Git\libiconv-2.dll" />
-    <Content Include="App_Data\Git\libiconv2.dll" />
     <Content Include="App_Data\Git\libneon-25.dll" />
     <Content Include="App_Data\Git\libpoppler-7.dll" />
     <Content Include="App_Data\Git\libssl.dll" />
@@ -386,11 +461,11 @@
     <Content Include="App_Data\Git\mkdir.exe" />
     <Content Include="App_Data\Git\msmtp.exe" />
     <Content Include="App_Data\Git\msys-1.0.dll" />
-    <Content Include="App_Data\Git\msys-crypto-0.9.8.dll" />
+    <Content Include="App_Data\Git\msys-crypto-1.0.0.dll" />
     <Content Include="App_Data\Git\msys-minires.dll" />
     <Content Include="App_Data\Git\msys-perl5_8.dll" />
     <Content Include="App_Data\Git\msys-regex-1.dll" />
-    <Content Include="App_Data\Git\msys-ssl-0.9.8.dll" />
+    <Content Include="App_Data\Git\msys-ssl-1.0.0.dll" />
     <Content Include="App_Data\Git\msys-z.dll" />
     <Content Include="App_Data\Git\msysltdl-3.dll" />
     <Content Include="App_Data\Git\mv.exe" />
@@ -434,22 +509,25 @@
     <Content Include="App_Data\Git\wish.exe" />
     <Content Include="App_Data\Git\wish85.exe" />
     <Content Include="App_Data\Git\xargs.exe" />
-    <Content Include="App_Data\note.txt" />
     <Content Include="App_Data\Repositories\note.txt" />
-    <EmbeddedResource Include="App_GlobalResources\Resources.fr-FR.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Resources.fr-FR.designer.cs</LastGenOutput>
+    <EmbeddedResource Include="App_GlobalResources\Resources.af-ZA.resx">
+      <LastGenOutput>Resources.af-ZA.designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="bin\NativeBinaries\amd64\git2-65e9dc6.dll" />
-    <Content Include="bin\NativeBinaries\x86\git2-65e9dc6.dll" />
+    <Content Include="bin\NativeBinaries\amd64\git2-e0902fb.dll" />
+    <Content Include="bin\NativeBinaries\x86\git2-e0902fb.dll" />
+    <Content Include="bin\x64\SQLite.Interop.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="bin\x86\SQLite.Interop.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\components\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\components\font-awesome\fonts\FontAwesome.otf" />
-    <Content Include="Content\components\highlight\build\lib\highlight.pack.js" />
-    <Content Include="Content\components\highlight\src\styles\github.css" />
+    <Content Include="Content\components\highlight\styles\github.css" />
     <Content Include="Content\components\pure\pure-min.css" />
     <Content Include="Content\fonts.css" />
     <Content Include="Content\fonts\opensans-bold.svg" />
@@ -458,6 +536,7 @@
     <Content Include="Content\images\git-logo.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\highlight.pack.js" />
     <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.4.js" />
     <Content Include="Scripts\jquery-1.4.4.min.js" />
@@ -476,15 +555,9 @@
     <Content Include="Scripts\MicrosoftMvcAjax.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\RepositoryGroupToggle.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Content\site.css" />
     <Content Include="Views\Web.config">
@@ -494,7 +567,9 @@
     <Content Include="Views\Team\Delete.cshtml" />
     <Content Include="Views\Repository\Delete.cshtml" />
     <Content Include="Views\Account\Delete.cshtml" />
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="..\changelog.md">
       <Link>changelog.md</Link>
     </Content>
@@ -503,12 +578,6 @@
     </Content>
     <Content Include="..\readme.md">
       <Link>readme.md</Link>
-    </Content>
-    <Content Include="x64\SQLite.Interop.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="x86\SQLite.Interop.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\Web.config" />
     <Content Include="App_Data\Git\astextplain" />
@@ -531,11 +600,6 @@
     <Content Include="App_Data\Git\vim" />
     <Content Include="App_Data\Git\which" />
     <Content Include="App_Data\Git\yacc" />
-    <EmbeddedResource Include="App_GlobalResources\Resources.de-DE.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.de-DE.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
     <Content Include="Content\fonts\opensans-bold.eot" />
@@ -547,12 +611,27 @@
     <Content Include="Content\fonts\opensans-regular.eot" />
     <Content Include="Content\fonts\opensans-regular.ttf" />
     <Content Include="Content\fonts\opensans-regular.woff" />
-    <EmbeddedResource Include="App_GlobalResources\Resources.zh-TW.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-TW.designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <Content Include="App_Data\.gitconfig" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <Content Include="Views\Repository\Blob.cshtml" />
+    <Content Include="Views\Repository\Clone.cshtml" />
+    <Content Include="Views\Repository\History.cshtml" />
+    <Content Include="Views\Repository\Blame.cshtml" />
+    <Content Include="Views\Home\ForgotPassword.cshtml" />
+    <Content Include="Views\Home\ResetPassword.cshtml" />
+    <None Include="Properties\PublishProfiles\Test.pubxml" />
+    <Content Include="Views\Repository\Tags.cshtml" />
+    <Content Include="Views\Repository\_Tag.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Test.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\LogOn.cshtml" />
@@ -584,45 +663,47 @@
     <Content Include="Views\Repository\_Commit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="App_GlobalResources\Resources.sv-SE.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Resources.sv-SE.designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="App_GlobalResources\Resources.cs-CZ.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.cs-CZ.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="App_GlobalResources\Resources.ru-RU.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Resources.ru-RU.designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="App_GlobalResources\Resources.es-ES.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Resources.es-ES.designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="App_GlobalResources\Resources.ja-JP.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.ja-JP.designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <Compile Include="App_GlobalResources\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="App_GlobalResources\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="App_GlobalResources\Resources.tr-TR.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.tr-TR.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="App_GlobalResources\Resources.zh-CN.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.zh-CN.designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="App_GlobalResources\Resources.cs-CZ.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.de-DE.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.es-ES.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.da-DK.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.fr-FR.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.ja-JP.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.pl-PL.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.pt-BR.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.ru-RU.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.sv-SE.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.tr-TR.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.zh-CN.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.zh-HK.resx" />
+    <EmbeddedResource Include="App_GlobalResources\Resources.zh-TW.resx" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\Recovery\" />
+    <Folder Include="Views\Validation\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
@@ -638,27 +719,34 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>50287</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50287/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>
+    <PreBuildEvent>
 if not exist "$(TargetDir)NativeBinaries" md "$(TargetDir)NativeBinaries"
 if not exist "$(TargetDir)NativeBinaries\x86" md "$(TargetDir)NativeBinaries\x86"
-xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.16.0.0\lib\net35\NativeBinaries\x86\*.*" "$(TargetDir)NativeBinaries\x86"
+%25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.21.0.176\lib\net40\NativeBinaries\x86\*.*" "$(TargetDir)NativeBinaries\x86"
 if not exist "$(TargetDir)NativeBinaries\amd64" md "$(TargetDir)NativeBinaries\amd64"
-xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.16.0.0\lib\net35\NativeBinaries\amd64\*.*" "$(TargetDir)NativeBinaries\amd64"</PostBuildEvent>
+%25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.21.0.176\lib\net40\NativeBinaries\amd64\*.*" "$(TargetDir)NativeBinaries\amd64"
+%25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.21.0.176\lib\net40\NativeBinaries\amd64\*.*" "$(TargetDir)NativeBinaries\amd64"
+if not exist "$(TargetDir)\x86" md "$(TargetDir)\x86"
+%25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\System.Data.SQLite.Core.1.0.99.0\build\net45\x86\*.*" "$(TargetDir)x86"
+if not exist "$(TargetDir)\x64" md "$(TargetDir)\x64"
+%25windir%25\system32\xcopy /s /y /d "$(SolutionDir)packages\System.Data.SQLite.Core.1.0.99.0\build\net45\x64\*.*" "$(TargetDir)x64"</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net45\System.Data.SQLite.Core.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net45\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.99.0\build\net45\System.Data.SQLite.Core.targets'))" />
+  </Target>
 </Project>

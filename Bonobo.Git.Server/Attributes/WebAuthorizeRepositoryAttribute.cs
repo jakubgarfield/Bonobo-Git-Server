@@ -1,6 +1,10 @@
 ﻿using System.Web.Mvc;
+using System.Web.Routing;
+using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
+
 using Microsoft.Practices.Unity;
+using System;
 
 namespace Bonobo.Git.Server
 {
@@ -15,25 +19,39 @@ namespace Bonobo.Git.Server
         {
             base.OnAuthorization(filterContext);
 
-            var repository = filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString();
-            var user = filterContext.HttpContext.User.Identity.Name;
-            if (RequiresRepositoryAdministrator)
+            if (!(filterContext.Result is HttpUnauthorizedResult))
             {
-                if (!RepositoryPermissionService.IsRepositoryAdministrator(user, repository))
+                Guid repoId;
+                var urlhelper = new UrlHelper(filterContext.RequestContext);
+                if (Guid.TryParse(filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString(), out repoId))
                 {
-                    filterContext.Result = new HttpUnauthorizedResult();
-                }
-            }
-            else
-            {
-                if (RepositoryPermissionService.HasPermission(user, repository))
-                {
-                    return;
-                }
+                    Guid userId = filterContext.HttpContext.User.Id();
 
-                if (!RepositoryPermissionService.AllowsAnonymous(repository))
+                    var requiredAccess = RequiresRepositoryAdministrator
+                        ? RepositoryAccessLevel.Administer
+                        : RepositoryAccessLevel.Push;
+
+                    if (RepositoryPermissionService.HasPermission(userId, repoId, requiredAccess))
+                    {
+                        return;
+                    }
+
+                    filterContext.Result = new RedirectResult(urlhelper.Action("Unauthorized", "Home"));
+                }
+                else
                 {
-                    filterContext.Result = new HttpUnauthorizedResult();
+                    var rd = filterContext.RequestContext.RouteData;
+                    var action = rd.GetRequiredString("action");
+                    var controller = rd.GetRequiredString("controller");
+                    if (action.Equals("index", StringComparison.OrdinalIgnoreCase) && controller.Equals("repository", StringComparison.OrdinalIgnoreCase))
+                    {
+                        filterContext.Result = new RedirectResult(urlhelper.Action("Unauthorized", "Home"));
+                    }
+                    else
+                    {
+                        filterContext.Controller.TempData["RepositoryNotFound"] = true;
+                        filterContext.Result = new RedirectResult(urlhelper.Action("Index", "Repository"));
+                    }
                 }
             }
         }
