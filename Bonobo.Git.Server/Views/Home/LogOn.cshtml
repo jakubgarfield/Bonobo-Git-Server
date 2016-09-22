@@ -22,6 +22,17 @@
             @Html.PasswordFor(m => m.Password, new { @class = "textInput small" })<em>*</em>
             @Html.ValidationMessageFor(m => m.Password)
         </div>
+       
+        <div class="pure-control-group">
+            @Html.Label("验证码", new { accesskey = "p" })
+            @Html.TextBox("Captcha")<em>*</em>
+            @Html.MvcCaptcha(new TSharp.Core.Mvc.MvcCaptchaOptions()
+       {
+           ValidationInputBoxId = "Captcha",
+           Height = 32,
+           Width = 80
+       })
+        </div>
         <div class="pure-control-group">
             @Html.LabelFor(m => m.RememberMe)
             @Html.CheckBoxFor(m => m.RememberMe)

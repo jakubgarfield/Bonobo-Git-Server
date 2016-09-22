@@ -21,6 +21,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Practices.Unity;
 using Bonobo.Git.Server.Owin.Windows;
 using System.Configuration;
+using TSharp.Core.Mvc;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -178,6 +179,7 @@ namespace Bonobo.Git.Server.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateMvcCaptcha("Captcha")]
         public ActionResult LogOn(LogOnModel model)
         {
             if (ModelState.IsValid)

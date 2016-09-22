@@ -288,6 +288,16 @@
     <Compile Include="Helpers\MembershipHelper.cs" />
     <Compile Include="Helpers\RepositoryCommitModelHelpers.cs" />
     <Compile Include="Models\RepositoryCommitTitle.cs" />
+    <Compile Include="MvcCaptcha\CaptchaImage.cs" />
+    <Compile Include="MvcCaptcha\Enumerations.cs" />
+    <Compile Include="MvcCaptcha\ICaptchaImageService.cs" />
+    <Compile Include="MvcCaptcha\MvcCaptchaConfigSection.cs" />
+    <Compile Include="MvcCaptcha\MvcCaptchaController.cs" />
+    <Compile Include="MvcCaptcha\MvcCaptchaHelper.cs" />
+    <Compile Include="MvcCaptcha\MvcCaptchaImage.cs" />
+    <Compile Include="MvcCaptcha\MvcCaptchaImageResult.cs" />
+    <Compile Include="MvcCaptcha\MvcCaptchaOptions.cs" />
+    <Compile Include="MvcCaptcha\ValidateMvcCaptchaAttribute.cs" />
     <Compile Include="Owin\NativeMethods.cs" />
     <Compile Include="Owin\WindowsAuthenticationDefaults.cs" />
     <Compile Include="Owin\WindowsAuthenticationExtensions.cs" />
