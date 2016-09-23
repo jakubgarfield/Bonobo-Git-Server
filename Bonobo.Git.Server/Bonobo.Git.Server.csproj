@@ -288,6 +288,16 @@
     <Compile Include="Helpers\MembershipHelper.cs" />
     <Compile Include="Helpers\RepositoryCommitModelHelpers.cs" />
     <Compile Include="Models\RepositoryCommitTitle.cs" />
+    <Compile Include="MvcCaptcha\Captcha.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Captcha.resx</DependentUpon>
+    </Compile>
+    <Compile Include="MvcCaptcha\Captcha.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Captcha.zh-CN.resx</DependentUpon>
+    </Compile>
     <Compile Include="MvcCaptcha\CaptchaImage.cs" />
     <Compile Include="MvcCaptcha\Enumerations.cs" />
     <Compile Include="MvcCaptcha\ICaptchaImageService.cs" />
@@ -622,6 +632,15 @@
     <Content Include="Content\fonts\opensans-regular.ttf" />
     <Content Include="Content\fonts\opensans-regular.woff" />
     <Content Include="App_Data\.gitconfig" />
+    <EmbeddedResource Include="MvcCaptcha\Captcha.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Captcha.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>TSharp.Core</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MvcCaptcha\Captcha.zh-CN.resx">
+      <Generator>ResXFileCodeGeneratorEx</Generator>
+      <LastGenOutput>Captcha.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <Content Include="Views\Repository\Blob.cshtml" />
     <Content Include="Views\Repository\Clone.cshtml" />

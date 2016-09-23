@@ -54,7 +54,7 @@ namespace TSharp.Core.Mvc
                            && !String.IsNullOrEmpty(expectedValue)
                            && String.Equals(actualValue, expectedValue, StringComparison.OrdinalIgnoreCase);
             if (!isValid)
-                ((Controller) filterContext.Controller).ModelState.AddModelError(Field, "验证码不匹配");
+                ((Controller) filterContext.Controller).ModelState.AddModelError(Field, Captcha.Captcha_Incorrect);
             //(string)filterContext.HttpContext.GetGlobalResourceObject("LangPack","ValidationCode_Not_Match"));
         }
     }

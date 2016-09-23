@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Web.Routing;
+using TSharp.Core;
 using TSharp.Core.Mvc;
 using TSharp.Core.Web;
 
@@ -18,32 +19,36 @@ namespace System.Web.Mvc
                 image);
             var url = new UrlHelper(helper.ViewContext.RequestContext);
             var sb = new StringBuilder(1500);
-            const string copyrightText = "\r\n<!--MvcCaptcha 1.2 @Webdiyer (http://www.webdiyer.com)-->\r\n";
+            const string copyrightText = "\r\n<!--MvcCaptcha 1.2 @Webdiyer (http://www.webdiyer.com) update by Jingbo from www.tsharp.org-->\r\n";
             sb.Append(copyrightText);
             sb.Append("<input type=\"hidden\" name=\"_mvcCaptchaGuid\" id=\"_mvcCaptchaGuid\"");
 
             if (options.DelayLoad)
             {
-                sb.Append(
-                    "/><script language=\"javascript\" type=\"text/javascript\">if (typeof (jQuery) == \"undefined\") { alert(\"jQuery脚本库未加载，请检查！\"); }");
-                sb.Append("var _mvcCaptchaPrevGuid = null,_mvcCaptchaImgLoaded = false;function _loadMvcCaptchaImage(){");
+                sb.Append("/><script language=\"javascript\" type=\"text/javascript\">if (typeof (jQuery) == \"undefined\") { alert(\"")
+                    .Append(Captcha.JQueryNotLoadedPleaseEnsureThat)
+                    .Append("\"); } var _mvcCaptchaPrevGuid = null,_mvcCaptchaImgLoaded = false;function _loadMvcCaptchaImage(){");
                 sb.Append("if(!_mvcCaptchaImgLoaded){$.ajax({type:'GET',url:'");
-                sb.Append(url.Action("MvcCaptchaLoader", "_MvcCaptcha", new RouteValueDictionary {{"area", null}}));
+                sb.Append(url.Action("MvcCaptchaLoader", "_MvcCaptcha", new RouteValueDictionary { { "area", null } }));
                 sb.Append("?'+_mvcCaptchaPrevGuid,global:false,success:function(data){_mvcCaptchaImgLoaded=true;");
                 sb.Append("$(\"#_mvcCaptchaGuid\").val(data);_mvcCaptchaPrevGuid=data;$(\"#");
                 sb.Append(options.CaptchaImageContainerId).Append("\").html('");
                 sb.Append(
                     CreateImgTag(
-                        url.Action(actionName, controllerName, new RouteValueDictionary {{"area", null}}) + "?'+data+'",
+                        url.Action(actionName, controllerName, new RouteValueDictionary { { "area", null } }) + "?'+data+'",
                         options, null));
                 sb.Append(
                     "');}});} };function _reloadMvcCaptchaImage(){_mvcCaptchaImgLoaded=false;_loadMvcCaptchaImage();};$(function(){");
                 sb.Append("if($(\"#")
                   .Append(options.ValidationInputBoxId)
-                  .Append("\").length==0){alert(\"未能找到验证码输入文本框，请检查ValidationInputBoxId属性是否设置正确！\");}");
+                  .Append("\").length==0){alert(\"")
+                  .AppendFormat(Captcha.Unfound_ValidationInputBoxId_PleaseCheck, options.ValidationInputBoxId)
+                  .Append("\");}");
                 sb.Append("if($(\"#")
                   .Append(options.CaptchaImageContainerId)
-                  .Append("\").length==0){alert(\"未能找到验证码图片父容器，请检查CaptchaImageContainerId属性是否设置正确！\");}");
+                  .Append("\").length==0){alert(\"" )
+                  .AppendFormat(Captcha.Unfound_CaptchaImageContainerId_PleaseCheck,options.CaptchaImageContainerId)
+                  .Append("\");}");
                 sb.Append("$(\"#").Append(options.ValidationInputBoxId);
                 sb.Append("\").bind(\"focus\",_loadMvcCaptchaImage)});</script>");
             }
@@ -52,7 +57,7 @@ namespace System.Web.Mvc
                 sb.AppendFormat(" value=\"{0}\" />", image.UniqueId);
                 sb.Append(
                     CreateImgTag(
-                        url.Action(actionName, controllerName, new RouteValueDictionary {{"area", null}}) + "?" +
+                        url.Action(actionName, controllerName, new RouteValueDictionary { { "area", null } }) + "?" +
                         image.UniqueId, options, image.UniqueId));
                 sb.Append(
                     "<script language=\"javascript\" type=\"text/javascript\">function _reloadMvcCaptchaImage(){var ci=document.getElementById(\"");
@@ -68,7 +73,7 @@ namespace System.Web.Mvc
         {
             var sb = new StringBuilder("<a href=\"javascript:_reloadMvcCaptchaImage()\"><img src=\"");
             sb.Append(url);
-            sb.Append("\" alt=\"MvcCaptcha\" title=\"刷新图片\" width=\"");
+            sb.Append("\" alt=\"MvcCaptcha\" title=\"" +Captcha.Refresh +"\" width=\"");
             sb.Append(options.Width);
             sb.Append("\" height=\"");
             sb.Append(options.Height);

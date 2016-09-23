@@ -15,7 +15,7 @@ namespace TSharp.Core.Mvc
         {
             string prevGuid = Request.ServerVariables["Query_String"];
             if (!string.IsNullOrEmpty(prevGuid))
-                HttpContext.Session.Remove(prevGuid);
+                Session.Remove(prevGuid);
             var options = new MvcCaptchaOptions();
             MvcCaptchaConfigSection config = MvcCaptchaConfigSection.GetConfig();
             if (config != null)
@@ -28,11 +28,11 @@ namespace TSharp.Core.Mvc
             }
 
             var image = new MvcCaptchaImage(options);
-            HttpContext.Session.Add(
+            Session.Add(
                 image.UniqueId,
                 image);
-            HttpContext.Response.Cache.SetNoStore();
-            HttpContext.Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetNoStore();
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
             return Content(image.UniqueId);
         }
     }
