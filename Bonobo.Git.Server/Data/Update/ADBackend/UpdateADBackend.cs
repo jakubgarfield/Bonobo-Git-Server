@@ -141,6 +141,7 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
             {
                 var repo = repoitem.Value;
                 var newrepo = new Models.RepositoryModel();
+                newrepo.Id = Guid.NewGuid();
                 newrepo.Name = repo.Name;
                 newrepo.Group = repo.Group;
                 newrepo.Description = repo.Description;
@@ -246,7 +247,7 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
                 }
 
                 var domainuser = UserPrincipal.FindByIdentity(dc, u.Username);
-                if (domainuser != null)
+                if (domainuser != null && domainuser.Guid.HasValue)
                 {
                     u.Id = domainuser.Guid.Value;
                 }

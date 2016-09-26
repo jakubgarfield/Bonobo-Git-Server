@@ -47,6 +47,10 @@ namespace Bonobo.Git.Server.Data
 
         public bool Add(T item)
         {
+            if (item.Id == Guid.Empty)
+            {
+                throw new ArgumentException("You must set the Id before adding an item");
+            }
             return _content.TryAdd(item.Id, item) && Store(item);
         }
 
@@ -88,6 +92,11 @@ namespace Bonobo.Git.Server.Data
 
         private bool Store(T item)
         {
+            if (item.Id == Guid.Empty)
+            {
+                throw new ArgumentException("Item does not have a proper Id");
+            }
+
             bool result = false;
 
             try
