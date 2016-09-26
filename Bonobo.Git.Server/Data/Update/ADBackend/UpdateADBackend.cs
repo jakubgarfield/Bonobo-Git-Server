@@ -185,9 +185,15 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
 
                 newrole.Id = Guid.NewGuid();
                 var members = new List<Guid>();
-                foreach (var member in role.Members) {
-                    members.Add(users[member].Id);
+                foreach (var memberName in role.Members)
+                {
+                    Models.UserModel user;
+                    if (users.TryGetValue(memberName, out user))
+                    {
+                        members.Add(user.Id);
+                    }
                 }
+                newrole.Members = members.ToArray();
             }
         }
 
