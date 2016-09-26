@@ -158,17 +158,7 @@ namespace Bonobo.Git.Server.Data
 
         private string GetItemFilename(T item)
         {
-            StringBuilder result = new StringBuilder(45);
-
-            byte[] hash = SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(item.Name));
-            for (int i = 0; i < hash.Length; i++)
-            {
-                result.Append(hexchars[hash[i] >> 4]);
-                result.Append(hexchars[hash[i] & 0x0f]);
-            }
-            result.Append(".json");
-
-            return result.ToString();
+            return item.Id+".json";
         }
     }
 }
