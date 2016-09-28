@@ -43,9 +43,22 @@ namespace Bonobo.Git.Server.Data
 
         public static void ResetSingletonForTesting()
         {
+            ResetSingletonWithoutAutomaticUpdate();
+        }
+
+        public static void ResetSingletonWithoutAutomaticUpdate()
+        {
             lock (instanceLock)
             {
                 instance = new ADBackend(false);
+            }
+        }
+
+        public static void ResetSingletonWithAutomaticUpdate()
+        {
+            lock (instanceLock)
+            {
+                instance = new ADBackend(true);
             }
         }
 
