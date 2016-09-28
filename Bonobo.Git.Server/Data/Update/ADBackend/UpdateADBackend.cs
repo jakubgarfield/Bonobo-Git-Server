@@ -7,6 +7,9 @@ using Bonobo.Git.Server.Configuration;
 using System;
 using System.Threading;
 using System.Linq;
+using Bonobo.Git.Server.Data;
+using Microsoft.VisualBasic.FileIO;
+using Newtonsoft.Json;
 
 namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
 {
@@ -17,120 +20,104 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
         {
             // Make a copy of the current backendfolder if it exists, so we can use the modern models for saving
             // it all to the correct location directly
-            var dir = PathEncoder.GetRootPath(ActiveDirectorySettings.BackendPath);
-            var bkpdir = PathEncoder.GetRootPath(ActiveDirectorySettings.BackendPath + "_pre6.0.0");
-            if (Directory.Exists(dir))
+            var backendDirectory = PathEncoder.GetRootPath(ActiveDirectorySettings.BackendPath);
+            var backupDirectory = PathEncoder.GetRootPath(ActiveDirectorySettings.BackendPath + "_pre6.0.0_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss"));
+            if (Directory.Exists(backendDirectory) && BackEndNeedsUpgrade(backendDirectory))
             {
-                var mustConvert = false;
-                foreach (var jsonfile in new DirectoryInfo(dir).EnumerateFiles("*.json", SearchOption.AllDirectories))
-                {
-                    // try to load with the modern models, if it succeeds we don't need to update
-                    try
-                    {
-                        var hadFile = true;
-                        switch (jsonfile.Directory.Name)
-                        {
-                            case "Roles":
-                                {
-                                    var x = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.RoleModel>(File.ReadAllText(jsonfile.FullName));
-                                    if (x.Id == Guid.Empty)
-                                    {
-                                        mustConvert = true;
-                                    }
-                                    break;
-                                }
-
-                            case "Users":
-                                {
-                                    var x = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.UserModel>(File.ReadAllText(jsonfile.FullName));
-                                    if (x.Id == Guid.Empty)
-                                    {
-                                        mustConvert = true;
-                                    }
-                                    break;
-                                }
-
-                            case "Teams":
-                                {
-                                    var x = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.TeamModel>(File.ReadAllText(jsonfile.FullName));
-                                    if (x.Id == Guid.Empty)
-                                    {
-                                        mustConvert = true;
-                                    }
-                                    break;
-                                }
-
-                            case "Repos":
-                                {
-                                    var x = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.RepositoryModel>(File.ReadAllText(jsonfile.FullName));
-                                    if (x.Id == Guid.Empty)
-                                    {
-                                        mustConvert = true;
-                                    }
-                                    break;
-                                }
-
-                            default:
-                                // the user created some directory we don't know about...
-                                hadFile = false;
-                                continue;
-                        }
-                        if (hadFile)
-                        {
-                            break;
-                        }
-                    }
-                    catch (Newtonsoft.Json.JsonSerializationException)
-                    {
-                        // We must convert...
-                        mustConvert = true;
-                        break;
-                    }
-                }
-                if (!mustConvert)
-                {
-                    // It seems the directory is here but no json files exist.
-                    // So there is nothing to update.
-                    return;
-                }
-
-                if (!Directory.Exists(bkpdir))
-                {
-                    {
-                        new Microsoft.VisualBasic.Devices.Computer().FileSystem.CopyDirectory(dir, bkpdir);
-                    }
-                    // Make sure the Computer() instance has been disposed se we can delete the source directory
-                    // If anyone knows a better way of doing this, please use it.
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-                    try
-                    {
-                        Directory.Delete(dir, true);
-                    }
-                    catch (IOException) // System.IO.IOException: The directory is not empty
-                    {
-                        // Normally it's only the top most dir that fails to delete for some reason...
-                        // If any json files are left we have a problem, if only folders are left
-                        // we can let it update without any problems. Leaving the old json files
-                        // means they would get loaded next run and crash the server.
-                        var anyfile = new DirectoryInfo(dir).EnumerateFiles("*.json").FirstOrDefault();
-                        if (anyfile != null)
-                        {
-                            throw;
-                        }
-                    }
-                }
+                MakeBackupOfBackendDirectory(backendDirectory, backupDirectory);
 
                 // We must create one that will not automatically update the items while we update them
                 ADBackend.ResetSingletonWithoutAutomaticUpdate();
 
-                var newUsers = UpdateUsers(Path.Combine(bkpdir, "Users"));
-                var newTeams = UpdateTeams(Path.Combine(bkpdir, "Teams"), newUsers);
-                UpdateRoles(Path.Combine(bkpdir, "Roles"), newUsers);
-                UpdateRepos(Path.Combine(bkpdir, "Repos"), newUsers, newTeams);
+                var newUsers = UpdateUsers(Path.Combine(backupDirectory, "Users"));
+                var newTeams = UpdateTeams(Path.Combine(backupDirectory, "Teams"), newUsers);
+                UpdateRoles(Path.Combine(backupDirectory, "Roles"), newUsers);
+                UpdateRepos(Path.Combine(backupDirectory, "Repos"), newUsers, newTeams);
 
                 // We are done, enable automatic update again.
                 ADBackend.ResetSingletonWithAutomaticUpdate();
+            }
+        }
+
+        /// <summary>
+        /// Check if the backend needs upgrading - try to load all the .json files - if they load OK and have GUID ids, then 
+        /// we don't need to load
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
+        private static bool BackEndNeedsUpgrade(string dir)
+        {
+            if (BackendSubDirectoryNeedsUpdating<Models.RoleModel>(dir, "Roles"))
+            {
+                return true;
+            }
+            if (BackendSubDirectoryNeedsUpdating<Models.UserModel>(dir, "Users"))
+            {
+                return true;
+            }
+            if (BackendSubDirectoryNeedsUpdating<Models.TeamModel>(dir, "Teams"))
+            {
+                return true;
+            }
+            if (BackendSubDirectoryNeedsUpdating<Models.RepositoryModel>(dir, "Repos"))
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+        /// <summary>
+        /// Try all the json files in one subdirectory
+        /// </summary>
+        private static bool BackendSubDirectoryNeedsUpdating<T>(string backendDirectory, string subdirectory) where T : INameProperty
+        {
+            var directory = Path.Combine(backendDirectory, subdirectory);
+            foreach (var jsonfile in new DirectoryInfo(directory).EnumerateFiles("*.json"))
+            {
+                // try to load with the modern models, if it succeeds we don't need to update
+                try
+                {
+                    var x = JsonConvert.DeserializeObject<T>(File.ReadAllText(jsonfile.FullName));
+                    if (x.Id == Guid.Empty)
+                    {
+                        // No GUID - we need to convert
+                        return true;
+                    }
+                    break;
+                }
+                catch (JsonSerializationException)
+                {
+                    // We must convert...
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static void MakeBackupOfBackendDirectory(string backendDirectory, string backupDirectory)
+        {
+            FileSystem.CopyDirectory(backendDirectory, backupDirectory);
+            int attemptsRemaining = 5;
+            while (attemptsRemaining-- > 0)
+            {
+                try
+                {
+                    Directory.Delete(backendDirectory, true);
+                    return;
+                }
+                catch (IOException) // System.IO.IOException: The directory is not empty
+                {
+                    // Normally it's only the top most dir that fails to delete for some reason (usually because Explorer is holding a handle to stuff)...
+                    // If any json files are left we have a problem, if only folders are left
+                    // we can let it update without any problems. Leaving the old json files
+                    // means they would get loaded next run and crash the server.
+                    if (attemptsRemaining == 0 && Directory.EnumerateFiles(backendDirectory, "*.json").Any())
+                    {
+                        throw;
+                    }
+                    Thread.Sleep(1000);
+                }
             }
         }
 
