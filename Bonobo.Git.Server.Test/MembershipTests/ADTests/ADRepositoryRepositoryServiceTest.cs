@@ -30,7 +30,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests.ADTests
 
         protected override TeamModel AddTeam()
         {
-            var newTeam = new TeamModel { Name = "Team1"};
+            var newTeam = new TeamModel { Name = "Team1", Id = Guid.NewGuid()};
             ADBackend.Instance.Teams.Add(newTeam);
             return newTeam;
         }
