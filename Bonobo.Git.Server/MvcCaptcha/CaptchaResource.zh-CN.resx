@@ -117,24 +117,29 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="JQueryNotLoadedPleaseEnsureThat" xml:space="preserve">
-    <value>jQuery have not loaded, please ensure that jQuery is loaded before!
-</value>
-  </data>
   <data name="Unfound_ValidationInputBoxId_PleaseCheck" xml:space="preserve">
-    <value>Unfound the Id:{0}, Please check validity of ValidatonInputBoxId</value>
+    <value>未能找到验证码输入文本框Id:{0}，请检查ValidationInputBoxId属性是否设置正确！</value>
   </data>
   <data name="Unfound_CaptchaImageContainerId_PleaseCheck" xml:space="preserve">
-    <value>Unfound the Id:{0}, Please check validity of CaptchaImageContainerId
-</value>
+    <value>未能找到验证码图片父容器Id:{0}，请检查CaptchaImageContainerId属性是否设置正确！</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>Refresh Image</value>
+    <value>刷新图片</value>
+  </data>
+  <data name="JQueryNotLoadedPleaseEnsureThat" xml:space="preserve">
+    <value>JQuery没有加载，请确保在此前加载jQuery</value>
+  </data>
+  <data name="RefreshImage" xml:space="preserve">
+    <value>换一张</value>
+    <comment>换一张</comment>
   </data>
   <data name="EnableCaptcha" xml:space="preserve">
-    <value>Enable Captcha</value>
+    <value>启用验证码</value>
   </data>
   <data name="Captcha_Incorrect" xml:space="preserve">
-    <value>Captcha Incorrect</value>
+    <value>验证码错误</value>
+  </data>
+  <data name="Title_Captcha" xml:space="preserve">
+    <value>验证码</value>
   </data>
 </root>

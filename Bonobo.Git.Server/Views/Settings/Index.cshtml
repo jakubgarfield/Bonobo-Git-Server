@@ -18,7 +18,7 @@
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(false, Resources.Settings_Index_Failed)
-    
+
     <fieldset>
 
         <div class="pure-control-group">
@@ -42,19 +42,26 @@
             <i class="fa fa-info-circle" title="@Resources.Settings_Global_SiteFooterMessage_Hint"></i>
         </div>
         <div class="pure-control-group">
+            @Html.LabelFor(m => m.LogonAttemptOfEnableCaptcha)
+            @Html.TextBoxFor(m => m.LogonAttemptOfEnableCaptcha, new { @class = "medium", autofocus = "" })
+            <i class="fa fa-info-circle" title="@Resources.Settings_AttemptCountOfEnableCaptcha_Hint"></i>
+        </div>
+        <div class="pure-control-group">
             @Html.LabelFor(m => m.DefaultLanguage)
-            @Html.DropDownListFor(m => m.DefaultLanguage, 
+            @Html.DropDownListFor(m => m.DefaultLanguage,
                 CultureInfo.GetCultures(CultureTypes.SpecificCultures).Select(
-                    cultureInfo => new SelectListItem() {
+                    cultureInfo => new SelectListItem()
+                    {
                         Text = String.Format("{0} - {1}", cultureInfo.Name, cultureInfo.DisplayName),
                         Value = cultureInfo.Name,
-                        Selected = Model.DefaultLanguage == null ? "en-US" == cultureInfo.Name : Model.DefaultLanguage == cultureInfo.Name }
+                        Selected = Model.DefaultLanguage == null ? "en-US" == cultureInfo.Name : Model.DefaultLanguage == cultureInfo.Name
+                    }
                     ).OrderBy(i => i.Text))
             <i class="fa fa-info-circle" title="@Resources.Settings_Global_DefaultLanguage_Hint"></i>
         </div>
         <div class="pure-controls">
-            <label for="AllowAnonymousRegistration" class="pure-checkbox">@Html.CheckBoxFor(m => m.AllowAnonymousRegistration) @Model.GetType().GetDisplayValue("AllowAnonymousRegistration") <i class="fa fa-info-circle" title="@Resources.Settings_Global_AllowAnonymousRegistration_Hint"></i></label>  
-            <label for="AllowUserRepositoryCreation" class="pure-checkbox">@Html.CheckBoxFor(m => m.AllowUserRepositoryCreation) @Model.GetType().GetDisplayValue("AllowUserRepositoryCreation") <i class="fa fa-info-circle" title="@Resources.Settings_Global_AllowUserRepositoryCreation_Hint"></i></label>            
+            <label for="AllowAnonymousRegistration" class="pure-checkbox">@Html.CheckBoxFor(m => m.AllowAnonymousRegistration) @Model.GetType().GetDisplayValue("AllowAnonymousRegistration") <i class="fa fa-info-circle" title="@Resources.Settings_Global_AllowAnonymousRegistration_Hint"></i></label>
+            <label for="AllowUserRepositoryCreation" class="pure-checkbox">@Html.CheckBoxFor(m => m.AllowUserRepositoryCreation) @Model.GetType().GetDisplayValue("AllowUserRepositoryCreation") <i class="fa fa-info-circle" title="@Resources.Settings_Global_AllowUserRepositoryCreation_Hint"></i></label>
             <label for="AllowPushToCreate" class="pure-checkbox">@Html.CheckBoxFor(m => m.AllowPushToCreate) @Model.GetType().GetDisplayValue("AllowPushToCreate") <i class="fa fa-info-circle" title="@Resources.Settings_Global_AllowPushToCreate_Hint"></i></label>
             <label for="AllowAnonymousPush" class="pure-checkbox">@Html.CheckBoxFor(m => m.AllowAnonymousPush) @Model.GetType().GetDisplayValue("AllowAnonymousPush")</label>
             <label for="IsCommitAuthorAvatarVisible" class="pure-checkbox">@Html.CheckBoxFor(m => m.IsCommitAuthorAvatarVisible) @Model.GetType().GetDisplayValue("IsCommitAuthorAvatarVisible")</label>

@@ -118,7 +118,7 @@ namespace TSharp.Core.Mvc
             FontWarp = Level.High;
             BackgroundNoise = Level.High;
             LineNoise = Level.High;
-            ReloadLinkText = "换一张";
+            ReloadLinkText = CaptchaResource.RefreshImage;
             Width = 160;
             Height = 40;
             TextLength = 4;

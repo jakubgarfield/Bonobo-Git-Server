@@ -8,6 +8,8 @@ namespace System.Web.Mvc
 {
     public static class MvcCaptchaHelper
     {
+
+
         private static MvcHtmlString MvcCaptcha(this HtmlHelper helper, string actionName, string controllerName,
                                                 MvcCaptchaOptions options)
         {
@@ -26,7 +28,7 @@ namespace System.Web.Mvc
             if (options.DelayLoad)
             {
                 sb.Append("/><script language=\"javascript\" type=\"text/javascript\">if (typeof (jQuery) == \"undefined\") { alert(\"")
-                    .Append(Captcha.JQueryNotLoadedPleaseEnsureThat)
+                    .Append(CaptchaResource.JQueryNotLoadedPleaseEnsureThat)
                     .Append("\"); } var _mvcCaptchaPrevGuid = null,_mvcCaptchaImgLoaded = false;function _loadMvcCaptchaImage(){");
                 sb.Append("if(!_mvcCaptchaImgLoaded){$.ajax({type:'GET',url:'");
                 sb.Append(url.Action("MvcCaptchaLoader", "_MvcCaptcha", new RouteValueDictionary { { "area", null } }));
@@ -42,12 +44,12 @@ namespace System.Web.Mvc
                 sb.Append("if($(\"#")
                   .Append(options.ValidationInputBoxId)
                   .Append("\").length==0){alert(\"")
-                  .AppendFormat(Captcha.Unfound_ValidationInputBoxId_PleaseCheck, options.ValidationInputBoxId)
+                  .AppendFormat(CaptchaResource.Unfound_ValidationInputBoxId_PleaseCheck, options.ValidationInputBoxId)
                   .Append("\");}");
                 sb.Append("if($(\"#")
                   .Append(options.CaptchaImageContainerId)
                   .Append("\").length==0){alert(\"" )
-                  .AppendFormat(Captcha.Unfound_CaptchaImageContainerId_PleaseCheck,options.CaptchaImageContainerId)
+                  .AppendFormat(CaptchaResource.Unfound_CaptchaImageContainerId_PleaseCheck,options.CaptchaImageContainerId)
                   .Append("\");}");
                 sb.Append("$(\"#").Append(options.ValidationInputBoxId);
                 sb.Append("\").bind(\"focus\",_loadMvcCaptchaImage)});</script>");
@@ -73,7 +75,7 @@ namespace System.Web.Mvc
         {
             var sb = new StringBuilder("<a href=\"javascript:_reloadMvcCaptchaImage()\"><img src=\"");
             sb.Append(url);
-            sb.Append("\" alt=\"MvcCaptcha\" title=\"" +Captcha.Refresh +"\" width=\"");
+            sb.Append("\" alt=\"MvcCaptcha\" title=\"" + CaptchaResource.Refresh +"\" width=\"");
             sb.Append(options.Width);
             sb.Append("\" height=\"");
             sb.Append(options.Height);

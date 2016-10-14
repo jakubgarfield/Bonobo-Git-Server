@@ -22,14 +22,14 @@ namespace TSharp.Core {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Captcha {
+    public class CaptchaResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Captcha() {
+        internal CaptchaResource() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace TSharp.Core {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Bonobo.Git.Server.MvcCaptcha.Captcha", typeof(Captcha).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Bonobo.Git.Server.MvcCaptcha.CaptchaResource", typeof(CaptchaResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -94,6 +94,24 @@ namespace TSharp.Core {
         public static string Refresh {
             get {
                 return ResourceManager.GetString("Refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Refresh 的本地化字符串。
+        /// </summary>
+        public static string RefreshImage {
+            get {
+                return ResourceManager.GetString("RefreshImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Captcha 的本地化字符串。
+        /// </summary>
+        public static string Title_Captcha {
+            get {
+                return ResourceManager.GetString("Title_Captcha", resourceCulture);
             }
         }
         

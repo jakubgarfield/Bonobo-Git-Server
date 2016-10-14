@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using Microsoft.Practices.Unity;
 
 namespace TSharp.Core.Mvc
 {
@@ -8,6 +9,7 @@ namespace TSharp.Core.Mvc
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class ValidateMvcCaptchaAttribute : ActionFilterAttribute
     {
+
         /// <summary>
         ///     Initializes a new instance of the CaptchaValidationAttribute class.
         /// </summary>
@@ -31,14 +33,20 @@ namespace TSharp.Core.Mvc
         /// <value>The field.</value>
         public string Field { get; private set; }
 
-
+       [ OptionalDependency]
+        public ISmartCaptcha Judger { get; set; }
         /// <summary>
         ///     Called when [action executed].
         /// </summary>
         /// <param name="filterContext">The filter filterContext.</param>
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            
+           // var judger = DependencyResolver.Current.GetService<ISmartCaptcha>();
+            if (Judger != null && !Judger.Enable(filterContext.HttpContext))
+            {
+                return;
+            }
+
             // get the guid from the post back 
             string guid = filterContext.HttpContext.Request.Form["_MvcCaptchaGuid"];
 
@@ -54,7 +62,7 @@ namespace TSharp.Core.Mvc
                            && !String.IsNullOrEmpty(expectedValue)
                            && String.Equals(actualValue, expectedValue, StringComparison.OrdinalIgnoreCase);
             if (!isValid)
-                ((Controller) filterContext.Controller).ModelState.AddModelError(Field, Captcha.Captcha_Incorrect);
+                ((Controller)filterContext.Controller).ModelState.AddModelError(Field, CaptchaResource.Captcha_Incorrect);
             //(string)filterContext.HttpContext.GetGlobalResourceObject("LangPack","ValidationCode_Not_Match"));
         }
     }
