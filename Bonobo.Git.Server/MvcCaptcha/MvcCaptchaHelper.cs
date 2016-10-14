@@ -31,13 +31,13 @@ namespace System.Web.Mvc
                     .Append(
                         "\"); } var _mvcCaptchaPrevGuid = null,_mvcCaptchaImgLoaded = false;function _loadMvcCaptchaImage(){");
                 sb.Append("if(!_mvcCaptchaImgLoaded){$.ajax({type:'GET',url:'");
-                sb.Append(url.Action("MvcCaptchaLoader", "_MvcCaptcha", new RouteValueDictionary {{"area", null}}));
+                sb.Append(url.Action("MvcCaptchaLoader", "_MvcCaptcha", new RouteValueDictionary { { "area", null } }));
                 sb.Append("?'+_mvcCaptchaPrevGuid,global:false,success:function(data){_mvcCaptchaImgLoaded=true;");
                 sb.Append("$(\"#_mvcCaptchaGuid\").val(data);_mvcCaptchaPrevGuid=data;$(\"#");
                 sb.Append(options.CaptchaImageContainerId).Append("\").html('");
                 sb.Append(
                     CreateImgTag(
-                        url.Action(actionName, controllerName, new RouteValueDictionary {{"area", null}}) + "?'+data+'",
+                        url.Action(actionName, controllerName, new RouteValueDictionary { { "area", null } }) + "?'+data+'",
                         options, null));
                 sb.Append(
                     "');}});} };function _reloadMvcCaptchaImage(){_mvcCaptchaImgLoaded=false;_loadMvcCaptchaImage();};$(function(){");
@@ -60,7 +60,7 @@ namespace System.Web.Mvc
                 sb.AppendFormat(" value=\"{0}\" />", image.UniqueId);
                 sb.Append(
                     CreateImgTag(
-                        url.Action(actionName, controllerName, new RouteValueDictionary {{"area", null}}) + "?" +
+                        url.Action(actionName, controllerName, new RouteValueDictionary { { "area", null } }) + "?" +
                         image.UniqueId, options, image.UniqueId));
                 sb.Append(
                     "<script language=\"javascript\" type=\"text/javascript\">function _reloadMvcCaptchaImage(){var ci=document.getElementById(\"");

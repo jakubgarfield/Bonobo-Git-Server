@@ -61,7 +61,7 @@ namespace TSharp.Core.Mvc
                           && !string.IsNullOrEmpty(expectedValue)
                           && string.Equals(actualValue, expectedValue, StringComparison.OrdinalIgnoreCase);
             if (!isValid)
-                ((Controller) filterContext.Controller).ModelState.AddModelError(Field,
+                ((Controller)filterContext.Controller).ModelState.AddModelError(Field,
                     CaptchaResource.Captcha_Incorrect);
             //(string)filterContext.HttpContext.GetGlobalResourceObject("LangPack","ValidationCode_Not_Match"));
         }

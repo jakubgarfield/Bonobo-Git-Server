@@ -78,7 +78,7 @@ namespace TSharp.Core.Mvc
         public int Width
         {
             get { return _width; }
-            set { _width = value < TextLength*18 ? TextLength*18 : value; }
+            set { _width = value < TextLength * 18 ? TextLength * 18 : value; }
         }
 
         /// <summary>

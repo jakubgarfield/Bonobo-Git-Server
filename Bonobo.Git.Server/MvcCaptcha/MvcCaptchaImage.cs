@@ -89,9 +89,9 @@ namespace TSharp.Core.Mvc
         /// </summary>
         private static GraphicsPath TextPath(string s, Font f, Rectangle r)
         {
-            var sf = new StringFormat {Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near};
+            var sf = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near };
             var gp = new GraphicsPath();
-            gp.AddString(s, f.FontFamily, (int) f.Style, f.Size, r, sf);
+            gp.AddString(s, f.FontFamily, (int)f.Style, f.Size, r, sf);
             return gp;
         }
 
@@ -106,19 +106,19 @@ namespace TSharp.Core.Mvc
             switch (CaptchaOptions.FontWarp)
             {
                 case Level.Low:
-                    fsize = Convert.ToInt32(CaptchaOptions.Height*0.8);
+                    fsize = Convert.ToInt32(CaptchaOptions.Height * 0.8);
                     break;
                 case Level.Medium:
-                    fsize = Convert.ToInt32(CaptchaOptions.Height*0.85);
+                    fsize = Convert.ToInt32(CaptchaOptions.Height * 0.85);
                     break;
                 case Level.High:
-                    fsize = Convert.ToInt32(CaptchaOptions.Height*0.9);
+                    fsize = Convert.ToInt32(CaptchaOptions.Height * 0.9);
                     break;
                 case Level.Extreme:
-                    fsize = Convert.ToInt32(CaptchaOptions.Height*0.95);
+                    fsize = Convert.ToInt32(CaptchaOptions.Height * 0.95);
                     break;
                 default:
-                    fsize = Convert.ToInt32(CaptchaOptions.Height*0.7);
+                    fsize = Convert.ToInt32(CaptchaOptions.Height * 0.7);
                     break;
             }
             return new Font(fname, fsize, FontStyle.Bold);
@@ -137,7 +137,7 @@ namespace TSharp.Core.Mvc
                 gr.Clear(Color.White);
 
                 var charOffset = 0;
-                double charWidth = CaptchaOptions.Width/CaptchaOptions.TextLength;
+                double charWidth = CaptchaOptions.Width / CaptchaOptions.TextLength;
                 Rectangle rectChar;
 
                 foreach (var c in Text)
@@ -145,7 +145,7 @@ namespace TSharp.Core.Mvc
                     {
                         using (Brush fontBrush = new SolidBrush(GetRandomColor()))
                         {
-                            rectChar = new Rectangle(Convert.ToInt32(charOffset*charWidth), 0,
+                            rectChar = new Rectangle(Convert.ToInt32(charOffset * charWidth), 0,
                                 Convert.ToInt32(charWidth), CaptchaOptions.Height);
 
                             // warp the character 
@@ -198,12 +198,12 @@ namespace TSharp.Core.Mvc
 
             var rectF = new RectangleF(Convert.ToSingle(rect.Left), 0, Convert.ToSingle(rect.Width), rect.Height);
 
-            var hrange = Convert.ToInt32(rect.Height/warpDivisor);
-            var wrange = Convert.ToInt32(rect.Width/warpDivisor);
-            var left = rect.Left - Convert.ToInt32(wrange*rangeModifier);
-            var top = rect.Top - Convert.ToInt32(hrange*rangeModifier);
-            var width = rect.Left + rect.Width + Convert.ToInt32(wrange*rangeModifier);
-            var height = rect.Top + rect.Height + Convert.ToInt32(hrange*rangeModifier);
+            var hrange = Convert.ToInt32(rect.Height / warpDivisor);
+            var wrange = Convert.ToInt32(rect.Width / warpDivisor);
+            var left = rect.Left - Convert.ToInt32(wrange * rangeModifier);
+            var top = rect.Top - Convert.ToInt32(hrange * rangeModifier);
+            var width = rect.Left + rect.Width + Convert.ToInt32(wrange * rangeModifier);
+            var height = rect.Top + rect.Height + Convert.ToInt32(hrange * rangeModifier);
 
             if (left < 0)
                 left = 0;
@@ -219,7 +219,7 @@ namespace TSharp.Core.Mvc
             var leftBottom = RandomPoint(left, left + wrange, height - hrange, height);
             var rightBottom = RandomPoint(width - wrange, width, height - hrange, height);
 
-            var points = new[] {leftTop, rightTop, leftBottom, rightBottom};
+            var points = new[] { leftTop, rightTop, leftBottom, rightBottom };
             var m = new Matrix();
             m.Translate(0, 0);
             textPath.Warp(points, rectF, m, WarpMode.Perspective, 0);
@@ -258,8 +258,8 @@ namespace TSharp.Core.Mvc
                     return;
             }
             var br = new SolidBrush(GetRandomColor());
-            var max = Convert.ToInt32(Math.Max(rect.Width, rect.Height)/size);
-            for (var i = 0; i <= Convert.ToInt32(rect.Width*rect.Height/density); i++)
+            var max = Convert.ToInt32(Math.Max(rect.Width, rect.Height) / size);
+            for (var i = 0; i <= Convert.ToInt32(rect.Width * rect.Height / density); i++)
                 g.FillEllipse(br, _rand.Next(rect.Width), _rand.Next(rect.Height), _rand.Next(max), _rand.Next(max));
             br.Dispose();
         }
@@ -279,22 +279,22 @@ namespace TSharp.Core.Mvc
                     goto default;
                 case Level.Low:
                     length = 4;
-                    width = Convert.ToSingle(CaptchaOptions.Height/31.25);
+                    width = Convert.ToSingle(CaptchaOptions.Height / 31.25);
                     linecount = 1;
                     break;
                 case Level.Medium:
                     length = 5;
-                    width = Convert.ToSingle(CaptchaOptions.Height/27.7777);
+                    width = Convert.ToSingle(CaptchaOptions.Height / 27.7777);
                     linecount = 1;
                     break;
                 case Level.High:
                     length = 3;
-                    width = Convert.ToSingle(CaptchaOptions.Height/25);
+                    width = Convert.ToSingle(CaptchaOptions.Height / 25);
                     linecount = 2;
                     break;
                 case Level.Extreme:
                     length = 3;
-                    width = Convert.ToSingle(CaptchaOptions.Height/22.7272);
+                    width = Convert.ToSingle(CaptchaOptions.Height / 22.7272);
                     linecount = 3;
                     break;
                 default:
@@ -338,7 +338,7 @@ namespace TSharp.Core.Mvc
         {
             if (string.IsNullOrEmpty(guid))
                 return null;
-            var img = (ICaptchaImageService) HttpContext.Current.Session[guid];
+            var img = (ICaptchaImageService)HttpContext.Current.Session[guid];
             return img;
         }
 

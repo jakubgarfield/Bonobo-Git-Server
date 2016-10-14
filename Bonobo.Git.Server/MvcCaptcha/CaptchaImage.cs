@@ -212,7 +212,7 @@ namespace TSharp.Core.Web
                             fontTmp.Dispose();
                         } while (true);
 
-                        path.AddString(text, font.FontFamily, (int) font.Style, font.Size, rect, format);
+                        path.AddString(text, font.FontFamily, (int)font.Style, font.Size, rect, format);
                         font.Dispose();
                     }
                     using (var matrix = new Matrix())
@@ -236,12 +236,12 @@ namespace TSharp.Core.Web
 
                     // Add some random noise.
                     var m = Math.Max(rect.Width, rect.Height);
-                    for (var i = 0; i < (int) (rect.Width*rect.Height/30F); i++)
+                    for (var i = 0; i < (int)(rect.Width * rect.Height / 30F); i++)
                     {
                         var x = random.Next(rect.Width);
                         var y = random.Next(rect.Height);
-                        var w = random.Next(m/50);
-                        var h = random.Next(m/50);
+                        var w = random.Next(m / 50);
+                        var h = random.Next(m / 50);
                         g.FillEllipse(hatchBrush, x, y, w, h);
                     }
                 }
