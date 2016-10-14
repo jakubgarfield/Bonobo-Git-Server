@@ -1,9 +1,6 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
+﻿using System.Drawing.Imaging;
 using System.Web;
 using System.Web.Mvc;
-using TSharp.Core.Mvc.MvcCaptcha;
 
 namespace TSharp.Core.Mvc
 {
@@ -11,11 +8,11 @@ namespace TSharp.Core.Mvc
     {
         public override void ExecuteResult(ControllerContext context)
         {
-            string guid = context.HttpContext.Request.ServerVariables["Query_String"];
+            var guid = context.HttpContext.Request.ServerVariables["Query_String"];
             if (guid.Contains("&"))
                 guid = guid.Split('&')[0];
-            ICaptchaImageService ci = MvcCaptchaImage.GetCachedCaptcha(guid);
-            if (String.IsNullOrEmpty(guid) || ci == null)
+            var ci = MvcCaptchaImage.GetCachedCaptcha(guid);
+            if (string.IsNullOrEmpty(guid) || (ci == null))
             {
                 context.HttpContext.Response.StatusCode = 404;
                 context.HttpContext.Response.StatusDescription = "Not Found";
@@ -23,7 +20,7 @@ namespace TSharp.Core.Mvc
                 return;
             }
             ci.ResetText();
-            using (Bitmap b = ci.RenderImage())
+            using (var b = ci.RenderImage())
             {
                 b.Save(context.HttpContext.Response.OutputStream, ImageFormat.Gif);
             }

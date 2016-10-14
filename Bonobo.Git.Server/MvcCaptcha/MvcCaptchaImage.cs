@@ -15,59 +15,8 @@ namespace TSharp.Core.Mvc
     [Serializable]
     internal class MvcCaptchaImage : ICaptchaImageService
     {
-        #region Static
-
-        private static readonly string[] RandomFontFamily =
-            {
-                "arial", "arial black", "comic sans ms", "courier new",
-                "estrangelo edessa", "franklin gothic medium", "georgia",
-                "lucida console", "lucida sans unicode", "mangal",
-                "microsoft sans serif", "palatino linotype", "sylfaen",
-                "tahoma", "times new roman", "trebuchet ms", "verdana"
-            };
-
-        private static readonly Color[] RandomColor =
-            {
-                Color.Red, Color.Green, Color.Blue, Color.Black, Color.Purple,
-                Color.Orange
-            };
-
-        /// <summary>
-        ///     Gets the cached captcha.
-        /// </summary>
-        public static ICaptchaImageService GetCachedCaptcha(string guid)
-        {
-            if (String.IsNullOrEmpty(guid))
-                return null;
-            var img = (ICaptchaImageService)HttpContext.Current.Session[guid];
-            return img;
-        }
-
-        #endregion
-
         private readonly Random _rand;
-        private string _UniqueId;
-
-        #region Public Properties
-
-        /// <summary>
-        ///     Returns a GUID that uniquely identifies this Captcha
-        /// </summary>
-        /// <value>The unique id.</value>
-        override internal protected string UniqueId
-        {
-            get { return _UniqueId; }
-        }
-
-        /// <summary>
-        ///     Gets the randomly generated Captcha text.
-        /// </summary>
-        /// <value>The text.</value>
-        override internal protected string Text { get; set; }
-
-        public MvcCaptchaOptions CaptchaOptions { get; set; }
-
-        #endregion
+        private readonly string _UniqueId;
 
         internal MvcCaptchaImage()
             : this(new MvcCaptchaOptions())
@@ -82,7 +31,7 @@ namespace TSharp.Core.Mvc
             //Text = GenerateRandomText();
         }
 
-        override internal protected void ResetText()
+        protected internal override void ResetText()
         {
             Text = GenerateRandomText();
         }
@@ -100,12 +49,12 @@ namespace TSharp.Core.Mvc
         /// </summary>
         private string GenerateRandomText()
         {
-            string txtChars = CaptchaOptions.TextChars;
+            var txtChars = CaptchaOptions.TextChars;
             if (string.IsNullOrEmpty(txtChars))
                 txtChars = "ACDEFGHJKLMNPQRSTUVWXYZ2346789";
             var sb = new StringBuilder(CaptchaOptions.TextLength);
-            int maxLength = txtChars.Length;
-            for (int n = 0; n <= CaptchaOptions.TextLength - 1; n++)
+            var maxLength = txtChars.Length;
+            for (var n = 0; n <= CaptchaOptions.TextLength - 1; n++)
                 sb.Append(txtChars.Substring(_rand.Next(maxLength), 1));
 
             return sb.ToString();
@@ -140,9 +89,9 @@ namespace TSharp.Core.Mvc
         /// </summary>
         private static GraphicsPath TextPath(string s, Font f, Rectangle r)
         {
-            var sf = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near };
+            var sf = new StringFormat {Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near};
             var gp = new GraphicsPath();
-            gp.AddString(s, f.FontFamily, (int)f.Style, f.Size, r, sf);
+            gp.AddString(s, f.FontFamily, (int) f.Style, f.Size, r, sf);
             return gp;
         }
 
@@ -152,24 +101,24 @@ namespace TSharp.Core.Mvc
         private Font GetFont()
         {
             float fsize;
-            string fname = GetRandomFontFamily();
+            var fname = GetRandomFontFamily();
 
             switch (CaptchaOptions.FontWarp)
             {
                 case Level.Low:
-                    fsize = Convert.ToInt32(CaptchaOptions.Height * 0.8);
+                    fsize = Convert.ToInt32(CaptchaOptions.Height*0.8);
                     break;
                 case Level.Medium:
-                    fsize = Convert.ToInt32(CaptchaOptions.Height * 0.85);
+                    fsize = Convert.ToInt32(CaptchaOptions.Height*0.85);
                     break;
                 case Level.High:
-                    fsize = Convert.ToInt32(CaptchaOptions.Height * 0.9);
+                    fsize = Convert.ToInt32(CaptchaOptions.Height*0.9);
                     break;
                 case Level.Extreme:
-                    fsize = Convert.ToInt32(CaptchaOptions.Height * 0.95);
+                    fsize = Convert.ToInt32(CaptchaOptions.Height*0.95);
                     break;
                 default:
-                    fsize = Convert.ToInt32(CaptchaOptions.Height * 0.7);
+                    fsize = Convert.ToInt32(CaptchaOptions.Height*0.7);
                     break;
             }
             return new Font(fname, fsize, FontStyle.Bold);
@@ -178,38 +127,35 @@ namespace TSharp.Core.Mvc
         /// <summary>
         ///     Renders the CAPTCHA image
         /// </summary>
-        override internal protected Bitmap RenderImage()
+        protected internal override Bitmap RenderImage()
         {
             var bmp = new Bitmap(CaptchaOptions.Width, CaptchaOptions.Height, PixelFormat.Format24bppRgb);
 
-            using (Graphics gr = Graphics.FromImage(bmp))
+            using (var gr = Graphics.FromImage(bmp))
             {
                 gr.SmoothingMode = SmoothingMode.AntiAlias;
                 gr.Clear(Color.White);
 
-                int charOffset = 0;
-                double charWidth = CaptchaOptions.Width / CaptchaOptions.TextLength;
+                var charOffset = 0;
+                double charWidth = CaptchaOptions.Width/CaptchaOptions.TextLength;
                 Rectangle rectChar;
 
-                foreach (char c in Text)
-                {
-                    // establish font and draw area 
-                    using (Font fnt = GetFont())
+                foreach (var c in Text)
+                    using (var fnt = GetFont())
                     {
                         using (Brush fontBrush = new SolidBrush(GetRandomColor()))
                         {
-                            rectChar = new Rectangle(Convert.ToInt32(charOffset * charWidth), 0,
-                                                     Convert.ToInt32(charWidth), CaptchaOptions.Height);
+                            rectChar = new Rectangle(Convert.ToInt32(charOffset*charWidth), 0,
+                                Convert.ToInt32(charWidth), CaptchaOptions.Height);
 
                             // warp the character 
-                            GraphicsPath gp = TextPath(c.ToString(), fnt, rectChar);
+                            var gp = TextPath(c.ToString(), fnt, rectChar);
                             WarpText(gp, rectChar);
                             // draw the character 
                             gr.FillPath(fontBrush, gp);
                             charOffset += 1;
                         }
                     }
-                }
 
                 var rect = new Rectangle(new Point(0, 0), bmp.Size);
                 AddNoise(gr, rect);
@@ -252,12 +198,12 @@ namespace TSharp.Core.Mvc
 
             var rectF = new RectangleF(Convert.ToSingle(rect.Left), 0, Convert.ToSingle(rect.Width), rect.Height);
 
-            int hrange = Convert.ToInt32(rect.Height / warpDivisor);
-            int wrange = Convert.ToInt32(rect.Width / warpDivisor);
-            int left = rect.Left - Convert.ToInt32(wrange * rangeModifier);
-            int top = rect.Top - Convert.ToInt32(hrange * rangeModifier);
-            int width = rect.Left + rect.Width + Convert.ToInt32(wrange * rangeModifier);
-            int height = rect.Top + rect.Height + Convert.ToInt32(hrange * rangeModifier);
+            var hrange = Convert.ToInt32(rect.Height/warpDivisor);
+            var wrange = Convert.ToInt32(rect.Width/warpDivisor);
+            var left = rect.Left - Convert.ToInt32(wrange*rangeModifier);
+            var top = rect.Top - Convert.ToInt32(hrange*rangeModifier);
+            var width = rect.Left + rect.Width + Convert.ToInt32(wrange*rangeModifier);
+            var height = rect.Top + rect.Height + Convert.ToInt32(hrange*rangeModifier);
 
             if (left < 0)
                 left = 0;
@@ -268,12 +214,12 @@ namespace TSharp.Core.Mvc
             if (height > CaptchaOptions.Height)
                 height = CaptchaOptions.Height;
 
-            PointF leftTop = RandomPoint(left, left + wrange, top, top + hrange);
-            PointF rightTop = RandomPoint(width - wrange, width, top, top + hrange);
-            PointF leftBottom = RandomPoint(left, left + wrange, height - hrange, height);
-            PointF rightBottom = RandomPoint(width - wrange, width, height - hrange, height);
+            var leftTop = RandomPoint(left, left + wrange, top, top + hrange);
+            var rightTop = RandomPoint(width - wrange, width, top, top + hrange);
+            var leftBottom = RandomPoint(left, left + wrange, height - hrange, height);
+            var rightBottom = RandomPoint(width - wrange, width, height - hrange, height);
 
-            var points = new[] { leftTop, rightTop, leftBottom, rightBottom };
+            var points = new[] {leftTop, rightTop, leftBottom, rightBottom};
             var m = new Matrix();
             m.Translate(0, 0);
             textPath.Warp(points, rectF, m, WarpMode.Perspective, 0);
@@ -312,8 +258,8 @@ namespace TSharp.Core.Mvc
                     return;
             }
             var br = new SolidBrush(GetRandomColor());
-            int max = Convert.ToInt32(Math.Max(rect.Width, rect.Height) / size);
-            for (int i = 0; i <= Convert.ToInt32((rect.Width * rect.Height) / density); i++)
+            var max = Convert.ToInt32(Math.Max(rect.Width, rect.Height)/size);
+            for (var i = 0; i <= Convert.ToInt32(rect.Width*rect.Height/density); i++)
                 g.FillEllipse(br, _rand.Next(rect.Width), _rand.Next(rect.Height), _rand.Next(max), _rand.Next(max));
             br.Dispose();
         }
@@ -333,22 +279,22 @@ namespace TSharp.Core.Mvc
                     goto default;
                 case Level.Low:
                     length = 4;
-                    width = Convert.ToSingle(CaptchaOptions.Height / 31.25);
+                    width = Convert.ToSingle(CaptchaOptions.Height/31.25);
                     linecount = 1;
                     break;
                 case Level.Medium:
                     length = 5;
-                    width = Convert.ToSingle(CaptchaOptions.Height / 27.7777);
+                    width = Convert.ToSingle(CaptchaOptions.Height/27.7777);
                     linecount = 1;
                     break;
                 case Level.High:
                     length = 3;
-                    width = Convert.ToSingle(CaptchaOptions.Height / 25);
+                    width = Convert.ToSingle(CaptchaOptions.Height/25);
                     linecount = 2;
                     break;
                 case Level.Extreme:
                     length = 3;
-                    width = Convert.ToSingle(CaptchaOptions.Height / 22.7272);
+                    width = Convert.ToSingle(CaptchaOptions.Height/22.7272);
                     linecount = 3;
                     break;
                 default:
@@ -358,14 +304,65 @@ namespace TSharp.Core.Mvc
             var pf = new PointF[length + 1];
             using (var p = new Pen(GetRandomColor(), width))
             {
-                for (int l = 1; l <= linecount; l++)
+                for (var l = 1; l <= linecount; l++)
                 {
-                    for (int i = 0; i <= length; i++)
+                    for (var i = 0; i <= length; i++)
                         pf[i] = RandomPoint(rect);
 
                     g.DrawCurve(p, pf, 1.75F);
                 }
             }
         }
+
+        #region Static
+
+        private static readonly string[] RandomFontFamily =
+        {
+            "arial", "arial black", "comic sans ms", "courier new",
+            "estrangelo edessa", "franklin gothic medium", "georgia",
+            "lucida console", "lucida sans unicode", "mangal",
+            "microsoft sans serif", "palatino linotype", "sylfaen",
+            "tahoma", "times new roman", "trebuchet ms", "verdana"
+        };
+
+        private static readonly Color[] RandomColor =
+        {
+            Color.Red, Color.Green, Color.Blue, Color.Black, Color.Purple,
+            Color.Orange
+        };
+
+        /// <summary>
+        ///     Gets the cached captcha.
+        /// </summary>
+        public static ICaptchaImageService GetCachedCaptcha(string guid)
+        {
+            if (string.IsNullOrEmpty(guid))
+                return null;
+            var img = (ICaptchaImageService) HttpContext.Current.Session[guid];
+            return img;
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        ///     Returns a GUID that uniquely identifies this Captcha
+        /// </summary>
+        /// <value>The unique id.</value>
+        protected internal override string UniqueId
+        {
+            get { return _UniqueId; }
+        }
+
+        /// <summary>
+        ///     Gets the randomly generated Captcha text.
+        /// </summary>
+        /// <value>The text.</value>
+        protected internal override string Text { get; set; }
+
+        public MvcCaptchaOptions CaptchaOptions { get; set; }
+
+        #endregion
     }
 }

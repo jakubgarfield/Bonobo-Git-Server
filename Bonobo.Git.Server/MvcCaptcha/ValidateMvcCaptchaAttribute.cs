@@ -6,10 +6,9 @@ namespace TSharp.Core.Mvc
 {
     /// <summary>
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Method, Inherited = false)]
     public sealed class ValidateMvcCaptchaAttribute : ActionFilterAttribute
     {
-
         /// <summary>
         ///     Initializes a new instance of the CaptchaValidationAttribute class.
         /// </summary>
@@ -17,6 +16,7 @@ namespace TSharp.Core.Mvc
             : this("_mvcCaptchaText")
         {
         }
+
         //private static readonly string SESSION_AUTH_CODE = "SESSION_AUTH_CODE";
         /// <summary>
         ///     Initializes a new instance of the CaptchaValidationAttribute class.
@@ -33,36 +33,36 @@ namespace TSharp.Core.Mvc
         /// <value>The field.</value>
         public string Field { get; private set; }
 
-       [ OptionalDependency]
+        [OptionalDependency]
         public ISmartCaptcha Judger { get; set; }
+
         /// <summary>
         ///     Called when [action executed].
         /// </summary>
         /// <param name="filterContext">The filter filterContext.</param>
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-           // var judger = DependencyResolver.Current.GetService<ISmartCaptcha>();
-            if (Judger != null && !Judger.Enable(filterContext.HttpContext))
-            {
+            // var judger = DependencyResolver.Current.GetService<ISmartCaptcha>();
+            if ((Judger != null) && !Judger.Enable(filterContext.HttpContext))
                 return;
-            }
 
             // get the guid from the post back 
-            string guid = filterContext.HttpContext.Request.Form["_MvcCaptchaGuid"];
+            var guid = filterContext.HttpContext.Request.Form["_MvcCaptchaGuid"];
 
             // get values 
             var image = MvcCaptchaImage.GetCachedCaptcha(guid);
-            string actualValue = filterContext.HttpContext.Request.Form[Field];
-            string expectedValue = image == null ? String.Empty : image.Text;
+            var actualValue = filterContext.HttpContext.Request.Form[Field];
+            var expectedValue = image == null ? string.Empty : image.Text;
 
             // removes the captch from Session so it cannot be used again 
             filterContext.HttpContext.Session.Remove(guid);
 
-            bool isValid = !String.IsNullOrEmpty(actualValue)
-                           && !String.IsNullOrEmpty(expectedValue)
-                           && String.Equals(actualValue, expectedValue, StringComparison.OrdinalIgnoreCase);
+            var isValid = !string.IsNullOrEmpty(actualValue)
+                          && !string.IsNullOrEmpty(expectedValue)
+                          && string.Equals(actualValue, expectedValue, StringComparison.OrdinalIgnoreCase);
             if (!isValid)
-                ((Controller)filterContext.Controller).ModelState.AddModelError(Field, CaptchaResource.Captcha_Incorrect);
+                ((Controller) filterContext.Controller).ModelState.AddModelError(Field,
+                    CaptchaResource.Captcha_Incorrect);
             //(string)filterContext.HttpContext.GetGlobalResourceObject("LangPack","ValidationCode_Not_Match"));
         }
     }

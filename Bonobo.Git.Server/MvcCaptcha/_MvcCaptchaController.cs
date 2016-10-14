@@ -1,6 +1,5 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-using TSharp.Core.Web;
 
 namespace TSharp.Core.Mvc
 {
@@ -13,11 +12,11 @@ namespace TSharp.Core.Mvc
 
         public ActionResult MvcCaptchaLoader()
         {
-            string prevGuid = Request.ServerVariables["Query_String"];
+            var prevGuid = Request.ServerVariables["Query_String"];
             if (!string.IsNullOrEmpty(prevGuid))
                 Session.Remove(prevGuid);
             var options = new MvcCaptchaOptions();
-            MvcCaptchaConfigSection config = MvcCaptchaConfigSection.GetConfig();
+            var config = MvcCaptchaConfigSection.GetConfig();
             if (config != null)
             {
                 options.TextChars = config.TextChars;

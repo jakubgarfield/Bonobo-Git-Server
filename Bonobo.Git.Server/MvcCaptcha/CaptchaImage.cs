@@ -14,37 +14,18 @@ namespace TSharp.Core.Web
     /// </summary>
     public class CaptchaImage : ICaptchaImageService, IDisposable
     {
+        private readonly MvcCaptchaOptions _captchaOptions;
+        private readonly string _UniqueId;
         // Public properties (all read-only).
 
         // Internal properties.
         private readonly Random random = new Random();
-        private string text;
         private string familyName;
-
-
-        /// <summary>
-        ///     generate random text for the CAPTCHA
-        /// </summary>
-        private string GenerateRandomText()
-        {
-            string txtChars = _captchaOptions.TextChars;
-            if (string.IsNullOrEmpty(txtChars))
-                txtChars = "ACDEFGHJKLMNPQRSTUVWXYZ2346789";
-            var sb = new StringBuilder(_captchaOptions.TextLength);
-            int maxLength = txtChars.Length;
-            for (int n = 0; n <= _captchaOptions.TextLength - 1; n++)
-                sb.Append(txtChars.Substring(random.Next(maxLength), 1));
-
-            return sb.ToString();
-        }
-
-        private readonly MvcCaptchaOptions _captchaOptions;
-        private readonly string _UniqueId;
+        private string text;
 
         public CaptchaImage()
             : this(new MvcCaptchaOptions())
         {
-
         }
 
         public CaptchaImage(MvcCaptchaOptions otion)
@@ -65,7 +46,7 @@ namespace TSharp.Core.Web
         ///     Gets the text.
         /// </summary>
         /// <value>The text.</value>
-        override internal protected string Text
+        protected internal override string Text
         {
             get { return text; }
             set { }
@@ -80,8 +61,10 @@ namespace TSharp.Core.Web
             get { return InnerGenerateImage(); }
         }
 
-
-
+        protected internal override string UniqueId
+        {
+            get { return _UniqueId; }
+        }
 
         #region IDisposable Members
 
@@ -95,6 +78,22 @@ namespace TSharp.Core.Web
         }
 
         #endregion
+
+        /// <summary>
+        ///     generate random text for the CAPTCHA
+        /// </summary>
+        private string GenerateRandomText()
+        {
+            var txtChars = _captchaOptions.TextChars;
+            if (string.IsNullOrEmpty(txtChars))
+                txtChars = "ACDEFGHJKLMNPQRSTUVWXYZ2346789";
+            var sb = new StringBuilder(_captchaOptions.TextLength);
+            var maxLength = txtChars.Length;
+            for (var n = 0; n <= _captchaOptions.TextLength - 1; n++)
+                sb.Append(txtChars.Substring(random.Next(maxLength), 1));
+
+            return sb.ToString();
+        }
 
         // ====================================================================
         // This member overrides Object.Finalize.
@@ -137,10 +136,10 @@ namespace TSharp.Core.Web
             // Check the width and height.
             if (width <= 0)
                 throw new ArgumentOutOfRangeException("width", width,
-                                                      "Argument out of range, must be greater than zero.");
+                    "Argument out of range, must be greater than zero.");
             if (height <= 0)
                 throw new ArgumentOutOfRangeException("height", height,
-                                                      "Argument out of range, must be greater than zero.");
+                    "Argument out of range, must be greater than zero.");
             _captchaOptions.Width = width;
             _captchaOptions.Height = height;
         }
@@ -172,14 +171,16 @@ namespace TSharp.Core.Web
             var bitmap = new Bitmap(_captchaOptions.Width, _captchaOptions.Height, PixelFormat.Format32bppArgb);
 
             // Create a graphics object for drawing.
-            using (Graphics g = Graphics.FromImage(bitmap))
+            using (var g = Graphics.FromImage(bitmap))
             {
                 g.SmoothingMode = SmoothingMode.AntiAlias;
                 var rect = new Rectangle(0, 0, _captchaOptions.Width, _captchaOptions.Height);
 
                 // Fill in the background.
                 using (var hatchBrush = new HatchBrush(HatchStyle.SmallConfetti, Color.LightGray, Color.White))
+                {
                     g.FillRectangle(hatchBrush, rect);
+                }
 
                 // Draw the text.
                 using (var hatchBrush = new HatchBrush(HatchStyle.LargeConfetti, Color.LightGray, Color.DarkGray))
@@ -208,26 +209,25 @@ namespace TSharp.Core.Web
                                 font = fontTmp;
                                 break;
                             }
-                            else
-                                fontTmp.Dispose();
+                            fontTmp.Dispose();
                         } while (true);
 
-                        path.AddString(text, font.FontFamily, (int)font.Style, font.Size, rect, format);
+                        path.AddString(text, font.FontFamily, (int) font.Style, font.Size, rect, format);
                         font.Dispose();
                     }
                     using (var matrix = new Matrix())
                     {
                         matrix.Translate(0F, 0F);
 
-                        float v = 4F;
+                        var v = 4F;
                         PointF[] points =
-                            {
-                                new PointF(random.Next(rect.Width)/v, random.Next(rect.Height)/v),
-                                new PointF(rect.Width - random.Next(rect.Width)/v, random.Next(rect.Height)/v),
-                                new PointF(random.Next(rect.Width)/v, rect.Height - random.Next(rect.Height)/v),
-                                new PointF(rect.Width - random.Next(rect.Width)/v,
-                                           rect.Height - random.Next(rect.Height)/v)
-                            };
+                        {
+                            new PointF(random.Next(rect.Width)/v, random.Next(rect.Height)/v),
+                            new PointF(rect.Width - random.Next(rect.Width)/v, random.Next(rect.Height)/v),
+                            new PointF(random.Next(rect.Width)/v, rect.Height - random.Next(rect.Height)/v),
+                            new PointF(rect.Width - random.Next(rect.Width)/v,
+                                rect.Height - random.Next(rect.Height)/v)
+                        };
                         path.Warp(points, rect, matrix, WarpMode.Perspective, 0F);
                         points = null;
                     }
@@ -235,13 +235,13 @@ namespace TSharp.Core.Web
                     g.FillPath(hatchBrush, path);
 
                     // Add some random noise.
-                    int m = Math.Max(rect.Width, rect.Height);
-                    for (int i = 0; i < (int)(rect.Width * rect.Height / 30F); i++)
+                    var m = Math.Max(rect.Width, rect.Height);
+                    for (var i = 0; i < (int) (rect.Width*rect.Height/30F); i++)
                     {
-                        int x = random.Next(rect.Width);
-                        int y = random.Next(rect.Height);
-                        int w = random.Next(m / 50);
-                        int h = random.Next(m / 50);
+                        var x = random.Next(rect.Width);
+                        var y = random.Next(rect.Height);
+                        var w = random.Next(m/50);
+                        var h = random.Next(m/50);
                         g.FillEllipse(hatchBrush, x, y, w, h);
                     }
                 }
@@ -259,11 +259,6 @@ namespace TSharp.Core.Web
         protected internal override Bitmap RenderImage()
         {
             return InnerGenerateImage();
-        }
-
-        protected internal override string UniqueId
-        {
-            get { return _UniqueId; }
         }
     }
 }

@@ -4,6 +4,21 @@ namespace TSharp.Core.Mvc
 {
     public class MvcCaptchaOptions
     {
+        #region constructor
+
+        public MvcCaptchaOptions()
+        {
+            FontWarp = Level.High;
+            BackgroundNoise = Level.High;
+            LineNoise = Level.High;
+            ReloadLinkText = CaptchaResource.RefreshImage;
+            Width = 160;
+            Height = 40;
+            TextLength = 4;
+        }
+
+        #endregion
+
         #region private fields
 
         private string _chars;
@@ -35,9 +50,9 @@ namespace TSharp.Core.Mvc
             get { return _chars; }
             set
             {
-                _chars = (string.IsNullOrEmpty(value) || value.Trim().Length < 3)
-                             ? "ACDEFGHJKLMNPQRSTUVWXYZ2346789"
-                             : value.Trim();
+                _chars = string.IsNullOrEmpty(value) || (value.Trim().Length < 3)
+                    ? "ACDEFGHJKLMNPQRSTUVWXYZ2346789"
+                    : value.Trim();
             }
         }
 
@@ -63,7 +78,7 @@ namespace TSharp.Core.Mvc
         public int Width
         {
             get { return _width; }
-            set { _width = value < (TextLength*18) ? TextLength*18 : value; }
+            set { _width = value < TextLength*18 ? TextLength*18 : value; }
         }
 
         /// <summary>
@@ -84,7 +99,7 @@ namespace TSharp.Core.Mvc
             {
                 if (DelayLoad && string.IsNullOrEmpty(_inputBoxId))
                     throw new ArgumentNullException("ValidationInputBoxId",
-                                                    "设置DelayLoad为true时必须指定ValidationInputBoxId的值");
+                        "设置DelayLoad为true时必须指定ValidationInputBoxId的值");
                 return _inputBoxId;
             }
             set { _inputBoxId = value; }
@@ -96,7 +111,7 @@ namespace TSharp.Core.Mvc
             {
                 if (DelayLoad && string.IsNullOrEmpty(_captchaImageContainerId))
                     throw new ArgumentNullException("CaptchaImageContainerId",
-                                                    "设置DelayLoad为true时必须指定CaptchaImageContainerId的值");
+                        "设置DelayLoad为true时必须指定CaptchaImageContainerId的值");
                 return _captchaImageContainerId;
             }
             set { _captchaImageContainerId = value; }
@@ -108,21 +123,6 @@ namespace TSharp.Core.Mvc
         ///     是否延迟加载（验证文本框获得焦点时才生成并加载验证图片）
         /// </summary>
         public bool DelayLoad { get; set; }
-
-        #endregion
-
-        #region constructor
-
-        public MvcCaptchaOptions()
-        {
-            FontWarp = Level.High;
-            BackgroundNoise = Level.High;
-            LineNoise = Level.High;
-            ReloadLinkText = CaptchaResource.RefreshImage;
-            Width = 160;
-            Height = 40;
-            TextLength = 4;
-        }
 
         #endregion
     }

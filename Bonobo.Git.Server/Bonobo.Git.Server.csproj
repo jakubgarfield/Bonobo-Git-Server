@@ -307,11 +307,13 @@
       <DependentUpon>CaptchaResource.zh-CN.resx</DependentUpon>
     </Compile>
     <Compile Include="MvcCaptcha\CaptchaImage.cs" />
-    <Compile Include="MvcCaptcha\Enumerations.cs" />
+    <Compile Include="MvcCaptcha\DefaultSmartCaptcha.cs" />
+    <Compile Include="MvcCaptcha\InternalExtension.cs" />
     <Compile Include="MvcCaptcha\ICaptchaImageService.cs" />
     <Compile Include="MvcCaptcha\ISmartCaptcha.cs" />
+    <Compile Include="MvcCaptcha\Level.cs" />
     <Compile Include="MvcCaptcha\MvcCaptchaConfigSection.cs" />
-    <Compile Include="MvcCaptcha\MvcCaptchaController.cs" />
+    <Compile Include="MvcCaptcha\_MvcCaptchaController.cs" />
     <Compile Include="MvcCaptcha\MvcCaptchaHelper.cs" />
     <Compile Include="MvcCaptcha\MvcCaptchaImage.cs" />
     <Compile Include="MvcCaptcha\MvcCaptchaImageResult.cs" />

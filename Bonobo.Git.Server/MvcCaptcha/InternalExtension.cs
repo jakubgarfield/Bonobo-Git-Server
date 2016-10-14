@@ -9,12 +9,4 @@ namespace TSharp.Core.Mvc
             return new StringBuilder(origion).Append(next);
         }
     }
-    public enum Level
-    {
-        None,
-        Low,
-        Medium,
-        High,
-        Extreme
-    }
 }
