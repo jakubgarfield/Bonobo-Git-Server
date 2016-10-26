@@ -4,6 +4,8 @@ using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Test.IntegrationTests;
 using Bonobo.Git.Server.Test.IntegrationTests.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using SpecsFor.Mvc;
 using System;
@@ -11,10 +13,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
-using System.Web.Mvc;
 
 namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 {
@@ -30,32 +30,38 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
     [TestClass]
     public class MsysgitIntegrationTests
     {
-        private const string RepositoryName = "Integration";
-        private static string WorkingDirectory = @"..\..\..\Tests\IntegrationTests";
-        private static string GitPath = @"..\..\..\Gits\{0}\bin\git.exe";
-        private static string RepositoryDirectory = Path.Combine(WorkingDirectory, RepositoryName);
-        private readonly static string ServerRepositoryPath = Path.Combine(@"..\..\..\Bonobo.Git.Server\App_Data\Repositories", RepositoryName);
-        private readonly static string ServerRepositoryBackupPath = Path.Combine(@"..\..\..\Tests\", RepositoryName, "Backup");
-        private readonly static string[] GitVersions = { "1.7.4", "1.7.6", "1.7.7.1", "1.7.8", "1.7.9", "1.8.0", "1.8.1.2", "1.8.3", "1.9.5", "2.6.1" };
-        private readonly static string Credentials = "admin:admin@";
+        private readonly static string RepositoryName = "Integration";
         private readonly static string RepositoryUrlTemplate = "http://{0}localhost:20000/{2}{1}";
-        private readonly static string RepositoryUrlWithoutCredentials = String.Format(RepositoryUrlTemplate, String.Empty, String.Empty, RepositoryName);
-        private readonly static string RepositoryUrlWithCredentials = String.Format(RepositoryUrlTemplate, Credentials, ".git", RepositoryName);
-        private readonly static string Url = string.Format(RepositoryUrlTemplate, string.Empty, string.Empty, string.Empty);
-        private readonly static string BareUrl = Url.TrimEnd('/');
 
+        private readonly static string WorkingDirectory = Path.GetFullPath(@"..\..\..\Tests\IntegrationTests");
+        private readonly static string GitPath = Path.GetFullPath(@"..\..\..\Gits\{0}\bin\git.exe");
+
+        private readonly static string ServerRepositoryPath = Path.Combine(@"..\..\..\Bonobo.Git.Server\App_Data\Repositories", RepositoryName);
+        private readonly static string RepositoryDirectory = Path.Combine(WorkingDirectory, RepositoryName);
+        private readonly static string ServerRepositoryBackupPath = Path.Combine(@"..\..\..\Tests\", RepositoryName, "Backup");
+
+        private static string RepositoryUrlWithCredentials;
+        private static string RepositoryUrlWithoutCredentials;
+        private static string Url;
+        private static string BareUrl;
+
+        private static string AdminCredentials;
+        private static string UserCredentials;
+
+        private readonly static string[] GitVersions = { "1.7.4", "1.7.6", "1.7.7.1", "1.7.8", "1.7.9", "1.8.0", "1.8.1.2", "1.8.3", "1.9.5", "2.6.1" };
         private static List<GitInstance> installedgits = new List<GitInstance>();
 
         private static MvcWebApp app;
         private static IntegrationTestHelpers ITH;
+        private static LoadedConfig lc;
 
         [ClassInitialize]
         public static void ClassInit(TestContext testContext)
         {
             // Make sure relative paths are frozen in case the app's CurrentDir changes
-            WorkingDirectory = Path.GetFullPath(WorkingDirectory);
-            GitPath = Path.GetFullPath(GitPath);
-            RepositoryDirectory = Path.Combine(WorkingDirectory, RepositoryName);
+            // WorkingDirectory = Path.GetFullPath(WorkingDirectory);
+            // GitPath = Path.GetFullPath(GitPath);
+            // RepositoryDirectory = Path.Combine(WorkingDirectory, RepositoryName);
             
             List<string> not_found = new List<string>();
 
@@ -77,7 +83,13 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 Assert.Fail(string.Format("Please ensure that you have at least one git installation in '{0}'.", string.Join("', '", not_found.Select(n => Path.GetFullPath(n)))));
             }
 
+            lc = AssemblyStartup.LoadedConfig;
+
+            AdminCredentials = lc.getUrlLogin("admin") + "@";
+            UserCredentials = lc.getUrlLogin("user") + "@";
+
             Directory.CreateDirectory(WorkingDirectory);
+
             if (AnyCredentialHelperExists(installedgits.Last()))
             {
                 /* At the moment there is no reliable way of overriding credential.helper on a global basis.
@@ -88,7 +100,12 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             }
 
             app = new MvcWebApp();
-            ITH = new IntegrationTestHelpers(app);
+            ITH = new IntegrationTestHelpers(app, lc);
+
+            RepositoryUrlWithCredentials = String.Format(RepositoryUrlTemplate, AdminCredentials, ".git", RepositoryName);
+            RepositoryUrlWithoutCredentials = String.Format(RepositoryUrlTemplate, String.Empty, String.Empty, RepositoryName);
+            Url = string.Format(RepositoryUrlTemplate, string.Empty, string.Empty, string.Empty);
+            BareUrl = Url.TrimEnd('/');
         }
 
         [ClassCleanup]
@@ -104,7 +121,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             ITH.LoginAndResetDatabase();
         }
 
-        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
         public void RunGitTests()
         {
 
@@ -128,7 +145,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 });
         }
 
-        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
         public void AnonRepoClone()
         {
             /* This test can fail if you have any credential.helper setup on your system.
@@ -153,7 +170,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             IEnumerable<string> urls = new List<string>
             {
                 string.Format(RepositoryUrlTemplate, string.Empty, string.Empty, string.Empty),
-                string.Format(RepositoryUrlTemplate, Credentials, string.Empty, string.Empty),
+                string.Format(RepositoryUrlTemplate, AdminCredentials, string.Empty, string.Empty),
             };
 
             foreach (var url in urls)
@@ -179,7 +196,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             return false;
         }
 
-        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
         public void NoDeadlockOnLargeOutput()
         {
             var git = installedgits.Last();
@@ -191,7 +208,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 CreateAndAddTestFiles(git, 2000);
         }
 
-        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
         public void RepoAnonPushRespectsGlobalSettings()
         {
 
@@ -215,7 +232,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             });
         }
 
-        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
         public void RepoAnonPushYesOverridesGlobalSettings()
         {
 
@@ -236,7 +253,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             });
         }
 
-        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
         public void RepoAnonPushNoOverridesGlobalSettings()
         {
 
@@ -271,7 +288,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
         /// This does an authorized push to a repo that allows anon clone
         /// At the time of writing, this demonstrates an issue which breaks authorised push if the repo allows anon pull
         /// </summary>
-        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
         public void NamedPushToAnonRepo()
         {
             ForAllGits(git =>
@@ -287,7 +304,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 CreateAndPushFiles(git);
             });
         }
-        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
         public void PushToCreateIsNotNormallyAllowed()
         {
             ForAllGits(git =>
@@ -303,20 +320,20 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             });
         }
 
-        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
         public void PushToCreateIsAllowedIfOptionIsSet()
         {
             ForAllGits(git =>
             {
+                // Enable the push-to-create option
+                ITH.SetGlobalSetting(x => x.AllowPushToCreate, true);
+
                 // Create a repo locally
                 Directory.CreateDirectory(RepositoryDirectory);
                 InitRepository(git);
                 Environment.CurrentDirectory = RepositoryDirectory;
                 CreateIdentity(git);
                 CreateAndAddFiles(git);
-
-                // Enable the push-to-create option
-                ITH.SetGlobalSetting(x => x.AllowPushToCreate, true);
 
                 RunGitOnRepo(git, "push origin master").ExpectSuccess();
 
@@ -326,7 +343,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             });
         }
 
-        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
         public void LinkifyGlobalWorks()
         {
 
@@ -360,7 +377,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
         }
 
-        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
         public void LinkifyRepoOverridesGlobal()
         {
 
@@ -397,7 +414,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             });
 
         }
-        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
         public void LinkifyRepoRegexEmptyGeneratesNoLinks()
         {
 
@@ -431,7 +448,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
 
         }
 
-        [TestMethod, TestCategory(TestCategories.ClAndWebIntegrationTest)]
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
         public void CheckTagLinksWorkInViews()
         {
             ForAllGits(git =>
@@ -469,6 +486,51 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
             });
         }
         
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
+        public void CanNavigateIntoBranchesFolder()
+        {
+            ForAllGits(git =>
+            {
+                var repo = ITH.CreateRepositoryOnWebInterface(RepositoryName);
+                CloneEmptyRepositoryWithCredentials(git);
+                CreateIdentity(git);
+                CreateAndAddTestFiles(git, 1);
+                RunGitOnRepo(git, "branch branchX");
+                Directory.CreateDirectory(Path.Combine(RepositoryDirectory, "dir1"));
+                File.Create(Path.Combine(RepositoryDirectory, "dir1", "file1.txt")).Close();
+                RunGitOnRepo(git, "add dir1").ExpectSuccess();
+                RunGitOnRepo(git, "commit -m\"dir1 on master\"").ExpectSuccess();
+                RunGitOnRepo(git, "push --set-upstream origin master").ExpectSuccess();
+                RunGitOnRepo(git, "checkout branchX").ExpectSuccess();
+                Directory.CreateDirectory(Path.Combine(RepositoryDirectory, "dir2"));
+                File.Create(Path.Combine(RepositoryDirectory, "dir2", "file2.txt")).Close();
+                RunGitOnRepo(git, "add dir2").ExpectSuccess();
+                RunGitOnRepo(git, "commit -m\"dir2 on branchX\"").ExpectSuccess();
+                RunGitOnRepo(git, "push --set-upstream origin branchX").ExpectSuccess();
+
+                app.NavigateTo<RepositoryController>(c => c.Tree(repo, null, null));
+                var elements = app.Browser.FindElementsByCssSelector("table#files td.path a.directory");
+                Assert.AreEqual(1, elements.Count);
+                Assert.AreEqual("dir1", elements[0].Text);
+                elements[0].Click();
+                app.WaitForElementToBeVisible(By.CssSelector("nav.branches"), TimeSpan.FromSeconds(1));
+                app.UrlShouldMapTo<RepositoryController>(c => c.Tree(repo, null, "dir1"));
+
+                app.NavigateTo<RepositoryController>(c => c.Tree(repo, "branchX", null));
+                app.WaitForElementToBeVisible(By.CssSelector("nav.branches"), TimeSpan.FromSeconds(1));
+                app.UrlShouldMapTo<RepositoryController>(c => c.Tree(repo, "branchX", null));
+                elements = app.Browser.FindElementsByCssSelector("table#files td.path a.directory");
+                Assert.AreEqual(1, elements.Count);
+                Assert.AreEqual("dir2", elements[0].Text);
+                elements[0].Click();
+                app.WaitForElementToBeVisible(By.CssSelector("nav.branches"), TimeSpan.FromSeconds(1));
+                app.UrlShouldMapTo<RepositoryController>(c => c.Tree(repo, "branchX", "dir2"));
+
+                ITH.DeleteRepositoryUsingWebsite(repo);
+            });
+
+        }
+
         /// <summary>
         /// Helper to run a test for every installed Git instance
         /// </summary>

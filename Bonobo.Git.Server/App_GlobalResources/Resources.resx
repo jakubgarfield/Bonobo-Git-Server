@@ -872,7 +872,12 @@
     <value>Link Url</value>
   </data>
   <data name="Settings_Global_LinksUrl_Hint" xml:space="preserve">
-    <value>Set Regex to parse commit message for links and url to launch</value>
+    <value>This uses the C# regex library to parse the provided regex. Capturing groups are supported.
+
+The pattern is {0} for the whole regex match.
+{1} onwards is each capturing group.
+
+The regular C# string formatting rules apply: To get {} in your link you need to write {{}}.</value>
   </data>
   <data name="Account_Edit_Username" xml:space="preserve">
     <value>Username</value>
@@ -911,7 +916,7 @@
     <value>Anonymous push</value>
   </data>
   <data name="Repository_AllowAnonymousPushHint" xml:space="preserve">
-    <value>Allows anonymous users to push to this repository if anonymous acces is granted. If "Global" is selected the option set under your global settings is used.</value>
+    <value>Allows anonymous users to push to this repository if anonymous access is granted. If "Global" is selected the option set under your global settings is used.</value>
   </data>
   <data name="Global" xml:space="preserve">
     <value>Global</value>
@@ -936,5 +941,14 @@
   </data>
   <data name="Repository_Layout_Tags" xml:space="preserve">
     <value>Tags</value>
+  </data>
+  <data name="Home_About_Thanks" xml:space="preserve">
+    <value>Thanks!</value>
+  </data>
+  <data name="Repository_Create_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Home_About_Title" xml:space="preserve">
+    <value>About</value>
   </data>
 </root>

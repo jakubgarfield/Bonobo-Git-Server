@@ -2079,7 +2079,12 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set Regex to parse commit message for links and url to launch.
+        ///   Looks up a localized string similar to This uses the C# regex library to parse the provided regex. Capturing groups are supported.
+        ///
+        ///The pattern is {0} for the whole regex match.
+        ///{1} onwards is each capturing group.
+        ///
+        ///The regulare C# string formatting rules apply: To get {} in your link you need to write {{}}..
         /// </summary>
         public static string Settings_Global_LinksUrl_Hint {
             get {

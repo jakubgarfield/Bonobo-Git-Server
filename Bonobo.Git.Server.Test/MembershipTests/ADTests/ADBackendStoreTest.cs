@@ -69,7 +69,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests.ADTests
         [TestMethod]
         public void ItemCanBeAddedToStoreAndRetrievedViaDisk()
         {
-            _store.Add(new StorableClass { Name = "Hello" });
+            _store.Add(new StorableClass { Name = "Hello", Id = Guid.NewGuid() });
 
             var loadStore = MakeStore();
             var retrieved = loadStore.Single();
@@ -161,6 +161,11 @@ namespace Bonobo.Git.Server.Test.MembershipTests.ADTests
             public Guid Id { get; set; }
             public string Name { get; set; }
             public string DisplayName { get { return Name; } }
+
+            public StorableClass()
+            {
+                Id = Guid.NewGuid();
+            }
         }
     }
 }

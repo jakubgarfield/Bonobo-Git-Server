@@ -14,7 +14,7 @@
         <div class="commitdate">
             @Model.Date.ToString(CultureInfo.InstalledUICulture)
         </div>
-        @if (UserConfiguration.Current.HasLinks)
+        @if (Model.Links.Count() > 0)
         {
         <span class="links">
 

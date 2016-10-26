@@ -8,7 +8,7 @@ namespace Bonobo.Git.Server.Security
     public interface IAuthenticationProvider
     {
         void Configure(IAppBuilder app);
-        void SignIn(string username, string returnUrl);
+        void SignIn(string username, string returnUrl, bool rememberMe);
         void SignOut();
         IEnumerable<Claim> GetClaimsForUser(string username);
     }

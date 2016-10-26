@@ -20,7 +20,7 @@ namespace Bonobo.Git.Server.Security
         public IRoleProvider RoleProvider { get; set; }
 
         public abstract void Configure(IAppBuilder app);
-        public abstract void SignIn(string username, string returnUrl);
+        public abstract void SignIn(string username, string returnUrl, bool rememberMe);
         public abstract void SignOut();
 
         public IEnumerable<Claim> GetClaimsForUser(string username)

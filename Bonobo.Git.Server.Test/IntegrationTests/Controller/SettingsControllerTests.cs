@@ -14,7 +14,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
     [TestClass]
     public class SettingsControllerTests : IntegrationTestBase
     {
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
         public void EnsureSelectedLanguageIsSaved()
         {
             app.NavigateTo<SettingsController>(c => c.Index());
@@ -34,7 +34,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             form.Submit();
         }
 
-        [TestMethod, TestCategory(TestCategories.WebIntegrationTest)]
+        [TestMethod, TestCategory(TestCategories.IntegrationTest)]
         public void InvalidLinkifyRegexAsYouTypeInSettings()
         {
             var brokenRegex = @"\";

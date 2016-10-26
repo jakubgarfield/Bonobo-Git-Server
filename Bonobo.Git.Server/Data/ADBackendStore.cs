@@ -12,6 +12,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Web.Hosting;
 using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Helpers;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -40,12 +41,16 @@ namespace Bonobo.Git.Server.Data
 
         public ADBackendStore(string rootpath, string name)
         {
-            _storagePath = Path.Combine(GetRootPath(rootpath), name);
+            _storagePath = Path.Combine(PathEncoder.GetRootPath(rootpath), name);
             _content = LoadContent();
         }
 
         public bool Add(T item)
         {
+            if (item.Id == Guid.Empty)
+            {
+                throw new ArgumentException("You must set the Id before adding an item");
+            }
             return _content.TryAdd(item.Id, item) && Store(item);
         }
 
@@ -87,6 +92,11 @@ namespace Bonobo.Git.Server.Data
 
         private bool Store(T item)
         {
+            if (item.Id == Guid.Empty)
+            {
+                throw new ArgumentException("Item does not have a proper Id");
+            }
+
             bool result = false;
 
             try
@@ -146,24 +156,9 @@ namespace Bonobo.Git.Server.Data
             return result;
         }
 
-        private string GetRootPath(string path)
-        {
-            return Path.IsPathRooted(path) ? path : HostingEnvironment.MapPath(path);
-        }
-
         private string GetItemFilename(T item)
         {
-            StringBuilder result = new StringBuilder(45);
-
-            byte[] hash = SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(item.Name));
-            for (int i = 0; i < hash.Length; i++)
-            {
-                result.Append(hexchars[hash[i] >> 4]);
-                result.Append(hexchars[hash[i] & 0x0f]);
-            }
-            result.Append(".json");
-
-            return result.ToString();
+            return item.Id+".json";
         }
     }
 }

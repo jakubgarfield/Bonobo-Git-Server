@@ -1,3 +1,4 @@
+using System;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
@@ -38,7 +39,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests.ADTests
 
         protected override TeamModel CreateTeam()
         {
-            var newTeam = new TeamModel { Name = "Team1" };
+            var newTeam = new TeamModel { Name = "Team1", Id = Guid.NewGuid() };
             newTeam.Members = new UserModel[0];
             ADBackend.Instance.Teams.Add(newTeam);
             return newTeam;
