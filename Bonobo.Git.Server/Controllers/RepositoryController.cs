@@ -448,7 +448,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Commits(Guid id, string encodedName, int page)
+        public ActionResult Commits(Guid id, string encodedName, int page = 1)
         {
             page = page >= 1 ? page : 1;
             
