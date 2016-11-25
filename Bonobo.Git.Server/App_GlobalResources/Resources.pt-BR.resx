@@ -738,4 +738,210 @@
   <data name="Repository_Clone_Submit" xml:space="preserve">
     <value>Clonar</value>
   </data>
+  <data name="Settings_Global_SiteFooterMessage" xml:space="preserve">
+    <value>Mensagem de rodapé do site</value>
+  </data>
+  <data name="Settings_Global_SiteFooterMessage_Hint" xml:space="preserve">
+    <value>Mensagem exibida na área de rodapé das páginas do site.</value>
+  </data>
+  <data name="Settings_Global_SiteLogoUrl" xml:space="preserve">
+    <value>URL Logotipo</value>
+  </data>
+  <data name="Settings_Global_SiteLogoUrl_Hint" xml:space="preserve">
+    <value>URL para um logotipo a ser usado para o site. Os caminhos relativos ao local (~) são suportados.</value>
+  </data>
+  <data name="Settings_Global_SiteTitle" xml:space="preserve">
+    <value>Título do Site</value>
+  </data>
+  <data name="Settings_Global_SiteTitle_Hint" xml:space="preserve">
+    <value>Título para este site.</value>
+  </data>
+  <data name="Repository_Commit_NoMessageDeclared" xml:space="preserve">
+    <value>Não declarado</value>
+  </data>
+  <data name="Repository_Detail_AuditPushUser" xml:space="preserve">
+    <value>Pushes de Auditoria</value>
+  </data>
+  <data name="Repository_AuditPushUserHint" xml:space="preserve">
+    <value>Gravar usuário que executou push para o servidor</value>
+  </data>
+  <data name="Validation_FileName_Regex" xml:space="preserve">
+    <value>Apenas caracteres, números, pontos, menos e sublinhado são permitidos para "{0}".</value>
+  </data>
+  <data name="Repository_History_Title" xml:space="preserve">
+    <value>Histórico</value>
+  </data>
+  <data name="Repository_Tree_History" xml:space="preserve">
+    <value>Histórico</value>
+  </data>
+  <data name="Repository_Commit_AuthorAvatar" xml:space="preserve">
+    <value>Avatar</value>
+  </data>
+  <data name="Settings_Global_IsCommitAuthorAvatarVisible" xml:space="preserve">
+    <value>Mostrar avatar no commit do usuário</value>
+  </data>
+  <data name="Repository_Blame_Title" xml:space="preserve">
+    <value>Blame</value>
+  </data>
+  <data name="Repository_Tree_Blame" xml:space="preserve">
+    <value>Blame</value>
+  </data>
+  <data name="Repository_Tree_Blob" xml:space="preserve">
+    <value>Blob</value>
+  </data>
+  <data name="Email_PasswordReset_Body" xml:space="preserve">
+    <value>&lt;p&gt;Uma solicitação foi recebida para redefinir sua senha. 
+                           Se você não solicitou a alteração, ignore este e-mail.&lt;/p&gt;
+                           &lt;p&gt;Clique no link a seguir para redefinir sua senha:&lt;/p&gt;</value>
+  </data>
+  <data name="Email_PasswordReset_Title" xml:space="preserve">
+    <value>Bonobo Git Server - Redefinição de senha</value>
+  </data>
+  <data name="Home_ForgotPassword_EmailError" xml:space="preserve">
+    <value>Não é possível enviar o e-mail. Verifique as configurações de SMTP.</value>
+  </data>
+  <data name="Home_ForgotPassword_EmailSuccess" xml:space="preserve">
+    <value>Email enviado</value>
+  </data>
+  <data name="Home_ForgotPassword_Failed" xml:space="preserve">
+    <value>Erro senha esquecida. Por favor, corrija os erros e tente novamente.</value>
+  </data>
+  <data name="Home_ForgotPassword_ForgotPassword" xml:space="preserve">
+    <value>Esqueceu a senha</value>
+  </data>
+  <data name="Home_ForgotPassword_Title" xml:space="preserve">
+    <value>Esqueceu a sua senha</value>
+  </data>
+  <data name="Home_ForgotPassword_Username" xml:space="preserve">
+    <value>Usuário</value>
+  </data>
+  <data name="Home_ForgotPassword_UserNameFailure" xml:space="preserve">
+    <value>Não foi possível encontrar o usuário</value>
+  </data>
+  <data name="Home_LogOn_ForgotPassword" xml:space="preserve">
+    <value>Esqueceu a senha?</value>
+  </data>
+  <data name="Home_ResetPassword_ConfirmPassword" xml:space="preserve">
+    <value>Confirme a senha</value>
+  </data>
+  <data name="Home_ResetPassword_Failed" xml:space="preserve">
+    <value>Não é possível redefinir a senha</value>
+  </data>
+  <data name="Home_ResetPassword_Password" xml:space="preserve">
+    <value>Senha</value>
+  </data>
+  <data name="Home_ResetPassword_ResetPassword" xml:space="preserve">
+    <value>Redefinição de senha</value>
+  </data>
+  <data name="Home_ResetPassword_Success" xml:space="preserve">
+    <value>Redefinição de senha</value>
+  </data>
+  <data name="Home_ResetPassword_Title" xml:space="preserve">
+    <value>Redefinição de senha</value>
+  </data>
+  <data name="Home_ResetPassword_Username" xml:space="preserve">
+    <value>Usuário</value>
+  </data>
+  <data name="Repository_Detail_Group" xml:space="preserve">
+    <value>Grupo</value>
+  </data>
+  <data name="Repository_Index_SortGroup" xml:space="preserve">
+    <value>Classificar por Grupo</value>
+  </data>
+  <data name="Repository_Detail_Location_Personal" xml:space="preserve">
+    <value>URL</value>
+    <comment>Exemplo: http://admin@localhost/Bonobo.Git.Server/teste.git</comment>
+  </data>
+  <data name="Repository_Detail_Logo_PostedFile" xml:space="preserve">
+    <value>Logotipo (36x36)</value>
+  </data>
+  <data name="Repository_Detail_RemoveLogo" xml:space="preserve">
+    <value>Remover logotipo</value>
+  </data>
+  <data name="Settings_Global_LinksRegex" xml:space="preserve">
+    <value>Link Regex</value>
+  </data>
+  <data name="Settings_Global_LinksUrl" xml:space="preserve">
+    <value>Link Url</value>
+  </data>
+  <data name="Settings_Global_LinksUrl_Hint" xml:space="preserve">
+    <value>Isso utiliza a biblioteca regex C# para analisar o regex fornecido. Captura de grupos é suportado.
+
+O padrão é {0} para toda a correspondência regex.
+{1} para cada grupo de captura.
+
+As regras regulares de formatação de string C# se aplicam: Para obter {} no seu link, você precisa escrever {{}}.</value>
+  </data>
+  <data name="Account_Edit_Username" xml:space="preserve">
+    <value>Usuário</value>
+  </data>
+  <data name="Repository_Create_Success_Go_To" xml:space="preserve">
+    <value>Vai para "{0}"</value>
+  </data>
+  <data name="Repository_Needs_Administrator" xml:space="preserve">
+    <value>Repositório requer pelo menos um administrador.</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copiar</value>
+  </data>
+  <data name="Repository_Git_Url_Copy" xml:space="preserve">
+    <value>Copiar URL do repositório</value>
+  </data>
+  <data name="Repository_No_Group" xml:space="preserve">
+    <value>Nenhum grupo</value>
+  </data>
+  <data name="Repository_Personal_Git_Url_Copy" xml:space="preserve">
+    <value>Copiar URL do repositório pessoal</value>
+  </data>
+  <data name="Repository_Rescan_Directory" xml:space="preserve">
+    <value>Escanear diretório</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Procurar</value>
+  </data>
+  <data name="Repository_Go_To_Dropdown" xml:space="preserve">
+    <value>Vai para o repositório</value>
+  </data>
+  <data name="Validation_Duplicate_Name" xml:space="preserve">
+    <value>Este nome já foi utilizado.</value>
+  </data>
+  <data name="Repository_Detail_AllowAnonymousPush" xml:space="preserve">
+    <value>Push anônimo</value>
+  </data>
+  <data name="Repository_AllowAnonymousPushHint" xml:space="preserve">
+    <value>Permite que usuários anônimos façam push para este repositório se o acesso anônimo for concedido. Se "Global" estiver selecionado, a opção definida em suas configurações globais será usada.</value>
+  </data>
+  <data name="Global" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="Repository_Detail_LinksUseGlobal" xml:space="preserve">
+    <value>Usar configurações globais de linkify</value>
+  </data>
+  <data name="Validation_Invalid_Regex" xml:space="preserve">
+    <value>O regex fornecido tem um erro. {0}</value>
+  </data>
+  <data name="Repository_Edit_InvalidAnonymousPushMode" xml:space="preserve">
+    <value>Valor inválido fornecido.</value>
+  </data>
+  <data name="Repository_Tags_Title" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="Repository_Layout_Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="Home_About_Thanks" xml:space="preserve">
+    <value>Obrigado!</value>
+  </data>
+  <data name="Repository_Create_Back" xml:space="preserve">
+    <value>Voltar</value>
+  </data>
+  <data name="Home_About_Title" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
 </root>
