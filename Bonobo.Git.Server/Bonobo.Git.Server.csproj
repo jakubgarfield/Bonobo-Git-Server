@@ -529,6 +529,7 @@
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.woff2" />
     <Content Include="Content\components\font-awesome\fonts\FontAwesome.otf" />
     <Content Include="Content\components\highlight\styles\github.css" />
     <Content Include="Content\components\pure\pure-min.css" />
