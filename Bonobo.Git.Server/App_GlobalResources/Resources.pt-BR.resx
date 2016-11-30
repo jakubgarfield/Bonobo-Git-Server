@@ -487,7 +487,7 @@
     <value>Pesquisar Repositório</value>
   </data>
   <data name="Settings_Global_AllowAnonymousPush" xml:space="preserve">
-    <value>Permitir empurrar para repositórios anônimos</value>
+    <value>Permitir realizar push para repositórios anônimos</value>
   </data>
   <data name="Settings_Global_RepositoryPath" xml:space="preserve">
     <value>Diretório do Repositório</value>
@@ -604,16 +604,16 @@
     <value>Os administradores têm acesso completo ao repositório. Eles podem modificar os metadados do repositório ou apagar o repositório.</value>
   </data>
   <data name="Repository_AllowAnonymousHint" xml:space="preserve">
-    <value>Se o acesso anônimo é permitido, todos podem puxar, clonar e  exibir os metadados do repositório. Empurrar está  disponível somente se definido na Configurações Globais.</value>
+    <value>Se o acesso anônimo é permitido, todos podem puxar, clonar e  exibir os metadados do repositório. Executar push está  disponível somente se definido na Configurações Globais.</value>
   </data>
   <data name="Repository_Create_NameFailure" xml:space="preserve">
     <value>"Nome" não deve conter caracteres em branco.</value>
   </data>
   <data name="Repository_TeamsHint" xml:space="preserve">
-    <value>As equipes têm acesso ao repositório. Eles podem clonar, empurrar ou puxar e exibir os metadados do repositório. Todos os usuários da equipe podem acessar este repositório.</value>
+    <value>As equipes têm acesso ao repositório. Eles podem clonar, executar push ou pull/fetch e exibir os metadados do repositório. Todos os usuários da equipe podem acessar este repositório.</value>
   </data>
   <data name="Repository_UsersHint" xml:space="preserve">
-    <value>Os usuários têm acesso ao repositório. Eles podem clonar , empurrar ou puxar e exibir os metadados do repositório</value>
+    <value>Os usuários têm acesso ao repositório. Eles podem clonar , executar push ou pull/fetch e exibir os metadados do repositório</value>
   </data>
   <data name="Validation_FileName" xml:space="preserve">
     <value>"{0}" contém caracteres que não podem estar em um arquivo ou nome de diretório.</value>
@@ -661,7 +661,7 @@
     <value>Usuários</value>
   </data>
   <data name="Delete_ConfirmationText" xml:space="preserve">
-    <value>Você realmente quer apagar {0} ?</value>
+    <value>Você realmente quer apagar o repositório {0} ?</value>
   </data>
   <data name="Account_Create_Success" xml:space="preserve">
     <value>O usuário foi excluído.</value>
@@ -670,7 +670,7 @@
     <value>Baixar</value>
   </data>
   <data name="Settings_Global_AllowAnonymousRegistration" xml:space="preserve">
-    <value>Permitir o registo anónimo.</value>
+    <value>Permitir o registo anônimo.</value>
   </data>
   <data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
     <value>Se caixa de seleção estiver desmarcada, apenas os administradores podem adicionar novos usuários e o acesso anônimo esta desativado.</value>
