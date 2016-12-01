@@ -8,6 +8,8 @@ namespace Bonobo.Git.Server.App_Start
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+            string guid_regex = @"[\da-z]{8}-[\da-z]{4}-[\da-z]{4}-[\da-z]{4}-[\da-z]{12}";
+
             routes.MapRoute("SecureInfoRefs",
                             "{repositoryName}.git/info/refs",
                             new { controller = "Git", action = "SecureGetInfoRefs" },
@@ -37,65 +39,65 @@ namespace Bonobo.Git.Server.App_Start
                             new { action = "Create" });
 
             routes.MapRoute("RepositoryTree",
-                            "Repository/{id}/{encodedName}/Tree/{*encodedPath}",
+                            "Repository/{id}/Tree/{encodedName}/{*encodedPath}",
                             new { controller = "Repository", action = "Tree" },
-                            new { id = @"\d+" });
+                            new { id = guid_regex });
 
             routes.MapRoute("RepositoryBlob",
                             "Repository/{id}/{encodedName}/Blob/{*encodedPath}",
                             new { controller = "Repository", action = "Blob" },
-                            new { id = @"\d+" });
+                            new { id = guid_regex });
 
             routes.MapRoute("RepositoryRaw",
                             "Repository/{id}/{encodedName}/Raw/{*encodedPath}",
                             new { controller = "Repository", action = "Raw" },
-                            new { id = @"\d+" });
+                            new { id = guid_regex });
 
             routes.MapRoute("RepositoryBlame",
                             "Repository/{id}/{encodedName}/Blame/{*encodedPath}",
                             new { controller = "Repository", action = "Blame" },
-                            new { id = @"\d+" });
+                            new { id = guid_regex });
 
             routes.MapRoute("RepositoryDownload",
                             "Repository/{id}/{encodedName}/Download/{*encodedPath}",
                             new { controller = "Repository", action = "Download" },
-                            new { id = @"\d+" });
+                            new { id = guid_regex });
 
             routes.MapRoute("RepositoryCommits",
                             "Repository/{id}/{encodedName}/Commits",
                             new { controller = "Repository", action = "Commits" },
-                            new { id = @"\d+" });
+                            new { id = guid_regex });
 
             routes.MapRoute("RepositoryCommit",
-                            "Repository/{id}/{encodedName}/Commit/{commit}/",
+                            "Repository/{id}/Commit/{commit}/",
                             new { controller = "Repository", action = "Commit" },
-                            new { id = @"\d+" });
+                            new { id = guid_regex });
 
             routes.MapRoute("RepositoryHistory",
                 "Repository/{id}/{encodedName}/History/{*encodedPath}",
                 new { controller = "Repository", action = "History" },
-                            new { id = @"\d+" });
+                            new { id = guid_regex });
 
             routes.MapRoute("Repository", 
                             "Repository/{id}/{action}/{reponame}",
                             new { controller = "Repository", action = "Detail", reponame = UrlParameter.Optional },
-                            new { id = @"\d+" });
+                            new { id = guid_regex });
 
             routes.MapRoute("Account",
                             "Account/{id}/{action}/{username}",
                             new { controller = "Account", action = "Detail", username = UrlParameter.Optional },
-                            new { id = @"\d+" });
+                            new { id = guid_regex });
 
             routes.MapRoute("Team", 
                             "Team/{id}/{action}/{teamname}",
                             new { controller = "Team", action = "Detail", teamname = UrlParameter.Optional },
-                            new { id = @"\d+" });
+                            new { id = guid_regex });
 
 
             routes.MapRoute("Validation", "Validation/{action}", new { controller = "Validation", action = String.Empty });
 
             routes.MapRoute("RepoCommits",
-                            "Repository/Commits/{id}",
+                            "Repository/{id}/Commits",
                             new { controller = "Repository", action = "Commits", id = string.Empty, page = 1 });
 
             routes.MapRoute("Default", 

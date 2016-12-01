@@ -334,13 +334,15 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     return File(model.Data, "application/octet-stream", model.Name);
                 }
+                if (model.IsImage)
+                {
+                    // do not include the last parameter "fileDownloadName" so the "Content-Disposition: attachment" header will not be added.
+                    return File(model.Data, MimeTypeMap.GetMimeType(Path.GetExtension(model.Name.ToLower())));
+                }
+                // text is the least prefered choice, and seems the IsText will always be true if the file is not zero length...
                 if (model.IsText)
                 {
                     return Content(model.Text, "text/plain", model.Encoding);
-                }
-                if (model.IsImage)
-                {
-                    return File(model.Data, MimeTypeMap.GetMimeType(Path.GetExtension(model.Name.ToLower())), model.Name);
                 }
             }
 
@@ -448,7 +450,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository]
-        public ActionResult Commits(Guid id, string encodedName, int page)
+        public ActionResult Commits(Guid id, string encodedName, int page = 1)
         {
             page = page >= 1 ? page : 1;
             
