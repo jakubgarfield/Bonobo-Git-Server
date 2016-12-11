@@ -8,6 +8,9 @@ namespace Bonobo.Git.Server
     {
         public static IEnumerable<T> OrderBy<T, TKey>(this IEnumerable<T> source, Func<T, TKey> selector, bool ascending)
         {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
             if (ascending)
             {
                 return source.OrderBy(selector);

@@ -39,7 +39,7 @@ namespace Bonobo.Git.Server.Data.Update
                         new SqlServer.InsertDefaultData()
                     };
                 default:
-                    throw new NotImplementedException(string.Format("The provider '{0}' is not supported yet", sqlProvider));
+                    throw new NotImplementedException($"The provider '{sqlProvider}' is not supported yet");
             }
         }
     }
