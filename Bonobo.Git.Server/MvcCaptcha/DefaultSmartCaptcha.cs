@@ -12,7 +12,7 @@ namespace TSharp.Core.Mvc
         public DefaultSmartCaptcha(Func<HttpContextBase, int> maxAttemptLogonFail)
         {
             if (maxAttemptLogonFail == null)
-                throw new ArgumentNullException(nameof(maxAttemptLogonFail));
+                throw new ArgumentNullException("maxAttemptLogonFail");
             _maxAttemptLogonFail = maxAttemptLogonFail;
         }
 
