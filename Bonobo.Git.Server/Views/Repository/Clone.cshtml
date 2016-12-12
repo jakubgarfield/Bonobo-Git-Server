@@ -1,3 +1,4 @@
+@using MvcCheckBoxList.Model
 ﻿@model RepositoryDetailModel
 @{
     ViewBag.Title = Resources.Repository_Clone_Title;
@@ -30,20 +31,26 @@
         </div>
         <div class="pure-control-group checkboxlist">
             @Html.LabelFor(m => m.Users)
-            @Html.CheckBoxListFor(m => m.PostedSelectedUsers, mm => mm.AllUsers, mm => mm.Id, mm => mm.DisplayName, mm => mm.Users)
+            <span>
+            	@Html.CheckBoxListFor(m => m.PostedSelectedUsers, mm => mm.AllUsers, mm => mm.Id, mm => mm.DisplayName, mm => mm.Users, Position.Vertical)
+            </span>
             <i class="fa fa-info-circle" title="@Resources.Repository_UsersHint"></i>
         </div>
 
         <div class="pure-control-group checkboxlist">
             @Html.LabelFor(m => m.Administrators)
-            @Html.CheckBoxListFor(m => m.PostedSelectedAdministrators, mm => mm.AllAdministrators, mm => mm.Id, mm => mm.DisplayName, mm => mm.Administrators)
+            <span>
+            	@Html.CheckBoxListFor(m => m.PostedSelectedAdministrators, mm => mm.AllAdministrators, mm => mm.Id, mm => mm.DisplayName, mm => mm.Administrators, Position.Vertical)
+            </span>
             @Html.ValidationMessageFor(m => m.Administrators)
             <i class="fa fa-info-circle" title="@Resources.Repository_AdministratorsHint"></i>
         </div>
 
         <div class="pure-control-group checkboxlist">
             @Html.LabelFor(m => m.Teams)
-            @Html.CheckBoxListFor(m => m.PostedSelectedTeams, mm => mm.AllTeams, mm => mm.Id, mm => mm.DisplayName, mm => mm.Teams)
+            <span>
+            	@Html.CheckBoxListFor(m => m.PostedSelectedTeams, mm => mm.AllTeams, mm => mm.Id, mm => mm.DisplayName, mm => mm.Teams, Position.Vertical)
+            </span>
             <i class="fa fa-info-circle" title="@Resources.Repository_TeamsHint"></i>
         </div>
 

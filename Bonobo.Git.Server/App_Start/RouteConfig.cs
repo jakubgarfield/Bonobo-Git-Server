@@ -28,11 +28,11 @@ namespace Bonobo.Git.Server.App_Start
                             new { controller = "Git", action = "GitUrl" },
                             new { method = new HttpMethodConstraint("GET") });
 
-            routes.MapRoute("IndexRoute", 
+            routes.MapRoute("IndexRoute",
                             "{controller}/Index/",
                             new { action = "Index" });
 
-            routes.MapRoute("CreateRoute", 
+            routes.MapRoute("CreateRoute",
                             "{controller}/Create/",
                             new { action = "Create" });
 
@@ -76,7 +76,7 @@ namespace Bonobo.Git.Server.App_Start
                 new { controller = "Repository", action = "History" },
                             new { id = @"\d+" });
 
-            routes.MapRoute("Repository", 
+            routes.MapRoute("Repository",
                             "Repository/{id}/{action}/{reponame}",
                             new { controller = "Repository", action = "Detail", reponame = UrlParameter.Optional },
                             new { id = @"\d+" });
@@ -86,7 +86,7 @@ namespace Bonobo.Git.Server.App_Start
                             new { controller = "Account", action = "Detail", username = UrlParameter.Optional },
                             new { id = @"\d+" });
 
-            routes.MapRoute("Team", 
+            routes.MapRoute("Team",
                             "Team/{id}/{action}/{teamname}",
                             new { controller = "Team", action = "Detail", teamname = UrlParameter.Optional },
                             new { id = @"\d+" });
@@ -96,9 +96,9 @@ namespace Bonobo.Git.Server.App_Start
 
             routes.MapRoute("RepoCommits",
                             "Repository/Commits/{id}",
-                            new { controller = "Repository", action = "Commits", id = string.Empty, page = 1 });
+                            new { controller = "Repository", action = "Commits", id = string.Empty, page = UrlParameter.Optional });
 
-            routes.MapRoute("Default", 
+            routes.MapRoute("Default",
                             "{controller}/{action}/{id}",
                             new { controller = "Home", action = "Index", id = String.Empty });
 
