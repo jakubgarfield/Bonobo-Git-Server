@@ -73,7 +73,7 @@ namespace Bonobo.Git.Server
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
+            BundleConfig.Register Bundles(BundleTable.Bundles);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             UserConfiguration.Initialize();
             RegisterDependencyResolver();

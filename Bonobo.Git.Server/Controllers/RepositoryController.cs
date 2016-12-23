@@ -326,7 +326,7 @@ namespace Bonobo.Git.Server.Controllers
             {
                 var name = PathEncoder.Decode(encodedName);
                 var path = PathEncoder.Decode(encodedPath);
-                string referenceName;
+                string referenceName
                 var model = browser.BrowseBlob(name, path, out referenceName);
                 model.Logo = new RepositoryLogoDetailModel(repo.Logo);
 
