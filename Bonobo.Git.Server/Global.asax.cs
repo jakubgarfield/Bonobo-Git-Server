@@ -11,7 +11,6 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
-using Bonobo.Git.Server.App_Start;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Data;
