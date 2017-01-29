@@ -514,7 +514,7 @@ namespace Bonobo.Git.Server.Test.Integration.ClAndWeb
                 Assert.AreEqual("dir1", elements[0].Text);
                 elements[0].Click();
                 app.WaitForElementToBeVisible(By.CssSelector("nav.branches"), TimeSpan.FromSeconds(1));
-                app.UrlShouldMapTo<RepositoryController>(c => c.Tree(repo, null, "dir1"));
+                app.UrlShouldMapTo<RepositoryController>(c => c.Tree(repo, "master", "dir1"));
 
                 app.NavigateTo<RepositoryController>(c => c.Tree(repo, "branchX", null));
                 app.WaitForElementToBeVisible(By.CssSelector("nav.branches"), TimeSpan.FromSeconds(1));
