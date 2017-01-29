@@ -277,7 +277,7 @@ namespace Bonobo.Git.Server.Controllers
                 var model = new RepositoryTreeModel
                 {
                     Name = repo.Name,
-                    Branch = name,
+                    Branch = name ?? referenceName,
                     Path = path,
                     Readme = readmeTxt,
                     Logo = new RepositoryLogoDetailModel(repo.Logo),
