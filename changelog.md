@@ -6,7 +6,7 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 ## Version 6.0.0
 
-**TBD March 2016**
+**TBD 2017**
 
 ### Compatibility issues
 
@@ -51,6 +51,7 @@ backup of your App_Data folder before you update.
 * Resharper settings provided so that Resharper suggested style matches project #465
 * UserModel and User entity class name properties made more consistent #470
 * Far fewer catch-all claueses silently swallowing exceptions
+* Updated jQuery and associated js code to 1.12.4 #586
 
 
 ## Version 5.2
@@ -358,7 +359,7 @@ This is a major release as Ollienator simplified and consolidated authorization 
 * Swedish localization - [JLedel](https://github.com/JLedel)
 * Russian localization - grigoryev
 * Spanish localization - [AHTA](https://github.com/AHTA)
-* Download repository as ZIP - [Rémy de Sérésin](https://github.com/latop2604)
+* Download repository as ZIP - [RÃ©my de SÃ©rÃ©sin](https://github.com/latop2604)
 
 ### Bug Fixes
 
