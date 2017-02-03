@@ -128,6 +128,3 @@ New release
 * update [AssemblyInfo.cs](https://github.com/jakubgarfield/Bonobo-Git-Server/blob/master/Bonobo.Git.Server/Properties/AssemblyInfo.cs)
 * add tag so it appears under [releases](https://github.com/jakubgarfield/Bonobo-Git-Server/releases) with `git tag -a 6.0.0 -m "Release 6.0.0"`
 * add zipped version to bonobogitserver.com at [Bonobo-Git-Server-Web](https://github.com/jakubgarfield/Bonobo-Git-Server-Web)
-* update [demo](demo.bonobogitserver.com) with new version
-  * stop the server
-  * delete all files and upload new ones
