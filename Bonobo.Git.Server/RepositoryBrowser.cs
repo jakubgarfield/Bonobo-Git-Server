@@ -199,6 +199,7 @@ namespace Bonobo.Git.Server
             return new RepositoryBlameModel
             {
                 Name = commit[path].Name,
+                TreeName =  referenceName,
                 Path = path,
                 Hunks = hunks,
                 FileSize = modelBlob.Data.LongLength,
