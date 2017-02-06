@@ -541,6 +541,7 @@
     <Content Include="Content\images\git-logo.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\clipboard.min.js" />
     <Content Include="Scripts\highlight.pack.js" />
     <Content Include="Scripts\jquery-1.12.4.js" />
     <Content Include="Scripts\jquery-1.12.4.min.js" />
