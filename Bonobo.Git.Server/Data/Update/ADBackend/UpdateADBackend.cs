@@ -10,6 +10,7 @@ using System.Linq;
 using Bonobo.Git.Server.Data;
 using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
 {
@@ -189,14 +190,30 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
         {
             var teams = Pre600Functions.LoadContent<Pre600TeamModel>(dir);
             var newTeams = new Dictionary<string, Models.TeamModel>();
-            foreach(var teamitem in teams)
+            
+            foreach (var teamitem in teams)
             {
                 var team = teamitem.Value;
                 var newteam = new Models.TeamModel();
                 newteam.Name = team.Name;
                 newteam.Description = team.Description;
-
                 newteam.Id = Guid.NewGuid();
+
+                try
+                {
+                    GroupPrincipal group;
+                    using (var pc = ADHelper.GetPrincipalGroup(ActiveDirectorySettings.TeamNameToGroupNameMapping[team.Name], out group))
+                    {
+                        newteam.Id = group.Guid.Value;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("Failed to acquire group GUID - adding new.");
+                    Trace.TraceError(ex.Message);
+                }
+
+                
                 var members = new List<Models.UserModel>();
                 foreach (var member in team.Members)
                 {
@@ -225,15 +242,7 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
                 u.Username = ou.Name;
                 u.Id = Guid.NewGuid();
 
-                PrincipalContext dc;
-                var domain = u.Username.GetDomain();
-                if (!domains.TryGetValue(domain, out dc))
-                {
-                    dc = new PrincipalContext(ContextType.Domain, domain);
-                    domains[domain] = dc;
-                }
-
-                var domainuser = UserPrincipal.FindByIdentity(dc, u.Username);
+                var domainuser = ADHelper.GetUserPrincipal(u.Username);
                 if (domainuser != null && domainuser.Guid.HasValue)
                 {
                     u.Id = domainuser.Guid.Value;

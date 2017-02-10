@@ -9,6 +9,7 @@ using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
 
 using Microsoft.Practices.Unity;
+using Bonobo.Git.Server.Helpers;
 
 namespace Bonobo.Git.Server
 {
@@ -109,26 +110,12 @@ namespace Bonobo.Git.Server
 
         private bool IsWindowsUserAuthorized(HttpContextBase httpContext, string username, string password)
         {
-            var domain = username.GetDomain();
-            username = username.StripDomain();
-            try
+            var strippedUsername = username.StripDomain();
+
+            if (ADHelper.ValidateUser(strippedUsername, password))
             {
-                using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain))
-                {
-                    var adUser = UserPrincipal.FindByIdentity(pc, username);
-                    if (adUser != null)
-                    {
-                        if (pc.ValidateCredentials(username, password, ContextOptions.Negotiate))
-                        {
-                            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username.Replace("\\", "!"))));
-                            return true;
-                        }
-                    }
-                }
-            }
-            catch (PrincipalException)
-            {
-                // let it fail
+                httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(strippedUsername)));
+                return true;
             }
             return false;
         }
