@@ -110,9 +110,10 @@ namespace Bonobo.Git.Server
 
         private bool IsWindowsUserAuthorized(HttpContextBase httpContext, string username, string password)
         {
+            var parsedDomain = username.GetDomain();
             var strippedUsername = username.StripDomain();
 
-            if (ADHelper.ValidateUser(strippedUsername, password))
+            if (ADHelper.ValidateUser(parsedDomain, strippedUsername, password))
             {
                 httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(strippedUsername)));
                 return true;

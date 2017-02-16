@@ -11,28 +11,51 @@ namespace Bonobo.Git.Server.Helpers
 {
     public static class ADHelper
     {
-        public static bool ValidateUser(string username, string password)
+        public static bool ValidateUser(string parsedDomain, string username, string password)
         {
+            Domain matchedDomain = GetDomain(parsedDomain);
+            // If a domain was present in the supplied username, try to find this first at validate against it.
+            if(matchedDomain != null)
+            {
+                return ValidateUser(matchedDomain, username, password);
+            }
+            // Else try all domains in the current forest.
             foreach (Domain domain in Forest.GetCurrentForest().Domains)
             {
-                try
-                {
-                    using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain.Name))
-                    {
-                        if (pc.ValidateCredentials(username, password, ContextOptions.Negotiate))
-                            return true;
-                    }
-                }
-                catch (Exception exp)
-                {
-                    Trace.TraceError(exp.Message);
-                    if (exp.InnerException != null)
-                        Trace.TraceError(exp.InnerException.Message);
-                    // let it fail
-                }
+                if (ValidateUser(matchedDomain, username, password))
+                    return true;
             }
 
             return false;
+        }
+
+        private static bool ValidateUser(Domain domain, string username, string password)
+        {
+            try
+            {
+                using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain.Name))
+                {
+                    if (pc.ValidateCredentials(username, password, ContextOptions.Negotiate))
+                        return true;
+                }
+            }
+            catch (Exception exp)
+            {
+                Trace.TraceError(exp.Message);
+                if (exp.InnerException != null)
+                    Trace.TraceError(exp.InnerException.Message);
+            }
+            return false;
+        }
+
+        private static Domain GetDomain(string parsedDomain)
+        {
+            foreach (Domain domain in Forest.GetCurrentForest().Domains)
+            {
+                if(domain.Name.Contains(parsedDomain))
+                    return domain;
+            }
+            return null;
         }
 
         public static UserPrincipal GetUserPrincipal(string username)
