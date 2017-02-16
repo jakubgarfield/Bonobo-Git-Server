@@ -1,28 +1,35 @@
 ﻿using Bonobo.Git.Server.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices.ActiveDirectory;
-using System.Linq;
-using System.Web;
 
 namespace Bonobo.Git.Server.Helpers
 {
     public static class ADHelper
     {
-        public static bool ValidateUser(string parsedDomain, string username, string password)
+        /// <summary>
+        /// Validates the user against Active directory - will try the domain that are part of the username if present
+        /// Alternatively it tries all domains in the current forest.
+        /// </summary>
+        /// <param name="username">Username with or without domain</param>
+        /// <param name="password"></param>
+        /// <returns>True on successfull validation</returns>
+        public static bool ValidateUser(string username, string password)
         {
+            var parsedDomain = username.GetDomain();
+            string strippedUsername = username.StripDomain();
+
             Domain matchedDomain = GetDomain(parsedDomain);
-            // If a domain was present in the supplied username, try to find this first at validate against it.
+            // If a domain was present in the supplied username, try to find this first and validate against it.
             if(matchedDomain != null)
             {
-                return ValidateUser(matchedDomain, username, password);
+                return ValidateUser(matchedDomain, strippedUsername, password);
             }
             // Else try all domains in the current forest.
             foreach (Domain domain in Forest.GetCurrentForest().Domains)
             {
-                if (ValidateUser(matchedDomain, username, password))
+                if (ValidateUser(matchedDomain, strippedUsername, password))
                     return true;
             }
 
@@ -57,31 +64,59 @@ namespace Bonobo.Git.Server.Helpers
             }
             return null;
         }
-
+        /// <summary>
+        /// Used to get the UserPrincpal based on username - will try the domain that are part of the username if present
+        /// </summary>
+        /// <param name="username">UPN or sAMAccountName</param>
+        /// <returns>Userprincipal if found else null</returns>
         public static UserPrincipal GetUserPrincipal(string username)
         {
+            var parsedDomain = username.GetDomain();
+            string strippedUsername = username.StripDomain();
+
+            Domain matchedDomain = GetDomain(parsedDomain);
+            // If a domain was present in the supplied username, try to find this first at validate against it.
+            if (matchedDomain != null)
+            {
+                var user = GetUserPrincipal(matchedDomain, strippedUsername);
+                if (user != null)
+                    return user;
+            }
+
             foreach (Domain domain in Forest.GetCurrentForest().Domains)
             {
-                try
-                {
-                    using (var pc = new PrincipalContext(ContextType.Domain, domain.Name))
-                    {
-                        var user = UserPrincipal.FindByIdentity(pc, username);
-                        if (user != null)
-                            return user;
-                    }
-                }
-                catch (Exception exp)
-                {
-                    Trace.TraceError(exp.Message);
-                    if (exp.InnerException != null)
-                        Trace.TraceError(exp.InnerException.Message);
-                }
+                var user = GetUserPrincipal(domain, strippedUsername);
+                if( user != null)
+                    return user;              
             }
 
             return null;
         }
 
+        private static UserPrincipal GetUserPrincipal(Domain domain, string username)
+        {
+            try
+            {
+                using (var pc = new PrincipalContext(ContextType.Domain, domain.Name))
+                {
+                    var user = UserPrincipal.FindByIdentity(pc, username);
+                    if (user != null)
+                        return user;
+                }
+            }
+            catch (Exception exp)
+            {
+                Trace.TraceError(exp.Message);
+                if (exp.InnerException != null)
+                    Trace.TraceError(exp.InnerException.Message);
+            }
+            return null;
+        }
+        /// <summary>
+        /// Used to get the UserPrinpal from a GUID
+        /// </summary>
+        /// <param name="id">The GUID of user</param>
+        /// <returns>The Userprincipal if found, else null</returns>
         public static UserPrincipal GetUserPrincipal(Guid id)
         {
             foreach (Domain domain in Forest.GetCurrentForest().Domains)
@@ -106,12 +141,25 @@ namespace Bonobo.Git.Server.Helpers
 
             return null;
         }
-
+        /// <summary>
+        /// Used to get the members group defined in web.config
+        /// Returns the principal context to be able to do further processing on the group, ie fetch users etc.
+        /// If the Principal context is disposed, it cannot query any more.
+        /// </summary>
+        /// <param name="group">The AD membergroup</param>
+        /// <returns>Principal context on which the membersgroup was found</returns>
         public static PrincipalContext GetMembersGroup(out GroupPrincipal group)
         {
             return GetPrincipalGroup(ActiveDirectorySettings.MemberGroupName, out group);
         }
-
+        /// <summary>
+        /// Gets a principal group by name
+        /// Returns the principal context to be able to do further processing on the group, ie fetch users etc.
+        /// If the Principal context is disposed, it cannot query any more.
+        /// </summary>
+        /// <param name="name">The group to search for</param>
+        /// <param name="group">The group found</param>
+        /// <returns>Principal context on which the group was found.</returns>
         public static PrincipalContext GetPrincipalGroup(string name, out GroupPrincipal group)
         {
             foreach (Domain domain in Forest.GetCurrentForest().Domains)

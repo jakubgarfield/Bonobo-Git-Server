@@ -92,31 +92,11 @@ namespace Bonobo.Git.Server
 
             if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password))
             {
-                if (AuthenticationProvider is WindowsAuthenticationProvider)
+                if (MembershipService.ValidateUser(username, password) == ValidationResult.Success)
                 {
-                    return IsWindowsUserAuthorized(httpContext, username, password);
+                    httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
+                    return true;
                 }
-                else
-                {
-                    if (MembershipService.ValidateUser(username, password) == ValidationResult.Success)
-                    {
-                        httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        private bool IsWindowsUserAuthorized(HttpContextBase httpContext, string username, string password)
-        {
-            var parsedDomain = username.GetDomain();
-            var strippedUsername = username.StripDomain();
-
-            if (ADHelper.ValidateUser(parsedDomain, strippedUsername, password))
-            {
-                httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(strippedUsername)));
-                return true;
             }
             return false;
         }

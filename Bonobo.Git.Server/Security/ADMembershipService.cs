@@ -32,12 +32,9 @@ namespace Bonobo.Git.Server.Security
             if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty", "username");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty", "password");
 
-            var parsedDomain = username.GetDomain();
-            var strippedUsername = username.StripDomain();
-
             try
             {
-                if (ADHelper.ValidateUser(parsedDomain, username, password))
+                if (ADHelper.ValidateUser(username, password))
                 {
                     using (var user = ADHelper.GetUserPrincipal(username))
                     {
