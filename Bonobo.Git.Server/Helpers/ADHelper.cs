@@ -29,7 +29,7 @@ namespace Bonobo.Git.Server.Helpers
             // Else try all domains in the current forest.
             foreach (Domain domain in Forest.GetCurrentForest().Domains)
             {
-                if (ValidateUser(matchedDomain, strippedUsername, password))
+                if (ValidateUser(domain, strippedUsername, password))
                     return true;
             }
 
@@ -67,7 +67,7 @@ namespace Bonobo.Git.Server.Helpers
         /// <summary>
         /// Used to get the UserPrincpal based on username - will try the domain that are part of the username if present
         /// </summary>
-        /// <param name="username">UPN or sAMAccountName</param>
+        /// <param name="username">UPN or SamAccountName</param>
         /// <returns>Userprincipal if found else null</returns>
         public static UserPrincipal GetUserPrincipal(string username)
         {
@@ -99,13 +99,12 @@ namespace Bonobo.Git.Server.Helpers
             {
                 using (var pc = new PrincipalContext(ContextType.Domain, domain.Name))
                 {
-                    var user = UserPrincipal.FindByIdentity(pc, username);
-                    if (user != null)
-                        return user;
+                    return UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName,username);
                 }
             }
             catch (Exception exp)
             {
+                Trace.TraceError("GetUserPrincipal in domain: " + domain.Name + " with username " + username);
                 Trace.TraceError(exp.Message);
                 if (exp.InnerException != null)
                     Trace.TraceError(exp.InnerException.Message);
@@ -132,6 +131,7 @@ namespace Bonobo.Git.Server.Helpers
                 }
                 catch (Exception exp)
                 {
+                    Trace.TraceError("GetUserPrincipal GUID " + id.ToString());
                     Trace.TraceError(exp.Message);
                     if (exp.InnerException != null)
                         Trace.TraceError(exp.InnerException.Message);
@@ -173,6 +173,7 @@ namespace Bonobo.Git.Server.Helpers
                 }
                 catch (Exception exp)
                 {
+                    Trace.TraceError("GetPrincipal Group with name: " + name);
                     Trace.TraceError(exp.Message);
                     if (exp.InnerException != null)
                         Trace.TraceError(exp.InnerException.Message);
