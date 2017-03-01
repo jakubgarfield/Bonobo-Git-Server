@@ -132,6 +132,12 @@ namespace Bonobo.Git.Server.Controllers
                 return RedirectToAction("Unauthorized", "Home");
             }
 
+            if (AuthenticationSettings.DemoModeActive && User.IsInRole(Definitions.Roles.Administrator) && User.Id() == model.Id)
+            {
+                // Don't allow the admin user to be changed in demo mode
+                return RedirectToAction("Unauthorized", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 bool valid = true;
