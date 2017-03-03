@@ -40,6 +40,11 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index(GlobalSettingsModel model)
         {
+            if (AuthenticationSettings.DemoModeActive)
+            {
+                return RedirectToAction("Unauthorized", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 try

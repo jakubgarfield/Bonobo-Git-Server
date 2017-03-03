@@ -1,22 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Web;
 
 namespace Bonobo.Git.Server.Configuration
 {
-    public class AuthenticationSettings
+    public static class AuthenticationSettings
     {
         public static string MembershipService { get; private set; }
         public static string AuthenticationProvider { get; private set; }
         public static bool ImportWindowsAuthUsersAsAdmin { get; private set; }
+        public static bool DemoModeActive { get; private set; }
 
         static AuthenticationSettings()
         {
             MembershipService = ConfigurationManager.AppSettings["MembershipService"];            
             AuthenticationProvider = ConfigurationManager.AppSettings["AuthenticationProvider"];
             ImportWindowsAuthUsersAsAdmin = Convert.ToBoolean(ConfigurationManager.AppSettings["ImportWindowsAuthUsersAsAdmin"]);
+            DemoModeActive = Convert.ToBoolean(ConfigurationManager.AppSettings["demoModeActive"]);
         }
     }
 }
