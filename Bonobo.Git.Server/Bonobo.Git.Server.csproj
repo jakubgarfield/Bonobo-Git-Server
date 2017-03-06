@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\LibGit2Sharp.NativeBinaries.1.0.164\build\LibGit2Sharp.NativeBinaries.props" Condition="Exists('..\packages\LibGit2Sharp.NativeBinaries.1.0.164\build\LibGit2Sharp.NativeBinaries.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.3.2\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -79,9 +81,9 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="LibGit2Sharp, Version=0.21.0.176, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\LibGit2Sharp.0.21.0.176\lib\net40\LibGit2Sharp.dll</HintPath>
+    <Reference Include="LibGit2Sharp, Version=0.23.1.0, Culture=neutral, PublicKeyToken=7cbde695407f0333, processorArchitecture=MSIL">
+      <HintPath>..\packages\LibGit2Sharp.0.23.1\lib\net40\LibGit2Sharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.IdentityModel.Logging, Version=1.1.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -159,7 +161,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.SQLite, Version=1.0.104.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.104.0\lib\net46\System.Data.SQLite.dll</HintPath>
       <Private>True</Private>
@@ -200,7 +201,6 @@
     <Reference Include="System.Web.Abstractions">
       <Private>False</Private>
     </Reference>
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
@@ -237,7 +237,6 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="Ude, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UDE.CSharp.1.1.0\lib\Ude.dll</HintPath>
       <Private>True</Private>
@@ -527,10 +526,6 @@
     <EmbeddedResource Include="App_GlobalResources\Resources.af-ZA.resx">
       <LastGenOutput>Resources.af-ZA.designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="bin\NativeBinaries\amd64\git2-e0902fb.dll" />
-    <Content Include="bin\NativeBinaries\amd64\git2-e0902fb.pdb" />
-    <Content Include="bin\NativeBinaries\x86\git2-e0902fb.dll" />
-    <Content Include="bin\NativeBinaries\x86\git2-e0902fb.pdb" />
     <Content Include="Content\components\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.svg" />
@@ -744,13 +739,15 @@ if not exist "$(TargetDir)NativeBinaries\x86" md "$(TargetDir)NativeBinaries\x86
 xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.21.0.176\lib\net40\NativeBinaries\x86\*.*" "$(TargetDir)NativeBinaries\x86\"
 if not exist "$(TargetDir)NativeBinaries\amd64" md "$(TargetDir)NativeBinaries\amd64"
 xcopy/s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.21.0.176\lib\net40\NativeBinaries\amd64\*.*" "$(TargetDir)NativeBinaries\amd64\"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
+    <Error Condition="!Exists('..\packages\LibGit2Sharp.NativeBinaries.1.0.164\build\LibGit2Sharp.NativeBinaries.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\LibGit2Sharp.NativeBinaries.1.0.164\build\LibGit2Sharp.NativeBinaries.props'))" />
     <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\System.Data.SQLite.Core.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.0.1\build\Microsoft.Net.Compilers.props'))" />
   </Target>
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\System.Data.SQLite.Core.targets')" />
 </Project>

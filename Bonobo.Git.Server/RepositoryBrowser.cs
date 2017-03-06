@@ -28,12 +28,12 @@ namespace Bonobo.Git.Server
 
         public IEnumerable<string> GetBranches()
         {
-            return _repository.Branches.Select(s => s.Name).ToList();
+            return _repository.Branches.Select(s => s.FriendlyName).ToList();
         }
 
         public IEnumerable<string> GetTags()
         {
-            return _repository.Tags.Select(s => s.Name).OrderByDescending(s => s).ToList();
+            return _repository.Tags.Select(s => s.FriendlyName).OrderByDescending(s => s).ToList();
         }
 
         public IEnumerable<RepositoryCommitModel> GetCommits(string name, int page, int pageSize, out string referenceName, out int totalCount)
@@ -46,7 +46,7 @@ namespace Bonobo.Git.Server
             }
 
             IEnumerable<Commit> commitLogQuery = this._repository.Commits
-                .QueryBy(new CommitFilter { Since = commit, SortBy = CommitSortStrategies.Topological });
+                .QueryBy(new CommitFilter { IncludeReachableFrom = commit, SortBy = CommitSortStrategies.Topological });
 
             totalCount = commitLogQuery.Count();
 
@@ -216,7 +216,7 @@ namespace Bonobo.Git.Server
             }
 
             return _repository.Commits
-                              .QueryBy(new CommitFilter { Since = commit, SortBy = CommitSortStrategies.Topological })
+                              .QueryBy(new CommitFilter { IncludeReachableFrom = commit, SortBy = CommitSortStrategies.Topological })
                               .Where(c => c.Parents.Count() < 2 && c[path] != null && (c.Parents.Count() == 0 || c.Parents.FirstOrDefault()[path] == null || c[path].Target.Id != c.Parents.FirstOrDefault()[path].Target.Id))
                               .Select(s => ToModel(s)).ToList();
         }
@@ -232,7 +232,7 @@ namespace Bonobo.Git.Server
 
         private IEnumerable<RepositoryTreeDetailModel> GetTreeModelsWithDetails(Commit commit, IEnumerable<TreeEntry> tree, string referenceName)
         {
-            var ancestors = _repository.Commits.QueryBy(new CommitFilter { Since = commit, SortBy = CommitSortStrategies.Topological | CommitSortStrategies.Reverse }).ToList();
+            var ancestors = _repository.Commits.QueryBy(new CommitFilter { IncludeReachableFrom = commit, SortBy = CommitSortStrategies.Topological | CommitSortStrategies.Reverse }).ToList();
             var entries = tree.ToList();
             var result = new List<RepositoryTreeDetailModel>();
 
@@ -289,14 +289,14 @@ namespace Bonobo.Git.Server
 
             if (string.IsNullOrEmpty(name))
             {
-                referenceName = _repository.Head.Name;
+                referenceName = _repository.Head.FriendlyName;
                 return _repository.Head.Tip;
             }
 
             var branch = _repository.Branches[name];
             if (branch != null && branch.Tip != null)
             {
-                referenceName = branch.Name;
+                referenceName = branch.FriendlyName;
                 return branch.Tip;
             }
 
@@ -306,14 +306,14 @@ namespace Bonobo.Git.Server
                 return _repository.Lookup(name) as Commit;
             }
 
-            referenceName = tag.Name;
+            referenceName = tag.FriendlyName;
             return tag.Target as Commit;
         }
 
         private RepositoryCommitModel ToModel(Commit commit, bool withDiff = false)//, Tuple<bool, string, string> linkify)
         {
             string tagsString = string.Empty;
-            var tags = _repository.Tags.Where(o => o.Target.Sha == commit.Sha).Select(o => o.Name).ToList();
+            var tags = _repository.Tags.Where(o => o.Target.Sha == commit.Sha).Select(o => o.FriendlyName).ToList();
 
             var shortMessageDetails = RepositoryCommitModelHelpers.MakeCommitMessage(commit.Message, 50);
 
