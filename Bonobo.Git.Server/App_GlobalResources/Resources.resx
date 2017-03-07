@@ -951,4 +951,10 @@ The regular C# string formatting rules apply: To get {} in your link you need to
   <data name="Home_About_Title" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="Settings_AttemptCountOfEnableCaptcha" xml:space="preserve">
+    <value>Smart Enable Captcha</value>
+  </data>
+  <data name="Settings_AttemptCountOfEnableCaptcha_Hint" xml:space="preserve">
+    <value>Set max logon fail count to enable captcha, Set -1 to diable captcha.</value>
+  </data>
 </root>

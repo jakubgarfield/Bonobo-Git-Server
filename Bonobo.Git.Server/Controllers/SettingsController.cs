@@ -30,6 +30,7 @@ namespace Bonobo.Git.Server.Controllers
                 SiteLogoUrl = UserConfiguration.Current.SiteLogoUrl,
                 SiteFooterMessage = UserConfiguration.Current.SiteFooterMessage,
                 IsCommitAuthorAvatarVisible = UserConfiguration.Current.IsCommitAuthorAvatarVisible,
+                LogonAttemptOfEnableCaptcha =UserConfiguration.Current.LogonAttemptOfEnableCaptcha,
                 LinksRegex = UserConfiguration.Current.LinksRegex,
                 LinksUrl = UserConfiguration.Current.LinksUrl,
             });
@@ -63,6 +64,7 @@ namespace Bonobo.Git.Server.Controllers
                         UserConfiguration.Current.SiteLogoUrl = model.SiteLogoUrl;
                         UserConfiguration.Current.SiteFooterMessage = model.SiteFooterMessage;
                         UserConfiguration.Current.IsCommitAuthorAvatarVisible = model.IsCommitAuthorAvatarVisible;
+                        UserConfiguration.Current.LogonAttemptOfEnableCaptcha = model.LogonAttemptOfEnableCaptcha;
                         UserConfiguration.Current.LinksRegex = model.LinksRegex;
                         UserConfiguration.Current.LinksUrl = model.LinksUrl;
                         UserConfiguration.Current.Save();

@@ -946,4 +946,10 @@
   <data name="Home_About_Thanks_p" xml:space="preserve">
     <value>Bonobo Git Server 使用了一些免费和开放原始码的项目。 感谢所有的作者和贡献者，感谢他们的努力和付出。</value>
   </data>
+  <data name="Settings_AttemptCountOfEnableCaptcha" xml:space="preserve">
+    <value>自动启用验证码</value>
+  </data>
+  <data name="Settings_AttemptCountOfEnableCaptcha_Hint" xml:space="preserve">
+    <value>当登录失败次数超过设置值时启用验证码</value>
+  </data>
 </root>
