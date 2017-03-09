@@ -26,14 +26,18 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,6 +48,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>..\..\..\Working File\98 Source Code\PCHForcasting\PCHForecast\Pfizer.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -292,6 +297,29 @@
     <Compile Include="Helpers\MembershipHelper.cs" />
     <Compile Include="Helpers\RepositoryCommitModelHelpers.cs" />
     <Compile Include="Models\RepositoryCommitTitle.cs" />
+    <Compile Include="MvcCaptcha\CaptchaResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CaptchaResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="MvcCaptcha\CaptchaResource.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CaptchaResource.zh-CN.resx</DependentUpon>
+    </Compile>
+    <Compile Include="MvcCaptcha\CaptchaImage.cs" />
+    <Compile Include="MvcCaptcha\DefaultSmartCaptcha.cs" />
+    <Compile Include="MvcCaptcha\InternalExtension.cs" />
+    <Compile Include="MvcCaptcha\ICaptchaImageService.cs" />
+    <Compile Include="MvcCaptcha\ISmartCaptcha.cs" />
+    <Compile Include="MvcCaptcha\Level.cs" />
+    <Compile Include="MvcCaptcha\MvcCaptchaConfigSection.cs" />
+    <Compile Include="MvcCaptcha\_MvcCaptchaController.cs" />
+    <Compile Include="MvcCaptcha\MvcCaptchaHelper.cs" />
+    <Compile Include="MvcCaptcha\MvcCaptchaImage.cs" />
+    <Compile Include="MvcCaptcha\MvcCaptchaImageResult.cs" />
+    <Compile Include="MvcCaptcha\MvcCaptchaOptions.cs" />
+    <Compile Include="MvcCaptcha\ValidateMvcCaptchaAttribute.cs" />
     <Compile Include="Owin\NativeMethods.cs" />
     <Compile Include="Owin\WindowsAuthenticationDefaults.cs" />
     <Compile Include="Owin\WindowsAuthenticationExtensions.cs" />
@@ -615,6 +643,16 @@
     <Content Include="Content\fonts\opensans-regular.ttf" />
     <Content Include="Content\fonts\opensans-regular.woff" />
     <Content Include="App_Data\.gitconfig" />
+    <EmbeddedResource Include="MvcCaptcha\CaptchaResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CaptchaResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>TSharp.Core</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MvcCaptcha\CaptchaResource.zh-CN.resx">
+      <Generator>ResXFileCodeGeneratorEx</Generator>
+      <LastGenOutput>CaptchaResource.zh-CN.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <Content Include="Views\Repository\Blob.cshtml" />
     <Content Include="Views\Repository\Clone.cshtml" />

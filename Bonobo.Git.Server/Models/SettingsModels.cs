@@ -42,6 +42,9 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Settings_Global_IsCommitAuthorAvatarVisible")]
         public bool IsCommitAuthorAvatarVisible { get; set; }
 
+        [Display(ResourceType = typeof(Resources), Name = "Settings_AttemptCountOfEnableCaptcha")]
+        public int LogonAttemptOfEnableCaptcha { get; set; }
+
         [Display(ResourceType = typeof(Resources), Name = "Settings_Global_LinksUrl")]
         public string LinksUrl { get; set; }
 
@@ -49,5 +52,7 @@ namespace Bonobo.Git.Server.Models
         [IsValidRegex]
         [Display(ResourceType = typeof(Resources), Name = "Settings_Global_LinksRegex")]
         public string LinksRegex { get; set; }
+
+
     }
 }

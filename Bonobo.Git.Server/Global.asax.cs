@@ -29,6 +29,7 @@ using Microsoft.Practices.Unity.Mvc;
 using System.Web.Configuration;
 using System.Security.Claims;
 using System.Web.Helpers;
+using TSharp.Core.Mvc;
 
 namespace Bonobo.Git.Server
 {
@@ -151,6 +152,9 @@ namespace Bonobo.Git.Server
                     throw new ArgumentException("Missing declaration in web.config", "AuthenticationProvider");
             }
 
+            var smartCaptcha = new DefaultSmartCaptcha(ctx => UserConfiguration.Current.LogonAttemptOfEnableCaptcha);
+
+            container.RegisterInstance<ISmartCaptcha>(smartCaptcha);
             container.RegisterType<IGitRepositoryLocator, ConfigurationBasedRepositoryLocator>(
                 new InjectionFactory((ctr, type, name) => {
                     return new ConfigurationBasedRepositoryLocator(UserConfiguration.Current.Repositories);

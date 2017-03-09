@@ -60,6 +60,8 @@ namespace Bonobo.Git.Server.Configuration
             }
         }
 
+        public int LogonAttemptOfEnableCaptcha { get; set; }
+
         public string GetSiteTitle()
         {
             return !string.IsNullOrWhiteSpace(this.SiteTitle) ? this.SiteTitle : Resources.Layout_Title;

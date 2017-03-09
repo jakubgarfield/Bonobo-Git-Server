@@ -21,6 +21,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Practices.Unity;
 using Bonobo.Git.Server.Owin.Windows;
 using System.Configuration;
+using TSharp.Core.Mvc;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -168,6 +169,7 @@ namespace Bonobo.Git.Server.Controllers
 
         public ActionResult LogOn(string returnUrl)
         {
+            ViewBag.EnableCaptcha = Judger.Enable(HttpContext);
             return View(new LogOnModel { ReturnUrl = returnUrl });
         }
 
@@ -176,8 +178,11 @@ namespace Bonobo.Git.Server.Controllers
             return View("LogOn", new LogOnModel { ReturnUrl = returnUrl, DatabaseResetCode = -1 });
         }
 
+        [OptionalDependency]
+        public ISmartCaptcha Judger { get; set; }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateMvcCaptcha("Captcha")]
         public ActionResult LogOn(LogOnModel model)
         {
             if (ModelState.IsValid)
@@ -186,6 +191,7 @@ namespace Bonobo.Git.Server.Controllers
                 switch (result)
                 {
                     case ValidationResult.Success:
+                        DefaultSmartCaptcha.LoginSuccess(this.HttpContext);
                         AuthenticationProvider.SignIn(model.Username, Url.IsLocalUrl(model.ReturnUrl) ? model.ReturnUrl : Url.Action("Index", "Home"), model.RememberMe);
                         Response.AppendToLog("SUCCESS");
                         if (Request.IsLocal && model.DatabaseResetCode > 0 && model.Username == "admin" && ConfigurationManager.AppSettings["AllowDBReset"] == "true" )
@@ -196,12 +202,13 @@ namespace Bonobo.Git.Server.Controllers
                     case ValidationResult.NotAuthorized:
                         return new RedirectResult("~/Home/Unauthorized");
                     default:
+                        DefaultSmartCaptcha.IncreaseLoginFail(this.HttpContext);
                         ModelState.AddModelError("", Resources.Home_LogOn_UsernamePasswordIncorrect);
                         Response.AppendToLog("FAILURE");
                         break;
                 }                
             }
-
+            ViewBag.EnableCaptcha = Judger.Enable(HttpContext);
             return View(model);
         }
 
