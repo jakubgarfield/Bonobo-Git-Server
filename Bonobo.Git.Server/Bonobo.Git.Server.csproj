@@ -525,8 +525,6 @@
     <EmbeddedResource Include="App_GlobalResources\Resources.af-ZA.resx">
       <LastGenOutput>Resources.af-ZA.designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="bin\NativeBinaries\amd64\git2-e0902fb.dll" />
-    <Content Include="bin\NativeBinaries\x86\git2-e0902fb.dll" />
     <Content Include="Content\components\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\components\font-awesome\fonts\fontawesome-webfont.svg" />
@@ -735,8 +733,11 @@
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>if not exist "$(TargetDir)NativeBinaries" md "$(TargetDir)NativeBinaries"
+if not exist "$(TargetDir)NativeBinaries\x86" md "$(TargetDir)NativeBinaries\x86"
+xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.21.0.176\lib\net40\NativeBinaries\x86\*.*" "$(TargetDir)NativeBinaries\x86\"
+if not exist "$(TargetDir)NativeBinaries\amd64" md "$(TargetDir)NativeBinaries\amd64"
+xcopy/s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.21.0.176\lib\net40\NativeBinaries\amd64\*.*" "$(TargetDir)NativeBinaries\amd64\"</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
