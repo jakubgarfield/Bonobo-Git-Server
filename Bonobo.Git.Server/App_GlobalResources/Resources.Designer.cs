@@ -567,6 +567,24 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Thanks!.
+        /// </summary>
+        public static string Home_About_Thanks {
+            get {
+                return ResourceManager.GetString("Home_About_Thanks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string Home_About_Title {
+            get {
+                return ResourceManager.GetString("Home_About_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occurred when processing your request. Please try again or contact the system administrator..
         /// </summary>
         public static string Home_Error_Text {
@@ -1026,7 +1044,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allows anonymous users to push to this repository if anonymous acces is granted. If &quot;Global&quot; is selected the option set under your global settings is used..
+        ///   Looks up a localized string similar to Allows anonymous users to push to this repository if anonymous access is granted. If &quot;Global&quot; is selected the option set under your global settings is used..
         /// </summary>
         public static string Repository_AllowAnonymousPushHint {
             get {
@@ -1265,6 +1283,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Repository_Commits_Title {
             get {
                 return ResourceManager.GetString("Repository_Commits_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back.
+        /// </summary>
+        public static string Repository_Create_Back {
+            get {
+                return ResourceManager.GetString("Repository_Create_Back", resourceCulture);
             }
         }
         
@@ -2084,7 +2111,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         ///The pattern is {0} for the whole regex match.
         ///{1} onwards is each capturing group.
         ///
-        ///The regulare C# string formatting rules apply: To get {} in your link you need to write {{}}..
+        ///The regular C# string formatting rules apply: To get {} in your link you need to write {{}}..
         /// </summary>
         public static string Settings_Global_LinksUrl_Hint {
             get {
