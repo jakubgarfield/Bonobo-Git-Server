@@ -93,21 +93,15 @@ namespace Bonobo.Git.Server.Security
 
         public UserModel GetUserModel(string username)
         {
-            if (!UsernameContainsDomain(username))
-            {
-                using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain))
-                using (UserPrincipal user = UserPrincipal.FindByIdentity(principalContext, username))
-                {
-                    // assuming all users have a guid on AD
-                    return ADBackend.Instance.Users.FirstOrDefault(n => n.Id == user.Guid.Value);
-                }
-            }
-            else if (!string.IsNullOrEmpty(username))
-            {
-                return ADBackend.Instance.Users.Where(x => x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-            }
+            var domain = username.GetDomain();
+            if (String.IsNullOrWhiteSpace(domain)) domain = ActiveDirectorySettings.DefaultDomain;
 
-            return null;
+            using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, domain))
+            using (UserPrincipal user = UserPrincipal.FindByIdentity(principalContext, username.StripDomain()))
+            {
+                // assuming all users have a guid on AD
+                return ADBackend.Instance.Users.FirstOrDefault(n => n.Id == user.Guid.Value);
+            }
         }
 
         public UserModel GetUserModel(Guid id)

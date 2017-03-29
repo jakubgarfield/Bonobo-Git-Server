@@ -172,23 +172,43 @@ namespace Bonobo.Git.Server.Data
 
         private void UpdateUsers()
         {
+            var gitUsersByDomain = Users.ToLookup(x => x.Username.GetDomain(), StringComparer.OrdinalIgnoreCase);
             try
             {
+                ILookup<string, string> groupUsersByDomain;
                 using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain))
                 using (GroupPrincipal memberGroup = GetMembersGroup(principalContext))
                 {
-                    foreach (Guid Id in Users.Select(x => x.Id).Where(x => UserPrincipal.FindByIdentity(principalContext, IdentityType.Guid, x.ToString()) == null))
+                    groupUsersByDomain = memberGroup.GetMembers(true).OfType<UserPrincipal>().Select(x => x.UserPrincipalName).Where(x => x != null).ToLookup(x=>x.GetDomain(), StringComparer.OrdinalIgnoreCase);
+                }
+
+                var allDomains = groupUsersByDomain.Select(x=>x.Key).Union(gitUsersByDomain.Select(x=>x.Key)).Distinct(StringComparer.OrdinalIgnoreCase);
+
+                foreach (var domain in allDomains)
+                {
+                    var gitUsers = gitUsersByDomain[domain].ToDictionary(x=>x.Username, StringComparer.OrdinalIgnoreCase);
+                    var groupUsers = new HashSet<string>(groupUsersByDomain[domain], StringComparer.OrdinalIgnoreCase);
+
+                    foreach (var gitUser in gitUsers.Values.Where(x=>!groupUsers.Contains(x.Username)))
                     {
-                        Users.Remove(Id);
+                        Users.Remove(gitUser);
                     }
-                    foreach (string username in memberGroup.GetMembers(true).OfType<UserPrincipal>().Select(x => x.UserPrincipalName).Where(x => x != null))
-                    {
-                        using (UserPrincipal principal = UserPrincipal.FindByIdentity(principalContext, IdentityType.UserPrincipalName, username))
+
+                    using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, domain))
+                    { 
+                        foreach (var groupUser in groupUsers)
                         {
-                            UserModel user = GetUserModelFromPrincipal(principal);
-                            if (user != null)
+                            using (var principal = UserPrincipal.FindByIdentity(principalContext, IdentityType.UserPrincipalName, groupUser))
                             {
-                                Users.AddOrUpdate(user);
+                                UserModel user = GetUserModelFromPrincipal(principal);
+                                if (user != null)
+                                {
+                                    Users.AddOrUpdate(user);
+                                }
+                                else if(gitUsers.ContainsKey(groupUser))
+                                {
+                                    Users.Remove(gitUsers[groupUser]);
+                                }
                             }
                         }
                     }

@@ -272,7 +272,7 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
                         dc = new PrincipalContext(ContextType.Domain, domain);
                         domains[domain] = dc;
                     }
-                    var user = UserPrincipal.FindByIdentity(dc, entry.Username);
+                    var user = UserPrincipal.FindByIdentity(dc, IdentityType.UserPrincipalName, entry.Username);
                     // if the user no longer exists
                     // it means he cannot login anymore so it is safe to assign
                     // any new guid to him
