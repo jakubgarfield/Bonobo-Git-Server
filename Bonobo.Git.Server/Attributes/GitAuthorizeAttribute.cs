@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.DirectoryServices.AccountManagement;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
+using Bonobo.Git.Server.Configuration;
 
 using Microsoft.Practices.Unity;
 
@@ -109,11 +110,10 @@ namespace Bonobo.Git.Server
 
         private bool IsWindowsUserAuthorized(HttpContextBase httpContext, string username, string password)
         {
-            var domain = username.GetDomain();
             username = username.StripDomain();
             try
             {
-                using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain))
+                using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain))
                 {
                     var adUser = UserPrincipal.FindByIdentity(pc, username);
                     if (adUser != null)
