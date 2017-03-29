@@ -6,13 +6,13 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 ## Version 6.0.0
 
-**TBD 2017**
+**29 March 2017**
 
 ### Compatibility issues
 
 * This version adds column to several tables in the database. This makes it
-incompatible with previous versions of Bonobo. Please ensure that you have a 
-backup of your App_Data folder before you update.
+incompatible with previous versions of Bonobo. **Please ensure that you have a 
+backup of your App_Data folder before you update.**
 
 ### Features
 
