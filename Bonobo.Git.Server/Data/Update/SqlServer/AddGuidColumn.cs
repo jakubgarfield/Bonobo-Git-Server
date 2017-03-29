@@ -6,6 +6,7 @@ using System;
 using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
+using Bonobo.Git.Server.Helpers;
 
 namespace Bonobo.Git.Server.Data.Update.SqlServer
 {
@@ -263,21 +264,12 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
         private void CopyUsers()
         {
             var users = _db.SqlQuery<OldUser>("Select * from oUser;").ToList();
-            Dictionary<string, PrincipalContext> domains = new Dictionary<string, PrincipalContext>();
             foreach (var entry in users)
             {
                 Guid guid = Guid.NewGuid();
                 if (AuthProvider is WindowsAuthenticationProvider)
                 {
-                    var domain = entry.Username.GetDomain(); // not sure what to do if domain is not found...
-                    PrincipalContext dc;
-                    
-                    if (!domains.TryGetValue(domain, out dc))
-                    {
-                        dc = new PrincipalContext(ContextType.Domain, domain);
-                        domains[domain] = dc;
-                    }
-                    var user = UserPrincipal.FindByIdentity(dc, entry.Username);
+                    var user = ADHelper.GetUserPrincipal(entry.Username);
                     // if the user no longer exists
                     // it means he cannot login anymore so it is safe to assign
                     // any new guid to him
@@ -418,5 +410,7 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
 
         public string Command { get { return null; } }
         public string Precondition { get { return null; } }
+
+        public PrincipalContext ADPricipalContextHelper { get; private set; }
     }
 }

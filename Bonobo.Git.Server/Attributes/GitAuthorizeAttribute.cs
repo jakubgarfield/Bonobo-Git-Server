@@ -9,6 +9,7 @@ using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
 
 using Microsoft.Practices.Unity;
+using Bonobo.Git.Server.Helpers;
 
 namespace Bonobo.Git.Server
 {
@@ -91,44 +92,11 @@ namespace Bonobo.Git.Server
 
             if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password))
             {
-                if (AuthenticationProvider is WindowsAuthenticationProvider)
+                if (MembershipService.ValidateUser(username, password) == ValidationResult.Success)
                 {
-                    return IsWindowsUserAuthorized(httpContext, username, password);
+                    httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
+                    return true;
                 }
-                else
-                {
-                    if (MembershipService.ValidateUser(username, password) == ValidationResult.Success)
-                    {
-                        httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        private bool IsWindowsUserAuthorized(HttpContextBase httpContext, string username, string password)
-        {
-            var domain = username.GetDomain();
-            username = username.StripDomain();
-            try
-            {
-                using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain))
-                {
-                    var adUser = UserPrincipal.FindByIdentity(pc, username);
-                    if (adUser != null)
-                    {
-                        if (pc.ValidateCredentials(username, password, ContextOptions.Negotiate))
-                        {
-                            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username.Replace("\\", "!"))));
-                            return true;
-                        }
-                    }
-                }
-            }
-            catch (PrincipalException)
-            {
-                // let it fail
             }
             return false;
         }

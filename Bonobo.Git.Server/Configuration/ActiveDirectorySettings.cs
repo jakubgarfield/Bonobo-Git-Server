@@ -8,7 +8,6 @@ namespace Bonobo.Git.Server.Configuration
 {
     public class ActiveDirectorySettings
     {
-        public static string DefaultDomain { get; private set; }
         public static string MemberGroupName { get; private set; }
         public static string BackendPath { get; private set; }
         public static IDictionary<string, string> RoleNameToGroupNameMapping { get; private set; }
@@ -45,7 +44,6 @@ namespace Bonobo.Git.Server.Configuration
 
         public static void LoadSettings()
         {
-            DefaultDomain = ConfigurationManager.AppSettings["ActiveDirectoryDefaultDomain"];
             MemberGroupName = ConfigurationManager.AppSettings["ActiveDirectoryMemberGroupName"];
             BackendPath = ConfigurationManager.AppSettings["ActiveDirectoryBackendPath"];
 

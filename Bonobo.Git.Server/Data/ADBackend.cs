@@ -11,6 +11,7 @@ using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Security;
 using System.Threading;
 using Microsoft.Practices.Unity;
+using Bonobo.Git.Server.Helpers;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -117,18 +118,6 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        private GroupPrincipal GetMembersGroup(PrincipalContext principalContext)
-        {
-            GroupPrincipal result = null;
-
-            if (!String.IsNullOrEmpty(ActiveDirectorySettings.MemberGroupName))
-            {
-                result = GroupPrincipal.FindByIdentity(principalContext, IdentityType.Name, ActiveDirectorySettings.MemberGroupName);
-            }
-
-            return result;
-        }
-
         private UserModel GetUserModelFromPrincipal(UserPrincipal user)
         {
             UserModel result = null;
@@ -174,16 +163,16 @@ namespace Bonobo.Git.Server.Data
         {
             try
             {
-                using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain))
-                using (GroupPrincipal memberGroup = GetMembersGroup(principalContext))
+                GroupPrincipal group;
+                using (var pc = ADHelper.GetMembersGroup(out group))
                 {
-                    foreach (Guid Id in Users.Select(x => x.Id).Where(x => UserPrincipal.FindByIdentity(principalContext, IdentityType.Guid, x.ToString()) == null))
+                    foreach (Guid Id in Users.Select(x => x.Id).Where(x => ADHelper.GetUserPrincipal(x) == null))
                     {
                         Users.Remove(Id);
                     }
-                    foreach (string username in memberGroup.GetMembers(true).OfType<UserPrincipal>().Select(x => x.UserPrincipalName).Where(x => x != null))
+                    foreach (string username in group.GetMembers(true).OfType<UserPrincipal>().Select(x => x.UserPrincipalName).Where(x => x != null))
                     {
-                        using (UserPrincipal principal = UserPrincipal.FindByIdentity(principalContext, IdentityType.UserPrincipalName, username))
+                        using (var principal = ADHelper.GetUserPrincipal(username))
                         {
                             UserModel user = GetUserModelFromPrincipal(principal);
                             if (user != null)
@@ -210,30 +199,29 @@ namespace Bonobo.Git.Server.Data
             if(MembershipService == null)
                 MembershipService = new ADMembershipService();
 
-            using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain))
+            foreach (string teamName in ActiveDirectorySettings.TeamNameToGroupNameMapping.Keys)
             {
-                foreach (string teamName in ActiveDirectorySettings.TeamNameToGroupNameMapping.Keys)
+                try
                 {
-                    try
+                    GroupPrincipal group;
+                    using (var pc = ADHelper.GetPrincipalGroup(ActiveDirectorySettings.TeamNameToGroupNameMapping[teamName], out group))
                     {
-                        using (GroupPrincipal group = GroupPrincipal.FindByIdentity(principalContext, IdentityType.Name, ActiveDirectorySettings.TeamNameToGroupNameMapping[teamName]))
+
+                        TeamModel teamModel = new TeamModel() {
+                            Id = group.Guid.Value,
+                            Description = group.Description,
+                            Name = teamName,
+                            Members = group.GetMembers(true).Select(x => MembershipService.GetUserModel(x.Guid.Value)).ToArray()
+                        };
+                        if (teamModel != null)
                         {
-                            TeamModel teamModel = new TeamModel() {
-                                Id = group.Guid.Value,
-                                Description = group.Description,
-                                Name = teamName,
-                                Members = group.GetMembers(true).Select(x => MembershipService.GetUserModel(x.Guid.Value)).ToArray()
-                            };
-                            if (teamModel != null)
-                            {
-                                Teams.AddOrUpdate(teamModel);
-                            }
+                            Teams.AddOrUpdate(teamModel);
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        LogException(ex);
-                    }
+                }
+                catch (Exception ex)
+                {
+                    LogException(ex);
                 }
             }
         }
@@ -245,10 +233,11 @@ namespace Bonobo.Git.Server.Data
                 Roles.Remove(role.Id);
             }
 
-            PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain);
+            
             foreach (string roleName in ActiveDirectorySettings.RoleNameToGroupNameMapping.Keys)
             {
-                GroupPrincipal group = GroupPrincipal.FindByIdentity(principalContext, IdentityType.Name, ActiveDirectorySettings.RoleNameToGroupNameMapping[roleName]);
+                GroupPrincipal group;
+                var pc = ADHelper.GetPrincipalGroup(ActiveDirectorySettings.RoleNameToGroupNameMapping[roleName], out group);
 
                 RoleModel roleModel = new RoleModel()
                 {

@@ -172,6 +172,7 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.104.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.ComponentModel.DataAnnotations">
@@ -297,6 +298,7 @@
     <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommit.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommitSignature.cs" />
     <Compile Include="Git\GitService\ReplicatingStream.cs" />
+    <Compile Include="Helpers\ADHelper.cs" />
     <Compile Include="Helpers\MembershipHelper.cs" />
     <Compile Include="Helpers\RepositoryCommitModelHelpers.cs" />
     <Compile Include="Models\RepositoryCommitTitle.cs" />
