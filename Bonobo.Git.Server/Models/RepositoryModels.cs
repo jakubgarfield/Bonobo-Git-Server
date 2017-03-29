@@ -299,6 +299,91 @@ namespace Bonobo.Git.Server.Models
         public IEnumerable<string> Links { get; set; }
     }
 
+    public class RepositoryCompareModel
+    {
+        public RepositoryCompareModel()
+        {
+            Name = "";
+            ID = "0000000";
+            TreeID = "0000000";
+            Parents = new string[0];
+            Author = "";
+            AuthorEmail = "";
+            AuthorAvatar = "";
+            MessageShort = "";
+            Links = new List<string>();
+            Tags = new List<string>();
+            Changes = new List<RepositoryCommitChangeModel>();
+            Notes = new List<RepositoryCommitNoteModel>();
+        }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Compare_Commit1")]
+        public string Commit1 { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Compare_Commit2")]
+        public string Commit2 { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Compare_FilePath")]
+        public string FilePath { get; set; }
+
+        public string Name { get; set; }
+        public RepositoryLogoDetailModel Logo { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_ID")]
+        public string ID { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_TreeID")]
+        public string TreeID { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Parents")]
+        public string[] Parents { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Author")]
+        public string Author { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_AuthorEmail")]
+        public string AuthorEmail { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_AuthorAvatar")]
+        public string AuthorAvatar { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Date")]
+        public DateTime Date { get; set; }
+
+        private string _message;
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Message")]
+
+        public string Message
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(_message))
+                {
+                    return Resources.Repository_Commit_NoMessageDeclared;
+                }
+                else
+                {
+                    return _message;
+                }
+            }
+            set
+            {
+                _message = value;
+            }
+        }
+
+        public string MessageShort { get; set; }
+
+        public IEnumerable<string> Tags { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Changes")]
+        public IEnumerable<RepositoryCommitChangeModel> Changes { get; set; }
+
+        public IEnumerable<RepositoryCommitNoteModel> Notes { get; set; }
+
+        public IEnumerable<string> Links { get; set; }
+    }
+
     public class RepositoryBlameModel
     {
         public string Name { get; set; }
