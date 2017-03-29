@@ -9,6 +9,8 @@ using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
 
 using Microsoft.Practices.Unity;
+using Microsoft.Owin.Security;
+using Bonobo.Git.Server.Owin.Windows;
 
 namespace Bonobo.Git.Server
 {
@@ -67,11 +69,25 @@ namespace Bonobo.Git.Server
                 }
                 else
                 {
-                    // If we're not even allowed to do an anonymous pull, then we should bounce this now, 
-                    // and tell the other end to try again with an auth header included next time
-                    httpContext.Response.Headers.Add("WWW-Authenticate", "Basic realm=\"Bonobo Git\"");
-                    filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-                    return;
+                    if (AuthenticationProvider is WindowsAuthenticationProvider)
+                    {
+                        AuthenticationProperties authenticationProperties = new AuthenticationProperties()
+                        {
+                            RedirectUri = httpContext.Request.Path
+                        };
+
+                        httpContext.Request.GetOwinContext().Authentication.Challenge(authenticationProperties, WindowsAuthenticationDefaults.AuthenticationType);
+                        return;
+                    }
+                    else
+                    {
+
+                        // If we're not even allowed to do an anonymous pull, then we should bounce this now, 
+                        // and tell the other end to try again with an auth header included next time
+                        httpContext.Response.Headers.Add("WWW-Authenticate", "Basic realm=\"Bonobo Git\"");
+                        filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+                        return;
+                    }
                 }
             }
 
@@ -110,17 +126,17 @@ namespace Bonobo.Git.Server
         private bool IsWindowsUserAuthorized(HttpContextBase httpContext, string username, string password)
         {
             var domain = username.GetDomain();
-            username = username.StripDomain();
+            var authUsername = username.StripDomain();
             try
             {
                 using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain))
                 {
-                    var adUser = UserPrincipal.FindByIdentity(pc, username);
+                    var adUser = UserPrincipal.FindByIdentity(pc, authUsername);
                     if (adUser != null)
                     {
-                        if (pc.ValidateCredentials(username, password, ContextOptions.Negotiate))
+                        if (pc.ValidateCredentials(authUsername, password, ContextOptions.Negotiate))
                         {
-                            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username.Replace("\\", "!"))));
+                            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
                             return true;
                         }
                     }
