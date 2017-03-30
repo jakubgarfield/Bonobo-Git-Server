@@ -966,4 +966,10 @@ The regular C# string formatting rules apply: To get {} in your link you need to
   <data name="Repository_Compare_Submit" xml:space="preserve">
     <value>Compare</value>
   </data>
+  <data name="Repository_Compare_DefferenceBetween" xml:space="preserve">
+    <value>Defference Between</value>
+  </data>
+  <data name="Repository_Compare_Title" xml:space="preserve">
+    <value>Compare</value>
+  </data>
 </root>

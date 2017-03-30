@@ -4,11 +4,19 @@
     ViewBag.Title = Resources.Repository_Commit_Detail;
     Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
 }
-@helper HeaderForDiff(RepositoryCommitChangeModel item)
+@helper HeaderForDiff(RepositoryCommitChangeModel item, bool withDiff)
 {
     <div class="item">
         <p>
-            <a href="@("#change-" + item.ChangeId)"><i class="fa fa-share-square-o" title="Go To Change"></i></a>
+            @if (withDiff)
+            {
+                <a href="@("#link-" + item.ChangeId)"><i class="fa fa-share-square-o" title="Go To Link"></i></a>
+            }
+            else
+            {
+                <a href="@("#change-" + item.ChangeId)"><i class="fa fa-share-square-o" title="Go To Change"></i></a>
+            }
+            
             @if (item.Status == LibGit2Sharp.ChangeKind.Added)
             {
                 <text><i class="fa fa-plus-square-o" title="@Resources.Repository_Commit_Added"></i></text>
@@ -35,7 +43,7 @@
             }
             @if (item.Status != LibGit2Sharp.ChangeKind.Deleted)
             {
-                @Html.ActionLink(item.Path, "Blob", new { id = ViewBag.ID, encodedPath = PathEncoder.Encode(item.Path, allowSlash: true), encodedName = PathEncoder.Encode(Model.ID) })
+                @Html.ActionLink(item.Path, "Blob", new { id = ViewBag.ID, encodedPath = PathEncoder.Encode(item.Path, allowSlash: true), encodedName = PathEncoder.Encode(Model.ID) }, new { id = (withDiff ? "change-" : "link-") + item.ChangeId })
             }
             else
             {
@@ -56,7 +64,7 @@
             <h3>@Model.GetType().GetDisplayValue("Changes")</h3>
             @foreach (var item in Model.Changes)
             {
-                @HeaderForDiff(item)
+                @HeaderForDiff(item, false)
             }
         </div>
 
@@ -66,7 +74,7 @@
             {
                 <div class="blob" id="@("change-"+ item.ChangeId)">
                     <div class="controls">
-                        @HeaderForDiff(item)
+                        @HeaderForDiff(item, true)
                     </div>
                     <pre><code class="language diff">@item.Patch</code></pre>
                 </div>

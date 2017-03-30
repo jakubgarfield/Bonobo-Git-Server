@@ -83,7 +83,7 @@ tfoot td { text-align: center; border-bottom: none !important; }
 
 .repository-menu { margin-bottom: 0em; }
 .repository-menu a:hover { text-decoration: none; }
-.Detail .repository-menu .detail, .Tree .repository-menu .browser, .Blame .repository-menu .browser, .Blob .repository-menu .browser, .Commit .repository-menu .commits, .Commits .repository-menu .commits { color: #4183c4; }
+.Detail .repository-menu .detail, .Tree .repository-menu .browser, .Blame .repository-menu .browser, .Blob .repository-menu .browser, .Commit .repository-menu .commits, .Commits .repository-menu .commits, .Compare .repository-menu .compare { color: #4183c4; }
 
 .Repository div.detail { margin-top: 2em; }
 
@@ -165,6 +165,13 @@ Tags .tag a { background-color: rgba(148, 190, 214, 1); border-radius: 5px; colo
 .Commit .blob .controls { text-align: left;}
 .Commit .blob .controls p { margin: 0; padding: 0.5em 1em;}
 .Commit .diff h3 { margin-top: 1.5em; }
+
+.changes em { font-style: normal;}
+.changes .item { font-family: Consolas, monospace; font-size: 0.8em;}
+.changes .item .count { text-align: right;}
+.changes .diff h3 { margin-top: 1.5em; }
+
+.Compare .fieldset { margin-top: 1.5em; }
 
 .commit .notes p { font-size: 0.7em; }
 .commit .commitdate { font-size: 0.7em}

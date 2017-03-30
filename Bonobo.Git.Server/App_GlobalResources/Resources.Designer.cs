@@ -1305,6 +1305,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         }
         
         /// <summary>
+        ///   查找类似 Defference Between 的本地化字符串。
+        /// </summary>
+        public static string Repository_Compare_DefferenceBetween {
+            get {
+                return ResourceManager.GetString("Repository_Compare_DefferenceBetween", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 FilePath 的本地化字符串。
         /// </summary>
         public static string Repository_Compare_FilePath {
@@ -1319,6 +1328,15 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Repository_Compare_Submit {
             get {
                 return ResourceManager.GetString("Repository_Compare_Submit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Compare 的本地化字符串。
+        /// </summary>
+        public static string Repository_Compare_Title {
+            get {
+                return ResourceManager.GetString("Repository_Compare_Title", resourceCulture);
             }
         }
         

@@ -251,20 +251,26 @@ namespace Bonobo.Git.Server
                 Commit1 = name1,
                 Commit2 = name2,
                 FilePath = path,
-                Author = commit2.Author.Name,
-                AuthorEmail = commit2.Author.Email,
-                AuthorAvatar = commit2.Author.GetAvatar(),
-                Date = commit2.Author.When.LocalDateTime,
-                ID = commit2.Sha,
-                TreeID = commit2.Tree.Sha,
-                Parents = commit2.Parents.Select(i => i.Sha).ToArray(),
-                Notes = (from n in commit2.Notes select new RepositoryCommitNoteModel(n.Message, n.Namespace)).ToList(),
-                Message = commit1.Sha.Substring(0, 7) + " : " + commit2.Sha.Substring(0, 7)
+                Commit1Model = ToMiniModel(commit1),
+                Commit2Model = ToMiniModel(commit2)
             };
 
-            var filePaths = new List<string> { path };
-            TreeChanges changes = !commit1.Parents.Any() ? _repository.Diff.Compare<TreeChanges>(commit1.Tree, commit2.Tree, filePaths) : _repository.Diff.Compare<TreeChanges>(commit1.Parents.First().Tree, commit2.Tree, filePaths);
-            Patch patches = !commit1.Parents.Any() ? _repository.Diff.Compare<Patch>(commit1.Tree, commit2.Tree, filePaths) : _repository.Diff.Compare<Patch>(commit1.Parents.First().Tree, commit2.Tree, filePaths);
+            var filePaths = new List<string>();
+            if (!string.IsNullOrWhiteSpace(path))
+                filePaths.Add(path);
+
+            TreeChanges changes = null;
+            Patch patches = null;
+            if (filePaths.Count > 0)
+            {
+                changes = !commit1.Parents.Any() ? _repository.Diff.Compare<TreeChanges>(commit1.Tree, commit2.Tree, filePaths) : _repository.Diff.Compare<TreeChanges>(commit1.Parents.First().Tree, commit2.Tree, filePaths);
+                patches = !commit1.Parents.Any() ? _repository.Diff.Compare<Patch>(commit1.Tree, commit2.Tree, filePaths) : _repository.Diff.Compare<Patch>(commit1.Parents.First().Tree, commit2.Tree, filePaths);
+            }
+            else
+            {
+                changes = !commit1.Parents.Any() ? _repository.Diff.Compare<TreeChanges>(commit1.Tree, commit2.Tree) : _repository.Diff.Compare<TreeChanges>(commit1.Parents.First().Tree, commit2.Tree);
+                patches = !commit1.Parents.Any() ? _repository.Diff.Compare<Patch>(commit1.Tree, commit2.Tree) : _repository.Diff.Compare<Patch>(commit1.Parents.First().Tree, commit2.Tree);
+            }
 
             model.Changes = changes.OrderBy(s => s.Path).Select(i =>
             {
@@ -276,8 +282,7 @@ namespace Bonobo.Git.Server
                     Status = i.Status,
                     LinesAdded = patch.LinesAdded,
                     LinesDeleted = patch.LinesDeleted,
-                    Patch = patch.Patch,
-
+                    Patch = patch.Patch
                 };
             });
 
@@ -417,6 +422,22 @@ namespace Bonobo.Git.Server
 
                 };
             });
+
+            return model;
+        }
+
+        private RepositoryCommitModel ToMiniModel(Commit commit)//, Tuple<bool, string, string> linkify)
+        {
+            var model = new RepositoryCommitModel
+            {
+                Author = commit.Author.Name,
+                AuthorEmail = commit.Author.Email,
+                AuthorAvatar = commit.Author.GetAvatar(),
+                Date = commit.Author.When.LocalDateTime,
+                ID = commit.Sha,
+                TreeID = commit.Tree.Sha,
+                Parents = commit.Parents.Select(i => i.Sha).ToArray()
+            };
 
             return model;
         }
