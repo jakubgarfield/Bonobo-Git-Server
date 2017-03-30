@@ -629,6 +629,7 @@
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <Content Include="Views\Repository\Tags.cshtml" />
     <Content Include="Views\Repository\_Tag.cshtml" />
+    <Content Include="Views\Repository\Compare.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
