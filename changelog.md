@@ -3,6 +3,15 @@ title: Changelog
 description: Tracks changes and bug fixes between different versions of Bonobo Git Server for Windows
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
+## New Version
+
+### Features
+
+* compare the difference between 2 commit filter with a filepath
+* commit view: go to change, add back to link
+
+* 增加Compare功能：比较两次提交之间的所有变更详情，可以通过文件名或文件夹过滤。
+* 优化Commit导航：patch窗口上的图标可以快速返回页面顶部的changes导航链接。
 
 ## Version 6.0.0
 
