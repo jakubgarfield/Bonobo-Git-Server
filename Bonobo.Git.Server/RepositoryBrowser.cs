@@ -9,6 +9,7 @@ using System.IO;
 using Bonobo.Git.Server.Helpers;
 using System.Text.RegularExpressions;
 using Bonobo.Git.Server.Configuration;
+using Serilog;
 
 namespace Bonobo.Git.Server
 {
@@ -20,6 +21,7 @@ namespace Bonobo.Git.Server
         {
             if (!Repository.IsValid(repositoryPath))
             {
+                Log.Error("Invalid repo path {RespositoryPath}", repositoryPath);
                 throw new ArgumentException("Repository is not valid.", "repositoryPath");
             }
 
