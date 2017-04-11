@@ -12,6 +12,7 @@ using Bonobo.Git.Server.Security;
 using System.Threading;
 using Microsoft.Practices.Unity;
 using Bonobo.Git.Server.Helpers;
+using Serilog;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -251,6 +252,7 @@ namespace Bonobo.Git.Server.Data
 
         private void LogException(Exception exception)
         {
+            Log.Error(exception, "AD Exception");
             Trace.TraceError("{0}: ADBackend Exception: {1}", DateTime.Now, exception);
         }
     }

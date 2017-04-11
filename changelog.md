@@ -4,6 +4,23 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 6.1
+
+**April 2017?**
+
+### Features
+
+* Enhanced logging - daily rotating log files written to App_Data\Logs, log level controllable in Web.Config
+*
+
+### Other improvements 
+
+* Improved French translation #670
+* Updated libgit2sharp #650
+* Updated CommonMark #651
+
+
+
 ## Version 6.0.0
 
 **29 March 2017**

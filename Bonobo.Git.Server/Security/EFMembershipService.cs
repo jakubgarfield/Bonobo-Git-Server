@@ -6,6 +6,7 @@ using Bonobo.Git.Server.Models;
 using System.Security.Cryptography;
 using System.Data.Entity.Core;
 using Microsoft.Practices.Unity;
+using Serilog;
 
 namespace Bonobo.Git.Server.Security
 {
@@ -44,12 +45,26 @@ namespace Bonobo.Git.Server.Security
             if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
 
+            Log.Information("EF: Validating user {UserName}", username);
+
             username = username.ToLowerInvariant();
             using (var database = CreateContext())
             {
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
-                return user != null && _passwordService.ComparePassword(password, username, user.PasswordSalt, user.Password) ? ValidationResult.Success : ValidationResult.Failure;
+                if (user != null)
+                {
+                    var result = _passwordService.ComparePassword(password, username, user.PasswordSalt, user.Password)
+                        ? ValidationResult.Success
+                        : ValidationResult.Failure;
+                    Log.Verbose("EF: User {UserName} validation result {Result}", username, result);
+                    return result;
+                }
+                else
+                {
+                    Log.Warning("EF: Failed to find user {UserName}", username);
+                }
             }
+            return ValidationResult.Failure;
         }
 
         public bool CreateUser(string username, string password, string givenName, string surname, string email)
