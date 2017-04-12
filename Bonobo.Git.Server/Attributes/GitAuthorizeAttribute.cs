@@ -90,10 +90,17 @@ namespace Bonobo.Git.Server
         {
             byte[] encodedDataAsBytes = Convert.FromBase64String(authHeader.Replace("Basic ", String.Empty));
             string value = Encoding.ASCII.GetString(encodedDataAsBytes);
-            string username = Uri.UnescapeDataString(value.Substring(0, value.IndexOf(':')));
-            string password = Uri.UnescapeDataString(value.Substring(value.IndexOf(':') + 1));
 
-            Log.Information("GitAuth: Trying to auth user {username}", username);
+            int colonPosition = value.IndexOf(':');
+            if (colonPosition == -1)
+            {
+                Log.Error("GitAuth: AuthHeader doesn't contain colon - failing auth");
+                return false;
+            }
+            string username = Uri.UnescapeDataString(value.Substring(0, colonPosition));
+            string password = Uri.UnescapeDataString(value.Substring(colonPosition + 1));
+
+            Log.Verbose("GitAuth: Trying to auth user {username}", username);
 
             if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password))
             {
