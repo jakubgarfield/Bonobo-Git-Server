@@ -6,20 +6,22 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 ## Version 6.1
 
-**April 2017?**
+**12 April 2017**
 
 ### Features
 
 * Enhanced logging - daily rotating log files written to App_Data\Logs, log level controllable in Web.Config
-*
+
+### Bugfixes
+
+* Fix problem with Git authentication with using the Windows Auth + EF Membership approach #668
+* Don't throw exception if GitAuth token doesn't contain colon #664
 
 ### Other improvements 
 
 * Improved French translation #670
 * Updated libgit2sharp #650
 * Updated CommonMark #651
-
-
 
 ## Version 6.0.0
 
