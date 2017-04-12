@@ -98,21 +98,75 @@ namespace Bonobo.Git.Server
 
             if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password))
             {
-                Log.Information("GitAuth: Going to membership service for user {username}", username);
-
-                if (MembershipService.ValidateUser(username, password) == ValidationResult.Success)
+                if (AuthenticationProvider is WindowsAuthenticationProvider && MembershipService is EFMembershipService)
                 {
-                    httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
-                    Log.Information("GitAuth: User {username} authorised by membership service", username);
-                    return true;
+                    Log.Information("GitAuth: Going to windows auth (EF Membership) for user {username}", username);
+                    if (IsWindowsUserAuthorized(httpContext, username, password))
+                    {
+                        httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
+                        Log.Information("GitAuth: User {username} authorised by direct windows auth", username);
+                        return true;
+                    }
                 }
-                Log.Warning("GitAuth: Membership service failed auth for {username}", username);
+                else
+                {
+                    Log.Information("GitAuth: Going to membership service for user {username}", username);
+
+                    if (MembershipService.ValidateUser(username, password) == ValidationResult.Success)
+                    {
+                        httpContext.User =
+                            new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
+                        Log.Information("GitAuth: User {username} authorised by membership service", username);
+                        return true;
+                    }
+                    Log.Warning("GitAuth: Membership service failed auth for {username}", username);
+                }
             }
             else
             {
                 Log.Warning("GitAuth: Blank name or password {username}", username);
             }
             Log.Warning("GitAuth: User {username} not authorised", username);
+            return false;
+        }
+
+        private bool IsWindowsUserAuthorized(HttpContextBase httpContext, string username, string password)
+        {
+            string domain = username.GetDomain();
+            username = username.StripDomain();
+
+            Log.Information("GitAuthWin: domain {DomainName}, stripped user {UserName}", domain, username);
+
+            try
+            {
+                using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain))
+                {
+                    var adUser = UserPrincipal.FindByIdentity(pc, username);
+                    if (adUser != null)
+                    {
+                        Log.Information("GitAuthWin: Found user {User}", adUser.Name);
+
+                        if (pc.ValidateCredentials(username, password, ContextOptions.Negotiate))
+                        {
+                            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username.Replace("\\", "!"))));
+                            Log.Information("GitAuthWin: Validated user {UserName} in domain {DomainName}", username, domain);
+                            return true;
+                        }
+                        else
+                        {
+                            Log.Warning("GitAuthWin: Couldn't valudate user {UserName} in domain {DomainName}", username, domain);
+                        }
+                    }
+                    else
+                    {
+                        Log.Warning("GitAuthWin: Can't find user {UserName} in domain {DomainName}", username, domain);
+                    }
+                }
+            }
+            catch (PrincipalException)
+            {
+                // let it fail
+            }
             return false;
         }
     }
