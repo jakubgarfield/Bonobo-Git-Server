@@ -17,6 +17,7 @@ using Bonobo.Git.Server.Helpers;
 using System.DirectoryServices.AccountManagement;
 
 using Microsoft.Practices.Unity;
+using Serilog;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -182,6 +183,9 @@ namespace Bonobo.Git.Server.Controllers
         {
             if ((!Request.IsAuthenticated) || !(MembershipService is EFMembershipService))
             {
+                Log.Warning("CreateADUser: can't run IsAuth: {IsAuth}, MemServ {MemServ}", 
+                    Request.IsAuthenticated,
+                    MembershipService.GetType());
                 return RedirectToAction("Unauthorized", "Home");
             }
 

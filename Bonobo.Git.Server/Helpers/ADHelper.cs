@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices.ActiveDirectory;
+using Serilog;
 
 namespace Bonobo.Git.Server.Helpers
 {
@@ -17,21 +18,31 @@ namespace Bonobo.Git.Server.Helpers
         /// <returns>True on successfull validation</returns>
         public static bool ValidateUser(string username, string password)
         {
+            Log.Information("AD: Validating user {UserName}", username);
+
             var parsedDomain = username.GetDomain();
             string strippedUsername = username.StripDomain();
+
+            Log.Information("AD: Validating user {UserName} - domain {DomainName}, stripped {StrippedUsername}", 
+                username, parsedDomain, strippedUsername);
 
             Domain matchedDomain = GetDomain(parsedDomain);
             // If a domain was present in the supplied username, try to find this first and validate against it.
             if(matchedDomain != null)
             {
+                Log.Information("AD: Found {parsedDomain}", parsedDomain);
                 return ValidateUser(matchedDomain, strippedUsername, password);
             }
             // Else try all domains in the current forest.
             foreach (Domain domain in Forest.GetCurrentForest().Domains)
             {
+                Log.Information("AD: Checking forest domain {DomainName}", domain.Name);
                 if (ValidateUser(domain, strippedUsername, password))
+                {
                     return true;
+                }
             }
+            Log.Information("AD: Failed to validate user {UserName}", username);
 
             return false;
         }
@@ -40,14 +51,22 @@ namespace Bonobo.Git.Server.Helpers
         {
             try
             {
+                Log.Information("AD: Validating {UserName} in domain {DomainName}", username, domain.Name);
+
                 using (PrincipalContext pc = new PrincipalContext(ContextType.Domain, domain.Name))
                 {
                     if (pc.ValidateCredentials(username, password, ContextOptions.Negotiate))
+                    {
+                        Log.Information("AD: Success validating {UserName} in domain {DomainName}", username, domain.Name);
                         return true;
+                    }
+                    Log.Warning("AD: Validating {UserName} in domain {DomainName} failed", username, domain.Name);
                 }
             }
             catch (Exception exp)
             {
+                Log.Error(exp, "AD Validate user {username}", username);
+
                 Trace.TraceError(exp.Message);
                 if (exp.InnerException != null)
                     Trace.TraceError(exp.InnerException.Message);
@@ -55,11 +74,12 @@ namespace Bonobo.Git.Server.Helpers
             return false;
         }
 
-        private static Domain GetDomain(string parsedDomain)
+        private static Domain GetDomain(string parsedDomainName)
         {
+            Log.Verbose("ADHelp: Looking for domain {DomainName}", parsedDomainName);
             foreach (Domain domain in Forest.GetCurrentForest().Domains)
             {
-                if(domain.Name.Contains(parsedDomain))
+                if(domain.Name.Contains(parsedDomainName))
                     return domain;
             }
             return null;
@@ -71,23 +91,33 @@ namespace Bonobo.Git.Server.Helpers
         /// <returns>Userprincipal if found else null</returns>
         public static UserPrincipal GetUserPrincipal(string username)
         {
-            var parsedDomain = username.GetDomain();
+            var parsedDomainName = username.GetDomain();
             string strippedUsername = username.StripDomain();
 
-            Domain matchedDomain = GetDomain(parsedDomain);
+            Log.Verbose("GetUserPrincipal: username {UserName}, domain {DomainName}, stripped {StrippedUserName}", username, parsedDomainName, strippedUsername);
+
+            Domain matchedDomain = GetDomain(parsedDomainName);
             // If a domain was present in the supplied username, try to find this first at validate against it.
             if (matchedDomain != null)
             {
                 var user = GetUserPrincipal(matchedDomain, strippedUsername);
                 if (user != null)
                     return user;
+                Log.Warning("Null principal in domain: {DomainName}, user: {UserName}", matchedDomain.Name,
+                    strippedUsername);
+            }
+            else
+            {
+                Log.Warning("Didn't GetDomain {parsedDomain}", parsedDomainName);
             }
 
             foreach (Domain domain in Forest.GetCurrentForest().Domains)
             {
+                Log.Information("Checking domain {DomainName}", domain);
                 var user = GetUserPrincipal(domain, strippedUsername);
-                if( user != null)
-                    return user;              
+                if ( user != null)
+                    return user;
+                Log.Warning("Null principal in domain: {DomainName}, user: {UserName}", domain.Name, strippedUsername);
             }
 
             return null;
@@ -104,6 +134,7 @@ namespace Bonobo.Git.Server.Helpers
             }
             catch (Exception exp)
             {
+                Log.Error(exp, "GetUserPrincipal in domain: {DomainName}, user: {UserName}", domain.Name, username);
                 Trace.TraceError("GetUserPrincipal in domain: " + domain.Name + " with username " + username);
                 Trace.TraceError(exp.Message);
                 if (exp.InnerException != null)
@@ -173,10 +204,14 @@ namespace Bonobo.Git.Server.Helpers
                 }
                 catch (Exception exp)
                 {
+                    Log.Error(exp, "GetPrincipal Group with name: " + name);
                     Trace.TraceError("GetPrincipal Group with name: " + name);
                     Trace.TraceError(exp.Message);
                     if (exp.InnerException != null)
+                    {
+                        Log.Error(exp.InnerException, "InnerEx on GetPrincipal Group with name: " + name);
                         Trace.TraceError(exp.InnerException.Message);
+                    }
                     // let it fail
                 }
             }
