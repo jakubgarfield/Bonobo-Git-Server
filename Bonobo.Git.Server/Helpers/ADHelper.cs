@@ -74,11 +74,12 @@ namespace Bonobo.Git.Server.Helpers
             return false;
         }
 
-        private static Domain GetDomain(string parsedDomain)
+        private static Domain GetDomain(string parsedDomainName)
         {
+            Log.Verbose("ADHelp: Looking for domain {DomainName}", parsedDomainName);
             foreach (Domain domain in Forest.GetCurrentForest().Domains)
             {
-                if(domain.Name.Contains(parsedDomain))
+                if(domain.Name.Contains(parsedDomainName))
                     return domain;
             }
             return null;
@@ -90,10 +91,12 @@ namespace Bonobo.Git.Server.Helpers
         /// <returns>Userprincipal if found else null</returns>
         public static UserPrincipal GetUserPrincipal(string username)
         {
-            var parsedDomain = username.GetDomain();
+            var parsedDomainName = username.GetDomain();
             string strippedUsername = username.StripDomain();
 
-            Domain matchedDomain = GetDomain(parsedDomain);
+            Log.Verbose("GetUserPrincipal: username {UserName}, domain {DomainName}, stripped {StrippedUserName}", username, parsedDomainName, strippedUsername);
+
+            Domain matchedDomain = GetDomain(parsedDomainName);
             // If a domain was present in the supplied username, try to find this first at validate against it.
             if (matchedDomain != null)
             {
@@ -105,7 +108,7 @@ namespace Bonobo.Git.Server.Helpers
             }
             else
             {
-                Log.Warning("Didn't GetDomain {parsedDomain}", parsedDomain);
+                Log.Warning("Didn't GetDomain {parsedDomain}", parsedDomainName);
             }
 
             foreach (Domain domain in Forest.GetCurrentForest().Domains)

@@ -45,7 +45,7 @@ namespace Bonobo.Git.Server.Security
             if (String.IsNullOrEmpty(username)) throw new ArgumentException("Value cannot be null or empty.", "username");
             if (String.IsNullOrEmpty(password)) throw new ArgumentException("Value cannot be null or empty.", "password");
 
-            Log.Information("EF: Validating user {UserName}", username);
+            Log.Verbose("EF: Validating user {UserName}", username);
 
             username = username.ToLowerInvariant();
             using (var database = CreateContext())

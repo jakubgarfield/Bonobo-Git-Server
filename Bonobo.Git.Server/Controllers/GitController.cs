@@ -11,6 +11,7 @@ using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 using Ionic.Zlib;
 using Microsoft.Practices.Unity;
+using Serilog;
 using Repository = LibGit2Sharp.Repository;
 
 namespace Bonobo.Git.Server.Controllers
@@ -42,6 +43,7 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     if (!RepositoryPermissionService.HasCreatePermission(User.Id()))
                     {
+                        Log.Warning("GitC: User {UserId} is not allowed to do push-to-create", User.Id());
                         return UnauthorizedResult();
                     }
                     if (!TryCreateOnPush(repositoryName))
@@ -62,6 +64,10 @@ namespace Bonobo.Git.Server.Controllers
             }
             else
             {
+                Log.Warning("GitC: SecureGetInfoRefs unauth because User {UserId} doesn't have permission {Permission} on  repo {RepositoryName}", 
+                    User.Id(),
+                    requiredLevel,
+                    repositoryName);
                 return UnauthorizedResult();
             }
         }
@@ -108,6 +114,7 @@ namespace Bonobo.Git.Server.Controllers
             if (directory.Exists)
             {
                 // We can't create a new repo - there's already a directory with that name
+                Log.Warning("GitC: Can't create {RepositoryName} - directory already exists", repositoryName);
                 return false;
             }
             RepositoryModel repository = new RepositoryModel();
@@ -115,6 +122,7 @@ namespace Bonobo.Git.Server.Controllers
             if (!repository.NameIsValid)
             {
                 // We don't like this name
+                Log.Warning("GitC: Can't create '{RepositoryName}' - name is invalid", repositoryName);
                 return false;
             }
             var user = MembershipService.GetUserModel(User.Id());
@@ -124,10 +132,12 @@ namespace Bonobo.Git.Server.Controllers
             if (!RepositoryRepository.Create(repository))
             {
                 // We can't add this to the repo store
+                Log.Warning("GitC: Can't create '{RepositoryName}' - RepoRepo.Create failed", repositoryName);
                 return false;
             }
 
             Repository.Init(Path.Combine(UserConfiguration.Current.Repositories, repository.Name), true);
+            Log.Information("GitC: '{RepositoryName}' created", repositoryName);
             return true;
         }
 
@@ -220,6 +230,10 @@ namespace Bonobo.Git.Server.Controllers
         {
             var directory = GetDirectoryInfo(repositoryName);
             var isValid = Repository.IsValid(directory.FullName);
+            if (!isValid)
+            {
+                Log.Warning("GitC: Invalid repo {RepositoryName}", repositoryName);
+            }
             return isValid;
         }
 
