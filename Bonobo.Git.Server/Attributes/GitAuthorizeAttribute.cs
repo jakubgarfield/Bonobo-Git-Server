@@ -4,7 +4,6 @@ using System.Security.Claims;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using System.DirectoryServices.AccountManagement;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
@@ -75,7 +74,7 @@ namespace Bonobo.Git.Server
                     httpContext.Response.Headers.Add("WWW-Authenticate", "Basic realm=\"Bonobo Git\"");
                     filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
 
-                    Log.Information("GitAuth: No auth header, anon operations not allowed");
+                    Log.Warning("GitAuth: No auth header, anon operations not allowed");
                     return;
                 }
             }
@@ -98,21 +97,35 @@ namespace Bonobo.Git.Server
 
             if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password))
             {
-                Log.Information("GitAuth: Going to membership service for user {username}", username);
-
-                if (MembershipService.ValidateUser(username, password) == ValidationResult.Success)
+                if (AuthenticationProvider is WindowsAuthenticationProvider && MembershipService is EFMembershipService)
                 {
-                    httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
-                    Log.Information("GitAuth: User {username} authorised by membership service", username);
-                    return true;
+                    Log.Verbose("GitAuth: Going to windows auth (EF Membership) for user {username}", username);
+                    if (ADHelper.ValidateUser(username, password))
+                    {
+                        httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
+                        Log.Verbose("GitAuth: User {username} authorised by direct windows auth", username);
+                        return true;
+                    }
                 }
-                Log.Warning("GitAuth: Membership service failed auth for {username}", username);
+                else
+                {
+                    Log.Verbose("GitAuth: Going to membership service for user {username}", username);
+
+                    if (MembershipService.ValidateUser(username, password) == ValidationResult.Success)
+                    {
+                        httpContext.User =
+                            new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
+                        Log.Verbose("GitAuth: User {username} authorised by membership service", username);
+                        return true;
+                    }
+                    Log.Warning("GitAuth: Membership service failed auth for {username}", username);
+                }
             }
             else
             {
                 Log.Warning("GitAuth: Blank name or password {username}", username);
             }
-            Log.Warning("GitAuth: User {username} not authorised", username);
+            Log.Warning("GitAuth: User {username} not authorized", username);
             return false;
         }
     }
