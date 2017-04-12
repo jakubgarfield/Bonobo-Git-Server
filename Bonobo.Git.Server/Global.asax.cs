@@ -29,6 +29,8 @@ using Microsoft.Practices.Unity.Mvc;
 using System.Web.Configuration;
 using System.Security.Claims;
 using System.Web.Helpers;
+using System.Web.Hosting;
+using Serilog;
 
 namespace Bonobo.Git.Server
 {
@@ -72,6 +74,9 @@ namespace Bonobo.Git.Server
 
         protected void Application_Start()
         {
+            ConfigureLogging();
+            Log.Information("Bonobo starting");
+
             AreaRegistration.RegisterAllAreas();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
@@ -99,8 +104,17 @@ namespace Bonobo.Git.Server
             catch (Exception ex)
             {
                 Trace.WriteLine("StartupException " + ex);
+                Log.Error(ex, "Startup exception");
                 throw;
             }
+        }
+
+        private void ConfigureLogging()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.AppSettings()
+                .WriteTo.RollingFile(Path.Combine(HostingEnvironment.MapPath(ConfigurationManager.AppSettings["LogDirectory"]), "log-{Date}.txt"))
+                .CreateLogger();
         }
 
         private static void RegisterDependencyResolver()
@@ -253,6 +267,7 @@ namespace Bonobo.Git.Server
                     routeData.Values.Add("action", "Error");
                     if (exception != null)
                     {
+                        Log.Error(exception, "Exception caught in Global.asax1");
                         Trace.TraceError("Error occured and caught in Global.asax - {0}", exception.ToString());
                     }
                 }
@@ -265,10 +280,12 @@ namespace Bonobo.Git.Server
                             break;
                         case 500:
                             routeData.Values.Add("action", "ServerError");
+                            Log.Error(exception, "500 Exception caught in Global.asax");
                             Trace.TraceError("Server Error occured and caught in Global.asax - {0}", exception.ToString());
                             break;
                         default:
                             routeData.Values.Add("action", "Error");
+                            Log.Error(exception, "Exception caught in Global.asax (code {Code})", httpException.GetHttpCode());
                             Trace.TraceError("Error occured and caught in Global.asax - {0}", exception.ToString());
                             break;
                     }

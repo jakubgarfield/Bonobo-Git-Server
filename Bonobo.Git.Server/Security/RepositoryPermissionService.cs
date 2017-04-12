@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Models;
 using Microsoft.Practices.Unity;
+using Serilog;
 
 namespace Bonobo.Git.Server.Security
 {
@@ -87,6 +88,12 @@ namespace Bonobo.Git.Server.Security
             if (userId == Guid.Empty) { throw new ArgumentException("Do not pass anonymous user id", "userId"); }
 
             bool userIsAnAdministrator = userIsSystemAdministrator || repository.Administrators.Any(x => x.Id == userId);
+
+            Log.Verbose("RepoPerms: Checking user {UserId} (admin? {IsAdmin}) has permission {Permission} on repo {RepositoryName}",
+                userId,
+                userIsAnAdministrator,
+                requiredLevel,
+                repository.Name);
 
             switch (requiredLevel)
             {
