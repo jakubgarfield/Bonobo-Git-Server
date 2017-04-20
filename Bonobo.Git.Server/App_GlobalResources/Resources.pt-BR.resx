@@ -373,7 +373,7 @@
     <value>Repositório foi criado com sucesso.</value>
   </data>
   <data name="Repository_Create_Title" xml:space="preserve">
-    <value>Criar Novo Repositório</value>
+    <value>Novo Repositório</value>
   </data>
   <data name="Repository_Delete_Success" xml:space="preserve">
     <value>Repositório foi excluído com sucesso.</value>
@@ -448,7 +448,7 @@
     <value>Todos os repositórios</value>
   </data>
   <data name="Repository_Index_CreateNew" xml:space="preserve">
-    <value>Criar novo repositório</value>
+    <value>Novo Repositório</value>
   </data>
   <data name="Repository_Index_No" xml:space="preserve">
     <value>Não</value>
