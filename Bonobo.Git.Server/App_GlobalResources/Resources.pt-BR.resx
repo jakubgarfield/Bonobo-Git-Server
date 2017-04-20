@@ -571,7 +571,7 @@
     <value>A equipe foi atualizada com sucesso.</value>
   </data>
   <data name="Team_Index_CreateNew" xml:space="preserve">
-    <value>Criar nova equipe</value>
+    <value>Nova Equipe</value>
   </data>
   <data name="Team_Index_Title" xml:space="preserve">
     <value>Equipes</value>
