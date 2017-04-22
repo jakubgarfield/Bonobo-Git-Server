@@ -8,6 +8,8 @@ using System.Text;
 using System.Web.Hosting;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
+using Bonobo.Git.Server.Helpers;
+using System.DirectoryServices.AccountManagement;
 
 namespace Bonobo.Git.Server.Configuration
 {
@@ -129,6 +131,35 @@ namespace Bonobo.Git.Server.Configuration
                         var thisRole = item;
                         SafelyReport(item.Name, () => thisRole.Members.Length + " members");
                     }
+                });
+                SafelyRun(() =>
+                {
+                    _report.AppendLine("Searching for AD groups:");
+
+                    foreach (var groupName in ActiveDirectorySettings.TeamNameToGroupNameMapping.Values)
+                    {
+                        _report.Append("Searching for: " + groupName + " ");
+
+                        GroupPrincipal gp;
+                        try{ 
+                        var pc = ADHelper.GetPrincipalGroup(groupName, out gp);
+                        if (pc != null)
+                            _report.AppendLine("In " + pc.Name);
+                        else
+                            _report.AppendLine("Principle context is null");
+
+                        if (gp != null)
+                            _report.AppendLine("Found group: " + gp.Name + " in domain " + pc.Name);
+                        }
+                        catch(Exception exp)
+                        {
+                            _report.AppendLine("Search AD group fail: " + exp.ToString());
+                        }
+
+                    }
+
+                    SafelyReport("AD Groups", () => ADHelper.DumpAllGroups());
+                    
                 });
             }
             else

@@ -66,10 +66,6 @@ namespace Bonobo.Git.Server.Helpers
             catch (Exception exp)
             {
                 Log.Error(exp, "AD Validate user {username}", username);
-
-                Trace.TraceError(exp.Message);
-                if (exp.InnerException != null)
-                    Trace.TraceError(exp.InnerException.Message);
             }
             return false;
         }
@@ -135,13 +131,37 @@ namespace Bonobo.Git.Server.Helpers
             catch (Exception exp)
             {
                 Log.Error(exp, "GetUserPrincipal in domain: {DomainName}, user: {UserName}", domain.Name, username);
-                Trace.TraceError("GetUserPrincipal in domain: " + domain.Name + " with username " + username);
-                Trace.TraceError(exp.Message);
-                if (exp.InnerException != null)
-                    Trace.TraceError(exp.InnerException.Message);
             }
             return null;
         }
+
+        public static string DumpAllGroups()
+        {
+            string result = string.Empty;
+
+            foreach (Domain domain in Forest.GetCurrentForest().Domains)
+            {
+                result = "Searching all groups in : " + domain.Name + Environment.NewLine;
+                // create your domain context
+                PrincipalContext ctx = new PrincipalContext(ContextType.Domain,domain.Name);
+
+                // define a "query-by-example" principal - here, we search for a GroupPrincipal 
+                GroupPrincipal qbeGroup = new GroupPrincipal(ctx);
+
+                // create your principal searcher passing in the QBE principal    
+                PrincipalSearcher srch = new PrincipalSearcher(qbeGroup);
+
+                // find all matches
+                foreach (var found in srch.FindAll())
+                {
+                    result += found.Name + ", ";
+                }
+                result += Environment.NewLine;
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Used to get the UserPrinpal from a GUID
         /// </summary>
@@ -162,10 +182,7 @@ namespace Bonobo.Git.Server.Helpers
                 }
                 catch (Exception exp)
                 {
-                    Trace.TraceError("GetUserPrincipal GUID " + id.ToString());
-                    Trace.TraceError(exp.Message);
-                    if (exp.InnerException != null)
-                        Trace.TraceError(exp.InnerException.Message);
+                    Log.Error(exp,"GetUserPrincipal GUID " + id.ToString());
                     // let it fail
                 }
             }
@@ -193,7 +210,9 @@ namespace Bonobo.Git.Server.Helpers
         /// <returns>Principal context on which the group was found.</returns>
         public static PrincipalContext GetPrincipalGroup(string name, out GroupPrincipal group)
         {
-            foreach (Domain domain in Forest.GetCurrentForest().Domains)
+            DomainCollection domains = Forest.GetCurrentForest().Domains;
+
+            foreach (Domain domain in domains)
             {
                 try
                 {
@@ -201,20 +220,18 @@ namespace Bonobo.Git.Server.Helpers
                     group = GroupPrincipal.FindByIdentity(pc, IdentityType.Name, name);
                     if (group != null)
                         return pc;
+
+                    Log.Warning("Null GroupPrincipal in domain: {DomainName}, user: {UserName}", domain.Name, domain.Name);
                 }
                 catch (Exception exp)
                 {
                     Log.Error(exp, "GetPrincipal Group with name: " + name);
-                    Trace.TraceError("GetPrincipal Group with name: " + name);
-                    Trace.TraceError(exp.Message);
-                    if (exp.InnerException != null)
-                    {
-                        Log.Error(exp.InnerException, "InnerEx on GetPrincipal Group with name: " + name);
-                        Trace.TraceError(exp.InnerException.Message);
-                    }
                     // let it fail
                 }
             }
+
+            Log.Information(DumpAllGroups());
+
             throw new ArgumentException("Could not find principal group: " + name);
         }
     }
