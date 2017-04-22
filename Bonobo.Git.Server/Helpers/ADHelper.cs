@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices.ActiveDirectory;
 using Serilog;
+using System.Text;
 
 namespace Bonobo.Git.Server.Helpers
 {
@@ -98,9 +99,10 @@ namespace Bonobo.Git.Server.Helpers
             {
                 var user = GetUserPrincipal(matchedDomain, strippedUsername);
                 if (user != null)
+                { 
                     return user;
-                Log.Warning("Null principal in domain: {DomainName}, user: {UserName}", matchedDomain.Name,
-                    strippedUsername);
+                }
+                Log.Warning("Null principal in domain: {DomainName}, user: {UserName}", matchedDomain.Name, strippedUsername);
             }
             else
             {
@@ -112,7 +114,9 @@ namespace Bonobo.Git.Server.Helpers
                 Log.Information("Checking domain {DomainName}", domain);
                 var user = GetUserPrincipal(domain, strippedUsername);
                 if ( user != null)
+                { 
                     return user;
+                }
                 Log.Warning("Null principal in domain: {DomainName}, user: {UserName}", domain.Name, strippedUsername);
             }
 
@@ -137,11 +141,11 @@ namespace Bonobo.Git.Server.Helpers
 
         public static string DumpAllGroups()
         {
-            string result = string.Empty;
+            StringBuilder builder = new StringBuilder();
 
             foreach (Domain domain in Forest.GetCurrentForest().Domains)
             {
-                result = "Searching all groups in : " + domain.Name + Environment.NewLine;
+                builder.AppendLine("Searching all groups in : " + domain.Name);
                 // create your domain context
                 PrincipalContext ctx = new PrincipalContext(ContextType.Domain,domain.Name);
 
@@ -154,12 +158,12 @@ namespace Bonobo.Git.Server.Helpers
                 // find all matches
                 foreach (var found in srch.FindAll())
                 {
-                    result += found.Name + ", ";
+                    builder.Append(found.Name + ", ");
                 }
-                result += Environment.NewLine;
+                builder.AppendLine("");
             }
 
-            return result;
+            return builder.ToString();
         }
 
         /// <summary>
@@ -219,9 +223,11 @@ namespace Bonobo.Git.Server.Helpers
                     var pc = new PrincipalContext(ContextType.Domain, domain.Name);
                     group = GroupPrincipal.FindByIdentity(pc, IdentityType.Name, name);
                     if (group != null)
+                    { 
                         return pc;
+                    }
 
-                    Log.Warning("Null GroupPrincipal in domain: {DomainName}, user: {UserName}", domain.Name, domain.Name);
+                    Log.Warning("Null GroupPrincipal in domain: {DomainName}, user: {GroupName}", domain.Name, name);
                 }
                 catch (Exception exp)
                 {

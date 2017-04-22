@@ -115,6 +115,7 @@ namespace Bonobo.Git.Server.Configuration
                 SafelyReport("User count", () => ad.Users.Count());
 
                 _report.AppendLine("AD Teams");
+
                 SafelyRun(() =>
                 {
                     foreach (var item in ad.Teams)
@@ -123,7 +124,9 @@ namespace Bonobo.Git.Server.Configuration
                         SafelyReport(item.Name, () => thisTeam.Members.Length + " members");
                     }
                 });
+
                 _report.AppendLine("AD Roles");
+
                 SafelyRun(() =>
                 {
                     foreach (var item in ad.Roles)
@@ -132,6 +135,7 @@ namespace Bonobo.Git.Server.Configuration
                         SafelyReport(item.Name, () => thisRole.Members.Length + " members");
                     }
                 });
+
                 SafelyRun(() =>
                 {
                     _report.AppendLine("Searching for AD groups:");
@@ -141,15 +145,23 @@ namespace Bonobo.Git.Server.Configuration
                         _report.Append("Searching for: " + groupName + " ");
 
                         GroupPrincipal gp;
-                        try{ 
-                        var pc = ADHelper.GetPrincipalGroup(groupName, out gp);
-                        if (pc != null)
-                            _report.AppendLine("In " + pc.Name);
-                        else
-                            _report.AppendLine("Principle context is null");
+                        try
+                        { 
+                            var pc = ADHelper.GetPrincipalGroup(groupName, out gp);
 
-                        if (gp != null)
-                            _report.AppendLine("Found group: " + gp.Name + " in domain " + pc.Name);
+                            if (pc != null)
+                            {
+                                _report.AppendLine("in " + pc.Name);
+                            }
+                            else
+                            { 
+                                _report.AppendLine("Principle context is null");
+                            }
+
+                            if (gp != null)
+                            { 
+                                _report.AppendLine("Found group: " + gp.Name + " in domain " + pc.Name);
+                            }
                         }
                         catch(Exception exp)
                         {
