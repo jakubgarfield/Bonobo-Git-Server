@@ -1,5 +1,7 @@
 ﻿using Bonobo.Git.Server.Configuration;
 using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices.ActiveDirectory;
@@ -9,6 +11,45 @@ namespace Bonobo.Git.Server.Helpers
 {
     public static class ADHelper
     {
+        /// <summary>
+        /// There are various sources of domains which we need to check
+        /// Try to lazy-enumerate this, so that expensive functions aren't called if they're not necessary
+        /// </summary>
+        /// <param name="username">The full user name (not stripped, should contain domain if available)</param>
+        /// <returns>An Enumerable of domains which can be tried</returns>
+        private static IEnumerable<Domain> GetAllDomainPossibilities(string username)
+        {
+            // First we try for the domain in the username
+            var parsedDomainName = username.GetDomain();
+            var domainFromUsername = GetDomain(parsedDomainName);
+            if (domainFromUsername != null)
+            {
+                yield return domainFromUsername;
+            }
+
+            // The we try the domain in web.config, if there is one
+            string defaultDomainName = ConfigurationManager.AppSettings["ActiveDirectoryDefaultDomain"];
+            if (!string.IsNullOrEmpty(defaultDomainName))
+            {
+                var domainFromConfig = GetDomain(defaultDomainName);
+                if (domainFromConfig != null)
+                {
+                    yield return domainFromConfig;
+                }
+            }
+
+            // Finally try the global catalogue
+            GlobalCatalogCollection gcc = Forest.GetCurrentForest().FindAllGlobalCatalogs();
+            Log.Information("Searching in {count} global catalogs", gcc.Count);
+
+            // Else try all global catalogs in the current forest.
+            foreach (GlobalCatalog gc in gcc)
+            {
+                Log.Information("Trying GlobalCatalogue {globalCatalog} domain {domain}", gc.Name, gc.Domain.Name);
+                yield return gc.Domain;
+            }
+        }
+
         /// <summary>
         /// Validates the user against Active directory - will try the domain that are part of the username if present
         /// Alternatively it tries all domains in the current forest.
@@ -20,35 +61,19 @@ namespace Bonobo.Git.Server.Helpers
         {
             Log.Information("AD: Validating user {UserName}", username);
 
-            var parsedDomain = username.GetDomain();
             string strippedUsername = username.StripDomain();
 
-            Log.Information("AD: Validating user {UserName} - domain {DomainName}, stripped {StrippedUsername}", 
-                username, parsedDomain, strippedUsername);
-
-            Domain matchedDomain = GetDomain(parsedDomain);
-            // If a domain was present in the supplied username, try to find this first and validate against it.
-            if(matchedDomain != null)
+            foreach (var domain in GetAllDomainPossibilities(username))
             {
-                Log.Information("AD: Found {parsedDomain}", parsedDomain);
-                return ValidateUser(matchedDomain, strippedUsername, password);
-            }
-
-            GlobalCatalogCollection gcc = Forest.GetCurrentForest().FindAllGlobalCatalogs();
-
-            Log.Information("Searching in {count} global catalogs", gcc.Count);
-
-            // Else try all global catalogs in the current forest.
-            foreach (GlobalCatalog gc in gcc)
-            {
-                Log.Information("Searching for user in globalcatalog {globalCatalog} in domain {domain}", gc.Name, gc.Domain.Name);
-                Domain domain = gc.Domain;
+                Log.Information("AD: Validating stripped username {StrippedUserName} - against domain {DomainName}",
+                    strippedUsername, domain.Name);
 
                 if (ValidateUser(domain, strippedUsername, password))
                 {
                     return true;
                 }
             }
+
             Log.Information("AD: Failed to validate user {UserName}", username);
 
             return false;
@@ -103,33 +128,13 @@ namespace Bonobo.Git.Server.Helpers
 
             Log.Verbose("GetUserPrincipal: username {UserName}, domain {DomainName}, stripped {StrippedUserName}", username, parsedDomainName, strippedUsername);
 
-            Domain matchedDomain = GetDomain(parsedDomainName);
-            // If a domain was present in the supplied username, try to find this first at validate against it.
-            if (matchedDomain != null)
+            foreach (var domain in GetAllDomainPossibilities(username))
             {
-                var user = GetUserPrincipal(matchedDomain, strippedUsername);
+                var user = GetUserPrincipal(domain, strippedUsername);
                 if (user != null)
                     return user;
-                Log.Warning("Null principal in domain: {DomainName}, user: {UserName}", matchedDomain.Name,
+                Log.Warning("Null principal in domain: {DomainName}, user: {UserName}", domain.Name,
                     strippedUsername);
-            }
-            else
-            {
-                Log.Warning("Didn't GetDomain {parsedDomain}", parsedDomainName);
-            }
-
-            GlobalCatalogCollection gcc = Forest.GetCurrentForest().FindAllGlobalCatalogs();
-
-            Log.Information("Searching in {count} global catalogs", gcc.Count);
-
-            foreach (GlobalCatalog gc in gcc)
-            {
-                Log.Information("Searching for user in globalcatalog {globalCatalog} in domain {domain}", gc.Name, gc.Domain.Name);
-
-                var user = GetUserPrincipal(gc.Domain, strippedUsername);
-                if ( user != null)
-                    return user;
-                Log.Warning("Null principal in domain: {DomainName}, user: {UserName}", gc.Domain.ToString(), strippedUsername);
             }
 
             return null;
