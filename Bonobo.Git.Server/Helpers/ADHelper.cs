@@ -33,10 +33,17 @@ namespace Bonobo.Git.Server.Helpers
                 Log.Information("AD: Found {parsedDomain}", parsedDomain);
                 return ValidateUser(matchedDomain, strippedUsername, password);
             }
-            // Else try all domains in the current forest.
-            foreach (Domain domain in Forest.GetCurrentForest().Domains)
+
+            GlobalCatalogCollection gcc = Forest.GetCurrentForest().FindAllGlobalCatalogs();
+
+            Log.Information("Searching in {count} global catalogs", gcc.Count);
+
+            // Else try all global catalogs in the current forest.
+            foreach (GlobalCatalog gc in gcc)
             {
-                Log.Information("AD: Checking forest domain {DomainName}", domain.Name);
+                Log.Information("Searching for user in globalcatalog {globalCatalog} in domain {domain}", gc.Name, gc.Domain.Name);
+                Domain domain = gc.Domain;
+
                 if (ValidateUser(domain, strippedUsername, password))
                 {
                     return true;
@@ -111,13 +118,18 @@ namespace Bonobo.Git.Server.Helpers
                 Log.Warning("Didn't GetDomain {parsedDomain}", parsedDomainName);
             }
 
-            foreach (Domain domain in Forest.GetCurrentForest().Domains)
+            GlobalCatalogCollection gcc = Forest.GetCurrentForest().FindAllGlobalCatalogs();
+
+            Log.Information("Searching in {count} global catalogs", gcc.Count);
+
+            foreach (GlobalCatalog gc in gcc)
             {
-                Log.Information("Checking domain {DomainName}", domain);
-                var user = GetUserPrincipal(domain, strippedUsername);
+                Log.Information("Searching for user in globalcatalog {globalCatalog} in domain {domain}", gc.Name, gc.Domain.Name);
+
+                var user = GetUserPrincipal(gc.Domain, strippedUsername);
                 if ( user != null)
                     return user;
-                Log.Warning("Null principal in domain: {DomainName}, user: {UserName}", domain.Name, strippedUsername);
+                Log.Warning("Null principal in domain: {DomainName}, user: {UserName}", gc.Domain.ToString(), strippedUsername);
             }
 
             return null;
@@ -149,8 +161,9 @@ namespace Bonobo.Git.Server.Helpers
         /// <returns>The Userprincipal if found, else null</returns>
         public static UserPrincipal GetUserPrincipal(Guid id)
         {
-            foreach (Domain domain in Forest.GetCurrentForest().Domains)
+            foreach (GlobalCatalog gc in Forest.GetCurrentForest().FindAllGlobalCatalogs())
             {
+                Domain domain = gc.Domain;
                 try
                 {
                     using (var pc = new PrincipalContext(ContextType.Domain, domain.Name))
@@ -193,8 +206,16 @@ namespace Bonobo.Git.Server.Helpers
         /// <returns>Principal context on which the group was found.</returns>
         public static PrincipalContext GetPrincipalGroup(string name, out GroupPrincipal group)
         {
-            foreach (Domain domain in Forest.GetCurrentForest().Domains)
+            GlobalCatalogCollection gcc = Forest.GetCurrentForest().FindAllGlobalCatalogs();
+
+            Log.Information("Searching in {count} global catalogs", gcc.Count);
+
+            foreach (GlobalCatalog gc in gcc)
             {
+                Log.Information("Searching for user in globalcatalog {globalCatalog} in domain {domain}", gc.Name, gc.Domain.Name);
+
+                Domain domain = gc.Domain;
+
                 try
                 {
                     var pc = new PrincipalContext(ContextType.Domain, domain.Name);
