@@ -212,7 +212,7 @@ namespace Bonobo.Git.Server.Data
                             Id = group.Guid.Value,
                             Description = group.Description,
                             Name = teamName,
-                            Members = group.GetMembers(true).Select(x => MembershipService.GetUserModel(x.Guid.Value)).ToArray()
+                            Members = group.GetMembers(true).Select(x => MembershipService.GetUserModel(x.Guid.Value)).Where(o => o != null).ToArray()
                         };
                         if (teamModel != null)
                         {
