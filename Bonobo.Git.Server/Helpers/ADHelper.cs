@@ -108,13 +108,21 @@ namespace Bonobo.Git.Server.Helpers
 
         private static Domain GetDomain(string parsedDomainName)
         {
-            Log.Verbose("ADHelp: Looking for domain {DomainName}", parsedDomainName);
-            foreach (Domain domain in Forest.GetCurrentForest().Domains)
+            Log.Verbose("ADHelp: Creating directory context with domain: {DomainName}", parsedDomainName);
+
+            Domain domain = null;
+
+            try { 
+
+                var dc = new DirectoryContext(DirectoryContextType.Domain, parsedDomainName);
+
+                domain = Domain.GetDomain(dc);
+            }catch(Exception exp)
             {
-                if(domain.Name.Contains(parsedDomainName))
-                    return domain;
+                Log.Error(exp, "Failed to create Directory context for domain {domain}.", parsedDomainName);
             }
-            return null;
+
+            return domain;
         }
         /// <summary>
         /// Used to get the UserPrincpal based on username - will try the domain that are part of the username if present
