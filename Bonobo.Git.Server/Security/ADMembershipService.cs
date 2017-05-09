@@ -15,6 +15,7 @@ using System.Web.Security;
 using System.Security.Principal;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Helpers;
+using Serilog;
 
 namespace Bonobo.Git.Server.Security
 {
@@ -61,7 +62,7 @@ namespace Bonobo.Git.Server.Security
             }
             catch(Exception ex)
             {
-                Trace.TraceError("AD.ValidateUser Exception: " + ex);
+                Log.Error(ex, "AD.ValidateUser Exception: ");
                 result = ValidationResult.Failure;
             }
 
