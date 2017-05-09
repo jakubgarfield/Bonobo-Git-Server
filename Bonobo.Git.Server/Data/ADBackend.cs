@@ -110,7 +110,7 @@ namespace Bonobo.Git.Server.Data
                 }
                 catch(Exception ex)
                 {
-                    LogException(ex);
+                    Log.Error(ex, "Failed to update data from AD");
                 }
                 finally
                 {
@@ -139,7 +139,7 @@ namespace Bonobo.Git.Server.Data
             }
             catch (Exception ex)
             {
-                LogException(ex);
+                Log.Error(ex, "Failed to convert UserPrincipal to UserModel");
             }
 
             return result;
@@ -186,7 +186,7 @@ namespace Bonobo.Git.Server.Data
             }
             catch (Exception ex)
             {
-                LogException(ex);
+                Log.Error(ex, "AD: Failed to update users.");
             }
         }
 
@@ -222,7 +222,7 @@ namespace Bonobo.Git.Server.Data
                 }
                 catch (Exception ex)
                 {
-                    LogException(ex);
+                    Log.Error(ex, "AD: Failed to update teams.");
                 }
             }
         }
@@ -248,12 +248,6 @@ namespace Bonobo.Git.Server.Data
                 };
                 Roles.AddOrUpdate(roleModel);
             }
-        }
-
-        private void LogException(Exception exception)
-        {
-            Log.Error(exception, "AD Exception");
-            Trace.TraceError("{0}: ADBackend Exception: {1}", DateTime.Now, exception);
         }
     }
 }

@@ -17,14 +17,18 @@ namespace Bonobo.Git.Server.Helpers
         /// </summary>
         /// <param name="username">The full user name (not stripped, should contain domain if available)</param>
         /// <returns>An Enumerable of domains which can be tried</returns>
-        private static IEnumerable<Domain> GetAllDomainPossibilities(string username)
+        private static IEnumerable<Domain> GetAllDomainPossibilities(string username = "")
         {
-            // First we try for the domain in the username
-            var parsedDomainName = username.GetDomain();
-            var domainFromUsername = GetDomain(parsedDomainName);
-            if (domainFromUsername != null)
-            {
-                yield return domainFromUsername;
+            //Skip checking username if none is supplied.
+            if(!string.IsNullOrEmpty(username))
+            { 
+                // First we try for the domain in the username
+                var parsedDomainName = username.GetDomain();
+                var domainFromUsername = GetDomain(parsedDomainName);
+                if (domainFromUsername != null)
+                {
+                    yield return domainFromUsername;
+                }
             }
 
             // The we try the domain in web.config, if there is one
@@ -98,10 +102,6 @@ namespace Bonobo.Git.Server.Helpers
             catch (Exception exp)
             {
                 Log.Error(exp, "AD Validate user {username}", username);
-
-                Trace.TraceError(exp.Message);
-                if (exp.InnerException != null)
-                    Trace.TraceError(exp.InnerException.Message);
             }
             return false;
         }
@@ -160,10 +160,6 @@ namespace Bonobo.Git.Server.Helpers
             catch (Exception exp)
             {
                 Log.Error(exp, "GetUserPrincipal in domain: {DomainName}, user: {UserName}", domain.Name, username);
-                Trace.TraceError("GetUserPrincipal in domain: " + domain.Name + " with username " + username);
-                Trace.TraceError(exp.Message);
-                if (exp.InnerException != null)
-                    Trace.TraceError(exp.InnerException.Message);
             }
             return null;
         }
@@ -174,13 +170,14 @@ namespace Bonobo.Git.Server.Helpers
         /// <returns>The Userprincipal if found, else null</returns>
         public static UserPrincipal GetUserPrincipal(Guid id)
         {
-            foreach (GlobalCatalog gc in Forest.GetCurrentForest().FindAllGlobalCatalogs())
+            foreach (Domain domain in GetAllDomainPossibilities())
             {
-                Domain domain = gc.Domain;
                 try
                 {
                     using (var pc = new PrincipalContext(ContextType.Domain, domain.Name))
                     {
+                        Log.Information("Looking for user with guid {guid} in domain {domain}", id.ToString(), domain.Name);
+
                         var user = UserPrincipal.FindByIdentity(pc, IdentityType.Guid, id.ToString());
                         if (user != null)
                             return user;
@@ -188,10 +185,7 @@ namespace Bonobo.Git.Server.Helpers
                 }
                 catch (Exception exp)
                 {
-                    Trace.TraceError("GetUserPrincipal GUID " + id.ToString());
-                    Trace.TraceError(exp.Message);
-                    if (exp.InnerException != null)
-                        Trace.TraceError(exp.InnerException.Message);
+                    Log.Error(exp, "AD: Failed to find user with guid {GUID}", id.ToString());
                     // let it fail
                 }
             }
@@ -219,15 +213,9 @@ namespace Bonobo.Git.Server.Helpers
         /// <returns>Principal context on which the group was found.</returns>
         public static PrincipalContext GetPrincipalGroup(string name, out GroupPrincipal group)
         {
-            GlobalCatalogCollection gcc = Forest.GetCurrentForest().FindAllGlobalCatalogs();
-
-            Log.Information("Searching in {count} global catalogs", gcc.Count);
-
-            foreach (GlobalCatalog gc in gcc)
+            foreach (Domain domain in GetAllDomainPossibilities())
             {
-                Log.Information("Searching for user in globalcatalog {globalCatalog} in domain {domain}", gc.Name, gc.Domain.Name);
-
-                Domain domain = gc.Domain;
+                Log.Information("Searching for group {name} in domain {domain}", name, domain.Name);
 
                 try
                 {
@@ -239,13 +227,6 @@ namespace Bonobo.Git.Server.Helpers
                 catch (Exception exp)
                 {
                     Log.Error(exp, "GetPrincipal Group with name: " + name);
-                    Trace.TraceError("GetPrincipal Group with name: " + name);
-                    Trace.TraceError(exp.Message);
-                    if (exp.InnerException != null)
-                    {
-                        Log.Error(exp.InnerException, "InnerEx on GetPrincipal Group with name: " + name);
-                        Trace.TraceError(exp.InnerException.Message);
-                    }
                     // let it fail
                 }
             }
