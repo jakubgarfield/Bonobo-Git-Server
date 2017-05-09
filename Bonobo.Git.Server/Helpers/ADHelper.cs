@@ -112,12 +112,14 @@ namespace Bonobo.Git.Server.Helpers
 
             Domain domain = null;
 
-            try { 
+            try
+            { 
 
                 var dc = new DirectoryContext(DirectoryContextType.Domain, parsedDomainName);
 
                 domain = Domain.GetDomain(dc);
-            }catch(Exception exp)
+            }
+            catch (Exception exp)
             {
                 Log.Error(exp, "Failed to create Directory context for domain {domain}.", parsedDomainName);
             }
