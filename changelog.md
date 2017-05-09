@@ -6,6 +6,20 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 ## Version 6.1
 
+**xx May 2017**
+
+### Features
+
+* Broader search for AD domain #683
+* Reintroduce ActiveDirectoryDefaultDomain configuration item (helps #683)
+
+### Bugfixes
+
+* Revert Jwt library to v4.x to repair ADFS login #681
+* Reintroduce ActiveDirectoryDefaultDomain configuration item #685
+
+## Version 6.1
+
 **12 April 2017**
 
 ### Features
