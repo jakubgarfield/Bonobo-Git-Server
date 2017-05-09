@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
+using Serilog;
 
 namespace Bonobo.Git.Server
 {
@@ -25,7 +25,7 @@ namespace Bonobo.Git.Server
             }
             catch(Exception ex)
             {
-                Trace.TraceError("GetClaimValue Exception " + ex);
+                Log.Error(ex, "GetClaimValue exception");
             }
             return null;
         }
@@ -54,7 +54,7 @@ namespace Bonobo.Git.Server
                 }
                 catch (Exception ex)
                 {
-                    Trace.TraceError("Could not parse id '{0}' from NameIdentifier claim: {1}", id, ex.Message);
+                    Log.Error(ex, "Could not parse id '{id}' from NameIdentifier claim", id);
                     return Guid.Empty;
                 }
             }
@@ -91,7 +91,7 @@ namespace Bonobo.Git.Server
             }
             catch(Exception ex)
             {
-                Trace.TraceError("GetClaim Exception " + ex);
+                Log.Error(ex, "GetClaim exception");
             }
 
             return result;

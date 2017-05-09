@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Web.Mvc;
@@ -253,7 +252,7 @@ namespace Bonobo.Git.Server.Controllers
         protected override void OnException(ExceptionContext filterContext)
         {
             Exception exception = filterContext.Exception;
-            Trace.TraceError("{0}: Error caught in GitController {1}", DateTime.Now, exception);
+            Log.Error(exception, "Error caught in GitController");
             filterContext.Result = new ContentResult { Content = exception.ToString() };
 
             filterContext.ExceptionHandled = true;
