@@ -4,8 +4,8 @@ using System.Linq;
 using Bonobo.Git.Server.Models;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
-using System.Diagnostics;
 using Microsoft.Practices.Unity;
+using Serilog;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -130,7 +130,7 @@ namespace Bonobo.Git.Server.Data
                 }
                 catch (DbUpdateException ex)
                 {
-                    Trace.TraceWarning("Failed to create repo {0} - {1}", model.Name, ex);
+                    Log.Error(ex, "Failed to create repo {RepoName}", model.Name);
                     return false;
                 }
                 catch (UpdateException)

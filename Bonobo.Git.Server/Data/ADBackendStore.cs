@@ -9,7 +9,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Collections;
-using System.Diagnostics;
 using System.Web.Hosting;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Helpers;
@@ -109,7 +108,6 @@ namespace Bonobo.Git.Server.Data
             catch(Exception ex)
             {
                 Log.Error(ex, "AD: Store");
-                Trace.TraceError("ADStoreErr: " + ex);
             }
 
             return result;
@@ -128,7 +126,6 @@ namespace Bonobo.Git.Server.Data
             catch (Exception ex)
             {
                 Log.Error(ex, "AD: Delete");
-                Trace.TraceError("ADStoreErr: " + ex);
             }
 
             return result;
@@ -153,7 +150,6 @@ namespace Bonobo.Git.Server.Data
                 catch (Exception ex)
                 {
                     Log.Error(ex, "AD: LoadContent");
-                    Trace.TraceError("ADStoreErr: " + ex);
                 }
             }
 

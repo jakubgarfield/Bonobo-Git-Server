@@ -10,7 +10,7 @@ using System.Linq;
 using Bonobo.Git.Server.Data;
 using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json;
-using System.Diagnostics;
+using Serilog;
 
 namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
 {
@@ -209,8 +209,7 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
                 }
                 catch (Exception ex)
                 {
-                    Trace.TraceError("Failed to acquire group GUID - adding new.");
-                    Trace.TraceError(ex.Message);
+                    Log.Error(ex, "Failed to acquire group GUID for teamName {team} - adding new.", team.Name);
                 }
 
                 

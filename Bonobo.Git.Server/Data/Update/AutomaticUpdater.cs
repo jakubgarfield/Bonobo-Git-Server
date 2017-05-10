@@ -2,8 +2,8 @@
 using Bonobo.Git.Server.Data.Update.ADBackendUpdate;
 using System;
 using System.Data.Entity.Infrastructure;
-using System.Diagnostics;
 using System.Linq;
+using Serilog;
 
 namespace Bonobo.Git.Server.Data.Update
 {
@@ -66,7 +66,7 @@ namespace Bonobo.Git.Server.Data.Update
                     }
                     catch (Exception ex)
                     {
-                        Trace.TraceError("Exception while processing upgrade script {0}\r\n{1}", item.Command, ex);
+                        Log.Error(ex, "Exception while processing upgrade script {0}", item.Command);
                         throw;
                     }
                 }

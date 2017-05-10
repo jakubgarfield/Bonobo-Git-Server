@@ -1,8 +1,8 @@
 ﻿using Bonobo.Git.Server.App_GlobalResources;
 using System;
-using System.Diagnostics;
 using System.Net.Mail;
 using Bonobo.Git.Server.Models;
+using Serilog;
 
 namespace Bonobo.Git.Server.Helpers
 {
@@ -30,7 +30,7 @@ namespace Bonobo.Git.Server.Helpers
             }
             catch (Exception ex)
             {
-                Trace.TraceError("Caught exception sending password reset email " + ex);
+                Log.Error(ex, "Caught exception sending password reset email ");
                 result = false;
             }
             return result;
