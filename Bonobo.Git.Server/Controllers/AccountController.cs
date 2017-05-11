@@ -18,6 +18,7 @@ using System.DirectoryServices.AccountManagement;
 
 using Microsoft.Practices.Unity;
 using Serilog;
+using Microsoft.Owin.Security;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -205,7 +206,12 @@ namespace Bonobo.Git.Server.Controllers
 
                         var id = MembershipService.GetUserModel(credentials).Id;
                         RoleProvider.AddUserToRoles(id, new[] {Definitions.Roles.Administrator});
-                        ((ClaimsIdentity)User.Identity).AddClaim(new Claim(ClaimTypes.Role, Definitions.Roles.Administrator));
+
+                        // Add the administrator role to the Identity/cookie
+                        var Identity = (ClaimsIdentity)User.Identity;
+                        Identity.AddClaim(new Claim(ClaimTypes.Role, Definitions.Roles.Administrator));
+                        var AuthenticationManager = HttpContext.GetOwinContext().Authentication;
+                        AuthenticationManager.AuthenticationResponseGrant = new AuthenticationResponseGrant(new ClaimsPrincipal(Identity), new AuthenticationProperties { IsPersistent = true });
                     }
 
                     return RedirectToAction("Index", "Repository");
