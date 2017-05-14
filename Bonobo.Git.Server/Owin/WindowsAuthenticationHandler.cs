@@ -86,8 +86,6 @@ namespace Bonobo.Git.Server.Owin.Windows
                                 {
                                     result.Add(new Claim(ClaimTypes.Email, adUser.EmailAddress));
                                 }
-                                result.Add(new Claim(ClaimTypes.Role, Definitions.Roles.Administrator));
-                                result.Add(new Claim(ClaimTypes.Role, "Administrator"));
                                 identity.AddClaims(result);
                                 identity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, WindowsAuthenticationDefaults.AuthenticationType));
                                 Options.Handshakes.TryRemove(handshakeId);

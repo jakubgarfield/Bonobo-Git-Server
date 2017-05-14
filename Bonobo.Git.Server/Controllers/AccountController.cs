@@ -18,6 +18,7 @@ using System.DirectoryServices.AccountManagement;
 
 using Microsoft.Practices.Unity;
 using Serilog;
+using Microsoft.Owin.Security;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -181,7 +182,9 @@ namespace Bonobo.Git.Server.Controllers
 
         public ActionResult CreateADUser()
         {
-            if ((!Request.IsAuthenticated) || !(MembershipService is EFMembershipService))
+            var efms = MembershipService as EFMembershipService;
+            
+            if ((!Request.IsAuthenticated) || efms == null)
             {
                 Log.Warning("CreateADUser: can't run IsAuth: {IsAuth}, MemServ {MemServ}", 
                     Request.IsAuthenticated,
@@ -193,20 +196,24 @@ namespace Bonobo.Git.Server.Controllers
             var adUser = ADHelper.GetUserPrincipal(credentials);
             if (adUser != null)
             {
-                //TODO Is this legit? Could an AD user ever not have a Guid
                 var userId = adUser.Guid.GetValueOrDefault(Guid.NewGuid());
                 if (MembershipService.CreateUser(credentials, Guid.NewGuid().ToString(), adUser.GivenName, adUser.Surname, adUser.EmailAddress, userId))
                 {
-                    if (MembershipService is EFMembershipService)
+                    // 2 because we just added the user and there is the default admin user.
+                    if (AuthenticationSettings.ImportWindowsAuthUsersAsAdmin || efms.UserCount() == 2)
                     {
-                        var efms = MembershipService as EFMembershipService;
-                        // 2 because we just added the user and there is the default admin user.
-                        if ((AuthenticationSettings.ImportWindowsAuthUsersAsAdmin || efms.UserCount() == 2))
-                        {
-                            var id = MembershipService.GetUserModel(credentials).Id;
-                            RoleProvider.AddUserToRoles(id, new string[] {Definitions.Roles.Administrator});
-                        }
+                        Log.Information("Making AD user {User} into an admin", credentials);
+
+                        var id = MembershipService.GetUserModel(credentials).Id;
+                        RoleProvider.AddUserToRoles(id, new[] {Definitions.Roles.Administrator});
+
+                        // Add the administrator role to the Identity/cookie
+                        var Identity = (ClaimsIdentity)User.Identity;
+                        Identity.AddClaim(new Claim(ClaimTypes.Role, Definitions.Roles.Administrator));
+                        var AuthenticationManager = HttpContext.GetOwinContext().Authentication;
+                        AuthenticationManager.AuthenticationResponseGrant = new AuthenticationResponseGrant(new ClaimsPrincipal(Identity), new AuthenticationProperties { IsPersistent = true });
                     }
+
                     return RedirectToAction("Index", "Repository");
                 }
                 else
