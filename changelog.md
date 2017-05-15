@@ -21,7 +21,8 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 ### Other improvements 
 
 * Permissions for unknown Windows users are set more sensibly when using internal membership #687
-
+* pt-BR translation improvements #678
+* All logging now moved to new app_data\logs files
 
 ## Version 6.1
 
