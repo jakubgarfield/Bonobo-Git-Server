@@ -6,7 +6,7 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 ## Version 6.2
 
-**xx May 2017**
+**15 May 2017**
 
 ### Features
 
