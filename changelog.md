@@ -4,7 +4,13 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
-## Version 6.2
+## Version 6.2.1
+
+**22 May 2017**
+
+This is identical to 6.2.0, but with corrected version numberin in the appveyor build.
+
+## Version 6.2.0
 
 **15 May 2017**
 
