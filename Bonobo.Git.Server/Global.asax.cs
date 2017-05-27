@@ -117,7 +117,12 @@ namespace Bonobo.Git.Server
 
         public static string GetLogFileNameFormat()
         {
-            return Path.Combine(HostingEnvironment.MapPath(ConfigurationManager.AppSettings["LogDirectory"]), "log-{Date}.txt");
+            string logDirectory = ConfigurationManager.AppSettings["LogDirectory"];
+            if (string.IsNullOrEmpty(logDirectory))
+            {
+                logDirectory = @"~\App_Data\Logs";
+            }
+            return Path.Combine(HostingEnvironment.MapPath(logDirectory), "log-{Date}.txt");
         }
 
         private static void RegisterDependencyResolver()
