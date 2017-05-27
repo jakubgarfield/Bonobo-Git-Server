@@ -223,6 +223,74 @@ namespace Bonobo.Git.Server
                               .Select(s => ToModel(s)).ToList();
         }
 
+        public RepositoryCompareModel Compare(string name1, string name2, string path)
+        {
+            if (string.IsNullOrWhiteSpace(name1))
+            {
+                return new RepositoryCompareModel();
+            }
+
+            if (string.IsNullOrWhiteSpace(name2))
+            {
+                return new RepositoryCompareModel();
+            }
+
+            string referenceName = null;
+            var commit1 = GetCommitByName(name1, out referenceName);
+            if (commit1 == null)
+            {
+                return new RepositoryCompareModel();
+            }
+
+            var commit2 = GetCommitByName(name2, out referenceName);
+            if (commit2 == null)
+            {
+                return new RepositoryCompareModel();
+            }
+
+            var model = new RepositoryCompareModel
+            {
+                Commit1 = name1,
+                Commit2 = name2,
+                FilePath = path,
+                Commit1Model = GetCompareCommit(commit1),
+                Commit2Model = GetCompareCommit(commit2)
+            };
+
+            var filePaths = new List<string>();
+            if (!string.IsNullOrWhiteSpace(path))
+                filePaths.Add(path);
+
+            TreeChanges changes = null;
+            Patch patches = null;
+            if (filePaths.Count > 0)
+            {
+                changes = !commit1.Parents.Any() ? _repository.Diff.Compare<TreeChanges>(commit1.Tree, commit2.Tree, filePaths) : _repository.Diff.Compare<TreeChanges>(commit1.Parents.First().Tree, commit2.Tree, filePaths);
+                patches = !commit1.Parents.Any() ? _repository.Diff.Compare<Patch>(commit1.Tree, commit2.Tree, filePaths) : _repository.Diff.Compare<Patch>(commit1.Parents.First().Tree, commit2.Tree, filePaths);
+            }
+            else
+            {
+                changes = !commit1.Parents.Any() ? _repository.Diff.Compare<TreeChanges>(commit1.Tree, commit2.Tree) : _repository.Diff.Compare<TreeChanges>(commit1.Parents.First().Tree, commit2.Tree);
+                patches = !commit1.Parents.Any() ? _repository.Diff.Compare<Patch>(commit1.Tree, commit2.Tree) : _repository.Diff.Compare<Patch>(commit1.Parents.First().Tree, commit2.Tree);
+            }
+
+            model.Changes = changes.OrderBy(s => s.Path).Select(i =>
+            {
+                var patch = patches[i.Path];
+                return new RepositoryCommitChangeModel
+                {
+                    ChangeId = i.Oid.Sha,
+                    Path = i.Path.Replace('\\', '/'),
+                    Status = i.Status,
+                    LinesAdded = patch.LinesAdded,
+                    LinesDeleted = patch.LinesDeleted,
+                    Patch = patch.Patch
+                };
+            });
+
+            return model;
+        }
+
         public void Dispose()
         {
             if (_repository != null)
@@ -356,6 +424,22 @@ namespace Bonobo.Git.Server
 
                 };
             });
+
+            return model;
+        }
+
+        private RepositoryCommitModel GetCompareCommit(Commit commit)//, Tuple<bool, string, string> linkify)
+        {
+            var model = new RepositoryCommitModel
+            {
+                Author = commit.Author.Name,
+                AuthorEmail = commit.Author.Email,
+                AuthorAvatar = commit.Author.GetAvatar(),
+                Date = commit.Author.When.LocalDateTime,
+                ID = commit.Sha,
+                TreeID = commit.Tree.Sha,
+                Parents = commit.Parents.Select(i => i.Sha).ToArray()
+            };
 
             return model;
         }

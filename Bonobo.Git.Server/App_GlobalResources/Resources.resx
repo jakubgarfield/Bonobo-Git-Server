@@ -951,4 +951,25 @@ The regular C# string formatting rules apply: To get {} in your link you need to
   <data name="Home_About_Title" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="Repository_Layout_Compare" xml:space="preserve">
+    <value>Compare</value>
+  </data>
+  <data name="Repository_Compare_Commit1" xml:space="preserve">
+    <value>Commit 1</value>
+  </data>
+  <data name="Repository_Compare_Commit2" xml:space="preserve">
+    <value>Commit 2</value>
+  </data>
+  <data name="Repository_Compare_FilePath" xml:space="preserve">
+    <value>FilePath</value>
+  </data>
+  <data name="Repository_Compare_Submit" xml:space="preserve">
+    <value>Compare</value>
+  </data>
+  <data name="Repository_Compare_DefferenceBetween" xml:space="preserve">
+    <value>Defference Between</value>
+  </data>
+  <data name="Repository_Compare_Title" xml:space="preserve">
+    <value>Compare</value>
+  </data>
 </root>
