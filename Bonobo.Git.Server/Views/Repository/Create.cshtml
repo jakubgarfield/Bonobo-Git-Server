@@ -70,7 +70,7 @@
         </div>
             <div class="pure-control-group checkboxlist">
                 @Html.LabelFor(m => m.Users)
-                <span>
+                <span class="scroll">
                     @Html.CheckBoxListFor(m => m.PostedSelectedUsers, mm => mm.AllUsers, mm => mm.Id, mm => mm.DisplayName, mm => mm.Users, Position.Vertical)
                 </span>
                 <i class="fa fa-info-circle" title="@Resources.Repository_UsersHint"></i>
@@ -78,7 +78,7 @@
 
             <div class="pure-control-group checkboxlist">
                 @Html.LabelFor(m => m.Administrators)
-                <span>
+                <span class="scroll">
                     @Html.CheckBoxListFor(m => m.PostedSelectedAdministrators, mm => mm.AllAdministrators, mm => mm.Id, mm => mm.DisplayName, mm => mm.Administrators, Position.Vertical)
                 </span>
                 @Html.ValidationMessageFor(m => m.Administrators)
@@ -87,7 +87,7 @@
 
             <div class="pure-control-group checkboxlist">
                 @Html.LabelFor(m => m.Teams)
-                <span>
+                <span class="scroll">
                     @Html.CheckBoxListFor(m => m.PostedSelectedTeams, mm => mm.AllTeams, mm => mm.Id, mm => mm.DisplayName, mm => mm.Teams, Position.Vertical)
                 </span>
                 <i class="fa fa-info-circle" title="@Resources.Repository_TeamsHint"></i>
