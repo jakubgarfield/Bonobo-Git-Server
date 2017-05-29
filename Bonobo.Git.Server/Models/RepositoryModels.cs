@@ -299,6 +299,35 @@ namespace Bonobo.Git.Server.Models
         public IEnumerable<string> Links { get; set; }
     }
 
+    public class RepositoryCompareModel
+    {
+        public RepositoryCompareModel()
+        {
+            Name = "";
+            Commit1Model = new RepositoryCommitModel();
+            Commit2Model = new RepositoryCommitModel();
+        }
+
+        public string Name { get; set; }
+        public RepositoryLogoDetailModel Logo { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Compare_Commit1")]
+        public string Commit1 { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Compare_Commit2")]
+        public string Commit2 { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Compare_FilePath")]
+        public string FilePath { get; set; }
+
+        public RepositoryCommitModel Commit1Model { get; set; }
+
+        public RepositoryCommitModel Commit2Model { get; set; }
+
+        [Display(ResourceType = typeof(Resources), Name = "Repository_Commit_Changes")]
+        public IEnumerable<RepositoryCommitChangeModel> Changes { get; set; }
+    }
+
     public class RepositoryBlameModel
     {
         public string Name { get; set; }

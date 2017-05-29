@@ -523,6 +523,21 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
+        [WebAuthorizeRepository]
+        public ActionResult Compare(Guid id, string commit1, string commit2, string filePath)
+        {
+            ViewBag.ID = id;
+            ViewBag.ShowShortMessageOnly = false;
+            var repo = RepositoryRepository.GetRepository(id);
+            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))
+            {
+                var model = browser.Compare(commit1, commit2, filePath);
+                model.Name = repo.Name;
+                model.Logo = new RepositoryLogoDetailModel(repo.Logo);
+                return View(model);
+            }
+        }
+
         [WebAuthorize]
         public ActionResult Clone(Guid id)
         {

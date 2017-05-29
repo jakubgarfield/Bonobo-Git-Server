@@ -946,4 +946,7 @@
   <data name="Home_About_Thanks_p" xml:space="preserve">
     <value>Bonobo Git Server 使用了一些免费和开放原始码的项目。 感谢所有的作者和贡献者，感谢他们的努力和付出。</value>
   </data>
+  <data name="Repository_Layout_Compare" xml:space="preserve">
+    <value>差异</value>
+  </data>
 </root>
