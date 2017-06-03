@@ -2,8 +2,8 @@
 using System.Runtime.Remoting.Messaging;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
-using System.Diagnostics;
 using System.Configuration;
+using Serilog;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -31,8 +31,8 @@ namespace Bonobo.Git.Server.Data
 
         public void DoReset(int mode)
         {
-            Trace.WriteLine("Reset mode " + mode.ToString());
-            Trace.WriteLine("AppSettings: " + ConfigurationManager.AppSettings["AllowDBReset"] ?? "null");
+            Log.Information("Reset mode {mode}", mode);
+            Log.Information("AppSettings Allow: {AllowDBReset}", ConfigurationManager.AppSettings["AllowDBReset"]);
             switch (mode)
             {
                 case 1:

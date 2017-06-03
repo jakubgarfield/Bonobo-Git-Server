@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -204,31 +203,21 @@ namespace Bonobo.Git.Server.Configuration
             _report.AppendLine("Exception Log");
             SafelyRun(() =>
             {
-                var loggingListener = Trace.Listeners.OfType<TextWriterTraceListener>().FirstOrDefault();
-                if (loggingListener != null)
+                var nameFormat = MvcApplication.GetLogFileNameFormat();
+                var todayLogFileName = nameFormat.Replace("{Date}", DateTime.Now.ToString("yyyyMMdd"));
+                SafelyReport("LogFileName: ", () => todayLogFileName);
+                var chunkSize = 10000;
+                var length = new FileInfo(todayLogFileName).Length;
+                Report("Log File total length", length);
+
+                var startingPoint = Math.Max(0, length - chunkSize);
+                Report("Starting log dump from ", startingPoint);
+
+                using (var logText = File.Open(todayLogFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    var writer = loggingListener.Writer as StreamWriter;
-                    if (writer != null)
-                    {
-                        var fileStream = writer.BaseStream as FileStream;
-                        if (fileStream != null)
-                        {
-                            SafelyReport("LogFileName: ", () => fileStream.Name);
-                            var chunkSize = 10000;
-                            var length = new FileInfo(fileStream.Name).Length;
-                            Report("Log File total length", length);
-
-                            var startingPoint = Math.Max(0, length - chunkSize);
-                            Report("Starting log dump from ", startingPoint);
-
-                            using (var logText = File.Open(fileStream.Name, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                            {
-                                logText.Seek(startingPoint, SeekOrigin.Begin);
-                                var reader = new StreamReader(logText);
-                                _report.AppendLine(reader.ReadToEnd());
-                            }
-                        }
-                    }
+                    logText.Seek(startingPoint, SeekOrigin.Begin);
+                    var reader = new StreamReader(logText);
+                    _report.AppendLine(reader.ReadToEnd());
                 }
             });
         }

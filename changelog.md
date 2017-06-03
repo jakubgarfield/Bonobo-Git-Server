@@ -4,15 +4,60 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 6.2.1
+
+**22 May 2017**
+
+This is identical to 6.2.0, but with corrected version numberin in the appveyor build.
+
+## Version 6.2.0
+
+**15 May 2017**
+
+### Features
+
+* Broader search for AD domain #683
+* Reintroduce ActiveDirectoryDefaultDomain configuration item (helps #683)
+
+### Bugfixes
+
+* Revert Jwt library to v4.x to repair ADFS login #681
+* Reintroduce ActiveDirectoryDefaultDomain configuration item #685
+
+### Other improvements 
+
+* Permissions for unknown Windows users are set more sensibly when using internal membership #687
+* pt-BR translation improvements #678
+* All logging now moved to new app_data\logs files
+
+## Version 6.1
+
+**12 April 2017**
+
+### Features
+
+* Enhanced logging - daily rotating log files written to App_Data\Logs, log level controllable in Web.Config
+
+### Bugfixes
+
+* Fix problem with Git authentication with using the Windows Auth + EF Membership approach #668
+* Don't throw exception if GitAuth token doesn't contain colon #664
+
+### Other improvements 
+
+* Improved French translation #670
+* Updated libgit2sharp #650
+* Updated CommonMark #651
+
 ## Version 6.0.0
 
-**TBD 2017**
+**29 March 2017**
 
 ### Compatibility issues
 
 * This version adds column to several tables in the database. This makes it
-incompatible with previous versions of Bonobo. Please ensure that you have a 
-backup of your App_Data folder before you update.
+incompatible with previous versions of Bonobo. **Please ensure that you have a 
+backup of your App_Data folder before you update.**
 
 ### Features
 

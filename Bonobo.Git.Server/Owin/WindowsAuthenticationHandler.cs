@@ -13,6 +13,7 @@ using System.DirectoryServices.AccountManagement;
 
 using Bonobo.Git.Server.Security;
 using Bonobo.Git.Server.Helpers;
+using Serilog;
 
 namespace Bonobo.Git.Server.Owin.Windows
 {
@@ -34,6 +35,8 @@ namespace Bonobo.Git.Server.Owin.Windows
                     case AuthenticationStage.Request:
                         if (handshake.TryAcquireServerChallenge(token))
                         {
+                            Log.Verbose("WinAuth: Obtained challenge token OK");
+
                             Response.Headers.Add("WWW-Authenticate", new[] { string.Concat("NTLM ", token.Challenge) });
                             Response.StatusCode = 401;
                             return Task.FromResult(new AuthenticationTicket(null, properties));
@@ -46,32 +49,57 @@ namespace Bonobo.Git.Server.Owin.Windows
                             var uid = handshake.AuthenticatedUsername.ToLowerInvariant();
                             var claimdelegate = Options.GetClaimsForUser(uid);
 
+                            Log.Verbose("WinAuth: Valid response for uid {UserId}", uid);
 
                             if (claimdelegate == null) 
                             {
-                                var dc = new PrincipalContext(ContextType.Domain, handshake.AuthenticatedUsername.GetDomain());
+                                string domainName = handshake.AuthenticatedUsername.GetDomain();
+
+                                Log.Verbose("WinAuth: New user - looking-up user {UserName} in domain {DomainName}",
+                                    handshake.AuthenticatedUsername, domainName);
+
+                                var dc = new PrincipalContext(ContextType.Domain, domainName);
                                 var adUser = UserPrincipal.FindByIdentity(dc, handshake.AuthenticatedUsername);
 
+                                if (adUser == null)
+                                {
+                                    Log.Error("DC for domain {DomainName} has returned null for username {UserName} - failing auth", domainName, handshake.AuthenticatedUsername);
+                                    Response.StatusCode = 401;
+                                    return Task.FromResult(new AuthenticationTicket(null, null));
+                                }
+
+                                Log.Verbose("WinAuth: DC returned adUser {ADUser}", adUser.GivenName);
 
                                 ClaimsIdentity identity = new ClaimsIdentity(Options.SignInAsAuthenticationType);
                                 List<Claim> result = new List<Claim>();
-                                result.Add(new Claim(ClaimTypes.GivenName, adUser.GivenName));
-                                result.Add(new Claim(ClaimTypes.Surname, adUser.Surname));
+                                if (!String.IsNullOrEmpty(adUser.GivenName))
+                                {
+                                    result.Add(new Claim(ClaimTypes.GivenName, adUser.GivenName));
+                                }
+                                if (!String.IsNullOrEmpty(adUser.Surname))
+                                {
+                                    result.Add(new Claim(ClaimTypes.Surname, adUser.Surname));
+                                }
                                 result.Add(new Claim(ClaimTypes.NameIdentifier, adUser.Guid.ToString()));
                                 result.Add(new Claim(ClaimTypes.Name, handshake.AuthenticatedUsername));
-                                result.Add(new Claim(ClaimTypes.Email, adUser.EmailAddress));
-                                result.Add(new Claim(ClaimTypes.Role, Definitions.Roles.Administrator));
-                                result.Add(new Claim(ClaimTypes.Role, "Administrator"));
+                                if (!String.IsNullOrEmpty(adUser.EmailAddress))
+                                {
+                                    result.Add(new Claim(ClaimTypes.Email, adUser.EmailAddress));
+                                }
                                 identity.AddClaims(result);
                                 identity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, WindowsAuthenticationDefaults.AuthenticationType));
                                 Options.Handshakes.TryRemove(handshakeId);
 
+                                Log.Verbose("WinAuth: New user - about to redirect to CreateADUser");
+
                                 // user does not exist! Redirect to create page.
                                 properties.RedirectUri = "/Account/CreateADUser";
                                 return Task.FromResult(new AuthenticationTicket(identity, properties));
-
-                            }else{
+                            }
+                            else
+                            {
                                 Claim[] claims = claimdelegate.ToArray();
+                                Log.Verbose("WinAuth: Found existing uid {UserId}, has {Claims} claims", uid, claims.Length);
                                 if (claims.Length > 0)
                                 {
                                     ClaimsIdentity identity = new ClaimsIdentity(Options.SignInAsAuthenticationType);
@@ -79,17 +107,17 @@ namespace Bonobo.Git.Server.Owin.Windows
                                     identity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, WindowsAuthenticationDefaults.AuthenticationType));
                                     Options.Handshakes.TryRemove(handshakeId);
 
+                                    Log.Verbose("WinAuth: Returning id auth ticket, claims: {Claims}", claims);
+
                                     return Task.FromResult(new AuthenticationTicket(identity, properties));
                                 }
                             }
                         }
                         break;
                 }
-
                 Response.Headers.Add("WWW-Authenticate", new[] { "NTLM" });
                 Response.StatusCode = 401;
             }
-
             return Task.FromResult(new AuthenticationTicket(null, properties));
         }
 

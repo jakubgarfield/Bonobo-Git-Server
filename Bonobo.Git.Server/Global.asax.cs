@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -29,6 +28,8 @@ using Microsoft.Practices.Unity.Mvc;
 using System.Web.Configuration;
 using System.Security.Claims;
 using System.Web.Helpers;
+using System.Web.Hosting;
+using Serilog;
 
 namespace Bonobo.Git.Server
 {
@@ -72,6 +73,9 @@ namespace Bonobo.Git.Server
 
         protected void Application_Start()
         {
+            ConfigureLogging();
+            Log.Information("Bonobo starting");
+
             AreaRegistration.RegisterAllAreas();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
@@ -80,10 +84,11 @@ namespace Bonobo.Git.Server
             GlobalFilters.Filters.Add((AllViewsFilter)DependencyResolver.Current.GetService<AllViewsFilter>());
 
             var connectionstring = WebConfigurationManager.ConnectionStrings["BonoboGitServerContext"];
-            if (connectionstring.ProviderName.ToLower() == "system.data.sqlite")
+            if (connectionstring.ProviderName.ToLowerInvariant() == "system.data.sqlite")
             {
-                if(!connectionstring.ConnectionString.ToLower().Contains("binaryguid=false")){
-                    Trace.WriteLine("Please ensure that the sqlite connection string contains 'BinaryGUID=false;'.");
+                if(!connectionstring.ConnectionString.ToLowerInvariant().Contains("binaryguid=false"))
+                {
+                    Log.Error("Please ensure that the sqlite connection string contains 'BinaryGUID=false;'.");
                     throw new ConfigurationErrorsException("Please ensure that the sqlite connection string contains 'BinaryGUID=false;'.");
                 }
             }
@@ -97,9 +102,27 @@ namespace Bonobo.Git.Server
             }
             catch (Exception ex)
             {
-                Trace.WriteLine("StartupException " + ex);
+                Log.Error(ex, "Startup exception");
                 throw;
             }
+        }
+
+        private void ConfigureLogging()
+        {
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.AppSettings()
+                .WriteTo.RollingFile(GetLogFileNameFormat())
+                .CreateLogger();
+        }
+
+        public static string GetLogFileNameFormat()
+        {
+            string logDirectory = ConfigurationManager.AppSettings["LogDirectory"];
+            if (string.IsNullOrEmpty(logDirectory))
+            {
+                logDirectory = @"~\App_Data\Logs";
+            }
+            return Path.Combine(HostingEnvironment.MapPath(logDirectory), "log-{Date}.txt");
         }
 
         private static void RegisterDependencyResolver()
@@ -252,7 +275,7 @@ namespace Bonobo.Git.Server
                     routeData.Values.Add("action", "Error");
                     if (exception != null)
                     {
-                        Trace.TraceError("Error occured and caught in Global.asax - {0}", exception.ToString());
+                        Log.Error(exception, "Exception caught in Global.asax1");
                     }
                 }
                 else
@@ -264,11 +287,11 @@ namespace Bonobo.Git.Server
                             break;
                         case 500:
                             routeData.Values.Add("action", "ServerError");
-                            Trace.TraceError("Server Error occured and caught in Global.asax - {0}", exception.ToString());
+                            Log.Error(exception, "500 Exception caught in Global.asax");
                             break;
                         default:
                             routeData.Values.Add("action", "Error");
-                            Trace.TraceError("Error occured and caught in Global.asax - {0}", exception.ToString());
+                            Log.Error(exception, "Exception caught in Global.asax (code {Code})", httpException.GetHttpCode());
                             break;
                     }
                 }

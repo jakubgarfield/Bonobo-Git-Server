@@ -14,6 +14,8 @@ using Bonobo.Git.Server.Models;
 using System.Web.Security;
 using System.Security.Principal;
 using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Helpers;
+using Serilog;
 
 namespace Bonobo.Git.Server.Security
 {
@@ -33,42 +35,34 @@ namespace Bonobo.Git.Server.Security
 
             try
             {
-                string domain = username.GetDomain();
-                if (String.IsNullOrEmpty(domain))
+                if (ADHelper.ValidateUser(username, password))
                 {
-                    domain = Configuration.ActiveDirectorySettings.DefaultDomain;
-                }
-
-                using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, domain))
-                {
-                    if (principalContext.ValidateCredentials(username, password, ContextOptions.Negotiate))
+                    using (var user = ADHelper.GetUserPrincipal(username))
                     {
-                        using (UserPrincipal user = UserPrincipal.FindByIdentity(principalContext, username))
-                        {
-							using (GroupPrincipal group = GroupPrincipal.FindByIdentity(principalContext, Configuration.ActiveDirectorySettings.MemberGroupName))
-							{
-								if (group == null)
-									result = ValidationResult.Failure;
+                        GroupPrincipal group;
+						using (var pc = ADHelper.GetMembersGroup(out group))
+						{
+							if (group == null)
+								result = ValidationResult.Failure;
 
-								if (user != null)
+							if (user != null)
+							{
+								if (!group.GetMembers(true).Contains(user))
 								{
-									if (!group.GetMembers(true).Contains(user))
-									{
-										result = ValidationResult.NotAuthorized;
-									}
-									else
-									{
-										result = ValidationResult.Success;
-									}
+									result = ValidationResult.NotAuthorized;
+								}
+								else
+								{
+									result = ValidationResult.Success;
 								}
 							}
-                        }
+						}
                     }
                 }
             }
             catch(Exception ex)
             {
-                Trace.TraceError("AD.ValidateUser Exception: " + ex);
+                Log.Error(ex, "AD.ValidateUser Exception: ");
                 result = ValidationResult.Failure;
             }
 
@@ -93,21 +87,11 @@ namespace Bonobo.Git.Server.Security
 
         public UserModel GetUserModel(string username)
         {
-            if (!UsernameContainsDomain(username))
+            using (var upc = ADHelper.GetUserPrincipal(username))
             {
-                using (PrincipalContext principalContext = new PrincipalContext(ContextType.Domain, ActiveDirectorySettings.DefaultDomain))
-                using (UserPrincipal user = UserPrincipal.FindByIdentity(principalContext, username))
-                {
-                    // assuming all users have a guid on AD
-                    return ADBackend.Instance.Users.FirstOrDefault(n => n.Id == user.Guid.Value);
-                }
+                return ADBackend.Instance.Users.FirstOrDefault(n => n.Id == upc.Guid.Value);
             }
-            else if (!string.IsNullOrEmpty(username))
-            {
-                return ADBackend.Instance.Users.Where(x => x.Username.Equals(username, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-            }
-
-            return null;
+            throw new ArgumentException("User was not found with username: " + username);
         }
 
         public UserModel GetUserModel(Guid id)

@@ -14,7 +14,7 @@ Prerequisites
     * [Installing IIS 8 on Windows Server 2012](http://www.iis.net/learn/get-started/whats-new-in-iis-8/installing-iis-8-on-windows-server-2012)
     * [Installing IIS 7 on Windows Server 2008 or Windows Server 2008 R2](http://www.iis.net/learn/install/installing-iis-7/installing-iis-7-and-above-on-windows-server-2008-or-windows-server-2008-r2)
     * [Installing IIS 7 on Windows Vista and Windows 7](http://www.iis.net/learn/install/installing-iis-7/installing-iis-on-windows-vista-and-windows-7)
-* [.NET Framework 4.5](http://www.microsoft.com/en-us/download/details.aspx?id=30653)
+* [.NET Framework 4.6](https://www.microsoft.com/en-gb/download/details.aspx?id=48130)
     * Windows Vista SP2, Windows 7, Windows 8 and higher
     * Windows Server 2008 R2, Windows Server 2008 SP2, Windows Server 2012 and higher
     * Don't forget to register .NET framework with your IIS
@@ -125,6 +125,6 @@ New release
 -----------------------------------------------
 
 * update [changelog](https://github.com/jakubgarfield/Bonobo-Git-Server/blob/master/changelog.md)
-* update [AssemblyInfo.cs](https://github.com/jakubgarfield/Bonobo-Git-Server/blob/master/Bonobo.Git.Server/Properties/AssemblyInfo.cs)
+* update version numbers in [appveyor.yml](https://github.com/jakubgarfield/Bonobo-Git-Server/blob/master/appveyor.yml)
 * add tag so it appears under [releases](https://github.com/jakubgarfield/Bonobo-Git-Server/releases) with `git tag -a 6.0.0 -m "Release 6.0.0"`
 * add zipped version to bonobogitserver.com at [Bonobo-Git-Server-Web](https://github.com/jakubgarfield/Bonobo-Git-Server-Web)
