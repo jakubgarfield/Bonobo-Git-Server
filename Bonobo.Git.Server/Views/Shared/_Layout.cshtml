@@ -5,6 +5,10 @@
     <link rel="shortcut icon" href="~/favicon.ico?v=2" type="image/x-icon" />
     <title>@ViewBag.Title :: @UserConfiguration.Current.GetSiteTitle()</title>
     @Styles.Render("~/Content/bundledCss")
+    @if (UserConfiguration.Current.HasCustomSiteCss)
+    {
+        <link rel="stylesheet" href="@Url.Content(@UserConfiguration.Current.SiteCssUrl)@(string.Format("?_={0}", DateTime.Now.Ticks))" type="text/css" />
+    }
     @if (UserConfiguration.Current.HasCustomSiteLogo)
     {
     <style>

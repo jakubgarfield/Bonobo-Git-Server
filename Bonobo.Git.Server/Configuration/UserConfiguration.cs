@@ -22,6 +22,7 @@ namespace Bonobo.Git.Server.Configuration
         public string SiteTitle { get; set; }
         public string SiteLogoUrl { get; set; }
         public string SiteFooterMessage { get; set; }
+        public string SiteCssUrl { get; set; }
         public bool IsCommitAuthorAvatarVisible { get; set; }
         public string LinksRegex { get; set; }
         public string LinksUrl { get; set; }
@@ -50,6 +51,11 @@ namespace Bonobo.Git.Server.Configuration
             {
                 return !string.IsNullOrWhiteSpace(this.SiteLogoUrl);
             }
+        }
+
+        public bool HasCustomSiteCss
+        {
+            get { return !string.IsNullOrWhiteSpace(SiteCssUrl); }
         }
 
         public bool HasLinks
