@@ -7,7 +7,7 @@
     @Styles.Render("~/Content/bundledCss")
     @if (UserConfiguration.Current.HasCustomSiteCss)
     {
-        <link rel="stylesheet" href="@Url.Content(@UserConfiguration.Current.SiteCssUrl)@(string.Format("?_={0}", DateTime.Now.Ticks))" type="text/css" />
+        <link rel="stylesheet" href="@string.Format("{0}?_={1}", Url.Content(UserConfiguration.Current.SiteCssUrl), DateTime.Now.Ticks)" type="text/css" />
     }
     @if (UserConfiguration.Current.HasCustomSiteLogo)
     {
