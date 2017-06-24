@@ -201,6 +201,7 @@ namespace Bonobo.Git.Server.Data
 
             foreach (string teamName in ActiveDirectorySettings.TeamNameToGroupNameMapping.Keys)
             {
+                Log.Verbose("AD: Updating team {TeamName}", teamName);
                 try
                 {
                     GroupPrincipal group;
@@ -213,15 +214,13 @@ namespace Bonobo.Git.Server.Data
                             Name = teamName,
                             Members = group.GetMembers(true).Select(x => MembershipService.GetUserModel(x.Guid.Value)).Where(o => o != null).ToArray()
                         };
-                        if (teamModel != null)
-                        {
-                            Teams.AddOrUpdate(teamModel);
-                        }
+                        Teams.AddOrUpdate(teamModel);
+                        Log.Verbose("AD: Updated team {TeamName} OK", teamName);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "AD: Failed to update teams.");
+                    Log.Error(ex, "AD: Failed to update team {TeamName}", teamName);
                 }
             }
         }

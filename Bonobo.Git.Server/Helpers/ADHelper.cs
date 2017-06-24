@@ -23,10 +23,17 @@ namespace Bonobo.Git.Server.Helpers
             { 
                 // First we try for the domain in the username
                 var parsedDomainName = username.GetDomain();
-                var domainFromUsername = GetDomain(parsedDomainName);
-                if (domainFromUsername != null)
+                if (!string.IsNullOrEmpty(parsedDomainName))
                 {
-                    yield return domainFromUsername;
+                    var domainFromUsername = GetDomain(parsedDomainName);
+                    if (domainFromUsername != null)
+                    {
+                        yield return domainFromUsername;
+                    }
+                }
+                else
+                {
+                    Log.Verbose("AD: Username {UserName} contains no domain part", username);
                 }
             }
 
@@ -39,6 +46,10 @@ namespace Bonobo.Git.Server.Helpers
                 {
                     yield return domainFromConfig;
                 }
+            }
+            else
+            {
+                Log.Verbose("AD: No default domain setting in web.config");
             }
 
             // Finally try the global catalogue
