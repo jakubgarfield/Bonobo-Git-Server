@@ -48,17 +48,27 @@ namespace Bonobo.Git.Server.Security
             return Repository.GetAllRepositories().Where(repo => HasPermission(userId, userTeams, userIsSystemAdministrator, repo, requiredLevel));
         }
 
-        private bool HasPermission(Guid userId, IList<TeamModel> userTeams, bool userIsSystemAdministrator, RepositoryModel repositoryModel, RepositoryAccessLevel requiredLevel)
+        private bool HasPermission(Guid userId, IList<TeamModel> userTeams, bool userIsSystemAdministrator,
+            RepositoryModel repositoryModel, RepositoryAccessLevel requiredLevel)
         {
+            // All users can take advantage of the anonymous permissions
+            if (CheckAnonymousPermission(repositoryModel, requiredLevel))
+            {
+                Log.Verbose(
+                    "RepoPerms: Permitting user {UserId} anonymous permission {Permission} on repo {RepositoryName}",
+                    userId,
+                    requiredLevel,
+                    repositoryModel.Name);
+                return true;
+            }
             if (userId == Guid.Empty)
             {
-                // This is an anonymous user, the rules are different
-                return CheckAnonymousPermission(repositoryModel, requiredLevel);
+                // We have no named user
+                return false;
             }
-            else
-            {
-                return CheckNamedUserPermission(userId, userTeams, userIsSystemAdministrator, repositoryModel, requiredLevel);
-            }
+
+            // Named users have more possibilities
+            return CheckNamedUserPermission(userId, userTeams, userIsSystemAdministrator, repositoryModel, requiredLevel);
         }
 
         private bool CheckAnonymousPermission(RepositoryModel repository, RepositoryAccessLevel requiredLevel)
