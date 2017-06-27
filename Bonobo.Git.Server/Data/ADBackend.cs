@@ -201,13 +201,14 @@ namespace Bonobo.Git.Server.Data
 
             foreach (string teamName in ActiveDirectorySettings.TeamNameToGroupNameMapping.Keys)
             {
-                Log.Verbose("AD: Updating team {TeamName}", teamName);
+                string groupName = ActiveDirectorySettings.TeamNameToGroupNameMapping[teamName];
+
+                Log.Verbose("AD: Updating team {TeamName} (groupName {GroupName})", teamName, groupName);
                 try
                 {
                     GroupPrincipal group;
-                    using (var pc = ADHelper.GetPrincipalGroup(ActiveDirectorySettings.TeamNameToGroupNameMapping[teamName], out group))
+                    using (var pc = ADHelper.GetPrincipalGroup(groupName, out group))
                     {
-
                         TeamModel teamModel = new TeamModel() {
                             Id = group.Guid.Value,
                             Description = group.Description,
@@ -231,20 +232,31 @@ namespace Bonobo.Git.Server.Data
             {
                 Roles.Remove(role.Id);
             }
-
             
             foreach (string roleName in ActiveDirectorySettings.RoleNameToGroupNameMapping.Keys)
             {
-                GroupPrincipal group;
-                var pc = ADHelper.GetPrincipalGroup(ActiveDirectorySettings.RoleNameToGroupNameMapping[roleName], out group);
-
-                RoleModel roleModel = new RoleModel()
+                string groupName = ActiveDirectorySettings.RoleNameToGroupNameMapping[roleName];
+                Log.Verbose("AD: Updating role {RoleName} (groupName {GroupName})", roleName, groupName);
+                try
                 {
-                    Id = group.Guid.Value,
-                    Name = roleName,
-                    Members = group.GetMembers(true).Where(x => x is UserPrincipal).Select(x => x.Guid.Value).ToArray()
-                };
-                Roles.AddOrUpdate(roleModel);
+                    GroupPrincipal group;
+                    using (var pc = ADHelper.GetPrincipalGroup(groupName, out group))
+                    {
+                        RoleModel roleModel = new RoleModel
+                        {
+                            Id = group.Guid.Value,
+                            Name = roleName,
+                            Members = group.GetMembers(true).Where(x => x is UserPrincipal).Select(x => x.Guid.Value)
+                                .ToArray()
+                        };
+                        Roles.AddOrUpdate(roleModel);
+                        Log.Verbose("AD: Updated role {RoleName} OK", roleName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "AD: Failed to update role {roleName}", roleName);
+                }
             }
         }
     }

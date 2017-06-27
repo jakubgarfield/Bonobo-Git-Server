@@ -41,6 +41,8 @@ namespace Bonobo.Git.Server.Helpers
             string defaultDomainName = ConfigurationManager.AppSettings["ActiveDirectoryDefaultDomain"];
             if (!string.IsNullOrEmpty(defaultDomainName))
             {
+                Log.Verbose("AD: Default domain set as {DomainName}", defaultDomainName);
+
                 var domainFromConfig = GetDomain(defaultDomainName);
                 if (domainFromConfig != null)
                 {
@@ -59,8 +61,20 @@ namespace Bonobo.Git.Server.Helpers
             // Else try all global catalogs in the current forest.
             foreach (GlobalCatalog gc in gcc)
             {
-                Log.Information("Trying GlobalCatalogue {globalCatalog} domain {domain}", gc.Name, gc.Domain.Name);
-                yield return gc.Domain;
+                Domain domain = null;
+                try
+                {
+                    Log.Information("Checking GlobalCatalogue {globalCatalog}", gc.Name);
+                    domain = gc.Domain;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to get domain from catalog {globalCatalog}", gc.Name);
+                }
+                if (domain != null)
+                {
+                    yield return domain;
+                }
             }
         }
 
