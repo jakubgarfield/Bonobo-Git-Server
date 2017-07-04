@@ -206,7 +206,7 @@ namespace Bonobo.Git.Server.Controllers
             return RedirectToAction("Index");
         }
 
-        [WebAuthorizeRepository]
+        [WebAuthorizeRepository(AllowAnonymousAccessWhenRepositoryAllowsIt =true)]
         public ActionResult Detail(Guid id)
         {
             ViewBag.ID = id;

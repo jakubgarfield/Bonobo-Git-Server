@@ -15,15 +15,41 @@ namespace Bonobo.Git.Server
 
         public bool RequiresRepositoryAdministrator { get; set; }
 
+        public bool AllowAnonymousAccessWhenRepositoryAllowsIt { get; set; }
+
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
+            Guid repoId = Guid.Empty;
+            UrlHelper urlhelper = null;
+
+            // is this set to allow anon users?
+            if (AllowAnonymousAccessWhenRepositoryAllowsIt)
+            {
+                urlhelper = GetUrlHelper(filterContext);
+                repoId = GetRepoId(filterContext);
+                //if the user is authenciated or the repo id isnt there let the normal auth code handle it.
+                if (repoId!=Guid.Empty && !filterContext.HttpContext.User.Identity.IsAuthenticated)
+                {
+                    //we are only allowing read access here.  The web ui doesnt do pushes
+                    if(RepositoryPermissionService.HasPermission(Guid.Empty,repoId, RepositoryAccessLevel.Pull))
+                    {
+                        return;
+                    }
+                }
+            }
+            //do base role checks
             base.OnAuthorization(filterContext);
 
             if (!(filterContext.Result is HttpUnauthorizedResult))
             {
-                Guid repoId;
-                var urlhelper = new UrlHelper(filterContext.RequestContext);
-                if (Guid.TryParse(filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString(), out repoId))
+                if (urlhelper == null)
+                {
+                    urlhelper = GetUrlHelper(filterContext);
+                }
+                if (repoId==Guid.Empty)                {
+                    repoId = GetRepoId(filterContext);
+                }
+                if (repoId!=Guid.Empty)
                 {
                     Guid userId = filterContext.HttpContext.User.Id();
 
@@ -54,6 +80,23 @@ namespace Bonobo.Git.Server
                     }
                 }
             }
+        }
+        private static Guid GetRepoId(AuthorizationContext filterContext)
+        {
+            Guid result;
+            if (Guid.TryParse(filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString(), out result))
+            {
+                return result;
+            }
+            else
+            {
+                return Guid.Empty;
+            }
+        }
+
+        private static UrlHelper GetUrlHelper(AuthorizationContext filterContext)
+        {
+            return new UrlHelper(filterContext.RequestContext);
         }
     }
 }
