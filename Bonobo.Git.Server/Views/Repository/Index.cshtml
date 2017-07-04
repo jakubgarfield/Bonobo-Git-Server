@@ -151,9 +151,9 @@
                                 if(repo.AllowAnonymousPush != RepositoryPushMode.Global){
                                     pushSetting = repo.AllowAnonymousPush == RepositoryPushMode.Yes;
                                 }
-                                
+
                                 var pushIcon = repo.AllowAnonymousPush == RepositoryPushMode.Global ? "fa-globe" : "fa-sign-in";
-                                var pushTitle = Resources.Repository_Detail_AllowAnonymousPush + ": " + (pushSetting ? Resources.Yes : Resources.No); 
+                                var pushTitle = Resources.Repository_Detail_AllowAnonymousPush + ": " + (pushSetting ? Resources.Yes : Resources.No);
                                 var pushColor = pushSetting ? "rgba(0, 120, 230, 1)" : "lightblue";
                                 var ret = Html.Raw("<span class='fa-fw'>").ToHtmlString();
                                 ret += Html.Raw("<div class='fa fa-sign-out' style='display: block; color: " + anonColor + "' title='" + anonTitle + "'></div>").ToHtmlString();
@@ -166,9 +166,9 @@
 
                     columns.Add(permitted.Column("Description", typeof(RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string)item.Description).Length > 100)) ? ((string)item.Description).Substring(0, 100) + " ... " : item.Description, style: "description"));
                     columns.Add(permitted.Column(format: (item) => Html.Raw("<button class=\"pure-button pure-button-primary copy-to-clip-button\" title=\"" + Resources.Repository_Git_Url_Copy + "\" data-clipboard-text=\"" + Html.Encode(item.GitUrl) + "\"><i class=\"fa fa-copy\" ></i></button>"), style: "action"));
-                    columns.Add(permitted.Column(format: (item) => Html.Raw("<button class=\"pure-button pure-button-primary copy-to-clip-button\" title=\"" + Resources.Repository_Personal_Git_Url_Copy + "\" data-clipboard-text=\"" + Html.Encode(item.PersonalGitUrl) + "\"><i class=\"fa fa-user\"></i><i class=\"fa fa-copy\"></i></button>"), style: "action"));
-                    columns.Add(permitted.Column(format: (item) => Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @class = "edit", title = Resources.Grid_Edit }), style: "action"));
-                    columns.Add(permitted.Column(format: (item) => Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @class = "delete", title = Resources.Grid_Delete }), style: "action"));
+                    columns.Add(permitted.Column(format: (item) => Html.Raw(String.IsNullOrWhiteSpace(item.PersonalGitUrl) ? "&nbsp" :"<button class=\"pure-button pure-button-primary copy-to-clip-button\" title=\"" + Resources.Repository_Personal_Git_Url_Copy + "\" data-clipboard-text=\"" + Html.Encode(item.PersonalGitUrl) + "\"><i class=\"fa fa-user\"></i><i class=\"fa fa-copy\"></i></button>"), style: "action"));
+                    columns.Add(permitted.Column(format: (item) => User.IsInRole(Definitions.Roles.Administrator) ? Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @class = "edit", title = Resources.Grid_Edit }) : Html.Raw("&nbsp;"), style: "action"));
+                    columns.Add(permitted.Column(format: (item) => User.IsInRole(Definitions.Roles.Administrator) ? Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @class = "delete", title = Resources.Grid_Delete }) : Html.Raw("&nbsp;"), style: "action"));
 
                     permitted.Columns(columns.ToArray());
                     @permitted.GetHtml(
