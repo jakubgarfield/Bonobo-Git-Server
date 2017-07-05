@@ -191,6 +191,10 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             if (select != field.Selected)
             {
                 field.Click();
+                if (select != field.Selected)
+                {
+                    field.SendKeys(" ");
+                }
             }
         }
 
