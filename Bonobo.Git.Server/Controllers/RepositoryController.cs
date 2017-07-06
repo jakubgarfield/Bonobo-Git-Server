@@ -39,6 +39,10 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult Index(string sortGroup = null, string searchString = null)
         {
             var firstList = this.GetIndexModel();
+            if (!User.Identity.IsAuthenticated && !firstList.Any())
+            {
+                return RedirectToAction("Logon", "Home");
+            }
             if (!string.IsNullOrEmpty(searchString))
             {
                 var search = searchString.ToLower();
