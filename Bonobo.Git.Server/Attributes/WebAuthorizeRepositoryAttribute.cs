@@ -28,10 +28,10 @@ namespace Bonobo.Git.Server
                 urlhelper = GetUrlHelper(filterContext);
                 repoId = GetRepoId(filterContext);
                 //if the user is authenciated or the repo id isnt there let the normal auth code handle it.
-                if (repoId!=Guid.Empty && !filterContext.HttpContext.User.Identity.IsAuthenticated)
+                if (repoId != Guid.Empty && !filterContext.HttpContext.User.Identity.IsAuthenticated)
                 {
                     //we are only allowing read access here.  The web ui doesnt do pushes
-                    if(RepositoryPermissionService.HasPermission(Guid.Empty,repoId, RepositoryAccessLevel.Pull))
+                    if (RepositoryPermissionService.HasPermission(Guid.Empty, repoId, RepositoryAccessLevel.Pull))
                     {
                         return;
                     }
@@ -46,10 +46,11 @@ namespace Bonobo.Git.Server
                 {
                     urlhelper = GetUrlHelper(filterContext);
                 }
-                if (repoId==Guid.Empty)                {
+                if (repoId == Guid.Empty)
+                {
                     repoId = GetRepoId(filterContext);
                 }
-                if (repoId!=Guid.Empty)
+                if (repoId != Guid.Empty)
                 {
                     Guid userId = filterContext.HttpContext.User.Id();
 

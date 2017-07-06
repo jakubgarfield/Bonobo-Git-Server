@@ -38,29 +38,29 @@ namespace Bonobo.Git.Server.Controllers
 
         public ActionResult Index(string sortGroup = null, string searchString = null)
         {
-            var firstList = this.GetIndexModel();
-            if (!User.Identity.IsAuthenticated && !firstList.Any())
+            var unorderedRepositoryDetails = this.GetIndexModel();
+            if (!User.Identity.IsAuthenticated && !unorderedRepositoryDetails.Any())
             {
                 return RedirectToAction("Logon", "Home", new { returnUrl="/Home/Index" });
             }
             if (!string.IsNullOrEmpty(searchString))
             {
                 var search = searchString.ToLower();
-                firstList = firstList.Where(a => a.Name.ToLower().Contains(search) ||
+                unorderedRepositoryDetails = unorderedRepositoryDetails.Where(a => a.Name.ToLower().Contains(search) ||
                                             (!string.IsNullOrEmpty(a.Group) && a.Group.ToLower().Contains(search)) ||
                                             (!string.IsNullOrEmpty(a.Description) && a.Description.ToLower().Contains(search)))
                                             .AsEnumerable();
             }
 
-            foreach(var item in firstList){
+            foreach(var item in unorderedRepositoryDetails){
                 SetGitUrls(item);
             }
-            var list = firstList
+            var orderedReposityDetails = unorderedRepositoryDetails
                     .GroupBy(x => x.Group)
                     .OrderBy(x => x.Key, string.IsNullOrEmpty(sortGroup) || sortGroup.Equals("ASC"))
                     .ToDictionary(x => x.Key ?? string.Empty, x => x.ToArray());
 
-            return View(list);
+            return View(orderedReposityDetails);
         }
 
         [WebAuthorizeRepository(RequiresRepositoryAdministrator = true)]
