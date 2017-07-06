@@ -22,7 +22,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Controller
             public void UserDetailRequiresLogin()
             {
                 app.NavigateTo<HomeController>(c => c.LogOff());
-                app.UrlShouldMapTo<RepositoryController>(c => c.Index(null,null));
+                app.UrlShouldMapTo<HomeController>(c => c.LogOn("/Home/Index"));
 
                 app.NavigateTo<AccountController>(c => c.Detail(new Guid("7479fc09-2c0b-4e93-a2cf-5e4bbf6bab4f")));
 

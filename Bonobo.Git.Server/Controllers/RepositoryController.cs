@@ -41,7 +41,7 @@ namespace Bonobo.Git.Server.Controllers
             var firstList = this.GetIndexModel();
             if (!User.Identity.IsAuthenticated && !firstList.Any())
             {
-                return RedirectToAction("Logon", "Home");
+                return RedirectToAction("Logon", "Home", new { returnUrl="/Home/Index" });
             }
             if (!string.IsNullOrEmpty(searchString))
             {
