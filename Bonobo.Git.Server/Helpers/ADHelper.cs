@@ -47,6 +47,7 @@ namespace Bonobo.Git.Server.Helpers
                 if (domainFromConfig != null)
                 {
                     yield return domainFromConfig;
+                    yield break;
                 }
             }
             else
@@ -54,7 +55,7 @@ namespace Bonobo.Git.Server.Helpers
                 Log.Verbose("AD: No default domain setting in web.config");
             }
 
-            // Finally try the global catalogue
+            // Finally try the global catalogue if haven't found the default domain
             GlobalCatalogCollection gcc = Forest.GetCurrentForest().FindAllGlobalCatalogs();
             Log.Information("Searching in {count} global catalogs", gcc.Count);
 
