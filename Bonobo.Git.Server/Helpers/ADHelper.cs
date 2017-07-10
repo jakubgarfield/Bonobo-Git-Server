@@ -181,7 +181,22 @@ namespace Bonobo.Git.Server.Helpers
             {
                 using (var pc = new PrincipalContext(ContextType.Domain, domain.Name))
                 {
-                    return UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName,username);
+                    UserPrincipal principalBySamName = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, username);
+                    if (principalBySamName != null)
+                    {
+                        return principalBySamName;
+                    }
+
+                    Log.Verbose("GetUserPrincipal: Did not find user {UserName} in domain {DomainName} by SamAccountName", username, domain.Name);
+
+                    UserPrincipal principalByUPN = UserPrincipal.FindByIdentity(pc, IdentityType.UserPrincipalName, username);
+                    if (principalByUPN == null)
+                    {
+                        Log.Verbose(
+                            "GetUserPrincipal: Did not find user {UserName} in domain {DomainName} by UPN",
+                            username, domain.Name);
+                    }
+                    return principalByUPN;
                 }
             }
             catch (Exception exp)
