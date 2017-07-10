@@ -165,7 +165,7 @@ namespace Bonobo.Git.Server.Helpers
 
             foreach (var domain in GetAllDomainPossibilities(username))
             {
-                var user = GetUserPrincipal(domain, strippedUsername);
+                var user = GetUserPrincipal(domain, username, strippedUsername);
                 if (user != null)
                     return user;
                 Log.Warning("Null principal in domain: {DomainName}, user: {UserName}", domain.Name,
@@ -175,33 +175,33 @@ namespace Bonobo.Git.Server.Helpers
             return null;
         }
 
-        private static UserPrincipal GetUserPrincipal(Domain domain, string username)
+        private static UserPrincipal GetUserPrincipal(Domain domain, string fullUsername, string strippedUsername)
         {
             try
             {
                 using (var pc = new PrincipalContext(ContextType.Domain, domain.Name))
                 {
-                    UserPrincipal principalBySamName = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, username);
+                    UserPrincipal principalBySamName = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, strippedUsername);
                     if (principalBySamName != null)
                     {
                         return principalBySamName;
                     }
 
-                    Log.Verbose("GetUserPrincipal: Did not find user {UserName} in domain {DomainName} by SamAccountName", username, domain.Name);
+                    Log.Verbose("GetUserPrincipal: Did not find user {UserName} in domain {DomainName} by SamAccountName", strippedUsername, domain.Name);
 
-                    UserPrincipal principalByUPN = UserPrincipal.FindByIdentity(pc, IdentityType.UserPrincipalName, username);
+                    UserPrincipal principalByUPN = UserPrincipal.FindByIdentity(pc, IdentityType.UserPrincipalName, fullUsername);
                     if (principalByUPN == null)
                     {
                         Log.Verbose(
                             "GetUserPrincipal: Did not find user {UserName} in domain {DomainName} by UPN",
-                            username, domain.Name);
+                            fullUsername, domain.Name);
                     }
                     return principalByUPN;
                 }
             }
             catch (Exception exp)
             {
-                Log.Error(exp, "GetUserPrincipal in domain: {DomainName}, user: {UserName}", domain.Name, username);
+                Log.Error(exp, "GetUserPrincipal in domain: {DomainName}, user: {FullUserName} ({StrippedUserName})", domain.Name, fullUsername, strippedUsername);
             }
             return null;
         }
