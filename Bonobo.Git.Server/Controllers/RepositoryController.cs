@@ -266,7 +266,7 @@ namespace Bonobo.Git.Server.Controllers
                 string referenceName;
                 var files = browser.BrowseTree(name, path, out referenceName, includeDetails).ToList();
 
-                var readme = files.FirstOrDefault(x => x.Path.Equals("readme.md", StringComparison.OrdinalIgnoreCase));
+                var readme = files.FirstOrDefault(x => x.Name.Equals("readme.md", StringComparison.OrdinalIgnoreCase));
                 string readmeTxt = string.Empty;
                 if (readme != null)
                 {
