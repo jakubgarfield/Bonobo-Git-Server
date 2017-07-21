@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Account_Create_AccountAlreadyExists" xml:space="preserve">
-    <value>Kullanıcı adı sistemde kayıtlı</value>
+    <value>Kullanıcı zaten sistemde kayıtlı.</value>
   </data>
   <data name="Account_Create_AccountInformation" xml:space="preserve">
     <value>Hesap Bilgeleri</value>
@@ -217,10 +217,10 @@
     <value>Şifreniz eşleşmiyor</value>
   </data>
   <data name="Account_Edit_Roles" xml:space="preserve">
-    <value>Roles</value>
+    <value>Roller</value>
   </data>
   <data name="Account_Edit_RolesHint" xml:space="preserve">
-    <value>Administrators have access to all repositories and are allowed to do all operations with repositories, teams and users.</value>
+    <value>Yöneticilerin bütün kullanıcı, takım ve depolar üzerinde bütün operasyonları gerçekleştirecek yetkileri vardır.</value>
   </data>
   <data name="Account_Edit_Submit" xml:space="preserve">
     <value>Kaydet</value>
@@ -268,7 +268,7 @@
     <value>Teşekkürler!</value>
   </data>
   <data name="Home_About_Thanks_p" xml:space="preserve">
-    <value>Bonobo Git Server is using few opensource and freeware projects. Many thanks to all authors and contributors for their great work.</value>
+    <value>Git Sunucusu</value>
   </data>
   <data name="Home_About_Title" xml:space="preserve">
     <value>Hakkında</value>
@@ -331,7 +331,7 @@
     <value>Hesap Ayarları</value>
   </data>
   <data name="Layout_Administration" xml:space="preserve">
-    <value>Administration</value>
+    <value>Yönetim</value>
   </data>
   <data name="Layout_AdministrationGlobalSettings" xml:space="preserve">
     <value>Genel Ayarlar</value>
@@ -364,19 +364,19 @@
     <value>Depolar</value>
   </data>
   <data name="Layout_Title" xml:space="preserve">
-    <value>Bonobo Git Sunucu [TR]</value>
+    <value>Git Sunucusu</value>
   </data>
   <data name="Repository_AddressBar_Root" xml:space="preserve">
     <value>Home</value>
   </data>
   <data name="Repository_AdministratorsHint" xml:space="preserve">
-    <value>Administrators have full access to repository. They can also modify repository metadata or delete repository.</value>
+    <value>Yöneticilerin depoya tam erişimi vardır. Depo meta bilgisini düzenleyebilir ya da depoyuı silebilirler.</value>
   </data>
   <data name="Repository_AllowAnonymousHint" xml:space="preserve">
-    <value>If anonymous access is allowed everyone can pull or clone repository and view repository metadata. Push is available only if setted in Global Settings.</value>
+    <value>Eğer anonim erişime izin verilirse herkes depoyu indirebilir, kopyalayabilir ve meta bilgisini görüntüleyebilir. Push yöntemi sadece Global Ayarlar üzerinden ayarlandığında mevcut olur.</value>
   </data>
   <data name="Repository_Commits_Title" xml:space="preserve">
-    <value>Commits</value>
+    <value>İşlemler</value>
   </data>
   <data name="Repository_Commit_Added" xml:space="preserve">
     <value>Eklendi</value>
@@ -409,16 +409,16 @@
     <value>Mesaj</value>
   </data>
   <data name="Repository_Commit_Modified" xml:space="preserve">
-    <value>Modified</value>
+    <value>Düzenlendi</value>
   </data>
   <data name="Repository_Commit_Parents" xml:space="preserve">
-    <value>Parents</value>
+    <value>Ebeveynler</value>
   </data>
   <data name="Repository_Commit_Renamed" xml:space="preserve">
-    <value>Renamed</value>
+    <value>Yeniden Adlandırıldı</value>
   </data>
   <data name="Repository_Commit_TreeID" xml:space="preserve">
-    <value>Tree</value>
+    <value>Ağaç</value>
   </data>
   <data name="Repository_Commit_TypeChanged" xml:space="preserve">
     <value>Tipi Değiştirildi</value>
@@ -427,10 +427,10 @@
     <value>Listeye dön</value>
   </data>
   <data name="Repository_Create_DirectoryExists" xml:space="preserve">
-    <value>The directory with this name already exists in your repository folder. Delete this directory or choose another name and try it again.</value>
+    <value>Depo klasöründe bu isimle bir klasör zaten bulunuyor. Bu klasörü silin ya da başka bir ad vererek tekrar deneyin.</value>
   </data>
   <data name="Repository_Create_Fail" xml:space="preserve">
-    <value>Depo oluşturma başarısız oldu.Hataları düzeltin ve tekrar deneyin.</value>
+    <value>Depo oluşturma başarısız oldu. Hataları düzeltin ve tekrar deneyin.</value>
   </data>
   <data name="Repository_Create_Failure" xml:space="preserve">
     <value>Seçilen isimde bir depo zaten var.</value>
@@ -475,7 +475,7 @@
     <value>Düzenle</value>
   </data>
   <data name="Repository_Detail_IsCurrentUserAdmin" xml:space="preserve">
-    <value>Admin</value>
+    <value>Yönetici</value>
   </data>
   <data name="Repository_Detail_Location" xml:space="preserve">
     <value>Git Depo Adresi</value>
@@ -517,7 +517,7 @@
     <value>Depo başarıyla güncellendi.</value>
   </data>
   <data name="Repository_Index_AdministratedRepositories" xml:space="preserve">
-    <value>Administrated Repositories</value>
+    <value>Yönetilen Depolar</value>
   </data>
   <data name="Repository_Index_AllRepositories" xml:space="preserve">
     <value>Tüm Depolar</value>
@@ -541,13 +541,13 @@
     <value>Depo Tarayıcı</value>
   </data>
   <data name="Repository_Layout_Commits" xml:space="preserve">
-    <value>Commits</value>
+    <value>İşlemler</value>
   </data>
   <data name="Repository_SwitchBranch" xml:space="preserve">
     <value>Geçerli dala geçin</value>
   </data>
   <data name="Repository_TeamsHint" xml:space="preserve">
-    <value>Teams have access to repository. They can clone, push or pull repository and view repository metadata. All users in team can access current repository.</value>
+    <value>Takımların depoya erişimi vardır. Takımlar depoyu indirebilir, kopyalayabilir ve meta bilgisini görüntüleyebilirler. Takıma dahil bütün kullanıcılar geçerli depoya erişebilirler.</value>
   </data>
   <data name="Repository_Tree_Author" xml:space="preserve">
     <value>Yazar</value>
@@ -568,10 +568,10 @@
     <value>Depoyu İncele</value>
   </data>
   <data name="Repository_UsersHint" xml:space="preserve">
-    <value>Users have access to repository. They can clone, push or pull repository and view repository metadata.</value>
+    <value>Kullanıcıların depoya erişimi vardır. Kullanıcılar depoyu indirebilir, kopyalayabilir ve meta bilgisini görüntüleyebilirler.</value>
   </data>
   <data name="Reset" xml:space="preserve">
-    <value>Reset</value>
+    <value>Sıfırla</value>
   </data>
   <data name="Settings_Global_AllowAnonymousPush" xml:space="preserve">
     <value>Anonim depoları için gönderilere izin ver</value>
@@ -580,22 +580,22 @@
     <value>Anonim kayda izin ver</value>
   </data>
   <data name="Settings_Global_AllowAnonymousRegistration_Hint" xml:space="preserve">
-    <value>If checkbox is unchecked only administrator can add new users and anonymous user registration is disabled.</value>
+    <value>Eğer seçim kutusu seçili değilse sadece sadece yöenticiler yeni kullanıcı ekleyebilirler ve anonim kullanıcı kayıtları devre dışı bırakılır.</value>
   </data>
   <data name="Settings_Global_AllowUserRepositoryCreation" xml:space="preserve">
     <value>Kullanıcıların depo oluşturmasına izin ver</value>
   </data>
   <data name="Settings_Global_AllowUserRepositoryCreation_Hint" xml:space="preserve">
-    <value>If checkbox is unchecked only administrator can create repositories.</value>
+    <value>Eğer seçim kutusu seçili değilse sadece sadece yöenticiler yeni depo yaratabilirler.</value>
   </data>
   <data name="Settings_Global_DirectoryHint" xml:space="preserve">
-    <value>All the git repositories are stored in this directory.</value>
+    <value>Bu klasörde saklanan bütün git depoları.</value>
   </data>
   <data name="Settings_Global_RepositoryPath" xml:space="preserve">
     <value>Depo Klasörü</value>
   </data>
   <data name="Settings_Index_Failed" xml:space="preserve">
-    <value>Settings update was unsuccessful. Please correct the errors and try again.</value>
+    <value>Ayarlar güncellenemedi. Lütfen hataları düzeltip tekrar deneyin.</value>
   </data>
   <data name="Settings_Index_Save" xml:space="preserve">
     <value>Kaydet</value>
@@ -610,16 +610,16 @@
     <value>Seçilen adres mevcut değil. Yeni bir klasör oluşturun veya farklı bir adres seçin.</value>
   </data>
   <data name="Settings_RepositoryPathUnauthorized" xml:space="preserve">
-    <value>You don't have enough privileges to write to selected folder. Please choose different path.</value>
+    <value>Seçili klasöre yazmak için yeterli yetkiye sahip değilsiniz. Lütfen başka bir yol seçiniz.</value>
   </data>
   <data name="Team_Create_Back" xml:space="preserve">
     <value>Listeye dön</value>
   </data>
   <data name="Team_Create_Fail" xml:space="preserve">
-    <value>New team creation was unsuccessful. Please correct the errors and try again.</value>
+    <value>Yeni takım yaratma işlemi başarısız. Lütfen hataları düzeltip tekrar deneyin.</value>
   </data>
   <data name="Team_Create_Failure" xml:space="preserve">
-    <value>Team with selected name already exists. Team wasn't created.</value>
+    <value>Seçilen adla sahip bir takım zaten mevcut. Takım yaratılamadı.</value>
   </data>
   <data name="Team_Create_Submit" xml:space="preserve">
     <value>Kaydet</value>
@@ -663,9 +663,6 @@
   <data name="Team_Edit_Back" xml:space="preserve">
     <value>Listeye dön</value>
   </data>
-  <data name="Team_Edit_Failure" xml:space="preserve">
-    <value>Team update was unsuccessful. Please correct the errors and try again.</value>
-  </data>
   <data name="Team_Edit_Submit" xml:space="preserve">
     <value>Güncelle</value>
   </data>
@@ -673,7 +670,7 @@
     <value>Takımı Düzenle</value>
   </data>
   <data name="Team_Edit_UpdateSuccess" xml:space="preserve">
-    <value>Team was updated successfully.</value>
+    <value>Takım başarıyla güncellendi.</value>
   </data>
   <data name="Team_Index_CreateNew" xml:space="preserve">
     <value>Yeni Takım Oluştur</value>
@@ -685,21 +682,274 @@
     <value>Takım Yönetimi</value>
   </data>
   <data name="Validation_Compare" xml:space="preserve">
-    <value>"{0}" and "{1}" must have the same value.</value>
+    <value>"{0}" ve "{1}" aynı ada sahip olmak zorundadır.</value>
   </data>
   <data name="Validation_Email" xml:space="preserve">
-    <value>"{0}" is not a valid email address.</value>
+    <value>"{0}" geçerli bir e-posta adresi değil.</value>
   </data>
   <data name="Validation_FileName" xml:space="preserve">
-    <value>"{0}" contains characters that can't be in file or directory name.</value>
+    <value>"{0}" içeriğinde klasörde olamayacak karakterler barındırıyor.</value>
   </data>
   <data name="Validation_Required" xml:space="preserve">
-    <value>"{0}" is mandatory.</value>
+    <value>"{0}" zorunludur.</value>
   </data>
   <data name="Validation_StringLength" xml:space="preserve">
-    <value>"{0}" should be smaller than {1} chars.</value>
+    <value>"{0}" {1} karakterden daha az olmalıdır.</value>
   </data>
   <data name="Validation_FileName_Regex" xml:space="preserve">
-    <value>Only characters, numbers, minus and underscore are allowed for "{0}".</value>
+    <value>"{0}" için sadece karakterler, sayılar, eksi işareti ve alt çizgi işareti geçerlidir.</value>
+  </data>
+  <data name="Team_Edit_Failure" xml:space="preserve">
+    <value>Takım güncelleme işlemi başarısız. Lütfen hataları düzeltip tekrar deneyin.</value>
+  </data>
+  <data name="Repository_Back" xml:space="preserve">
+    <value>Geri</value>
+  </data>
+  <data name="Settings_Global_AllowPushToCreate" xml:space="preserve">
+    <value>Push işlemi ile depo yaratmaya izin ver.</value>
+  </data>
+  <data name="Settings_Global_AllowPushToCreate_Hint" xml:space="preserve">
+    <value>Eğer seçim kutusu seçili ise Yöneticiler push işlemi ile yeni depo yaratabilirler.</value>
+  </data>
+  <data name="Repository_Tree_PreviewNotSupported" xml:space="preserve">
+    <value>Bu dosya için önizleme desteklenmiyor.</value>
+  </data>
+  <data name="Settings_Global_DefaultLanguage" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="Settings_Global_DefaultLanguage_Hint" xml:space="preserve">
+    <value>Varsayılan dil.</value>
+  </data>
+  <data name="Repository_Detail_Status" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="Repository_Tree_RawDisplay" xml:space="preserve">
+    <value>Ham</value>
+  </data>
+  <data name="Repository_Tree_Zip" xml:space="preserve">
+    <value>İndir</value>
+  </data>
+  <data name="Repository_Commit_Details" xml:space="preserve">
+    <value>Detaylar</value>
+  </data>
+  <data name="Item_NotFound_Text" xml:space="preserve">
+    <value>Aradığınız öğe bulunamadı.</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Onayla</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Resmi Sayfa</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>Github</value>
+  </data>
+  <data name="Repository_Layout_Clone" xml:space="preserve">
+    <value>Klonla</value>
+  </data>
+  <data name="Repository_Clone_Success" xml:space="preserve">
+    <value>Depo başarıyla klonlandı.</value>
+  </data>
+  <data name="Repository_Clone_Title" xml:space="preserve">
+    <value>Depoyu klonla.</value>
+  </data>
+  <data name="Repository_Clone_Fail" xml:space="preserve">
+    <value>Depo klonlama işlemi başarısız. Lütfen hataları düzeltip tekrar deneyin.</value>
+  </data>
+  <data name="Repository_Clone_Submit" xml:space="preserve">
+    <value>Klonla</value>
+  </data>
+  <data name="Settings_Global_SiteFooterMessage" xml:space="preserve">
+    <value>Site Footer Mesajı</value>
+  </data>
+  <data name="Settings_Global_SiteFooterMessage_Hint" xml:space="preserve">
+    <value>Site footer alanında görüntülenecek mesaj.</value>
+  </data>
+  <data name="Settings_Global_SiteLogoUrl" xml:space="preserve">
+    <value>Site logo yolu.</value>
+  </data>
+  <data name="Settings_Global_SiteLogoUrl_Hint" xml:space="preserve">
+    <value>Site üzerinde kullanılacak logo yolu. Siteye baz (~) yollar desteklenmektedir.</value>
+  </data>
+  <data name="Settings_Global_SiteTitle" xml:space="preserve">
+    <value>Site başlığı.</value>
+  </data>
+  <data name="Settings_Global_SiteTitle_Hint" xml:space="preserve">
+    <value>Bu git sunucusu için başlık.</value>
+  </data>
+  <data name="Repository_Commit_NoMessageDeclared" xml:space="preserve">
+    <value>Belirtilmemiş.</value>
+  </data>
+  <data name="Repository_Detail_AuditPushUser" xml:space="preserve">
+    <value>Push işlemlerini değerlendir.</value>
+  </data>
+  <data name="Repository_AuditPushUserHint" xml:space="preserve">
+    <value>Suncuya bu işlemeleri göndermiş kullanıcıyı kaydet.</value>
+  </data>
+  <data name="Repository_History_Title" xml:space="preserve">
+    <value>Geçmiş</value>
+  </data>
+  <data name="Repository_Tree_History" xml:space="preserve">
+    <value>Geçmiş</value>
+  </data>
+  <data name="Repository_Commit_AuthorAvatar" xml:space="preserve">
+    <value>Avatar</value>
+  </data>
+  <data name="Settings_Global_IsCommitAuthorAvatarVisible" xml:space="preserve">
+    <value>İşlemede bulunan kullanıcının avatarını göster.</value>
+  </data>
+  <data name="Repository_Blame_Title" xml:space="preserve">
+    <value>Suçla</value>
+  </data>
+  <data name="Repository_Tree_Blame" xml:space="preserve">
+    <value>Suçla</value>
+  </data>
+  <data name="Repository_Tree_Blob" xml:space="preserve">
+    <value>Blob</value>
+  </data>
+  <data name="Email_PasswordReset_Body" xml:space="preserve">
+    <value>&lt;p&gt;Şifrenizi sıfırlamak için bir talepte bulunuldu.
+                           Eğer bu işlemi siz yapmadıysanız lütfen bu e-postayı görmezden geliniz.&lt;/p&gt;
+                           &lt;p&gt;Parolanızı sıfırlamak için lütfen bu bağlantıya tıklayınız.:&lt;/p&gt;</value>
+  </data>
+  <data name="Email_PasswordReset_Title" xml:space="preserve">
+    <value>Parola Sıfırlama İsteği</value>
+  </data>
+  <data name="Home_ForgotPassword_EmailError" xml:space="preserve">
+    <value>E-posta gönderilemedi. SMTP Ayarlarınızı kontrol ediniz.</value>
+  </data>
+  <data name="Home_ForgotPassword_EmailSuccess" xml:space="preserve">
+    <value>E-posta gönderildi.</value>
+  </data>
+  <data name="VarBG" xml:space="preserve">
+    <value>Bu kullanıcı adıyla bir hesap mevcut.</value>
+  </data>
+  <data name="Repository_Layout_Tags" xml:space="preserve">
+    <value>Etiketler</value>
+  </data>
+  <data name="Repository_Tags_Title" xml:space="preserve">
+    <value>Etiketler</value>
+  </data>
+  <data name="Home_ForgotPassword_Failed" xml:space="preserve">
+    <value>Şifremi unuttum başarısız. Lütfen hataları düzeltip tekrar deneyin.</value>
+  </data>
+  <data name="Home_ForgotPassword_ForgotPassword" xml:space="preserve">
+    <value>Şifremi Unuttum</value>
+  </data>
+  <data name="Home_ForgotPassword_Title" xml:space="preserve">
+    <value>Şifremi Unuttum</value>
+  </data>
+  <data name="Home_ForgotPassword_Username" xml:space="preserve">
+    <value>Kullanıcı Adı</value>
+  </data>
+  <data name="Home_ForgotPassword_UserNameFailure" xml:space="preserve">
+    <value>Kullanıcı adını bulamıyorum</value>
+  </data>
+  <data name="Home_LogOn_ForgotPassword" xml:space="preserve">
+    <value>Şifremi Unuttum</value>
+  </data>
+  <data name="Home_ResetPassword_ConfirmPassword" xml:space="preserve">
+    <value>Şifreyi Onayla</value>
+  </data>
+  <data name="Home_ResetPassword_Failed" xml:space="preserve">
+    <value>Şifre sıfırlanamıyor.</value>
+  </data>
+  <data name="Home_ResetPassword_Password" xml:space="preserve">
+    <value>Şifre</value>
+  </data>
+  <data name="Home_ResetPassword_ResetPassword" xml:space="preserve">
+    <value>Şifreyi Sıfırla</value>
+  </data>
+  <data name="Home_ResetPassword_Success" xml:space="preserve">
+    <value>Şifreyi Sıfırla</value>
+  </data>
+  <data name="Home_ResetPassword_Title" xml:space="preserve">
+    <value>Şifreyi Sıfırla</value>
+  </data>
+  <data name="Home_ResetPassword_Username" xml:space="preserve">
+    <value>Kullanıcı Adı</value>
+  </data>
+  <data name="Repository_Detail_Group" xml:space="preserve">
+    <value>Grup</value>
+  </data>
+  <data name="Repository_Index_SortGroup" xml:space="preserve">
+    <value>Grupları Sırala</value>
+  </data>
+  <data name="Repository_Detail_Location_Personal" xml:space="preserve">
+    <value>Kişisel Adres</value>
+  </data>
+  <data name="Repository_Detail_Logo_PostedFile" xml:space="preserve">
+    <value>Logo (36x36)</value>
+  </data>
+  <data name="Repository_Detail_RemoveLogo" xml:space="preserve">
+    <value>Logoyu kaldır</value>
+  </data>
+  <data name="Settings_Global_LinksRegex" xml:space="preserve">
+    <value>Bağlantı Regex</value>
+  </data>
+  <data name="Settings_Global_LinksUrl" xml:space="preserve">
+    <value>Bağlantı Adresi</value>
+  </data>
+  <data name="Settings_Global_LinksUrl_Hint" xml:space="preserve">
+    <value>Regex sağlamak için C# regex kütüphanesini kullanır.
+
+{0} ile bütün yakalama ardından {1} ile her yakalama grubunu seçer.</value>
+  </data>
+  <data name="Account_Edit_Username" xml:space="preserve">
+    <value>Kullanıcı Adı</value>
+  </data>
+  <data name="Repository_Create_Success_Go_To" xml:space="preserve">
+    <value>Git "{0}"</value>
+  </data>
+  <data name="Repository_Needs_Administrator" xml:space="preserve">
+    <value>Depo en az 1 yöneticiye ihtiyaç duyuyor.</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Kopyala</value>
+  </data>
+  <data name="Repository_Git_Url_Copy" xml:space="preserve">
+    <value>Depo bağlantısını kopyala</value>
+  </data>
+  <data name="Repository_No_Group" xml:space="preserve">
+    <value>Grup yok</value>
+  </data>
+  <data name="Repository_Personal_Git_Url_Copy" xml:space="preserve">
+    <value>Kişisel depo bağlantısını kopyala</value>
+  </data>
+  <data name="Repository_Rescan_Directory" xml:space="preserve">
+    <value>Dizini tekrar araştır</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Ara</value>
+  </data>
+  <data name="Repository_Go_To_Dropdown" xml:space="preserve">
+    <value>Depoya git</value>
+  </data>
+  <data name="Validation_Duplicate_Name" xml:space="preserve">
+    <value>Bu isim zaten kullanılıyor.</value>
+  </data>
+  <data name="Repository_Detail_AllowAnonymousPush" xml:space="preserve">
+    <value>Anonim gönderme</value>
+  </data>
+  <data name="Repository_AllowAnonymousPushHint" xml:space="preserve">
+    <value>Eğer izin verilirse anonim kullanıcıların bu depoya göndermesine olanak sağlar. Eğer "Genel" seçili ise genel ayarlarınız kullanılır.</value>
+  </data>
+  <data name="Global" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Hayır</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Evet</value>
+  </data>
+  <data name="Repository_Detail_LinksUseGlobal" xml:space="preserve">
+    <value>Genel linkify ayarlarını kullan.</value>
+  </data>
+  <data name="Validation_Invalid_Regex" xml:space="preserve">
+    <value>Sağlana regex hata bildirdi. {0}</value>
+  </data>
+  <data name="Repository_Edit_InvalidAnonymousPushMode" xml:space="preserve">
+    <value>Geçersiz değer sağlandı.</value>
   </data>
 </root>
