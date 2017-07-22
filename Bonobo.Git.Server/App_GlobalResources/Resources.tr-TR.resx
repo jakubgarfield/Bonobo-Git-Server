@@ -148,7 +148,7 @@
     <value>Yeni Hesap Oluştur</value>
   </data>
   <data name="Account_Create_Unsuccessfull" xml:space="preserve">
-    <value>Hesap oluşturma başarısız oldu.Hataları düzeltin ve tekrar deneyin.</value>
+    <value>Hesap oluşturma başarısız oldu. Hataları düzeltin ve tekrar deneyin.</value>
   </data>
   <data name="Account_Create_Username" xml:space="preserve">
     <value>Kullanıcı Adı</value>
