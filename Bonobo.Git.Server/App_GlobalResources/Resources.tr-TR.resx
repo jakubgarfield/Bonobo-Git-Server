@@ -253,7 +253,7 @@
     <value>Sil</value>
   </data>
   <data name="Delete_ConfirmationText" xml:space="preserve">
-    <value>Gerçekten {0} silmek istediğinizden emin misiniz?</value>
+    <value>Gerçekten "{0}" öğesini silmek istediğinizden emin misiniz?</value>
   </data>
   <data name="Delete_Title" xml:space="preserve">
     <value>Silme Onayı</value>
@@ -268,7 +268,8 @@
     <value>Teşekkürler!</value>
   </data>
   <data name="Home_About_Thanks_p" xml:space="preserve">
-    <value>Git Sunucusu</value>
+    <value>
+Bonobo Git Sunucusu bir kaç açık kaynak ve ücretsiz projeyi kullanmaktadır. Bu projelerin sahiplerine ve yardımcılarna çıkardıkları harika iş için teşekkürler.</value>
   </data>
   <data name="Home_About_Title" xml:space="preserve">
     <value>Hakkında</value>
@@ -706,7 +707,7 @@
     <value>Geri</value>
   </data>
   <data name="Settings_Global_AllowPushToCreate" xml:space="preserve">
-    <value>Push işlemi ile depo yaratmaya izin ver.</value>
+    <value>Push işlemi ile depo yaratmaya izin ver</value>
   </data>
   <data name="Settings_Global_AllowPushToCreate_Hint" xml:space="preserve">
     <value>Eğer seçim kutusu seçili ise Yöneticiler push işlemi ile yeni depo yaratabilirler.</value>
@@ -766,13 +767,13 @@
     <value>Site footer alanında görüntülenecek mesaj.</value>
   </data>
   <data name="Settings_Global_SiteLogoUrl" xml:space="preserve">
-    <value>Site logo yolu.</value>
+    <value>Site logo yolu</value>
   </data>
   <data name="Settings_Global_SiteLogoUrl_Hint" xml:space="preserve">
     <value>Site üzerinde kullanılacak logo yolu. Siteye baz (~) yollar desteklenmektedir.</value>
   </data>
   <data name="Settings_Global_SiteTitle" xml:space="preserve">
-    <value>Site başlığı.</value>
+    <value>Site başlığı</value>
   </data>
   <data name="Settings_Global_SiteTitle_Hint" xml:space="preserve">
     <value>Bu git sunucusu için başlık.</value>
@@ -944,7 +945,7 @@
     <value>Evet</value>
   </data>
   <data name="Repository_Detail_LinksUseGlobal" xml:space="preserve">
-    <value>Genel linkify ayarlarını kullan.</value>
+    <value>Genel linkify ayarlarını kullan</value>
   </data>
   <data name="Validation_Invalid_Regex" xml:space="preserve">
     <value>Sağlana regex hata bildirdi. {0}</value>
