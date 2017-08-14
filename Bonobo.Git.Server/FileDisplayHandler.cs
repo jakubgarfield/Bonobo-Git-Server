@@ -126,18 +126,16 @@ namespace Bonobo.Git.Server
             }
         }
 
-        public static string GetText(byte[] data)
+        public static string GetText(byte[] data, Encoding encoding)
         {
             if (data.Length == 0)
             {
                 return string.Empty;
             }
-
-            Encoding encoding = GetEncoding(data);
-            return encoding != null ? new StreamReader(new MemoryStream(data), encoding, true).ReadToEnd() : null;
+            return new StreamReader(new MemoryStream(data), encoding, true).ReadToEnd();
         }
 
-        public static Encoding GetEncoding(byte[] data)
+        public static bool TryGetEncoding(byte[] data, out Encoding encoding)
         {
             ICharsetDetector cdet = new CharsetDetector();
             cdet.Feed(data, 0, data.Length);
@@ -146,25 +144,27 @@ namespace Bonobo.Git.Server
             {
                 if (cdet.Charset.ToLowerInvariant() == "big-5")
                 {
-                    return Encoding.GetEncoding("big5");
+                    encoding = Encoding.GetEncoding("big5");
+                    return true;
                 }
                 else
                 {
                     try
                     {
-                        return Encoding.GetEncoding(cdet.Charset);
+                        encoding = Encoding.GetEncoding(cdet.Charset);
+                        return true;
                     }
                     catch
                     {
-                        return Encoding.Default;
+                        encoding = Encoding.Default;
+                        return false;
                     }
                 }
             }
 
-            return Encoding.Default;
+            encoding = Encoding.Default;
+            return false;
         }
-
-
 
         /// <summary>
         /// <para>Returns the human-readable file size for an arbitrary, 64-bit file size</para>
