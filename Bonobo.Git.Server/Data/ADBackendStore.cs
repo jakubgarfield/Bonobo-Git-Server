@@ -37,7 +37,6 @@ namespace Bonobo.Git.Server.Data
 
         private readonly string _storagePath;
         private readonly ConcurrentDictionary<Guid, T> _content;
-        private readonly string hexchars = "0123456789abcdef";
 
         public ADBackendStore(string rootpath, string name)
         {
