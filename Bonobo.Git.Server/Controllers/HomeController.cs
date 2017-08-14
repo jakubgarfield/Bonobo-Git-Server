@@ -34,7 +34,6 @@ namespace Bonobo.Git.Server.Controllers
         [Dependency]
         public IDatabaseResetManager ResetManager { get; set; }
 
-        [WebAuthorize]
         public ActionResult Index()
         {
             return RedirectToAction("Index", "Repository");

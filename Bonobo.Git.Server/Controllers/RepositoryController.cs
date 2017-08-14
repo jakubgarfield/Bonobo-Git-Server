@@ -36,28 +36,31 @@ namespace Bonobo.Git.Server.Controllers
         [Dependency]
         public IAuthenticationProvider AuthenticationProvider { get; set; }
 
-        [WebAuthorize]
         public ActionResult Index(string sortGroup = null, string searchString = null)
         {
-            var firstList = this.GetIndexModel();
+            var unorderedRepositoryDetails = this.GetIndexModel();
+            if (!User.Identity.IsAuthenticated && !unorderedRepositoryDetails.Any())
+            {
+                return RedirectToAction("Logon", "Home", new { returnUrl="/Home/Index" });
+            }
             if (!string.IsNullOrEmpty(searchString))
             {
                 var search = searchString.ToLower();
-                firstList = firstList.Where(a => a.Name.ToLower().Contains(search) ||
+                unorderedRepositoryDetails = unorderedRepositoryDetails.Where(a => a.Name.ToLower().Contains(search) ||
                                             (!string.IsNullOrEmpty(a.Group) && a.Group.ToLower().Contains(search)) ||
                                             (!string.IsNullOrEmpty(a.Description) && a.Description.ToLower().Contains(search)))
                                             .AsEnumerable();
             }
 
-            foreach(var item in firstList){
+            foreach(var item in unorderedRepositoryDetails){
                 SetGitUrls(item);
             }
-            var list = firstList
+            var orderedReposityDetails = unorderedRepositoryDetails
                     .GroupBy(x => x.Group)
                     .OrderBy(x => x.Key, string.IsNullOrEmpty(sortGroup) || sortGroup.Equals("ASC"))
                     .ToDictionary(x => x.Key ?? string.Empty, x => x.ToArray());
 
-            return View(list);
+            return View(orderedReposityDetails);
         }
 
         [WebAuthorizeRepository(RequiresRepositoryAdministrator = true)]
@@ -207,7 +210,7 @@ namespace Bonobo.Git.Server.Controllers
             return RedirectToAction("Index");
         }
 
-        [WebAuthorizeRepository]
+        [WebAuthorizeRepository(AllowAnonymousAccessWhenRepositoryAllowsIt = true)]
         public ActionResult Detail(Guid id)
         {
             ViewBag.ID = id;
@@ -250,7 +253,7 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [WebAuthorizeRepository]
+        [WebAuthorizeRepository(AllowAnonymousAccessWhenRepositoryAllowsIt = true)]
         public ActionResult Tree(Guid id, string encodedName, string encodedPath)
         {
             bool includeDetails = Request.IsAjaxRequest();
@@ -297,7 +300,7 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [WebAuthorizeRepository]
+        [WebAuthorizeRepository(AllowAnonymousAccessWhenRepositoryAllowsIt = true)]
         public ActionResult Blob(Guid id, string encodedName, string encodedPath)
         {
             ViewBag.ID = id;
@@ -367,7 +370,7 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [WebAuthorizeRepository]
+        [WebAuthorizeRepository(AllowAnonymousAccessWhenRepositoryAllowsIt = true)]
         public ActionResult Download(Guid id, string encodedName, string encodedPath)
         {
             var name = PathEncoder.Decode(encodedName);
@@ -423,7 +426,7 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [WebAuthorizeRepository]
+        [WebAuthorizeRepository(AllowAnonymousAccessWhenRepositoryAllowsIt = true)]
         public ActionResult Tags(Guid id, string encodedName, int page = 1)
         {
             page = page >= 1 ? page : 1;
@@ -447,7 +450,7 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [WebAuthorizeRepository]
+        [WebAuthorizeRepository(AllowAnonymousAccessWhenRepositoryAllowsIt = true)]
         public ActionResult Commits(Guid id, string encodedName, int? page = null)
         {
             page = page >= 1 ? page : 1;
@@ -508,7 +511,7 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [WebAuthorizeRepository]
+        [WebAuthorizeRepository(AllowAnonymousAccessWhenRepositoryAllowsIt = true)]
         public ActionResult Commit(Guid id, string commit)
         {
             ViewBag.ID = id;
@@ -523,7 +526,7 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [WebAuthorize]
+        [WebAuthorizeRepository]
         public ActionResult Clone(Guid id)
         {
             if (!RepositoryPermissionService.HasCreatePermission(User.Id()))
@@ -539,7 +542,6 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        [WebAuthorize]
         [WebAuthorizeRepository]
         [ValidateAntiForgeryToken]
         public ActionResult Clone(Guid id, RepositoryDetailModel model)

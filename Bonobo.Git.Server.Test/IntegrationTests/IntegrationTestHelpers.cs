@@ -191,6 +191,14 @@ namespace Bonobo.Git.Server.Test.IntegrationTests.Helpers
             if (select != field.Selected)
             {
                 field.Click();
+                /* Because selenium tests & drivers can be flakey I added a second test
+                 * with a different way of checking -or clearing- a checkbox. 
+                 * This fixed local failures. (win10/IE11)  
+                 */
+                if (select != field.Selected)
+                {
+                    field.SendKeys(" ");
+                }
             }
         }
 
