@@ -222,6 +222,18 @@ namespace Bonobo.Git.Server.Test.MembershipTests
         }
 
         [TestMethod]
+        public void AnonymousRepoIsPermittedToNamedUserToPull()
+        {
+            // A named user should have at least as good access as an anonymous user
+            var repo = MakeRepo("Repo1");
+            repo.AnonymousAccess = true;
+            Assert.IsTrue(_repos.Create(repo));
+
+            var user = AddUser();
+            Assert.AreEqual("Repo1", _service.GetAllPermittedRepositories(user.Id, RepositoryAccessLevel.Pull).Single().Name);
+        }
+
+        [TestMethod]
         public void RepositoryIsPermittedToUser()
         {
             var user = AddUser();
