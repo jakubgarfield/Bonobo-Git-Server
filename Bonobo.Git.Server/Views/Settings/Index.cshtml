@@ -42,6 +42,11 @@
             <i class="fa fa-info-circle" title="@Resources.Settings_Global_SiteFooterMessage_Hint"></i>
         </div>
         <div class="pure-control-group">
+            @Html.LabelFor(m => m.SiteCssUrl)
+            @Html.TextBoxFor(m => m.SiteCssUrl, new { @class = "medium", autofocus = "" })
+            <i class="fa fa-info-circle" title="@Resources.Settings_Global_SiteCssUrl_Hint"></i>
+        </div>
+        <div class="pure-control-group">
             @Html.LabelFor(m => m.DefaultLanguage)
             @Html.DropDownListFor(m => m.DefaultLanguage, 
                 CultureInfo.GetCultures(CultureTypes.SpecificCultures).Select(
