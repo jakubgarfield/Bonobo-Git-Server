@@ -39,6 +39,9 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Settings_Global_SiteFooterMessage")]
         public string SiteFooterMessage { get; set; }
 
+        [Display(ResourceType = typeof(Resources), Name = "Settings_Global_SiteCssUrl")]
+        public string SiteCssUrl { get; set; }
+
         [Display(ResourceType = typeof(Resources), Name = "Settings_Global_IsCommitAuthorAvatarVisible")]
         public bool IsCommitAuthorAvatarVisible { get; set; }
 
