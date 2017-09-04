@@ -38,10 +38,10 @@ namespace Bonobo.Git.Server.Controllers
 
         public ActionResult Index(string sortGroup = null, string searchString = null)
         {
-            var unorderedRepositoryDetails = this.GetIndexModel();
+            var unorderedRepositoryDetails = GetIndexModel().ToList();
             if (!User.Identity.IsAuthenticated && !unorderedRepositoryDetails.Any())
             {
-                return RedirectToAction("Logon", "Home", new { returnUrl="/Home/Index" });
+                return RedirectToAction("Logon", "Home", new { returnUrl = Url.Action("index", "Home") });
             }
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -49,10 +49,10 @@ namespace Bonobo.Git.Server.Controllers
                 unorderedRepositoryDetails = unorderedRepositoryDetails.Where(a => a.Name.ToLower().Contains(search) ||
                                             (!string.IsNullOrEmpty(a.Group) && a.Group.ToLower().Contains(search)) ||
                                             (!string.IsNullOrEmpty(a.Description) && a.Description.ToLower().Contains(search)))
-                                            .AsEnumerable();
+                                            .ToList();
             }
-
-            foreach(var item in unorderedRepositoryDetails){
+            foreach(var item in unorderedRepositoryDetails)
+            {
                 SetGitUrls(item);
             }
             var orderedReposityDetails = unorderedRepositoryDetails
