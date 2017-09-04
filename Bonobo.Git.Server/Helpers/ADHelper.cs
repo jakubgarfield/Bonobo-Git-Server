@@ -23,10 +23,17 @@ namespace Bonobo.Git.Server.Helpers
             { 
                 // First we try for the domain in the username
                 var parsedDomainName = username.GetDomain();
-                var domainFromUsername = GetDomain(parsedDomainName);
-                if (domainFromUsername != null)
+                if (!string.IsNullOrEmpty(parsedDomainName))
                 {
-                    yield return domainFromUsername;
+                    var domainFromUsername = GetDomain(parsedDomainName);
+                    if (domainFromUsername != null)
+                    {
+                        yield return domainFromUsername;
+                    }
+                }
+                else
+                {
+                    Log.Verbose("AD: Username {UserName} contains no domain part", username);
                 }
             }
 
@@ -34,22 +41,41 @@ namespace Bonobo.Git.Server.Helpers
             string defaultDomainName = ConfigurationManager.AppSettings["ActiveDirectoryDefaultDomain"];
             if (!string.IsNullOrEmpty(defaultDomainName))
             {
+                Log.Verbose("AD: Default domain set as {DomainName}", defaultDomainName);
+
                 var domainFromConfig = GetDomain(defaultDomainName);
                 if (domainFromConfig != null)
                 {
                     yield return domainFromConfig;
+                    yield break;
                 }
             }
+            else
+            {
+                Log.Verbose("AD: No default domain setting in web.config");
+            }
 
-            // Finally try the global catalogue
+            // Finally try the global catalogue if haven't found the default domain
             GlobalCatalogCollection gcc = Forest.GetCurrentForest().FindAllGlobalCatalogs();
             Log.Information("Searching in {count} global catalogs", gcc.Count);
 
             // Else try all global catalogs in the current forest.
             foreach (GlobalCatalog gc in gcc)
             {
-                Log.Information("Trying GlobalCatalogue {globalCatalog} domain {domain}", gc.Name, gc.Domain.Name);
-                yield return gc.Domain;
+                Domain domain = null;
+                try
+                {
+                    Log.Information("Checking GlobalCatalogue {globalCatalog}", gc.Name);
+                    domain = gc.Domain;
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to get domain from catalog {globalCatalog}", gc.Name);
+                }
+                if (domain != null)
+                {
+                    yield return domain;
+                }
             }
         }
 
@@ -139,7 +165,7 @@ namespace Bonobo.Git.Server.Helpers
 
             foreach (var domain in GetAllDomainPossibilities(username))
             {
-                var user = GetUserPrincipal(domain, strippedUsername);
+                var user = GetUserPrincipal(domain, username, strippedUsername);
                 if (user != null)
                     return user;
                 Log.Warning("Null principal in domain: {DomainName}, user: {UserName}", domain.Name,
@@ -149,18 +175,33 @@ namespace Bonobo.Git.Server.Helpers
             return null;
         }
 
-        private static UserPrincipal GetUserPrincipal(Domain domain, string username)
+        private static UserPrincipal GetUserPrincipal(Domain domain, string fullUsername, string strippedUsername)
         {
             try
             {
                 using (var pc = new PrincipalContext(ContextType.Domain, domain.Name))
                 {
-                    return UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName,username);
+                    UserPrincipal principalBySamName = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, strippedUsername);
+                    if (principalBySamName != null)
+                    {
+                        return principalBySamName;
+                    }
+
+                    Log.Verbose("GetUserPrincipal: Did not find user {UserName} in domain {DomainName} by SamAccountName", strippedUsername, domain.Name);
+
+                    UserPrincipal principalByUPN = UserPrincipal.FindByIdentity(pc, IdentityType.UserPrincipalName, fullUsername);
+                    if (principalByUPN == null)
+                    {
+                        Log.Verbose(
+                            "GetUserPrincipal: Did not find user {UserName} in domain {DomainName} by UPN",
+                            fullUsername, domain.Name);
+                    }
+                    return principalByUPN;
                 }
             }
             catch (Exception exp)
             {
-                Log.Error(exp, "GetUserPrincipal in domain: {DomainName}, user: {UserName}", domain.Name, username);
+                Log.Error(exp, "GetUserPrincipal in domain: {DomainName}, user: {FullUserName} ({StrippedUserName})", domain.Name, fullUsername, strippedUsername);
             }
             return null;
         }

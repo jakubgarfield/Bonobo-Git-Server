@@ -97,8 +97,8 @@ namespace Bonobo.Git.Server
                 Log.Error("GitAuth: AuthHeader doesn't contain colon - failing auth");
                 return false;
             }
-            string username = Uri.UnescapeDataString(value.Substring(0, colonPosition));
-            string password = Uri.UnescapeDataString(value.Substring(colonPosition + 1));
+            string username = value.Substring(0, colonPosition);
+            string password = value.Substring(colonPosition + 1);
 
             Log.Verbose("GitAuth: Trying to auth user {username}", username);
 

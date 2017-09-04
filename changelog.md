@@ -4,11 +4,29 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 6.2.2
+
+**28 August 2017**
+
+### Features
+
+* Allow anonymous users to browse repos without credentials where permitted #710 / @jeffgaroutte
+
+### Bugfixes
+
+* Don't unescape Git passwords/usernames unnecessarily #704
+* Improvements to AD domain handling #706
+
+### Other improvements 
+
+* Enable README display for all folders #713
+* Turkish translation improvements #722
+
 ## Version 6.2.1
 
 **22 May 2017**
 
-This is identical to 6.2.0, but with corrected version numberin in the appveyor build.
+This is identical to 6.2.0, but with corrected version numbering in the appveyor build.
 
 ## Version 6.2.0
 

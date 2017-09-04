@@ -160,14 +160,18 @@ namespace Bonobo.Git.Server
                 model.Data = memoryStream.ToArray();
             }
 
-            model.Text = FileDisplayHandler.GetText(model.Data);
-            model.Encoding = FileDisplayHandler.GetEncoding(model.Data);
-            model.IsText = model.Text != null;
-            model.IsMarkdown = model.IsText && Path.GetExtension(path).Equals(".md", StringComparison.OrdinalIgnoreCase);
+            Encoding encoding;
+            if(FileDisplayHandler.TryGetEncoding(model.Data, out encoding))
+            {
+                model.Text = FileDisplayHandler.GetText(model.Data, encoding);
+                model.Encoding = encoding;
+                model.IsText = model.Text != null;
+                model.IsMarkdown = model.IsText && Path.GetExtension(path).Equals(".md", StringComparison.OrdinalIgnoreCase);
+            }
             model.TextBrush = FileDisplayHandler.GetBrush(path);
 
             // try to render as text file if the extension matches
-            if (model.TextBrush != FileDisplayHandler.NoBrush && model.IsText == false)
+            if (model.TextBrush != FileDisplayHandler.NoBrush && !model.IsText)
             {
                 model.IsText = true;
                 model.Encoding = Encoding.Default;
