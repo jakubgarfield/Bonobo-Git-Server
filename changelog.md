@@ -4,6 +4,25 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 6.3.0
+
+**5 September 2017**
+
+### Features
+
+* Allow named users to browse anonymous repos for which they don't have
+  explicit permission #708
+* Allow custom CSS files #705
+
+### Bugfixes
+
+* Fix regression in 6.2.2 for certain domain configurations #731/#733
+
+### Other improvements 
+
+* Update compiler used for pages #702
+
+
 ## Version 6.2.2
 
 **28 August 2017**
