@@ -51,7 +51,7 @@ namespace Bonobo.Git.Server.Git.GitService
             var info = new ProcessStartInfo(gitPath, args)
             {
                 CreateNoWindow = true,
-                RedirectStandardError = true,
+                RedirectStandardError = false,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
@@ -87,6 +87,7 @@ namespace Bonobo.Git.Server.Git.GitService
 
             using (var process = Process.Start(info))
             {
+                var reader = process.StandardOutput.BaseStream.CopyToAsync(outStream);
                 inStream.CopyTo(process.StandardInput.BaseStream);
                 if (options.endStreamWithClose) {
                     process.StandardInput.Close();
@@ -94,7 +95,7 @@ namespace Bonobo.Git.Server.Git.GitService
                     process.StandardInput.Write('\0');
                 }
 
-                process.StandardOutput.BaseStream.CopyTo(outStream);
+                reader.Wait();
                 process.WaitForExit();
             }
         }
