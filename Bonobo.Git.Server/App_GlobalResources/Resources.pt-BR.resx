@@ -664,7 +664,7 @@
     <value>Você realmente quer apagar o repositório {0} ?</value>
   </data>
   <data name="Account_Create_Success" xml:space="preserve">
-    <value>O usuário foi excluído.</value>
+    <value>O usuário foi criado.</value>
   </data>
   <data name="Repository_Tree_Download" xml:space="preserve">
     <value>Baixar</value>
