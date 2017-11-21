@@ -41,7 +41,7 @@ namespace Bonobo.Git.Server.Controllers
             var unorderedRepositoryDetails = GetIndexModel().ToList();
             if (!User.Identity.IsAuthenticated && !unorderedRepositoryDetails.Any())
             {
-                return RedirectToAction("Logon", "Home", new { returnUrl = Url.Action("index", "Home") });
+                return RedirectToAction((AuthenticationProvider is WindowsAuthenticationProvider ? "WindowsLogin" : "Logon"), "Home", new { returnUrl = Url.Action("index", "Home") });
             }
             if (!string.IsNullOrEmpty(searchString))
             {
