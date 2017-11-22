@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Bonobo.Git.Server.Models;
-using System;
 
 namespace Bonobo.Git.Server.Data
 {

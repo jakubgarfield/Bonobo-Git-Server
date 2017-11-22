@@ -1,52 +1,47 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.ModelConfiguration;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Bonobo.Git.Server.Data.Mapping
 {
-    public class RoleMap : EntityTypeConfiguration<Role>
+    public class RoleMap : IEntityTypeConfiguration<Role>
     {
-        public RoleMap()
+        public void Configure(EntityTypeBuilder<Role> builder)
         {
-            SetPrimaryKey();
-            SetProperties();
-            SetTableAndColumnMappings();
-            SetRelationships();
+            SetPrimaryKey(builder);
+            SetProperties(builder);
+            SetTableAndColumnMappings(builder);
+            SetRelationships(builder);
         }
 
-
-        private void SetRelationships()
+        private void SetRelationships(EntityTypeBuilder<Role> builder)
         {
-            HasMany(t => t.Users)
-                .WithMany(t => t.Roles)
-                .Map(m =>
-                {
-                    m.ToTable("UserRole_InRole");
-                    m.MapLeftKey("Role_Id");
-                    m.MapRightKey("User_Id");
-                });
+            builder
+                .HasMany(t => t.Users)
+                .WithOne(ur => ur.Role)
+                .HasForeignKey(t => t.RoleId);
         }
 
-        private void SetTableAndColumnMappings()
+        private void SetTableAndColumnMappings(EntityTypeBuilder<Role> builder)
         {
-            ToTable("Role");
-            Property(t => t.Id).HasColumnName("Id");
-            Property(t => t.Name).HasColumnName("Name");
-            Property(t => t.Description).HasColumnName("Description");
+            builder.ToTable("Role");
+            builder.Property(t => t.Id).HasColumnName("Id");
+            builder.Property(t => t.Name).HasColumnName("Name");
+            builder.Property(t => t.Description).HasColumnName("Description");
         }
 
-        private void SetProperties()
+        private void SetProperties(EntityTypeBuilder<Role> builder)
         {
-            Property(t => t.Name)
+            builder.Property(t => t.Name)
                 .IsRequired()
                 .HasMaxLength(255);
 
-            Property(t => t.Description)
+            builder.Property(t => t.Description)
                 .HasMaxLength(255);
         }
 
-        private void SetPrimaryKey()
+        private void SetPrimaryKey(EntityTypeBuilder<Role> builder)
         {
-            HasKey(t => t.Id);
+            builder.HasKey(t => t.Id);
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Bonobo.Git.Server.Data.Update.Sqlite
+﻿namespace Bonobo.Git.Server.Data.Update.Sqlite
 {
     public class AddRepositoryLogo : IUpdateScript
     {

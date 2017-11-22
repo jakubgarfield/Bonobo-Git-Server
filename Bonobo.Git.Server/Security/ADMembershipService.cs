@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Data;
-using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
-using System.Security.Cryptography;
-using System.IO;
-using System.Text;
-using System.Data.Entity.Core;
-using System.Diagnostics;
+using System.Linq;
 using Bonobo.Git.Server.Data;
-using Bonobo.Git.Server.Models;
-using System.Web.Security;
-using System.Security.Principal;
-using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Helpers;
+using Bonobo.Git.Server.Models;
 using Serilog;
 
 namespace Bonobo.Git.Server.Security
 {
     public class ADMembershipService : IMembershipService
     {
+        private readonly ADHelper _adHelper;
+        private readonly ADBackend _adBackend;
+
+        public ADMembershipService(ADHelper adHelper, ADBackend adBackend)
+        {
+            _adHelper = adHelper;
+            _adBackend = adBackend;
+        }
+
         public bool IsReadOnly()
         {
             return true;
@@ -35,32 +34,30 @@ namespace Bonobo.Git.Server.Security
 
             try
             {
-                if (ADHelper.ValidateUser(username, password))
+                if (_adHelper.ValidateUser(username, password))
                 {
-                    using (var user = ADHelper.GetUserPrincipal(username))
+                    using (var user = _adHelper.GetUserPrincipal(username))
+                    using (var pc = _adHelper.GetMembersGroup(out GroupPrincipal group))
                     {
-                        GroupPrincipal group;
-						using (var pc = ADHelper.GetMembersGroup(out group))
-						{
-							if (group == null)
-								result = ValidationResult.Failure;
+                        if (group == null)
+                            result = ValidationResult.Failure;
 
-							if (user != null)
-							{
-								if (!group.GetMembers(true).Contains(user))
-								{
-									result = ValidationResult.NotAuthorized;
-								}
-								else
-								{
-									result = ValidationResult.Success;
-								}
-							}
-						}
+                        if (user != null)
+                        {
+                            if (!group.GetMembers(true).Contains(user))
+                            {
+                                result = ValidationResult.NotAuthorized;
+                            }
+                            else
+                            {
+                                result = ValidationResult.Success;
+                            }
+                        }
                     }
+
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex, "AD.ValidateUser Exception: ");
                 result = ValidationResult.Failure;
@@ -81,22 +78,22 @@ namespace Bonobo.Git.Server.Security
 
         public IList<UserModel> GetAllUsers()
         {
-            var users = ADBackend.Instance.Users.ToList();
+            var users = _adBackend.Users.ToList();
             return users;
         }
 
         public UserModel GetUserModel(string username)
         {
-            using (var upc = ADHelper.GetUserPrincipal(username))
+            using (var upc = _adHelper.GetUserPrincipal(username))
             {
-                return ADBackend.Instance.Users.FirstOrDefault(n => n.Id == upc.Guid.Value);
+                return _adBackend.Users.FirstOrDefault(n => n.Id == upc.Guid.Value);
             }
             throw new ArgumentException("User was not found with username: " + username);
         }
 
         public UserModel GetUserModel(Guid id)
         {
-            return ADBackend.Instance.Users[id];
+            return _adBackend.Users[id];
         }
 
         private static bool UsernameContainsDomain(string username)
@@ -106,17 +103,17 @@ namespace Bonobo.Git.Server.Security
 
         public void UpdateUser(Guid id, string username, string givenName, string surname, string email, string password)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public void DeleteUser(Guid id)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public string GenerateResetToken(string username)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }

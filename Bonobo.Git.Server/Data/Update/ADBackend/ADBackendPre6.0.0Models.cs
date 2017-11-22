@@ -1,8 +1,8 @@
 ﻿
-using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Bonobo.Git.Server.Data.Update.Pre600ADBackend
 {

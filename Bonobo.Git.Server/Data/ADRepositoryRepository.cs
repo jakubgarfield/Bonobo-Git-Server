@@ -7,6 +7,12 @@ namespace Bonobo.Git.Server.Data
 {
     public class ADRepositoryRepository : IRepositoryRepository
     {
+        private readonly ADBackend _adBackend;
+
+        public ADRepositoryRepository(ADBackend adBackend)
+        {
+            this._adBackend = adBackend;
+        }
         public bool Create(RepositoryModel repository)
         {
             // Make sure we don't already have a repo with this name
@@ -16,12 +22,12 @@ namespace Bonobo.Git.Server.Data
             }
 
             repository.Id = Guid.NewGuid();
-            return ADBackend.Instance.Repositories.Add(SanitizeModel(repository));
+            return _adBackend.Repositories.Add(SanitizeModel(repository));
         }
 
         public void Delete(Guid id)
         {
-            ADBackend.Instance.Repositories.Remove(id);
+            _adBackend.Repositories.Remove(id);
         }
 
         public bool NameIsUnique(string newName, Guid ignoreRepoId)
@@ -32,19 +38,19 @@ namespace Bonobo.Git.Server.Data
 
         public IList<RepositoryModel> GetAllRepositories()
         {
-            return ADBackend.Instance.Repositories.ToList();
+            return _adBackend.Repositories.ToList();
         }
 
         public RepositoryModel GetRepository(string name)
         {
             return
-                ADBackend.Instance.Repositories.FirstOrDefault(
+                _adBackend.Repositories.FirstOrDefault(
                     repo => repo.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
-        
+
         public RepositoryModel GetRepository(Guid id)
         {
-            var result = ADBackend.Instance.Repositories[id];
+            var result = _adBackend.Repositories[id];
             if (result == null)
             {
                 // Ensure that we behave the same way as the EF reporepo
@@ -64,7 +70,7 @@ namespace Bonobo.Git.Server.Data
                 // If we're given a null logo, then we need to preserve the existing one
                 repository.Logo = GetRepository(repository.Id).Logo;
             }
-            ADBackend.Instance.Repositories.Update(SanitizeModel(repository));
+            _adBackend.Repositories.Update(SanitizeModel(repository));
         }
 
         private static RepositoryModel SanitizeModel(RepositoryModel model)
@@ -79,4 +85,4 @@ namespace Bonobo.Git.Server.Data
         }
     }
 }
- 
+

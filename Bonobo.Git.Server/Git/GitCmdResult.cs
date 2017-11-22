@@ -1,13 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.IO.Compression;
-using System.Web;
-using System.Web.Mvc;
-using Bonobo.Git.Server.Configuration;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Bonobo.Git.Server.Git
 {
-    public class GitCmdResult : ActionResult
+    public class GitCmdResult : IActionResult
     {
         private readonly string contentType;
         private readonly string advertiseRefsContent;
@@ -25,28 +23,33 @@ namespace Bonobo.Git.Server.Git
             this.executeGitCommand = executeGitCommand;
         }
 
-        public override void ExecuteResult(ControllerContext context)
+        public Task ExecuteResultAsync(ActionContext context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
 
             var response = context.HttpContext.Response;
 
-            if (advertiseRefsContent != null)
-            {
-                response.Write(advertiseRefsContent);
-            }
-
             // SetNoCache
-            response.AddHeader("Expires", "Fri, 01 Jan 1980 00:00:00 GMT");
-            response.AddHeader("Pragma", "no-cache");
-            response.AddHeader("Cache-Control", "no-cache, max-age=0, must-revalidate");
+            response.Headers.Add("Expires", "Fri, 01 Jan 1980 00:00:00 GMT");
+            response.Headers.Add("Pragma", "no-cache");
+            response.Headers.Add("Cache-Control", "no-cache, max-age=0, must-revalidate");
 
-            response.BufferOutput = false;
-            response.Charset = "";
+            //response.BufferOutput = false;
+            //response.Charset = "";
             response.ContentType = contentType;
 
-            executeGitCommand(response.OutputStream);
+            if (advertiseRefsContent != null)
+            {
+                var bytes = System.Text.Encoding.ASCII.GetBytes(advertiseRefsContent);
+                response.Body.Write(bytes, 0, bytes.Length);
+            }
+
+
+
+            executeGitCommand(response.Body);
+
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,35 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
-using System.Security.Cryptography;
-using System.Data.Entity.Core;
-using Microsoft.Practices.Unity;
 using Serilog;
 
 namespace Bonobo.Git.Server.Security
 {
     public class EFMembershipService : IMembershipService
     {
-        [Dependency]
-        public Func<BonoboGitServerContext> CreateContext { get; set; }
+        private BonoboGitServerContext _ctx;
+
+        public BonoboGitServerContext CreateContext() => _ctx;
 
         private readonly IPasswordService _passwordService;
 
-        public EFMembershipService()
+        public EFMembershipService(BonoboGitServerContext createContext)
         {
+            _ctx = createContext;
             // set up dependencies
             Action<string, string> updateUserPasswordHook =
                 (username, password) =>
                 {
-                    using (var db = CreateContext())
+                    var db = CreateContext();
+
+                    var user = db.Users.FirstOrDefault(i => i.Username == username);
+                    if (user != null)
                     {
-                        var user = db.Users.FirstOrDefault(i => i.Username == username);
-                        if (user != null)
-                        {
-                            UpdateUser(user.Id, null, null, null, null, password);
-                        }
+                        UpdateUser(user.Id, null, null, null, null, password);
                     }
                 };
             _passwordService = new PasswordService(updateUserPasswordHook);
@@ -48,7 +47,7 @@ namespace Bonobo.Git.Server.Security
             Log.Verbose("EF: Validating user {UserName}", username);
 
             username = username.ToLowerInvariant();
-            using (var database = CreateContext())
+            var database = CreateContext();
             {
                 var user = database.Users.FirstOrDefault(i => i.Username == username);
                 if (user != null)
@@ -82,7 +81,7 @@ namespace Bonobo.Git.Server.Security
             if (id == Guid.Empty) throw new ArgumentException("Id must be a proper Guid", "id");
 
             username = username.ToLowerInvariant();
-            using (var database = CreateContext())
+            var database = CreateContext();
             {
                 var user = new User
                 {
@@ -98,7 +97,8 @@ namespace Bonobo.Git.Server.Security
                 {
                     database.SaveChanges();
                 }
-                catch (UpdateException)
+                //catch (UpdateException)
+                catch (Exception)
                 {
                     return false;
                 }
@@ -109,9 +109,9 @@ namespace Bonobo.Git.Server.Security
 
         public IList<UserModel> GetAllUsers()
         {
-            using (var db = CreateContext())
+            var db = CreateContext();
             {
-                return db.Users.Include("Roles").ToList().Select(item => new UserModel
+                return db.Users/*.Include("Roles")*/.ToList().Select(item => new UserModel
                 {
                     Id = item.Id,
                     Username = item.Username,
@@ -124,7 +124,7 @@ namespace Bonobo.Git.Server.Security
 
         public int UserCount()
         {
-            using (var db = CreateContext())
+            var db = CreateContext();
             {
                 return db.Users.Count();
             }
@@ -139,12 +139,12 @@ namespace Bonobo.Git.Server.Security
                 GivenName = user.GivenName,
                 Surname = user.Surname,
                 Email = user.Email,
-             };
+            };
         }
 
         public UserModel GetUserModel(Guid id)
         {
-            using (var db = CreateContext())
+            var db = CreateContext();
             {
                 var user = db.Users.FirstOrDefault(i => i.Id == id);
                 return GetUserModel(user);
@@ -153,7 +153,7 @@ namespace Bonobo.Git.Server.Security
 
         public UserModel GetUserModel(string username)
         {
-            using (var db = CreateContext())
+            var db = CreateContext();
             {
                 username = username.ToLowerInvariant();
                 var user = db.Users.FirstOrDefault(i => i.Username == username);
@@ -163,7 +163,7 @@ namespace Bonobo.Git.Server.Security
 
         public void UpdateUser(Guid id, string username, string givenName, string surname, string email, string password)
         {
-            using (var db = CreateContext())
+            var db = CreateContext();
             {
                 var user = db.Users.FirstOrDefault(i => i.Id == id);
                 if (user != null)
@@ -184,7 +184,7 @@ namespace Bonobo.Git.Server.Security
 
         public void DeleteUser(Guid id)
         {
-            using (var db = CreateContext())
+            var db = CreateContext();
             {
                 var user = db.Users.FirstOrDefault(u => u.Id == id);
                 if (user != null)
@@ -197,7 +197,7 @@ namespace Bonobo.Git.Server.Security
                     db.SaveChanges();
                 }
             }
-        } 
+        }
 
         private void SetPassword(User user, string password)
         {
@@ -226,6 +226,6 @@ namespace Bonobo.Git.Server.Security
             Buffer.BlockCopy(salt, 0, outputBytes, 1, SaltSize);
             Buffer.BlockCopy(subkey, 0, outputBytes, 1 + SaltSize, PBKDF2SubkeyLength);
             return Convert.ToBase64String(outputBytes);
-        }        
+        }
     }
 }

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using LibGit2Sharp;
+﻿using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using LibGit2Sharp;
 
 namespace Bonobo.Git.Server.Extensions
 {

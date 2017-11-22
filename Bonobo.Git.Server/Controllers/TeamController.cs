@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
-
+using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
-using Bonobo.Git.Server.App_GlobalResources;
-
-using Microsoft.Practices.Unity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Bonobo.Git.Server.Controllers
 {
     public class TeamController : Controller
     {
-        [Dependency]
         public IMembershipService MembershipService { get; set; }
-
-        [Dependency]
         public IRepositoryRepository RepositoryRepository { get; set; }
-
-        [Dependency]
         public ITeamRepository TeamRepository { get; set; }
+
+        public TeamController(IMembershipService membershipService, IRepositoryRepository repositoryRepository, ITeamRepository teamRepository)
+        {
+            MembershipService = membershipService;
+            RepositoryRepository = repositoryRepository;
+            TeamRepository = teamRepository;
+        }
 
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index()
@@ -40,7 +39,7 @@ namespace Bonobo.Git.Server.Controllers
         [ValidateAntiForgeryToken]
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Edit(TeamEditModel model)
-        {           
+        {
             if (ModelState.IsValid)
             {
                 TeamRepository.Update(ConvertTeamDetailModel(model));
@@ -53,7 +52,7 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Create()
         {
-            var model = new TeamEditModel 
+            var model = new TeamEditModel
             {
                 AllUsers = MembershipService.GetAllUsers().ToArray(),
                 SelectedUsers = new UserModel[] { }
@@ -115,7 +114,6 @@ namespace Bonobo.Git.Server.Controllers
         {
             return View(ConvertDetailTeamModel(TeamRepository.GetTeam(id)));
         }
-
 
         private TeamDetailModelList ConvertTeamModels(IEnumerable<TeamModel> models)
         {

@@ -1,13 +1,10 @@
-﻿
-using System;
-
-namespace Bonobo.Git.Server.Data.Update.Sqlite
+﻿namespace Bonobo.Git.Server.Data.Update.Sqlite
 {
     public class InitialCreateScript : IUpdateScript
     {
         public string Command
         {
-            get 
+            get
             {
                 // If you modify this scheme make sure to introduce an unit test for the new scheme.
                 return string.Format(@"

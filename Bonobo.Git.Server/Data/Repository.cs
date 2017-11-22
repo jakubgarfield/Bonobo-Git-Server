@@ -1,8 +1,9 @@
-using Bonobo.Git.Server.App_GlobalResources;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Bonobo.Git.Server.App_GlobalResources;
+using Bonobo.Git.Server.Data.Mapping;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -18,9 +19,9 @@ namespace Bonobo.Git.Server.Data
 
     public partial class Repository
     {
-        private ICollection<Team> _teams;
-        private ICollection<User> _administrators;
-        private ICollection<User> _users;
+        private ICollection<TeamRepositoryPermission> _teams;
+        private ICollection<UserRepositoryAdministrator> _administrators;
+        private ICollection<UserRepositoryPermission> _users;
 
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -30,11 +31,11 @@ namespace Bonobo.Git.Server.Data
         public byte[] Logo { get; set; }
         public RepositoryPushMode AllowAnonymousPush { get; set; }
 
-        public virtual ICollection<Team> Teams
+        public virtual ICollection<TeamRepositoryPermission> Teams
         {
             get
             {
-                return _teams ?? (_teams = new List<Team>());
+                return _teams ?? (_teams = new List<TeamRepositoryPermission>());
             }
             set
             {
@@ -42,11 +43,11 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public virtual ICollection<User> Administrators
+        public virtual ICollection<UserRepositoryAdministrator> Administrators
         {
             get
             {
-                return _administrators ?? (_administrators = new List<User>());
+                return _administrators ?? (_administrators = new List<UserRepositoryAdministrator>());
             }
             set
             {
@@ -54,11 +55,11 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public virtual ICollection<User> Users
+        public virtual ICollection<UserRepositoryPermission> Users
         {
             get
             {
-                return _users ?? (_users = new List<User>());
+                return _users ?? (_users = new List<UserRepositoryPermission>());
             }
             set
             {
@@ -66,16 +67,11 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public Repository()
-        {
-            LinksUseGlobal = true;
-        }
-
         public bool AuditPushUser { get; set; }
 
         public string LinksRegex { get; set; }
         public string LinksUrl { get; set; }
-        public bool LinksUseGlobal { get; set; }
+        public bool LinksUseGlobal { get; set; } = true;
 
 
         /// <summary>
@@ -110,6 +106,5 @@ namespace Bonobo.Git.Server.Data
             // our job to worry about that
             return incomingRepositoryName;
         }
-
     }
 }

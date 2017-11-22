@@ -8,20 +8,26 @@ namespace Bonobo.Git.Server.Data
     public class ADTeamRepository : ITeamRepository
     {
         Dictionary<Guid, string> _id_to_name = new Dictionary<Guid, string>();
+        private readonly ADBackend _adBackend;
+
+        public ADTeamRepository(ADBackend adBackend)
+        {
+            _adBackend = adBackend;
+        }
 
         public bool Create(TeamModel team)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public void Delete(Guid name)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public IList<TeamModel> GetAllTeams()
         {
-            var ret = ADBackend.Instance.Teams.ToList();
+            var ret = _adBackend.Teams.ToList();
             foreach (var t in ret)
             {
                 _id_to_name[t.Id] = t.Name;
@@ -31,7 +37,7 @@ namespace Bonobo.Git.Server.Data
 
         public TeamModel GetTeam(Guid TeamId)
         {
-            return ADBackend.Instance.Teams[TeamId];
+            return _adBackend.Teams[TeamId];
         }
 
         public TeamModel GetTeam(string name)
@@ -49,17 +55,17 @@ namespace Bonobo.Git.Server.Data
 
         public IList<TeamModel> GetTeams(Guid userId)
         {
-            return ADBackend.Instance.Teams.Where(x => x.Members.Any(y => y.Id == userId)).ToList();
+            return _adBackend.Teams.Where(x => x.Members.Any(y => y.Id == userId)).ToList();
         }
 
         public void Update(TeamModel team)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public void UpdateUserTeams(Guid userId, List<string> newTeams)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }

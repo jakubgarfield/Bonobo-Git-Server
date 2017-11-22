@@ -1,20 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.Configuration;
-using System.Web.Mvc;
 using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Bonobo.Git.Server.Controllers
 {
     public class SettingsController : Controller
     {
+        private readonly IOptions<AuthenticationSettings> _authSettings;
+
+        public SettingsController(IOptions<AuthenticationSettings> authSettings)
+        {
+            _authSettings = authSettings;
+        }
+
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index()
         {
@@ -41,7 +43,8 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Index(GlobalSettingsModel model)
         {
-            if (AuthenticationSettings.DemoModeActive)
+
+            if (_authSettings.Value.DemoModeActive)
             {
                 return RedirectToAction("Unauthorized", "Home");
             }
@@ -50,9 +53,9 @@ namespace Bonobo.Git.Server.Controllers
             {
                 try
                 {
-                    if (Directory.Exists(Path.IsPathRooted(model.RepositoryPath)
-                                         ? model.RepositoryPath
-                                         : HttpContext.Server.MapPath(model.RepositoryPath)))
+                    if (Directory.Exists(/*Path.IsPathRooted(model.RepositoryPath)
+                                         ?*/ model.RepositoryPath/*
+                                         : HttpContext.Server.MapPath(model.RepositoryPath)*/))
                     {
                         UserConfiguration.Current.AllowAnonymousPush = model.AllowAnonymousPush;
                         UserConfiguration.Current.RepositoryPath = model.RepositoryPath;
@@ -69,7 +72,7 @@ namespace Bonobo.Git.Server.Controllers
                         UserConfiguration.Current.LinksUrl = model.LinksUrl;
                         UserConfiguration.Current.Save();
 
-                        this.Session["Culture"] = new CultureInfo(model.DefaultLanguage);
+                        //this.Session["Culture"] = new CultureInfo(model.DefaultLanguage);
 
                         TempData["UpdateSuccess"] = true;
                         return RedirectToAction("Index");

@@ -1,19 +1,18 @@
-﻿using Ionic.Zlib;
-using LibGit2Sharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web;
+//using Ionic.Zlib;
 
 namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
 {
     public class ReceivePackParser : IGitService
     {
-        private readonly IGitService gitService;        
+        private readonly IGitService gitService;
         private readonly IHookReceivePack receivePackHandler;
         private readonly GitServiceResultParser resultParser;
 
@@ -46,7 +45,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                 var buff1 = new byte[1];
                 var buff4 = new byte[4];
                 var buff20 = new byte[20];
-                var buff16K = new byte[1024 * 16]; 
+                var buff16K = new byte[1024 * 16];
 
                 while (true)
                 {
@@ -139,9 +138,9 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                         }
 
                         var origPosition = inStream.Position;
-                        long offsetVal = 0;
+                        //long offsetVal = 0;
 
-                        using (var zlibStream = new ZlibStream(inStream, CompressionMode.Decompress, true))
+                        using (var zlibStream = GetZlibCompressedStream(inStream, CompressionMode.Decompress, true))
                         {
                             // read compressed data max 16KB at a time
                             var readRemaining = len;
@@ -156,15 +155,16 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                                 var parsedCommit = ParseCommitDetails(buff16K, len);
                                 packCommits.Add(parsedCommit);
                             }
-                            offsetVal = zlibStream.TotalIn;
+                            //offsetVal = zlibStream.TotalIn;
                         }
                         // move back position a bit because ZLibStream reads more than needed for inflating
-                        inStream.Seek(origPosition + offsetVal, SeekOrigin.Begin);
+                        //inStream.Seek(origPosition + offsetVal, SeekOrigin.Begin);
                     }
                 }
                 // -------------------
 
-                var user = HttpContext.Current.User.Username();
+                // var user = HttpContext.Current.User.Username();
+                var user = "plop";
                 receivedPack = new ParsedReceivePack(correlationId, repositoryName, pktLines, user, DateTime.Now, packCommits);
 
                 inStream.Seek(0, SeekOrigin.Begin);
@@ -182,7 +182,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                 execResult = resultParser.ParseResult(capturedOutputStream);
             }
 
-            if(receivedPack != null)
+            if (receivedPack != null)
             {
                 receivePackHandler.PostPackReceive(receivedPack, execResult);
             }
@@ -211,7 +211,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
             foreach (var commitLine in commitLines)
             {
                 commitHeadersEndIndex += 1;
-                
+
                 // Make sure we have safe default values in case the string is empty.
                 var commitHeaderType = "";
                 var commitHeaderData = "";
@@ -293,13 +293,13 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
             // Find the start and end markers of the email address.
             var emailStart = commitHeaderData.IndexOf('<');
             var emailEnd = commitHeaderData.IndexOf('>');
-            
+
             // Leave out the trailing space.
             var nameLength = emailStart - 1;
 
             // Leave out the starting bracket.
             var emailLength = emailEnd - emailStart - 1;
-            
+
             // Parse the name and email values.
             var name = commitHeaderData.Substring(0, nameLength);
             var email = commitHeaderData.Substring(emailStart + 1, emailLength);
@@ -322,6 +322,27 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
             if (readBytes != buff.Length)
             {
                 throw new Exception(string.Format("Expected to read {0} bytes, got {1}", buff.Length, readBytes));
+            }
+        }
+
+        public static Stream GetZlibCompressedStream(Stream stream, CompressionMode mode, bool leaveOpen)
+        {
+            // https://github.com/adamhathcock/sharpcompress/issues/233
+            byte[] CMF = new byte[] { 0b0101, 0b1000, 0b10_0_0, 0b0101 };
+            byte[] FLG = new byte[] { 0b0111, 0b1000, 0b00_0_0, 0b0001 };
+
+            switch (mode)
+            {
+                case CompressionMode.Compress:
+                    // We need to add a zlib-compatible header, because the C++ zlib.dll requires it and we want to remain compatible.
+                    stream.Write(CMF, 0, CMF.Length);
+                    return new DeflateStream(stream, CompressionMode.Compress, leaveOpen);
+                case CompressionMode.Decompress:
+                    // we need to seek past zlib's 2-byte magic header, called CMF FLG because Microsoft's DeflateStream doesn't handle them.
+                    stream.Position += CMF.Length;
+                    return new DeflateStream(stream, CompressionMode.Decompress, leaveOpen);
+                default:
+                    return null;
             }
         }
     }

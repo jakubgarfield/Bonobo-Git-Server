@@ -1,37 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Security;
-
 using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Configuration;
-using Bonobo.Git.Server.Extensions;
+using Bonobo.Git.Server.Helpers;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
-
-using Bonobo.Git.Server.Helpers;
-using System.DirectoryServices.AccountManagement;
-
-using Microsoft.Practices.Unity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Serilog;
-using Microsoft.Owin.Security;
 
 namespace Bonobo.Git.Server.Controllers
 {
     public class AccountController : Controller
     {
-        [Dependency]
+        private readonly IOptions<AuthenticationSettings> _authSettings;
+
         public IMembershipService MembershipService { get; set; }
-
-        [Dependency]
         public IRoleProvider RoleProvider { get; set; }
-
-        [Dependency]
         public IAuthenticationProvider AuthenticationProvider { get; set; }
+
+        public AccountController(
+            IMembershipService membershipService,
+            IRoleProvider roleProvider,
+            IAuthenticationProvider authenticationProvider,
+            IOptions<AuthenticationSettings> authSettings
+            )
+        {
+            MembershipService = membershipService;
+            RoleProvider = roleProvider;
+            AuthenticationProvider = authenticationProvider;
+            _authSettings = authSettings;
+        }
 
         [WebAuthorize]
         public ActionResult Detail(Guid id)
@@ -134,7 +134,7 @@ namespace Bonobo.Git.Server.Controllers
                 return RedirectToAction("Unauthorized", "Home");
             }
 
-            if (AuthenticationSettings.DemoModeActive && User.IsInRole(Definitions.Roles.Administrator) && User.Id() == model.Id)
+            if (_authSettings.Value.DemoModeActive && User.IsInRole(Definitions.Roles.Administrator) && User.Id() == model.Id)
             {
                 // Don't allow the admin user to be changed in demo mode
                 return RedirectToAction("Unauthorized", "Home");
@@ -180,38 +180,39 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        public ActionResult CreateADUser()
+        public ActionResult CreateADUser([FromServices] ADHelper adHelper)
         {
             var efms = MembershipService as EFMembershipService;
-            
-            if ((!Request.IsAuthenticated) || efms == null)
+
+            if ((!User.Identity.IsAuthenticated) || efms == null)
             {
-                Log.Warning("CreateADUser: can't run IsAuth: {IsAuth}, MemServ {MemServ}", 
-                    Request.IsAuthenticated,
+                Log.Warning("CreateADUser: can't run IsAuth: {IsAuth}, MemServ {MemServ}",
+                    User.Identity.IsAuthenticated,
                     MembershipService.GetType());
                 return RedirectToAction("Unauthorized", "Home");
             }
 
             var credentials = User.Username();
-            var adUser = ADHelper.GetUserPrincipal(credentials);
+            var adUser = adHelper.GetUserPrincipal(credentials);
             if (adUser != null)
             {
                 var userId = adUser.Guid.GetValueOrDefault(Guid.NewGuid());
                 if (MembershipService.CreateUser(credentials, Guid.NewGuid().ToString(), adUser.GivenName, adUser.Surname, adUser.EmailAddress, userId))
                 {
                     // 2 because we just added the user and there is the default admin user.
-                    if (AuthenticationSettings.ImportWindowsAuthUsersAsAdmin || efms.UserCount() == 2)
+                    if (_authSettings.Value.ImportWindowsAuthUsersAsAdmin || efms.UserCount() == 2)
                     {
                         Log.Information("Making AD user {User} into an admin", credentials);
 
                         var id = MembershipService.GetUserModel(credentials).Id;
-                        RoleProvider.AddUserToRoles(id, new[] {Definitions.Roles.Administrator});
+                        RoleProvider.AddUserToRoles(id, new[] { Definitions.Roles.Administrator });
 
                         // Add the administrator role to the Identity/cookie
                         var Identity = (ClaimsIdentity)User.Identity;
                         Identity.AddClaim(new Claim(ClaimTypes.Role, Definitions.Roles.Administrator));
-                        var AuthenticationManager = HttpContext.GetOwinContext().Authentication;
-                        AuthenticationManager.AuthenticationResponseGrant = new AuthenticationResponseGrant(new ClaimsPrincipal(Identity), new AuthenticationProperties { IsPersistent = true });
+                        throw new NotImplementedException();
+                        //var AuthenticationManager = HttpContext.GetOwinContext().Authentication;
+                        //AuthenticationManager.AuthenticationResponseGrant = new AuthenticationResponseGrant(new ClaimsPrincipal(Identity), new AuthenticationProperties { IsPersistent = true });
                     }
 
                     return RedirectToAction("Index", "Repository");
@@ -230,7 +231,8 @@ namespace Bonobo.Git.Server.Controllers
 
         public ActionResult Create()
         {
-            if ((Request.IsAuthenticated && !User.IsInRole(Definitions.Roles.Administrator)) || (!Request.IsAuthenticated && !UserConfiguration.Current.AllowAnonymousRegistration))
+            if ((Request.HttpContext.User.Identity.IsAuthenticated && !User.IsInRole(Definitions.Roles.Administrator))
+                || (!Request.HttpContext.User.Identity.IsAuthenticated && !UserConfiguration.Current.AllowAnonymousRegistration))
             {
                 return RedirectToAction("Unauthorized", "Home");
             }
@@ -242,7 +244,8 @@ namespace Bonobo.Git.Server.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(UserCreateModel model)
         {
-            if ((Request.IsAuthenticated && !User.IsInRole(Definitions.Roles.Administrator)) || (!Request.IsAuthenticated && !UserConfiguration.Current.AllowAnonymousRegistration))
+            if ((Request.HttpContext.User.Identity.IsAuthenticated && !User.IsInRole(Definitions.Roles.Administrator))
+                || (!Request.HttpContext.User.Identity.IsAuthenticated && !UserConfiguration.Current.AllowAnonymousRegistration))
             {
                 return RedirectToAction("Unauthorized", "Home");
             }
@@ -264,7 +267,7 @@ namespace Bonobo.Git.Server.Controllers
                     }
                     else
                     {
-                        AuthenticationProvider.SignIn(model.Username, Url.Action("Index", "Home"), false);
+                        AuthenticationProvider.SignIn(this.HttpContext, model.Username, Url.Action("Index", "Home"), false);
                         return new EmptyResult();
                     }
                 }

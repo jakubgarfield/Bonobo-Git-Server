@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Bonobo.Git.Server.Data.Mapping;
 using Bonobo.Git.Server.Models;
-using System.Data.Entity.Core;
-using System.Data.Entity.Infrastructure;
-using Microsoft.Practices.Unity;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Bonobo.Git.Server.Data
 {
     public class EFRepositoryRepository : IRepositoryRepository
     {
-        [Dependency]
-        public Func<BonoboGitServerContext> CreateContext { get; set; }
+        private BonoboGitServerContext _ctx;
+        public EFRepositoryRepository(BonoboGitServerContext createContext)
+        {
+            _ctx = createContext;
+        }
+
+        public BonoboGitServerContext CreateContext() => _ctx;
 
         public IList<RepositoryModel> GetAllRepositories()
         {
-            using (var db = CreateContext())
+            var db = CreateContext();
             {
                 var dbrepos = db.Repositories.Select(repo => new
                 {
@@ -40,9 +44,9 @@ namespace Bonobo.Git.Server.Data
                     Group = repo.Group,
                     Description = repo.Description,
                     AnonymousAccess = repo.AnonymousAccess,
-                    Users = repo.Users.Select(user => user.ToModel()).ToArray(),
-                    Teams = repo.Teams.Select(TeamToTeamModel).ToArray(),
-                    Administrators = repo.Administrators.Select(user => user.ToModel()).ToArray(),
+                    Users = repo.Users.Select(user => user.User.ToModel()).ToArray(),
+                    Teams = repo.Teams.Select(t => TeamToTeamModel(t.Team)).ToArray(),
+                    Administrators = repo.Administrators.Select(user => user.User.ToModel()).ToArray(),
                     AuditPushUser = repo.AuditPushUser,
                     AllowAnonymousPush = repo.AllowAnonPush,
                     Logo = repo.Logo
@@ -71,7 +75,7 @@ namespace Bonobo.Git.Server.Data
 
         public RepositoryModel GetRepository(Guid id)
         {
-            using (var db = CreateContext())
+            var db = CreateContext();
             {
                 return ConvertToModel(db.Repositories.First(i => i.Id.Equals(id)));
             }
@@ -79,7 +83,7 @@ namespace Bonobo.Git.Server.Data
 
         public void Delete(Guid id)
         {
-            using (var db = CreateContext())
+            var db = CreateContext();
             {
                 var repo = db.Repositories.FirstOrDefault(i => i.Id == id);
                 if (repo != null)
@@ -104,7 +108,7 @@ namespace Bonobo.Git.Server.Data
             if (model == null) throw new ArgumentException("model");
             if (model.Name == null) throw new ArgumentException("name");
 
-            using (var database = CreateContext())
+            var database = CreateContext();
             {
                 model.EnsureCollectionsAreValid();
                 model.Id = Guid.NewGuid();
@@ -120,7 +124,7 @@ namespace Bonobo.Git.Server.Data
                     AuditPushUser = model.AuditPushUser,
                     LinksUseGlobal = model.LinksUseGlobal,
                     LinksUrl = model.LinksUrl,
-                    LinksRegex = model.LinksRegex 
+                    LinksRegex = model.LinksRegex
                 };
                 database.Repositories.Add(repository);
                 AddMembers(model.Users.Select(x => x.Id), model.Administrators.Select(x => x.Id), model.Teams.Select(x => x.Id), repository, database);
@@ -133,10 +137,10 @@ namespace Bonobo.Git.Server.Data
                     Log.Error(ex, "Failed to create repo {RepoName}", model.Name);
                     return false;
                 }
-                catch (UpdateException)
-                {
-                    return false;
-                }
+                //catch (UpdateException)
+                //{
+                //    return false;
+                //}
                 return true;
             }
         }
@@ -146,7 +150,7 @@ namespace Bonobo.Git.Server.Data
             if (model == null) throw new ArgumentException("model");
             if (model.Name == null) throw new ArgumentException("name");
 
-            using (var db = CreateContext())
+            var db = CreateContext();
             {
                 var repo = db.Repositories.FirstOrDefault(i => i.Id == model.Id);
                 if (repo != null)
@@ -187,7 +191,7 @@ namespace Bonobo.Git.Server.Data
                 Id = t.Id,
                 Name = t.Name,
                 Description = t.Description,
-                Members = t.Users.Select(user => user.ToModel()).ToArray()
+                Members = t.Users.Select(user => user.User.ToModel()).ToArray()
             };
         }
 
@@ -205,9 +209,9 @@ namespace Bonobo.Git.Server.Data
                 Group = item.Group,
                 Description = item.Description,
                 AnonymousAccess = item.Anonymous,
-                Users = item.Users.Select(user => user.ToModel()).ToArray(),
-                Teams = item.Teams.Select(TeamToTeamModel).ToArray(),
-                Administrators = item.Administrators.Select(user => user.ToModel()).ToArray(),
+                Users = item.Users.Select(user => user.User.ToModel()).ToArray(),
+                Teams = item.Teams.Select(t => TeamToTeamModel(t.Team)).ToArray(),
+                Administrators = item.Administrators.Select(user => user.User.ToModel()).ToArray(),
                 AuditPushUser = item.AuditPushUser,
                 AllowAnonymousPush = item.AllowAnonymousPush,
                 Logo = item.Logo,
@@ -225,7 +229,12 @@ namespace Bonobo.Git.Server.Data
                 var administrators = database.Users.Where(i => admins.Contains(i.Id));
                 foreach (var item in administrators)
                 {
-                    repo.Administrators.Add(item);
+                    var u = new UserRepositoryAdministrator
+                    {
+                        RepositoryId = repo.Id,
+                        UserId = item.Id,
+                    };
+                    repo.Administrators.Add(u);
                 }
             }
 
@@ -234,7 +243,12 @@ namespace Bonobo.Git.Server.Data
                 var permittedUsers = database.Users.Where(i => users.Contains(i.Id));
                 foreach (var item in permittedUsers)
                 {
-                    repo.Users.Add(item);
+                    var u = new UserRepositoryPermission
+                    {
+                        UserId = item.Id,
+                        RepositoryId = repo.Id,
+                    };
+                    repo.Users.Add(u);
                 }
             }
 
@@ -243,7 +257,12 @@ namespace Bonobo.Git.Server.Data
                 var permittedTeams = database.Teams.Where(i => teams.Contains(i.Id));
                 foreach (var item in permittedTeams)
                 {
-                    repo.Teams.Add(item);
+                    var u = new TeamRepositoryPermission
+                    {
+                        RepositoryId = repo.Id,
+                        TeamId = item.Id,
+                    };
+                    repo.Teams.Add(u);
                 }
             }
         }

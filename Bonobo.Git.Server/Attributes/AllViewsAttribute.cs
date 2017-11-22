@@ -1,11 +1,14 @@
-﻿using Bonobo.Git.Server.App_GlobalResources;
-using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.Security;
-using Microsoft.Practices.Unity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
+using Bonobo.Git.Server.App_GlobalResources;
+using Bonobo.Git.Server.Models;
+using Bonobo.Git.Server.Security;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonobo.Git.Server.Attributes
 {
@@ -33,29 +36,31 @@ namespace Bonobo.Git.Server.Attributes
 
     public class AllViewsFilter : ActionFilterAttribute
     {
-        [Dependency]
-        public IRepositoryPermissionService RepoPermissions { get; set; }
-
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            filterContext.Controller.ViewBag.PermittedRepositories = PopulateRepoGoToList(filterContext.HttpContext.User.Id(), filterContext.Controller.ControllerContext);
+            if (filterContext.Controller is Controller ctrl)
+            {
+                ctrl.ViewBag.PermittedRepositories = PopulateRepoGoToList(filterContext, filterContext.HttpContext.User.Id());
+            }
         }
 
-        private List<SelectListItem> PopulateRepoGoToList(Guid id, ControllerContext ControllerContext)
+        private List<SelectListItem> PopulateRepoGoToList(ActionExecutingContext filterContext, Guid id)
         {
-            var pullList = RepoPermissions.GetAllPermittedRepositories(id, RepositoryAccessLevel.Pull);
-            var adminList = RepoPermissions.GetAllPermittedRepositories(id, RepositoryAccessLevel.Administer);
+            var repoPermissions = filterContext.HttpContext.RequestServices.GetService<IRepositoryPermissionService>();
+
+            var pullList = repoPermissions.GetAllPermittedRepositories(id, RepositoryAccessLevel.Pull);
+            var adminList = repoPermissions.GetAllPermittedRepositories(id, RepositoryAccessLevel.Administer);
             var firstList = pullList.Union(adminList, new InlineComparer<RepositoryModel>((lhs, rhs) => lhs.Id == rhs.Id, obj => obj.Id.GetHashCode()))
                     .OrderBy(x => x.Name.ToLowerInvariant())
-                    .GroupBy(x => x.Group == null ? Resources.Repository_No_Group : x.Group);
+                    .GroupBy(x => x.Group ?? Resources.Repository_No_Group);
+
             List<SelectListItem> items = new List<SelectListItem>();
-            var u = new UrlHelper(ControllerContext.RequestContext);
+            var u = new UrlHelper(filterContext);
             var groups = new Dictionary<string, SelectListGroup>();
             foreach (var grouped in firstList)
             {
-                SelectListGroup group = null;
                 string key = grouped.Key;
-                if (!groups.TryGetValue(key, out group))
+                if (!groups.TryGetValue(key, out SelectListGroup group))
                 {
                     group = new SelectListGroup();
                     group.Name = key;

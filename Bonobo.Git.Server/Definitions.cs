@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Bonobo.Git.Server
+﻿namespace Bonobo.Git.Server
 {
     public static class Definitions
     {

@@ -1,6 +1,6 @@
-using System.Web.Mvc;
 using Bonobo.Git.Server.Data;
-using Microsoft.Practices.Unity;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonobo.Git.Server
 {
@@ -20,20 +20,20 @@ namespace Bonobo.Git.Server
             _repositoryNameParameterName = repositoryNameParameterName;
         }
 
-        [Dependency]
-        public IRepositoryRepository RepositoryRepository { get; set; }
-
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             object incomingRepositoryNameParameter;
-            if(filterContext.ActionParameters.TryGetValue(_repositoryNameParameterName, out incomingRepositoryNameParameter))
+            if (filterContext.ActionArguments.TryGetValue(_repositoryNameParameterName, out incomingRepositoryNameParameter))
             {
                 var incomingRepositoryName = (string)incomingRepositoryNameParameter;
-                var normalizedName = Repository.NormalizeRepositoryName(incomingRepositoryName, RepositoryRepository);
+
+                var repositoryRepository = filterContext.HttpContext.RequestServices.GetService<IRepositoryRepository>();
+
+                var normalizedName = Repository.NormalizeRepositoryName(incomingRepositoryName, repositoryRepository);
                 if (normalizedName != incomingRepositoryName)
                 {
                     // We've had to correct the incoming repository name
-                    filterContext.ActionParameters[_repositoryNameParameterName] = normalizedName;
+                    filterContext.ActionArguments[_repositoryNameParameterName] = normalizedName;
                 }
             }
         }

@@ -3,23 +3,23 @@ using System.Collections.Generic;
 
 namespace Bonobo.Git.Server.Data
 {
-    public partial class Role
+    public class Role
     {
-        private ICollection<User> _users;
+        private ICollection<UserRole> _userRoles;
 
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public virtual ICollection<User> Users
+        public virtual ICollection<UserRole> Users
         {
             get
             {
-                return _users ?? (_users = new List<User>());
+                return _userRoles ?? (_userRoles = new List<UserRole>());
             }
             set
             {
-                _users = value;
+                _userRoles = value;
             }
         }
     }

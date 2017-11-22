@@ -12,8 +12,8 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
                 Guid UserId = new Guid("3eb9995e-99e3-425a-b978-1409bdd61fb6");
                 return @"
 
-                    INSERT INTO [Role] ([Id], [Name], [Description]) VALUES ('" + roleId +@"','Administrator','System administrator');
-                    INSERT INTO [User] ([Id], [Name], [Surname], [Username], [Password], [PasswordSalt], [Email]) VALUES ('" +UserId +@"','admin', '', 'admin', '0CC52C6751CC92916C138D8D714F003486BF8516933815DFC11D6C3E36894BFA044F97651E1F3EEBA26CDA928FB32DE0869F6ACFB787D5A33DACBA76D34473A3', 'admin', '');
+                    INSERT INTO [Role] ([Id], [Name], [Description]) VALUES ('" + roleId + @"','Administrator','System administrator');
+                    INSERT INTO [User] ([Id], [Name], [Surname], [Username], [Password], [PasswordSalt], [Email]) VALUES ('" + UserId + @"','admin', '', 'admin', '0CC52C6751CC92916C138D8D714F003486BF8516933815DFC11D6C3E36894BFA044F97651E1F3EEBA26CDA928FB32DE0869F6ACFB787D5A33DACBA76D34473A3', 'admin', '');
                     INSERT INTO [UserRole_InRole] ([User_Id], [Role_Id]) VALUES ('" + UserId + "','" + roleId + @"');
                     ";
             }

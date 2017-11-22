@@ -1,65 +1,60 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Web;
-
-using Bonobo.Git.Server.Models;
-
-using Microsoft.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Practices.Unity;
-
-using Owin;
-using Bonobo.Git.Server.Owin.Windows;
-using Microsoft.Owin.Extensions;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonobo.Git.Server.Security
 {
     public class WindowsAuthenticationProvider : AuthenticationProvider
     {
-        public override void Configure(IAppBuilder app)
+        public WindowsAuthenticationProvider(IMembershipService membershipService, IRoleProvider roleProvider) : base(membershipService, roleProvider)
         {
-            app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
-            app.UseCookieAuthentication(new CookieAuthenticationOptions()
-            {
-                AuthenticationType = CookieAuthenticationDefaults.AuthenticationType,
-                LoginPath = new PathString("/Home/WindowsLogin"),
-                Provider = new Microsoft.Owin.Security.Cookies.CookieAuthenticationProvider()
-                {
-                    OnApplyRedirect = context =>
-                    {
-                        if (context.Request.Path != WindowsAuthenticationOptions.DefaultRedirectPath && !context.Request.Headers.ContainsKey("AuthNoRedirect"))
-                        {
-                            context.Response.Redirect(context.RedirectUri);
-                        }
-                    }
-                }
-            });
-            app.UseWindowsAuthentication(new WindowsAuthenticationOptions
-            {
-                GetClaimsForUser = username =>
-                {
-                    return GetClaimsForUser(username);
-                }
-            });
         }
 
-        public override void SignIn(string username, string returnUrl = null, bool rememberMe = false)
+        public static void Configure(IServiceCollection services)
         {
-            ClaimsIdentity identity = new ClaimsIdentity(GetClaimsForUser(username), WindowsAuthenticationDefaults.AuthenticationType);
-            var authprop = new AuthenticationProperties { IsPersistent = rememberMe, RedirectUri = returnUrl };
-            HttpContext.Current.GetOwinContext().Authentication.SignIn(authprop, identity);
-            if (!String.IsNullOrEmpty(returnUrl))
-            {
-                HttpContext.Current.Response.Redirect(returnUrl, false);
-            }
+            throw new NotImplementedException();
+            //app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
+            //app.UseCookieAuthentication(new CookieAuthenticationOptions()
+            //{
+            //    AuthenticationType = CookieAuthenticationDefaults.AuthenticationType,
+            //    LoginPath = new PathString("/Home/WindowsLogin"),
+            //    Provider = new Microsoft.Owin.Security.Cookies.CookieAuthenticationProvider()
+            //    {
+            //        OnApplyRedirect = context =>
+            //        {
+            //            if (context.Request.Path != WindowsAuthenticationOptions.DefaultRedirectPath && !context.Request.Headers.ContainsKey("AuthNoRedirect"))
+            //            {
+            //                context.Response.Redirect(context.RedirectUri);
+            //            }
+            //        }
+            //    }
+            //});
+            //app.UseWindowsAuthentication(new WindowsAuthenticationOptions
+            //{
+            //    GetClaimsForUser = username =>
+            //    {
+            //        return GetClaimsForUser(username);
+            //    }
+            //});
         }
 
-        public override void SignOut()
+        public override Task SignIn(HttpContext httpContext, string username, string returnUrl = null, bool rememberMe = false)
         {
-            HttpContext.Current.GetOwinContext().Authentication.SignOut(WindowsAuthenticationDefaults.AuthenticationType);
+            throw new NotImplementedException();
+            //ClaimsIdentity identity = new ClaimsIdentity(GetClaimsForUser(username), WindowsAuthenticationDefaults.AuthenticationType);
+            //var authprop = new AuthenticationProperties { IsPersistent = rememberMe, RedirectUri = returnUrl };
+            //await httpContext.SignInAsync(authprop, identity);
+            //if (!String.IsNullOrEmpty(returnUrl))
+            //{
+            //    httpContext.Response.Redirect(returnUrl, false);
+            //}
+        }
+
+        public override Task SignOut(HttpContext httpContext)
+        {
+            throw new NotImplementedException();
+            //return httpContext.SignOutAsync(WindowsAuthenticationDefaults.AuthenticationScheme);
         }
     }
 }

@@ -1,7 +1,5 @@
-using System.Data.Common;
 using Bonobo.Git.Server.Data.Mapping;
-using System.Data.Entity;
-using Microsoft.Practices.Unity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -13,32 +11,36 @@ namespace Bonobo.Git.Server.Data
         public DbSet<User> Users { get; set; }
 
 
-        static BonoboGitServerContext()
-        {
-            Database.SetInitializer<BonoboGitServerContext>(null);
-        }
+        //static BonoboGitServerContext()
+        //{
+        //    Database.SetInitializer<BonoboGitServerContext>(null);
+        //}
 
-        public BonoboGitServerContext()
-            : base("Name=BonoboGitServerContext")
-        {
-        }
-
-        // Don't make this public because it confuses Unity
-        private BonoboGitServerContext(DbConnection databaseConnection) : base(databaseConnection, false)
+        public BonoboGitServerContext(DbContextOptions databaseConnection) : base(databaseConnection)
         {
         }
 
-        public static BonoboGitServerContext FromDatabase(DbConnection databaseConnection)
+        //public static BonoboGitServerContext FromDatabase(DbConnection databaseConnection)
+        //{
+        //    return new BonoboGitServerContext(databaseConnection);
+        //}
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            return new BonoboGitServerContext(databaseConnection);
+            base.OnConfiguring(optionsBuilder);
         }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Configurations.Add(new RepositoryMap());
-            modelBuilder.Configurations.Add(new RoleMap());
-            modelBuilder.Configurations.Add(new TeamMap());
-            modelBuilder.Configurations.Add(new UserMap());
+            modelBuilder.ApplyConfiguration(new UserTeamMemberMap());
+            modelBuilder.ApplyConfiguration(new TeamRepositoryPermissionMap());
+            modelBuilder.ApplyConfiguration(new UserRepositoryAdministratorMap());
+            modelBuilder.ApplyConfiguration(new UserRepositoryPermissioneMap());
+            modelBuilder.ApplyConfiguration(new RepositoryMap());
+            modelBuilder.ApplyConfiguration(new RoleMap());
+            modelBuilder.ApplyConfiguration(new TeamMap());
+            modelBuilder.ApplyConfiguration(new UserMap());
+            modelBuilder.ApplyConfiguration(new UserRoleMap());
         }
     }
 }

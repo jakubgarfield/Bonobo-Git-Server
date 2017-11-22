@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
-using System.Text;
+using System.Security.Principal;
 using System.Text.RegularExpressions;
-using System.Web.Mvc;
 using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Data;
@@ -12,29 +12,38 @@ using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Helpers;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
-using Ionic.Zip;
-using Microsoft.Practices.Unity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using MimeTypes;
-using System.Security.Principal;
 
 namespace Bonobo.Git.Server.Controllers
 {
     public class RepositoryController : Controller
     {
-        [Dependency]
+        private readonly IOptions<AppSettings> _appSettings;
+
         public ITeamRepository TeamRepository { get; set; }
-
-        [Dependency]
         public IRepositoryRepository RepositoryRepository { get; set; }
-
-        [Dependency]
         public IMembershipService MembershipService { get; set; }
-
-        [Dependency]
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
-
-        [Dependency]
         public IAuthenticationProvider AuthenticationProvider { get; set; }
+
+        public RepositoryController(
+            ITeamRepository teamRepository,
+            IRepositoryRepository repositoryRepository,
+            IMembershipService membershipService,
+            IRepositoryPermissionService repositoryPermissionService,
+            IAuthenticationProvider authenticationProvider,
+            IOptions<AppSettings> appSettings)
+        {
+            TeamRepository = teamRepository;
+            RepositoryRepository = repositoryRepository;
+            MembershipService = membershipService;
+            RepositoryPermissionService = repositoryPermissionService;
+            AuthenticationProvider = authenticationProvider;
+            _appSettings = appSettings;
+        }
 
         public ActionResult Index(string sortGroup = null, string searchString = null)
         {
@@ -51,7 +60,7 @@ namespace Bonobo.Git.Server.Controllers
                                             (!string.IsNullOrEmpty(a.Description) && a.Description.ToLower().Contains(search)))
                                             .ToList();
             }
-            foreach(var item in unorderedRepositoryDetails)
+            foreach (var item in unorderedRepositoryDetails)
             {
                 SetGitUrls(item);
             }
@@ -88,7 +97,7 @@ namespace Bonobo.Git.Server.Controllers
                     {
                         RepositoryRepository.Update(repoModel);
                     }
-                    catch (System.Data.Entity.Infrastructure.DbUpdateException)
+                    catch (DbUpdateException)
                     {
                         MoveRepo(repoModel, existingRepo);
                     }
@@ -237,13 +246,9 @@ namespace Bonobo.Git.Server.Controllers
         /// </summary>
         void SetGitUrls(RepositoryDetailModel model)
         {
-            string serverAddress = System.Configuration.ConfigurationManager.AppSettings["GitServerPath"]
-                                   ?? string.Format("{0}://{1}{2}{3}/",
-                                       Request.Url.Scheme,
-                                       Request.Url.Host,
-                                       (Request.Url.IsDefaultPort ? "" : (":" + Request.Url.Port)),
-                                       Request.ApplicationPath == "/" ? "" : Request.ApplicationPath
-                                       );
+            string serverAddress = _appSettings.Value.GitServerPath
+                                   ??
+                                   $"{Request.Scheme}://{Request.Host}{""/*Request.ApplicationPath == "/" ? "" : Request.ApplicationPath*/}/";
 
             model.GitUrl = String.Concat(serverAddress, model.Name, ".git");
             if (User.Identity.IsAuthenticated)
@@ -256,7 +261,7 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorizeRepository(AllowAnonymousAccessWhenRepositoryAllowsIt = true)]
         public ActionResult Tree(Guid id, string encodedName, string encodedPath)
         {
-            bool includeDetails = Request.IsAjaxRequest();
+            bool includeDetails = false;// Request.IsAjaxRequest();
 
             ViewBag.ID = id;
             var name = PathEncoder.Decode(encodedName);
@@ -289,7 +294,7 @@ namespace Bonobo.Git.Server.Controllers
 
                 if (includeDetails)
                 {
-                    return Json(model, JsonRequestBehavior.AllowGet);
+                    return Json(model/*, JsonRequestBehavior.AllowGet*/);
                 }
                 else
                 {
@@ -347,7 +352,7 @@ namespace Bonobo.Git.Server.Controllers
                 }
             }
 
-            return HttpNotFound();
+            return NotFound();
         }
 
         [WebAuthorizeRepository]
@@ -376,32 +381,26 @@ namespace Bonobo.Git.Server.Controllers
             var name = PathEncoder.Decode(encodedName);
             var path = PathEncoder.Decode(encodedPath);
 
-            Response.BufferOutput = false;
-            Response.Charset = "";
+            //Response.BufferOutput = false;
+            //Response.Charset = "";
             Response.ContentType = "application/zip";
 
             var repo = RepositoryRepository.GetRepository(id);
             string headerValue = ContentDispositionUtil.GetHeaderValue((name ?? repo.Name) + ".zip");
-            Response.AddHeader("Content-Disposition", headerValue);
+            Response.Headers.Add("Content-Disposition", headerValue);
 
-            using (var outputZip = new ZipFile())
+            using (var zipArchive = new ZipArchive(new WriteOnlyStreamWrapper(Response.Body), ZipArchiveMode.Create, true))
             {
-                outputZip.UseZip64WhenSaving = Zip64Option.Always;
-                outputZip.AlternateEncodingUsage = ZipOption.AsNecessary;
-                outputZip.AlternateEncoding = Encoding.Unicode;
-
                 using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, repo.Name)))
                 {
-                    AddTreeToZip(browser, name, path, outputZip);
+                    AddTreeToZip(browser, name, path, zipArchive);
                 }
-
-                outputZip.Save(Response.OutputStream);
-
-                return new EmptyResult();
             }
+
+            return new EmptyResult();
         }
 
-        private static void AddTreeToZip(RepositoryBrowser browser, string name, string path, ZipFile outputZip)
+        private static void AddTreeToZip(RepositoryBrowser browser, string name, string path, ZipArchive outputZip)
         {
             string referenceName;
             var treeNode = browser.BrowseTree(name, path, out referenceName);
@@ -410,13 +409,16 @@ namespace Bonobo.Git.Server.Controllers
             {
                 if (item.IsLink)
                 {
-                    outputZip.AddDirectoryByName(Path.Combine(item.TreeName, item.Path));
+                    var zipEntry = outputZip.CreateEntry(Path.Combine(item.TreeName, item.Path));
                 }
                 else if (!item.IsTree)
                 {
                     string blobReferenceName;
                     var model = browser.BrowseBlob(item.TreeName, item.Path, out blobReferenceName);
-                    outputZip.AddEntry(Path.Combine(item.TreeName, item.Path), model.Data);
+
+                    var zipEntry = outputZip.CreateEntry(Path.Combine(item.TreeName, item.Path));
+                    using (var zipStream = zipEntry.Open())
+                        zipStream.Write(model.Data, 0, model.Data.Length);
                 }
                 else
                 {
@@ -442,7 +444,8 @@ namespace Bonobo.Git.Server.Controllers
                 var commits = browser.GetTags(name, page, 10, out referenceName, out totalCount);
                 PopulateBranchesData(browser, referenceName);
                 ViewBag.TotalCount = totalCount;
-                return View(new RepositoryCommitsModel {
+                return View(new RepositoryCommitsModel
+                {
                     Commits = commits,
                     Name = repo.Name,
                     Logo = new RepositoryLogoDetailModel(repo.Logo)
@@ -503,7 +506,8 @@ namespace Bonobo.Git.Server.Controllers
                     }
                     commit.Links = links;
                 }
-                return View(new RepositoryCommitsModel {
+                return View(new RepositoryCommitsModel
+                {
                     Commits = commits,
                     Name = repo.Name,
                     Logo = new RepositoryLogoDetailModel(repo.Logo)
@@ -572,10 +576,10 @@ namespace Bonobo.Git.Server.Controllers
                         string sourceRepositoryPath = Path.Combine(UserConfiguration.Current.Repositories, source_repo.Name);
 
                         LibGit2Sharp.CloneOptions options = new LibGit2Sharp.CloneOptions()
-                            {
-                                IsBare = true,
-                                Checkout = false
-                            };
+                        {
+                            IsBare = true,
+                            Checkout = false
+                        };
 
                         LibGit2Sharp.Repository.Clone(sourceRepositoryPath, targetRepositoryPath, options);
 
@@ -619,7 +623,8 @@ namespace Bonobo.Git.Server.Controllers
                 var name = PathEncoder.Decode(encodedName);
                 string referenceName;
                 var commits = browser.GetHistory(path, name, out referenceName);
-                return View(new RepositoryCommitsModel {
+                return View(new RepositoryCommitsModel
+                {
                     Commits = commits,
                     Name = repo.Name,
                     Logo = new RepositoryLogoDetailModel(repo.Logo)
@@ -645,7 +650,7 @@ namespace Bonobo.Git.Server.Controllers
             {
                 model.Administrators = model.PostedSelectedAdministrators.Select(x => MembershipService.GetUserModel(x)).ToArray();
             }
-            model.PostedSelectedAdministrators =  new Guid[0];
+            model.PostedSelectedAdministrators = new Guid[0];
             model.PostedSelectedUsers = new Guid[0];
             model.PostedSelectedTeams = new Guid[0];
         }
@@ -654,9 +659,9 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         // This takes an irrelevant ID, because there isn't a good route
         // to RepositoryController for anything without an Id which isn't the Index action
-        public ActionResult Rescan(string id)
+        public ActionResult Rescan([FromServices]IRepositoryRepository repositoryRepository, string id)
         {
-            new RepositorySynchronizer().Run();
+            new RepositorySynchronizer(repositoryRepository).Run();
             return RedirectToAction("Index");
         }
 

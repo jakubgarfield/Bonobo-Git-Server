@@ -8,11 +8,11 @@ namespace Bonobo.Git.Server.Data.Update
         /// <summary>
         /// Creates the list of scripts that should be executed on app start. Ordering matters!
         /// </summary>
-        public static IEnumerable<IUpdateScript> GetScriptsBySqlProviderName(string sqlProvider)
+        public static IEnumerable<IUpdateScript> GetScriptsBySqlProviderName(string sqlProvider, IServiceProvider serviceProvider)
         {
             switch (sqlProvider)
             {
-                case "SQLiteConnection":
+                case "Microsoft.EntityFrameworkCore.Sqlite":
                     return new List<IUpdateScript>
                     {
                         new Sqlite.InitialCreateScript(),
@@ -20,12 +20,12 @@ namespace Bonobo.Git.Server.Data.Update
                         new Sqlite.AddAuditPushUser(),
                         new Sqlite.AddGroup(),
                         new Sqlite.AddRepositoryLogo(),
-                        new Sqlite.AddGuidColumn(),
+                        new Sqlite.AddGuidColumn(serviceProvider),
                         new Sqlite.AddRepoPushColumn(),
                         new Sqlite.AddRepoLinksColumn(),
                         new Sqlite.InsertDefaultData()
                     };
-                case "SqlConnection":
+                case "Microsoft.EntityFrameworkCore.SqlServer":
                     return new List<IUpdateScript>
                     {
                         new SqlServer.InitialCreateScript(),
@@ -33,13 +33,13 @@ namespace Bonobo.Git.Server.Data.Update
                         new SqlServer.AddAuditPushUser(),
                         new SqlServer.AddGroup(),
                         new SqlServer.AddRepositoryLogo(),
-                        new SqlServer.AddGuidColumn(),
+                        new SqlServer.AddGuidColumn(serviceProvider),
                         new SqlServer.AddRepoPushColumn(),
                         new SqlServer.AddRepoLinksColumn(),
                         new SqlServer.InsertDefaultData()
                     };
                 default:
-                    throw new NotImplementedException($"The provider '{sqlProvider}' is not supported yet");
+                    throw new NotSupportedException($"The provider '{sqlProvider}' is not supported yet");
             }
         }
     }

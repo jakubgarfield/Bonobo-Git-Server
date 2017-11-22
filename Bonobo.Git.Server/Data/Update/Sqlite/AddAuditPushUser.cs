@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Bonobo.Git.Server.Data.Update.Sqlite
+﻿namespace Bonobo.Git.Server.Data.Update.Sqlite
 {
     public class AddAuditPushUser : IUpdateScript
     {
@@ -23,7 +21,7 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
             }
         }
 
-        public void CodeAction(BonoboGitServerContext context) {}
+        public void CodeAction(BonoboGitServerContext context) { }
 
     }
 }
