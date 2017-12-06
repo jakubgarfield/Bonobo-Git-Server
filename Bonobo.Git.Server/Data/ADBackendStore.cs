@@ -1,17 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Web;
-using System.Collections;
-using System.Web.Hosting;
-using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Helpers;
+using Newtonsoft.Json;
 using Serilog;
 
 namespace Bonobo.Git.Server.Data
@@ -104,7 +97,7 @@ namespace Bonobo.Git.Server.Data
                 File.WriteAllText(itemFilename, JsonConvert.SerializeObject(item));
                 result = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex, "AD: Store");
             }
@@ -157,7 +150,7 @@ namespace Bonobo.Git.Server.Data
 
         private string GetItemFilename(T item)
         {
-            return item.Id+".json";
+            return item.Id + ".json";
         }
     }
 }

@@ -1,37 +1,42 @@
 ﻿using System;
 using System.IO;
-using System.Net;
-using System.Web.Mvc;
+using System.IO.Compression;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Git;
 using Bonobo.Git.Server.Git.GitService;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
-using Ionic.Zlib;
-using Microsoft.Practices.Unity;
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Repository = LibGit2Sharp.Repository;
 
 namespace Bonobo.Git.Server.Controllers
 {
-    [GitAuthorize]
+    [GitAuthorize(AuthenticationSchemes = "Basic", Policy = "Git")]
     [RepositoryNameNormalizer("repositoryName")]
     public class GitController : Controller
     {
-        [Dependency]
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
-
-        [Dependency]
         public IRepositoryRepository RepositoryRepository { get; set; }
-
-        [Dependency]
         public IMembershipService MembershipService { get; set; }
-
-        [Dependency]
         public IGitService GitService { get; set; }
 
-        public ActionResult SecureGetInfoRefs(String repositoryName, String service)
+        public GitController(
+            IRepositoryPermissionService repositoryPermissionService,
+            IRepositoryRepository repositoryRepository,
+            IMembershipService membershipService,
+            IGitService gitService
+            )
+        {
+            RepositoryPermissionService = repositoryPermissionService;
+            RepositoryRepository = repositoryRepository;
+            MembershipService = membershipService;
+            GitService = gitService;
+        }
+
+        [HttpGet("{repositoryName}.git/info/refs", Name = "SecureInfoRefs")]
+        public IActionResult SecureGetInfoRefs(String repositoryName, String service)
         {
             bool isPush = String.Equals("git-receive-pack", service, StringComparison.OrdinalIgnoreCase);
 
@@ -52,7 +57,7 @@ namespace Bonobo.Git.Server.Controllers
                 }
                 else
                 {
-                    return new HttpNotFoundResult();
+                    return new NotFoundResult();
                 }
             }
 
@@ -63,7 +68,7 @@ namespace Bonobo.Git.Server.Controllers
             }
             else
             {
-                Log.Warning("GitC: SecureGetInfoRefs unauth because User {UserId} doesn't have permission {Permission} on  repo {RepositoryName}", 
+                Log.Warning("GitC: SecureGetInfoRefs unauth because User {UserId} doesn't have permission {Permission} on  repo {RepositoryName}",
                     User.Id(),
                     requiredLevel,
                     repositoryName);
@@ -71,12 +76,12 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [HttpPost]
-        public ActionResult SecureUploadPack(String repositoryName)
+        [HttpPost("{repositoryName}.git/git-upload-pack", Name = "SecureUploadPack")]
+        public IActionResult SecureUploadPack(String repositoryName)
         {
             if (!RepositoryIsValid(repositoryName))
             {
-                return new HttpNotFoundResult();
+                return new NotFoundResult();
             }
 
             if (RepositoryPermissionService.HasPermission(User.Id(), repositoryName, RepositoryAccessLevel.Pull))
@@ -89,12 +94,12 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [HttpPost]
-        public ActionResult SecureReceivePack(String repositoryName)
+        [HttpPost("{repositoryName}.git/git-receive-pack", Name = "SecureReceivePack")]
+        public IActionResult SecureReceivePack(String repositoryName)
         {
             if (!RepositoryIsValid(repositoryName))
             {
-                return new HttpNotFoundResult();
+                return new NotFoundResult();
             }
 
             if (RepositoryPermissionService.HasPermission(User.Id(), repositoryName, RepositoryAccessLevel.Push))
@@ -127,7 +132,7 @@ namespace Bonobo.Git.Server.Controllers
             var user = MembershipService.GetUserModel(User.Id());
             repository.Description = "Auto-created by push for " + user.DisplayName;
             repository.AnonymousAccess = false;
-            repository.Administrators = new[] {user};
+            repository.Administrators = new[] { user };
             if (!RepositoryRepository.Create(repository))
             {
                 // We can't add this to the repo store
@@ -145,12 +150,13 @@ namespace Bonobo.Git.Server.Controllers
         /// This is the action invoked if you browse to a .git URL
         /// We just redirect to the repo details page, which is basically what GitHub does
         /// </summary>
-        public ActionResult GitUrl(string repositoryName)
+        [HttpGet("{repositoryName}.git", Name = "GitBaseUrl")]
+        public IActionResult GitUrl(string repositoryName)
         {
-            return RedirectPermanent(Url.Action("Detail", "Repository", new { id = repositoryName}));
+            return RedirectPermanent(Url.Action("Detail", "Repository", new { id = repositoryName }));
         }
 
-        private ActionResult ExecuteReceivePack(string repositoryName)
+        private IActionResult ExecuteReceivePack(string repositoryName)
         {
             return new GitCmdResult(
                 "application/x-git-receive-pack-result",
@@ -164,7 +170,7 @@ namespace Bonobo.Git.Server.Controllers
                 });
         }
 
-        private ActionResult ExecuteUploadPack(string repositoryName)
+        private IActionResult ExecuteUploadPack(string repositoryName)
         {
             return new GitCmdResult(
                 "application/x-git-upload-pack-result",
@@ -178,7 +184,7 @@ namespace Bonobo.Git.Server.Controllers
                 });
         }
 
-        private ActionResult GetInfoRefs(String repositoryName, String service)
+        private IActionResult GetInfoRefs(String repositoryName, String service)
         {
             Response.StatusCode = 200;
 
@@ -192,22 +198,22 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     GitService.ExecuteServiceByName(
                         Guid.NewGuid().ToString("N"),
-                        repositoryName, 
-                        serviceName, 
+                        repositoryName,
+                        serviceName,
                         new ExecutionOptions() { AdvertiseRefs = true },
                         GetInputStream(),
                         outStream
                     );
-                }, 
+                },
                 advertiseRefsContent);
         }
 
-        private ActionResult UnauthorizedResult()
+        private IActionResult UnauthorizedResult()
         {
-            Response.Clear();
-            Response.AddHeader("WWW-Authenticate", "Basic realm=\"Bonobo Git\"");
-            
-            return new HttpStatusCodeResult(401);
+            //Response.Body.Clear();
+            Response.Headers.Add("WWW-Authenticate", "Basic realm=\"Bonobo Git\"");
+
+            return new StatusCodeResult(401);
         }
 
         private static String FormatMessage(String input)
@@ -240,27 +246,27 @@ namespace Bonobo.Git.Server.Controllers
         {
             // For really large uploads we need to get a bufferless input stream and disable the max
             // request length.
-            Stream requestStream = disableBuffer ?
+            Stream requestStream = Request.Body;/*  disableBuffer ?
                 Request.GetBufferlessInputStream(disableMaxRequestLength: true) :
-                Request.GetBufferedInputStream();
+                Request.GetBufferedInputStream();*/
 
             return Request.Headers["Content-Encoding"] == "gzip" ?
                 new GZipStream(requestStream, CompressionMode.Decompress) :
                 requestStream;
         }
 
-        protected override void OnException(ExceptionContext filterContext)
-        {
-            Exception exception = filterContext.Exception;
-            Log.Error(exception, "Error caught in GitController");
-            filterContext.Result = new ContentResult { Content = exception.ToString() };
+        //protected override void OnException(ExceptionContext filterContext)
+        //{
+        //    Exception exception = filterContext.Exception;
+        //    Log.Error(exception, "Error caught in GitController");
+        //    filterContext.Result = new ContentResult { Content = exception.ToString() };
 
-            filterContext.ExceptionHandled = true;
+        //    filterContext.ExceptionHandled = true;
 
-            filterContext.HttpContext.Response.Clear();
-            filterContext.HttpContext.Response.StatusCode = 500;
-            filterContext.HttpContext.Response.StatusDescription = "Exception in GitController";
-            filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
-        }
+        //    filterContext.HttpContext.Response.Clear();
+        //    filterContext.HttpContext.Response.StatusCode = 500;
+        //    filterContext.HttpContext.Response.StatusDescription = "Exception in GitController";
+        //    filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
+        //}
     }
 }

@@ -1,24 +1,25 @@
-﻿using Bonobo.Git.Server.Security;
-using System.DirectoryServices.AccountManagement;
-using System.Web.Mvc;
-using System.Collections.Generic;
-using System;
-using System.Data.Entity;
+﻿using System;
 using System.Data.SqlClient;
 using System.Linq;
 using Bonobo.Git.Server.Helpers;
+using Bonobo.Git.Server.Security;
+using Dapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonobo.Git.Server.Data.Update.SqlServer
 {
     public class AddGuidColumn : IUpdateScript
-
     {
         private readonly IAuthenticationProvider AuthProvider;
-        private Database _db;
+        private readonly ADHelper _adHelper;
+        private DatabaseFacade _db;
 
-        public AddGuidColumn()
+        public AddGuidColumn(IServiceProvider serviceProvider)
         {
-            AuthProvider = DependencyResolver.Current.GetService<IAuthenticationProvider>();
+            _adHelper = serviceProvider.GetService<ADHelper>();
+            this.AuthProvider = serviceProvider.GetService<IAuthenticationProvider>();
         }
 
         public void CodeAction(BonoboGitServerContext context)
@@ -53,13 +54,13 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
         {
             try
             {
-                var result = _db.SqlQuery<int>(@"
+                //var tran = (_db.CurrentTransaction as Microsoft.EntityFrameworkCore.Storage.RelationalTransaction).GetInfrastructure();
+                return _db.GetDbConnection().ExecuteScalar<bool>(@"
                             IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'User' AND  COLUMN_NAME = 'Id')
                                 SELECT 1
                             ELSE
                                 SELECT 0
                 ");
-                return result.SingleAsync().GetAwaiter().GetResult() == 1;
             }
             catch (SqlException)
             {
@@ -263,13 +264,15 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
 
         private void CopyUsers()
         {
-            var users = _db.SqlQuery<OldUser>("Select * from oUser;").ToList();
+            var tran = (_db.CurrentTransaction as Microsoft.EntityFrameworkCore.Storage.RelationalTransaction).GetInfrastructure();
+            var users = _db.GetDbConnection().Query<OldUser>("Select * from oUser;", transaction: tran).ToList();
+            //tran.Commit();
             foreach (var entry in users)
             {
                 Guid guid = Guid.NewGuid();
                 if (AuthProvider is WindowsAuthenticationProvider)
                 {
-                    var user = ADHelper.GetUserPrincipal(entry.Username);
+                    var user = _adHelper.GetUserPrincipal(entry.Username);
                     // if the user no longer exists
                     // it means he cannot login anymore so it is safe to assign
                     // any new guid to him
@@ -310,7 +313,9 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
 
         private void CopyTeams()
         {
-            var teams = _db.SqlQuery<NameDesc>("Select * from oTeam").ToList();
+
+            var tran = (_db.CurrentTransaction as Microsoft.EntityFrameworkCore.Storage.RelationalTransaction).GetInfrastructure();
+            var teams = _db.GetDbConnection().Query<NameDesc>("Select * from oTeam", transaction: tran).ToList();
             foreach (var team in teams)
             {
                 _db.ExecuteSqlCommand("INSERT INTO Team VALUES ({0}, {1}, {2})",
@@ -320,7 +325,8 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
 
         private void CopyRoles()
         {
-            var roles = _db.SqlQuery<NameDesc>("Select * from oRole").ToList();
+            var tran = (_db.CurrentTransaction as Microsoft.EntityFrameworkCore.Storage.RelationalTransaction).GetInfrastructure();
+            var roles = _db.GetDbConnection().Query<NameDesc>("Select * from oRole", transaction: tran).ToList();
             foreach (var role in roles)
             {
                 _db.ExecuteSqlCommand("INSERT INTO Role VALUES ({0}, {1}, {2})",
@@ -332,14 +338,15 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
 
         private void CopyRepositories()
         {
-            var repos = _db.SqlQuery<OldRepo>("SELECT * FROM oRepo").ToList();
+            var tran = (_db.CurrentTransaction as Microsoft.EntityFrameworkCore.Storage.RelationalTransaction).GetInfrastructure();
+            var repos = _db.GetDbConnection().Query<OldRepo>("SELECT * FROM oRepo", transaction: tran).ToList();
             foreach (var repo in repos)
             {
                 _db.ExecuteSqlCommand("INSERT INTO Repository VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6})",
                     Guid.NewGuid(), repo.Name, repo.Description, repo.Anonymous, repo.AuditPushUser, repo.Group, repo.Logo);
             }
         }
-        
+
         private void AddRelations()
         {
             // ALTER TABLE UserRepository_Administrator RENAME TO ura;
@@ -411,6 +418,6 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
         public string Command { get { return null; } }
         public string Precondition { get { return null; } }
 
-        public PrincipalContext ADPricipalContextHelper { get; private set; }
+        //public PrincipalContext ADPricipalContextHelper { get; private set; }
     }
 }

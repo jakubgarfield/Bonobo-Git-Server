@@ -1,7 +1,4 @@
-﻿using System.Configuration;
-using System.IO;
-using System.Web;
-using System.Web.Hosting;
+﻿using System.IO;
 using System.Xml.Serialization;
 
 namespace Bonobo.Git.Server.Configuration
@@ -11,10 +8,10 @@ namespace Bonobo.Git.Server.Configuration
         private static Entry _current = null;
         private static readonly object _sync = new object();
         private static readonly XmlSerializer _serializer = new XmlSerializer(typeof(Entry));
-        private static readonly string _configPath = Path.IsPathRooted(ConfigurationManager.AppSettings["UserConfiguration"])
+        private static readonly string _configPath = @"E:\Users\kalten\Documents\GitHub\Bonobo-Git-Server\Bonobo.Git.Server\App_Data\config.xml";/* Path.IsPathRooted(ConfigurationManager.AppSettings["UserConfiguration"])
                                                     ? ConfigurationManager.AppSettings["UserConfiguration"]
                                                     : HostingEnvironment.MapPath(ConfigurationManager.AppSettings["UserConfiguration"]);
-
+                                                    */
 
         public static Entry Current { get { return _current ?? Load(); } }
 

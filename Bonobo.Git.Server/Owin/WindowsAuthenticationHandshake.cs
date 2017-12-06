@@ -1,9 +1,6 @@
-﻿using Microsoft.Owin.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Security.Principal;
-using System.Web;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Bonobo.Git.Server.Owin.Windows
 {
@@ -36,11 +33,10 @@ namespace Bonobo.Git.Server.Owin.Windows
             try
             {
                 SecurityInteger lifetime = new SecurityInteger(0);
-                uint contextAttributes;
 
                 if (NativeMethods.AcquireCredentialsHandle(null, "NTLM", SecurityCredentialsInbound, IntPtr.Zero, IntPtr.Zero, 0, IntPtr.Zero, ref credentials, ref lifetime) == 0)
                 {
-                    if (NativeMethods.AcceptSecurityContext(ref credentials, IntPtr.Zero, ref clientToken, StandardContextAttributes, SecurityNativeDataRepresentation, out context, out serverToken, out contextAttributes, out lifetime) == IntermediateResult)
+                    if (NativeMethods.AcceptSecurityContext(ref credentials, IntPtr.Zero, ref clientToken, StandardContextAttributes, SecurityNativeDataRepresentation, out context, out serverToken, out uint contextAttributes, out lifetime) == IntermediateResult)
                     {
                         result = true;
                     }
@@ -66,15 +62,12 @@ namespace Bonobo.Git.Server.Owin.Windows
 
             try
             {
-                uint contextAttributes;
-                var lifetime = new SecurityInteger(0);
-
-                if (NativeMethods.AcceptSecurityContext(ref credentials, ref context, ref clientToken, StandardContextAttributes, SecurityNativeDataRepresentation, out context, out serverToken, out contextAttributes, out lifetime) == 0)
+                if (NativeMethods.AcceptSecurityContext(ref credentials, ref context, ref clientToken, StandardContextAttributes, SecurityNativeDataRepresentation, out context, out serverToken, out uint contextAttributes, out SecurityInteger lifetime) == 0)
                 {
                     if (NativeMethods.QuerySecurityContextToken(ref context, ref securityContextHandle) == 0)
                     {
                         using (WindowsIdentity identity = new WindowsIdentity(securityContextHandle))
-                        { 
+                        {
                             if (identity != null)
                             {
                                 AuthenticatedUsername = identity.Name;

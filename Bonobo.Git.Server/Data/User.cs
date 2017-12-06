@@ -1,15 +1,17 @@
 using System;
 using System.Collections.Generic;
+using Bonobo.Git.Server.Data.Mapping;
 using Bonobo.Git.Server.Models;
 
 namespace Bonobo.Git.Server.Data
 {
     public partial class User
     {
-        private ICollection<Repository> _administratedRepositories;
-        private ICollection<Repository> _repositories;
-        private ICollection<Role> _roles;
-        private ICollection<Team> _teams;
+        private ICollection<UserRepositoryPermission> _userRepositoryPermissions;
+        private ICollection<UserRepositoryAdministrator> _administratedRepositories;
+        //private ICollection<TeamRepositoryPermission> _repositories;
+        private ICollection<UserRole> _roles;
+        private ICollection<UserTeamMember> _teams;
 
         public Guid Id { get; set; }
         public string GivenName { get; set; }
@@ -19,11 +21,23 @@ namespace Bonobo.Git.Server.Data
         public string PasswordSalt { get; set; }
         public string Email { get; set; }
 
-        public virtual ICollection<Repository> AdministratedRepositories
+        public virtual ICollection<UserRepositoryPermission> Repositories
         {
             get
             {
-                return _administratedRepositories ?? (_administratedRepositories = new List<Repository>());
+                return _userRepositoryPermissions ?? (_userRepositoryPermissions = new List<UserRepositoryPermission>());
+            }
+            set
+            {
+                _userRepositoryPermissions = value;
+            }
+        }
+
+        public virtual ICollection<UserRepositoryAdministrator> AdministratedRepositories
+        {
+            get
+            {
+                return _administratedRepositories ?? (_administratedRepositories = new List<UserRepositoryAdministrator>());
             }
             set
             {
@@ -31,23 +45,23 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public virtual ICollection<Repository> Repositories
-        {
-            get
-            {
-                return _repositories ?? (_repositories = new List<Repository>());
-            }
-            set
-            {
-                _repositories = value;
-            }
-        }
+        //public virtual ICollection<TeamRepositoryPermission> Repositories
+        //{
+        //    get
+        //    {
+        //        return _repositories ?? (_repositories = new List<TeamRepositoryPermission>());
+        //    }
+        //    set
+        //    {
+        //        _repositories = value;
+        //    }
+        //}
 
-        public virtual ICollection<Role> Roles
+        public virtual ICollection<UserRole> Roles
         {
             get
             {
-                return _roles ?? (_roles = new List<Role>());
+                return _roles ?? (_roles = new List<UserRole>());
             }
             set
             {
@@ -55,11 +69,11 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public virtual ICollection<Team> Teams
+        public virtual ICollection<UserTeamMember> Teams
         {
             get
             {
-                return _teams ?? (_teams = new List<Team>());
+                return _teams ?? (_teams = new List<UserTeamMember>());
             }
             set
             {
@@ -78,7 +92,5 @@ namespace Bonobo.Git.Server.Data
                 Email = Email,
             };
         }
-
-
     }
 }

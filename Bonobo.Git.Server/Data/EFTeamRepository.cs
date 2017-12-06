@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Bonobo.Git.Server.Data.Mapping;
 using Bonobo.Git.Server.Models;
-using System.Data.Entity.Core;
-using System.Data.Entity.Infrastructure;
-using Microsoft.Practices.Unity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bonobo.Git.Server.Data
 {
     public class EFTeamRepository : ITeamRepository
     {
-        [Dependency]
-        public Func<BonoboGitServerContext> CreateContext { get; set; }
+        private BonoboGitServerContext _ctx;
+        public EFTeamRepository(BonoboGitServerContext createContext)
+        {
+            _ctx = createContext;
+        }
+
+        public BonoboGitServerContext CreateContext() => _ctx;
 
         public IList<TeamModel> GetAllTeams()
         {
-            using (var db = CreateContext())
+            var db = CreateContext();
             {
                 var dbTeams = db.Teams.Select(team => new
                 {
@@ -23,7 +27,7 @@ namespace Bonobo.Git.Server.Data
                     Name = team.Name,
                     Description = team.Description,
                     Members = team.Users,
-                    Repositories = team.Repositories.Select(m => m.Name),
+                    Repositories = team.Repositories.Select(m => m.Repository.Name),
                 }).ToList();
 
                 return dbTeams.Select(item => new TeamModel
@@ -31,7 +35,7 @@ namespace Bonobo.Git.Server.Data
                     Id = item.Id,
                     Name = item.Name,
                     Description = item.Description,
-                    Members = item.Members.Select(user => user.ToModel()).ToArray(),
+                    Members = item.Members.Select(user => user.User.ToModel()).ToArray(),
                 }).ToList();
             }
         }
@@ -43,18 +47,18 @@ namespace Bonobo.Git.Server.Data
 
         private TeamModel GetTeamModel(Team team)
         {
-                return team == null ? null : new TeamModel
-                {
-                    Id = team.Id,
-                    Name = team.Name,
-                    Description = team.Description,
-                    Members = team.Users.Select(user => user.ToModel()).ToArray(),
-                };
+            return team == null ? null : new TeamModel
+            {
+                Id = team.Id,
+                Name = team.Name,
+                Description = team.Description,
+                Members = team.Users.Select(user => user.User.ToModel()).ToArray(),
+            };
         }
 
         public TeamModel GetTeam(Guid id)
         {
-            using (var db = CreateContext())
+            var db = CreateContext();
             {
                 var team = db.Teams.FirstOrDefault(i => i.Id == id);
                 return GetTeamModel(team);
@@ -76,7 +80,7 @@ namespace Bonobo.Git.Server.Data
 
         public void Delete(Guid teamId)
         {
-            using (var db = CreateContext())
+            var db = CreateContext();
             {
                 var team = db.Teams.FirstOrDefault(i => i.Id == teamId);
                 if (team != null)
@@ -94,7 +98,7 @@ namespace Bonobo.Git.Server.Data
             if (model == null) throw new ArgumentException("team");
             if (model.Name == null) throw new ArgumentException("name");
 
-            using (var database = CreateContext())
+            var database = CreateContext();
             {
                 // Write this into the model so that the caller knows the ID of the new itel
                 model.Id = Guid.NewGuid();
@@ -117,11 +121,11 @@ namespace Bonobo.Git.Server.Data
                 {
                     return false;
                 }
-                catch (UpdateException)
-                {
-                    // Not sure when this exception happens - DbUpdateException is what you get for adding a duplicate teamname
-                    return false;
-                }
+                //catch (UpdateException)
+                //{
+                //    // Not sure when this exception happens - DbUpdateException is what you get for adding a duplicate teamname
+                //    return false;
+                //}
             }
 
             return true;
@@ -132,7 +136,7 @@ namespace Bonobo.Git.Server.Data
             if (model == null) throw new ArgumentException("team");
             if (model.Name == null) throw new ArgumentException("name");
 
-            using (var db = CreateContext())
+            var db = CreateContext();
             {
                 var team = db.Teams.FirstOrDefault(i => i.Id == model.Id);
                 if (team != null)
@@ -154,7 +158,12 @@ namespace Bonobo.Git.Server.Data
             var users = database.Users.Where(user => members.Contains(user.Id));
             foreach (var item in users)
             {
-                team.Users.Add(item);
+                var userTeamMember = new UserTeamMember()
+                {
+                    UserId = item.Id,
+                    TeamId = team.Id,
+                };
+                team.Users.Add(userTeamMember);
             }
         }
 
@@ -162,7 +171,7 @@ namespace Bonobo.Git.Server.Data
         {
             if (newTeams == null) throw new ArgumentException("newTeams");
 
-            using (var db = CreateContext())
+            var db = CreateContext();
             {
                 var user = db.Users.FirstOrDefault(u => u.Id == userId);
                 if (user != null)
@@ -171,7 +180,12 @@ namespace Bonobo.Git.Server.Data
                     var teams = db.Teams.Where(t => newTeams.Contains(t.Name));
                     foreach (var team in teams)
                     {
-                        user.Teams.Add(team);
+                        var userTeamMember = new UserTeamMember
+                        {
+                            TeamId = team.Id,
+                            UserId = user.Id,
+                        };
+                        user.Teams.Add(userTeamMember);
                     }
                     db.SaveChanges();
                 }

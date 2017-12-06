@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Web;
-
-namespace Bonobo.Git.Server.Configuration
+﻿namespace Bonobo.Git.Server.Configuration
 {
-    public static class AppSettings
+    public class AppSettings
     {
-        public static bool IsPushAuditEnabled
-        {
-            get
-            {
-                return bool.Parse(ConfigurationManager.AppSettings["IsPushAuditEnabled"] ?? "false");
-            }
-        }
+        public bool IsPushAuditEnabled { get; set; }
+        public string LogDirectory { get; set; }
+        public string RecoveryDataPath { get; set; }
+        public string GitPath { get; set; }
+        public string GitHomePath { get; set; }
+        public string GitServerPath { get; set; }
+        public bool AllowDBReset { get; set; }
+        public string DefaultRepositoriesDirectory { get; set; }
+        public string ActiveDirectoryDefaultDomain { get; set; }
     }
 }

@@ -1,26 +1,33 @@
-﻿using Bonobo.Git.Server.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.DirectoryServices.AccountManagement;
 using System.DirectoryServices.ActiveDirectory;
+using Bonobo.Git.Server.Configuration;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 namespace Bonobo.Git.Server.Helpers
 {
-    public static class ADHelper
+    public class ADHelper
     {
+        private readonly AppSettings _appSettings;
+
+        public ADHelper(IOptions<AppSettings> appSettings)
+        {
+            _appSettings = appSettings.Value;
+        }
+
         /// <summary>
         /// There are various sources of domains which we need to check
         /// Try to lazy-enumerate this, so that expensive functions aren't called if they're not necessary
         /// </summary>
         /// <param name="username">The full user name (not stripped, should contain domain if available)</param>
         /// <returns>An Enumerable of domains which can be tried</returns>
-        private static IEnumerable<Domain> GetAllDomainPossibilities(string username = "")
+        private IEnumerable<Domain> GetAllDomainPossibilities(string username = "")
         {
             //Skip checking username if none is supplied.
-            if(!string.IsNullOrEmpty(username))
-            { 
+            if (!string.IsNullOrEmpty(username))
+            {
                 // First we try for the domain in the username
                 var parsedDomainName = username.GetDomain();
                 if (!string.IsNullOrEmpty(parsedDomainName))
@@ -38,7 +45,7 @@ namespace Bonobo.Git.Server.Helpers
             }
 
             // The we try the domain in web.config, if there is one
-            string defaultDomainName = ConfigurationManager.AppSettings["ActiveDirectoryDefaultDomain"];
+            string defaultDomainName = _appSettings.ActiveDirectoryDefaultDomain;
             if (!string.IsNullOrEmpty(defaultDomainName))
             {
                 Log.Verbose("AD: Default domain set as {DomainName}", defaultDomainName);
@@ -86,7 +93,7 @@ namespace Bonobo.Git.Server.Helpers
         /// <param name="username">Username with or without domain</param>
         /// <param name="password"></param>
         /// <returns>True on successfull validation</returns>
-        public static bool ValidateUser(string username, string password)
+        public bool ValidateUser(string username, string password)
         {
             Log.Information("AD: Validating user {UserName}", username);
 
@@ -138,8 +145,7 @@ namespace Bonobo.Git.Server.Helpers
             Domain domain = null;
 
             try
-            { 
-
+            {
                 var dc = new DirectoryContext(DirectoryContextType.Domain, parsedDomainName);
 
                 domain = Domain.GetDomain(dc);
@@ -151,17 +157,18 @@ namespace Bonobo.Git.Server.Helpers
 
             return domain;
         }
+
         /// <summary>
         /// Used to get the UserPrincpal based on username - will try the domain that are part of the username if present
         /// </summary>
         /// <param name="username">UPN or SamAccountName</param>
         /// <returns>Userprincipal if found else null</returns>
-        public static UserPrincipal GetUserPrincipal(string username)
+        public UserPrincipal GetUserPrincipal(string username)
         {
             var parsedDomainName = username.GetDomain();
             string strippedUsername = username.StripDomain();
 
-            Log.Verbose("GetUserPrincipal: username {UserName}, domain {DomainName}, stripped {StrippedUserName}", username, parsedDomainName, strippedUsername);
+            //            Log.Verbose("GetUserPrincipal: username {UserName}, domain {DomainName}, stripped {StrippedUserName}", username, parsedDomainName, strippedUsername);
 
             foreach (var domain in GetAllDomainPossibilities(username))
             {
@@ -205,12 +212,13 @@ namespace Bonobo.Git.Server.Helpers
             }
             return null;
         }
+
         /// <summary>
         /// Used to get the UserPrinpal from a GUID
         /// </summary>
         /// <param name="id">The GUID of user</param>
         /// <returns>The Userprincipal if found, else null</returns>
-        public static UserPrincipal GetUserPrincipal(Guid id)
+        public UserPrincipal GetUserPrincipal(Guid id)
         {
             foreach (Domain domain in GetAllDomainPossibilities())
             {
@@ -234,6 +242,7 @@ namespace Bonobo.Git.Server.Helpers
 
             return null;
         }
+
         /// <summary>
         /// Used to get the members group defined in web.config
         /// Returns the principal context to be able to do further processing on the group, ie fetch users etc.
@@ -241,10 +250,11 @@ namespace Bonobo.Git.Server.Helpers
         /// </summary>
         /// <param name="group">The AD membergroup</param>
         /// <returns>Principal context on which the membersgroup was found</returns>
-        public static PrincipalContext GetMembersGroup(out GroupPrincipal group)
+        public PrincipalContext GetMembersGroup(out GroupPrincipal group)
         {
             return GetPrincipalGroup(ActiveDirectorySettings.MemberGroupName, out group);
         }
+
         /// <summary>
         /// Gets a principal group by name
         /// Returns the principal context to be able to do further processing on the group, ie fetch users etc.
@@ -253,7 +263,7 @@ namespace Bonobo.Git.Server.Helpers
         /// <param name="name">The group to search for</param>
         /// <param name="group">The group found</param>
         /// <returns>Principal context on which the group was found.</returns>
-        public static PrincipalContext GetPrincipalGroup(string name, out GroupPrincipal group)
+        public PrincipalContext GetPrincipalGroup(string name, out GroupPrincipal group)
         {
             foreach (Domain domain in GetAllDomainPossibilities())
             {

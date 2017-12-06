@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
-
-using Owin;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Bonobo.Git.Server.Security
 {
     public interface IAuthenticationProvider
     {
-        void Configure(IAppBuilder app);
-        void SignIn(string username, string returnUrl, bool rememberMe);
-        void SignOut();
+        Task SignIn(HttpContext httpContext, string username, string returnUrl, bool rememberMe);
+        Task SignOut(HttpContext httpContext);
         IEnumerable<Claim> GetClaimsForUser(string username);
     }
 }

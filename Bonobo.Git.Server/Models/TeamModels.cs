@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.ComponentModel.DataAnnotations;
-
 using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Bonobo.Git.Server.Models
 {
-    using IdName = Tuple<int, string, string>;
-    using System.Web.Mvc;
-
-    public class TeamModel : INameProperty 
+    public class TeamModel : INameProperty
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -31,14 +26,14 @@ namespace Bonobo.Git.Server.Models
     {
         public Guid Id { get; set; }
 
-        [Remote("UniqueNameTeam", "Validation", AdditionalFields="Id", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Duplicate_Name")]
-        [AllowHtml]
+        [Remote("UniqueNameTeam", "Validation", AdditionalFields = "Id", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Duplicate_Name")]
+        //[AllowHtml]
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
         [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
         [Display(ResourceType = typeof(Resources), Name = "Team_Detail_Name")]
         public string Name { get; set; }
 
-        [AllowHtml]
+        //[AllowHtml]
         [Display(ResourceType = typeof(Resources), Name = "Team_Detail_Description")]
         public string Description { get; set; }
 

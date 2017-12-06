@@ -33,24 +33,46 @@
     }
     else
     {
-        <div class="summary-error">    
+        <div class="summary-error">
             <p>@Resources.Account_Delete_DeleteCurrentUser</p>
         </div>
     }
 }
 
 
+<table class="pure-table users">
+    <tr>
+        <th>@typeof(UserDetailModel).GetDisplayValue("Username")</th>
+        <th>@typeof(UserDetailModel).GetDisplayValue("Name")</th>
+        <th>@typeof(UserDetailModel).GetDisplayValue("Surname")</th>
+        <th>@typeof(UserDetailModel).GetDisplayValue("Email")</th>
+        <th></th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.ActionLink(item.Username, "Detail", new { id = item.Id }, new { @class = "detail" })</td>
+            <td>@item.Name</td>
+            <td>@item.Surname</td>
+            <td>@item.Email</td>
+            <td class="action">@(item.IsReadOnly ? Html.Raw(String.Empty) : Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @class = "edit", title = Resources.Grid_Edit }))</td>
+            <td class="action">@(item.IsReadOnly ? Html.Raw(String.Empty) : Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @class = "delete", title = Resources.Grid_Delete }))</td>
+        </tr>
+    }
+</table>
+
 @{
-    var grid = new WebGrid(source: Model, defaultSort: "Username", rowsPerPage: 15);
-    @grid.GetHtml(
-        tableStyle: "pure-table users",
-        columns: grid.Columns(
-        grid.Column("Username", header: typeof(UserDetailModel).GetDisplayValue("Username"), format: (item) => Html.ActionLink((string)item.Username, "Detail", new { id = item.Id }, new { @class = "detail" })),
-        grid.Column("Name", typeof(UserDetailModel).GetDisplayValue("Name")),
-            grid.Column("Surname", typeof(UserDetailModel).GetDisplayValue("Surname")),
-            grid.Column("Email", typeof(UserDetailModel).GetDisplayValue("Email")),
-            grid.Column(format: (item) => item.IsReadOnly ? Html.Raw(String.Empty) : Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @class = "edit", title = Resources.Grid_Edit }), style: "action"),
-            grid.Column(format: (item) => item.IsReadOnly ? Html.Raw(String.Empty) : Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @class = "delete", title = Resources.Grid_Delete }), style: "action")
-        )
-    )
+    @*var grid = new WebGrid(source: Model, defaultSort: "Username", rowsPerPage: 15);
+        @grid.GetHtml(
+            tableStyle: "pure-table users",
+            columns: grid.Columns(
+            grid.Column("Username", header: typeof(UserDetailModel).GetDisplayValue("Username"), format: (item) => Html.ActionLink((string)item.Username, "Detail", new { id = item.Id }, new { @class = "detail" })),
+            grid.Column("Name", typeof(UserDetailModel).GetDisplayValue("Name")),
+                grid.Column("Surname", typeof(UserDetailModel).GetDisplayValue("Surname")),
+                grid.Column("Email", typeof(UserDetailModel).GetDisplayValue("Email")),
+                grid.Column(format: (item) => item.IsReadOnly ? Html.Raw(String.Empty) : Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @class = "edit", title = Resources.Grid_Edit }), style: "action"),
+                grid.Column(format: (item) => item.IsReadOnly ? Html.Raw(String.Empty) : Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @class = "delete", title = Resources.Grid_Delete }), style: "action")
+            )
+        )*@
 }

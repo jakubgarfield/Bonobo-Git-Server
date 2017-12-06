@@ -1,6 +1,6 @@
-﻿using Bonobo.Git.Server.App_GlobalResources;
-using System;
+﻿using System;
 using System.Net.Mail;
+using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Models;
 using Serilog;
 
@@ -18,7 +18,7 @@ namespace Bonobo.Git.Server.Helpers
                 //email.From = new MailAddress("admin@domain.com");
                 email.To.Add(new MailAddress(user.Email));
 
-                email.Subject =  Resources.Email_PasswordReset_Title;
+                email.Subject = Resources.Email_PasswordReset_Title;
                 email.IsBodyHtml = true;
 
                 email.Body = Resources.Email_PasswordReset_Body +

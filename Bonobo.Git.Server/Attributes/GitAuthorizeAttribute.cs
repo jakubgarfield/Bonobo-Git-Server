@@ -1,92 +1,122 @@
 ﻿using System;
-using System.Net;
 using System.Security.Claims;
 using System.Text;
-using System.Web;
-using System.Web.Mvc;
+using System.Threading.Tasks;
 using Bonobo.Git.Server.Data;
-using Bonobo.Git.Server.Security;
-using Microsoft.Practices.Unity;
 using Bonobo.Git.Server.Helpers;
+using Bonobo.Git.Server.Security;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 namespace Bonobo.Git.Server
 {
-    public class GitAuthorizeAttribute : AuthorizeAttribute
+
+    public class GitAuthPolicy : IAuthorizationRequirement
     {
-        [Dependency]
-        public IMembershipService MembershipService { get; set; }
+        public GitAuthPolicy()
+        {
+        }
+    }
 
-        [Dependency]
-        public IAuthenticationProvider AuthenticationProvider { get; set; }
+    public class GitAuthorizationHandler : AuthorizationHandler<GitAuthPolicy>
+    {
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, GitAuthPolicy requirement)
+        {
 
-        [Dependency]
-        public IRepositoryPermissionService RepositoryPermissionService { get; set; }
+            if (context.Resource is Microsoft.AspNetCore.Mvc.Filters.AuthorizationFilterContext mvcContext)
+            {
+                var httpContext = mvcContext.HttpContext;
 
-        [Dependency]
-        public IRepositoryRepository RepositoryRepository { get; set; }
+                string incomingRepoName = GetRepoPath(httpContext.Request.Path, /*httpContext.Request.ApplicationPath*/ "/");
+                var repositoryRepository = httpContext.RequestServices.GetService<IRepositoryRepository>();
+                string repoName = Repository.NormalizeRepositoryName(incomingRepoName, repositoryRepository);
+
+                var authenticationProvider = httpContext.RequestServices.GetService<IAuthenticationProvider>();
+                var membershipService = httpContext.RequestServices.GetService<IMembershipService>();
+
+                //if (context.User.Identity.IsAuthenticated)
+                {
+                    context.Succeed(requirement);
+                }
+            }
+            return Task.CompletedTask;
+        }
 
         public static string GetRepoPath(string path, string applicationPath)
         {
-            var repo = path.Replace(applicationPath, "").Replace("/","");
+            var repo = path.Replace(applicationPath, "").Replace("/", "");
+            return repo.Substring(0, repo.IndexOf(".git"));
+        }
+    }
+
+
+    public class GitAuthorizeAttribute : AuthorizeAttribute//, IAuthorizationFilter
+    {
+        public static string GetRepoPath(string path, string applicationPath)
+        {
+            var repo = path.Replace(applicationPath, "").Replace("/", "");
             return repo.Substring(0, repo.IndexOf(".git"));
         }
 
-        public override void OnAuthorization(System.Web.Mvc.AuthorizationContext filterContext)
-        {
-            if (filterContext == null)
-            {
-                throw new ArgumentNullException("filterContext");
-            }
+        //public void OnAuthorization(AuthorizationFilterContext context)
+        //{
+        //    if (context == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(context));
+        //    }
 
-            HttpContextBase httpContext = filterContext.HttpContext;
+        //    var httpContext = context.HttpContext;
 
-            string incomingRepoName = GetRepoPath(httpContext.Request.Path, httpContext.Request.ApplicationPath);
-            string repoName = Repository.NormalizeRepositoryName(incomingRepoName, RepositoryRepository);
+        //    string incomingRepoName = GetRepoPath(httpContext.Request.Path, /*httpContext.Request.ApplicationPath*/ "/");
+        //    var repositoryRepository = context.HttpContext.RequestServices.GetService<IRepositoryRepository>();
+        //    string repoName = Repository.NormalizeRepositoryName(incomingRepoName, repositoryRepository);
 
-            // Add header to prevent redirection to login page even if we fail auth later (see IAuthenticationProvider.Configure)
-            // If we don't fail auth later, then this is benign
-            httpContext.Request.Headers.Add("AuthNoRedirect", "1");
+        //    // Add header to prevent redirection to login page even if we fail auth later (see IAuthenticationProvider.Configure)
+        //    // If we don't fail auth later, then this is benign
+        //    httpContext.Request.Headers.Add("AuthNoRedirect", "1");
 
-            if (httpContext.Request.IsAuthenticated && httpContext.User != null && httpContext.User.Identity is System.Security.Claims.ClaimsIdentity)
-            {
-                // We already have a claims id, we don't need to worry about the rest of these checks
-                Log.Verbose("GitAuth: User {username} already has identity", httpContext.User.DisplayName());
-                return;
-            }
+        //    if (httpContext.User.Identity.IsAuthenticated && httpContext.User != null && httpContext.User.Identity is System.Security.Claims.ClaimsIdentity)
+        //    {
+        //        // We already have a claims id, we don't need to worry about the rest of these checks
+        //        Log.Verbose("GitAuth: User {username} already has identity", httpContext.User.DisplayName());
+        //        return;
+        //    }
 
-            string authHeader = httpContext.Request.Headers["Authorization"];
+        //    string authHeader = httpContext.Request.Headers["Authorization"];
 
-            if (String.IsNullOrEmpty(authHeader))
-            {
-                // We don't have an auth header, but if we're doing an anonymous operation, that's OK
-                if (RepositoryPermissionService.HasPermission(Guid.Empty, repoName, RepositoryAccessLevel.Pull))
-                {
-                    // Allow this through.  If it turns out they're actually trying to do an anon push and that's not allowed for this repo
-                    // then the GitController will reject them in there
-                    Log.Information("GitAuth: No auth header, anon operation may be allowed");
-                    return;
-                }
-                else
-                {
-                    // If we're not even allowed to do an anonymous pull, then we should bounce this now, 
-                    // and tell the other end to try again with an auth header included next time
-                    httpContext.Response.Headers.Add("WWW-Authenticate", "Basic realm=\"Bonobo Git\"");
-                    filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
+        //    if (String.IsNullOrEmpty(authHeader))
+        //    {
+        //        // We don't have an auth header, but if we're doing an anonymous operation, that's OK
+        //        var repositoryPermissionService = context.HttpContext.RequestServices.GetService<IRepositoryPermissionService>();
+        //        if (repositoryPermissionService.HasPermission(Guid.Empty, repoName, RepositoryAccessLevel.Pull))
+        //        {
+        //            // Allow this through.  If it turns out they're actually trying to do an anon push and that's not allowed for this repo
+        //            // then the GitController will reject them in there
+        //            Log.Information("GitAuth: No auth header, anon operation may be allowed");
+        //            return;
+        //        }
+        //        else
+        //        {
+        //            // If we're not even allowed to do an anonymous pull, then we should bounce this now, 
+        //            // and tell the other end to try again with an auth header included next time
+        //            //httpContext.Response.Headers.Add("WWW-Authenticate", "Basic realm=\"Bonobo Git\"");
+        //            context.Result = new StatusCodeResult((int)HttpStatusCode.Unauthorized);
 
-                    Log.Warning("GitAuth: No auth header, anon operations not allowed");
-                    return;
-                }
-            }
+        //            Log.Warning("GitAuth: No auth header, anon operations not allowed");
+        //            return;
+        //        }
+        //    }
 
-            // Process the auth header and see if we've been given valid credentials
-            if (!IsUserAuthorized(authHeader, httpContext))
-            {
-                filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Unauthorized);
-            }
-        }
+        //    // Process the auth header and see if we've been given valid credentials
+        //    if (!IsUserAuthorized(authHeader, httpContext))
+        //    {
+        //        context.Result = new StatusCodeResult((int)HttpStatusCode.Unauthorized);
+        //    }
+        //}
 
-        private bool IsUserAuthorized(string authHeader, HttpContextBase httpContext)
+        private bool IsUserAuthorized(string authHeader, HttpContext httpContext)
         {
             byte[] encodedDataAsBytes = Convert.FromBase64String(authHeader.Replace("Basic ", String.Empty));
             string value = Encoding.ASCII.GetString(encodedDataAsBytes);
@@ -104,12 +134,15 @@ namespace Bonobo.Git.Server
 
             if (!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password))
             {
-                if (AuthenticationProvider is WindowsAuthenticationProvider && MembershipService is EFMembershipService)
+                var authenticationProvider = httpContext.RequestServices.GetService<IAuthenticationProvider>();
+                var membershipService = httpContext.RequestServices.GetService<IMembershipService>();
+                if (authenticationProvider is WindowsAuthenticationProvider && membershipService is EFMembershipService)
                 {
+                    var adHelper = httpContext.RequestServices.GetService<ADHelper>();
                     Log.Verbose("GitAuth: Going to windows auth (EF Membership) for user {username}", username);
-                    if (ADHelper.ValidateUser(username, password))
+                    if (adHelper.ValidateUser(username, password))
                     {
-                        httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
+                        httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(authenticationProvider.GetClaimsForUser(username)));
                         Log.Verbose("GitAuth: User {username} authorised by direct windows auth", username);
                         return true;
                     }
@@ -117,11 +150,11 @@ namespace Bonobo.Git.Server
                 else
                 {
                     Log.Verbose("GitAuth: Going to membership service for user {username}", username);
-
-                    if (MembershipService.ValidateUser(username, password) == ValidationResult.Success)
+                    if (membershipService.ValidateUser(username, password) == ValidationResult.Success)
                     {
-                        httpContext.User =
-                            new ClaimsPrincipal(new ClaimsIdentity(AuthenticationProvider.GetClaimsForUser(username)));
+                        ClaimsIdentity identity = new ClaimsIdentity(authenticationProvider.GetClaimsForUser(username));
+                        //identity.IsAuthenticated
+                        httpContext.User = new ClaimsPrincipal(identity);
                         Log.Verbose("GitAuth: User {username} authorised by membership service", username);
                         return true;
                     }

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Configuration;
-using System.IO;
-using System.Web;
 using System.Xml.Serialization;
 
 namespace Bonobo.Git.Server.Configuration
 {
     using Bonobo.Git.Server.App_GlobalResources;
-    using System.Web.Hosting;
 
     [XmlRootAttribute(ElementName = "Configuration", IsNullable = false)]
     public class UserConfiguration : ConfigurationEntry<UserConfiguration>
@@ -31,9 +27,10 @@ namespace Bonobo.Git.Server.Configuration
         {
             get
             {
-                return Path.IsPathRooted(RepositoryPath)
-                       ? RepositoryPath
-                       : HostingEnvironment.MapPath(RepositoryPath);
+                return RepositoryPath ?? ".";
+                //return Path.IsPathRooted(RepositoryPath)
+                //       ? RepositoryPath
+                //       : HostingEnvironment.MapPath(RepositoryPath);
             }
         }
 
@@ -71,12 +68,13 @@ namespace Bonobo.Git.Server.Configuration
             return !string.IsNullOrWhiteSpace(this.SiteTitle) ? this.SiteTitle : Resources.Layout_Title;
         }
 
-        public static void Initialize()
+        public static void Initialize(AppSettings appSettings)
         {
             if (IsInitialized())
                 return;
 
-            Current.RepositoryPath = ConfigurationManager.AppSettings["DefaultRepositoriesDirectory"];
+            System.Diagnostics.Debugger.Break();
+            Current.RepositoryPath = appSettings.DefaultRepositoriesDirectory;
             Current.Save();
         }
 

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Extensions;
-using LibGit2Sharp;
-using System.IO;
 using Bonobo.Git.Server.Helpers;
-using System.Text.RegularExpressions;
-using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Models;
+using LibGit2Sharp;
 using Serilog;
 
 namespace Bonobo.Git.Server
@@ -61,7 +59,7 @@ namespace Bonobo.Git.Server
         }
 
 
-        internal IEnumerable<RepositoryCommitModel> GetTags(string name, int page, int p, out string referenceName, out int totalCount)
+        internal IEnumerable<RepositoryCommitModel> GetTags(string name, int page, int pageSize, out string referenceName, out int totalCount)
         {
             var commit = GetCommitByName(name, out referenceName);
             if (commit == null)
@@ -75,17 +73,24 @@ namespace Bonobo.Git.Server
             {
                 var c = _repository.Lookup(tag.Target.Id) as Commit;
                 commits.Add(ToModel(c));
-
             }
-            totalCount = commits.Count();
+            totalCount = commits.Count;
 
-            return commits.OrderByDescending(x => x, (x, y) => x.Date.CompareTo(y.Date));
+            IEnumerable<RepositoryCommitModel> result = commits.OrderByDescending(
+                x => x,
+                (x, y) => x.Date.CompareTo(y.Date));
+
+            if (page >= 1 && pageSize >= 1)
+            {
+                result = result.Skip((page - 1) * pageSize).Take(pageSize);
+            }
+
+            return result;
         }
 
         public RepositoryCommitModel GetCommitDetail(string name)
         {
-            string referenceName;
-            var commit = GetCommitByName(name, out referenceName);
+            var commit = GetCommitByName(name, out string referenceName);
             return commit == null ? null : ToModel(commit, true);
         }
 
@@ -161,7 +166,7 @@ namespace Bonobo.Git.Server
             }
 
             Encoding encoding;
-            if(FileDisplayHandler.TryGetEncoding(model.Data, out encoding))
+            if (FileDisplayHandler.TryGetEncoding(model.Data, out encoding))
             {
                 model.Text = FileDisplayHandler.GetText(model.Data, encoding);
                 model.Encoding = encoding;
@@ -205,7 +210,7 @@ namespace Bonobo.Git.Server
             return new RepositoryBlameModel
             {
                 Name = commit[path].Name,
-                TreeName =  referenceName,
+                TreeName = referenceName,
                 Path = path,
                 Hunks = hunks,
                 FileSize = modelBlob.Data.LongLength,

@@ -1,15 +1,14 @@
-﻿@using System.Collections.Concurrent
-@model Bonobo.Git.Server.Models.LogOnModel
+﻿@model Bonobo.Git.Server.Models.LogOnModel
 @{
-    ViewBag.Title = @Resources.Home_LogOn_Title;
+    ViewBag.Title = Bonobo.Git.Server.App_GlobalResources.Resources.Home_LogOn_Title;
 }
 
-<h1>@Resources.Home_LogOn_Title</h1>
+<h1>@Bonobo.Git.Server.App_GlobalResources.Resources.Home_LogOn_Title</h1>
 
 @using (Html.BeginForm("LogOn", "Home", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
 {
     @Html.AntiForgeryToken()
-    @Html.ValidationSummary(false, Resources.Home_LogOn_Failed)
+    @Html.ValidationSummary(false, Bonobo.Git.Server.App_GlobalResources.Resources.Home_LogOn_Failed)
 
     <fieldset>
         <div class="pure-control-group">
@@ -33,10 +32,10 @@
             @Html.TextBoxFor(m => m.DatabaseResetCode)
         }
         <div class="pure-controls">
-            <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-sign-in"></i> @Resources.Home_LogOn_LogOn</button>
+            <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-sign-in"></i> @Bonobo.Git.Server.App_GlobalResources.Resources.Home_LogOn_LogOn</button>
         </div>
         <div class="pure-controls">
-            @Html.ActionLink(Resources.Home_LogOn_ForgotPassword, "ForgotPassword")
+            @Html.ActionLink(Bonobo.Git.Server.App_GlobalResources.Resources.Home_LogOn_ForgotPassword, "ForgotPassword")
         </div>
     </fieldset>
 }

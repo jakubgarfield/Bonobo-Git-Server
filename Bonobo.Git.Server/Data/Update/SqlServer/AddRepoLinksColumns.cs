@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Bonobo.Git.Server.Data.Update.SqlServer
+﻿namespace Bonobo.Git.Server.Data.Update.SqlServer
 {
     public class AddRepoLinksColumn : IUpdateScript
     {

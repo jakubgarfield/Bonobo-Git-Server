@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Caching;
-using System.Web;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 
 namespace Bonobo.Git.Server.Owin.Windows
 {
@@ -17,12 +14,11 @@ namespace Bonobo.Git.Server.Owin.Windows
             bool result = false;
             handshake = null;
 
-            if (handshakeCache.Contains(key))
+            if (handshakeCache.TryGetValue(key, out object cachedHandshake))
             {
-                object cachedHandshake = handshakeCache[key];
                 if (cachedHandshake != null)
                 {
-                    handshake = cachedHandshake as WindowsAuthenticationHandshake; 
+                    handshake = cachedHandshake as WindowsAuthenticationHandshake;
                     result = true;
                 }
             }
@@ -37,30 +33,33 @@ namespace Bonobo.Git.Server.Owin.Windows
 
         public bool TryRemove(string key)
         {
-            return handshakeCache.Remove(key) != null;
+            handshakeCache.Remove(key);
+            return true;
         }
 
-        private static CacheItemPolicy GetCacheItemPolicy()
+        private static MemoryCacheEntryOptions GetCacheItemPolicy()
         {
-            var policy = new CacheItemPolicy()
+            var policy = new MemoryCacheEntryOptions()
             {
-                Priority = CacheItemPriority.Default,
+                Priority = CacheItemPriority.Normal,
                 AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(expirationTimeInMinutes),
-                RemovedCallback = (handshake) =>
-                {
-                    IDisposable expiredHandshake = handshake.CacheItem as IDisposable;
-                    if (expiredHandshake != null)
-                    {
-                        expiredHandshake.Dispose();
-                    }
-                }
             };
+
+            policy.RegisterPostEvictionCallback((key, value, reason, state) =>
+                 {
+                     IDisposable expiredHandshake = value as IDisposable;
+                     if (expiredHandshake != null)
+                     {
+                         expiredHandshake.Dispose();
+                     }
+                 });
+
             return policy;
         }
 
         public WindowsAuthenticationHandshakeCache(string name)
         {
-            handshakeCache = new MemoryCache(name);
+            handshakeCache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
         }
     }
 }

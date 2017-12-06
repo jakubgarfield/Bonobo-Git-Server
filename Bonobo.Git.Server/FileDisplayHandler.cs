@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Text;
 using System.IO;
-using System.Xml;
-using Ude;
+using System.Text;
 using MimeTypes;
 
 namespace Bonobo.Git.Server
@@ -22,7 +16,7 @@ namespace Bonobo.Git.Server
 
         public static string GetBrush(string fileName)
         {
-            if (String.IsNullOrWhiteSpace(fileName)) 
+            if (String.IsNullOrWhiteSpace(fileName))
             {
                 throw new ArgumentNullException("fileName");
             }
@@ -137,30 +131,30 @@ namespace Bonobo.Git.Server
 
         public static bool TryGetEncoding(byte[] data, out Encoding encoding)
         {
-            ICharsetDetector cdet = new CharsetDetector();
-            cdet.Feed(data, 0, data.Length);
-            cdet.DataEnd();
-            if (cdet.Charset != null)
-            {
-                if (cdet.Charset.ToLowerInvariant() == "big-5")
-                {
-                    encoding = Encoding.GetEncoding("big5");
-                    return true;
-                }
-                else
-                {
-                    try
-                    {
-                        encoding = Encoding.GetEncoding(cdet.Charset);
-                        return true;
-                    }
-                    catch
-                    {
-                        encoding = Encoding.Default;
-                        return false;
-                    }
-                }
-            }
+            //ICharsetDetector cdet = new CharsetDetector();
+            //cdet.Feed(data, 0, data.Length);
+            //cdet.DataEnd();
+            //if (cdet.Charset != null)
+            //{
+            //    if (cdet.Charset.ToLowerInvariant() == "big-5")
+            //    {
+            //        encoding = Encoding.GetEncoding("big5");
+            //        return true;
+            //    }
+            //    else
+            //    {
+            //        try
+            //        {
+            //            encoding = Encoding.GetEncoding(cdet.Charset);
+            //            return true;
+            //        }
+            //        catch
+            //        {
+            //            encoding = Encoding.Default;
+            //            return false;
+            //        }
+            //    }
+            //}
 
             encoding = Encoding.Default;
             return false;

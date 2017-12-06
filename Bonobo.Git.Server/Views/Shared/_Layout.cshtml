@@ -1,47 +1,57 @@
-﻿<!DOCTYPE html>
+﻿@using Bonobo.Git.Server.App_GlobalResources
+@using Bonobo.Git.Server.Configuration
+@using Bonobo.Git.Server.Helpers
+@using Bonobo.Git.Server
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="~/favicon.ico?v=2" type="image/x-icon" />
     <title>@ViewBag.Title :: @UserConfiguration.Current.GetSiteTitle()</title>
-    @Styles.Render("~/Content/bundledCss")
+
+    <link rel="stylesheet" href="~/Content/components/pure/pure-min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Content/components/font-awesome/css/font-awesome.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Content/components/highlight/styles/github.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Content/fonts.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Content/site.css" asp-append-version="true" />
+
     @if (UserConfiguration.Current.HasCustomSiteCss)
     {
         <link rel="stylesheet" href="@string.Format("{0}?_={1}", Url.Content(UserConfiguration.Current.SiteCssUrl), DateTime.Now.Ticks)" type="text/css" />
     }
     @if (UserConfiguration.Current.HasCustomSiteLogo)
     {
-    <style>
+        <style>
         .navigation.pure-menu a.pure-menu-heading {
             background: url('@Url.Content(UserConfiguration.Current.SiteLogoUrl)') no-repeat 0 4px;
         }
-    </style>
+        </style>
     }
 </head>
-<body class="@HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString() @HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString()">
+<body class="@ViewContext.RouteData.Values["controller"].ToString() @ViewContext.RouteData.Values["action"].ToString()">
     <div class="main">
         <div class="header">
             <div class="navigation pure-menu pure-menu-open pure-menu-horizontal">
                 @Html.ActionLink(UserConfiguration.Current.GetSiteTitle(), "", "", null, new { @class = "pure-menu-heading" })
 
                 <ul>
-                    @if (Request.IsAuthenticated)
+                    @if (this.Context.User.Identity.IsAuthenticated)
                     {
                         var items = (IEnumerable<SelectListItem>)Html.ViewBag.PermittedRepositories;
                         @Html.DropDownList("Repositories", items, Resources.Repository_Go_To_Dropdown, new { @class = "repositories", @onChange = "javascript:location.href=this.options[this.selectedIndex].value;" });
                         <li><a href="@Url.Action("Index", "Repository")" class="repository"><i class="fa fa-hdd-o"></i> @Resources.Layout_Repositories</a></li>
                     }
-                    @if (User.IsInRole(Definitions.Roles.Administrator))
+                    @if (User.IsInRole(Bonobo.Git.Server.Definitions.Roles.Administrator))
                     {
                         <li><a href="@Url.Action("Index", "Account")" class="users"><i class="fa fa-user"></i> @Resources.Layout_AdministrationUsers</a></li>
                         <li><a href="@Url.Action("Index", "Team")" class="teams"><i class="fa fa-group"></i> @Resources.Layout_AdministrationTeams</a></li>
                         <li><a href="@Url.Action("Index", "Settings")" class="settings"><i class="fa fa-gears"></i> @Resources.Layout_AdministrationGlobalSettings</a></li>
                     }
-                    @if (Request.IsAuthenticated)
+                    @if (this.Context.User.Identity.IsAuthenticated)
                     {
                         <li class="separator"><a href="@Url.Action("Edit", "Account", new { id = User.Id() })"><i class="fa fa-male"></i> @User.DisplayName()</a></li>
-                        if (!User.IsWindowsAuthenticated())
+                        if (true /*!User.IsWindowsAuthenticated()*/)
                         {
                             <li><a href="@Url.Action("LogOff", "Home")"><i class="fa fa-sign-out"></i> @Resources.Layout_LogOff</a></li>
                         }
@@ -69,14 +79,20 @@
                     @UserConfiguration.Current.SiteFooterMessage
                     @:&middot;
                 }
-                Bonobo Git Server (@Html.AssemblyVersion()) &copy; 2015 <a href="http://www.chodounsky.net">Jakub Chodounský</a>
-                &middot; <a href="http://bonobogitserver.com/">@Resources.Home</a> 
+                Bonobo Git Server (@this.Html.AssemblyVersion()) &copy; 2015 <a href="http://www.chodounsky.net">Jakub Chodounský</a>
+                &middot; <a href="http://bonobogitserver.com/">@Resources.Home</a>
                 &middot; <a href="https://github.com/jakubgarfield/Bonobo-Git-Server">@Resources.Source</a>
             </p>
         </div>
     </div>
 
-    @Scripts.Render("~/bundledJs")
+    <script src="~/Scripts/jquery-jquery-1.12.4.js" asp-append-version="true"></script>
+    <script src="~/Scripts/jquery.validate.js" asp-append-version="true"></script>
+    <script src="~/Content/uni/js/uni-form-validation.jquery.js" asp-append-version="true"></script>
+    <script src="~/Scripts/MicrosoftAjax.js" asp-append-version="true"></script>
+    <script src="~/Scripts/MicrosoftMvcAjax.js" asp-append-version="true"></script>
+    <script src="~/Scripts/highlight.pack.js" asp-append-version="true"></script>
+    <script src="~/Scripts/clipboard.min.js" asp-append-version="true"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

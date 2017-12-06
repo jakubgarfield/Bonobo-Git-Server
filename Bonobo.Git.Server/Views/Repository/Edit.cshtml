@@ -1,5 +1,6 @@
 ﻿@using Bonobo.Git.Server.Extensions
-@using MvcCheckBoxList.Model
+@inject Microsoft.Extensions.Options.IOptions<AppSettings> appSettings
+
 @model Bonobo.Git.Server.Models.RepositoryDetailModel
 
 @{
@@ -13,10 +14,10 @@
 else
 {
     <text>
-        <h1>
-            @Html.Raw(Model.Logo.Exists ? string.Format("<img src='data:image/png;base64,{0}' class='repo-logo' />", Model.Logo.Base64Image) : "")
-            @Model.Name
-        </h1>
+    <h1>
+        @Html.Raw(Model.Logo.Exists ? string.Format("<img src='data:image/png;base64,{0}' class='repo-logo' />", Model.Logo.Base64Image) : "")
+        @Model.Name
+    </h1>
 
     @if (ViewBag.UpdateSuccess != null && ViewBag.UpdateSuccess)
     {
@@ -30,7 +31,7 @@ else
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(false, Resources.Repository_Edit_Fail)
         @Html.HiddenFor(m => m.Id)
-        
+
         <fieldset>
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.Name)
@@ -43,7 +44,7 @@ else
             </div>
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.Description)
-                    @Html.TextAreaFor(m => m.Description, new { @class = "medium" })
+                @Html.TextAreaFor(m => m.Description, new { @class = "medium" })
             </div>
 
             <div class="pure-control-group">
@@ -66,15 +67,16 @@ else
                 @Html.LabelFor(m => m.AllowAnonymousPush)
                 @{
                     object attribs = new { @id = "AllowAnonymousPush" };
-                    if (!Model.AllowAnonymous){
-                        attribs = new { @id = "AllowAnonymousPush", @disabled = "" }; 
+                    if (!Model.AllowAnonymous)
+                    {
+                        attribs = new { @id = "AllowAnonymousPush", @disabled = "" };
                     }
                 }
-                @Html.EnumDropDownListFor(m => m.AllowAnonymousPush, attribs)
+                @Html.DropDownListFor(m => m.AllowAnonymousPush, Html.GetEnumSelectList<Bonobo.Git.Server.Data.RepositoryPushMode>(), attribs)
                 <i class="fa fa-info-circle" title="@Resources.Repository_AllowAnonymousPushHint"></i>
             </div>
 
-            @if (AppSettings.IsPushAuditEnabled)
+            @if (appSettings.Value.IsPushAuditEnabled)
             {
                 <div class="pure-control-group">
                     @Html.LabelFor(m => m.AuditPushUser)
@@ -90,7 +92,8 @@ else
                 @Html.LabelFor(m => m.LinksRegex)
                 @{
                     attribs = new { @class = "medium" };
-                    if (Model.LinksUseGlobal){
+                    if (Model.LinksUseGlobal)
+                    {
                         attribs = new { @class = "medium", disabled = "" };
                     }
                     @Html.TextBoxFor(m => m.LinksRegex, attribs);
@@ -105,7 +108,7 @@ else
             <div class="pure-control-group checkboxlist">
                 @Html.LabelFor(m => m.Users)
                 <span>
-                    @Html.CheckBoxListFor(m => m.PostedSelectedUsers, m => m.AllUsers, m => m.Id, m => m.DisplayName, m => m.Users, Position.Vertical)
+                    @*@Html.CheckBoxListFor(m => m.PostedSelectedUsers, m => m.AllUsers, m => m.Id, m => m.DisplayName, m => m.Users, Position.Vertical)*@
                 </span>
                 <i class="fa fa-info-circle" title="@Resources.Repository_UsersHint"></i>
             </div>
@@ -115,7 +118,7 @@ else
             <div class="pure-control-group checkboxlist">
                 @Html.LabelFor(m => m.Administrators)
                 <span>
-                    @Html.CheckBoxListFor(m => m.PostedSelectedAdministrators, m => m.AllAdministrators, m => m.Id, m => m.DisplayName, m => m.Administrators, Position.Vertical)
+                    @*@Html.CheckBoxListFor(m => m.PostedSelectedAdministrators, m => m.AllAdministrators, m => m.Id, m => m.DisplayName, m => m.Administrators, Position.Vertical)*@
                 </span>
                 <i class="fa fa-info-circle" title="@Resources.Repository_AdministratorsHint"></i>
                 @Html.ValidationMessageFor(m => m.Administrators)
@@ -124,7 +127,7 @@ else
             <div class="pure-control-group checkboxlist">
                 @Html.LabelFor(m => m.Teams)
                 <span>
-                    @Html.CheckBoxListFor(m => m.PostedSelectedTeams, m => m.AllTeams, mm => mm.Id, mm => mm.DisplayName, mm => mm.Teams, Position.Vertical)
+                    @*@Html.CheckBoxListFor(m => m.PostedSelectedTeams, m => m.AllTeams, mm => mm.Id, mm => mm.DisplayName, mm => mm.Teams, Position.Vertical)*@
                 </span>
                 <i class="fa fa-info-circle" title="@Resources.Repository_TeamsHint"></i>
             </div>
@@ -134,6 +137,6 @@ else
                 <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-save"></i> @Resources.Repository_Edit_Submit</button>
             </div>
         </fieldset>
-    }
+                    }
     </text>
-}
+                    }

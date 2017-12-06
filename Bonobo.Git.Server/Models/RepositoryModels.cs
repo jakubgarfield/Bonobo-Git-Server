@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
-
 using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Attributes;
 using Bonobo.Git.Server.Data;
-
 using LibGit2Sharp;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Bonobo.Git.Server.Models
 {
@@ -93,7 +88,7 @@ namespace Bonobo.Git.Server.Models
 
         public Guid Id { get; set; }
 
-        [Remote("UniqueNameRepo", "Validation", AdditionalFields="Id", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Duplicate_Name")]
+        [Remote("UniqueNameRepo", "Validation", AdditionalFields = "Id", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Duplicate_Name")]
         [UniqueRepoName]
         [RegularExpression(RepositoryModel.NameValidityRegex, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_FileName_Regex")]
         [FileName(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_FileName")]
@@ -101,12 +96,12 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Name")]
         public string Name { get; set; }
 
-        [AllowHtml]
+        //[AllowHtml]
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Group")]
         [StringLength(255, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
         public string Group { get; set; }
 
-        [AllowHtml]
+        //[AllowHtml]
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Description")]
         [StringLength(255, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
         public string Description { get; set; }
@@ -133,7 +128,7 @@ namespace Bonobo.Git.Server.Models
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Anonymous")]
         public bool AllowAnonymous { get; set; }
 
-        [EnumDataType(typeof(RepositoryPushMode), ErrorMessageResourceType=typeof(Resources), ErrorMessageResourceName="Repository_Edit_InvalidAnonymousPushMode")]
+        [EnumDataType(typeof(RepositoryPushMode), ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Repository_Edit_InvalidAnonymousPushMode")]
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_AllowAnonymousPush")]
         public RepositoryPushMode AllowAnonymousPush { get; set; }
 
@@ -329,7 +324,7 @@ namespace Bonobo.Git.Server.Models
 
         [FileUploadExtensions(Extensions = "PNG,JPG,JPEG,GIF")]
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_Logo_PostedFile")]
-        public HttpPostedFileWrapper PostedFile { get; set; }
+        public IFormFile PostedFile { get; set; }
 
         [Display(ResourceType = typeof(Resources), Name = "Repository_Detail_RemoveLogo")]
         public bool RemoveLogo { get; set; }
@@ -350,13 +345,14 @@ namespace Bonobo.Git.Server.Models
                 {
                     using (MemoryStream ms = new MemoryStream())
                     {
-                        Image originalImage = Image.FromStream(PostedFile.InputStream, true, true);
+                        PostedFile.CopyTo(ms);
+                        //Image originalImage = Image.FromStream(PostedFile.InputStream, true, true);
 
-                        int logoWidth = originalImage.Width >= 72 ? 72 : 36;
+                        //int logoWidth = originalImage.Width >= 72 ? 72 : 36;
 
-                        Image resizedImage = originalImage.GetThumbnailImage(logoWidth, (logoWidth * originalImage.Height) / originalImage.Width, null, IntPtr.Zero);
+                        //Image resizedImage = originalImage.GetThumbnailImage(logoWidth, (logoWidth * originalImage.Height) / originalImage.Width, null, IntPtr.Zero);
 
-                        resizedImage.Save(ms, ImageFormat.Png);
+                        //resizedImage.Save(ms, ImageFormat.Png);
 
                         _data = ms.GetBuffer();
                     }

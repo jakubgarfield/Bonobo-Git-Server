@@ -1,12 +1,5 @@
-﻿using Bonobo.Git.Server.Data;
-using Bonobo.Git.Server.Security;
+﻿using System.Diagnostics;
 using System.IO;
-using System.Web;
-using System.Web.Mvc;
-using System.Linq;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Bonobo.Git.Server.Git.GitService
 {
@@ -15,9 +8,9 @@ namespace Bonobo.Git.Server.Git.GitService
     public class GitServiceExecutorParams
     {
         public string GitPath { get; set; }
-        
+
         public string GitHomePath { get; set; }
-        
+
         public string RepositoriesDirPath { get; set; }
     }
 
@@ -60,21 +53,23 @@ namespace Bonobo.Git.Server.Git.GitService
 
             SetHomePath(info);
 
-            var username = HttpContext.Current.User.Username();
+            //var username = HttpContext.Current.User.Username();
+            var username = "plop";
             var teamsstr = "";
             var rolesstr = "";
             var displayname = "";
-            if(!string.IsNullOrEmpty(username)){
-                ITeamRepository tr = DependencyResolver.Current.GetService<ITeamRepository>();
-                var userId = HttpContext.Current.User.Id();
-                var teams = tr.GetTeams(userId);
-                teamsstr = UserExtensions.StringlistToEscapedStringForEnvVar(teams.Select(x => x.Name));
+            if (!string.IsNullOrEmpty(username))
+            {
+                //ITeamRepository tr = DependencyResolver.Current.GetService<ITeamRepository>();
+                //var userId = HttpContext.Current.User.Id();
+                //var teams = tr.GetTeams(userId);
+                //teamsstr = UserExtensions.StringlistToEscapedStringForEnvVar(teams.Select(x => x.Name));
 
-                IRoleProvider rp = DependencyResolver.Current.GetService<IRoleProvider>();
-                rolesstr = UserExtensions.StringlistToEscapedStringForEnvVar(rp.GetRolesForUser(userId));
+                //IRoleProvider rp = DependencyResolver.Current.GetService<IRoleProvider>();
+                //rolesstr = UserExtensions.StringlistToEscapedStringForEnvVar(rp.GetRolesForUser(userId));
 
-                IMembershipService ms = DependencyResolver.Current.GetService<IMembershipService>();
-                displayname = ms.GetUserModel(userId).DisplayName;
+                //IMembershipService ms = DependencyResolver.Current.GetService<IMembershipService>();
+                //displayname = ms.GetUserModel(userId).DisplayName;
 
             }
             // If anonymous option is set then these will always be empty
@@ -88,9 +83,12 @@ namespace Bonobo.Git.Server.Git.GitService
             using (var process = Process.Start(info))
             {
                 inStream.CopyTo(process.StandardInput.BaseStream);
-                if (options.endStreamWithClose) {
+                if (options.endStreamWithClose)
+                {
                     process.StandardInput.Close();
-                } else {
+                }
+                else
+                {
                     process.StandardInput.Write('\0');
                 }
 

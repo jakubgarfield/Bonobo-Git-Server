@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Web;
 
 namespace Bonobo.Git.Server.Configuration
 {
@@ -44,11 +41,12 @@ namespace Bonobo.Git.Server.Configuration
 
         public static void LoadSettings()
         {
-            MemberGroupName = ConfigurationManager.AppSettings["ActiveDirectoryMemberGroupName"];
-            BackendPath = ConfigurationManager.AppSettings["ActiveDirectoryBackendPath"];
+            System.Diagnostics.Debugger.Break();
+            //MemberGroupName = ConfigurationManager.AppSettings["ActiveDirectoryMemberGroupName"];
+            //BackendPath = ConfigurationManager.AppSettings["ActiveDirectoryBackendPath"];
 
-            RoleNameToGroupNameMapping = CreateMapping(ConfigurationManager.AppSettings["ActiveDirectoryRoleMapping"]);
-            TeamNameToGroupNameMapping = CreateMapping(ConfigurationManager.AppSettings["ActiveDirectoryTeamMapping"]);
+            //RoleNameToGroupNameMapping = CreateMapping(ConfigurationManager.AppSettings["ActiveDirectoryRoleMapping"]);
+            //TeamNameToGroupNameMapping = CreateMapping(ConfigurationManager.AppSettings["ActiveDirectoryTeamMapping"]);
         }
     }
 }

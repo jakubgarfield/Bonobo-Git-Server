@@ -1,14 +1,12 @@
-﻿using Bonobo.Git.Server.Data.Update.Pre600ADBackend;
-using System.IO;
-using Bonobo.Git.Server.Helpers;
+﻿using System;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
-using Bonobo.Git.Server.Configuration;
-using System;
-using System.Threading;
+using System.IO;
 using System.Linq;
-using Bonobo.Git.Server.Data;
-using Microsoft.VisualBasic.FileIO;
+using System.Threading;
+using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Data.Update.Pre600ADBackend;
+using Bonobo.Git.Server.Helpers;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -16,8 +14,17 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
 {
     public class Pre600UpdateTo600
     {
+        private readonly ADHelper _adHelper;
+        private readonly ADBackend _adBackend;
+
+        public Pre600UpdateTo600(ADHelper adHelper, ADBackend adBackend)
+        {
+            this._adHelper = adHelper;
+            this._adBackend = adBackend;
+        }
+
         // Before 6.0.0 the mapping was done via the name property. After that the Guid is used.
-        public static void UpdateADBackend()
+        public void UpdateADBackend()
         {
             // Make a copy of the current backendfolder if it exists, so we can use the modern models for saving
             // it all to the correct location directly
@@ -98,7 +105,7 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
 
         private static void MakeBackupOfBackendDirectory(string backendDirectory, string backupDirectory)
         {
-            FileSystem.CopyDirectory(backendDirectory, backupDirectory);
+            CopyDirectory(backendDirectory, backupDirectory, true);
             int attemptsRemaining = 5;
             while (attemptsRemaining-- > 0)
             {
@@ -122,10 +129,48 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
             }
         }
 
-        private static void UpdateRepos(string dir, Dictionary<string, Models.UserModel> users, Dictionary<string, Models.TeamModel> teams)
+        private static void CopyDirectory(string sourceDirName, string destDirName, bool copySubDirs)
+        {
+            // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + sourceDirName);
+            }
+
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            // If the destination directory doesn't exist, create it.
+            if (!Directory.Exists(destDirName))
+            {
+                Directory.CreateDirectory(destDirName);
+            }
+
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string temppath = Path.Combine(destDirName, file.Name);
+                file.CopyTo(temppath, false);
+            }
+
+            // If copying subdirectories, copy them and their contents to new location.
+            if (copySubDirs)
+            {
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    string temppath = Path.Combine(destDirName, subdir.Name);
+                    CopyDirectory(subdir.FullName, temppath, copySubDirs);
+                }
+            }
+        }
+
+        private void UpdateRepos(string dir, Dictionary<string, Models.UserModel> users, Dictionary<string, Models.TeamModel> teams)
         {
             var repos = Pre600Functions.LoadContent<Pre600RepositoryModel>(dir);
-            foreach(var repoitem in repos)
+            foreach (var repoitem in repos)
             {
                 var repo = repoitem.Value;
                 var newrepo = new Models.RepositoryModel();
@@ -146,27 +191,27 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
                 newrepo.Users = list.ToArray();
 
                 list.Clear();
-                foreach(var admins in repo.Administrators)
+                foreach (var admins in repo.Administrators)
                 {
                     list.Add(users[admins]);
                 }
                 newrepo.Administrators = list.ToArray();
 
                 var newteams = new List<Models.TeamModel>();
-                foreach(var team in repo.Teams)
+                foreach (var team in repo.Teams)
                 {
                     newteams.Add(teams[team]);
                 }
                 newrepo.Teams = newteams.ToArray();
 
-                ADBackend.Instance.Repositories.Add(newrepo);
+                _adBackend.Repositories.Add(newrepo);
             }
         }
 
         private static void UpdateRoles(string dir, Dictionary<string, Models.UserModel> users)
         {
             var roles = Pre600Functions.LoadContent<Pre600RoleModel>(dir);
-            foreach(var roleitem in roles)
+            foreach (var roleitem in roles)
             {
                 var role = roleitem.Value;
                 var newrole = new Models.RoleModel();
@@ -186,11 +231,11 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
             }
         }
 
-        private static Dictionary<string, Models.TeamModel> UpdateTeams(string dir, Dictionary<string, Models.UserModel> users)
+        private Dictionary<string, Models.TeamModel> UpdateTeams(string dir, Dictionary<string, Models.UserModel> users)
         {
             var teams = Pre600Functions.LoadContent<Pre600TeamModel>(dir);
             var newTeams = new Dictionary<string, Models.TeamModel>();
-            
+
             foreach (var teamitem in teams)
             {
                 var team = teamitem.Value;
@@ -202,7 +247,7 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
                 try
                 {
                     GroupPrincipal group;
-                    using (var pc = ADHelper.GetPrincipalGroup(ActiveDirectorySettings.TeamNameToGroupNameMapping[team.Name], out group))
+                    using (var pc = _adHelper.GetPrincipalGroup(ActiveDirectorySettings.TeamNameToGroupNameMapping[team.Name], out group))
                     {
                         newteam.Id = group.Guid.Value;
                     }
@@ -212,7 +257,7 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
                     Log.Error(ex, "Failed to acquire group GUID for teamName {team} - adding new.", team.Name);
                 }
 
-                
+
                 var members = new List<Models.UserModel>();
                 foreach (var member in team.Members)
                 {
@@ -220,13 +265,13 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
                 }
                 newteam.Members = members.ToArray();
 
-                ADBackend.Instance.Teams.Add(newteam);
+                _adBackend.Teams.Add(newteam);
                 newTeams[team.Name] = newteam;
             }
             return newTeams;
         }
 
-        private static Dictionary<string, Models.UserModel> UpdateUsers(string dir)
+        private Dictionary<string, Models.UserModel> UpdateUsers(string dir)
         {
             var users = Pre600Functions.LoadContent<Pre600UserModel>(dir);
             var domains = new Dictionary<string, PrincipalContext>();
@@ -241,13 +286,13 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
                 u.Username = ou.Name;
                 u.Id = Guid.NewGuid();
 
-                var domainuser = ADHelper.GetUserPrincipal(u.Username);
+                var domainuser = _adHelper.GetUserPrincipal(u.Username);
                 if (domainuser != null && domainuser.Guid.HasValue)
                 {
                     u.Id = domainuser.Guid.Value;
                 }
 
-                ADBackend.Instance.Users.Add(u);
+                _adBackend.Users.Add(u);
                 newUsers[u.Username] = u;
             }
             return newUsers;

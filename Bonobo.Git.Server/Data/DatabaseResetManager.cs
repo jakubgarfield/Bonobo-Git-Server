@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Runtime.Remoting.Messaging;
+using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Security;
-using Microsoft.Practices.Unity;
-using System.Configuration;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 namespace Bonobo.Git.Server.Data
@@ -17,22 +17,34 @@ namespace Bonobo.Git.Server.Data
     /// </summary>
     public class DatabaseResetManager : IDatabaseResetManager
     {
-        [Dependency]
+        private readonly IConfiguration configuration;
+        private readonly IOptions<AppSettings> _appSettings;
+
         public IRepositoryRepository Repository { get; set; }
-
-        [Dependency]
         public IRoleProvider RoleProvider { get; set; }
-
-        [Dependency]
         public ITeamRepository TeamRepository { get; set; }
-
-        [Dependency]
         public IMembershipService Users { get; set; }
+
+        public DatabaseResetManager(
+            IRepositoryRepository Repository,
+            IRoleProvider RoleProvider,
+            ITeamRepository TeamRepository,
+            IMembershipService Users,
+            IConfiguration configuration,
+            IOptions<AppSettings> appSettings)
+        {
+            this.Repository = Repository;
+            this.RoleProvider = RoleProvider;
+            this.TeamRepository = TeamRepository;
+            this.Users = Users;
+            this.configuration = configuration;
+            this._appSettings = appSettings;
+        }
 
         public void DoReset(int mode)
         {
             Log.Information("Reset mode {mode}", mode);
-            Log.Information("AppSettings Allow: {AllowDBReset}", ConfigurationManager.AppSettings["AllowDBReset"]);
+            Log.Information("AppSettings Allow: {AllowDBReset}", _appSettings.Value.AllowDBReset);
             switch (mode)
             {
                 case 1:

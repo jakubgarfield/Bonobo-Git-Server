@@ -1,57 +1,58 @@
-﻿using Bonobo.Git.Server.Configuration;
+﻿using System;
+using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Data.Update.ADBackendUpdate;
-using System;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
+using Dapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 namespace Bonobo.Git.Server.Data.Update
 {
     public class AutomaticUpdater
     {
-        public void Run()
+        public void Run(IServiceProvider serviceProvider, BonoboGitServerContext context, AuthenticationSettings authSettings)
         {
-            if (AuthenticationSettings.MembershipService.ToLowerInvariant() == "activedirectory")
+            if (string.Equals(authSettings.MembershipService, "activedirectory", StringComparison.OrdinalIgnoreCase))
             {
-                Pre600UpdateTo600.UpdateADBackend();
+                var updater = serviceProvider.GetService<Pre600UpdateTo600>();
+                updater.UpdateADBackend();
             }
             else
             {
-                UpdateDatabase();
+                UpdateDatabase(serviceProvider, context);
             }
         }
 
-        public void RunWithContext(BonoboGitServerContext context)
+        public void RunWithContext(IServiceProvider serviceProvider, BonoboGitServerContext context)
         {
-            DoUpdate(context);
+            DoUpdate(serviceProvider, context);
         }
 
-        private void UpdateDatabase()
+        private void UpdateDatabase(IServiceProvider serviceProvider, BonoboGitServerContext ctx)
         {
-            using (var ctx = new BonoboGitServerContext())
+            //using (var ctx = new BonoboGitServerContext(databaseConnection))
             {
-                DoUpdate(ctx);
+                DoUpdate(serviceProvider, ctx);
             }
         }
 
-        private void DoUpdate(BonoboGitServerContext ctx)
+        private void DoUpdate(IServiceProvider serviceProvider, BonoboGitServerContext ctx)
         {
-            IObjectContextAdapter ctxAdapter = ctx;
-            var connectiontype = ctx.Database.Connection.GetType().Name;
+            var connectiontype = ctx.Database.ProviderName;//.Connection.GetType().Name;
 
-            foreach (var item in UpdateScriptRepository.GetScriptsBySqlProviderName(connectiontype))
+            foreach (var item in UpdateScriptRepository.GetScriptsBySqlProviderName(connectiontype, serviceProvider))
             {
                 if (!string.IsNullOrEmpty(item.Precondition))
                 {
                     try
                     {
-                        var preConditionResult = ctxAdapter.ObjectContext.ExecuteStoreQuery<int>(item.Precondition).Single();
+                        var preConditionResult = ctx.Database.GetDbConnection().ExecuteScalar<int>(item.Precondition);
                         if (preConditionResult == 0)
                         {
                             continue;
                         }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         // consider failures in pre-conditions as an indication that
                         // store ecommand should be executed
@@ -62,7 +63,7 @@ namespace Bonobo.Git.Server.Data.Update
                 {
                     try
                     {
-                        ctxAdapter.ObjectContext.ExecuteStoreCommand(item.Command);
+                        ctx.Database.ExecuteSqlCommand(item.Command);
                     }
                     catch (Exception ex)
                     {

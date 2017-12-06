@@ -10,13 +10,19 @@
         @Html.Partial("_BranchSwitcher")
         @if (Model.Commits != null)
         {
-            var grid = new WebGrid(rowsPerPage: 10, canPage:true, canSort:false);
-            grid.Bind(Model.Commits, null, false, (int)(ViewBag.TotalCount ?? 0));
-            @grid.GetHtml(displayHeader: false, mode: WebGridPagerModes.All, 
+            <table>
+                @foreach (var item in Model.Commits.Reverse())
+                {
+                    <tr>
+                        <td>@Html.Partial("_Commit", item)</td>
+                    </tr>
+                }
+            </table>
+            @*@grid.GetHtml(displayHeader: false, mode: WebGridPagerModes.All,
                 columns: grid.Columns(
                     grid.Column(format: item => Html.Partial("_Commit", (RepositoryCommitModel)item.Value))
                     )
-                )
+                )*@
         }
     </div>
 }

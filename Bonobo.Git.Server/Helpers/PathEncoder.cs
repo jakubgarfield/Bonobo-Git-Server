@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Text;
-using System.Web.Hosting;
 
 namespace Bonobo.Git.Server.Helpers
 {
@@ -120,7 +118,8 @@ namespace Bonobo.Git.Server.Helpers
 
         public static string GetRootPath(string path)
         {
-            return Path.IsPathRooted(path) ? path : HostingEnvironment.MapPath(path);
+            return path;
+            //return Path.IsPathRooted(path) ? path : HostingEnvironment.MapPath(path);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Bonobo.Git.Server
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex, "GetClaimValue exception");
             }
@@ -33,8 +33,7 @@ namespace Bonobo.Git.Server
         public static Guid Id(this IPrincipal user)
         {
             string id = user.GetClaimValue(ClaimTypes.NameIdentifier);
-            Guid result;
-            if (Guid.TryParse(id, out result))
+            if (Guid.TryParse(id, out Guid result))
             {
                 // It's a normal string Guid
                 return result;
@@ -89,7 +88,7 @@ namespace Bonobo.Git.Server
                     result = claimsIdentity.FindAll(ClaimTypes.Role).Select(x => x.Value).ToArray();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex, "GetClaim exception");
             }
@@ -101,8 +100,7 @@ namespace Bonobo.Git.Server
         {
             ClaimsIdentity result = null;
 
-            ClaimsPrincipal claimsPrincipal = user as ClaimsPrincipal;
-            if (claimsPrincipal != null)
+            if (user is ClaimsPrincipal claimsPrincipal)
             {
                 result = claimsPrincipal.Identities.FirstOrDefault(x => x != null);
             }
@@ -174,7 +172,7 @@ namespace Bonobo.Git.Server
 
         public static string StringlistToEscapedStringForEnvVar(IEnumerable<string> items, string separator = ",")
         {
-            var y = items.Select(x => x.Replace(@"\", @"\\").Replace(separator, @"\"+separator));
+            var y = items.Select(x => x.Replace(@"\", @"\\").Replace(separator, @"\" + separator));
             return string.Join(separator, y);
         }
     }

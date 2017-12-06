@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
-using Bonobo.Git.Server.Data;
 
 namespace Bonobo.Git.Server.Security
 {
     public class PasswordService : IPasswordService
     {
         private readonly Action<string, string> _updateUserPasswordHook;
-        private readonly Func<HashAlgorithm> _getCurrentHashProvider; 
+        private readonly Func<HashAlgorithm> _getCurrentHashProvider;
         private readonly Func<HashAlgorithm> _getDeprecatedHashProvider;
 
         /// <summary>
@@ -65,13 +63,13 @@ namespace Bonobo.Git.Server.Security
             }
             return false;
         }
-        
+
         private bool IsOfCurrentHashFormat(string hash)
         {
             //sha512-hex, md5-hex would be 32
             return Regex.IsMatch(hash, "^[0-9A-F]{128}$");
         }
-        
+
         private string GetDeprecatedHash(string password)
         {
             return GetHash(password, _getDeprecatedHashProvider);

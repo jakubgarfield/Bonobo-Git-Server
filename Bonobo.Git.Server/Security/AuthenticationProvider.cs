@@ -1,27 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System.Collections.Generic;
 using System.Linq;
-
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Bonobo.Git.Server.Models;
-
-using Microsoft.Practices.Unity;
-
-using Owin;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonobo.Git.Server.Security
 {
     public abstract class AuthenticationProvider : IAuthenticationProvider
     {
-        [Dependency]
+        public AuthenticationProvider(IMembershipService membershipService, IRoleProvider roleProvider)
+        {
+            MembershipService = membershipService;
+            RoleProvider = roleProvider;
+        }
+
         public IMembershipService MembershipService { get; set; }
 
-        [Dependency]
         public IRoleProvider RoleProvider { get; set; }
 
-        public abstract void Configure(IAppBuilder app);
-        public abstract void SignIn(string username, string returnUrl, bool rememberMe);
-        public abstract void SignOut();
+        //public abstract void Configure(IApplicationBuilder app);
+        public abstract Task SignIn(HttpContext httpContext, string username, string returnUrl, bool rememberMe);
+        public abstract Task SignOut(HttpContext httpContext);
 
         public IEnumerable<Claim> GetClaimsForUser(string username)
         {
@@ -41,6 +44,30 @@ namespace Bonobo.Git.Server.Security
             }
 
             return result;
+        }
+
+        protected static void AddGitAuth(AuthenticationBuilder authenticationBuilder)
+        {
+            authenticationBuilder.AddScheme<BasicAuthenticationOptions, BasicAuthenticationHandler>("Basic", o => { });
+
+            authenticationBuilder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Git",
+                                  policy =>
+                                  {
+                                      //policy.AddRequirements(new GitAuthPolicy());
+                                      policy.RequireClaim(ClaimTypes.NameIdentifier);
+                                      policy.RequireClaim(ClaimTypes.Name);
+                                      policy.RequireClaim(ClaimTypes.Email);
+                                      policy.RequireClaim(ClaimTypes.Role);
+                                      //policy.AddRequirements()
+                                      //policy.RequireUserName("admin");
+                                      policy.AddAuthenticationSchemes("Basic");
+                                  });
+            });
+
+
+            authenticationBuilder.Services.AddSingleton<IAuthorizationHandler, GitAuthorizationHandler>();
         }
     }
 }

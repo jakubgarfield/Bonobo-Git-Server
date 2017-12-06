@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Web.Hosting;
-using Bonobo.Git.Server.Data;
-using Bonobo.Git.Server.Security;
+using Microsoft.Extensions.Configuration;
 
 namespace Bonobo.Git.Server.Configuration
 {
@@ -20,6 +17,12 @@ namespace Bonobo.Git.Server.Configuration
     {
         private readonly StringBuilder _report = new StringBuilder();
         private readonly UserConfiguration _userConfig = UserConfiguration.Current;
+        private readonly IConfiguration _configuration;
+
+        public DiagnosticReporter(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
         public string GetVerificationReport()
         {
@@ -39,13 +42,13 @@ namespace Bonobo.Git.Server.Configuration
             ExceptionLog();
         }
 
-        
+
         private void DumpAppSettings()
         {
             _report.AppendLine("Web.Config AppSettings");
-            foreach (string key in ConfigurationManager.AppSettings)
+            foreach (var kv in _configuration.AsEnumerable())
             {
-                QuotedReport("AppSettings."+key, ConfigurationManager.AppSettings[key]);
+                QuotedReport("AppSettings." + kv.Key, kv.Value);
             }
         }
 
@@ -108,27 +111,27 @@ namespace Bonobo.Git.Server.Configuration
                 SafelyReport("Backend folder exists", () => Directory.Exists(MapPath(AppSetting("ActiveDirectoryBackendPath"))));
                 ReportDirectoryStatus("Backend folder", MapPath(AppSetting("ActiveDirectoryBackendPath")));
 
-                var ad = ADBackend.Instance;
-                SafelyReport("User count", () => ad.Users.Count());
+                //var ad = ADBackend.Instance;
+                //SafelyReport("User count", () => ad.Users.Count());
 
                 _report.AppendLine("AD Teams");
-                SafelyRun(() =>
-                {
-                    foreach (var item in ad.Teams)
-                    {
-                        var thisTeam = item;
-                        SafelyReport(item.Name, () => thisTeam.Members.Length + " members");
-                    }
-                });
+                //SafelyRun(() =>
+                //{
+                //    foreach (var item in ad.Teams)
+                //    {
+                //        var thisTeam = item;
+                //        SafelyReport(item.Name, () => thisTeam.Members.Length + " members");
+                //    }
+                //});
                 _report.AppendLine("AD Roles");
-                SafelyRun(() =>
-                {
-                    foreach (var item in ad.Roles)
-                    {
-                        var thisRole = item;
-                        SafelyReport(item.Name, () => thisRole.Members.Length + " members");
-                    }
-                });
+                //SafelyRun(() =>
+                //{
+                //    foreach (var item in ad.Roles)
+                //    {
+                //        var thisRole = item;
+                //        SafelyReport(item.Name, () => thisRole.Members.Length + " members");
+                //    }
+                //});
             }
             else
             {
@@ -141,7 +144,7 @@ namespace Bonobo.Git.Server.Configuration
             var sb = new StringBuilder();
             if (Directory.Exists(directory))
             {
-                sb.AppendFormat("Exists, {0} files, {1} entries, ", 
+                sb.AppendFormat("Exists, {0} files, {1} entries, ",
                     Directory.GetFiles(directory).Length,
                     Directory.GetFileSystemEntries(directory).Length
                     );
@@ -186,7 +189,7 @@ namespace Bonobo.Git.Server.Configuration
 
             if (AppSetting("MembershipService") == "Internal")
             {
-                SafelyReport("User count", () => new EFMembershipService { CreateContext = () => new BonoboGitServerContext() }.GetAllUsers().Count);
+                //SafelyReport("User count", () => new EFMembershipService { CreateContext = () => new BonoboGitServerContext() }.GetAllUsers().Count);
             }
             else
             {
@@ -203,22 +206,23 @@ namespace Bonobo.Git.Server.Configuration
             _report.AppendLine("Exception Log");
             SafelyRun(() =>
             {
-                var nameFormat = MvcApplication.GetLogFileNameFormat();
-                var todayLogFileName = nameFormat.Replace("{Date}", DateTime.Now.ToString("yyyyMMdd"));
-                SafelyReport("LogFileName: ", () => todayLogFileName);
-                var chunkSize = 10000;
-                var length = new FileInfo(todayLogFileName).Length;
-                Report("Log File total length", length);
+                throw new NotImplementedException();
+                //var nameFormat = MvcApplication.GetLogFileNameFormat();
+                //var todayLogFileName = nameFormat.Replace("{Date}", DateTime.Now.ToString("yyyyMMdd"));
+                //SafelyReport("LogFileName: ", () => todayLogFileName);
+                //var chunkSize = 10000;
+                //var length = new FileInfo(todayLogFileName).Length;
+                //Report("Log File total length", length);
 
-                var startingPoint = Math.Max(0, length - chunkSize);
-                Report("Starting log dump from ", startingPoint);
+                //var startingPoint = Math.Max(0, length - chunkSize);
+                //Report("Starting log dump from ", startingPoint);
 
-                using (var logText = File.Open(todayLogFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    logText.Seek(startingPoint, SeekOrigin.Begin);
-                    var reader = new StreamReader(logText);
-                    _report.AppendLine(reader.ReadToEnd());
-                }
+                //using (var logText = File.Open(todayLogFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                //{
+                //    logText.Seek(startingPoint, SeekOrigin.Begin);
+                //    var reader = new StreamReader(logText);
+                //    _report.AppendLine(reader.ReadToEnd());
+                //}
             });
         }
 
@@ -263,12 +267,13 @@ namespace Bonobo.Git.Server.Configuration
 
         private string MapPath(string path)
         {
-            return Path.IsPathRooted(path) ? path : HostingEnvironment.MapPath(path);
+            return path;
+            //return Path.IsPathRooted(path) ? path : HostingEnvironment.MapPath(path);
         }
 
         private string AppSetting(string name)
         {
-            return ConfigurationManager.AppSettings[name];
+            return _configuration.GetSection("AppSettings").GetValue<string>(name);
         }
 
         private static string FormatException(Exception ex)
@@ -290,7 +295,7 @@ namespace Bonobo.Git.Server.Configuration
 
         private void QuotedReport(string tag, object value)
         {
-            Report(tag, "'"+value+"'");
+            Report(tag, "'" + value + "'");
         }
     }
 }

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Attributes;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Bonobo.Git.Server.Models
 {

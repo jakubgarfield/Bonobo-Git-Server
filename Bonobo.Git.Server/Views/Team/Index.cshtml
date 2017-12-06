@@ -11,7 +11,7 @@
     @if (!Model.IsReadOnly)
     {
         <div class="pure-u-2-5 add">
-        <a class="pure-button pure-button-primary" href="@Url.Action("Create")"><i class="fa fa-plus-circle"></i> @Resources.Team_Index_CreateNew</a>
+            <a class="pure-button pure-button-primary" href="@Url.Action("Create")"><i class="fa fa-plus-circle"></i> @Resources.Team_Index_CreateNew</a>
         </div>
     }
 </div>
@@ -30,17 +30,35 @@
 }
 
 @{
-    var grid = new WebGrid(source: Model, defaultSort: "Name", rowsPerPage: 15);
+    //var grid = new WebGrid(source: Model, defaultSort: "Name", rowsPerPage: 15);
 }
 
 <div class="w-grid">
-    @grid.GetHtml(
-        tableStyle: "pure-table teams",
-        columns: grid.Columns(
-            grid.Column(header: typeof(TeamDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink((string)item.Name, "Detail", new { id = item.Id }, new { @class = "detail" })),
-            grid.Column("Description", typeof(TeamDetailModel).GetDisplayValue("Description"), format: (item) => item.Description != null && ((string)item.Description).Length > 100 ? ((string)item.Description).Substring(0, 100) + " (...) " : item.Description),
-            grid.Column(format: (item) => item.IsReadOnly ? Html.Raw(String.Empty) : Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @class = "edit", title = Resources.Grid_Edit }), style: "action"),
-            grid.Column(format: (item) => item.IsReadOnly ? Html.Raw(String.Empty) : Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @class = "delete", title = Resources.Grid_Delete }), style: "action")
-        )
-    )
+    <table class="pure-table teams">
+        <tr>
+            <th>@typeof(TeamDetailModel).GetDisplayValue("Name")</th>
+            <th>@typeof(TeamDetailModel).GetDisplayValue("Description")</th>
+            <th>@typeof(UserDetailModel).GetDisplayValue("Surname")</th>
+            <th>@typeof(UserDetailModel).GetDisplayValue("Email")</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="detail">@Html.ActionLink((string)item.Name, "Detail", new { id = item.Id }, new { @class = "detail" })</td>
+                <td>@(item.Description != null && ((string)item.Description).Length > 100 ? ((string)item.Description).Substring(0, 100) + " (...) " : item.Description)</td>
+                <td class="edit">@(item.IsReadOnly ? Html.Raw(String.Empty) : Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @class = "edit", title = Resources.Grid_Edit }))</td>
+                <td class="delete">@(item.IsReadOnly ? Html.Raw(String.Empty) : Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @class = "delete", title = Resources.Grid_Delete }))</td>
+            </tr>
+        }
+    </table>
+
+    @*@grid.GetHtml(
+            tableStyle: "pure-table teams",
+            columns: grid.Columns(
+                grid.Column(header: typeof(TeamDetailModel).GetDisplayValue("Name"), format: (item) => Html.ActionLink((string)item.Name, "Detail", new { id = item.Id }, new { @class = "detail" })),
+                grid.Column("Description", typeof(TeamDetailModel).GetDisplayValue("Description"), format: (item) => item.Description != null && ((string)item.Description).Length > 100 ? ((string)item.Description).Substring(0, 100) + " (...) " : item.Description),
+                grid.Column(format: (item) => item.IsReadOnly ? Html.Raw(String.Empty) : Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @class = "edit", title = Resources.Grid_Edit }), style: "action"),
+                grid.Column(format: (item) => item.IsReadOnly ? Html.Raw(String.Empty) : Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @class = "delete", title = Resources.Grid_Delete }), style: "action")
+            )
+        )*@
 </div>

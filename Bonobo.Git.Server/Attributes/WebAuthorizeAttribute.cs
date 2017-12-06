@@ -1,32 +1,32 @@
 ﻿using System;
 using System.Linq;
-using System.Web.Mvc;
-using System.Web.Routing;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Bonobo.Git.Server
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class WebAuthorizeAttribute : AuthorizeAttribute
+    public class WebAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
         public new string Roles
         {
             get
             {
-                return roles == null ? null : String.Join(",", roles);
+                return roles == null ? null : string.Join(",", roles);
             }
             set
             {
-                roles = value == null ? null : value.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                roles = value?.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             }
         }
 
         private string[] roles;
 
-        public override void OnAuthorization(AuthorizationContext filterContext)
-        {
-            base.OnAuthorization(filterContext);
 
-            if (!(filterContext.Result is HttpUnauthorizedResult))
+        public virtual void OnAuthorization(AuthorizationFilterContext filterContext)
+        {
+            if (!(filterContext.Result is Microsoft.AspNetCore.Mvc.UnauthorizedResult))
             {
                 if (!filterContext.HttpContext.User.IsInRole(Definitions.Roles.Member) && !filterContext.HttpContext.User.Identity.IsAuthenticated)
                 {

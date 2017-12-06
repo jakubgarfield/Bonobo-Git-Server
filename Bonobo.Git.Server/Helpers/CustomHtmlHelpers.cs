@@ -1,31 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Mvc.Html;
-using System.Reflection;
-using System.Text;
-using System.Web.Routing;
-using System.Linq.Expressions;
-using Bonobo.Git.Server.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Reflection;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Bonobo.Git.Server.Helpers
 {
     public static class CustomHtmlHelpers
     {
-        public static IHtmlString AssemblyVersion(this HtmlHelper helper)
+        public static HtmlString AssemblyVersion(this IHtmlHelper helper)
         {
-            return MvcHtmlString.Create(Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            return new HtmlString(Assembly.GetExecutingAssembly().GetName().Version.ToString());
         }
 
-        public static IHtmlString MarkdownToHtml(this HtmlHelper helper, string markdownText)
+        public static HtmlString MarkdownToHtml(this IHtmlHelper helper, string markdownText)
         {
-            return MvcHtmlString.Create(CommonMark.CommonMarkConverter.Convert(markdownText));
+            return new HtmlString(CommonMark.CommonMarkConverter.Convert(markdownText));
         }
 
-        public static MvcHtmlString DisplayEnum(this HtmlHelper helper, Enum e)
+        public static HtmlString DisplayEnum(this IHtmlHelper helper, Enum e)
         {
             string result = "[[" + e.ToString() + "]]";
             var memberInfo = e.GetType().GetMember(e.ToString()).FirstOrDefault();
@@ -41,7 +35,7 @@ namespace Bonobo.Git.Server.Helpers
                 }
             }
 
-            return MvcHtmlString.Create(result);
+            return new HtmlString(result);
         }
     }
 }

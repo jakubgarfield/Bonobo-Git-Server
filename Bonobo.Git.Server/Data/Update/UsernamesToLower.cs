@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace Bonobo.Git.Server.Data.Update
+﻿namespace Bonobo.Git.Server.Data.Update
 {
     public class UsernamesToLower : IUpdateScript
     {
         public string Command
         {
-            get 
+            get
             {
                 return @"
                     UPDATE [User] SET Username = lower(Username);
