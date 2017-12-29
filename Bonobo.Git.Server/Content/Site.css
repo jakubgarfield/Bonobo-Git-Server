@@ -44,15 +44,15 @@ div.pure-control-group.checkboxlist>span { display: inline-block; }
 table.repositories button.copy-to-clip-button { margin-left: 0px; border-radius: 5px; }
 
 .navigation { padding: 0.5em 0; text-align: right;}
-.navigation.pure-menu a.pure-menu-heading { color: white; font-weight: 300; font-size: 1.2em; background: url('images/git-logo.png') no-repeat 0 4px; padding-left: 40px; float: left; margin-left: 0.5em;}
-.navigation.pure-menu-open { background: #2d3e50; }
-.navigation .pure-menu-selected a { color: white; }
-.navigation a { color: #fff; }
+.navigation.pure-menu a.pure-menu-heading { color: black; font-weight: 300; font-size: 1.2em; background: url('images/git-logo.png') no-repeat 0 4px; padding-left: 40px; float: left; margin-left: 0.5em;}
+.navigation.pure-menu-open { background: white; }
+.navigation .pure-menu-selected a { color: black; }
+.navigation a { color: black; }
 .navigation ul { display: inline-block; font-size: 0.9em; padding-right: 0.5em;}
 .navigation ul a { padding: 7px 10px;}
 .navigation li a:hover,
-.navigation li a:focus { background: none; color: #AECFE5; text-decoration: none; }
-.Repository .navigation .repository, .Account .navigation .users, .Team .navigation .teams, .Settings .navigation .settings { color: #AECFE5; }
+.navigation li a:focus { background: none; color: rgb(97, 101, 104); text-decoration: none; }
+.Repository .navigation .repository, .Account .navigation .users, .Team .navigation .teams, .Settings .navigation .settings { color: rgb(97, 101, 104); }
 .Repository select.repositories {margin-left: 20px; }
 
 
@@ -62,9 +62,9 @@ table.repositories button.copy-to-clip-button { margin-left: 0px; border-radius:
 .content h1 { position:relative; }
 .content h1 img {   position: absolute; left: -54px; top: 6px; }
 
-.footer { color: #999; background-color: #000; font-size: 0.85em; width: 100%; position: absolute; bottom: 0; height: 50px; line-height: 1.7em; text-align: center; }
-.footer a { color: #999; text-decoration: none; }
-.footer a:hover { color: #fff; }
+.footer { color: black; background-color: white; font-size: 0.85em; width: 100%; position: absolute; bottom: 0; height: 50px; line-height: 1.7em; text-align: center; }
+.footer a { color: black; text-decoration: none; }
+.footer a:hover { color: rgb(97, 101, 104); }
 
 .add { text-align: right; margin-top: 1.6em; }
 
