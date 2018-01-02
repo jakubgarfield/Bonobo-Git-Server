@@ -275,7 +275,6 @@
     <Compile Include="Application\Hooks\AfterPushAuditHandler.cs" />
     <Compile Include="Application\Hooks\GitBranchPushData.cs" />
     <Compile Include="Application\Hooks\GitTagPushData.cs" />
-    <Compile Include="Application\Hooks\IAfterAppEventHandler.cs" />
     <Compile Include="Application\Hooks\IAfterGitPushHandler.cs" />
     <Compile Include="Attributes\AllViewsAttribute.cs" />
     <Compile Include="Attributes\FileExtensionsCustom.cs" />
