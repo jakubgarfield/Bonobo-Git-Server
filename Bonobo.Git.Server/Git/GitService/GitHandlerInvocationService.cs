@@ -147,7 +147,8 @@ namespace Bonobo.Git.Server.Git.GitService
             }
         }
 
-        private void InvokeAccordingToTagChange(string repositoryName, Repository repository, GitReceiveCommand command) {
+        private void InvokeAccordingToTagChange(string repositoryName, Repository repository, GitReceiveCommand command)
+        {
             Debug.Assert(repositoryName != null);
             Debug.Assert(repository != null);
 

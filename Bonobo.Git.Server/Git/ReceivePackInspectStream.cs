@@ -6,7 +6,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace Bonobo.Git.Server.Git {
+namespace Bonobo.Git.Server.Git
+{
     /// <summary>
     ///     Reads data from the wrapped stream analyzing / parsing the initial parts of the communicated Git http protocol 
     ///     and aggregates important metadata about what commands are performed.
@@ -35,7 +36,8 @@ namespace Bonobo.Git.Server.Git {
     /// <seealso href="https://github.com/git/git/blob/master/Documentation/technical/pack-format.txt"/>
     /// <seealso href="https://github.com/git/git/blob/master/Documentation/technical/protocol-common.txt"/>
     /// <seealso href="https://github.com/git/git/blob/master/Documentation/technical/protocol-capabilities.txt"/>
-    public class ReceivePackInspectStream: Stream {
+    public class ReceivePackInspectStream: Stream
+    {
         // version, number of objects. (the 4 byte PACK signature is not included.)
         private const int PackHeaderSize = 4 + 4;
         private const int PktLineLengthSize = 4;
@@ -97,7 +99,8 @@ namespace Bonobo.Git.Server.Git {
         /// </remarks>
         /// <param name="wrappedStream">The origin stream to read from.</param>
         /// <param name="commandListReceived">Called once the command list has been completely retrieved.</param>
-        public ReceivePackInspectStream(Stream wrappedStream, Action<ReceivePackInspectStream> commandListReceived = null) {
+        public ReceivePackInspectStream(Stream wrappedStream, Action<ReceivePackInspectStream> commandListReceived = null)
+        {
             if (wrappedStream == null) throw new ArgumentNullException(nameof(wrappedStream));
 
             _wrappedStream = wrappedStream;
@@ -108,7 +111,8 @@ namespace Bonobo.Git.Server.Git {
             SetPktLineLengthState();
         }
         
-        public override int Read(byte[] buffer, int offset, int count) {
+        public override int Read(byte[] buffer, int offset, int count)
+        {
             if (buffer == null) throw new ArgumentNullException(nameof(buffer));
             if (offset < 0) throw new ArgumentOutOfRangeException(nameof(offset));
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
@@ -122,19 +126,23 @@ namespace Bonobo.Git.Server.Git {
             return bytesRead;
         }
 
-        public override void Flush() {
+        public override void Flush()
+        {
             throw new NotImplementedException();
         }
 
-        public override long Seek(long offset, SeekOrigin origin) {
+        public override long Seek(long offset, SeekOrigin origin)
+        {
             throw new NotImplementedException();
         }
 
-        public override void SetLength(long value) {
+        public override void SetLength(long value)
+        {
             throw new NotImplementedException();
         }
 
-        public override void Write(byte[] buffer, int offset, int count) {
+        public override void Write(byte[] buffer, int offset, int count)
+        {
             throw new NotImplementedException();
         }
 
@@ -172,7 +180,8 @@ namespace Bonobo.Git.Server.Git {
         ///     Processes the data according to the current state of the protocol, if enough data is available.
         ///     Will recurse until either the whole command list has been processed or the buffer has run out of data.
         /// </summary>
-        private void Continue(int bytesAvailable, byte[] buffer, int offset) {
+        private void Continue(int bytesAvailable, byte[] buffer, int offset)
+        {
             Debug.Assert(bytesAvailable >= 0);
             Debug.Assert(buffer != null);
             Debug.Assert(offset >= 0);
@@ -230,7 +239,8 @@ namespace Bonobo.Git.Server.Git {
 
         // command-pkt line format: <FromSHA1> <ToSHA1> <RefPath>\n?
         // first command-pkt also appends a \0 followed by a <list of capabilities>
-        private void ProcessCommandPktLine(string payload) {
+        private void ProcessCommandPktLine(string payload)
+        {
             Debug.Assert(payload != null);
 
             try {
@@ -252,30 +262,35 @@ namespace Bonobo.Git.Server.Git {
             }
         }
 
-        private void SetPktLineLengthState() {
+        private void SetPktLineLengthState()
+        {
             _state = ProtocolState.PktLineLengthOrPackString;
             _bytesNeeded = PktLineLengthSize;
         }
 
-        private void SetPktLinePayloadState(int payloadLength) {
+        private void SetPktLinePayloadState(int payloadLength)
+        {
             Debug.Assert(payloadLength > PktLineLengthSize);
 
             _state = ProtocolState.PktLinePayload;
             _bytesNeeded = payloadLength;
         }
 
-        private void SetPackHeaderState() {
+        private void SetPackHeaderState()
+        {
             _state = ProtocolState.PackHeader;
             _bytesNeeded = PackHeaderSize;
         }
 
-        private void SetPackObjectsState() {
+        private void SetPackObjectsState()
+        {
             _state = ProtocolState.PackObjects;
             _bytesNeeded = 0;
         }
 
         // "0032" => 50; "00a0" => 160 etc.
-        private static int FourHexCharsToInt(byte[] buffer, int offset) {
+        private static int FourHexCharsToInt(byte[] buffer, int offset)
+        {
             Debug.Assert(buffer != null);
             Debug.Assert(offset >= 0);
 
@@ -286,7 +301,8 @@ namespace Bonobo.Git.Server.Git {
             return result;
         }
 
-        private static int HexCharToInt(int chr) {
+        private static int HexCharToInt(int chr)
+        {
             Debug.Assert((chr >= '0' && chr <= '9') || (chr >= 'a' && chr <= 'f'));
 
             if (chr < 'a')
@@ -298,7 +314,8 @@ namespace Bonobo.Git.Server.Git {
         /// <summary>
         ///     Converts a network byte-order int32 to a normal integer.
         /// </summary>
-        private static int FourNetByteToInt(byte[] buffer, int offset) {
+        private static int FourNetByteToInt(byte[] buffer, int offset)
+        {
             Debug.Assert(buffer != null);
             Debug.Assert(offset >= 0);
 
@@ -308,7 +325,8 @@ namespace Bonobo.Git.Server.Git {
                    (buffer[offset + 3] <<  0);
         }
 
-        private enum ProtocolState {
+        private enum ProtocolState
+        {
             PktLineLengthOrPackString,
             PktLinePayload,
             PackHeader,

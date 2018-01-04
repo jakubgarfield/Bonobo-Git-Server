@@ -1,5 +1,7 @@
-﻿namespace Bonobo.Git.Server.Git {
-    public struct GitReceiveCommand {
+﻿namespace Bonobo.Git.Server.Git
+{
+    public struct GitReceiveCommand
+    {
         public static GitReceiveCommand Invalid = default(GitReceiveCommand);
 
         /// <summary>
@@ -35,7 +37,8 @@
         /// </remarks>
         public string NewSha1 { get; set; }
 
-        public GitReceiveCommand(string fullRefName, string oldSha1, string newSha1) {
+        public GitReceiveCommand(string fullRefName, string oldSha1, string newSha1)
+        {
             this.OldSha1 = oldSha1;
             this.NewSha1 = newSha1;
 

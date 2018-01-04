@@ -2,8 +2,10 @@
 using System.Web;
 using LibGit2Sharp;
 
-namespace Bonobo.Git.Server.Application.Hooks {
-    public interface IAfterGitPushHandler {
+namespace Bonobo.Git.Server.Application.Hooks
+{
+    public interface IAfterGitPushHandler
+    {
         void OnBranchCreated(HttpContext httpContext, GitBranchPushData branchData);
         void OnBranchDeleted(HttpContext httpContext, GitBranchPushData branchData);
 

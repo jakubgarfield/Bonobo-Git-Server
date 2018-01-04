@@ -3,7 +3,8 @@ using LibGit2Sharp;
 
 namespace Bonobo.Git.Server.Application.Hooks
 {
-    public struct GitBranchPushData {
+    public struct GitBranchPushData
+    {
         public string RepositoryName { get; set; }
         public Repository Repository { get; set; }
 

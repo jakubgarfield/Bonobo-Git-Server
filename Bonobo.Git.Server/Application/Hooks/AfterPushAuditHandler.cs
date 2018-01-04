@@ -6,7 +6,8 @@ using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
 using LibGit2Sharp;
 
-namespace Bonobo.Git.Server.Application.Hooks {
+namespace Bonobo.Git.Server.Application.Hooks
+{
     /// <summary>
     ///     Adds Bonobo user specific identity information to all newly pushed commits by appending a 
     ///     Git note to them.
@@ -63,7 +64,9 @@ namespace Bonobo.Git.Server.Application.Hooks {
             if (string.IsNullOrEmpty(bonoboUserName))
             {
                 bonoboUserName = EmptyUser;
-            } else {
+            }
+            else
+            {
                 var bonoboUser = _bonoboUsers.GetUserModel(bonoboUserName);
                 if (bonoboUser != null)
                     email = bonoboUser.Email;
