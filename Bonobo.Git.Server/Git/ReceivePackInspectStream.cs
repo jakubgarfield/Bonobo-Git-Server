@@ -120,8 +120,9 @@ namespace Bonobo.Git.Server.Git
 
             int bytesRead = _wrappedStream.Read(buffer, offset, count);
 
-            byte[] bufferToProcess = BufferWithPreviousDataPrepended(buffer, offset, ref bytesRead);
-            Continue(bytesRead, bufferToProcess, offset);
+            int bytesAvailable;
+            byte[] bufferToProcess = BufferWithPreviousDataPrepended(buffer, offset, bytesRead, out bytesAvailable);
+            Continue(bytesAvailable, bufferToProcess, offset);
 
             return bytesRead;
         }
@@ -154,7 +155,7 @@ namespace Bonobo.Git.Server.Git
                 _dataFromPreviousRead.Value.Dispose();
         }
 
-        private byte[] BufferWithPreviousDataPrepended(byte[] buffer, int offset, ref int bytesRead)
+        private byte[] BufferWithPreviousDataPrepended(byte[] buffer, int offset, int bytesRead, out int bytesAvailable)
         {
             Debug.Assert(buffer != null);
             Debug.Assert(offset >= 0);
@@ -166,12 +167,15 @@ namespace Bonobo.Git.Server.Git
 
                 dataFromPreviousReadStream.Write(buffer, offset, bytesRead);
                 bufferToWorkWith = dataFromPreviousReadStream.ToArray();
-                bytesRead = Convert.ToInt32(dataFromPreviousReadStream.Length);
+                bytesAvailable = Convert.ToInt32(dataFromPreviousReadStream.Length);
 
                 dataFromPreviousReadStream.SetLength(0);
             }
             else
+            {
                 bufferToWorkWith = buffer;
+                bytesAvailable = bytesRead;
+            }
 
             return bufferToWorkWith;
         }
@@ -200,9 +204,7 @@ namespace Bonobo.Git.Server.Git
                         int pktLineLength = FourHexCharsToInt(buffer, offset);
 
                         bool isFlushPkt = pktLineLength == 0;
-                        if (isFlushPkt)
-                            SetPackHeaderState(); // all commands have been processed
-                        else if (pktLineLength == PktLineLengthSize) // empty line
+                        if (isFlushPkt || pktLineLength == PktLineLengthSize) // empty line
                             SetPktLineLengthState();
                         else
                             SetPktLinePayloadState(pktLineLength - PktLineLengthSize);
