@@ -630,9 +630,9 @@ namespace Bonobo.Git.Server.Controllers
         private void PopulateCheckboxListData(ref RepositoryDetailModel model)
         {
             model = model.Id != Guid.Empty ? ConvertRepositoryModel(RepositoryRepository.GetRepository(model.Id), User) : model;
-            model.AllAdministrators = MembershipService.GetAllUsers().ToArray();
-            model.AllUsers = MembershipService.GetAllUsers().ToArray();
-            model.AllTeams = TeamRepository.GetAllTeams().ToArray();
+            model.AllAdministrators = MembershipService.GetAllUsers().OrderBy(u => u.DisplayName).ToArray();
+            model.AllUsers = MembershipService.GetAllUsers().OrderBy(u => u.DisplayName).ToArray();
+            model.AllTeams = TeamRepository.GetAllTeams().OrderBy(g => g.DisplayName).ToArray();
             if (model.PostedSelectedUsers != null && model.PostedSelectedUsers.Any())
             {
                 model.Users = model.PostedSelectedUsers.Select(x => MembershipService.GetUserModel(x)).ToArray();
