@@ -122,7 +122,10 @@ namespace Bonobo.Git.Server
             {
                 logDirectory = @"~\App_Data\Logs";
             }
-            return Path.Combine(HostingEnvironment.MapPath(logDirectory), "log-{Date}.txt");
+
+            var logPath = GetRootPath(logDirectory); // Allow for Different Log location.
+
+            return Path.Combine(logPath, "log-{Date}.txt");
         }
 
         private static void RegisterDependencyResolver()
