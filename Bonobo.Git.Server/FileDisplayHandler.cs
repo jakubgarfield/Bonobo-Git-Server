@@ -22,7 +22,7 @@ namespace Bonobo.Git.Server
 
         public static string GetBrush(string fileName)
         {
-            if (String.IsNullOrWhiteSpace(fileName)) 
+            if (String.IsNullOrWhiteSpace(fileName))
             {
                 throw new ArgumentNullException("fileName");
             }
@@ -33,6 +33,9 @@ namespace Bonobo.Git.Server
                 case ".vb":
                     return "vb";
 
+                case ".vbs":
+                    return "vbs";
+
                 case ".cs":
                     return "csharp";
 
@@ -41,6 +44,10 @@ namespace Bonobo.Git.Server
 
                 case ".sh":
                     return "bash";
+
+                case ".bat":
+                case ".cmd":
+                    return "dos";
 
                 case ".html":
                 case ".htm":
@@ -53,7 +60,8 @@ namespace Bonobo.Git.Server
                 case ".xaml":
                 case ".csproj":
                 case ".config":
-                    return "html";
+                case ".wsf":
+                    return "xml";
 
                 case ".cf":
                     return "cf";
