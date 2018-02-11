@@ -31,9 +31,9 @@ namespace Bonobo.Git.Server.Configuration
         {
             get
             {
-                return Path.IsPathRooted(RepositoryPath)
+                return !string.IsNullOrWhiteSpace(RepositoryPath) ? Path.IsPathRooted(RepositoryPath)
                        ? RepositoryPath
-                       : HostingEnvironment.MapPath(RepositoryPath);
+                       : HostingEnvironment.MapPath(RepositoryPath) : null;
             }
         }
 
