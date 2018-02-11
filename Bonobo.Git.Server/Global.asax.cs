@@ -185,7 +185,7 @@ namespace Bonobo.Git.Server
                 {
                     GitPath = GetRootPath(ConfigurationManager.AppSettings["GitPath"]),
                     GitHomePath = GetRootPath(ConfigurationManager.AppSettings["GitHomePath"]),
-                    RepositoriesDirPath = UserConfiguration.Current.Repositories,
+                    RepositoriesDirPath = UserConfiguration.Current?.Repositories ?? ConfigurationManager.AppSettings["DefaultRepositoriesDirectory"],
                 });
 
             container.RegisterType<IDatabaseResetManager, DatabaseResetManager>();
