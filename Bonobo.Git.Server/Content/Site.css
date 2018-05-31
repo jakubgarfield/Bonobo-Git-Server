@@ -18,6 +18,8 @@ th a:hover { text-decoration: none; color: #4183c4; }
 .pure-table thead { background: none; }
 .pure-table th { font-weight: 300; }
 
+.markdown img{max-width:100%;}
+
 pre code { font-family: Consolas, monospace; }
 
 .field-validation-error { color: #a94442; margin-left: 0.7em; }
