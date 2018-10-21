@@ -281,6 +281,7 @@
     <Compile Include="Configuration\AuthenticationSettings.cs" />
     <Compile Include="Configuration\DiagnosticReporter.cs" />
     <Compile Include="Configuration\FederationSettings.cs" />
+    <Compile Include="Controllers\RepositoryGraphController.cs" />
     <Compile Include="Controllers\ValidationController.cs" />
     <Compile Include="Data\ADBackend.cs" />
     <Compile Include="Data\ADBackendStore.cs" />
@@ -714,12 +715,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Recovery\" />
+    <Folder Include="Views\RepositoryGraph\" />
     <Folder Include="Views\Validation\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bonobo.Git.Tools\Bonobo.Git.Tools.csproj">
-      <Project>{a2c33114-192c-4ef9-b117-15292f0ff8b7}</Project>
-      <Name>Bonobo.Git.Tools</Name>
+    <ProjectReference Include="..\Bonobo.Git.Graph\Bonobo.Git.Graph.csproj">
+      <Project>{17bdf247-34cf-4eff-8c5c-ce49fa904396}</Project>
+      <Name>Bonobo.Git.Graph</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

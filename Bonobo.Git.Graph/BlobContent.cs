@@ -6,7 +6,7 @@ using System.Data.Services.Common;
 using System.IO;
 using System.Text;
 
-namespace Bonobo.Git.Tools
+namespace Bonobo.Git.Graph
 {
     [DataServiceKey("Id")]
     public class BlobContent

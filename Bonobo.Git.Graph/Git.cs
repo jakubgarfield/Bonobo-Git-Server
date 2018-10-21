@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Configuration;
 using System.IO;
 
-namespace Bonobo.Git.Tools
+namespace Bonobo.Git.Graph
 {
     public abstract class Git
     {

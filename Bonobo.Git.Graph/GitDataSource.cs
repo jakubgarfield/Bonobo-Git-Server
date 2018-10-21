@@ -5,16 +5,22 @@ using System.Web;
 using System.Configuration;
 using System.IO;
 
-namespace Bonobo.Git.Tools
+namespace Bonobo.Git.Graph
 {
     public class GitDataSource
     {
+        private string _DefaultRepositoriesDirectory{ get; set; }
+
+        public GitDataSource(string DefaultRepositoriesDirectory)
+        {
+            _DefaultRepositoriesDirectory = DefaultRepositoriesDirectory;
+        }
+
         public IQueryable<Repository> Repositories
         {
             get 
             {
-                var baseFolder = ConfigurationManager.AppSettings["DefaultRepositoriesDirectory"];
-                var directoryInfo = new DirectoryInfo(baseFolder);
+                var directoryInfo = new DirectoryInfo(_DefaultRepositoriesDirectory);
 
                 var repos= from dir in directoryInfo.EnumerateDirectories("*", SearchOption.AllDirectories)
                            where Repository.IsValid(dir.FullName)
@@ -28,8 +34,7 @@ namespace Bonobo.Git.Tools
         {
             get
             {
-                var baseFolder = ConfigurationManager.AppSettings["DefaultRepositoriesDirectory"];
-                var directoryInfo = new DirectoryInfo(baseFolder);
+                var directoryInfo = new DirectoryInfo(_DefaultRepositoriesDirectory);
 
                 var repos = from dir in directoryInfo.EnumerateDirectories("*", SearchOption.AllDirectories)
                             where Repository.IsValid(dir.FullName)
@@ -39,15 +44,9 @@ namespace Bonobo.Git.Tools
             }
         }
 
-//        public IQueryable<Branch> Branches { get { return null; } }
-
         public IQueryable<Commit> Commits { get { return null; } }
 
         public IQueryable<Tree> Trees { get { return null; } }
-
-        public IQueryable<Blob> Blobs { get { return null; } }
-
-        public IQueryable<BlobContent> BlobContents { get { return null; } }
 
         public IQueryable<Ref> Refs { get { return null; } }
 

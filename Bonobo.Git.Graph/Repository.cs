@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Configuration;
 
-namespace Bonobo.Git.Tools
+namespace Bonobo.Git.Graph
 {
     [DataServiceKey("Id")]
     public class Repository

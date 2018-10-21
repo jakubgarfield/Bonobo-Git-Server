@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data.Services.Common;
 
-namespace Bonobo.Git.Tools
+namespace Bonobo.Git.Graph
 {
     [DataServiceKey("Id")]
     public class Ref

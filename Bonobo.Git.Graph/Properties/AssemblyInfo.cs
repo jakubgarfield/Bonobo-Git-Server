@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Bonobo.Git.Tools")]
+[assembly: AssemblyTitle("Bonobo.Git.Graph")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Bonobo.Git.Tools")]
+[assembly: AssemblyProduct("Bonobo.Git.Graph")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a2c33114-192c-4ef9-b117-15292f0ff8b7")]
+[assembly: Guid("17bdf247-34cf-4eff-8c5c-ce49fa904396")]
 
 // Version information for an assembly consists of the following four values:
 //
