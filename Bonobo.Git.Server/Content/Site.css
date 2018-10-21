@@ -199,10 +199,10 @@ img.repo-logo { width:36px; height: auto; image-rendering: -moz-crisp-edges; ima
 
 .clear {clear: both;}
 
-.horizontalcanvascontainer {overflow-x: scroll;}
+.horizontalcanvascontainer {overflow-x: auto;}
 
 .commititem {height: 75px;white-space: nowrap;}
 
-.leftbranchescanvas {float: left;width: 25%;overflow-x: scroll;padding-bottom:15px;}
+.leftbranchescanvas {float: left;width: 25%;overflow-x: auto;padding-bottom:15px;}
 
-.leftbranchescanvasmessages {float: left;width:70%;overflow-x: scroll;border-left:solid 1px #cccccc;padding-left :5px;}
+.leftbranchescanvasmessages {overflow-x: auto;border-left:solid 1px #cccccc;padding-left :5px;}
