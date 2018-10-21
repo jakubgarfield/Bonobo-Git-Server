@@ -119,7 +119,7 @@
                     var y = node.X * h + h / 2;
 
                     //if (i <= 12) {
-                        ctx.fillStyle = "#c18b55";
+                        ctx.fillStyle = "#0078e7";
                         ctx.strokeStyle = "#cccccc";
                         ctx.lineWidth = 3;
 
@@ -130,7 +130,7 @@
                         ctx.fill();
                         ctx.closePath();
 
-                        ctx.fillStyle = "#000";
+                        ctx.fillStyle = "#fff";
                         ctx.font = "14px Calibri";
 
                         ctx.fillText(node.Id, x - 22, y + 5);
@@ -141,7 +141,7 @@
                     x = node.X * w2 + w2 / 2;
                     y = node.Y * h2 + h2 / 2;
 
-                    ctx2.fillStyle = "#7a3b95";
+                    ctx2.fillStyle = "#f23f33";
                     ctx2.beginPath();
                     ctx2.arc(x, y, r2, 0, Math.PI * 2, true);
                     ctx2.fill();
