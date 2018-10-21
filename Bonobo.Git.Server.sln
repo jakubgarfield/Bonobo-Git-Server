@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonobo.Git.Server", "Bonobo.Git.Server\Bonobo.Git.Server.csproj", "{6129B3FE-B282-4F6F-8836-8AF66602F8DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonobo.Git.Server.Test", "Bonobo.Git.Server.Test\Bonobo.Git.Server.Test.csproj", "{0B124D88-5C2B-47AD-B660-434B709A0DFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonobo.Git.Tools", "Bonobo.Git.Tools\Bonobo.Git.Tools.csproj", "{A2C33114-192C-4EF9-B117-15292F0FF8B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,11 +52,30 @@ Global
 		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Test|Mixed Platforms.ActiveCfg = Test|Any CPU
 		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Test|Mixed Platforms.Build.0 = Test|Any CPU
 		{0B124D88-5C2B-47AD-B660-434B709A0DFF}.Test|x86.ActiveCfg = Test|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Debug|x86.Build.0 = Debug|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Release|x86.ActiveCfg = Release|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Release|x86.Build.0 = Release|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Test|Any CPU.Build.0 = Release|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Test|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Test|Mixed Platforms.Build.0 = Release|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Test|x86.ActiveCfg = Release|Any CPU
+		{A2C33114-192C-4EF9-B117-15292F0FF8B7}.Test|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35
+		SolutionGuid = {568706F8-FD2A-40A2-BA85-B14E0C9306D4}
 	EndGlobalSection
 EndGlobal
