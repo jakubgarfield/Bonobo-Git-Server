@@ -128,5 +128,5 @@ New release
 * update version numbers in [appveyor.yml](https://github.com/jakubgarfield/Bonobo-Git-Server/blob/master/appveyor.yml)
 * add tag so it appears under [releases](https://github.com/jakubgarfield/Bonobo-Git-Server/releases) with `git tag -a 6.0.0 -m "Release 6.0.0"`
 * add zipped version to bonobogitserver.com at [Bonobo-Git-Server-Web](https://github.com/jakubgarfield/Bonobo-Git-Server-Web)
-* add git tree graph to the repository page, with commits and comments
+* add repository tree graph to the repository page, with commits and comments, you can inspect the tree to see branches, and commits, by [KariemSoudy](https://github.com/KariemSoudy)
 
