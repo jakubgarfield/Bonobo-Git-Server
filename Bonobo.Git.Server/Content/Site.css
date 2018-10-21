@@ -185,3 +185,24 @@ h2.group .toggle.on:after { content: "\f055"; }
 img.repo-logo { width:36px; height: auto; image-rendering: -moz-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; -ms-interpolation-mode: nearest-neighbor; }
 
 .copy-to-clip-button {font-size: 12px; padding: 4px; }
+
+
+
+
+
+/*CANVAS*/
+.leftbranchescanvas {float: left;}
+
+.topbranchescanvas {margin-top: 10px}
+
+.nodes {list-style-type: none;font: 16px/24px arial;padding: 0;margin: 0;margin-top: 20px;}
+
+.clear {clear: both;}
+
+.horizontalcanvascontainer {overflow-x: scroll;}
+
+.commititem {height: 75px;white-space: nowrap;}
+
+.leftbranchescanvas {float: left;width: 25%;overflow-x: scroll;padding-bottom:15px;}
+
+.leftbranchescanvasmessages {float: left;width:70%;overflow-x: scroll;border-left:solid 1px #cccccc;padding-left :5px;}

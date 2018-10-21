@@ -953,4 +953,7 @@
   <data name="Home_About_Title" xml:space="preserve">
     <value>О программе</value>
   </data>
+  <data name="Repository_Layout_Graph" xml:space="preserve">
+    <value>Graph</value>
+  </data>
 </root>

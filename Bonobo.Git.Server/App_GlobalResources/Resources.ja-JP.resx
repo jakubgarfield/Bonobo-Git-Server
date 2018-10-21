@@ -870,4 +870,7 @@
   <data name="Settings_Global_LinksUrl" xml:space="preserve">
     <value>リンクURL</value>
   </data>
+  <data name="Repository_Layout_Graph" xml:space="preserve">
+    <value>Graph</value>
+  </data>
 </root>

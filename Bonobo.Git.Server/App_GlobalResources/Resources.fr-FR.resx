@@ -911,4 +911,7 @@ The regular C# string formatting rules apply: To get {} in your link you need to
   <data name="Yes" xml:space="preserve">
     <value>Oui</value>
   </data>
+  <data name="Repository_Layout_Graph" xml:space="preserve">
+    <value>Graph</value>
+  </data>
 </root>

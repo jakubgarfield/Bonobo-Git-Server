@@ -1,8 +1,10 @@
 ﻿using Bonobo.Git.Graph;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 
 namespace Bonobo.Git.Server.Controllers
@@ -14,7 +16,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             List<GraphNode> result = new List<GraphNode>();
 
-            GitDataSource git = new GitDataSource("");
+            GitDataSource git = new GitDataSource(HostingEnvironment.MapPath(ConfigurationManager.AppSettings["DefaultRepositoriesDirectory"]));
             var graph = git.RepositoryGraph.Where(p => p.Name == repositoryName).FirstOrDefault();
             if (graph != null)
                 result = graph.Nodes.ToList();
@@ -27,7 +29,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             List<GraphLink> result = new List<GraphLink>();
 
-            GitDataSource git = new GitDataSource("");
+            GitDataSource git = new GitDataSource(HostingEnvironment.MapPath(ConfigurationManager.AppSettings["DefaultRepositoriesDirectory"]));
             var graph = git.RepositoryGraph.Where(p => p.Name == repositoryName).FirstOrDefault();
             if (graph != null)
                 result = graph.Links.ToList();

@@ -45,8 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Blob.cs" />
-    <Compile Include="BlobContent.cs" />
     <Compile Include="Commit.cs" />
     <Compile Include="Git.cs" />
     <Compile Include="GitDataSource.cs" />

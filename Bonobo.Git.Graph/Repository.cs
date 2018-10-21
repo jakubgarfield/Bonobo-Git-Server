@@ -17,21 +17,20 @@ namespace Bonobo.Git.Graph
         public string Name { get; set; }
         public string RepoFolder { get; set; }
 
-        public static Repository Open(string directory)
+        public static Repository Open(string directory,string DefaultRepositoriesDirectory)
         {
             var repo = new Repository
             {
                 Name = Path.GetFileNameWithoutExtension(directory),
                 RepoFolder = directory,
-                Id = GetId(directory)
+                Id = GetId(directory, DefaultRepositoriesDirectory)
             };
             return repo;
         }
 
-        private static string GetId(string directory)
+        private static string GetId(string directory, string DefaultRepositoriesDirectory)
         {
-            var baseFolder = ConfigurationManager.AppSettings["DefaultRepositoriesDirectory"];
-            return directory.Substring(baseFolder.Length + 1).Replace("\\", ".").Replace(".git", "");
+            return directory.Substring(DefaultRepositoriesDirectory.Length + 1).Replace("\\", ".").Replace(".git", "");
         }
 
         public static bool IsValid(string path)
@@ -58,28 +57,6 @@ namespace Bonobo.Git.Graph
                 return false;
             return true;
         }
-        
-        //public IEnumerable<Branch> Branches
-        //{
-        //    get
-        //    {
-        //        var branches = from b in Git.Run("branch", this.RepoFolder).Split('\n')
-        //                       where !string.IsNullOrWhiteSpace(b)
-        //                       select new Branch { Name = b.Substring(2) };
-        //        return branches;
-        //    }
-        //}
-
-        //public string CurrentBranch
-        //{
-        //    get
-        //    {
-        //        var branches = from b in Git.Run("branch", this.RepoFolder).Split('\n')
-        //                       where b.StartsWith("*")
-        //                       select b.Substring(2);
-        //        return branches.FirstOrDefault();
-        //    }
-        //}
 
         public IEnumerable<Commit> Commits
         {

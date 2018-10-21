@@ -858,4 +858,7 @@
   <data name="Repository_Detail_RemoveLogo" xml:space="preserve">
     <value>Fjern logo</value>
   </data>
+  <data name="Repository_Layout_Graph" xml:space="preserve">
+    <value>Graph</value>
+  </data>
 </root>

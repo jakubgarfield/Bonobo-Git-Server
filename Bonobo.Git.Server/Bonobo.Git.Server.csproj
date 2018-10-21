@@ -569,6 +569,7 @@
     <Content Include="Scripts\jquery-1.12.4.min.js" />
     <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jQuery.tmpl.min.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -647,6 +648,7 @@
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <Content Include="Views\Repository\Tags.cshtml" />
     <Content Include="Views\Repository\_Tag.cshtml" />
+    <Content Include="Views\Repository\Graph.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -715,7 +717,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Recovery\" />
-    <Folder Include="Views\RepositoryGraph\" />
     <Folder Include="Views\Validation\" />
   </ItemGroup>
   <ItemGroup>

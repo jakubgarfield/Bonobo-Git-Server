@@ -774,4 +774,7 @@
   <data name="Repository_AllowAnonymousPushHint" xml:space="preserve">
     <value>Permitir a usuarios anónimos hacer push a este repositorio si tiene acceso anónimo permitido. Si se selecciona "Global" se utilizará la opción de la configuración global.</value>
   </data>
+  <data name="Repository_Layout_Graph" xml:space="preserve">
+    <value>Graph</value>
+  </data>
 </root>

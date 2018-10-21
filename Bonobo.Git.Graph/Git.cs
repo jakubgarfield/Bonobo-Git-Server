@@ -5,6 +5,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Configuration;
 using System.IO;
+using System.Web.Hosting;
 
 namespace Bonobo.Git.Graph
 {
@@ -15,7 +16,7 @@ namespace Bonobo.Git.Graph
 
         public static string Run(string args, string workingDirectory)
         {
-            var GitPath = ConfigurationManager.AppSettings["GitPath"];
+            var GitPath = HostingEnvironment.MapPath(ConfigurationManager.AppSettings["GitPath"]);
 
             Trace.WriteLine(string.Format("{2}>{0} {1}", GitPath, args, workingDirectory), TRACE_CATEGORY);
 
@@ -50,7 +51,7 @@ namespace Bonobo.Git.Graph
         public static void RunCmd(string args, string workingDirectory)
         {
 
-            var GitPath = ConfigurationManager.AppSettings["GitPath"];
+            var GitPath = HostingEnvironment.MapPath(ConfigurationManager.AppSettings["GitPath"]);
 
             Trace.WriteLine(string.Format("{2}>{0} {1}", GitPath, args, workingDirectory), TRACE_CATEGORY);
 
@@ -73,41 +74,9 @@ namespace Bonobo.Git.Graph
             }
         }
 
-        //public static void Run(string args, string workingDirectory, Action<string> action)
-        //{
-        //    var GitPath = ConfigurationManager.AppSettings["GitPath"];
-
-        //    Trace.WriteLine(string.Format("{2}>{0} {1}", GitPath, args, workingDirectory), TRACE_CATEGORY);
-
-        //    var pinfo = new ProcessStartInfo(GitPath)
-        //    {
-        //        Arguments = args,
-        //        CreateNoWindow = true,
-        //        RedirectStandardError = true,
-        //        RedirectStandardOutput = true,
-        //        UseShellExecute = false,
-        //        WorkingDirectory = workingDirectory,
-        //    };
-
-        //    var process = new Process();
-        //    process.StartInfo = pinfo;
-        //    process.EnableRaisingEvents = true;
-
-        //    process.OutputDataReceived += (_, e) => { action(e.Data); };
-        //    //process.ErrorDataReceived += (_, e) => { throw new Exception(e.Data); };
-
-        //    process.Start();
-
-        //    process.BeginErrorReadLine();
-        //    process.BeginOutputReadLine();
-
-        //    process.WaitForExit();
-
-        //}
-
         public static void RunGitCmd(string args)
         {
-            var GitPath = ConfigurationManager.AppSettings["GitPath"];
+            var GitPath = HostingEnvironment.MapPath(ConfigurationManager.AppSettings["GitPath"]);
 
             Trace.WriteLine(string.Format("{2}>{0} {1}", GitPath, args, ""), TRACE_CATEGORY);
 

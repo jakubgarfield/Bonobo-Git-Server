@@ -15,7 +15,7 @@ namespace Bonobo.Git.Graph
         {
             _DefaultRepositoriesDirectory = DefaultRepositoriesDirectory;
         }
-
+        
         public IQueryable<Repository> Repositories
         {
             get 
@@ -24,7 +24,7 @@ namespace Bonobo.Git.Graph
 
                 var repos= from dir in directoryInfo.EnumerateDirectories("*", SearchOption.AllDirectories)
                            where Repository.IsValid(dir.FullName)
-                           select Repository.Open(dir.FullName); 
+                           select Repository.Open(dir.FullName, _DefaultRepositoriesDirectory); 
 
                 return repos.AsQueryable();
             }
@@ -38,7 +38,7 @@ namespace Bonobo.Git.Graph
 
                 var repos = from dir in directoryInfo.EnumerateDirectories("*", SearchOption.AllDirectories)
                             where Repository.IsValid(dir.FullName)
-                            select new Graph(Repository.Open(dir.FullName));
+                            select new Graph(Repository.Open(dir.FullName, _DefaultRepositoriesDirectory));
 
                 return repos.AsQueryable();
             }
