@@ -51,7 +51,7 @@ namespace Bonobo.Git.Server.Test.IntegrationTests
                 .UsePort(20000)
                 //And optionally, it can apply Web.config transformations if you want 
                 //it to.
-                .ApplyWebConfigTransformForConfig("Test");
+                .ApplyWebConfigTransformForConfig("Test").UseMSBuildExecutableAt(@"C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe");
 
             //In order to leverage the strongly-typed helpers in SpecsFor.Mvc,
             //you need to tell it about your routes.  Here we are just calling
