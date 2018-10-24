@@ -82,12 +82,12 @@ namespace Bonobo.Git.Server.Test.IntegrationTests
             //need to keep a reference to it so we can shut it down after all
             //the specifications have executed.
             _host = new SpecsForIntegrationHost(config);
-    try{
+    //try{
             _host.Start();
-    }
-    catch(Exception ex)
-    {
-    }
+    //}
+    //catch(Exception ex)
+    //{
+    //}
 
         }
 
