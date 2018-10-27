@@ -42,160 +42,161 @@
 {
     <script type="text/javascript">
 
-        var repoId = '@Model.Id';
-        var repo = '@Model.Name';
-        var ctx = $("#horizontalcanvas")[0].getContext('2d');
-        var ctx2 = $("#verticalcanvas")[0].getContext('2d');
-        var nodes;
-        var links;
+            var repoId = '@Model.Id';
+            var repo = '@Model.Name';
+            var hCtx = $("#horizontalcanvas")[0].getContext('2d');
+            var vCtx = $("#verticalcanvas")[0].getContext('2d');
+            var nodes;
+            var links;
 
-        $(function () {
+            $(function () {
 
-            $.ajaxSetup({
-                contentType: "application/json; charset=utf-8",
-                dataType: "json"
+                $.ajaxSetup({
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json"
+                });
+
+                $.ajax({
+                    url: "/" + repo + "/Graph",
+                    success: function (data) {
+                        nodes = data.Nodes;
+                        links = data.Links;
+
+                        draw(nodes, links);
+                    },
+                    error: function (xhr) { alert(xhr.responseText); }
+                });
             });
 
-            $.ajax({
-                url: "/" + repo + "/Nodes",
-                success: function (data) {
-                    nodes = data;
-                    $.ajax({
-                        url: "/" + repo + "/Links",
-                        success: function (data) {
-                            links = data;
-                            draw(nodes, links);
-                        },
-                        error: function (xhr) { alert(xhr.responseText); }
-                    });
+            var h = 60;
+            var w = 78;
+            var r = 10;
+            var xmax;
 
-                },
-                error: function (xhr) { alert(xhr.responseText); }
-            });
-        });
+            var h2 = 75;
+            var w2 = 48;
+            var r2 = 15;
 
-        var h = 60;
-        var w = 78;
-        var r = 10;
-        var xmax;
+            function draw(nodes, links) {
+                var ww = 0;
+                var nl = nodes.length;
 
-        var h2 = 75;
-        var w2 = 48;
-        var r2 = 15;
+                for (var i = 0; i < nl; i++) {
+                    if (nodes[i].X > ww) ww = nodes[i].X;
+                }
 
-        function draw(nodes, links) {
-            var ww = 0;
-            var nl = nodes.length;// > 12 ? 12 : nodes.length;
+                //horizontal graph
+                hCtx.canvas.width = xmax = nl * w;
+                hCtx.canvas.height = (ww + 1.5) * h;
 
-            for (var i = 0; i < nl; i++) {
-                if (nodes[i].X > ww) ww = nodes[i].X;
-            }
-
-            //horizontal graph
-            ctx.canvas.width = xmax = nl * w;
-            ctx.canvas.height = (ww + 1.5) * h;
-
-            for (var i = 0; i < nodes.length; i++) {
-                if (nodes[i].X > ww) ww = nodes[i].X;
-            }
-            //vertical graph
-            ctx2.canvas.width = (ww + 1) * w2;
-            ctx2.canvas.height = nodes.length * h2;
-
-            drawLinks(links);
-            drawNodes(nodes);
-            $("#nodeTemplate").tmpl(nodes).appendTo("#nodeList");
-        }
-
-        function drawNodes(nodes) {
-
-            for (var i = 0; i < nodes.length; i++) {
-                var node = nodes[i];
-                node.RepoId = repoId;
-                node.FullId = node.Id;
-                node.Id = node.Id.substring(0, 5);
-                node.Message = node.Message.substring(0, 60);
-                var x = xmax - node.Y * w - w / 2;
-                var y = node.X * h + h / 2;
-
-
-                ctx.fillStyle = "#5da6e8";
-                ctx.strokeStyle = "#cccccc";
-                ctx.lineWidth = 3;
-
-                ctx.beginPath();
-                ctx.rect(x - 30, y - 15, 60, 30);
-
-                ctx.stroke();
-                ctx.fill();
-                ctx.closePath();
-
-                ctx.fillStyle = "#000000";
-                ctx.font = "14px Calibri";
-
-                ctx.fillText(node.Id, x - 22, y + 5);
-                ctx.fillText(node.Branches, x - 30, y + 30);
-
+                for (var i = 0; i < nodes.length; i++) {
+                    if (nodes[i].X > ww) ww = nodes[i].X;
+                }
 
                 //vertical graph
-                x = node.X * w2 + w2 / 2;
-                y = node.Y * h2 + h2 / 2;
+                vCtx.canvas.width = (ww + 1) * w2;
+                vCtx.canvas.height = nodes.length * h2;
 
-                ctx2.fillStyle = "#f23f33";
-                ctx2.beginPath();
-                ctx2.arc(x, y, r2, 0, Math.PI * 2, true);
-                ctx2.fill();
-                ctx2.closePath();
+                drawLinks(links);
+                drawNodes(nodes);
+                $("#nodeTemplate").tmpl(nodes).appendTo("#nodeList");
             }
-        }
 
-        function drawLinks(links) {
+            function drawNodes(nodes) {
 
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = "#4c4c4c";
+                for (var i = 0; i < nodes.length; i++) {
+                    var node = nodes[i];
+                    node.RepoId = repoId;
+                    node.FullId = node.Id;
+                    node.Id = node.Id.substring(0, 5);
+                    node.Message = node.Message.substring(0, 60);
+                    var x = xmax - node.Y * w - w / 2;
+                    var y = node.X * h + h / 2;
 
-            ctx2.lineWidth = 1;
-            ctx2.strokeStyle = "#4c4c4c";
 
-            for (var i = 0; i < links.length; i++) {
+                    ctx.fillStyle = "#5da6e8";
+                    ctx.strokeStyle = "#cccccc";
+                    ctx.lineWidth = 3;
 
-                var link = links[i];
-                var x1 = xmax - link.Y1 * w - w / 2;
-                var y1 = link.X1 * h + h / 2;
-                var x2 = xmax - link.Y2 * w - w / 2;
-                var y2 = link.X2 * h + h / 2;
-                var x3 = xmax - (link.Y2 - 1) * w - w / 2;
+                    hCtx.beginPath();
+                    hCtx.rect(x - 30, y - 15, 60, 30);
 
-                if (link.X1 === link.X2) {
-                    ctx.moveTo(x1, y1);
-                    ctx.lineTo(x2, y2);
+                    hCtx.stroke();
+                    hCtx.fill();
+                    hCtx.closePath();
+
+                    hCtx.fillStyle = "#000000";
+                    hCtx.font = "14px Calibri";
+
+                    hCtx.fillText(node.Id, x - 22, y + 5);
+                    hCtx.fillText(node.Branches, x - 30, y + 30);
+
+
+                    //vertical graph
+                    x = node.X * w2 + w2 / 2;
+                    y = node.Y * h2 + h2 / 2;
+
+                    ctx2.fillStyle = "#f23f33";
+                    vCtx.beginPath();
+                    vCtx.arc(x, y, r2, 0, Math.PI * 2, true);
+                    vCtx.fill();
+                    vCtx.closePath();
                 }
-                else {
-                    ctx.moveTo(x1, y1);
-                    ctx.lineTo(x3, y1);
-                    ctx.bezierCurveTo(x2, y1, x3, y2, x2, y2);
-                }
-                ctx.stroke();
-
-                //vertical graph
-                x1 = link.X1 * w2 + w2 / 2;
-                y1 = link.Y1 * h2 + h2 / 2;
-                x2 = link.X2 * w2 + w2 / 2;
-                y2 = link.Y2 * h2 + h2 / 2;
-                y3 = (link.Y2 - 1) * h2 + h2 / 2;
-
-                if (link.X1 === link.X2) {
-                    ctx2.moveTo(x1, y1);
-                    ctx2.lineTo(x2, y2);
-                }
-                else {
-                    ctx2.moveTo(x1, y1);
-                    ctx2.lineTo(x1, y3);
-                    ctx2.bezierCurveTo(x1, y2, x2, y3, x2, y2);
-                }
-                ctx2.stroke();
             }
-        }
+
+            function drawLinks(links) {
+
+                hCtx.lineWidth = 3;
+                vCtx.lineWidth = 3;
+
+                for (var i = 0; i < links.length; i++) {
+
+                    var link = links[i];
+
+                    var color = randomColor();
+                    hCtx.strokeStyle = color;
+                    vCtx.strokeStyle = color;
+
+
+                    //horizontal graph
+                    var x1 = xmax - link.Y1 * w - w / 2;
+                    var y1 = link.X1 * h + h / 2;
+                    var x2 = xmax - link.Y2 * w - w / 2;
+                    var y2 = link.X2 * h + h / 2;
+                    var x3 = xmax - (link.Y2 - 1) * w - w / 2;
+
+                    hCtx.beginPath();
+                    hCtx.moveTo(x1, y1);
+                    hCtx.lineTo(x2, y2);
+                    hCtx.stroke();
+
+                    //vertical graph
+                    x1 = link.X1 * w2 + w2 / 2;
+                    y1 = link.Y1 * h2 + h2 / 2;
+                    x2 = link.X2 * w2 + w2 / 2;
+                    y2 = link.Y2 * h2 + h2 / 2;
+                    y3 = (link.Y2 - 1) * h2 + h2 / 2;
+
+                    vCtx.beginPath();
+                    vCtx.moveTo(x1, y1);
+                    vCtx.lineTo(x2, y2);
+                    vCtx.stroke();
+                }
+            }
+
+            function randomColor() {
+                var color = '#';
+
+                var digits = '0123456789ABCDEF';
+
+                var i = 0;
+
+                for (i = 0; i < 6; i++) {
+                    color += digits[Math.floor(Math.random() * Math.floor(digits.length))];
+                }
+
+                return color;
+            }
 
     </script>
 }
