@@ -1,4 +1,4 @@
-﻿using Bonobo.Git.Graph;
+using Bonobo.Git.Graph;
 using Bonobo.Git.Server.Configuration;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,27 +9,14 @@ namespace Bonobo.Git.Server.Controllers
     public class RepositoryGraphController : Controller
     {
         [WebAuthorizeRepository(AllowAnonymousAccessWhenRepositoryAllowsIt = true)]
-        public ActionResult GetRepoNodes(string repositoryName)
+        public ActionResult GetRepoGraph(string repositoryName)
         {
-            List<GraphNode> result = new List<GraphNode>();
+            Bonobo.Git.Graph.Graph result = null;
 
             GitDataSource git = new GitDataSource(UserConfiguration.Current.RepositoryPath);
             var graph = git.RepositoryGraph.Where(p => p.Name == repositoryName).FirstOrDefault();
             if (graph != null)
-                result = graph.Nodes.ToList();
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
-        [WebAuthorizeRepository(AllowAnonymousAccessWhenRepositoryAllowsIt = true)]
-        public ActionResult GetRepoLinks(string repositoryName)
-        {
-            List<GraphLink> result = new List<GraphLink>();
-
-            GitDataSource git = new GitDataSource(UserConfiguration.Current.RepositoryPath);
-            var graph = git.RepositoryGraph.Where(p => p.Name == repositoryName).FirstOrDefault();
-            if (graph != null)
-                result = graph.Links.ToList();
+                result = graph;
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
