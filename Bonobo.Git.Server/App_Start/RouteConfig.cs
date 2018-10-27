@@ -9,13 +9,9 @@ namespace Bonobo.Git.Server.App_Start
         public static void RegisterRoutes(RouteCollection routes)
         {
 
-            routes.MapRoute("RepoGraphNodes",
-                            "{repositoryName}/Nodes",
-                            new { controller = "RepositoryGraph", action = "GetRepoNodes" });
-
-            routes.MapRoute("RepoGraphLink",
-                            "{repositoryName}/Links",
-                            new { controller = "RepositoryGraph", action = "GetRepoLinks" });
+            routes.MapRoute("RepoGraph",
+                            "{repositoryName}/Graph",
+                            new { controller = "RepositoryGraph", action = "GetRepoGraph" });
 
             routes.MapRoute("SecureInfoRefs",
                             "{repositoryName}.git/info/refs",
