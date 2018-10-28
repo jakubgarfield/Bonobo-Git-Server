@@ -114,9 +114,9 @@
                     var y = node.X * h + h / 2;
 
 
-                    ctx.fillStyle = "#5da6e8";
-                    ctx.strokeStyle = "#cccccc";
-                    ctx.lineWidth = 3;
+                    hCtx.fillStyle = "#5da6e8";
+                    hCtx.strokeStyle = "#cccccc";
+                    hCtx.lineWidth = 3;
 
                     hCtx.beginPath();
                     hCtx.rect(x - 30, y - 15, 60, 30);
@@ -136,7 +136,7 @@
                     x = node.X * w2 + w2 / 2;
                     y = node.Y * h2 + h2 / 2;
 
-                    ctx2.fillStyle = "#f23f33";
+                    vCtx.fillStyle = "#f23f33";
                     vCtx.beginPath();
                     vCtx.arc(x, y, r2, 0, Math.PI * 2, true);
                     vCtx.fill();

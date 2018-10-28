@@ -1,0 +1,23 @@
+_sdk()
+{
+	local cur prev opts
+	COMPREPLY=()
+	cur="${COMP_WORDS[COMP_CWORD]}"
+	prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+	case "$prev" in
+	build|cd|init)
+		local projects=$(sdk valid_projects)
+		COMPREPLY=($(compgen -W "$projects" -- $cur))
+		return 0
+		;;
+	create-desktop-icon)
+		return 1
+		;;
+	esac
+
+	opts=$(sdk valid_commands)
+	COMPREPLY=($(compgen -W "$opts" -- $cur))
+	   return 0
+}
+complete -F _sdk sdk

@@ -1,0 +1,15 @@
+*.doc	diff=astextplain
+*.DOC	diff=astextplain
+*.docx	diff=astextplain
+*.DOCX	diff=astextplain
+*.docm	diff=astextplain
+*.DOCM	diff=astextplain
+*.dot	diff=astextplain
+*.DOT	diff=astextplain
+*.dotm	diff=astextplain
+*.DOTM	diff=astextplain
+*.pdf	diff=astextplain
+*.PDF	diff=astextplain
+*.rtf	diff=astextplain
+*.RTF	diff=astextplain
+
