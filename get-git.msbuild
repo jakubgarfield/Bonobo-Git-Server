@@ -1,5 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <MainSolution>$(MSBuildThisFileDirectory)\Bonobo.Git.Server.sln</MainSolution>
+        <GitVersion>2.6.1</GitVersion>            
+        <GitArchitecture>32</GitArchitecture>
+    </PropertyGroup>
+    
+    <UsingTask TaskName="DownloadGit" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v12.0.dll">
+       <ParameterGroup>
+           <OutputFilename ParameterType="System.String" Required="true" />
+           <GitVersion ParameterType="System.String" Required="true" />
+           <GitArch ParameterType="System.String" Required="true" />
+           <Proxy ParameterType="System.String" />
+       </ParameterGroup>
+       <Task>
+           <Reference Include="System.Core" />
+           <Using Namespace="System" />
+           <Using Namespace="System.IO" />
+           <Using Namespace="System.Net" />
+           <Using Namespace="Microsoft.Build.Framework" />
+           <Using Namespace="Microsoft.Build.Utilities" />
+           <Using Namespace="System.LINQ" />
+           <Code Type="Fragment" Language="cs">
+                <![CDATA[
+                try {
+                    OutputFilename = Path.GetFullPath(OutputFilename);
+                    Log.LogMessage("Downloading version {0} of git...", GitVersion);
+                    WebClient webClient = new WebClient();
+                    IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
+                    if (defaultWebProxy != null)
+                    {
+                        defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+                        webClient.Proxy = defaultWebProxy;
+                    }
+                   
+                    // Maybe we need a certain proxy
+                    if(!String.IsNullOrEmpty(Proxy))
+                    {
+                        var p = new WebProxy(Proxy, true);
+                        webClient.Proxy = p;
+                        Log.LogMessage("Using Proxy {0}", Proxy);
+                    }
+   
+                    var parts = GitVersion.Split('.');
+                    var versionfolder = String.Format("{0}.{1}.{2}.windows.{3}",
+                            parts[0], parts[1], parts[2], parts.Count() > 3 ? parts[3] : "1");
+                    var url = String.Format("http://github.com/git-for-windows/git/releases/download/v{1}/PortableGit-{2}-{0}-bit.7z.exe",
+                                            GitArch,
+                                            versionfolder,
+                                            GitVersion);
+                    Log.LogMessage("Url: {0}", url);
+                    webClient.DownloadFile(url, OutputFilename);
+                    return true;
+                }
+                catch (Exception ex) {
+                    Log.LogErrorFromException(ex);
+                    if (ex.InnerException != null)
+                    {
+                        Log.LogErrorFromException(ex.InnerException);
+                    }
+                    return false;
+                }
+                ]]>
+           </Code>
+       </Task>
+    </UsingTask>
 
-    <Target Name="Build" />
+    <Target Name="GetGit">
+        <PropertyGroup>
+            <GitDir>$(MSBuildThisFileDirectory)\Gits</GitDir>
+            <GitVersionDir>$(GitDir)\$(GitVersion)</GitVersionDir>
+            <GitPackagePath>$(GitDir)\Portable-$(GitVersion)-$(GitArchitecture)-bits.7z.exe</GitPackagePath>
+          <UnpackGit>"$(GitPackagePath)" -nr -y -gm2 -InstallPath="$(GitVersionDir)"</UnpackGit>
+        </PropertyGroup>
+        <MakeDir Directories="$(GitDir)" Condition="!Exists('$(GitDir)')" />
+        <Message Text="Setting up git $(GitVersion)" Importance="high" />
+        <DownloadGit OutputFilename="$(GitPackagePath)" GitVersion="$(GitVersion)" GitArch="$(GitArchitecture)" Proxy="$(Proxy)" Condition=" !Exists('$(GitVersionDir)\bin\git.exe')" />
+        <Exec Command="$(UnpackGit)" LogStandardErrorAsError="true" Condition=" !Exists('$(GitVersionDir)\bin\git.exe')" />
+        <Exec Command="$(GitVersionDir)\post-install.bat" LogStandardErrorAsError="true" IgnoreExitCode="true" Condition=" Exists('$(GitVersionDir)\post-install.bat')" /><!-- We must ignore the exit code because it always fails due to some bash problems. -->
+    </Target>
+  
+    <Target Name="Build" DependsOnTargets="GetGit" />
 </Project>
