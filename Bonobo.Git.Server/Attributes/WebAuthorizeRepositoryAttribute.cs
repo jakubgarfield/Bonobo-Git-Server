@@ -1,10 +1,8 @@
-﻿using System.Web.Mvc;
-using System.Web.Routing;
-using Bonobo.Git.Server.Data;
+﻿using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
-
 using Microsoft.Practices.Unity;
 using System;
+using System.Web.Mvc;
 
 namespace Bonobo.Git.Server
 {
@@ -12,6 +10,9 @@ namespace Bonobo.Git.Server
     {
         [Dependency]
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
+
+        [Dependency]
+        public IRepositoryRepository RepositoryRepository { get; set; }
 
         public bool RequiresRepositoryAdministrator { get; set; }
 
@@ -82,16 +83,23 @@ namespace Bonobo.Git.Server
                 }
             }
         }
-        private static Guid GetRepoId(AuthorizationContext filterContext)
+        private Guid GetRepoId(AuthorizationContext filterContext)
         {
-            Guid result;
-            if (Guid.TryParse(filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString(), out result))
+            if (filterContext.Controller.ControllerContext.RouteData.Values.ContainsKey("id"))
             {
-                return result;
+                Guid result;
+                if (Guid.TryParse(filterContext.Controller.ControllerContext.RouteData.Values["id"].ToString(), out result))
+                {
+                    return result;
+                }
+                else
+                {
+                    return Guid.Empty;
+                }
             }
             else
             {
-                return Guid.Empty;
+                return RepositoryRepository.GetRepository(filterContext.Controller.ControllerContext.RouteData.Values["repositoryName"].ToString()).Id;
             }
         }
 

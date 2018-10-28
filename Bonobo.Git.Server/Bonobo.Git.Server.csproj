@@ -281,6 +281,7 @@
     <Compile Include="Configuration\AuthenticationSettings.cs" />
     <Compile Include="Configuration\DiagnosticReporter.cs" />
     <Compile Include="Configuration\FederationSettings.cs" />
+    <Compile Include="Controllers\RepositoryGraphController.cs" />
     <Compile Include="Controllers\ValidationController.cs" />
     <Compile Include="Data\ADBackend.cs" />
     <Compile Include="Data\ADBackendStore.cs" />
@@ -568,6 +569,7 @@
     <Content Include="Scripts\jquery-1.12.4.min.js" />
     <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jQuery.tmpl.min.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -646,6 +648,7 @@
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <Content Include="Views\Repository\Tags.cshtml" />
     <Content Include="Views\Repository\_Tag.cshtml" />
+    <Content Include="Views\Repository\Graph.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -715,6 +718,12 @@
   <ItemGroup>
     <Folder Include="App_Data\Recovery\" />
     <Folder Include="Views\Validation\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bonobo.Git.Graph\Bonobo.Git.Graph.csproj">
+      <Project>{17bdf247-34cf-4eff-8c5c-ce49fa904396}</Project>
+      <Name>Bonobo.Git.Graph</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

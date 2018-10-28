@@ -768,4 +768,7 @@
   <data name="Validation_StringLength" xml:space="preserve">
     <value>"{0}" powinno być krótsze niż {1} znaków.</value>
   </data>
+  <data name="Repository_Layout_Graph" xml:space="preserve">
+    <value>Graph</value>
+  </data>
 </root>

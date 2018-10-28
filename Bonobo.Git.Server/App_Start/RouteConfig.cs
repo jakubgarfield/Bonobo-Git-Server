@@ -8,6 +8,11 @@ namespace Bonobo.Git.Server.App_Start
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+
+            routes.MapRoute("RepoGraph",
+                            "{repositoryName}/Graph",
+                            new { controller = "RepositoryGraph", action = "GetRepoGraph" });
+
             routes.MapRoute("SecureInfoRefs",
                             "{repositoryName}.git/info/refs",
                             new { controller = "Git", action = "SecureGetInfoRefs" },

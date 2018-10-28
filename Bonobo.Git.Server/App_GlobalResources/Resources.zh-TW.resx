@@ -702,4 +702,7 @@
   <data name="Validation_FileName_Regex" xml:space="preserve">
     <value>只有英文字，數字，減號和底線允許用於 "{0}"</value>
   </data>
+  <data name="Repository_Layout_Graph" xml:space="preserve">
+    <value>Graph</value>
+  </data>
 </root>

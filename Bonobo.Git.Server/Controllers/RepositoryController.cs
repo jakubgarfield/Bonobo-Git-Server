@@ -211,6 +211,27 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [WebAuthorizeRepository(AllowAnonymousAccessWhenRepositoryAllowsIt = true)]
+        public ActionResult Graph(Guid id)
+        {
+            ViewBag.ID = id;
+
+            var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id), User);
+            if (model != null)
+            {
+                model.IsCurrentUserAdministrator = RepositoryPermissionService.HasPermission(User.Id(), model.Id, RepositoryAccessLevel.Administer);
+                SetGitUrls(model);
+            }
+            using (var browser = new RepositoryBrowser(Path.Combine(UserConfiguration.Current.Repositories, model.Name)))
+            {
+                string defaultReferenceName;
+                browser.BrowseTree(null, null, out defaultReferenceName);
+                RouteData.Values.Add("encodedName", defaultReferenceName);
+            }
+
+            return View(model);
+        }
+
+        [WebAuthorizeRepository(AllowAnonymousAccessWhenRepositoryAllowsIt = true)]
         public ActionResult Detail(Guid id)
         {
             ViewBag.ID = id;

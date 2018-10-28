@@ -630,4 +630,7 @@
   <data name="Validation_FileName_Regex" xml:space="preserve">
     <value>Nur Buchstaben, Zahlen, Punkt, Minus und Unterstrich für "{0}" erlaubt.</value>
   </data>
+  <data name="Repository_Layout_Graph" xml:space="preserve">
+    <value>Graph</value>
+  </data>
 </root>

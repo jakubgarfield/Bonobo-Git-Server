@@ -1,0 +1,202 @@
+﻿@model Bonobo.Git.Server.Models.RepositoryDetailModel
+@{
+    Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
+    ViewBag.Title = Resources.Repository_Detail_Title;
+}
+
+@if (Model != null)
+{
+
+    <div class="pure-form pure-form-aligned detail">
+
+        <!--START-->
+        <div class="horizontalcanvascontainer">
+            <canvas class="topbranchescanvas" id="horizontalcanvas"></canvas>
+        </div>
+        <div>
+            <div class="leftbranchescanvas">
+                <canvas id="verticalcanvas" width="100"></canvas>
+            </div>
+            <div class="leftbranchescanvasmessages">
+                <ul class="nodes" id="nodeList"></ul>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <script id="nodeTemplate" type="text/x-jquery-tmpl">
+            <li class="commititem">
+                <span class="commit-id">${Id}</span>
+                <span class="branch">${Branches}</span>
+                <span class="tag">${Tags}</span>
+                <a href='@Url.Action("Commit", "Repository")/${RepoId}?commit=${FullId}'>${Message}</a>
+                <span class="commit-user">${CommitterName}</span>
+                <span class="commit-date">${CommitDateRelative}</span>
+            </li>
+        </script>
+        <!--END-->
+
+    </div>
+}
+
+
+@section scripts
+{
+    <script type="text/javascript">
+
+            var repoId = '@Model.Id';
+            var repo = '@Model.Name';
+            var hCtx = $("#horizontalcanvas")[0].getContext('2d');
+            var vCtx = $("#verticalcanvas")[0].getContext('2d');
+            var nodes;
+            var links;
+
+            $(function () {
+
+                $.ajaxSetup({
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json"
+                });
+
+                $.ajax({
+                    url: "/" + repo + "/Graph",
+                    success: function (data) {
+                        nodes = data.Nodes;
+                        links = data.Links;
+
+                        draw(nodes, links);
+                    },
+                    error: function (xhr) { alert(xhr.responseText); }
+                });
+            });
+
+            var h = 60;
+            var w = 78;
+            var r = 10;
+            var xmax;
+
+            var h2 = 75;
+            var w2 = 48;
+            var r2 = 15;
+
+            function draw(nodes, links) {
+                var ww = 0;
+                var nl = nodes.length;
+
+                for (var i = 0; i < nl; i++) {
+                    if (nodes[i].X > ww) ww = nodes[i].X;
+                }
+
+                //horizontal graph
+                hCtx.canvas.width = xmax = nl * w;
+                hCtx.canvas.height = (ww + 1.5) * h;
+
+                for (var i = 0; i < nodes.length; i++) {
+                    if (nodes[i].X > ww) ww = nodes[i].X;
+                }
+
+                //vertical graph
+                vCtx.canvas.width = (ww + 1) * w2;
+                vCtx.canvas.height = nodes.length * h2;
+
+                drawLinks(links);
+                drawNodes(nodes);
+                $("#nodeTemplate").tmpl(nodes).appendTo("#nodeList");
+            }
+
+            function drawNodes(nodes) {
+
+                for (var i = 0; i < nodes.length; i++) {
+                    var node = nodes[i];
+                    node.RepoId = repoId;
+                    node.FullId = node.Id;
+                    node.Id = node.Id.substring(0, 5);
+                    node.Message = node.Message.substring(0, 60);
+                    var x = xmax - node.Y * w - w / 2;
+                    var y = node.X * h + h / 2;
+
+
+                    hCtx.fillStyle = "#5da6e8";
+                    hCtx.strokeStyle = "#cccccc";
+                    hCtx.lineWidth = 3;
+
+                    hCtx.beginPath();
+                    hCtx.rect(x - 30, y - 15, 60, 30);
+
+                    hCtx.stroke();
+                    hCtx.fill();
+                    hCtx.closePath();
+
+                    hCtx.fillStyle = "#000000";
+                    hCtx.font = "14px Calibri";
+
+                    hCtx.fillText(node.Id, x - 22, y + 5);
+                    hCtx.fillText(node.Branches, x - 30, y + 30);
+
+
+                    //vertical graph
+                    x = node.X * w2 + w2 / 2;
+                    y = node.Y * h2 + h2 / 2;
+
+                    vCtx.fillStyle = "#f23f33";
+                    vCtx.beginPath();
+                    vCtx.arc(x, y, r2, 0, Math.PI * 2, true);
+                    vCtx.fill();
+                    vCtx.closePath();
+                }
+            }
+
+            function drawLinks(links) {
+
+                hCtx.lineWidth = 3;
+                vCtx.lineWidth = 3;
+
+                for (var i = 0; i < links.length; i++) {
+
+                    var link = links[i];
+
+                    var color = randomColor();
+                    hCtx.strokeStyle = color;
+                    vCtx.strokeStyle = color;
+
+
+                    //horizontal graph
+                    var x1 = xmax - link.Y1 * w - w / 2;
+                    var y1 = link.X1 * h + h / 2;
+                    var x2 = xmax - link.Y2 * w - w / 2;
+                    var y2 = link.X2 * h + h / 2;
+                    var x3 = xmax - (link.Y2 - 1) * w - w / 2;
+
+                    hCtx.beginPath();
+                    hCtx.moveTo(x1, y1);
+                    hCtx.lineTo(x2, y2);
+                    hCtx.stroke();
+
+                    //vertical graph
+                    x1 = link.X1 * w2 + w2 / 2;
+                    y1 = link.Y1 * h2 + h2 / 2;
+                    x2 = link.X2 * w2 + w2 / 2;
+                    y2 = link.Y2 * h2 + h2 / 2;
+                    y3 = (link.Y2 - 1) * h2 + h2 / 2;
+
+                    vCtx.beginPath();
+                    vCtx.moveTo(x1, y1);
+                    vCtx.lineTo(x2, y2);
+                    vCtx.stroke();
+                }
+            }
+
+            function randomColor() {
+                var color = '#';
+
+                var digits = '0123456789ABCDEF';
+
+                var i = 0;
+
+                for (i = 0; i < 6; i++) {
+                    color += digits[Math.floor(Math.random() * Math.floor(digits.length))];
+                }
+
+                return color;
+            }
+
+    </script>
+}

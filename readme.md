@@ -1,7 +1,7 @@
 Bonobo Git Server
 ==============================================
 
-[![Build status](https://ci.appveyor.com/api/projects/status/4vyllwtb5i645lrt/branch/master?svg=true)](https://ci.appveyor.com/project/jakubgarfield/bonobo-git-server)
+[![Build status](https://ci.appveyor.com/api/projects/status/uwhmcf6b7q09mfpr/branch/master?svg=true)](https://ci.appveyor.com/project/KariemSoudy/bonobo-git-server/branch/master)
 
 Thank you for downloading Bonobo Git Server. For more information please visit [http://bonobogitserver.com](http://bonobogitserver.com).
 
@@ -128,3 +128,5 @@ New release
 * update version numbers in [appveyor.yml](https://github.com/jakubgarfield/Bonobo-Git-Server/blob/master/appveyor.yml)
 * add tag so it appears under [releases](https://github.com/jakubgarfield/Bonobo-Git-Server/releases) with `git tag -a 6.0.0 -m "Release 6.0.0"`
 * add zipped version to bonobogitserver.com at [Bonobo-Git-Server-Web](https://github.com/jakubgarfield/Bonobo-Git-Server-Web)
+* add repository tree graph to the repository page, with commits and comments, you can inspect the tree to see branches, and commits, by [KariemSoudy](https://github.com/KariemSoudy)
+
