@@ -25,6 +25,7 @@
                 <![CDATA[
                 try {
                     OutputFilename = Path.GetFullPath(OutputFilename);
+
                     Log.LogMessage("Downloading version {0} of git...", GitVersion);
                     WebClient webClient = new WebClient();
                     IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
@@ -45,11 +46,13 @@
                     var parts = GitVersion.Split('.');
                     var versionfolder = String.Format("{0}.{1}.{2}.windows.{3}",
                             parts[0], parts[1], parts[2], parts.Count() > 3 ? parts[3] : "1");
+
                     var url = String.Format("http://github.com/git-for-windows/git/releases/download/v{1}/PortableGit-{2}-{0}-bit.7z.exe",
                                             GitArch,
                                             versionfolder,
                                             GitVersion);
                     Log.LogMessage("Url: {0}", url);
+					ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                     webClient.DownloadFile(url, OutputFilename);
                     return true;
                 }
