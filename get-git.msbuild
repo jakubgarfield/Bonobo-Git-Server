@@ -2,7 +2,7 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <MainSolution>$(MSBuildThisFileDirectory)\Bonobo.Git.Server.sln</MainSolution>
-        <GitVersion>2.6.1</GitVersion>            
+        <GitVersion>2.19.1</GitVersion>            
         <GitArchitecture>32</GitArchitecture>
     </PropertyGroup>
     
