@@ -165,10 +165,14 @@ namespace Bonobo.Git.Server.Controllers
                 if (valid)
                 {
                     MembershipService.UpdateUser(model.Id, model.Username, model.Name, model.Surname, model.Email, model.NewPassword);
-                    RoleProvider.RemoveUserFromRoles(model.Id, RoleProvider.GetAllRoles());
-                    if (model.PostedSelectedRoles != null)
+                    // Only Administrators can make any changes to roles
+                    if (User.IsInRole(Definitions.Roles.Administrator))
                     {
-                        RoleProvider.AddUserToRoles(model.Id, model.PostedSelectedRoles);
+                        RoleProvider.RemoveUserFromRoles(model.Id, RoleProvider.GetAllRoles());
+                        if (model.PostedSelectedRoles != null)
+                        {
+                            RoleProvider.AddUserToRoles(model.Id, model.PostedSelectedRoles);
+                        }
                     }
                     ViewBag.UpdateSuccess = true;
                 }
