@@ -23,6 +23,7 @@ namespace Bonobo.Git.Server.Git.GitService
 
     public class GitServiceExecutor : IGitService
     {
+        private static readonly string[] _permittedServiceNames = {"upload-pack", "receive-pack"};
         private readonly string gitPath;
         private readonly string gitHomePath;
         private readonly string repositoriesDirPath;
@@ -44,6 +45,11 @@ namespace Bonobo.Git.Server.Git.GitService
             Stream inStream,
             Stream outStream)
         {
+            if (!_permittedServiceNames.Contains(serviceName))
+            {
+                throw new ArgumentException("Invalid service name", nameof(serviceName));
+            }
+
             var args = serviceName + " --stateless-rpc";
             args += options.ToCommandLineArgs();
             args += " \"" + repoLocator.GetRepositoryDirectoryPath(repositoryName).FullName + "\"";
