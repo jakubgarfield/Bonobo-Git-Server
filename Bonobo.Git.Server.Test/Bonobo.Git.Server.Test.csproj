@@ -139,12 +139,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="IntegrationTests\LoadedConfig.cs" />
-    <Compile Include="IntegrationTests\IntegrationTestBase.cs" />
-    <Compile Include="IntegrationTests\Controller\TeamControllerTests.cs" />
-    <Compile Include="IntegrationTests\SharedLayoutTests.cs" />
-    <Compile Include="IntegrationTests\GitResult.cs" />
-    <Compile Include="IntegrationTests\MiscTests.cs" />
     <Compile Include="MembershipTests\ADTests\ADBackendStoreTest.cs" />
     <Compile Include="MembershipTests\ADTests\ADMembershipServiceTest.cs" />
     <Compile Include="MembershipTests\ADTests\ADMembershipServiceTestFacade.cs" />
@@ -153,9 +147,6 @@
     <Compile Include="MembershipTests\ADTests\ADTestSupport.cs" />
     <Compile Include="MembershipTests\ADTests\ADTeamRepositoryTests.cs" />
     <Compile Include="MembershipTests\EFTests\EFPermissionServiceTest.cs" />
-    <Compile Include="IntegrationTests\Controller\SettingsControllerTests.cs" />
-    <Compile Include="IntegrationTests\IntegrationTestHelpers.cs" />
-    <Compile Include="IntegrationTests\Controller\RepositoryControllerTests.cs" />
     <Compile Include="MembershipTests\EFTests\EFRepositoryRepositoryTest.cs" />
     <Compile Include="MembershipTests\TeamRepositoryTestsBase.cs" />
     <Compile Include="MembershipTests\PermissionServiceTestBase.cs" />
@@ -168,10 +159,6 @@
     <Compile Include="MembershipTests\MembershipServiceTestBase.cs" />
     <Compile Include="MembershipTests\EFTests\SqliteTestConnection.cs" />
     <Compile Include="MembershipTests\EFTests\SqlServerTestConnection.cs" />
-    <Compile Include="IntegrationTests\AssemblyStartup.cs" />
-    <Compile Include="IntegrationTests\Controller\AccountControllerTests.cs" />
-    <Compile Include="IntegrationTests\MsysgitIntegrationTests.cs" />
-    <Compile Include="IntegrationTests\MsysgitResources.cs" />
     <Compile Include="UnitTests\CustomHtmlHelperTest.cs" />
     <Compile Include="UnitTests\DatabaseUpdateTestsSqlite.cs" />
     <Compile Include="UnitTests\DatabaseUpdateTestsSqlServer.cs" />
