@@ -4,11 +4,28 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 6.5.0
+
+**17 April 2019**
+
+### Security
+
+This is an important security release which addresses two vulnerabilities, and users should upgrade immediately, 
+particularly if they permit anonymous or low-trust users access to any repository.  
+
+AD users who have been avoiding 6.2.2 or later versions because of problems introduced in that release
+should be safe to upgrade to this version, which removes that particular troublesome feature.
+
+We are grateful to the team at flab.cesnet.cz for the responsible disclosure of the vulnerabilities addressed by this release. 
+
+### Bugfixes
+
+* Sanitise service name in calls to Git services (CVE-2019-11217)
+* Prevent non-admin users maninpulating role membership (CVE-2019-11218)
+
 ## Version 6.4.0
 
-**13 November 2017**
-
-### Features
+**13 November 2017 (unreleased)**
 
 ### Bugfixes
 
@@ -58,7 +75,7 @@ tags: [Changelog, Changes, Bug Fixes, Features]
 
 **22 May 2017**
 
-This is identical to 6.2.0, but with corrected version numberin in the appveyor build.
+This is identical to 6.2.0, but with corrected version numbering in the appveyor build.
 
 ## Version 6.2.0
 
