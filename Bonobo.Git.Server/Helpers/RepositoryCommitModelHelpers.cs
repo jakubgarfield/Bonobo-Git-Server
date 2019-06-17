@@ -1,7 +1,6 @@
 ﻿using Bonobo.Git.Server.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
 
 namespace Bonobo.Git.Server.Helpers
 {

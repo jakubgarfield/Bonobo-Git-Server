@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
+using Microsoft.AspNetCore.Http;
 
 namespace Bonobo.Git.Server.Attributes
 {
@@ -74,7 +75,7 @@ namespace Bonobo.Git.Server.Attributes
                 return true;
             }
 
-            HttpPostedFileBase valueAsString = value as HttpPostedFileBase;
+            IFormFile valueAsString = value as IFormFile;
 
             if (valueAsString != null)
             {

@@ -1,13 +1,16 @@
-﻿@using Bonobo.Git.Server.Extensions
-@model RepositoryTreeDetailModel
+﻿@using Bonobo.Git.Server
+@using Bonobo.Git.Server.App_GlobalResources
+@using Bonobo.Git.Server.Extensions
+@using Bonobo.Git.Server.Helpers
+@model Bonobo.Git.Server.Models.RepositoryTreeDetailModel
 @{
     Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
     ViewBag.Title = Resources.Repository_Tree_Title;
 }
 @if (Model != null)
 {
-    @Html.Partial("_BranchSwitcher")
-    @Html.Partial("_AddressBar")
+    @await Html.PartialAsync("_BranchSwitcher")
+    @await Html.PartialAsync("_AddressBar")
 
     <div class="blob">
         @{

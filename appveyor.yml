@@ -1,6 +1,7 @@
 version: '{build}'
 configuration: Release
 platform: Any CPU
+image: Visual Studio 2017
 
 cache:
 - packages -> **\packages.config

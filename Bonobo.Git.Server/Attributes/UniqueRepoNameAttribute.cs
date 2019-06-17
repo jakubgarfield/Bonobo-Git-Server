@@ -1,14 +1,9 @@
 ﻿using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.App_GlobalResources;
-using Microsoft.Practices.Unity;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 
 using Bonobo.Git.Server.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonobo.Git.Server.Attributes
 {
@@ -22,7 +17,7 @@ namespace Bonobo.Git.Server.Attributes
                 return new ValidationResult("empty repo name?");
             }
 
-            IRepositoryRepository RepositoryRepository = DependencyResolver.Current.GetService<IRepositoryRepository>();
+            IRepositoryRepository RepositoryRepository = context.GetService<IRepositoryRepository>();
             if (RepositoryRepository.NameIsUnique(value.ToString(), ((RepositoryDetailModel)context.ObjectInstance).Id))
             {
                 return ValidationResult.Success;

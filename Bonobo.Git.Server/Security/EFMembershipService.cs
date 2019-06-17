@@ -4,21 +4,21 @@ using System.Linq;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
 using System.Security.Cryptography;
-using System.Data.Entity.Core;
-using Microsoft.Practices.Unity;
+using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Bonobo.Git.Server.Security
 {
     public class EFMembershipService : IMembershipService
     {
-        [Dependency]
         public Func<BonoboGitServerContext> CreateContext { get; set; }
 
         private readonly IPasswordService _passwordService;
 
-        public EFMembershipService()
+        public EFMembershipService(Func<BonoboGitServerContext> createContext)
         {
+            CreateContext = createContext;
             // set up dependencies
             Action<string, string> updateUserPasswordHook =
                 (username, password) =>
@@ -98,7 +98,7 @@ namespace Bonobo.Git.Server.Security
                 {
                     database.SaveChanges();
                 }
-                catch (UpdateException)
+                catch (DbUpdateException)
                 {
                     return false;
                 }

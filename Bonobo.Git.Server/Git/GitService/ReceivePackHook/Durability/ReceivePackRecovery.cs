@@ -1,11 +1,8 @@
-﻿using Bonobo.Git.Server.Data;
-using Bonobo.Git.Server.Git.GitService.ReceivePackHook;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
 
 namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability
 {
@@ -14,27 +11,24 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability
     /// </summary>
     public class ReceivePackRecovery : IHookReceivePack
     {
-        private readonly TimeSpan failedPackWaitTimeBeforeExecution;
-        private readonly IHookReceivePack next;
-        private readonly IRecoveryFilePathBuilder recoveryFilePathBuilder;
-        private readonly GitServiceResultParser resultFileParser;
+        private readonly IHookReceivePack _next;
+        private readonly IRecoveryFilePathBuilder _recoveryFilePathBuilder;
+        private readonly GitServiceResultParser _resultFileParser;
 
         public ReceivePackRecovery(
             IHookReceivePack next, 
-            NamedArguments.FailedPackWaitTimeBeforeExecution failedPackWaitTimeBeforeExecution,
             IRecoveryFilePathBuilder recoveryFilePathBuilder,
             GitServiceResultParser resultFileParser)
         {
-            this.next = next;
-            this.failedPackWaitTimeBeforeExecution = failedPackWaitTimeBeforeExecution.Value;
-            this.recoveryFilePathBuilder = recoveryFilePathBuilder;
-            this.resultFileParser = resultFileParser;
+            _next = next;
+            _recoveryFilePathBuilder = recoveryFilePathBuilder;
+            _resultFileParser = resultFileParser;
         }
 
         public void PrePackReceive(ParsedReceivePack receivePack)
         {
-            File.WriteAllText(recoveryFilePathBuilder.GetPathToPackFile(receivePack), JsonConvert.SerializeObject(receivePack));
-            next.PrePackReceive(receivePack);
+            File.WriteAllText(_recoveryFilePathBuilder.GetPathToPackFile(receivePack), JsonConvert.SerializeObject(receivePack));
+            _next.PrePackReceive(receivePack);
         }
 
         public void PostPackReceive(ParsedReceivePack receivePack, GitExecutionResult result)
@@ -45,9 +39,9 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability
 
         private void ProcessOnePack(ParsedReceivePack receivePack, GitExecutionResult result)
         {
-            next.PostPackReceive(receivePack, result);
+            _next.PostPackReceive(receivePack, result);
             
-            var packFilePath = recoveryFilePathBuilder.GetPathToPackFile(receivePack);
+            var packFilePath = _recoveryFilePathBuilder.GetPathToPackFile(receivePack);
             if (File.Exists(packFilePath))
             {
                 File.Delete(packFilePath);
@@ -56,9 +50,14 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability
 
         public void RecoverAll()
         {
+            RecoverAll(TimeSpan.FromSeconds(5 * 60));
+        }
+
+        public void RecoverAll(TimeSpan failedPackWaitTimeBeforeExecution)
+        {
             var waitingReceivePacks = new List<ParsedReceivePack>();
 
-            foreach (var packDir in recoveryFilePathBuilder.GetPathToPackDirectory())
+            foreach (var packDir in _recoveryFilePathBuilder.GetPathToPackDirectory())
             {
                 foreach (var packFilePath in Directory.GetFiles(packDir))
                 {
@@ -77,12 +76,12 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability
                 {
                     // re-parse result file and execute "post" hooks
                     // if result file is no longer there then move on
-                    var failedPackResultFilePath = recoveryFilePathBuilder.GetPathToResultFile(pack.PackId, pack.RepositoryName, "receive-pack");
+                    var failedPackResultFilePath = _recoveryFilePathBuilder.GetPathToResultFile(pack.PackId, pack.RepositoryName, "receive-pack");
                     if (File.Exists(failedPackResultFilePath))
                     {
                         using (var resultFileStream = File.OpenRead(failedPackResultFilePath))
                         {
-                            var failedPackResult = resultFileParser.ParseResult(resultFileStream);
+                            var failedPackResult = _resultFileParser.ParseResult(resultFileStream);
                             ProcessOnePack(pack, failedPackResult);
                         }
                         File.Delete(failedPackResultFilePath);

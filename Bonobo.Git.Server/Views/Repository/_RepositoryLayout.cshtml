@@ -1,9 +1,10 @@
-﻿@{
+﻿@using Bonobo.Git.Server.App_GlobalResources
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @if (Model == null)
 {    
-    @Html.Partial("~/Views/Shared/_ItemNotFound.cshtml") 
+    @await Html.PartialAsync("~/Views/Shared/_ItemNotFound.cshtml") 
 }
 else
 {  

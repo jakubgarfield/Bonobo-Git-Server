@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Web;
-using System.Web.Caching;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Configuration;
@@ -15,26 +12,36 @@ using Bonobo.Git.Server.Helpers;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Practices.Unity;
 using Bonobo.Git.Server.Owin.Windows;
 using System.Configuration;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Serilog;
 
 namespace Bonobo.Git.Server.Controllers
 {
     public class HomeController : Controller
     {
-        [Dependency]
+        private readonly BonoboGitServerContext _context;
         public IMembershipService MembershipService { get; set; }
-
-        [Dependency]
         public IAuthenticationProvider AuthenticationProvider { get; set; }
-
-        [Dependency]
         public IDatabaseResetManager ResetManager { get; set; }
 
-        [WebAuthorize]
+        public HomeController(IMembershipService membershipService, IAuthenticationProvider authenticationProvider,
+            IDatabaseResetManager resetManager, BonoboGitServerContext context)
+        {
+            MembershipService = membershipService;
+            AuthenticationProvider = authenticationProvider;
+            ResetManager = resetManager;
+            _context = context;
+        }
+
+        [Authorize(Policy = "Web")]
         public ActionResult Index()
         {
             return RedirectToAction("Index", "Repository");
@@ -57,7 +64,7 @@ namespace Bonobo.Git.Server.Controllers
 
         private string CheckForPasswordResetUsername(string digest)
         {
-            var cacheObj = MvcApplication.Cache[HttpUtility.UrlDecode(digest)];
+            var cacheObj = Program.Cache[HttpUtility.UrlDecode(digest)];
             if (cacheObj == null)
             {
                 return null;
@@ -70,15 +77,12 @@ namespace Bonobo.Git.Server.Controllers
             string username = CheckForPasswordResetUsername(digest);
             if (username != null )
             {
-                using (var db = new BonoboGitServerContext())
+                var user = _context.Users.FirstOrDefault(x => x.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+                if (user == null)
                 {
-                    var user = db.Users.FirstOrDefault(x => x.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
-                    if (user == null)
-                    {
-                        throw new UnauthorizedAccessException("Unknown user " + username);
-                    }
-                    return View(new ResetPasswordModel { Username = username, Digest = digest});
+                    throw new UnauthorizedAccessException("Unknown user " + username);
                 }
+                return View(new ResetPasswordModel { Username = username, Digest = digest});
             }
             else
             {
@@ -98,19 +102,16 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     throw new UnauthorizedAccessException("Invalid password reset form");
                 }
-                using (var db = new BonoboGitServerContext())
+                var user = _context.Users.FirstOrDefault(x => x.Username.Equals(model.Username, StringComparison.OrdinalIgnoreCase));
+                if (user == null)
                 {
-                    var user = db.Users.FirstOrDefault(x => x.Username.Equals(model.Username, StringComparison.OrdinalIgnoreCase));
-                    if (user == null)
-                    {
-                        TempData["ResetSuccess"] = false;
-                        Response.AppendToLog("FAILURE");
-                    }
-                    else
-                    {
-                        MembershipService.UpdateUser(user.Id, null, null, null, null, model.Password);
-                        TempData["ResetSuccess"] = true;
-                    }
+                    TempData["ResetSuccess"] = false;
+                    Log.Warning("FAILURE");
+                }
+                else
+                {
+                    MembershipService.UpdateUser(user.Id, null, null, null, null, model.Password);
+                    TempData["ResetSuccess"] = true;
                 }
             }
             return View(model);
@@ -131,15 +132,15 @@ namespace Bonobo.Git.Server.Controllers
                 if (user == null)
                 {
                     ModelState.AddModelError("", Resources.Home_ForgotPassword_UserNameFailure);
-                    Response.AppendToLog("FAILURE");
+                    Log.Warning("FAILURE");
                 }
                 else
                 {
                     string token = MembershipService.GenerateResetToken(user.Username);
-                    MvcApplication.Cache.Add(token, model.Username, DateTimeOffset.Now.AddHours(1));
+                    Program.Cache.Add(token, model.Username, DateTimeOffset.Now.AddHours(1));
 
                     // Passing Requust.Url.Scheme to Url.Action forces it to generate a full URL
-                    var resetUrl = Url.Action("ResetPassword", "Home", new {digest = HttpUtility.UrlEncode(Encoding.UTF8.GetBytes(token))},Request.Url.Scheme);
+                    var resetUrl = Url.Action("ResetPassword", "Home", new {digest = HttpUtility.UrlEncode(Encoding.UTF8.GetBytes(token))},Request.Scheme);
 
                     TempData["SendSuccess"] = MembershipHelper.SendForgotPasswordEmail(user, resetUrl);
                 }
@@ -158,7 +159,7 @@ namespace Bonobo.Git.Server.Controllers
                     RedirectUri = returnUrl
                 };
 
-                Request.GetOwinContext().Authentication.Challenge(authenticationProperties, WindowsAuthenticationDefaults.AuthenticationType);
+                HttpContext.ChallengeAsync(WindowsAuthenticationDefaults.AuthenticationType, authenticationProperties);
                 return new EmptyResult();
             }
 
@@ -186,8 +187,8 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     case ValidationResult.Success:
                         AuthenticationProvider.SignIn(model.Username, Url.IsLocalUrl(model.ReturnUrl) ? model.ReturnUrl : Url.Action("Index", "Home"), model.RememberMe);
-                        Response.AppendToLog("SUCCESS");
-                        if (Request.IsLocal && model.DatabaseResetCode > 0 && model.Username == "admin" && ConfigurationManager.AppSettings["AllowDBReset"] == "true" )
+                        Log.Information("SUCCESS");
+                        if (Url.IsLocalUrl(Request.GetEncodedUrl()) && model.DatabaseResetCode > 0 && model.Username == "admin" && ConfigurationManager.AppSettings["AllowDBReset"] == "true" )
                         {
                             ResetManager.DoReset(model.DatabaseResetCode);
                         }
@@ -196,7 +197,7 @@ namespace Bonobo.Git.Server.Controllers
                         return new RedirectResult("~/Home/Unauthorized");
                     default:
                         ModelState.AddModelError("", Resources.Home_LogOn_UsernamePasswordIncorrect);
-                        Response.AppendToLog("FAILURE");
+                        Log.Warning("FAILURE");
                         break;
                 }                
             }
@@ -210,23 +211,23 @@ namespace Bonobo.Git.Server.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public ActionResult Unauthorized()
+        public new ActionResult Unauthorized()
         {
             return View();
         }
 
         public ActionResult ChangeCulture(string lang, string returnUrl)
         {
-            Session["Culture"] = new CultureInfo(lang);
+            HttpContext.Session.SetString("Culture", JsonConvert.SerializeObject(new CultureInfo(lang)));
             return Redirect(returnUrl);
         }
 
         public ActionResult Diagnostics()
         {
-            if (Request.IsLocal)
+            if (Url.IsLocalUrl(Request.GetEncodedUrl()))
             {
-                var verifier = new DiagnosticReporter();
-                return Content(verifier.GetVerificationReport(), "text/plain", Encoding.UTF8);
+                var verifier = new DiagnosticReporter(HttpContext.RequestServices.GetService<IHostingEnvironment>());
+                return Content(verifier.GetVerificationReport(HttpContext.RequestServices), "text/plain", Encoding.UTF8);
             }
             else
             {

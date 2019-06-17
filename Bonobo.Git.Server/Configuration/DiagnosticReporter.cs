@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Web.Hosting;
 using Bonobo.Git.Server.Data;
+using Bonobo.Git.Server.Extensions;
 using Bonobo.Git.Server.Security;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonobo.Git.Server.Configuration
 {
@@ -18,16 +20,22 @@ namespace Bonobo.Git.Server.Configuration
     /// </summary>
     public class DiagnosticReporter
     {
+        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly StringBuilder _report = new StringBuilder();
         private readonly UserConfiguration _userConfig = UserConfiguration.Current;
 
-        public string GetVerificationReport()
+        public DiagnosticReporter(IHostingEnvironment hostingEnvironment)
         {
-            RunReport();
+            _hostingEnvironment = hostingEnvironment;
+        }
+
+        public string GetVerificationReport(IServiceProvider serviceProvider)
+        {
+            RunReport(serviceProvider);
             return _report.ToString();
         }
 
-        private void RunReport()
+        private void RunReport(IServiceProvider serviceProvider)
         {
             DumpAppSettings();
             CheckUserConfigurationFile();
@@ -35,7 +43,7 @@ namespace Bonobo.Git.Server.Configuration
             CheckGitSettings();
             CheckFederatedAuth();
             CheckADMembership();
-            CheckInternalMembership();
+            CheckInternalMembership(serviceProvider);
             ExceptionLog();
         }
 
@@ -180,13 +188,15 @@ namespace Bonobo.Git.Server.Configuration
             }
         }
 
-        private void CheckInternalMembership()
+        private void CheckInternalMembership(IServiceProvider serviceProvider)
         {
             _report.AppendLine("Internal Membership");
 
             if (AppSetting("MembershipService") == "Internal")
             {
-                SafelyReport("User count", () => new EFMembershipService { CreateContext = () => new BonoboGitServerContext() }.GetAllUsers().Count);
+                SafelyReport("User count",
+                    () => new EFMembershipService(serviceProvider.GetService<BonoboGitServerContext>)
+                        .GetAllUsers().Count);
             }
             else
             {
@@ -203,7 +213,7 @@ namespace Bonobo.Git.Server.Configuration
             _report.AppendLine("Exception Log");
             SafelyRun(() =>
             {
-                var nameFormat = MvcApplication.GetLogFileNameFormat();
+                var nameFormat = Startup.GetLogFileNameFormat(_hostingEnvironment);
                 var todayLogFileName = nameFormat.Replace("{Date}", DateTime.Now.ToString("yyyyMMdd"));
                 SafelyReport("LogFileName: ", () => todayLogFileName);
                 var chunkSize = 10000;
@@ -263,7 +273,7 @@ namespace Bonobo.Git.Server.Configuration
 
         private string MapPath(string path)
         {
-            return Path.IsPathRooted(path) ? path : HostingEnvironment.MapPath(path);
+            return Path.IsPathRooted(path) ? path : _hostingEnvironment.MapPath(path);
         }
 
         private string AppSetting(string name)

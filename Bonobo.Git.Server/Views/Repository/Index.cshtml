@@ -1,7 +1,13 @@
-﻿@using Bonobo.Git.Server.Extensions
-@using System.Web.Mvc.Html
+﻿@using System.Web.WebPages
+@using AndreyKurdiumov.AspNetCore.Helpers
+@using Bonobo.Git.Server
+@using Bonobo.Git.Server.App_GlobalResources
+@using Bonobo.Git.Server.Configuration
+@using Bonobo.Git.Server.Extensions
 @using Bonobo.Git.Server.Models
 @using Bonobo.Git.Server.Data
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 
 @model Dictionary<string, RepositoryDetailModel[]>
 @{
@@ -35,7 +41,7 @@
     </div>
     <div class="pure-u-3-5 add">
         @{
-            var sortGroupQuery = Request.QueryString["sortGroup"];
+            var sortGroupQuery = HttpContextAccessor.HttpContext.Request.Query["sortGroup"];
 
             var sortGroup = new
             {
@@ -66,7 +72,7 @@
     if (RepoNotFound)
     {
         <div class="pure-u-2-5">
-            @Html.Partial("~/Views/Shared/_ItemNotFound.cshtml")
+            @await Html.PartialAsync("~/Views/Shared/_ItemNotFound.cshtml")
         </div>
     }
 }
@@ -90,13 +96,13 @@
     </div>
 }
 
-@using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "pure-form" }))
-{
+<form method="post" class="pure-form">
     <p>
         @Html.TextBox("SearchString")
         <input type="submit" value="@Resources.Search" class="pure-button pure-button-primary" />
     </p>
-}
+</form>
+
 
 <div class="pure-g">
     @{
@@ -116,7 +122,7 @@
             // https://dusted.codes/making-font-awesome-awesome-using-icons-without-i-tags
             <div class="pure-u-1">
                 @{
-                    var permitted = new WebGrid(source: model.Value, defaultSort: "Name", rowsPerPage: 15);
+                    var permitted = new WebGrid(HttpContextAccessor, source: model.Value, defaultSort: "Name", rowsPerPage: 15);
 
 
                     var columns = new List<WebGridColumn>();
@@ -141,9 +147,9 @@
                     if (User.IsInRole(Definitions.Roles.Administrator))
                     {
                         columns.Add(permitted.Column(
-                            format: (item) =>
+                            format: (itemm) =>
                             {
-                                var repo = (RepositoryDetailModel)item.Value;
+                                var repo = (RepositoryDetailModel)itemm.Value;
                                 var anonColor = repo.AllowAnonymous ? "rgba(0, 120, 230, 1)" : "lightblue";
                                 var anonTitle = Resources.Repository_Detail_Anonymous + ": " + (repo.AllowAnonymous ? Resources.Yes : Resources.No);
 
@@ -165,8 +171,8 @@
                     }
 
                     columns.Add(permitted.Column("Description", typeof(RepositoryDetailModel).GetDisplayValue("Description"), format: (item) => ((item.Description != null && ((string)item.Description).Length > 100)) ? ((string)item.Description).Substring(0, 100) + " ... " : item.Description, style: "description"));
-                    columns.Add(permitted.Column(format: (item) => Html.Raw("<button class=\"pure-button pure-button-primary copy-to-clip-button\" title=\"" + Resources.Repository_Git_Url_Copy + "\" data-clipboard-text=\"" + Html.Encode(item.GitUrl) + "\"><i class=\"fa fa-copy\" ></i></button>"), style: "action"));
-                    columns.Add(permitted.Column(format: (item) => Html.Raw("<button class=\"pure-button pure-button-primary copy-to-clip-button\" title=\"" + Resources.Repository_Personal_Git_Url_Copy + "\" data-clipboard-text=\"" + Html.Encode(item.PersonalGitUrl) + "\"><i class=\"fa fa-user\"></i><i class=\"fa fa-copy\"></i></button>"), style: "action"));
+                    columns.Add(permitted.Column(format: (item) => Html.Raw("<button class=\"pure-button pure-button-primary copy-to-clip-button\" title=\"" + Resources.Repository_Git_Url_Copy + "\" data-clipboard-text=\"" + Html.Encode((string)item.GitUrl) + "\"><i class=\"fa fa-copy\" ></i></button>"), style: "action"));
+                    columns.Add(permitted.Column(format: (item) => Html.Raw("<button class=\"pure-button pure-button-primary copy-to-clip-button\" title=\"" + Resources.Repository_Personal_Git_Url_Copy + "\" data-clipboard-text=\"" + Html.Encode((string)item.PersonalGitUrl) + "\"><i class=\"fa fa-user\"></i><i class=\"fa fa-copy\"></i></button>"), style: "action"));
                     columns.Add(permitted.Column(format: (item) => Html.ActionLink(" ", "Edit", new { id = item.Id }, new { @class = "edit", title = Resources.Grid_Edit }), style: "action"));
                     columns.Add(permitted.Column(format: (item) => Html.ActionLink(" ", "Delete", new { id = item.Id }, new { @class = "delete", title = Resources.Grid_Delete }), style: "action"));
 

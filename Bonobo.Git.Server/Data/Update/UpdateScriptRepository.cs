@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Bonobo.Git.Server.Security;
 
 namespace Bonobo.Git.Server.Data.Update
 {
@@ -8,11 +9,11 @@ namespace Bonobo.Git.Server.Data.Update
         /// <summary>
         /// Creates the list of scripts that should be executed on app start. Ordering matters!
         /// </summary>
-        public static IEnumerable<IUpdateScript> GetScriptsBySqlProviderName(string sqlProvider)
+        public static IEnumerable<IUpdateScript> GetScriptsBySqlProviderName(string sqlProvider, IAuthenticationProvider authenticationProvider)
         {
             switch (sqlProvider)
             {
-                case "SQLiteConnection":
+                case "Microsoft.EntityFrameworkCore.Sqlite":
                     return new List<IUpdateScript>
                     {
                         new Sqlite.InitialCreateScript(),
@@ -20,12 +21,12 @@ namespace Bonobo.Git.Server.Data.Update
                         new Sqlite.AddAuditPushUser(),
                         new Sqlite.AddGroup(),
                         new Sqlite.AddRepositoryLogo(),
-                        new Sqlite.AddGuidColumn(),
+                        new Sqlite.AddGuidColumn(authenticationProvider),
                         new Sqlite.AddRepoPushColumn(),
                         new Sqlite.AddRepoLinksColumn(),
                         new Sqlite.InsertDefaultData()
                     };
-                case "SqlConnection":
+                case "Microsoft.EntityFrameworkCore.SqlServer":
                     return new List<IUpdateScript>
                     {
                         new SqlServer.InitialCreateScript(),
@@ -33,7 +34,7 @@ namespace Bonobo.Git.Server.Data.Update
                         new SqlServer.AddAuditPushUser(),
                         new SqlServer.AddGroup(),
                         new SqlServer.AddRepositoryLogo(),
-                        new SqlServer.AddGuidColumn(),
+                        new SqlServer.AddGuidColumn(authenticationProvider),
                         new SqlServer.AddRepoPushColumn(),
                         new SqlServer.AddRepoLinksColumn(),
                         new SqlServer.InsertDefaultData()

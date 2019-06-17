@@ -1,52 +1,59 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.ModelConfiguration;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Bonobo.Git.Server.Data.Mapping
 {
-    public class TeamMap : EntityTypeConfiguration<Team>
+    public class TeamMap : IEntityTypeConfiguration<Team>
     {
-        public TeamMap()
+        private readonly ValueConverter _primaryKeyConverter;
+
+        public TeamMap(ValueConverter primaryKeyConverter)
         {
-            SetPrimaryKey();
-            SetProperties();
-            SetTableAndColumnMappings();
-            SetRelationships();
+            _primaryKeyConverter = primaryKeyConverter;
         }
 
-
-        private void SetRelationships()
+        public void Configure(EntityTypeBuilder<Team> builder)
         {
-            HasMany(t => t.Users)
-                .WithMany(t => t.Teams)
-                .Map(m =>
-                {
-                    m.ToTable("UserTeam_Member");
-                    m.MapLeftKey("Team_Id");
-                    m.MapRightKey("User_Id");
-                });
+            SetPrimaryKey(builder);
+            SetProperties(builder);
+            SetTableAndColumnMappings(builder);
+            SetRelationships(builder);
         }
 
-        private void SetTableAndColumnMappings()
+        private void SetRelationships(EntityTypeBuilder<Team> builder)
         {
-            ToTable("Team");
-            Property(t => t.Id).HasColumnName("Id");
-            Property(t => t.Name).HasColumnName("Name");
-            Property(t => t.Description).HasColumnName("Description");
+            //builder.HasMany(t => t.Users)
+            //    .WithMany(t => t.Teams)
+            //    .Map(m =>
+            //    {
+            //        m.ToTable("UserTeam_Member");
+            //        m.MapLeftKey("Team_Id");
+            //        m.MapRightKey("User_Id");
+            //    });
         }
 
-        private void SetProperties()
+        private void SetTableAndColumnMappings(EntityTypeBuilder<Team> builder)
         {
-            Property(t => t.Name)
+            builder.ToTable("Team");
+            builder.Property(t => t.Id).HasColumnName("Id").HasConversion(_primaryKeyConverter);
+            builder.Property(t => t.Name).HasColumnName("Name");
+            builder.Property(t => t.Description).HasColumnName("Description");
+        }
+
+        private void SetProperties(EntityTypeBuilder<Team> builder)
+        {
+            builder.Property(t => t.Name)
                 .IsRequired()
                 .HasMaxLength(255);
 
-            Property(t => t.Description)
+            builder.Property(t => t.Description)
                 .HasMaxLength(255);
         }
 
-        private void SetPrimaryKey()
+        private void SetPrimaryKey(EntityTypeBuilder<Team> builder)
         {
-            HasKey(t => t.Id);
+            builder.HasKey(t => t.Id);
         }
     }
 }

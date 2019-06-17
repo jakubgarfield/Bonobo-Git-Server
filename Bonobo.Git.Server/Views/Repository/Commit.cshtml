@@ -1,56 +1,60 @@
-﻿@model RepositoryCommitModel
+﻿@model Bonobo.Git.Server.Models.RepositoryCommitModel
+@using Bonobo.Git.Server.App_GlobalResources
 @using Bonobo.Git.Server.Extensions
+@using Bonobo.Git.Server.Helpers
+@using Bonobo.Git.Server.Models
+@using Microsoft.AspNetCore.Html
 @{
     ViewBag.Title = Resources.Repository_Commit_Detail;
     Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
 }
-@helper HeaderForDiff(RepositoryCommitChangeModel item)
-{
-    <div class="item">
-        <p>
-            <a href="@("#change-" + item.ChangeId)"><i class="fa fa-share-square-o" title="Go To Change"></i></a>
-            @if (item.Status == LibGit2Sharp.ChangeKind.Added)
-            {
-                <text><i class="fa fa-plus-square-o" title="@Resources.Repository_Commit_Added"></i></text>
-            }
-            else if (item.Status == LibGit2Sharp.ChangeKind.Modified)
-            {
-                <text><i class="fa fa-edit" title="@Resources.Repository_Commit_Modified"></i></text>
-            }
-            else if (item.Status == LibGit2Sharp.ChangeKind.Deleted)
-            {
-                <text><i class="fa fa-minus-square-o" title="@Resources.Repository_Commit_Deleted"></i></text>
-            }
-            else if (item.Status == LibGit2Sharp.ChangeKind.Renamed)
-            {
-                <text><i class="fa fa-share-square-o" title="@Resources.Repository_Commit_Renamed"></i></text>
-            }
-            else if (item.Status == LibGit2Sharp.ChangeKind.Copied)
-            {
-                <text><i class="fa fa-copy" title="@Resources.Repository_Commit_Copied"></i></text>
-            }
-            else if (item.Status == LibGit2Sharp.ChangeKind.TypeChanged)
-            {
-                <text><i class="fa fa-caret-square-o-right" title="@Resources.Repository_Commit_TypeChanged"></i></text>
-            }
-            @if (item.Status != LibGit2Sharp.ChangeKind.Deleted)
-            {
-                @Html.ActionLink(item.Path, "Blob", new { id = ViewBag.ID, encodedPath = PathEncoder.Encode(item.Path, allowSlash: true), encodedName = PathEncoder.Encode(Model.ID) })
-            }
-            else
-            {
-                @item.Path
-            }
-            <span class="count">@item.LinesChanged<em>(+@item.LinesAdded -@item.LinesDeleted)</em></span>
+@{
+    Func<RepositoryCommitChangeModel, IHtmlContent> HeaderForDiff =
+        @<div class="item">
+            <p>
+                <a href="@("#change-" + item.ChangeId)"><i class="fa fa-share-square-o" title="Go To Change"></i></a>
+                @if (item.Status == LibGit2Sharp.ChangeKind.Added)
+                {
+                    <text><i class="fa fa-plus-square-o" title="@Resources.Repository_Commit_Added"></i></text>
+                }
+                else if (item.Status == LibGit2Sharp.ChangeKind.Modified)
+                {
+                    <text><i class="fa fa-edit" title="@Resources.Repository_Commit_Modified"></i></text>
+                }
+                else if (item.Status == LibGit2Sharp.ChangeKind.Deleted)
+                {
+                    <text><i class="fa fa-minus-square-o" title="@Resources.Repository_Commit_Deleted"></i></text>
+                }
+                else if (item.Status == LibGit2Sharp.ChangeKind.Renamed)
+                {
+                    <text><i class="fa fa-share-square-o" title="@Resources.Repository_Commit_Renamed"></i></text>
+                }
+                else if (item.Status == LibGit2Sharp.ChangeKind.Copied)
+                {
+                    <text><i class="fa fa-copy" title="@Resources.Repository_Commit_Copied"></i></text>
+                }
+                else if (item.Status == LibGit2Sharp.ChangeKind.TypeChanged)
+                {
+                    <text><i class="fa fa-caret-square-o-right" title="@Resources.Repository_Commit_TypeChanged"></i></text>
+                }
+                @if (item.Status != LibGit2Sharp.ChangeKind.Deleted)
+                {
+                    @Html.ActionLink(item.Path, "Blob", new { id = ViewBag.ID, encodedPath = PathEncoder.Encode(item.Path, allowSlash: true), encodedName = PathEncoder.Encode(Model.ID) })
+                }
+                else
+                {
+                    @item.Path
+                }
+                <span class="count">@item.LinesChanged<em>(+@item.LinesAdded -@item.LinesDeleted)</em></span>
 
-        </p>
-    </div>
+            </p>
+        </div>;
 }
 
 @if (Model != null)
 {
     <div>
-        @Html.Partial("_Commit", Model)
+        @await Html.PartialAsync("_Commit", Model)
 
         <div class="changes">
             <h3>@Model.GetType().GetDisplayValue("Changes")</h3>

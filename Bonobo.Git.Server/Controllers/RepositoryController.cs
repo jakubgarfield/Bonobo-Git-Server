@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Data;
@@ -13,30 +13,33 @@ using Bonobo.Git.Server.Helpers;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 using Ionic.Zip;
-using Microsoft.Practices.Unity;
 using MimeTypes;
 using System.Security.Principal;
+using Bonobo.Git.Server.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonobo.Git.Server.Controllers
 {
     public class RepositoryController : Controller
     {
-        [Dependency]
         public ITeamRepository TeamRepository { get; set; }
-
-        [Dependency]
         public IRepositoryRepository RepositoryRepository { get; set; }
-
-        [Dependency]
         public IMembershipService MembershipService { get; set; }
-
-        [Dependency]
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
-
-        [Dependency]
         public IAuthenticationProvider AuthenticationProvider { get; set; }
 
-        [WebAuthorize]
+        public RepositoryController(ITeamRepository teamRepository, IRepositoryRepository repositoryRepository,
+            IMembershipService membershipService, IRepositoryPermissionService repositoryPermissionService)
+        {
+            TeamRepository = teamRepository;
+            RepositoryRepository = repositoryRepository;
+            MembershipService = membershipService;
+            RepositoryPermissionService = repositoryPermissionService;
+        }
+
+        [Authorize(Policy = "Web")]
         public ActionResult Index(string sortGroup = null, string searchString = null)
         {
             var firstList = this.GetIndexModel();
@@ -60,7 +63,7 @@ namespace Bonobo.Git.Server.Controllers
             return View(list);
         }
 
-        [WebAuthorizeRepository(RequiresRepositoryAdministrator = true)]
+        [Authorize(Policy = "WebRepository", Roles = "RepositoryAdministrator")]
         public ActionResult Edit(Guid id)
         {
             var model = ConvertRepositoryModel(RepositoryRepository.GetRepository(id), User);
@@ -70,7 +73,7 @@ namespace Bonobo.Git.Server.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [WebAuthorizeRepository(RequiresRepositoryAdministrator = true)]
+        [Authorize(Policy = "WebRepository", Roles = "RepositoryAdministrator")]
         public ActionResult Edit(RepositoryDetailModel model)
         {
             if (ModelState.IsValid)
@@ -85,7 +88,7 @@ namespace Bonobo.Git.Server.Controllers
                     {
                         RepositoryRepository.Update(repoModel);
                     }
-                    catch (System.Data.Entity.Infrastructure.DbUpdateException)
+                    catch (DbUpdateException)
                     {
                         MoveRepo(repoModel, existingRepo);
                     }
@@ -117,7 +120,7 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [WebAuthorize]
+        [Authorize(Policy = "Web")]
         public ActionResult Create()
         {
             if (!RepositoryPermissionService.HasCreatePermission(User.Id()))
@@ -134,7 +137,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        [WebAuthorize]
+        [Authorize(Policy = "Web")]
         [ValidateAntiForgeryToken]
         public ActionResult Create(RepositoryDetailModel model)
         {
@@ -182,7 +185,7 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        [WebAuthorizeRepository(RequiresRepositoryAdministrator = true)]
+        [Authorize(Policy = "WebRepository", Roles = "RepositoryAdministrator")]
         public ActionResult Delete(Guid id)
         {
             return View(ConvertRepositoryModel(RepositoryRepository.GetRepository(id), User));
@@ -190,7 +193,7 @@ namespace Bonobo.Git.Server.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [WebAuthorizeRepository(RequiresRepositoryAdministrator = true)]
+        [Authorize(Policy = "WebRepository", Roles = "RepositoryAdministrator")]
         public ActionResult Delete(RepositoryDetailModel model)
         {
             if (model != null)
@@ -207,7 +210,7 @@ namespace Bonobo.Git.Server.Controllers
             return RedirectToAction("Index");
         }
 
-        [WebAuthorizeRepository]
+        [Authorize(Policy = "WebRepository")]
         public ActionResult Detail(Guid id)
         {
             ViewBag.ID = id;
@@ -235,11 +238,10 @@ namespace Bonobo.Git.Server.Controllers
         void SetGitUrls(RepositoryDetailModel model)
         {
             string serverAddress = System.Configuration.ConfigurationManager.AppSettings["GitServerPath"]
-                                   ?? string.Format("{0}://{1}{2}{3}/",
-                                       Request.Url.Scheme,
-                                       Request.Url.Host,
-                                       (Request.Url.IsDefaultPort ? "" : (":" + Request.Url.Port)),
-                                       Request.ApplicationPath == "/" ? "" : Request.ApplicationPath
+                                   ?? string.Format("{0}://{1}{2}/",
+                                       Request.Scheme,
+                                       Request.Host,
+                                       Request.Path == "/" ? "" : (string)Request.Path
                                        );
 
             model.GitUrl = String.Concat(serverAddress, model.Name, ".git");
@@ -250,7 +252,7 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [WebAuthorizeRepository]
+        [Authorize(Policy = "WebRepository")]
         public ActionResult Tree(Guid id, string encodedName, string encodedPath)
         {
             bool includeDetails = Request.IsAjaxRequest();
@@ -286,7 +288,7 @@ namespace Bonobo.Git.Server.Controllers
 
                 if (includeDetails)
                 {
-                    return Json(model, JsonRequestBehavior.AllowGet);
+                    return Json(model);
                 }
                 else
                 {
@@ -297,7 +299,7 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [WebAuthorizeRepository]
+        [Authorize(Policy = "WebRepository")]
         public ActionResult Blob(Guid id, string encodedName, string encodedPath)
         {
             ViewBag.ID = id;
@@ -316,7 +318,7 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [WebAuthorizeRepository]
+        [Authorize(Policy = "WebRepository")]
         public ActionResult Raw(Guid id, string encodedName, string encodedPath, bool display = false)
         {
             ViewBag.ID = id;
@@ -344,10 +346,10 @@ namespace Bonobo.Git.Server.Controllers
                 }
             }
 
-            return HttpNotFound();
+            return NotFound();
         }
 
-        [WebAuthorizeRepository]
+        [Authorize(Policy = "WebRepository")]
         public ActionResult Blame(Guid id, string encodedName, string encodedPath)
         {
             ViewBag.ID = id;
@@ -367,19 +369,19 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [WebAuthorizeRepository]
+        [Authorize(Policy = "WebRepository")]
         public ActionResult Download(Guid id, string encodedName, string encodedPath)
         {
             var name = PathEncoder.Decode(encodedName);
             var path = PathEncoder.Decode(encodedPath);
 
-            Response.BufferOutput = false;
-            Response.Charset = "";
+            //Response.BufferOutput = false;
+            //Response.Charset = "";
             Response.ContentType = "application/zip";
 
             var repo = RepositoryRepository.GetRepository(id);
             string headerValue = ContentDispositionUtil.GetHeaderValue((name ?? repo.Name) + ".zip");
-            Response.AddHeader("Content-Disposition", headerValue);
+            Response.Headers.Add("Content-Disposition", headerValue);
 
             using (var outputZip = new ZipFile())
             {
@@ -392,7 +394,7 @@ namespace Bonobo.Git.Server.Controllers
                     AddTreeToZip(browser, name, path, outputZip);
                 }
 
-                outputZip.Save(Response.OutputStream);
+                outputZip.Save(Response.Body);
 
                 return new EmptyResult();
             }
@@ -423,7 +425,7 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [WebAuthorizeRepository]
+        [Authorize(Policy = "WebRepository")]
         public ActionResult Tags(Guid id, string encodedName, int page = 1)
         {
             page = page >= 1 ? page : 1;
@@ -447,7 +449,7 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [WebAuthorizeRepository]
+        [Authorize(Policy = "WebRepository")]
         public ActionResult Commits(Guid id, string encodedName, int? page = null)
         {
             page = page >= 1 ? page : 1;
@@ -508,7 +510,7 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [WebAuthorizeRepository]
+        [Authorize(Policy = "WebRepository")]
         public ActionResult Commit(Guid id, string commit)
         {
             ViewBag.ID = id;
@@ -523,7 +525,7 @@ namespace Bonobo.Git.Server.Controllers
             }
         }
 
-        [WebAuthorize]
+        [Authorize(Policy = "Web")]
         public ActionResult Clone(Guid id)
         {
             if (!RepositoryPermissionService.HasCreatePermission(User.Id()))
@@ -539,8 +541,8 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        [WebAuthorize]
-        [WebAuthorizeRepository]
+        [Authorize(Policy = "Web")]
+        [Authorize(Policy = "WebRepository")]
         [ValidateAntiForgeryToken]
         public ActionResult Clone(Guid id, RepositoryDetailModel model)
         {
@@ -605,7 +607,7 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        [WebAuthorizeRepository]
+        [Authorize(Policy = "WebRepository")]
         public ActionResult History(Guid id, string encodedPath, string encodedName)
         {
             ViewBag.ID = id;
@@ -649,12 +651,12 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
+        [Authorize(Policy = "Web", Roles = Definitions.Roles.Administrator)]
         // This takes an irrelevant ID, because there isn't a good route
         // to RepositoryController for anything without an Id which isn't the Index action
         public ActionResult Rescan(string id)
         {
-            new RepositorySynchronizer().Run();
+            new RepositorySynchronizer(HttpContext.RequestServices.GetService<IRepositoryRepository>()).Run();
             return RedirectToAction("Index");
         }
 

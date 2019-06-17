@@ -1,23 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 using Bonobo.Git.Server.Models;
 using System.DirectoryServices.AccountManagement;
-using System.Threading.Tasks;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Security;
 using System.Threading;
-using Microsoft.Practices.Unity;
 using Bonobo.Git.Server.Helpers;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 namespace Bonobo.Git.Server.Data
 {
     public sealed class ADBackend
     {
-        [Dependency]
+        public IHostingEnvironment HostingEnvironment { get; set; }
         public IMembershipService MembershipService { get; set; }
 
         public ADBackendStore<RepositoryModel> Repositories { get { return repositories.Value; } }
@@ -63,25 +62,13 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        private Lazy<ADBackendStore<RepositoryModel>> repositories = new Lazy<ADBackendStore<RepositoryModel>>(() =>
-        {
-            return new ADBackendStore<RepositoryModel>(ActiveDirectorySettings.BackendPath, "Repos");
-        });
+        private Lazy<ADBackendStore<RepositoryModel>> repositories;
 
-        private Lazy<ADBackendStore<TeamModel>> teams = new Lazy<ADBackendStore<TeamModel>>(() =>
-        {
-            return new ADBackendStore<TeamModel>(ActiveDirectorySettings.BackendPath, "Teams");
-        });
+        private Lazy<ADBackendStore<TeamModel>> teams;
 
-        private Lazy<ADBackendStore<UserModel>> users = new Lazy<ADBackendStore<UserModel>>(() =>
-        {
-            return new ADBackendStore<UserModel>(ActiveDirectorySettings.BackendPath, "Users");
-        });
+        private Lazy<ADBackendStore<UserModel>> users;
 
-        private Lazy<ADBackendStore<RoleModel>> roles = new Lazy<ADBackendStore<RoleModel>>(() =>
-        {
-            return new ADBackendStore<RoleModel>(ActiveDirectorySettings.BackendPath, "Roles");
-        });
+        private Lazy<ADBackendStore<RoleModel>> roles;
 
         private static volatile ADBackend instance;
         private static object instanceLock = new object();
@@ -94,6 +81,26 @@ namespace Bonobo.Git.Server.Data
             {
                 updateTimer = new Timer(Update, null, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(180));
             }
+
+            repositories = new Lazy<ADBackendStore<RepositoryModel>>(() =>
+            {
+                return new ADBackendStore<RepositoryModel>(HostingEnvironment, ActiveDirectorySettings.BackendPath, "Repos");
+            });
+
+            teams = new Lazy<ADBackendStore<TeamModel>>(() =>
+            {
+                return new ADBackendStore<TeamModel>(HostingEnvironment, ActiveDirectorySettings.BackendPath, "Teams");
+            });
+
+            users = new Lazy<ADBackendStore<UserModel>>(() =>
+            {
+                return new ADBackendStore<UserModel>(HostingEnvironment, ActiveDirectorySettings.BackendPath, "Users");
+            });
+
+            roles = new Lazy<ADBackendStore<RoleModel>>(() =>
+            {
+                return new ADBackendStore<RoleModel>(HostingEnvironment, ActiveDirectorySettings.BackendPath, "Roles");
+            });
         }
 
         private void Update(object state)

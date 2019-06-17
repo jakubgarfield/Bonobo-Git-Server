@@ -31,10 +31,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests.ADTests
             _users = new ADMembershipServiceTestFacade(new ADMembershipService(), _testSupport);
             _repos = new ADRepositoryRepository();
 
-            _service = new RepositoryPermissionService
-            {
-                Repository = _repos, RoleProvider = _roles, TeamRepository = _teams
-            };
+            _service = new RepositoryPermissionService(_repos, _roles, _teams);
         }
 
         protected override TeamModel CreateTeam()

@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
+using Bonobo.Git.Server.Data.ManyToMany;
 using Bonobo.Git.Server.Models;
 
 namespace Bonobo.Git.Server.Data
 {
     public partial class User
     {
-        private ICollection<Repository> _administratedRepositories;
-        private ICollection<Repository> _repositories;
-        private ICollection<Role> _roles;
-        private ICollection<Team> _teams;
+        private ICollection<UserRepository_Administrator> _administratedRepositories;
+        private ICollection<UserRepository_Permission> _repositories;
+        private ICollection<UserRole_InRole> _roles;
+        private ICollection<UserTeam_Member> _teams;
 
         public Guid Id { get; set; }
         public string GivenName { get; set; }
@@ -19,11 +20,11 @@ namespace Bonobo.Git.Server.Data
         public string PasswordSalt { get; set; }
         public string Email { get; set; }
 
-        public virtual ICollection<Repository> AdministratedRepositories
+        public virtual ICollection<UserRepository_Administrator> AdministratedRepositories
         {
             get
             {
-                return _administratedRepositories ?? (_administratedRepositories = new List<Repository>());
+                return _administratedRepositories ?? (_administratedRepositories = new List<UserRepository_Administrator>());
             }
             set
             {
@@ -31,11 +32,11 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public virtual ICollection<Repository> Repositories
+        public virtual ICollection<UserRepository_Permission> Repositories
         {
             get
             {
-                return _repositories ?? (_repositories = new List<Repository>());
+                return _repositories ?? (_repositories = new List<UserRepository_Permission>());
             }
             set
             {
@@ -43,11 +44,11 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public virtual ICollection<Role> Roles
+        public virtual ICollection<UserRole_InRole> Roles
         {
             get
             {
-                return _roles ?? (_roles = new List<Role>());
+                return _roles ?? (_roles = new List<UserRole_InRole>());
             }
             set
             {
@@ -55,11 +56,11 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public virtual ICollection<Team> Teams
+        public virtual ICollection<UserTeam_Member> Teams
         {
             get
             {
-                return _teams ?? (_teams = new List<Team>());
+                return _teams ?? (_teams = new List<UserTeam_Member>());
             }
             set
             {

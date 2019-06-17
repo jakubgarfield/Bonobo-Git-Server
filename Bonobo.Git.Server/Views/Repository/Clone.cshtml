@@ -1,15 +1,16 @@
-@using MvcCheckBoxList.Model
-@model RepositoryDetailModel
+@using Bonobo.Git.Server.App_GlobalResources
+@using Bonobo.Git.Server.Helpers
+@model Bonobo.Git.Server.Models.RepositoryDetailModel
 @{
     ViewBag.Title = Resources.Repository_Clone_Title;
 }
 <h1>@Resources.Repository_Clone_Title</h1>
 
-@using (Html.BeginForm("Clone", "Repository", new { id = ViewBag.ID }, FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
-{    
+@using (Html.BeginForm("Clone", "Repository", new { id = ViewBag.ID }, FormMethod.Post, true, new { @class = "pure-form pure-form-aligned" }))
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(false, Resources.Repository_Clone_Fail)
-    
+
     <fieldset>
         <div class="pure-control-group">
             @Html.LabelFor(m => m.Name)
@@ -32,7 +33,7 @@
         <div class="pure-control-group checkboxlist">
             @Html.LabelFor(m => m.Users)
             <span>
-            	@Html.CheckBoxListFor(m => m.PostedSelectedUsers, mm => mm.AllUsers, mm => mm.Id, mm => mm.DisplayName, mm => mm.Users, Position.Vertical)
+                @Html.CheckBoxListFor(m => m.PostedSelectedUsers, mm => mm.AllUsers, mm => mm.Id, mm => mm.DisplayName, mm => mm.Users)
             </span>
             <i class="fa fa-info-circle" title="@Resources.Repository_UsersHint"></i>
         </div>
@@ -40,7 +41,7 @@
         <div class="pure-control-group checkboxlist">
             @Html.LabelFor(m => m.Administrators)
             <span>
-            	@Html.CheckBoxListFor(m => m.PostedSelectedAdministrators, mm => mm.AllAdministrators, mm => mm.Id, mm => mm.DisplayName, mm => mm.Administrators, Position.Vertical)
+                @Html.CheckBoxListFor(m => m.PostedSelectedAdministrators, mm => mm.AllAdministrators, mm => mm.Id, mm => mm.DisplayName, mm => mm.Administrators)
             </span>
             @Html.ValidationMessageFor(m => m.Administrators)
             <i class="fa fa-info-circle" title="@Resources.Repository_AdministratorsHint"></i>
@@ -49,7 +50,7 @@
         <div class="pure-control-group checkboxlist">
             @Html.LabelFor(m => m.Teams)
             <span>
-            	@Html.CheckBoxListFor(m => m.PostedSelectedTeams, mm => mm.AllTeams, mm => mm.Id, mm => mm.DisplayName, mm => mm.Teams, Position.Vertical)
+                @Html.CheckBoxListFor(m => m.PostedSelectedTeams, mm => mm.AllTeams, mm => mm.Id, mm => mm.DisplayName, mm => mm.Teams)
             </span>
             <i class="fa fa-info-circle" title="@Resources.Repository_TeamsHint"></i>
         </div>

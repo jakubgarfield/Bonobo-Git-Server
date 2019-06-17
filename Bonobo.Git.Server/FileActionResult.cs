@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Bonobo.Git.Server
 {
@@ -18,14 +16,14 @@ namespace Bonobo.Git.Server
         }
 
 
-        public override void ExecuteResult(ControllerContext context)
+        public override void ExecuteResult(ActionContext context)
         {
-            if (!String.IsNullOrEmpty(_name))
+            if (!string.IsNullOrEmpty(_name))
             {
-                context.HttpContext.Response.AddHeader("content-disposition", "attachment; filename=" + _name);
+                context.HttpContext.Response.Headers.Add("content-disposition", "attachment; filename=" + _name);
             }
 
-            context.HttpContext.Response.Write(_data);
+            context.HttpContext.Response.WriteAsync(_data).RunSynchronously();
         }
     }
 }

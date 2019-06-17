@@ -1,5 +1,6 @@
-﻿@using Bonobo.Git.Server.Extensions
-@using MvcCheckBoxList.Model
+﻿@using Bonobo.Git.Server.App_GlobalResources
+@using Bonobo.Git.Server.Configuration
+@using Bonobo.Git.Server.Helpers
 @model Bonobo.Git.Server.Models.RepositoryDetailModel
 
 @{
@@ -8,7 +9,7 @@
 
 @if (Model == null)
 {
-    @Html.Partial("~/Views/Shared/_ItemNotFound.cshtml")
+    @await Html.PartialAsync("~/Views/Shared/_ItemNotFound.cshtml")
 }
 else
 {
@@ -70,7 +71,7 @@ else
                         attribs = new { @id = "AllowAnonymousPush", @disabled = "" }; 
                     }
                 }
-                @Html.EnumDropDownListFor(m => m.AllowAnonymousPush, attribs)
+                @Html.DropDownListFor(m => m.AllowAnonymousPush, Html.GetEnumSelectList(Model.AllowAnonymousPush.GetType()), attribs)
                 <i class="fa fa-info-circle" title="@Resources.Repository_AllowAnonymousPushHint"></i>
             </div>
 
@@ -105,7 +106,7 @@ else
             <div class="pure-control-group checkboxlist">
                 @Html.LabelFor(m => m.Users)
                 <span>
-                    @Html.CheckBoxListFor(m => m.PostedSelectedUsers, m => m.AllUsers, m => m.Id, m => m.DisplayName, m => m.Users, Position.Vertical)
+                    @Html.CheckBoxListFor(m => m.PostedSelectedUsers, m => m.AllUsers, m => m.Id, m => m.DisplayName, m => m.Users)
                 </span>
                 <i class="fa fa-info-circle" title="@Resources.Repository_UsersHint"></i>
             </div>
@@ -115,7 +116,7 @@ else
             <div class="pure-control-group checkboxlist">
                 @Html.LabelFor(m => m.Administrators)
                 <span>
-                    @Html.CheckBoxListFor(m => m.PostedSelectedAdministrators, m => m.AllAdministrators, m => m.Id, m => m.DisplayName, m => m.Administrators, Position.Vertical)
+                    @Html.CheckBoxListFor(m => m.PostedSelectedAdministrators, m => m.AllAdministrators, m => m.Id, m => m.DisplayName, m => m.Administrators)
                 </span>
                 <i class="fa fa-info-circle" title="@Resources.Repository_AdministratorsHint"></i>
                 @Html.ValidationMessageFor(m => m.Administrators)
@@ -124,7 +125,7 @@ else
             <div class="pure-control-group checkboxlist">
                 @Html.LabelFor(m => m.Teams)
                 <span>
-                    @Html.CheckBoxListFor(m => m.PostedSelectedTeams, m => m.AllTeams, mm => mm.Id, mm => mm.DisplayName, mm => mm.Teams, Position.Vertical)
+                    @Html.CheckBoxListFor(m => m.PostedSelectedTeams, m => m.AllTeams, mm => mm.Id, mm => mm.DisplayName, mm => mm.Teams)
                 </span>
                 <i class="fa fa-info-circle" title="@Resources.Repository_TeamsHint"></i>
             </div>

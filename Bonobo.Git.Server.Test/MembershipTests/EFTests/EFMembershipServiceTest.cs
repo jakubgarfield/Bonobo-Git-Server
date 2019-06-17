@@ -5,6 +5,7 @@ using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
 
 namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 {
@@ -19,7 +20,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
         public void UpdatesCanBeRunOnAlreadyUpdatedDatabase()
         {
             // Run all the updates again - this should be completely harmless
-            new AutomaticUpdater().RunWithContext(GetContext());
+            new AutomaticUpdater().RunWithContext(GetContext(), Substitute.For<IAuthenticationProvider>());
         }
 
         [TestMethod]
@@ -123,8 +124,8 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 
         protected void InitialiseTestObjects()
         {
-            _service = new EFMembershipService {CreateContext = GetContext};
-            new AutomaticUpdater().RunWithContext(GetContext());
+            _service = new EFMembershipService(GetContext);
+            new AutomaticUpdater().RunWithContext(GetContext(), Substitute.For<IAuthenticationProvider>());
         }
     }
 }

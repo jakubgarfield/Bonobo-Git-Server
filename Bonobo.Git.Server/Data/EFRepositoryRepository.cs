@@ -1,52 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Bonobo.Git.Server.Data.ManyToMany;
 using Bonobo.Git.Server.Models;
-using System.Data.Entity.Core;
-using System.Data.Entity.Infrastructure;
-using Microsoft.Practices.Unity;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Bonobo.Git.Server.Data
 {
     public class EFRepositoryRepository : IRepositoryRepository
     {
-        [Dependency]
         public Func<BonoboGitServerContext> CreateContext { get; set; }
+
+        public EFRepositoryRepository(Func<BonoboGitServerContext> createContext)
+        {
+            CreateContext = createContext;
+        }
 
         public IList<RepositoryModel> GetAllRepositories()
         {
             using (var db = CreateContext())
             {
-                var dbrepos = db.Repositories.Select(repo => new
-                {
-                    Id = repo.Id,
-                    Name = repo.Name,
-                    Group = repo.Group,
-                    Description = repo.Description,
-                    AnonymousAccess = repo.Anonymous,
-                    Users = repo.Users,
-                    Teams = repo.Teams,
-                    Administrators = repo.Administrators,
-                    AuditPushUser = repo.AuditPushUser,
-                    AllowAnonPush = repo.AllowAnonymousPush,
-                    Logo = repo.Logo
-                }).ToList();
-
-                return dbrepos.Select(repo => new RepositoryModel
-                {
-                    Id = repo.Id,
-                    Name = repo.Name,
-                    Group = repo.Group,
-                    Description = repo.Description,
-                    AnonymousAccess = repo.AnonymousAccess,
-                    Users = repo.Users.Select(user => user.ToModel()).ToArray(),
-                    Teams = repo.Teams.Select(TeamToTeamModel).ToArray(),
-                    Administrators = repo.Administrators.Select(user => user.ToModel()).ToArray(),
-                    AuditPushUser = repo.AuditPushUser,
-                    AllowAnonymousPush = repo.AllowAnonPush,
-                    Logo = repo.Logo
-                }).ToList();
+                var dbrepos = db.Repositories.ToList();
+                return dbrepos.Select(ConvertToModel).ToList();
             }
         }
 
@@ -133,10 +110,6 @@ namespace Bonobo.Git.Server.Data
                     Log.Error(ex, "Failed to create repo {RepoName}", model.Name);
                     return false;
                 }
-                catch (UpdateException)
-                {
-                    return false;
-                }
                 return true;
             }
         }
@@ -187,7 +160,7 @@ namespace Bonobo.Git.Server.Data
                 Id = t.Id,
                 Name = t.Name,
                 Description = t.Description,
-                Members = t.Users.Select(user => user.ToModel()).ToArray()
+                Members = t.Users.Select(user => user.User.ToModel()).ToArray()
             };
         }
 
@@ -205,16 +178,15 @@ namespace Bonobo.Git.Server.Data
                 Group = item.Group,
                 Description = item.Description,
                 AnonymousAccess = item.Anonymous,
-                Users = item.Users.Select(user => user.ToModel()).ToArray(),
-                Teams = item.Teams.Select(TeamToTeamModel).ToArray(),
-                Administrators = item.Administrators.Select(user => user.ToModel()).ToArray(),
+                Users = item.Users.Select(user => user.User.ToModel()).ToArray(),
+                Teams = item.Teams.Select(x => TeamToTeamModel(x.Team)).ToArray(),
+                Administrators = item.Administrators.Select(user => user.User.ToModel()).ToArray(),
                 AuditPushUser = item.AuditPushUser,
                 AllowAnonymousPush = item.AllowAnonymousPush,
                 Logo = item.Logo,
                 LinksRegex = item.LinksRegex,
                 LinksUrl = item.LinksUrl,
                 LinksUseGlobal = item.LinksUseGlobal
-
             };
         }
 
@@ -225,7 +197,11 @@ namespace Bonobo.Git.Server.Data
                 var administrators = database.Users.Where(i => admins.Contains(i.Id));
                 foreach (var item in administrators)
                 {
-                    repo.Administrators.Add(item);
+                    repo.Administrators.Add(new UserRepository_Administrator
+                    {
+                        Repository = repo,
+                        User = item
+                    });
                 }
             }
 
@@ -234,7 +210,11 @@ namespace Bonobo.Git.Server.Data
                 var permittedUsers = database.Users.Where(i => users.Contains(i.Id));
                 foreach (var item in permittedUsers)
                 {
-                    repo.Users.Add(item);
+                    repo.Users.Add(new UserRepository_Permission
+                    {
+                        Repository = repo,
+                        User = item
+                    });
                 }
             }
 
@@ -243,7 +223,12 @@ namespace Bonobo.Git.Server.Data
                 var permittedTeams = database.Teams.Where(i => teams.Contains(i.Id));
                 foreach (var item in permittedTeams)
                 {
-                    repo.Teams.Add(item);
+                    if (repo.Teams == null) repo.Teams = new List<TeamRepository_Permission>();
+                    repo.Teams.Add(new TeamRepository_Permission
+                    {
+                        Repository = repo,
+                        Team = item
+                    });
                 }
             }
         }

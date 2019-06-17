@@ -2,12 +2,13 @@ using System;
 using System.Data.SqlClient;
 using System.IO;
 using Bonobo.Git.Server.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 {
     class SqlServerTestConnection : IDatabaseTestConnection
     {
-        readonly SqlConnection _connection;
+        readonly DbContextOptionsBuilder<BonoboGitServerContext> _optionsBuilder;
         private readonly string _databaseName;
         private static readonly string _instanceName;
 
@@ -52,13 +53,15 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 
             Console.WriteLine("Created test database: " + fileName);
 
-            _connection = new SqlConnection(String.Format(@"Data Source=(LocalDB)\{0};Integrated Security=True;AttachDbFilename={1};Initial Catalog={2}", _instanceName, fileName, _databaseName));
-            _connection.Open();
+            _optionsBuilder = new DbContextOptionsBuilder<BonoboGitServerContext>();
+            _optionsBuilder.UseSqlServer(string.Format(
+                @"Data Source=(LocalDB)\{0};Integrated Security=True;AttachDbFilename={1};Initial Catalog={2}",
+                _instanceName, fileName, _databaseName));
         }
 
         public BonoboGitServerContext GetContext()
         {
-            return BonoboGitServerContext.FromDatabase(_connection);
+            return new BonoboGitServerContext(_optionsBuilder.Options);
         }
 
         void CreateDB(string fileName)
@@ -96,7 +99,6 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 
         public void Dispose()
         {
-            _connection.Dispose();
             SqlConnection.ClearAllPools();
             TryToDeleteDatabaseFiles();
         }

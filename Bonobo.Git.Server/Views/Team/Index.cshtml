@@ -1,5 +1,10 @@
-﻿@using Bonobo.Git.Server.Extensions;
-@model TeamDetailModelList
+﻿@using AndreyKurdiumov.AspNetCore.Helpers
+@using Bonobo.Git.Server.App_GlobalResources
+@using Bonobo.Git.Server.Extensions;
+@using Bonobo.Git.Server.Models
+@using Microsoft.AspNetCore.Http
+@model Bonobo.Git.Server.Models.TeamDetailModelList
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     ViewBag.Title = Resources.Team_Index_Title;
 }
@@ -30,7 +35,7 @@
 }
 
 @{
-    var grid = new WebGrid(source: Model, defaultSort: "Name", rowsPerPage: 15);
+    var grid = new WebGrid(HttpContextAccessor, source: Model, defaultSort: "Name", rowsPerPage: 15);
 }
 
 <div class="w-grid">

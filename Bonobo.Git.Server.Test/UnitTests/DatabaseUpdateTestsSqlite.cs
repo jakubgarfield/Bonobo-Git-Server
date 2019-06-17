@@ -3,6 +3,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Bonobo.Git.Server.Test.MembershipTests.EFTests;
 using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Data;
+using Bonobo.Git.Server.Security;
+using Microsoft.EntityFrameworkCore;
+using NSubstitute;
 
 namespace Bonobo.Git.Server.Test.UnitTests
 {
@@ -91,7 +94,7 @@ namespace Bonobo.Git.Server.Test.UnitTests
                     );
                   
                     ");
-            new AutomaticUpdater().RunWithContext(_connection.GetContext());
+            new AutomaticUpdater().RunWithContext(_connection.GetContext(), Substitute.For<IAuthenticationProvider>());
         }
 
         [TestMethod]

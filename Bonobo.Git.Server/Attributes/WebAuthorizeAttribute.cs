@@ -1,14 +1,27 @@
 ﻿using System;
 using System.Linq;
-using System.Web.Mvc;
-using System.Web.Routing;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Bonobo.Git.Server
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class WebAuthorizeAttribute : AuthorizeAttribute
+    public class WebRequirement : IAuthorizationRequirement
     {
-        public new string Roles
+
+    }
+
+    public class WebAuthorizationHandler : AuthorizationHandler<WebRequirement>
+    {
+        private string[] roles;
+
+        public WebAuthorizationHandler()
+        {
+
+        }
+
+        public string Roles
         {
             get
             {
@@ -20,24 +33,25 @@ namespace Bonobo.Git.Server
             }
         }
 
-        private string[] roles;
-
-        public override void OnAuthorization(AuthorizationContext filterContext)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, WebRequirement requirement)
         {
-            base.OnAuthorization(filterContext);
-
-            if (!(filterContext.Result is HttpUnauthorizedResult))
+            var redirectContext = context.Resource as AuthorizationFilterContext;
+            if (!context.User.IsInRole(Definitions.Roles.Member) && !context.User.Identity.IsAuthenticated)
             {
-                if (!filterContext.HttpContext.User.IsInRole(Definitions.Roles.Member) && !filterContext.HttpContext.User.Identity.IsAuthenticated)
-                {
-                    filterContext.Result = new RedirectResult("~/Home/Unauthorized");
-                }
-
-                if (roles != null && roles.Length != 0 && !filterContext.HttpContext.User.Roles().Any(x => roles.Contains(x)))
-                {
-                    filterContext.Result = new RedirectResult("~/Home/Unauthorized");
-                }
+                context.Fail();
+                redirectContext.Result = new RedirectToActionResult("Unauthorized", "Home", null);
+                return Task.CompletedTask;
             }
+
+            if (roles != null && roles.Length != 0 && !context.User.Roles().Any(x => roles.Contains(x)))
+            {
+                context.Fail();
+                redirectContext.Result = new RedirectToActionResult("Unauthorized", "Home", null);
+                return Task.CompletedTask;
+            }
+
+            context.Succeed(requirement);
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,56 +1,63 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.ModelConfiguration;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Bonobo.Git.Server.Data.Mapping
 {
-    public class UserMap : EntityTypeConfiguration<User>
+    public class UserMap : IEntityTypeConfiguration<User>
     {
-        public UserMap()
+        private readonly ValueConverter _primaryKeyConverter;
+
+        public UserMap(ValueConverter primaryKeyConverter)
         {
-            SetPrimaryKey();
-            SetProperties();
-            SetTableAndColumnMappings();
+            _primaryKeyConverter = primaryKeyConverter;
         }
 
-
-        private void SetTableAndColumnMappings()
+        public void Configure(EntityTypeBuilder<User> builder)
         {
-            ToTable("User");
-            Property(t => t.Id).HasColumnName("Id");
-            Property(t => t.GivenName).HasColumnName("Name");
-            Property(t => t.Surname).HasColumnName("Surname");
-            Property(t => t.Username).HasColumnName("Username");
-            Property(t => t.Password).HasColumnName("Password");
-            Property(t => t.PasswordSalt).HasColumnName("PasswordSalt");
-            Property(t => t.Email).HasColumnName("Email");
+            SetPrimaryKey(builder);
+            SetProperties(builder);
+            SetTableAndColumnMappings(builder);
         }
 
-        private void SetProperties()
+        private void SetTableAndColumnMappings(EntityTypeBuilder<User> builder)
         {
-            Property(t => t.GivenName)
+            builder.ToTable("User");
+            builder.Property(t => t.Id).HasColumnName("Id").HasConversion(_primaryKeyConverter);
+            builder.Property(t => t.GivenName).HasColumnName("Name");
+            builder.Property(t => t.Surname).HasColumnName("Surname");
+            builder.Property(t => t.Username).HasColumnName("Username");
+            builder.Property(t => t.Password).HasColumnName("Password");
+            builder.Property(t => t.PasswordSalt).HasColumnName("PasswordSalt");
+            builder.Property(t => t.Email).HasColumnName("Email");
+        }
+
+        private void SetProperties(EntityTypeBuilder<User> builder)
+        {
+            builder.Property(t => t.GivenName)
                 .IsRequired()
                 .HasMaxLength(255);
 
-            Property(t => t.Surname)
+            builder.Property(t => t.Surname)
                 .IsRequired()
                 .HasMaxLength(255);
 
-            Property(t => t.Username)
+            builder.Property(t => t.Username)
                 .IsRequired()
                 .HasMaxLength(255);
 
-            Property(t => t.Password)
+            builder.Property(t => t.Password)
                 .IsRequired()
                 .HasMaxLength(255);
 
-            Property(t => t.Email)
+            builder.Property(t => t.Email)
                 .IsRequired()
                 .HasMaxLength(255);
         }
 
-        private void SetPrimaryKey()
+        private void SetPrimaryKey(EntityTypeBuilder<User> builder)
         {
-            HasKey(t => t.Id);
+            builder.HasKey(t => t.Id);
         }
     }
 }

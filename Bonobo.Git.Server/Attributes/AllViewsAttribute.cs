@@ -1,11 +1,14 @@
 ﻿using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
-using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace Bonobo.Git.Server.Attributes
 {
@@ -33,15 +36,24 @@ namespace Bonobo.Git.Server.Attributes
 
     public class AllViewsFilter : ActionFilterAttribute
     {
-        [Dependency]
         public IRepositoryPermissionService RepoPermissions { get; set; }
+
+        private readonly IActionContextAccessor _actionContextAccessor;
+
+        public AllViewsFilter(IRepositoryPermissionService repoPermissions, IActionContextAccessor actionContextAccessor)
+        {
+            RepoPermissions = repoPermissions;
+            _actionContextAccessor = actionContextAccessor;
+        }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            filterContext.Controller.ViewBag.PermittedRepositories = PopulateRepoGoToList(filterContext.HttpContext.User.Id(), filterContext.Controller.ControllerContext);
+            Controller controler = filterContext.Controller as Controller;
+            if (controler == null) return;
+            controler.ViewBag.PermittedRepositories = PopulateRepoGoToList(filterContext.HttpContext.User.Id());
         }
 
-        private List<SelectListItem> PopulateRepoGoToList(Guid id, ControllerContext ControllerContext)
+        private List<SelectListItem> PopulateRepoGoToList(Guid id)
         {
             var pullList = RepoPermissions.GetAllPermittedRepositories(id, RepositoryAccessLevel.Pull);
             var adminList = RepoPermissions.GetAllPermittedRepositories(id, RepositoryAccessLevel.Administer);
@@ -49,7 +61,7 @@ namespace Bonobo.Git.Server.Attributes
                     .OrderBy(x => x.Name.ToLowerInvariant())
                     .GroupBy(x => x.Group == null ? Resources.Repository_No_Group : x.Group);
             List<SelectListItem> items = new List<SelectListItem>();
-            var u = new UrlHelper(ControllerContext.RequestContext);
+            var u = new UrlHelper(_actionContextAccessor.ActionContext);
             var groups = new Dictionary<string, SelectListGroup>();
             foreach (var grouped in firstList)
             {

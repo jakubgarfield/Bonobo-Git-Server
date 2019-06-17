@@ -7,8 +7,7 @@ using Bonobo.Git.Server.Configuration;
 using System;
 using System.Threading;
 using System.Linq;
-using Bonobo.Git.Server.Data;
-using Microsoft.VisualBasic.FileIO;
+using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -17,12 +16,13 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
     public class Pre600UpdateTo600
     {
         // Before 6.0.0 the mapping was done via the name property. After that the Guid is used.
-        public static void UpdateADBackend()
+        public static void UpdateADBackend(IHostingEnvironment hostingEnvironment)
         {
             // Make a copy of the current backendfolder if it exists, so we can use the modern models for saving
             // it all to the correct location directly
-            var backendDirectory = PathEncoder.GetRootPath(ActiveDirectorySettings.BackendPath);
-            var backupDirectory = PathEncoder.GetRootPath(ActiveDirectorySettings.BackendPath + "_pre6.0.0_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss"));
+            var backendDirectory = PathEncoder.GetRootPath(hostingEnvironment, ActiveDirectorySettings.BackendPath);
+            var backupDirectory = PathEncoder.GetRootPath(hostingEnvironment,
+                ActiveDirectorySettings.BackendPath + "_pre6.0.0_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmmss"));
             if (Directory.Exists(backendDirectory) && BackEndNeedsUpgrade(backendDirectory))
             {
                 MakeBackupOfBackendDirectory(backendDirectory, backupDirectory);
@@ -98,7 +98,7 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
 
         private static void MakeBackupOfBackendDirectory(string backendDirectory, string backupDirectory)
         {
-            FileSystem.CopyDirectory(backendDirectory, backupDirectory);
+            CopyDirectory(backendDirectory, backupDirectory);
             int attemptsRemaining = 5;
             while (attemptsRemaining-- > 0)
             {
@@ -119,6 +119,40 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
                     }
                     Thread.Sleep(1000);
                 }
+            }
+        }
+
+        private static void CopyDirectory(string sourceDirName, string destDirName)
+        {
+            // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + sourceDirName);
+            }
+
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            // If the destination directory doesn't exist, create it.
+            if (!Directory.Exists(destDirName))
+            {
+                Directory.CreateDirectory(destDirName);
+            }
+
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string temppath = Path.Combine(destDirName, file.Name);
+                file.CopyTo(temppath, false);
+            }
+
+            foreach (DirectoryInfo subdir in dirs)
+            {
+                string temppath = Path.Combine(destDirName, subdir.Name);
+                CopyDirectory(subdir.FullName, temppath);
             }
         }
 

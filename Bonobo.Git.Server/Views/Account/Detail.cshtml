@@ -1,10 +1,12 @@
-﻿@model Bonobo.Git.Server.Models.UserDetailModel
+﻿@using Bonobo.Git.Server
+@using Bonobo.Git.Server.App_GlobalResources
+@model Bonobo.Git.Server.Models.UserDetailModel
 @{
     ViewBag.Title = @Resources.Account_Detail_Title;
 }
 @if (Model == null)
 {   
-    @Html.Partial("~/Views/Shared/_ItemNotFound.cshtml") 
+    @await Html.PartialAsync("~/Views/Shared/_ItemNotFound.cshtml") 
 }
 else
 {  

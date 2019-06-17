@@ -1,25 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
 using System.Linq;
-
 using Bonobo.Git.Server.Models;
-
-using Microsoft.Practices.Unity;
-
-using Owin;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonobo.Git.Server.Security
 {
     public abstract class AuthenticationProvider : IAuthenticationProvider
     {
-        [Dependency]
         public IMembershipService MembershipService { get; set; }
-
-        [Dependency]
         public IRoleProvider RoleProvider { get; set; }
 
-        public abstract void Configure(IAppBuilder app);
+        protected readonly IHttpContextAccessor httpContextAccessor;
+
+        protected AuthenticationProvider(IHttpContextAccessor httpContextAccessor, IMembershipService membershipService,
+            IRoleProvider roleProvider)
+        {
+            this.httpContextAccessor = httpContextAccessor;
+            MembershipService = membershipService;
+            RoleProvider = roleProvider;
+        }
+
+        public abstract void Configure(IServiceCollection services);
         public abstract void SignIn(string username, string returnUrl, bool rememberMe);
         public abstract void SignOut();
 

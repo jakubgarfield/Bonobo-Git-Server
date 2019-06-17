@@ -1,25 +1,85 @@
 ﻿using System;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-using Microsoft.Owin.Infrastructure;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Infrastructure;
-using System.Security.Cryptography;
-using System.Text;
 using System.DirectoryServices.AccountManagement;
-
-using Bonobo.Git.Server.Security;
-using Bonobo.Git.Server.Helpers;
+using System.Linq;
+using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 namespace Bonobo.Git.Server.Owin.Windows
 {
     internal class WindowsAuthenticationHandler : AuthenticationHandler<WindowsAuthenticationOptions>
     {
-        protected override Task<AuthenticationTicket> AuthenticateCoreAsync()
+        public WindowsAuthenticationHandler(IOptionsMonitor<WindowsAuthenticationOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock) : base(options, logger, encoder, clock)
+        {
+        }
+
+        protected override Task HandleChallengeAsync(AuthenticationProperties properties)
+        {
+            //if (Response.StatusCode == 401 && Response.Headers.ContainsKey("WWW-Authenticate") == false)
+            //{
+            //    var challenge = Helper.LookupChallenge(Options.AuthenticationType, Options.AuthenticationMode);
+
+            //    if (challenge != null)
+            //    {
+            //        AuthenticationProperties challengeProperties = challenge.Properties;
+
+            //        if (string.IsNullOrEmpty(challengeProperties.RedirectUri))
+            //        {
+            //            throw new ArgumentNullException("RedirectUri");
+            //        }
+
+            //        string protectedProperties = Options.StateDataFormat.Protect(challengeProperties);
+            //        string handshakeId = Guid.NewGuid().ToString();
+
+            //        WindowsAuthenticationHandshake handshake = new WindowsAuthenticationHandshake()
+            //        {
+            //            AuthenticationProperties = challengeProperties
+            //        };
+
+            //        Options.Handshakes.Add(handshakeId, handshake);
+            //        Response.Redirect(WebUtilities.AddQueryString(Request.PathBase + Options.CallbackPath.Value, "id", handshakeId));
+            //    }
+            //}
+
+            return Task.Delay(0);
+        }
+
+        //public override async Task<bool> InvokeAsync()
+        //{
+        //    bool result = false;
+
+        //    if (Options.CallbackPath.HasValue && Options.CallbackPath == Request.Path)
+        //    {
+        //        AuthenticateResult ticket = await AuthenticateAsync();
+        //        if (ticket != null && ticket.Identity != null)
+        //        {
+        //            Context.SignInAsync(ticket.Properties, ticket.Identity);
+        //            if(!ticket.Properties.RedirectUri.StartsWith(Request.PathBase.Value))
+        //            {
+        //                ticket.Properties.RedirectUri = Request.PathBase.Value + ticket.Properties.RedirectUri;
+        //            }
+        //            Response.Redirect(ticket.Properties.RedirectUri);
+        //            result = true;
+        //        }
+
+        //        if (Response.Headers.ContainsKey("WWW-Authenticate"))
+        //        {
+        //            result = true;
+        //        }
+        //    }
+
+        //    return result;
+        //}
+
+
+
+        protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
             AuthenticationProperties properties = null;
             WindowsAuthenticationHandshake handshake = null;
@@ -39,7 +99,8 @@ namespace Bonobo.Git.Server.Owin.Windows
 
                             Response.Headers.Add("WWW-Authenticate", new[] { string.Concat("NTLM ", token.Challenge) });
                             Response.StatusCode = 401;
-                            return Task.FromResult(new AuthenticationTicket(null, properties));
+                            return Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(null, properties,
+                                WindowsAuthenticationDefaults.AuthenticationType)));
                         }
                         break;
                     case AuthenticationStage.Response:
@@ -51,7 +112,7 @@ namespace Bonobo.Git.Server.Owin.Windows
 
                             Log.Verbose("WinAuth: Valid response for uid {UserId}", uid);
 
-                            if (claimdelegate == null) 
+                            if (claimdelegate == null)
                             {
                                 string domainName = handshake.AuthenticatedUsername.GetDomain();
 
@@ -65,7 +126,7 @@ namespace Bonobo.Git.Server.Owin.Windows
                                 {
                                     Log.Error("DC for domain {DomainName} has returned null for username {UserName} - failing auth", domainName, handshake.AuthenticatedUsername);
                                     Response.StatusCode = 401;
-                                    return Task.FromResult(new AuthenticationTicket(null, null));
+                                    return Task.FromResult(AuthenticateResult.Fail("DC for domain {DomainName} has returned null for username {UserName}"));
                                 }
 
                                 Log.Verbose("WinAuth: DC returned adUser {ADUser}", adUser.GivenName);
@@ -91,10 +152,9 @@ namespace Bonobo.Git.Server.Owin.Windows
                                 Options.Handshakes.TryRemove(handshakeId);
 
                                 Log.Verbose("WinAuth: New user - about to redirect to CreateADUser");
-
                                 // user does not exist! Redirect to create page.
                                 properties.RedirectUri = "/Account/CreateADUser";
-                                return Task.FromResult(new AuthenticationTicket(identity, properties));
+                                return Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(new ClaimsPrincipal(identity), properties, WindowsAuthenticationDefaults.AuthenticationType)));
                             }
                             else
                             {
@@ -109,7 +169,7 @@ namespace Bonobo.Git.Server.Owin.Windows
 
                                     Log.Verbose("WinAuth: Returning id auth ticket, claims: {Claims}", claims);
 
-                                    return Task.FromResult(new AuthenticationTicket(identity, properties));
+                                    return Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(new ClaimsPrincipal(identity), properties, WindowsAuthenticationDefaults.AuthenticationType)));
                                 }
                             }
                         }
@@ -118,66 +178,7 @@ namespace Bonobo.Git.Server.Owin.Windows
                 Response.Headers.Add("WWW-Authenticate", new[] { "NTLM" });
                 Response.StatusCode = 401;
             }
-            return Task.FromResult(new AuthenticationTicket(null, properties));
-        }
-
-        protected override Task ApplyResponseChallengeAsync()
-        {
-            if (Response.StatusCode == 401 && Response.Headers.ContainsKey("WWW-Authenticate") == false)
-            {
-                var challenge = Helper.LookupChallenge(Options.AuthenticationType, Options.AuthenticationMode);
-
-                if (challenge != null)
-                {
-                    AuthenticationProperties challengeProperties = challenge.Properties;
-
-                    if (string.IsNullOrEmpty(challengeProperties.RedirectUri))
-                    {
-                        throw new ArgumentNullException("RedirectUri");
-                    }
-
-                    string protectedProperties = Options.StateDataFormat.Protect(challengeProperties);
-                    string handshakeId = Guid.NewGuid().ToString();
-
-                    WindowsAuthenticationHandshake handshake = new WindowsAuthenticationHandshake()
-                    {
-                        AuthenticationProperties = challengeProperties
-                    };
-
-                    Options.Handshakes.Add(handshakeId, handshake);
-                    Response.Redirect(WebUtilities.AddQueryString(Request.PathBase + Options.CallbackPath.Value, "id", handshakeId));
-                }
-            }
-
-            return Task.Delay(0);
-        }
-
-        public override async Task<bool> InvokeAsync()
-        {
-            bool result = false;
-
-            if (Options.CallbackPath.HasValue && Options.CallbackPath == Request.Path)
-            {
-                AuthenticationTicket ticket = await AuthenticateAsync();
-                if (ticket != null && ticket.Identity != null)
-                {
-
-                    Context.Authentication.SignIn(ticket.Properties, ticket.Identity);
-                    if(!ticket.Properties.RedirectUri.StartsWith(Request.PathBase.Value))
-                    {
-                        ticket.Properties.RedirectUri = Request.PathBase.Value + ticket.Properties.RedirectUri;
-                    }
-                    Response.Redirect(ticket.Properties.RedirectUri);
-                    result = true;
-                }
-
-                if (Response.Headers.ContainsKey("WWW-Authenticate"))
-                {
-                    result = true;
-                }
-            }
-
-            return result;
+            return Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(null, properties, WindowsAuthenticationDefaults.AuthenticationType)));
         }
     }
 }

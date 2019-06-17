@@ -1,32 +1,32 @@
-﻿using System;
-using System.Web.Mvc;
-using System.Web.Routing;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace Bonobo.Git.Server.App_Start
 {
     public class RouteConfig
     {
-        public static void RegisterRoutes(RouteCollection routes)
+        public static IRouteBuilder RegisterRoutes(IRouteBuilder routes)
         {
             routes.MapRoute("SecureInfoRefs",
                             "{repositoryName}.git/info/refs",
                             new { controller = "Git", action = "SecureGetInfoRefs" },
-                            new { method = new HttpMethodConstraint("GET") });
+                            new { method = new HttpMethodRouteConstraint("GET") });
 
             routes.MapRoute("SecureUploadPack",
                             "{repositoryName}.git/git-upload-pack",
                             new { controller = "Git", action = "SecureUploadPack" },
-                            new { method = new HttpMethodConstraint("POST") });
+                            new { method = new HttpMethodRouteConstraint("POST") });
 
             routes.MapRoute("SecureReceivePack",
                             "{repositoryName}.git/git-receive-pack",
                             new { controller = "Git", action = "SecureReceivePack" },
-                            new { method = new HttpMethodConstraint("POST") });
+                            new { method = new HttpMethodRouteConstraint("POST") });
 
             routes.MapRoute("GitBaseUrl",
                             "{repositoryName}.git",
                             new { controller = "Git", action = "GitUrl" },
-                            new { method = new HttpMethodConstraint("GET") });
+                            new { method = new HttpMethodRouteConstraint("GET") });
 
             routes.MapRoute("IndexRoute",
                             "{controller}/Index/",
@@ -71,34 +71,37 @@ namespace Bonobo.Git.Server.App_Start
                             new { id = @"\d+" });
 
             routes.MapRoute("Repository",
-                            "Repository/{id}/{action}/{reponame}",
-                            new { controller = "Repository", action = "Detail", reponame = UrlParameter.Optional },
+                            "Repository/{id}/{action}/{reponame?}",
+                            new { controller = "Repository", action = "Detail" },
                             new { id = @"\d+" });
 
             routes.MapRoute("Account",
-                            "Account/{id}/{action}/{username}",
-                            new { controller = "Account", action = "Detail", username = UrlParameter.Optional },
+                            "Account/{id}/{action}/{username?}",
+                            new { controller = "Account", action = "Detail" },
                             new { id = @"\d+" });
 
             routes.MapRoute("Team",
-                            "Team/{id}/{action}/{teamname}",
-                            new { controller = "Team", action = "Detail", teamname = UrlParameter.Optional },
+                            "Team/{id}/{action}/{teamname?}",
+                            new { controller = "Team", action = "Detail" },
                             new { id = @"\d+" });
 
 
-            routes.MapRoute("Validation", "Validation/{action}", new { controller = "Validation", action = String.Empty });
+            routes.MapRoute("Validation", "Validation/{action}",
+                            new {controller = "Validation", action = string.Empty});
 
             routes.MapRoute("RepoCommits",
-                            "Repository/Commits/{id}",
-                            new { controller = "Repository", action = "Commits", id = string.Empty});
+                            "Repository/Commits/{id?}",
+                            new { controller = "Repository", action = "Commits"});
 
             routes.MapRoute("Default",
-                            "{controller}/{action}/{id}",
-                            new { controller = "Home", action = "Index", id = String.Empty });
+                            "{controller}/{action}/{id?}",
+                            new { controller = "Home", action = "Index" });
 
-            routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
+            //routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
 
-            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            //routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+            return routes;
         }
     }
 }

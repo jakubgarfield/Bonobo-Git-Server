@@ -1,35 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 using Bonobo.Git.Server.App_GlobalResources;
-
-using Microsoft.Practices.Unity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bonobo.Git.Server.Controllers
 {
     public class TeamController : Controller
     {
-        [Dependency]
         public IMembershipService MembershipService { get; set; }
-
-        [Dependency]
         public IRepositoryRepository RepositoryRepository { get; set; }
-
-        [Dependency]
         public ITeamRepository TeamRepository { get; set; }
 
-        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
+        public TeamController(IMembershipService membershipService, IRepositoryRepository repositoryRepository,
+            ITeamRepository teamRepository)
+        {
+            MembershipService = membershipService;
+            RepositoryRepository = repositoryRepository;
+            TeamRepository = teamRepository;
+        }
+
+        [Authorize(Policy = "Web", Roles = Definitions.Roles.Administrator)]
         public ActionResult Index()
         {
             return View(ConvertTeamModels(TeamRepository.GetAllTeams()));
         }
 
-        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
+        [Authorize(Policy = "Web", Roles = Definitions.Roles.Administrator)]
         public ActionResult Edit(Guid id)
         {
             var model = ConvertEditTeamModel(TeamRepository.GetTeam(id));
@@ -38,7 +40,7 @@ namespace Bonobo.Git.Server.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
+        [Authorize(Policy = "Web", Roles = Definitions.Roles.Administrator)]
         public ActionResult Edit(TeamEditModel model)
         {           
             if (ModelState.IsValid)
@@ -50,7 +52,7 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
+        [Authorize(Policy = "Web", Roles = Definitions.Roles.Administrator)]
         public ActionResult Create()
         {
             var model = new TeamEditModel 
@@ -63,7 +65,7 @@ namespace Bonobo.Git.Server.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
+        [Authorize(Policy = "Web", Roles = Definitions.Roles.Administrator)]
         public ActionResult Create(TeamEditModel model)
         {
             while (!String.IsNullOrEmpty(model.Name) && model.Name.Last() == ' ')
@@ -89,7 +91,7 @@ namespace Bonobo.Git.Server.Controllers
             return View(model);
         }
 
-        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
+        [Authorize(Policy = "Web", Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(Guid id)
         {
             return View(ConvertEditTeamModel(TeamRepository.GetTeam(id)));
@@ -97,7 +99,7 @@ namespace Bonobo.Git.Server.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [WebAuthorize(Roles = Definitions.Roles.Administrator)]
+        [Authorize(Policy = "Web", Roles = Definitions.Roles.Administrator)]
         public ActionResult Delete(TeamEditModel model)
         {
             if (model != null && model.Id != null)
@@ -110,7 +112,7 @@ namespace Bonobo.Git.Server.Controllers
             return RedirectToAction("Index");
         }
 
-        [WebAuthorize]
+        [Authorize(Policy = "Web")]
         public ActionResult Detail(Guid id)
         {
             return View(ConvertDetailTeamModel(TeamRepository.GetTeam(id)));

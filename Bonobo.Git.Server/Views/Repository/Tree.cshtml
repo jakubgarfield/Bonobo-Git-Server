@@ -1,5 +1,8 @@
-﻿@using Bonobo.Git.Server.Extensions
-@model RepositoryTreeModel
+﻿@using Bonobo.Git.Server.App_GlobalResources
+@using Bonobo.Git.Server.Extensions
+@using Bonobo.Git.Server.Helpers
+@using Bonobo.Git.Server.Models
+@model Bonobo.Git.Server.Models.RepositoryTreeModel
 @{
     Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
     ViewBag.Title = Resources.Repository_Tree_Title;
@@ -7,8 +10,8 @@
 @if (Model != null)
 {
     <div class="content">
-        @Html.Partial("_BranchSwitcher")
-        @Html.Partial("_AddressBar")
+        @await Html.PartialAsync("_BranchSwitcher")
+        @await Html.PartialAsync("_AddressBar")
 
         <table id="files" class="pure-table">
             <thead>

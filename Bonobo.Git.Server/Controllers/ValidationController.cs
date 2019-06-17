@@ -1,37 +1,42 @@
 ﻿using Bonobo.Git.Server.Attributes;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
-using Microsoft.Practices.Unity;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
-using System.Web.UI;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Bonobo.Git.Server.Controllers
 {
-    [OutputCache(Location = OutputCacheLocation.None, NoStore = true)]
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class ValidationController : Controller
     {
-        [Dependency]
         public IRepositoryRepository RepoRepo { get; set; }
-
-        [Dependency]
         public IMembershipService MembershipService { get; set; }
-
-        [Dependency]
         public ITeamRepository TeamRepo { get; set; }
+
+        private readonly IActionContextAccessor actionContextAccessor;
+
+        public ValidationController(IRepositoryRepository repoRepo, IMembershipService membershipService,
+            ITeamRepository teamRepository, IActionContextAccessor actionContextAccessor)
+        {
+            RepoRepo = repoRepo;
+            MembershipService = membershipService;
+            TeamRepo = teamRepository;
+            this.actionContextAccessor = actionContextAccessor;
+        }
 
         public ActionResult UniqueNameRepo(string name, Guid? id)
         {
             bool isUnique = RepoRepo.NameIsUnique(name, id ?? Guid.Empty);
-            return Json(isUnique, JsonRequestBehavior.AllowGet);
+            return Json(isUnique);
         }
 
         public ActionResult UniqueNameUser(string Username, Guid? id)
         {
             var possibly_existent_user = MembershipService.GetUserModel(Username);
             bool exists = (possibly_existent_user != null) && (id != possibly_existent_user.Id);
-            return Json(!exists, JsonRequestBehavior.AllowGet);
+            return Json(!exists);
         }
 
         public ActionResult UniqueNameTeam(string name, Guid? id)
@@ -39,19 +44,19 @@ namespace Bonobo.Git.Server.Controllers
             var possibly_existing_team = TeamRepo.GetTeam(name);
             bool exists = (possibly_existing_team != null) && (id != possibly_existing_team.Id);
             // false when repo exists!
-            return Json(!exists, JsonRequestBehavior.AllowGet);
+            return Json(!exists);
         }
 
         public ActionResult IsValidRegex(string LinksRegex)
         {
-            var validationContext = new ValidationContext(Request.RequestContext);
+            var validationContext = new ValidationContext(actionContextAccessor.ActionContext);
             var isvalidregexattr = new IsValidRegexAttribute();
             var result = isvalidregexattr.GetValidationResult(LinksRegex, validationContext);
             if (result == System.ComponentModel.DataAnnotations.ValidationResult.Success)
             {
-                return Json(true, JsonRequestBehavior.AllowGet);
+                return Json(true);
             }
-            return Json(result.ErrorMessage, JsonRequestBehavior.AllowGet);
+            return Json(result.ErrorMessage);
         }
     }
 }
