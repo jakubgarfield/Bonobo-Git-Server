@@ -8,17 +8,20 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
+using Microsoft.AspNetCore.Http;
 
 namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
 {
     public class ReceivePackParser : IGitService
     {
+        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IGitService gitService;        
         private readonly IHookReceivePack receivePackHandler;
         private readonly GitServiceResultParser resultParser;
 
-        public ReceivePackParser(IGitService gitService, IHookReceivePack receivePackHandler, GitServiceResultParser resultParser)
+        public ReceivePackParser(IHttpContextAccessor httpContextAccessor, IGitService gitService, IHookReceivePack receivePackHandler, GitServiceResultParser resultParser)
         {
+            this.httpContextAccessor = httpContextAccessor;
             this.gitService = gitService;
             this.receivePackHandler = receivePackHandler;
             this.resultParser = resultParser;
@@ -164,7 +167,7 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook
                 }
                 // -------------------
 
-                var user = HttpContext.Current.User.Username();
+                var user = httpContextAccessor.HttpContext.User.Username();
                 receivedPack = new ParsedReceivePack(correlationId, repositoryName, pktLines, user, DateTime.Now, packCommits);
 
                 inStream.Seek(0, SeekOrigin.Begin);

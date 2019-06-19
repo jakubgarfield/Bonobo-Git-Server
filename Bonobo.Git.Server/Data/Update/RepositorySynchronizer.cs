@@ -1,18 +1,21 @@
 ﻿using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Models;
-using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonobo.Git.Server.Data.Update
 {
     public class RepositorySynchronizer
     {
-        IRepositoryRepository _repositoryRepository = DependencyResolver.Current.GetService<IRepositoryRepository>();
+        private readonly IRepositoryRepository _repositoryRepository;
+
+        public RepositorySynchronizer(IRepositoryRepository repositoryRepository)
+        {
+            _repositoryRepository = repositoryRepository;
+        }
 
         public virtual void Run()
         {

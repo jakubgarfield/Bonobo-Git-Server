@@ -1,34 +1,41 @@
-﻿<!DOCTYPE html>
+﻿@using Bonobo.Git.Server
+@using Bonobo.Git.Server.Helpers
+@using Bonobo.Git.Server.App_GlobalResources
+@using Bonobo.Git.Server.Configuration
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Routing
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="~/favicon.ico?v=2" type="image/x-icon" />
     <title>@ViewBag.Title :: @UserConfiguration.Current.GetSiteTitle()</title>
-    @Styles.Render("~/Content/bundledCss")
+    <link rel="stylesheet" href="~/bundle.css" />
     @if (UserConfiguration.Current.HasCustomSiteCss)
     {
         <link rel="stylesheet" href="@string.Format("{0}?_={1}", Url.Content(UserConfiguration.Current.SiteCssUrl), DateTime.Now.Ticks)" type="text/css" />
     }
     @if (UserConfiguration.Current.HasCustomSiteLogo)
     {
-    <style>
+        <style>
         .navigation.pure-menu a.pure-menu-heading {
             background: url('@Url.Content(UserConfiguration.Current.SiteLogoUrl)') no-repeat 0 4px;
         }
-    </style>
+        </style>
     }
 </head>
-<body class="@HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString() @HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString()">
+<body class="@Context.GetRouteData().Values["controller"].ToString() @Context.GetRouteData().Values["action"].ToString()">
     <div class="main">
         <div class="header">
             <div class="navigation pure-menu pure-menu-open pure-menu-horizontal">
                 @Html.ActionLink(UserConfiguration.Current.GetSiteTitle(), "", "", null, new { @class = "pure-menu-heading" })
 
                 <ul>
-                    @if (Request.IsAuthenticated)
+                    @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
                     {
-                        var items = (IEnumerable<SelectListItem>)Html.ViewBag.PermittedRepositories;
+                        var items = (IEnumerable<SelectListItem>)ViewBag.PermittedRepositories ?? new List<SelectListItem>();
                         @Html.DropDownList("Repositories", items, Resources.Repository_Go_To_Dropdown, new { @class = "repositories", @onChange = "javascript:location.href=this.options[this.selectedIndex].value;" });
                         <li><a href="@Url.Action("Index", "Repository")" class="repository"><i class="fa fa-hdd-o"></i> @Resources.Layout_Repositories</a></li>
                     }
@@ -38,9 +45,10 @@
                         <li><a href="@Url.Action("Index", "Team")" class="teams"><i class="fa fa-group"></i> @Resources.Layout_AdministrationTeams</a></li>
                         <li><a href="@Url.Action("Index", "Settings")" class="settings"><i class="fa fa-gears"></i> @Resources.Layout_AdministrationGlobalSettings</a></li>
                     }
-                    @if (Request.IsAuthenticated)
+                    @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
                     {
-                        <li class="separator"><a href="@Url.Action("Edit", "Account", new { id = User.Id() })"><i class="fa fa-male"></i> @User.DisplayName()</a></li>
+                        var id = User.Id();
+                        <li class="separator"><a href="@Url.Action("Edit", "Account", new { id = id })"><i class="fa fa-male"></i> @User.DisplayName()</a></li>
                         if (!User.IsWindowsAuthenticated())
                         {
                             <li><a href="@Url.Action("LogOff", "Home")"><i class="fa fa-sign-out"></i> @Resources.Layout_LogOff</a></li>
@@ -70,13 +78,13 @@
                     @:&middot;
                 }
                 Bonobo Git Server (@Html.AssemblyVersion()) &copy; 2015 <a href="http://www.chodounsky.net">Jakub Chodounský</a>
-                &middot; <a href="http://bonobogitserver.com/">@Resources.Home</a> 
+                &middot; <a href="http://bonobogitserver.com/">@Resources.Home</a>
                 &middot; <a href="https://github.com/jakubgarfield/Bonobo-Git-Server">@Resources.Source</a>
             </p>
         </div>
     </div>
 
-    @Scripts.Render("~/bundledJs")
+    <script src="~/bundle.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

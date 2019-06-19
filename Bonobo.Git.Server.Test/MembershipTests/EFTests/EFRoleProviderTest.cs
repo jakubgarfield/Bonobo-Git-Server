@@ -4,6 +4,7 @@ using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
 
 namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 {
@@ -48,7 +49,7 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
         public void UpdatesCanBeRunOnAlreadyUpdatedDatabase()
         {
             // Run all the updates again - this should be completely harmless
-            new AutomaticUpdater().RunWithContext(GetContext());
+            new AutomaticUpdater().RunWithContext(GetContext(), Substitute.For<IAuthenticationProvider>());
         }
 
         [TestMethod]
@@ -148,14 +149,14 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 
         Guid AddUserFred()
         {
-            EFMembershipService memberService = new EFMembershipService { CreateContext = GetContext };
+            EFMembershipService memberService = new EFMembershipService(GetContext);
             memberService.CreateUser("fred", "letmein", "Fred", "FredBlogs", "fred@aol");
             return memberService.GetUserModel("fred").Id;
         }
 
         Guid GetAdminId()
         {
-            EFMembershipService memberService = new EFMembershipService { CreateContext = GetContext };
+            EFMembershipService memberService = new EFMembershipService(GetContext);
             return memberService.GetUserModel("Admin").Id;
         }
 
@@ -166,8 +167,8 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 
         protected void InitialiseTestObjects()
         {
-            _provider = new EFRoleProvider {CreateContext = () => _connection.GetContext()};
-            new AutomaticUpdater().RunWithContext(_connection.GetContext());
+            _provider = new EFRoleProvider(() => _connection.GetContext());
+            new AutomaticUpdater().RunWithContext(_connection.GetContext(), Substitute.For<IAuthenticationProvider>());
         }
     }
 }

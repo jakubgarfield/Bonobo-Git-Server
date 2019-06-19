@@ -1,19 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Data;
-using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
-using System.Security.Cryptography;
-using System.IO;
-using System.Text;
-using System.Data.Entity.Core;
-using System.Diagnostics;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
-using System.Web.Security;
-using System.Security.Principal;
-using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Helpers;
 using Serilog;
 

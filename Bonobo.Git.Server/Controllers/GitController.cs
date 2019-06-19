@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Net;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Git;
@@ -9,27 +8,33 @@ using Bonobo.Git.Server.Git.GitService;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 using Ionic.Zlib;
-using Microsoft.Practices.Unity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Serilog;
 using Repository = LibGit2Sharp.Repository;
 
 namespace Bonobo.Git.Server.Controllers
 {
-    [GitAuthorize]
-    [RepositoryNameNormalizer("repositoryName")]
+    [Authorize(Policy = "Git")]
+    [GitControllerExceptionFilter]
+    [TypeFilter(typeof(RepositoryNameNormalizerAttribute), Arguments = new object[] { "repositoryName" })]
     public class GitController : Controller
     {
-        [Dependency]
         public IRepositoryPermissionService RepositoryPermissionService { get; set; }
-
-        [Dependency]
         public IRepositoryRepository RepositoryRepository { get; set; }
-
-        [Dependency]
         public IMembershipService MembershipService { get; set; }
-
-        [Dependency]
         public IGitService GitService { get; set; }
+
+        public GitController(IRepositoryPermissionService repositoryPermissionService,
+            IRepositoryRepository repositoryRepository, IMembershipService membershipService, IGitService gitService)
+        {
+            RepositoryPermissionService = repositoryPermissionService;
+            RepositoryRepository = repositoryRepository;
+            MembershipService = membershipService;
+            GitService = gitService;
+        }
 
         public ActionResult SecureGetInfoRefs(String repositoryName, String service)
         {
@@ -52,7 +57,7 @@ namespace Bonobo.Git.Server.Controllers
                 }
                 else
                 {
-                    return new HttpNotFoundResult();
+                    return new NotFoundResult();
                 }
             }
 
@@ -76,7 +81,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (!RepositoryIsValid(repositoryName))
             {
-                return new HttpNotFoundResult();
+                return new NotFoundResult();
             }
 
             if (RepositoryPermissionService.HasPermission(User.Id(), repositoryName, RepositoryAccessLevel.Pull))
@@ -94,7 +99,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (!RepositoryIsValid(repositoryName))
             {
-                return new HttpNotFoundResult();
+                return new NotFoundResult();
             }
 
             if (RepositoryPermissionService.HasPermission(User.Id(), repositoryName, RepositoryAccessLevel.Push))
@@ -150,6 +155,7 @@ namespace Bonobo.Git.Server.Controllers
             return RedirectPermanent(Url.Action("Detail", "Repository", new { id = repositoryName}));
         }
 
+        [DisableRequestSizeLimit]
         private ActionResult ExecuteReceivePack(string repositoryName)
         {
             return new GitCmdResult(
@@ -204,10 +210,10 @@ namespace Bonobo.Git.Server.Controllers
 
         private ActionResult UnauthorizedResult()
         {
-            Response.Clear();
-            Response.AddHeader("WWW-Authenticate", "Basic realm=\"Bonobo Git\"");
+            Response.Body = new MemoryStream();
+            Response.Headers.Add("WWW-Authenticate", "Basic realm=\"Bonobo Git\"");
             
-            return new HttpStatusCodeResult(401);
+            return new StatusCodeResult(401);
         }
 
         private static String FormatMessage(String input)
@@ -240,27 +246,28 @@ namespace Bonobo.Git.Server.Controllers
         {
             // For really large uploads we need to get a bufferless input stream and disable the max
             // request length.
-            Stream requestStream = disableBuffer ?
-                Request.GetBufferlessInputStream(disableMaxRequestLength: true) :
-                Request.GetBufferedInputStream();
+            Stream requestStream = Request.Body;
 
             return Request.Headers["Content-Encoding"] == "gzip" ?
                 new GZipStream(requestStream, CompressionMode.Decompress) :
                 requestStream;
         }
 
-        protected override void OnException(ExceptionContext filterContext)
+        public class GitControllerExceptionFilterAttribute : ExceptionFilterAttribute
         {
-            Exception exception = filterContext.Exception;
-            Log.Error(exception, "Error caught in GitController");
-            filterContext.Result = new ContentResult { Content = exception.ToString() };
+            public override void OnException(ExceptionContext filterContext)
+            {
+                Exception exception = filterContext.Exception;
+                Log.Error(exception, "Error caught in GitController");
+                filterContext.Result = new ContentResult { Content = exception.ToString() };
 
-            filterContext.ExceptionHandled = true;
+                filterContext.ExceptionHandled = true;
 
-            filterContext.HttpContext.Response.Clear();
-            filterContext.HttpContext.Response.StatusCode = 500;
-            filterContext.HttpContext.Response.StatusDescription = "Exception in GitController";
-            filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
+                filterContext.HttpContext.Response.Clear();
+                filterContext.HttpContext.Response.StatusCode = 500;
+                filterContext.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = "Exception in GitController";
+                //filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
+            }
         }
     }
 }

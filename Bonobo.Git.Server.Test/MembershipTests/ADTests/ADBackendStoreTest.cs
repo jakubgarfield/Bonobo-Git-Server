@@ -2,7 +2,9 @@
 using System.IO;
 using System.Linq;
 using Bonobo.Git.Server.Data;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
 
 namespace Bonobo.Git.Server.Test.MembershipTests.ADTests
 {
@@ -42,7 +44,8 @@ namespace Bonobo.Git.Server.Test.MembershipTests.ADTests
 
         private static ADBackendStore<StorableClass> MakeStore()
         {
-            return new ADBackendStore<StorableClass>(Path.GetTempPath(), "BonoboTestStore");
+            var hostingEnvironment = Substitute.For<IHostingEnvironment>();
+            return new ADBackendStore<StorableClass>(hostingEnvironment, Path.GetTempPath(), "BonoboTestStore");
         }
 
         [TestMethod]

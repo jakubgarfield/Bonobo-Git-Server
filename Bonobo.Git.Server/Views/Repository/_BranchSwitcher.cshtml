@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Bonobo.Git.Server.Helpers
+@{
     var branches = ViewData["branches"] as IEnumerable<string>;
     var tags = ViewData["tags"] as IEnumerable<string>;
     var isTag = tags.Contains(ViewData["referenceName"]);

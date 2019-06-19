@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Bonobo.Git.Server.Data.ManyToMany;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -18,9 +19,9 @@ namespace Bonobo.Git.Server.Data
 
     public partial class Repository
     {
-        private ICollection<Team> _teams;
-        private ICollection<User> _administrators;
-        private ICollection<User> _users;
+        private ICollection<TeamRepository_Permission> _teams;
+        private ICollection<UserRepository_Administrator> _administrators;
+        private ICollection<UserRepository_Permission> _users;
 
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -30,11 +31,11 @@ namespace Bonobo.Git.Server.Data
         public byte[] Logo { get; set; }
         public RepositoryPushMode AllowAnonymousPush { get; set; }
 
-        public virtual ICollection<Team> Teams
+        public virtual ICollection<TeamRepository_Permission> Teams
         {
             get
             {
-                return _teams ?? (_teams = new List<Team>());
+                return _teams ?? (_teams = new List<TeamRepository_Permission>());
             }
             set
             {
@@ -42,11 +43,11 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public virtual ICollection<User> Administrators
+        public virtual ICollection<UserRepository_Administrator> Administrators
         {
             get
             {
-                return _administrators ?? (_administrators = new List<User>());
+                return _administrators ?? (_administrators = new List<UserRepository_Administrator>());
             }
             set
             {
@@ -54,11 +55,11 @@ namespace Bonobo.Git.Server.Data
             }
         }
 
-        public virtual ICollection<User> Users
+        public virtual ICollection<UserRepository_Permission> Users
         {
             get
             {
-                return _users ?? (_users = new List<User>());
+                return _users ?? (_users = new List<UserRepository_Permission>());
             }
             set
             {

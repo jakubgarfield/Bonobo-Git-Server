@@ -1,12 +1,11 @@
 ﻿using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Security;
 using System.IO;
-using System.Web;
-using System.Web.Mvc;
 using System.Linq;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonobo.Git.Server.Git.GitService
 {
@@ -28,13 +27,15 @@ namespace Bonobo.Git.Server.Git.GitService
         private readonly string gitHomePath;
         private readonly string repositoriesDirPath;
         private readonly IGitRepositoryLocator repoLocator;
+        private readonly IServiceProvider serviceProvider;
 
-        public GitServiceExecutor(GitServiceExecutorParams parameters, IGitRepositoryLocator repoLocator)
+        public GitServiceExecutor(GitServiceExecutorParams parameters, IGitRepositoryLocator repoLocator, IServiceProvider serviceProvider)
         {
             this.gitPath = parameters.GitPath;
             this.gitHomePath = parameters.GitHomePath;
             this.repositoriesDirPath = parameters.RepositoriesDirPath;
             this.repoLocator = repoLocator;
+            this.serviceProvider = serviceProvider;
         }
 
         public void ExecuteServiceByName(
@@ -66,20 +67,20 @@ namespace Bonobo.Git.Server.Git.GitService
 
             SetHomePath(info);
 
-            var username = HttpContext.Current.User.Username();
+            var username = serviceProvider.GetService<IHttpContextAccessor>().HttpContext.User.Username();
             var teamsstr = "";
             var rolesstr = "";
             var displayname = "";
             if(!string.IsNullOrEmpty(username)){
-                ITeamRepository tr = DependencyResolver.Current.GetService<ITeamRepository>();
-                var userId = HttpContext.Current.User.Id();
+                ITeamRepository tr = serviceProvider.GetService<ITeamRepository>();
+                var userId = serviceProvider.GetService<IHttpContextAccessor>().HttpContext.User.Id();
                 var teams = tr.GetTeams(userId);
                 teamsstr = UserExtensions.StringlistToEscapedStringForEnvVar(teams.Select(x => x.Name));
 
-                IRoleProvider rp = DependencyResolver.Current.GetService<IRoleProvider>();
+                IRoleProvider rp = serviceProvider.GetService<IRoleProvider>();
                 rolesstr = UserExtensions.StringlistToEscapedStringForEnvVar(rp.GetRolesForUser(userId));
 
-                IMembershipService ms = DependencyResolver.Current.GetService<IMembershipService>();
+                IMembershipService ms = serviceProvider.GetService<IMembershipService>();
                 displayname = ms.GetUserModel(userId).DisplayName;
 
             }

@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Bonobo.Git.Server.Test.MembershipTests.EFTests;
 using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bonobo.Git.Server.Test.UnitTests
 {

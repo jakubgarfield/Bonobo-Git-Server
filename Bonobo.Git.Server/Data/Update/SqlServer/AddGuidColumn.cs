@@ -1,12 +1,13 @@
-﻿using Bonobo.Git.Server.Security;
+﻿using System;
 using System.DirectoryServices.AccountManagement;
-using System.Web.Mvc;
-using System.Collections.Generic;
-using System;
-using System.Data.Entity;
 using System.Data.SqlClient;
-using System.Linq;
+using Bonobo.Git.Server.Data.Update.Data;
+using Bonobo.Git.Server.Extensions;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+
 using Bonobo.Git.Server.Helpers;
+using Bonobo.Git.Server.Security;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bonobo.Git.Server.Data.Update.SqlServer
 {
@@ -14,18 +15,18 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
 
     {
         private readonly IAuthenticationProvider AuthProvider;
-        private Database _db;
+        private DatabaseFacade _db;
 
-        public AddGuidColumn()
+        public AddGuidColumn(IAuthenticationProvider authProvider)
         {
-            AuthProvider = DependencyResolver.Current.GetService<IAuthenticationProvider>();
+            AuthProvider = authProvider;
         }
 
         public void CodeAction(BonoboGitServerContext context)
         {
             _db = context.Database;
 
-            if (UpgradeHasAlreadyBeenRun())
+            if (UpgradeHasAlreadyBeenRun(context))
             {
                 return;
             }
@@ -36,7 +37,7 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
                 {
                     RenameTables();
                     CreateTables();
-                    CopyData();
+                    CopyData(context);
                     AddRelations();
                     DropRenamedTables();
                     trans.Commit();
@@ -49,17 +50,17 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
             }
         }
 
-        private bool UpgradeHasAlreadyBeenRun()
+        private bool UpgradeHasAlreadyBeenRun(BonoboGitServerContext context)
         {
             try
             {
-                var result = _db.SqlQuery<int>(@"
+                var result = Convert.ToInt32(context.Database.ExecuteScalar(@"
                             IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'User' AND  COLUMN_NAME = 'Id')
                                 SELECT 1
                             ELSE
                                 SELECT 0
-                ");
-                return result.SingleAsync().GetAwaiter().GetResult() == 1;
+                "));
+                return result == 1;
             }
             catch (SqlException)
             {
@@ -228,42 +229,17 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
             ");
         }
 
-        class OldUser
+        private void CopyData(BonoboGitServerContext context)
         {
-            public string Name { get; set; }
-            public string Surname { get; set; }
-            public string Username { get; set; }
-            public string Password { get; set; }
-            public string Email { get; set; }
+            CopyUsers(context);
+            CopyTeams(context);
+            CopyRoles(context);
+            CopyRepositories(context);
         }
 
-        class NameDesc
+        private void CopyUsers(BonoboGitServerContext context)
         {
-            public string Name { get; set; }
-            public string Description { get; set; }
-        }
-
-        class OldRepo
-        {
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public bool Anonymous { get; set; }
-            public bool AuditPushUser { get; set; }
-            public string Group { get; set; }
-            public byte[] Logo { get; set; }
-        }
-
-        private void CopyData()
-        {
-            CopyUsers();
-            CopyTeams();
-            CopyRoles();
-            CopyRepositories();
-        }
-
-        private void CopyUsers()
-        {
-            var users = _db.SqlQuery<OldUser>("Select * from oUser;").ToList();
+            var users = context.Query<OldUser>().FromSql("Select * from oUser;");
             foreach (var entry in users)
             {
                 Guid guid = Guid.NewGuid();
@@ -308,9 +284,9 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
             }
         }
 
-        private void CopyTeams()
+        private void CopyTeams(BonoboGitServerContext context)
         {
-            var teams = _db.SqlQuery<NameDesc>("Select * from oTeam").ToList();
+            var teams = context.Query<NameDesc>().FromSql("Select * from oTeam");
             foreach (var team in teams)
             {
                 _db.ExecuteSqlCommand("INSERT INTO Team VALUES ({0}, {1}, {2})",
@@ -318,9 +294,9 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
             }
         }
 
-        private void CopyRoles()
+        private void CopyRoles(BonoboGitServerContext context)
         {
-            var roles = _db.SqlQuery<NameDesc>("Select * from oRole").ToList();
+            var roles = context.Query<NameDesc>().FromSql("Select * from oRole");
             foreach (var role in roles)
             {
                 _db.ExecuteSqlCommand("INSERT INTO Role VALUES ({0}, {1}, {2})",
@@ -330,9 +306,9 @@ namespace Bonobo.Git.Server.Data.Update.SqlServer
             }
         }
 
-        private void CopyRepositories()
+        private void CopyRepositories(BonoboGitServerContext context)
         {
-            var repos = _db.SqlQuery<OldRepo>("SELECT * FROM oRepo").ToList();
+            var repos = context.Query<OldRepo>().FromSql("SELECT * FROM oRepo");
             foreach (var repo in repos)
             {
                 _db.ExecuteSqlCommand("INSERT INTO Repository VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6})",

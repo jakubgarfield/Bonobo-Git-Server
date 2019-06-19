@@ -1,0 +1,22 @@
+﻿[
+  {
+    "outputFileName": "wwwroot/bundle.js",
+    "inputFiles": [
+      "Scripts/jquery-1.12.4.js",
+      "Scripts/jquery.validate.js",
+      "Content/uni/js/uni-form-validation.jquery.js",
+      "Scripts/MicrosoftAjax.js",
+      "Scripts/MicrosoftMvcAjax.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/bundle.css",
+    "inputFiles": [
+      "Content/components/pure/pure-min.css",
+      "Content/components/font-awesome/css/font-awesome.min.css",
+      "Content/components/highlight/styles/github.css",
+      "Content/fonts.css",
+      "Content/site.css"
+    ]
+  }
+]

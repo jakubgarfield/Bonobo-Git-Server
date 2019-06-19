@@ -1,14 +1,7 @@
-﻿using Bonobo.Git.Server.Data;
-using Bonobo.Git.Server.App_GlobalResources;
-using Microsoft.Practices.Unity;
+﻿using Bonobo.Git.Server.App_GlobalResources;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 
-using Bonobo.Git.Server.Models;
 using System.Text.RegularExpressions;
 
 namespace Bonobo.Git.Server.Attributes

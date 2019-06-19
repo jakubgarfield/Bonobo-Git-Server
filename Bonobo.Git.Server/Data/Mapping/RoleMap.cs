@@ -1,52 +1,61 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.ModelConfiguration;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Bonobo.Git.Server.Data.Mapping
 {
-    public class RoleMap : EntityTypeConfiguration<Role>
+    public class RoleMap : IEntityTypeConfiguration<Role>
     {
-        public RoleMap()
+        private readonly ValueConverter _primaryKeyConverter;
+
+        public RoleMap(ValueConverter primaryKeyConverter)
         {
-            SetPrimaryKey();
-            SetProperties();
-            SetTableAndColumnMappings();
-            SetRelationships();
+            _primaryKeyConverter = primaryKeyConverter;
         }
 
-
-        private void SetRelationships()
+        public void Configure(EntityTypeBuilder<Role> builder)
         {
-            HasMany(t => t.Users)
-                .WithMany(t => t.Roles)
-                .Map(m =>
-                {
-                    m.ToTable("UserRole_InRole");
-                    m.MapLeftKey("Role_Id");
-                    m.MapRightKey("User_Id");
-                });
+            SetPrimaryKey(builder);
+            SetProperties(builder);
+            SetTableAndColumnMappings(builder);
+            SetRelationships(builder);
         }
 
-        private void SetTableAndColumnMappings()
+        private void SetRelationships(EntityTypeBuilder<Role> builder)
         {
-            ToTable("Role");
-            Property(t => t.Id).HasColumnName("Id");
-            Property(t => t.Name).HasColumnName("Name");
-            Property(t => t.Description).HasColumnName("Description");
+            //builder.HasMany(t => t.Users)
+            //    .WithMany(t => t.Roles)
+            //    .Map(m =>
+            //    {
+            //        m.ToTable("UserRole_InRole");
+            //        m.MapLeftKey("Role_Id");
+            //        m.MapRightKey("User_Id");
+            //    });
         }
 
-        private void SetProperties()
+        private void SetTableAndColumnMappings(EntityTypeBuilder<Role> builder)
         {
-            Property(t => t.Name)
+            builder.ToTable("Role");
+            builder.Property(t => t.Id).HasColumnName("Id").HasConversion(_primaryKeyConverter);
+            builder.Property(t => t.Name).HasColumnName("Name");
+            builder.Property(t => t.Description).HasColumnName("Description");
+        }
+
+        private void SetProperties(EntityTypeBuilder<Role> builder)
+        {
+            builder.Property(t => t.Name)
                 .IsRequired()
                 .HasMaxLength(255);
 
-            Property(t => t.Description)
+            builder.Property(t => t.Description)
                 .HasMaxLength(255);
         }
 
-        private void SetPrimaryKey()
+        private void SetPrimaryKey(EntityTypeBuilder<Role> builder)
         {
-            HasKey(t => t.Id);
+            builder.HasKey(t => t.Id);
         }
+
+
     }
 }

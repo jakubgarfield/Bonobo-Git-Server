@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.IO.Compression;
-using System.Web;
-using System.Web.Mvc;
-using Bonobo.Git.Server.Configuration;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
 
 namespace Bonobo.Git.Server.Git
 {
@@ -25,28 +24,28 @@ namespace Bonobo.Git.Server.Git
             this.executeGitCommand = executeGitCommand;
         }
 
-        public override void ExecuteResult(ControllerContext context)
+        public override void ExecuteResult(ActionContext context)
         {
             if (context == null)
-                throw new ArgumentNullException("context");
+                throw new ArgumentNullException(nameof(context));
 
             var response = context.HttpContext.Response;
 
             if (advertiseRefsContent != null)
             {
-                response.Write(advertiseRefsContent);
+                response.WriteAsync(advertiseRefsContent).RunSynchronously();
             }
 
             // SetNoCache
-            response.AddHeader("Expires", "Fri, 01 Jan 1980 00:00:00 GMT");
-            response.AddHeader("Pragma", "no-cache");
-            response.AddHeader("Cache-Control", "no-cache, max-age=0, must-revalidate");
+            response.Headers.Add("Expires", "Fri, 01 Jan 1980 00:00:00 GMT");
+            response.Headers.Add("Pragma", "no-cache");
+            response.Headers.Add("Cache-Control", "no-cache, max-age=0, must-revalidate");
 
-            response.BufferOutput = false;
-            response.Charset = "";
+            //response.BufferOutput = false;
+            //response.Charset = "";
             response.ContentType = contentType;
 
-            executeGitCommand(response.OutputStream);
+            executeGitCommand(response.Body);
         }
     }
 }

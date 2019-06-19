@@ -10,15 +10,6 @@ namespace Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability
     /// </summary>
     public class NamedArguments
     {
-        public class FailedPackWaitTimeBeforeExecution
-        {
-            public FailedPackWaitTimeBeforeExecution(TimeSpan timeSpan)
-            {
-                this.Value = timeSpan;
-            }
-            public TimeSpan Value { get; private set; }
-        }
-
         public class ReceivePackRecoveryDirectory
         {
             public ReceivePackRecoveryDirectory(string receivePackRecoveryDirectory)

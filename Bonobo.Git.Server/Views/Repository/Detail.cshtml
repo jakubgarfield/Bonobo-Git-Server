@@ -1,4 +1,7 @@
-﻿@model Bonobo.Git.Server.Models.RepositoryDetailModel
+﻿@using Bonobo.Git.Server.App_GlobalResources
+@using Bonobo.Git.Server.Configuration
+@using Bonobo.Git.Server.Models
+@model Bonobo.Git.Server.Models.RepositoryDetailModel
 @{
     Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
     ViewBag.Title = Resources.Repository_Detail_Title;
@@ -60,7 +63,7 @@
             </div>
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.AllowAnonymousPush)
-                @Html.DisplayEnum(Model.AllowAnonymousPush)
+                @Html.DisplayFor(m => m.AllowAnonymousPush)
             </div>
 
             <div class="pure-control-group">

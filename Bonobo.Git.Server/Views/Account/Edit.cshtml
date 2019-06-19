@@ -1,11 +1,13 @@
-﻿@using MvcCheckBoxList.Model
+﻿@using Bonobo.Git.Server
+@using Bonobo.Git.Server.Helpers
+@using Bonobo.Git.Server.App_GlobalResources
 @model Bonobo.Git.Server.Models.UserEditModel
 @{
     ViewBag.Title = Resources.Account_Edit_Title;
 }
 @if (Model == null)
 {    
-    @Html.Partial("~/Views/Shared/_ItemNotFound.cshtml") 
+    @await Html.PartialAsync("~/Views/Shared/_ItemNotFound.cshtml") 
 }
 else
 {
@@ -72,7 +74,7 @@ else
                 <div class="pure-control-group checkboxlist">
                     @Html.LabelFor(m => m.Roles)
                     <span>
-                        @Html.CheckBoxListFor(m => m.PostedSelectedRoles, m => m.Roles, m => m, m => m, m => m.SelectedRoles, Position.Vertical)
+                        @Html.CheckBoxListFor(m => m.PostedSelectedRoles, m => m.Roles, m => m, m => m, m => m.SelectedRoles)
                     </span>
                     <i class="fa fa-info-circle" title="@Resources.Account_Edit_RolesHint"></i>
                 </div>

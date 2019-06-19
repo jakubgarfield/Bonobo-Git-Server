@@ -4,22 +4,24 @@ using System;
 using System.Collections.Generic;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Models;
-using Microsoft.Practices.Unity;
 using Serilog;
 
 namespace Bonobo.Git.Server.Security
 {
     public class RepositoryPermissionService : IRepositoryPermissionService
     {
-        [Dependency]
         public IRepositoryRepository Repository { get; set; }
-
-        [Dependency]
         public IRoleProvider RoleProvider { get; set; }
-
-        [Dependency]
         public ITeamRepository TeamRepository { get; set; }
-        
+
+        public RepositoryPermissionService(IRepositoryRepository repository, IRoleProvider roleProvider,
+            ITeamRepository teamRepository)
+        {
+            Repository = repository;
+            RoleProvider = roleProvider;
+            TeamRepository = teamRepository;
+        }
+
         public bool HasPermission(Guid userId, string repositoryName, RepositoryAccessLevel requiredLevel)
         {
             var repository = Repository.GetRepository(repositoryName);

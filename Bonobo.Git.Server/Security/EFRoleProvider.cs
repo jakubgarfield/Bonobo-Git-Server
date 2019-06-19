@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Linq;
 using Bonobo.Git.Server.Data;
-using Microsoft.Practices.Unity;
+using Bonobo.Git.Server.Data.ManyToMany;
+using Bonobo.Git.Server.Extensions;
 
 namespace Bonobo.Git.Server.Security
 {
     public class EFRoleProvider : IRoleProvider
     {
-        [Dependency]
         public Func<BonoboGitServerContext> CreateContext { get; set; }
+
+        public EFRoleProvider(Func<BonoboGitServerContext> createContext)
+        {
+            CreateContext = createContext;
+        }
 
         public void AddUserToRoles(Guid userId, string[] roleNames)
         {
@@ -26,7 +31,11 @@ namespace Bonobo.Git.Server.Security
                 {
                     foreach (var user in users)
                     {
-                        role.Users.Add(user);
+                        role.Users.Add(new UserRole_InRole
+                        {
+                            Role = role,
+                            User = user
+                        });
                     }
                 }
 
@@ -56,7 +65,7 @@ namespace Bonobo.Git.Server.Security
                 {
                     if (throwOnPopulatedRole)
                     {
-                        if (role.Users.Count > 0)
+                        if (role.Users.Any())
                         {
                             throw new InvalidOperationException("Can't delete role with members.");
                         }
@@ -76,7 +85,7 @@ namespace Bonobo.Git.Server.Security
             using (var database = CreateContext())
             {
                 var users = database.Users
-                    .Where(us => us.Username.Contains(usernameToMatch) && us.Roles.Any(role => role.Name == roleName))
+                    .Where(us => us.Username.Contains(usernameToMatch) && us.Roles.Any(role => role.Role.Name == roleName))
                     .Select(us => us.Username)
                     .ToArray();
                 return users;
@@ -95,8 +104,12 @@ namespace Bonobo.Git.Server.Security
         {
             using (var database = CreateContext())
             {
+                var sql = database.Roles
+                    .Where(role => role.Users.Any(us => us.UserId == userId))
+                    .Select(role => role.Name).ToSql();
+
                 var roles = database.Roles
-                    .Where(role => role.Users.Any(us => us.Id == userId))
+                    .Where(role => role.Users.Any(us => us.UserId == userId))
                     .Select(role => role.Name)
                     .ToArray();
                 return roles;
@@ -108,7 +121,7 @@ namespace Bonobo.Git.Server.Security
             using (var database = CreateContext())
             {
                 var users = database.Users
-                    .Where(us => us.Roles.Any(role => role.Name == roleName))
+                    .Where(us => us.Roles.Any(role => role.Role.Name == roleName))
                     .Select(us => us.Id)
                     .ToArray();
                 return users;
@@ -119,7 +132,7 @@ namespace Bonobo.Git.Server.Security
         {
             using (var database = CreateContext())
             {
-                return database.Roles.Any(role => role.Name == roleName && role.Users.Any(us => us.Id == userId));
+                return database.Roles.Any(role => role.Name == roleName && role.Users.Any(us => us.User.Id == userId));
             }
         }
 
@@ -138,7 +151,11 @@ namespace Bonobo.Git.Server.Security
                 {
                     foreach (var user in users)
                     {
-                        role.Users.Remove(user);
+                        database.Remove(new UserRole_InRole
+                        {
+                            RoleId = role.Id,
+                            UserId = user.Id
+                        });
                     }
                 }
                 database.SaveChanges();

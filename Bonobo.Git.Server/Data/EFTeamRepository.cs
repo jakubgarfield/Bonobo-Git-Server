@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Bonobo.Git.Server.Data.ManyToMany;
 using Bonobo.Git.Server.Models;
-using System.Data.Entity.Core;
-using System.Data.Entity.Infrastructure;
-using Microsoft.Practices.Unity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bonobo.Git.Server.Data
 {
     public class EFTeamRepository : ITeamRepository
     {
-        [Dependency]
         public Func<BonoboGitServerContext> CreateContext { get; set; }
+
+        public EFTeamRepository(Func<BonoboGitServerContext> createContext)
+        {
+            CreateContext = createContext;
+        }
 
         public IList<TeamModel> GetAllTeams()
         {
@@ -22,8 +25,8 @@ namespace Bonobo.Git.Server.Data
                     Id = team.Id,
                     Name = team.Name,
                     Description = team.Description,
-                    Members = team.Users,
-                    Repositories = team.Repositories.Select(m => m.Name),
+                    Members = team.Users.Select(user => user.User.ToModel()).ToArray(),
+                    Repositories = team.Repositories.Select(m => m.Repository.Name),
                 }).ToList();
 
                 return dbTeams.Select(item => new TeamModel
@@ -31,7 +34,7 @@ namespace Bonobo.Git.Server.Data
                     Id = item.Id,
                     Name = item.Name,
                     Description = item.Description,
-                    Members = item.Members.Select(user => user.ToModel()).ToArray(),
+                    Members = item.Members,
                 }).ToList();
             }
         }
@@ -48,7 +51,7 @@ namespace Bonobo.Git.Server.Data
                     Id = team.Id,
                     Name = team.Name,
                     Description = team.Description,
-                    Members = team.Users.Select(user => user.ToModel()).ToArray(),
+                    Members = team.Users.Select(user => user.User.ToModel()).ToArray(),
                 };
         }
 
@@ -117,11 +120,6 @@ namespace Bonobo.Git.Server.Data
                 {
                     return false;
                 }
-                catch (UpdateException)
-                {
-                    // Not sure when this exception happens - DbUpdateException is what you get for adding a duplicate teamname
-                    return false;
-                }
             }
 
             return true;
@@ -154,7 +152,11 @@ namespace Bonobo.Git.Server.Data
             var users = database.Users.Where(user => members.Contains(user.Id));
             foreach (var item in users)
             {
-                team.Users.Add(item);
+                team.Users.Add(new UserTeam_Member
+                {
+                    Team = team,
+                    User = item
+                });
             }
         }
 
@@ -171,7 +173,11 @@ namespace Bonobo.Git.Server.Data
                     var teams = db.Teams.Where(t => newTeams.Contains(t.Name));
                     foreach (var team in teams)
                     {
-                        user.Teams.Add(team);
+                        user.Teams.Add(new UserTeam_Member
+                        {
+                            User = user,
+                            Team = team
+                        });
                     }
                     db.SaveChanges();
                 }

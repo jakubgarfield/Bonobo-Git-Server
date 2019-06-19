@@ -1,51 +1,52 @@
-﻿@using MvcCheckBoxList.Model
+﻿@using Bonobo.Git.Server.App_GlobalResources
+@using Bonobo.Git.Server.Helpers
 @model Bonobo.Git.Server.Models.TeamEditModel
 @{
     ViewBag.Title = Resources.Team_Edit_Title;
 }
 @if (Model == null)
-{    
-    @Html.Partial("~/Views/Shared/_ItemNotFound.cshtml") 
+{
+    @await Html.PartialAsync("~/Views/Shared/_ItemNotFound.cshtml")
 }
 else
 {
     <text>
-    <h1>@Model.Name</h1>
+        <h1>@Model.Name</h1>
 
-    @if (ViewBag.UpdateSuccess != null && ViewBag.UpdateSuccess)
-    {
-        <div class="summary-success">
-            <p>@Resources.Team_Edit_UpdateSuccess</p>
-        </div>
-    }
+        @if (ViewBag.UpdateSuccess != null && ViewBag.UpdateSuccess)
+        {
+            <div class="summary-success">
+                <p>@Resources.Team_Edit_UpdateSuccess</p>
+            </div>
+        }
 
-    @using (Html.BeginForm("Edit", "Team", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
-    {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(false, Resources.Team_Edit_Failure)
-        @Html.HiddenFor(m => m.Id)
-                
-        <fieldset>
-            <div class="pure-control-group">
-                @Html.LabelFor(m => m.Name)
-                @Html.TextBoxFor(m => m.Name, new { @class = "textInput medium", autofocus = ""})<em>*</em>
-                @Html.ValidationMessageFor(m => m.Name)
-            </div>
-            <div class="pure-control-group">
-                @Html.LabelFor(m => m.Description)
-                @Html.TextAreaFor(m => m.Description, new { @class = "textInput medium", autofocus = "" })
-            </div> 
-            <div class="pure-control-group checkboxlist">
-                @Html.LabelFor(m => m.AllUsers)
-                <span>
-                    @Html.CheckBoxListFor(m => m.PostedSelectedUsers, m => m.AllUsers, m => m.Id, m => m.DisplayName, m => m.SelectedUsers, Position.Vertical)
-                </span>
-            </div>
-            <div class="pure-controls">
-                <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Team_Edit_Back</a>
-                <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-save"></i> @Resources.Team_Edit_Submit</button>
-            </div>
-        </fieldset>
-    }
+        @using (Html.BeginForm("Edit", "Team", FormMethod.Post, new { @class = "pure-form pure-form-aligned" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(false, Resources.Team_Edit_Failure)
+            @Html.HiddenFor(m => m.Id)
+
+            <fieldset>
+                <div class="pure-control-group">
+                    @Html.LabelFor(m => m.Name)
+                    @Html.TextBoxFor(m => m.Name, new { @class = "textInput medium", autofocus = "" })<em>*</em>
+                    @Html.ValidationMessageFor(m => m.Name)
+                </div>
+                <div class="pure-control-group">
+                    @Html.LabelFor(m => m.Description)
+                    @Html.TextAreaFor(m => m.Description, new { @class = "textInput medium", autofocus = "" })
+                </div>
+                <div class="pure-control-group checkboxlist">
+                    @Html.LabelFor(m => m.AllUsers)
+                    <span>
+                        @Html.CheckBoxListFor(m => m.PostedSelectedUsers, m => m.AllUsers, m => m.Id, m => m.DisplayName, m => m.SelectedUsers)
+                    </span>
+                </div>
+                <div class="pure-controls">
+                    <a class="pure-button" href="@Url.Action("Index")"><i class="fa fa-long-arrow-left"></i> @Resources.Team_Edit_Back</a>
+                    <button type="submit" class="pure-button pure-button-primary"><i class="fa fa-save"></i> @Resources.Team_Edit_Submit</button>
+                </div>
+            </fieldset>
+        }
     </text>
 }

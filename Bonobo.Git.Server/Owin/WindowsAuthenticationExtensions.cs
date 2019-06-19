@@ -1,18 +1,14 @@
-﻿using Microsoft.Owin.Extensions;
-using Owin;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Bonobo.Git.Server.Owin.Windows
 {
     public static class WindowsAuthenticationExtensions
     {
-        public static IAppBuilder UseWindowsAuthentication(this IAppBuilder app, WindowsAuthenticationOptions options)
+        public static AuthenticationBuilder AddWindows(this AuthenticationBuilder builder, Action<WindowsAuthenticationOptions> configureOptions)
         {
-            app.Use(typeof(WindowsAuthenticationMiddleware), app, options);
-            return app.UseStageMarker(PipelineStage.Authenticate);
+            return builder.AddScheme<WindowsAuthenticationOptions, WindowsAuthenticationHandler>(
+                WindowsAuthenticationDefaults.AuthenticationType, configureOptions);
         }
     }
 }

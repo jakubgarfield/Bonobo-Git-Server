@@ -1,22 +1,21 @@
-﻿using Bonobo.Git.Server.Security;
-using System.DirectoryServices.AccountManagement;
-using System.Web.Mvc;
-using System.Collections.Generic;
-using System;
-using System.Data.Entity;
-using System.Data.SQLite;
+﻿using System;
+using System.Data.Common;
+using Bonobo.Git.Server.Data.Update.Data;
+using Bonobo.Git.Server.Security;
 using Bonobo.Git.Server.Helpers;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Bonobo.Git.Server.Data.Update.Sqlite
 {
     public class AddGuidColumn : IUpdateScript
     {
         private readonly IAuthenticationProvider AuthProvider;
-        private Database _db;
+        private DatabaseFacade _db;
 
-        public AddGuidColumn()
+        public AddGuidColumn(IAuthenticationProvider authProvider)
         {
-            AuthProvider = DependencyResolver.Current.GetService<IAuthenticationProvider>();
+            AuthProvider = authProvider;
         }
 
         public void CodeAction(BonoboGitServerContext context)
@@ -34,7 +33,7 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
                 {
                     RenameTables();
                     CreateTables();
-                    CopyData();
+                    CopyData(context);
                     AddRelations();
                     DropRenamedTables();
                     trans.Commit();
@@ -55,7 +54,7 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
                 _db.ExecuteSqlCommand("SELECT Count([Id]) = -1 FROM User");
                 return true;
             }
-            catch (SQLiteException)
+            catch (DbException)
             {
                 // the column does not exist!
                 return false;
@@ -223,42 +222,17 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
             ");
         }
 
-        class OldUser
+        private void CopyData(BonoboGitServerContext context)
         {
-            public string Name { get; set; }
-            public string Surname { get; set; }
-            public string Username { get; set; }
-            public string Password { get; set; }
-            public string Email { get; set; }
+            CopyUsers(context);
+            CopyTeams(context);
+            CopyRoles(context);
+            CopyRepositories(context);
         }
 
-        class NameDesc
+        private void CopyUsers(BonoboGitServerContext context)
         {
-            public string Name { get; set; }
-            public string Description { get; set; }
-        }
-
-        class OldRepo
-        {
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public bool Anonymous { get; set; }
-            public bool AuditPushUser { get; set; }
-            public string Group { get; set; }
-            public byte[] Logo { get; set; }
-        }
-
-        private void CopyData()
-        {
-            CopyUsers();
-            CopyTeams();
-            CopyRoles();
-            CopyRepositories();
-        }
-
-        private void CopyUsers()
-        {
-            var users = _db.SqlQuery<OldUser>("Select * from oUser;");
+            var users = context.Query<OldUser>().FromSql("Select * from oUser;");
             foreach (var entry in users)
             {
                 Guid guid = Guid.NewGuid();
@@ -303,9 +277,9 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
             }
         }
 
-        private void CopyTeams()
+        private void CopyTeams(BonoboGitServerContext context)
         {
-            var teams = _db.SqlQuery<NameDesc>("Select * from oTeam");
+            var teams = context.Query<NameDesc>().FromSql("Select * from oTeam");
             foreach (var team in teams)
             {
                 _db.ExecuteSqlCommand("INSERT INTO Team VALUES ({0}, {1}, {2})",
@@ -313,9 +287,9 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
             }
         }
 
-        private void CopyRoles()
+        private void CopyRoles(BonoboGitServerContext context)
         {
-            var roles = _db.SqlQuery<NameDesc>("Select * from oRole");
+            var roles = context.Query<NameDesc>().FromSql("Select * from oRole");
             foreach (var role in roles)
             {
                 _db.ExecuteSqlCommand("INSERT INTO Role VALUES ({0}, {1}, {2})",
@@ -325,9 +299,9 @@ namespace Bonobo.Git.Server.Data.Update.Sqlite
             }
         }
 
-        private void CopyRepositories()
+        private void CopyRepositories(BonoboGitServerContext context)
         {
-            var repos = _db.SqlQuery<OldRepo>("SELECT * FROM oRepo");
+            var repos = context.Query<OldRepo>().FromSql("SELECT * FROM oRepo");
             foreach (var repo in repos)
             {
                 _db.ExecuteSqlCommand("INSERT INTO Repository VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6})",

@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
-using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Helpers;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bonobo.Git.Server.Test.UnitTests
@@ -9,7 +8,7 @@ namespace Bonobo.Git.Server.Test.UnitTests
     [TestClass]
     public class CustomHtmlHelperTest
     {
-        readonly HtmlHelper Html = new HtmlHelper(new ViewContext(), new ViewPage());
+        private readonly IHtmlHelper Html;
 
         [TestMethod]
         public void EnumsWithDisplayAttributesAreFormatted()

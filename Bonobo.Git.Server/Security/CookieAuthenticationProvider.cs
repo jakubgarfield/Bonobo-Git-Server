@@ -1,58 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Security.Claims;
-using System.Web;
-
-using Bonobo.Git.Server.Models;
-
-using Microsoft.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Practices.Unity;
-
-using Owin;
 
 namespace Bonobo.Git.Server.Security
 {
     public class CookieAuthenticationProvider : AuthenticationProvider
     {
-        public override void Configure(IAppBuilder app)
+        public CookieAuthenticationProvider(IHttpContextAccessor httpContextAccessor, IMembershipService membershipService, IRoleProvider roleProvider) : base(httpContextAccessor, membershipService, roleProvider)
         {
-            app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = CookieAuthenticationDefaults.AuthenticationType,
-                LoginPath = new PathString("/Home/LogOn"),
-                ExpireTimeSpan = TimeSpan.FromDays(3),
-                SlidingExpiration = true,
-                Provider = new Microsoft.Owin.Security.Cookies.CookieAuthenticationProvider
+        }
+
+        public override void Configure(IServiceCollection services)
+        {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
                 {
-                    OnApplyRedirect = context =>
-                    {
-                        if (!context.Request.Headers.ContainsKey("AuthNoRedirect"))
-                        {
-                            context.Response.Redirect(context.RedirectUri);
-                        }
-                    }
-                },
-            });
+                    options.LoginPath = new PathString("/Home/LogOn");
+                    options.ExpireTimeSpan = TimeSpan.FromDays(3);
+                    options.SlidingExpiration = true;
+                });
         }
 
         public override void SignIn(string username, string returnUrl = null, bool rememberMe = false)
         {
-            ClaimsIdentity identity = new ClaimsIdentity(GetClaimsForUser(username), CookieAuthenticationDefaults.AuthenticationType);
+            ClaimsIdentity identity = new ClaimsIdentity(GetClaimsForUser(username), CookieAuthenticationDefaults.AuthenticationScheme);
+            ClaimsPrincipal principal = new ClaimsPrincipal(identity);
             var authprop = new AuthenticationProperties { IsPersistent = rememberMe, RedirectUri = returnUrl };
-            HttpContext.Current.GetOwinContext().Authentication.SignIn(authprop, identity);
+            httpContextAccessor.HttpContext.SignInAsync(principal, authprop).Wait();
             if (!String.IsNullOrEmpty(returnUrl))
             {
-                HttpContext.Current.Response.Redirect(returnUrl, false);
+                httpContextAccessor.HttpContext.Response.Redirect(returnUrl, false);
             }
         }
 
         public override void SignOut()
         {
-            HttpContext.Current.GetOwinContext().Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
+            httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
     }
 }

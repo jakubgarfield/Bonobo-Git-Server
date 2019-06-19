@@ -3,6 +3,7 @@ using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
 
 namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 {
@@ -44,19 +45,14 @@ namespace Bonobo.Git.Server.Test.MembershipTests.EFTests
 
         protected void InitialiseTestObjects()
         {
-            _teams = new EFTeamRepository { CreateContext = () => _connection.GetContext() };
-            _users = new EFMembershipService { CreateContext = () => _connection.GetContext() };
-            _repos = new EFRepositoryRepository { CreateContext = () => _connection.GetContext() };
-            _roles = new EFRoleProvider { CreateContext = () => _connection.GetContext() };
+            _teams = new EFTeamRepository(() => _connection.GetContext());
+            _users = new EFMembershipService(() => _connection.GetContext());
+            _repos = new EFRepositoryRepository(() => _connection.GetContext());
+            _roles = new EFRoleProvider(() => _connection.GetContext() );
 
-            _service = new RepositoryPermissionService
-            {
-                Repository = _repos,
-                TeamRepository = _teams,
-                RoleProvider = _roles
-            };
+            _service = new RepositoryPermissionService(_repos, _roles, _teams);
 
-            new AutomaticUpdater().RunWithContext(_connection.GetContext());
+            new AutomaticUpdater().RunWithContext(_connection.GetContext(), Substitute.For<IAuthenticationProvider>());
         }
 
         protected override TeamModel CreateTeam()

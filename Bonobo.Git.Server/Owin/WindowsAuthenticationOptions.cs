@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 
-using Microsoft.Owin;
-using Microsoft.Owin.Security;
-using System.Collections.Concurrent;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 
 namespace Bonobo.Git.Server.Owin.Windows
 {
-    public class WindowsAuthenticationOptions : AuthenticationOptions
+    public class WindowsAuthenticationOptions : AuthenticationSchemeOptions
     {
         internal static readonly PathString DefaultRedirectPath = new PathString("/windowsAuthCallback");
 
@@ -20,11 +19,11 @@ namespace Bonobo.Git.Server.Owin.Windows
         public string SignInAsAuthenticationType { get; set; }
         public ISecureDataFormat<AuthenticationProperties> StateDataFormat { get; set; }
 
-        public WindowsAuthenticationOptions() : base(WindowsAuthenticationDefaults.AuthenticationType)
+        public WindowsAuthenticationOptions()
         {
-            Description.Caption = WindowsAuthenticationDefaults.AuthenticationType;
+            //Description.Caption = WindowsAuthenticationDefaults.AuthenticationType;
             CallbackPath = DefaultRedirectPath;
-            AuthenticationMode = AuthenticationMode.Passive;
+            //AuthenticationMode = AuthenticationMode.Passive;
             Handshakes = new WindowsAuthenticationHandshakeCache("WindowsHandshakeCache");
         }
     }

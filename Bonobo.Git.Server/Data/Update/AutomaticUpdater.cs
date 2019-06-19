@@ -1,57 +1,48 @@
 ﻿using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Data.Update.ADBackendUpdate;
 using System;
-using System.Data.Entity.Infrastructure;
-using System.Linq;
+using Bonobo.Git.Server.Extensions;
+using Bonobo.Git.Server.Security;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Bonobo.Git.Server.Data.Update
 {
     public class AutomaticUpdater
     {
-        public void Run()
+        public void Run(BonoboGitServerContext context, IAuthenticationProvider authenticationProvider, IHostingEnvironment hostingEnvironment)
         {
             if (AuthenticationSettings.MembershipService.ToLowerInvariant() == "activedirectory")
             {
-                Pre600UpdateTo600.UpdateADBackend();
+                Pre600UpdateTo600.UpdateADBackend(hostingEnvironment);
             }
             else
             {
-                UpdateDatabase();
+                RunWithContext(context, authenticationProvider);
             }
         }
 
-        public void RunWithContext(BonoboGitServerContext context)
+        public void RunWithContext(BonoboGitServerContext context, IAuthenticationProvider authenticationProvider)
         {
-            DoUpdate(context);
+            DoUpdate(context, authenticationProvider);
         }
 
-        private void UpdateDatabase()
+        private void DoUpdate(BonoboGitServerContext ctx, IAuthenticationProvider authenticationProvider)
         {
-            using (var ctx = new BonoboGitServerContext())
-            {
-                DoUpdate(ctx);
-            }
-        }
-
-        private void DoUpdate(BonoboGitServerContext ctx)
-        {
-            IObjectContextAdapter ctxAdapter = ctx;
-            var connectiontype = ctx.Database.Connection.GetType().Name;
-
-            foreach (var item in UpdateScriptRepository.GetScriptsBySqlProviderName(connectiontype))
+            foreach (var item in UpdateScriptRepository.GetScriptsBySqlProviderName(ctx.Database.ProviderName, authenticationProvider))
             {
                 if (!string.IsNullOrEmpty(item.Precondition))
                 {
                     try
                     {
-                        var preConditionResult = ctxAdapter.ObjectContext.ExecuteStoreQuery<int>(item.Precondition).Single();
+                        var preConditionResult = Convert.ToInt32(ctx.Database.ExecuteScalar(item.Precondition));
                         if (preConditionResult == 0)
                         {
                             continue;
                         }
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
                         // consider failures in pre-conditions as an indication that
                         // store ecommand should be executed
@@ -62,7 +53,7 @@ namespace Bonobo.Git.Server.Data.Update
                 {
                     try
                     {
-                        ctxAdapter.ObjectContext.ExecuteStoreCommand(item.Command);
+                        ctx.Database.ExecuteSqlCommand(item.Command);
                     }
                     catch (Exception ex)
                     {

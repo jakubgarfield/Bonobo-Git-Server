@@ -27,11 +27,17 @@ namespace Bonobo.Git.Server.Data
             return GetAllRepositories().Where(x => x.Administrators.Any(y => y.Id == userId)).ToList();
         }
 
+        public RepositoryModel GetRepository(string Name)
+        {
+            return GetRepository(Name, StringComparison.OrdinalIgnoreCase);
+        }
+
         public abstract RepositoryModel GetRepository(Guid id);
-        public abstract RepositoryModel GetRepository(string Name, StringComparison compType = StringComparison.OrdinalIgnoreCase);
+        public abstract RepositoryModel GetRepository(string Name, StringComparison compType);
         public abstract bool Create(RepositoryModel repository);
         public abstract void Update(RepositoryModel repository);
         public abstract void Delete(Guid id);
+        public abstract bool NameIsUnique(string newName, Guid ignoreRepoId);
         public abstract IList<RepositoryModel> GetAllRepositories();
     }
 }

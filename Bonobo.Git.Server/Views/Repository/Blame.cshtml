@@ -1,13 +1,15 @@
-﻿@using Bonobo.Git.Server.Extensions
-@model RepositoryBlameModel
+﻿@using Bonobo.Git.Server
+@using Bonobo.Git.Server.App_GlobalResources
+@using Bonobo.Git.Server.Helpers
+@model Bonobo.Git.Server.Models.RepositoryBlameModel
 @{
     Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
     ViewBag.Title = Resources.Repository_Blame_Title;
 }
 @if (Model != null)
 {
-    @Html.Partial("_BranchSwitcher")
-    @Html.Partial("_AddressBar")
+    @await Html.PartialAsync("_BranchSwitcher")
+    @await Html.PartialAsync("_AddressBar")
 
     <div class="blob">
         @{
@@ -36,7 +38,7 @@
                                     @if (i == 0)
                                     {
                                         <td class="commit" rowspan="@length">
-                                            @Html.Partial("_Commit", hunk.Commit)
+                                            @await Html.PartialAsync("_Commit", hunk.Commit)
                                         </td>
                                     }
                                     <td class="line_nr">

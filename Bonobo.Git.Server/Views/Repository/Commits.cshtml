@@ -1,5 +1,9 @@
-﻿@using Bonobo.Git.Server.Extensions
-@model RepositoryCommitsModel
+﻿@using AndreyKurdiumov.AspNetCore.Helpers
+@using Bonobo.Git.Server.App_GlobalResources
+@using Bonobo.Git.Server.Models
+@using Microsoft.AspNetCore.Http
+@model Bonobo.Git.Server.Models.RepositoryCommitsModel
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     Layout = "~/Views/Repository/_RepositoryLayout.cshtml";
     ViewBag.Title = Resources.Repository_Commits_Title;
@@ -10,7 +14,7 @@
         @Html.Partial("_BranchSwitcher")
         @if (Model.Commits != null)
         {
-            var grid = new WebGrid(rowsPerPage: 10, canPage:true, canSort:false);
+            var grid = new WebGrid(HttpContextAccessor, rowsPerPage: 10, canPage:true, canSort:false);
             grid.Bind(Model.Commits, null, false, (int)(ViewBag.TotalCount ?? 0));
             @grid.GetHtml(displayHeader: false, mode: WebGridPagerModes.All, 
                 columns: grid.Columns(

@@ -1,9 +1,6 @@
-﻿using Microsoft.Owin.Security;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Security.Principal;
-using System.Web;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Bonobo.Git.Server.Owin.Windows
 {

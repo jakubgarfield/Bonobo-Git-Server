@@ -1,23 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 using Bonobo.Git.Server.Configuration;
 
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.WsFederation;
+using Microsoft.AspNetCore.Authentication.WsFederation;
 
-using Owin;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonobo.Git.Server.Security
 {
     public class FederationAuthenticationProvider : AuthenticationProvider
     {
-        public override void Configure(IAppBuilder app)
+        public FederationAuthenticationProvider(IHttpContextAccessor httpContextAccessor, IMembershipService membershipService, IRoleProvider roleProvider) : base(httpContextAccessor, membershipService, roleProvider)
+        {
+        }
+
+        public override void Configure(IServiceCollection services)
         {
             if (String.IsNullOrEmpty(FederationSettings.MetadataAddress))
             {
@@ -30,40 +32,42 @@ namespace Bonobo.Git.Server.Security
 
             }
 
-            app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
-            app.UseCookieAuthentication(new CookieAuthenticationOptions());
-            app.UseWsFederationAuthentication(new WsFederationAuthenticationOptions
-            {
-                MetadataAddress = FederationSettings.MetadataAddress,
-                Wtrealm = FederationSettings.Realm,
-                Notifications = new WsFederationAuthenticationNotifications()
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie()
+                .AddWsFederation(options =>
                 {
-                    RedirectToIdentityProvider = (context) =>
+                    options.MetadataAddress = FederationSettings.MetadataAddress;
+                    options.Wtrealm = FederationSettings.Realm;
+                    options.Events = new WsFederationEvents
                     {
-                        if (context.OwinContext.Response.StatusCode == (int)HttpStatusCode.Unauthorized && context.Request.Headers.ContainsKey("AuthNoRedirect"))
+                        OnRedirectToIdentityProvider = (context) =>
                         {
-                            context.HandleResponse();
-                        }
+                            if (context.Response.StatusCode == (int) HttpStatusCode.Unauthorized &&
+                                context.Request.Headers.ContainsKey("AuthNoRedirect"))
+                            {
+                                context.HandleResponse();
+                            }
 
-                        return Task.FromResult(0);
-                    }
-                }
-            });
+                            return Task.FromResult(0);
+                        }
+                    };
+                });
         }
 
         public override void SignIn(string username, string returnUrl, bool rememberMe)
         {
             var authprop = new AuthenticationProperties { IsPersistent = rememberMe, RedirectUri = returnUrl };
-            HttpContext.Current.GetOwinContext().Authentication.Challenge(authprop, WsFederationAuthenticationDefaults.AuthenticationType);
+            httpContextAccessor.HttpContext.ChallengeAsync(WsFederationDefaults.AuthenticationScheme, authprop);
             if (!String.IsNullOrEmpty(returnUrl))
             {
-                HttpContext.Current.Response.Redirect(returnUrl, false);
+                httpContextAccessor.HttpContext.Response.Redirect(returnUrl, false);
             }
         }
 
         public override void SignOut()
         {
-            HttpContext.Current.GetOwinContext().Authentication.SignOut(WsFederationAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
+            httpContextAccessor.HttpContext.SignOutAsync(WsFederationDefaults.AuthenticationScheme);
+            httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
     }
 }
