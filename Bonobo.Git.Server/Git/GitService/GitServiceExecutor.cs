@@ -95,7 +95,7 @@ namespace Bonobo.Git.Server.Git.GitService
 
             using (var process = Process.Start(info))
             {
-                //Do asynchronous copy i.e. spin up a separate task so we can simultaneously read/write & 
+                //Do asynchronous copy i.e. spin up a separate task so we can simultaneously read/write &
                 //avoid deadlock due to filled buffers within git process
                 Task stdInTask = inStream.CopyToAsync(process.StandardInput.BaseStream);
 
@@ -107,7 +107,7 @@ namespace Bonobo.Git.Server.Git.GitService
                 bool completionJobDone = false;
                 while (true)
                 {
-                    //check if all output has been sent to git exe via stdin                    
+                    //check if all output has been sent to git exe via stdin
                     if ((stdInTask.IsCompleted) && (completionJobDone==false))
                     {
                         //all output has been sent to git process, send final signal.
