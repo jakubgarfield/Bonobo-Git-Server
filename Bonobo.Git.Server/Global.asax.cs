@@ -20,6 +20,7 @@ using Bonobo.Git.Server.Git.GitService;
 using Bonobo.Git.Server.Git.GitService.ReceivePackHook;
 using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability;
 using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks;
+using Bonobo.Git.Server.Git.GitLfs;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 using System.Runtime.Caching;
@@ -196,6 +197,8 @@ namespace Bonobo.Git.Server
             }
 
             container.RegisterType<IGitService, GitServiceExecutor>();
+            container.RegisterType<IGitLfsService, GitLfsService>();
+            container.RegisterType<ILfsDataStorageProvider, LfsAppDataStorageProvider>();
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
 

@@ -28,6 +28,25 @@ namespace Bonobo.Git.Server.App_Start
                             new { controller = "Git", action = "GitUrl" },
                             new { method = new HttpMethodConstraint("GET") });
 
+            // ---- LFS additions
+            routes.MapRoute("GitLfsBatchAPI",
+                            "{repositoryName}.git/info/lfs/objects/batch",
+                            new { controller = "Git", action = "GitLfsBatchAPI" },
+                            new { method = new HttpMethodConstraint("POST") });
+
+            // Example: http://localhost:51178/LfsTests.git/lfs/oid/089b6f8178811ecdb44855673dea198f80954e4bbabf848bc12f4f43f3032b84
+            routes.MapRoute("GitLfsBasicTransferDownload",
+                            "{repositoryName}.git/lfs/oid/{oid}",
+                            new { controller = "Git", action = "GitLfsBasicTransferDownload" },
+                            new { method = new HttpMethodConstraint("GET") });
+
+            // Example: http://localhost:51178/LfsTests.git/lfs/oid/089b6f8178811ecdb44855673dea198f80954e4bbabf848bc12f4f43f3032b84
+            routes.MapRoute("GitLfsBasicTransferUpload",
+                            "{repositoryName}.git/lfs/oid/{oid}",
+                            new { controller = "Git", action = "GitLfsBasicTransferUpload" },
+                            new { method = new HttpMethodConstraint("PUT") });
+            // ---- End LFS additions
+
             routes.MapRoute("IndexRoute",
                             "{controller}/Index/",
                             new { action = "Index" });
