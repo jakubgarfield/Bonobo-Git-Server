@@ -143,9 +143,6 @@ namespace Bonobo.Git.Server.Controllers
                     , GitLfsConsts.GIT_LFS_CONTENT_TYPE);
             }
 
-            // This blows up if you dispose it here.
-            // Gives you "Cannot operate on a closed stream" or similar.
-            // That is why ILfsDataStorageProvider is not IDisposable.
             Stream readStream = StorageProvider.GetReadStream(LfsOperationNames.DOWNLOAD, repositoryName, oid);
             return File(readStream, "application/octet-stream");
         }

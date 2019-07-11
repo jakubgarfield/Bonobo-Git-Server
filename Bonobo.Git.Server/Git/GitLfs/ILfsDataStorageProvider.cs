@@ -3,7 +3,6 @@ using System.IO;
 
 namespace Bonobo.Git.Server.Git.GitLfs
 {
-    // TODO: This probably should be IDisposable, but disposing the streams in the controller methods causes grief.
     ///<summary>Represents a method of storage for LFS objects.</summary>
     public interface ILfsDataStorageProvider
     {

@@ -7,7 +7,7 @@ using System.Web;
 namespace Bonobo.Git.Server.Git.GitLfs
 {
     /// <summary>
-    /// This is a terrible implementation.  Let's just get it working first.
+    /// Provides a simple LfsDataStorageProvider implementation where LFS objects are stored directly in the AppData folder of the Bonobo web site.
     /// </summary>
     public class LfsAppDataStorageProvider : ILfsDataStorageProvider
     {
