@@ -12,9 +12,13 @@ namespace Bonobo.Git.Server.Configuration
     [XmlRootAttribute(ElementName = "Configuration", IsNullable = false)]
     public class UserConfiguration : ConfigurationEntry<UserConfiguration>
     {
+        private static bool _initialized = false;
+
         public bool AllowAnonymousPush { get; set; }
         [XmlElementAttribute(ElementName = "Repositories")]
         public string RepositoryPath { get; set; }
+        [XmlElementAttribute(ElementName = "LfsPath")]
+        public string LfsPath { get; set; }
         public bool AllowUserRepositoryCreation { get; set; }
         public bool AllowPushToCreate { get; set; }
         public bool AllowAnonymousRegistration { get; set; }
@@ -73,16 +77,25 @@ namespace Bonobo.Git.Server.Configuration
 
         public static void Initialize()
         {
+            if (!_initialized)
+            {
+                // This is a bit of a cheat.  It loads from web.config whereas nothing else does.
+                // It will be overridden with a value derived from the Repositories setting in the 
+                // config.xml if it is missing from web.config, so it is optional.
+                Current.LfsPath = ConfigurationManager.AppSettings["DefaultLfsDirectory"];
+                Current.Save();
+                _initialized = true;
+            }
+
+            // Because this triggers an initialization it will never return false...
             if (IsInitialized())
                 return;
-
-            Current.RepositoryPath = ConfigurationManager.AppSettings["DefaultRepositoriesDirectory"];
-            Current.Save();
         }
 
 
         private static bool IsInitialized()
-        {
+        {   
+            // Bug: This triggers an initial config load and therefore always returns true.
             return !String.IsNullOrEmpty(Current.RepositoryPath);
         }
     }

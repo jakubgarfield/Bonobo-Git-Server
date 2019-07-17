@@ -5,7 +5,9 @@ using System.Web.Mvc;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Git;
+using Bonobo.Git.Server.Git.GitLfs;
 using Bonobo.Git.Server.Git.GitService;
+using Bonobo.Git.Server.Git.Models;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 using Ionic.Zlib;
@@ -30,6 +32,12 @@ namespace Bonobo.Git.Server.Controllers
 
         [Dependency]
         public IGitService GitService { get; set; }
+
+        [Dependency]
+        public IGitLfsService LfsService { get; set; }
+
+        [Dependency]
+        public ILfsDataStorageProvider StorageProvider { get; set; }
 
         public ActionResult SecureGetInfoRefs(String repositoryName, String service)
         {
@@ -105,6 +113,68 @@ namespace Bonobo.Git.Server.Controllers
             {
                 return UnauthorizedResult();
             }
+        }
+
+        [HttpPost]
+        public ActionResult GitLfsBatchAPI(string repositoryName, BatchApiRequest requestObj)
+        {
+            Guid userGuid = User.Id();
+            var result = LfsService.GetBatchApiResponse(Request.Url.Scheme, Request.Url.Authority, Request.ApplicationPath,
+                repositoryName, Request.AcceptTypes, requestObj, userGuid);
+            
+            Response.StatusCode = result.HttpStatusCode;
+            return Content(
+                Newtonsoft.Json.JsonConvert.SerializeObject(result.Content, this.LfsService.GetJsonSerializerSettings()), 
+                GitLfsConsts.GIT_LFS_CONTENT_TYPE);
+        }
+
+        [HttpGet]
+        public ActionResult GitLfsBasicTransferDownload(string repositoryName, string oid)
+        {
+            bool authorized = RepositoryPermissionService.HasPermission(User.Id(), RepositoryRepository.GetRepository(repositoryName).Id, RepositoryAccessLevel.Pull);
+            if (!authorized)
+            {
+                Response.StatusCode = 403;
+                return Content(
+                    Newtonsoft.Json.JsonConvert.SerializeObject(new BatchApiErrorResponse()
+                    {
+                        Message = "You do not have permission to PULL (LFS download)."
+                    })
+                    , GitLfsConsts.GIT_LFS_CONTENT_TYPE);
+            }
+
+            Stream readStream = StorageProvider.GetReadStream(LfsOperationNames.DOWNLOAD, repositoryName, oid);
+            return File(readStream, "application/octet-stream");
+        }
+
+        [HttpPut]
+        public ActionResult GitLfsBasicTransferUpload(string repositoryName, string oid)
+        {
+            bool authorized = RepositoryPermissionService.HasPermission(User.Id(), RepositoryRepository.GetRepository(repositoryName).Id, RepositoryAccessLevel.Pull);
+            if (!authorized)
+            {
+                Response.StatusCode = 403;
+                return Content(
+                    Newtonsoft.Json.JsonConvert.SerializeObject(new BatchApiErrorResponse()
+                    {
+                        Message = "You do not have permission to PUSH (LFS upload)."
+                    })
+                    , GitLfsConsts.GIT_LFS_CONTENT_TYPE);
+            }
+
+            // If the object already exists, the client does not send it.  But even if it does, we will still not replace it.
+            if (!StorageProvider.Exists(repositoryName, oid))
+            {
+                using (Stream destStream = StorageProvider.GetWriteStream(LfsOperationNames.UPLOAD, repositoryName, oid))
+                {
+                    Request.InputStream.CopyTo(destStream);
+                    destStream.Flush();
+                    destStream.Close();
+                }
+            }
+
+            Response.StatusCode = 200;
+            return null;
         }
 
         private bool TryCreateOnPush(string repositoryName)
