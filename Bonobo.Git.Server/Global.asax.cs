@@ -198,7 +198,7 @@ namespace Bonobo.Git.Server
 
             container.RegisterType<IGitService, GitServiceExecutor>();
             container.RegisterType<IGitLfsService, GitLfsService>();
-            container.RegisterType<ILfsDataStorageProvider, LfsAppDataStorageProvider>();
+            container.RegisterType<ILfsDataStorageProvider, LfsFileSystemStorageProvider>();
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
 

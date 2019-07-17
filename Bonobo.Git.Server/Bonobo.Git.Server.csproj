@@ -309,6 +309,7 @@
     <Compile Include="Git\GitLfs\ILfsDataStorageProvider.cs" />
     <Compile Include="Git\GitLfs\LfsActionFactory.cs" />
     <Compile Include="Git\GitLfs\LfsDefinitions.cs" />
+    <Compile Include="Git\GitLfs\LfsFileSystemStorageProvider.cs" />
     <Compile Include="Git\GitService\GitServiceResultParser.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\Durability\AutoCreateMissingRecoveryDirectories.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\Durability\OneFolderRecoveryFilePathBuilder.cs" />
@@ -322,7 +323,7 @@
     <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommit.cs" />
     <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommitSignature.cs" />
     <Compile Include="Git\GitService\ReplicatingStream.cs" />
-    <Compile Include="Git\GitLfs\LfsAppDataStorageProvider.cs" />
+    <Compile Include="Git\Models\BatchApiErrorResponse.cs" />
     <Compile Include="Git\Models\BatchApiRequest.cs" />
     <Compile Include="Git\Models\BatchApiRequestModelBinder.cs" />
     <Compile Include="Git\Models\BatchApiResponse.cs" />

@@ -99,11 +99,4 @@ namespace Bonobo.Git.Server.Git.Models
         /// <summary> An array of objects to be downloaded. </summary>
         public BatchApiObject[] Objects { get; set; }
     }
-
-    public class BatchApiErrorResponse
-    {
-        public string Message { get; set; }
-        public string Documentation_Url => "https://github.com/git-lfs/git-lfs/blob/master/docs/api/batch.md";
-        public string Request_Id { get; set; }
-    }
 }

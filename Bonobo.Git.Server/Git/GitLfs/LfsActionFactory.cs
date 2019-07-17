@@ -9,6 +9,7 @@ namespace Bonobo.Git.Server.Git.GitLfs
     /// <summary> Factory for producing actions of the correct type per the specified operation.  Used when constructing LFS responses. </summary>
     public class LfsActionFactory
     {
+
         /// <summary>Creates the ACTION part of the response object for the given operation. </summary>
         /// <param name="urlScheme">The protocol part of the URL.</param>
         /// <param name="urlAuthority">The domain part of the URL.</param>
@@ -29,10 +30,11 @@ namespace Bonobo.Git.Server.Git.GitLfs
             // If this is an upload, generate an upload action.
             if (operationName.Equals(LfsOperationNames.UPLOAD))
             {
+                string fileUrl = FileUrl(urlScheme, urlAuthority, ref requestApplicationPath, requestObject, repositoryName);
+
                 var uploadAction = new BatchApiResponse.BatchApiObjectTransferAction()
                 {
-                    Href = storageProvider.GetFileUrl(urlScheme, urlAuthority, requestApplicationPath, 
-                        operationName, repositoryName, requestObject.Oid, requestObject.Size),
+                    Href = fileUrl,
                     Header = null,
                     Expires_in = 0x07FFFFFFF
                 };
@@ -48,10 +50,11 @@ namespace Bonobo.Git.Server.Git.GitLfs
             // If this is a download, gnerate a download action.
             if (operationName.Equals(LfsOperationNames.DOWNLOAD))
             {
+                string fileUrl = FileUrl(urlScheme, urlAuthority, ref requestApplicationPath, requestObject, repositoryName);
+
                 var downloadAction = new BatchApiResponse.BatchApiObjectTransferAction()
                 {
-                    Href = storageProvider.GetFileUrl(urlScheme, urlAuthority, requestApplicationPath,
-                        operationName, repositoryName, requestObject.Oid, requestObject.Size),
+                    Href = fileUrl,
                     Header = null,
                     Expires_in = 0x07FFFFFFF
                 };
@@ -59,6 +62,27 @@ namespace Bonobo.Git.Server.Git.GitLfs
             }
 
             return result;
+        }
+
+        private string FileUrl(string urlScheme, string urlAuthority, ref string requestApplicationPath, BatchApiRequest.LfsObjectToTransfer requestObject, string repositoryName)
+        {
+            var authorityParts = urlAuthority.Split(':');
+            var path = requestApplicationPath = string.Concat(
+                repositoryName,
+                ".git",
+                requestApplicationPath,
+                "lfs/oid/",
+                requestObject.Oid);
+
+            var ub = new UriBuilder();
+            ub.Scheme = urlScheme;
+            ub.Host = authorityParts[0];
+            if (authorityParts.Length > 1)
+                if (int.TryParse(authorityParts[1], out int iport))
+                    ub.Port = iport;
+            ub.Path = path;
+            string fileUrl = ub.ToString();
+            return fileUrl;
         }
     }
 }
