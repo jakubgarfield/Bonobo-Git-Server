@@ -1,30 +1,47 @@
 html, button, input, select, textarea, .pure-g [class *= "pure-u"], .pure-g-r [class *= "pure-u"] { font-family: OpenSans, sans-serif; }
+.pure-menu.pure-menu-open, .pure-menu.pure-menu-horizontal li .pure-menu-children,
+nav.branches ul li { color: #dbdbdb; background-color: #383c4a !important; }
+.pure-menu li a:hover, .pure-menu li a:focus { background-color: #2e323e; border-radius: 3px; }
+.pure-form select, input, select, textarea { color: #dbdbdb; background-color: #404552; box-shadow: none !important; }
+.pure-form input[type=text][disabled], .pure-form input[type=password][disabled], .pure-form input[type=email][disabled], .pure-form input[type=url][disabled], .pure-form input[type=date][disabled], .pure-form input[type=month][disabled], .pure-form input[type=time][disabled], .pure-form input[type=datetime][disabled], .pure-form input[type=datetime-local][disabled], .pure-form input[type=week][disabled], .pure-form input[type=number][disabled], .pure-form input[type=search][disabled], .pure-form input[type=tel][disabled], .pure-form input[type=color][disabled], .pure-form select[disabled], .pure-form textarea[disabled],
+.pure-form input[readonly], .pure-form select[readonly], .pure-form textarea[readonly] { color: #dbdbdb; background-color: #2e323e; box-shadow: none !important; }
+.pure-form select, textarea, .pure-form input[type=text], .pure-form input[type=password] { border: 2px solid transparent !important; }
+.pure-form select:focus, textarea:focus, .pure-form input[type=text]:focus, .pure-form input[type=password]:focus { border: 2px solid #4b505f !important; }
 
-html { font-size: 16px; color: #333; text-rendering: optimizeLegibility; }
-html, body { margin: 0; padding: 0; height: 100%; min-width: 1100px;}
+html { font-size: 16px; color: #dbdbdb; text-rendering: optimizeLegibility; }
+html, body { margin: 0; padding: 0; height: 100%; min-width: 1100px; background-color: #383c4a;}
 
 h1, h2, h3, h4, h5, h6 { font-weight: 300; }
-a { color: #4183c4; text-decoration: none; }
+a { color: #87ab63; text-decoration: none; }
 a:hover { text-decoration: underline; }
 .pure-button:hover { text-decoration: none; }
 i.fa { margin-right: 0.25em; }
 
-table { width: 100%; margin: 2em 0; }
-th a { color: #333; }
-th a:hover { text-decoration: none; color: #4183c4; }
+table { width: 100%; margin: 2em 0; 
+    border-radius: 3px !important;
+    border: 1px solid #4c505c !important;
+    border-collapse: separate !important; }
+th a { color: #dbdbdb; }
+th a:hover { text-decoration: none; color: #a0cc75; }
+tr:last-child td { border-bottom: none; }
 .pure-table td, .pure-table th { padding: 0.8em; }
+.pure-table th { background-color: #404552; }
+.pure-table th:first-child { background-color: #404552;  }
+.pure-table th:last-child { background-color: #404552;  }
+
+.pure-table td { background-color: #2a2e3a; }
 .pure-table { border: none; }
-.pure-table td, .pure-table th { border: none; border-bottom: 1px solid #f6f6f6; text-align: left; }
-.pure-table thead { background: none; }
+.pure-table td, .pure-table th { border: none; border-bottom: 1px solid #4b505f; text-align: left; }
+.pure-table thead { background: none; color: #f6f6f6; }
 .pure-table th { font-weight: 300; }
 
 pre code { font-family: Consolas, monospace; }
 
 .field-validation-error { color: #a94442; margin-left: 0.7em; }
 .field-validation-valid { display: none; }
-.input-validation-error { border: 1px solid #a94442 !important; background-color: #fdf7f7; }
-.validation-summary-errors, .summary-error { border-left: 3px solid #d9534f; background: #fdf7f7; padding: 1em; margin-bottom: 2em; }
-.summary-success { border-left: 3px solid #009900; background: #F2F9EF; padding: 1em; margin-bottom: 2em; }
+.input-validation-error { border: 1px solid #a94442 !important; background-color: #383c4a; }
+.validation-summary-errors, .summary-error { border-left: 3px solid #d9534f; background: #383c4a; padding: 1em; margin-bottom: 2em; }
+.summary-success { border-left: 3px solid #009900; background: #404552; padding: 1em; margin-bottom: 2em; }
 .validation-summary-errors ul { margin: 0.75em 1em; }
 .validation-summary-valid { display: none; }
 .pure-form .checkboxlist > label, .pure-form .checkboxlist > .field-validation-error, .pure-form .checkboxlist > i.fa-info-circle { vertical-align: top !important; }
@@ -33,6 +50,7 @@ pre code { font-family: Consolas, monospace; }
 .pure-form .checkboxlist ul li label { width: 14em; }
 .pure-form em, .pure-form i.fa-info-circle { color: silver; padding-left: 0.3em; }
 .pure-form .pure-button { margin-right: 1em; }
+.pure-button-primary, .pure-button-selected, a.pure-button-primary, a.pure-button-selected { background-color: #87ab63;}
 .pure-form.detail span { vertical-align: middle; line-height: 2em; }
 .pure-form.detail label { color: silver; }
 textarea.medium, input.medium { width: 30em; }
@@ -45,14 +63,15 @@ table.repositories button.copy-to-clip-button { margin-left: 0px; border-radius:
 
 .navigation { padding: 0.5em 0; text-align: right;}
 .navigation.pure-menu a.pure-menu-heading { color: white; font-weight: 300; font-size: 1.2em; background: url('images/git-logo.png') no-repeat 0 4px; padding-left: 40px; float: left; margin-left: 0.5em;}
-.navigation.pure-menu-open { background: #2d3e50; }
+.navigation.pure-menu-open { background: #2e323e; }
 .navigation .pure-menu-selected a { color: white; }
+.pure-menu a { color: #9e9e9e; }
 .navigation a { color: #fff; }
 .navigation ul { display: inline-block; font-size: 0.9em; padding-right: 0.5em;}
 .navigation ul a { padding: 7px 10px;}
 .navigation li a:hover,
-.navigation li a:focus { background: none; color: #AECFE5; text-decoration: none; }
-.Repository .navigation .repository, .Account .navigation .users, .Team .navigation .teams, .Settings .navigation .settings { color: #AECFE5; }
+.navigation li a:focus { background: none; color: #a0cc75; text-decoration: none; }
+.Repository .navigation .repository, .Account .navigation .users, .Team .navigation .teams, .Settings .navigation .settings { color: #87ab63; }
 .Repository select.repositories {margin-left: 20px; }
 
 
@@ -62,7 +81,7 @@ table.repositories button.copy-to-clip-button { margin-left: 0px; border-radius:
 .content h1 { position:relative; }
 .content h1 img {   position: absolute; left: -54px; top: 6px; }
 
-.footer { color: #999; background-color: #000; font-size: 0.85em; width: 100%; position: absolute; bottom: 0; height: 50px; line-height: 1.7em; text-align: center; }
+.footer { color: #999; background-color: #2e323e; font-size: 0.85em; width: 100%; position: absolute; bottom: 0; height: 50px; line-height: 1.7em; text-align: center; }
 .footer a { color: #999; text-decoration: none; }
 .footer a:hover { color: #fff; }
 
@@ -83,21 +102,21 @@ tfoot td { text-align: center; border-bottom: none !important; }
 
 .repository-menu { margin-bottom: 0em; }
 .repository-menu a:hover { text-decoration: none; }
-.Detail .repository-menu .detail, .Tree .repository-menu .browser, .Blame .repository-menu .browser, .Blob .repository-menu .browser, .Commit .repository-menu .commits, .Commits .repository-menu .commits { color: #4183c4; }
+.Detail .repository-menu .detail, .Tree .repository-menu .browser, .Blame .repository-menu .browser, .Blob .repository-menu .browser, .Commit .repository-menu .commits, .Commits .repository-menu .commits { color: #a0cc75; }
 
 .Repository div.detail { margin-top: 2em; }
 
 
 nav.branches a:hover { text-decoration: none; }
-nav.branches li.active a { color: #4183c4; }
+nav.branches li.active a { color: #a0cc75; }
 nav.branches li > a:after { content: '\f107'; font-family: FontAwesome; margin-left: 0.5em; }
 nav.branches li > a:only-child:after { content: ''; }
 nav.branches .branch a:before, .branches a.branch:before { content: '\f0e8'; font-family: FontAwesome; margin-right: 0.5em; display: inline-block; -webkit-transform: rotate(180deg); -moz-transform: rotate(180deg); -o-transform: rotate(180deg); -ms-transform: rotate(180deg); transform: rotate(180deg); }
 nav.branches li:hover { background-color: #eee; }
 nav.branches ul { padding: 0; margin: 0; }
 nav.branches ul li { list-style: none; background-color: #fff; float: left; }
-nav.branches ul li a { color: #777; padding: 7px 20px; display: inline-block; }
-nav.branches ul li ul { display: none; border: 1px solid #f6f6f6; }
+nav.branches ul li a { color: #9e9e9e; padding: 7px 20px; display: inline-block; }
+nav.branches ul li ul { display: none; border: 1px solid #4b505f; }
 nav.branches ul li:hover ul { z-index: 99999; display: list-item; position: absolute; }
 nav.branches ul li:hover ul li { float: none; }
 .Commits nav.branches ul li { display: inline-block; float: none;}
@@ -119,9 +138,9 @@ Tags .tag a { background-color: rgba(148, 190, 214, 1); border-radius: 5px; colo
 .blob { border: 1px solid #ddd; margin: 2em 0; }
 .blob .controls { border-bottom: 1px solid #ddd; text-shadow: 0 1px 0 #fff; background-image: linear-gradient(#fafafa, #eaeaea); background-repeat: repeat-x; padding-right: 1em;}
 .blob .controls:after { content: ''; clear: both; display: block;}
-.blob .controls > * { color: #777; display: inline-block; padding: 0.5em;}
+.blob .controls > * { color: #dbdbdb; display: inline-block; padding: 0.5em;}
 .blob .controls a { float: right;}
-.blob .controls a:hover { color: #4183c4; text-decoration: none;}
+.blob .controls a:hover { color: #a0cc75; text-decoration: none;}
 .blob pre, .diff pre { font-size: 0.8em; word-wrap:normal; overflow: auto; margin: 0; padding: 0;}
 .blob pre code, .diff pre code { white-space: pre; background: transparent; margin: 0.5em;}
 .blob img {margin: 1em auto; display: block;}
@@ -179,9 +198,18 @@ h2.group { margin: 0; }
 td.description { width: 50%; }
 td.logo { width: 36px; }
 
-h2.group .toggle:after { display: inline-block; font-family: FontAwesome; top: 0; content: "\f056"; height: 100%; width: 20px; cursor: pointer; color: #4183c4; }
+h2.group .toggle:after { display: inline-block; font-family: FontAwesome; top: 0; content: "\f056"; height: 100%; width: 20px; cursor: pointer; color: #a0cc75; }
 h2.group .toggle.on:after { content: "\f055"; }
 
 img.repo-logo { width:36px; height: auto; image-rendering: -moz-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; -ms-interpolation-mode: nearest-neighbor; }
 
 .copy-to-clip-button {font-size: 12px; padding: 4px; }
+
+
+.fa-fw .fa.fa-sign-out,
+.fa-fw .fa.fa-globe {
+  color: #87ab63 !important;
+}
+.pure-menu-heading {
+  text-transform: none !important;
+}
