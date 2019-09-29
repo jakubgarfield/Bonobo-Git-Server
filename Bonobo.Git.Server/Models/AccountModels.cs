@@ -103,6 +103,7 @@ namespace Bonobo.Git.Server.Models
 
         [DataType(DataType.Password)]
         [Display(ResourceType = typeof(Resources), Name = "Account_Edit_NewPassword")]
+        [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
         public string NewPassword { get; set; }
 
         [System.ComponentModel.DataAnnotations.Compare("NewPassword", ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Compare")]
