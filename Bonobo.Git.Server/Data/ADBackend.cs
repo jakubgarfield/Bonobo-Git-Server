@@ -129,7 +129,7 @@ namespace Bonobo.Git.Server.Data
                     result = new UserModel
                     {
                         Id = user.Guid.Value,
-                        Username = user.UserPrincipalName,
+                        Username = user.SamAccountName + "@" + user.Context.Name,
                         GivenName = user.GivenName ?? String.Empty,
                         Surname = user.Surname ?? String.Empty,
                         Email = user.EmailAddress ?? String.Empty,
@@ -170,15 +170,12 @@ namespace Bonobo.Git.Server.Data
                     {
                         Users.Remove(Id);
                     }
-                    foreach (string username in group.GetMembers(true).OfType<UserPrincipal>().Select(x => x.UserPrincipalName).Where(x => x != null))
+                    foreach (UserPrincipal principal in group.GetMembers(true).OfType<UserPrincipal>())
                     {
-                        using (var principal = ADHelper.GetUserPrincipal(username))
+                        UserModel user = GetUserModelFromPrincipal(principal);
+                        if (user != null)
                         {
-                            UserModel user = GetUserModelFromPrincipal(principal);
-                            if (user != null)
-                            {
-                                Users.AddOrUpdate(user);
-                            }
+                            Users.AddOrUpdate(user);
                         }
                     }
                 }
@@ -232,7 +229,7 @@ namespace Bonobo.Git.Server.Data
             {
                 Roles.Remove(role.Id);
             }
-            
+
             foreach (string roleName in ActiveDirectorySettings.RoleNameToGroupNameMapping.Keys)
             {
                 string groupName = ActiveDirectorySettings.RoleNameToGroupNameMapping[roleName];
