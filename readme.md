@@ -24,7 +24,7 @@ Prerequisites
 
 
 
-Update
+Manual Update
 -----------------------------------------------
 
 Before each update please read carefully the information about **compatibility issues** between your version and the latest one in [changelog](/changelog.md).
@@ -38,7 +38,7 @@ Before each update please read carefully the information about **compatibility i
 
 
 
-Installation
+Manual Installation
 -----------------------------------------------
 
 These steps illustrate simple installation with Windows 2008 Server and IIS 7. They are exactly the same for higher platforms (Windows Server 2012 and IIS 8.0).
@@ -60,6 +60,27 @@ These steps illustrate simple installation with Windows 2008 Server and IIS 7. T
 * **Launch your browser** and go to [http://localhost/Bonobo.Git.Server](http://localhost/Bonobo.Git.Server). Now you can see the initial page of Bonobo Git Server and everything is working.
     * Default credentials are username: **admin** password: **admin**
 
+<hr />
+
+
+Installation and Update via Chocolatey
+-----------------------------------------------
+
+* [Install chocolatey](https://chocolatey.org/docs/installation)
+* Run `choco install bonobo-git-server`
+    * Sets up prerequisites
+    * Sets file permissions
+    * To pass parameters, use `--params "''"` (e.g. `choco install bonobo-git-server [other options] --params="'/Site:MySite /Name:GitServer /UseExistingAppPool'"`).
+    * To have choco remember parameters on upgrade, be sure to set `choco feature enable -n=useRememberedArgumentsForUpgrades`. 
+* Options
+    * /Port: - Uses Set-WebBinding to switch the port used to a new port
+    * /Site: - What IIS Site to Install WebApplication under - defaults to "Default Web Site"
+    * /Name: - Name to use when installing WebApplication - defaults to "Bonobo.Git.Server"
+    * /AppPool - Name of AppPool to use - defaults to "Bonobo.Git.Server"
+    * /UseExistingAppPool - If True, Does not create/recreate the app pool - defaults to False
+    * /InstallLocation: - Physical Path to set for the website - defaults to "$env:SystemDrive\inetpub\wwwroot\Bonobo.Git.Server"
+* Updates
+    * Run `choco update bonobo-git-server`
 
 <hr />
 
