@@ -4,6 +4,14 @@ description: Tracks changes and bug fixes between different versions of Bonobo G
 tags: [Changelog, Changes, Bug Fixes, Features]
 ---
 
+## Version 6.5.1
+
+**16 January 2020**
+
+### Security
+
+Only users with administrative role in repository can push into master branch (#856)
+
 ## Version 6.5.0
 
 **17 April 2019**
