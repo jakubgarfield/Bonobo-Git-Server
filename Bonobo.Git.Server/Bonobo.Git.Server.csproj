@@ -318,6 +318,7 @@
     <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommitSignature.cs" />
     <Compile Include="Git\GitService\ReplicatingStream.cs" />
     <Compile Include="Helpers\ADHelper.cs" />
+    <Compile Include="Helpers\ByteUtils.cs" />
     <Compile Include="Helpers\MembershipHelper.cs" />
     <Compile Include="Helpers\RepositoryCommitModelHelpers.cs" />
     <Compile Include="Models\RepositoryCommitTitle.cs" />

@@ -89,8 +89,7 @@ namespace Bonobo.Git.Server.Git.GitService
             info.EnvironmentVariables.Add("AUTH_USER_TEAMS", teamsstr);
             info.EnvironmentVariables.Add("AUTH_USER_ROLES", rolesstr);
             info.EnvironmentVariables.Add("AUTH_USER_DISPLAYNAME", displayname);
-
-
+            
             using (var process = Process.Start(info))
             {
                 inStream.CopyTo(process.StandardInput.BaseStream);

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.IO.Compression;
-using System.Web;
 using System.Web.Mvc;
-using Bonobo.Git.Server.Configuration;
 
 namespace Bonobo.Git.Server.Git
 {

@@ -8,8 +8,8 @@ cache:
 assembly_info:
   patch: true
   file: AssemblyInfo.cs
-  assembly_version: "6.5.0.{build}-$(APPVEYOR_BUILD_ID)-$(APPVEYOR_REPO_BRANCH)-$(APPVEYOR_REPO_COMMIT)"
-  assembly_file_version: "6.5.0.{build}-$(APPVEYOR_BUILD_ID)-$(APPVEYOR_REPO_BRANCH)-$(APPVEYOR_REPO_COMMIT)"
+  assembly_version: "6.5.1.{build}-$(APPVEYOR_BUILD_ID)-$(APPVEYOR_REPO_BRANCH)-$(APPVEYOR_REPO_COMMIT)"
+  assembly_file_version: "6.5.1.{build}-$(APPVEYOR_BUILD_ID)-$(APPVEYOR_REPO_BRANCH)-$(APPVEYOR_REPO_COMMIT)"
 
 install:
 - set IIS_USER_HOME=%USERPROFILE%\Documents\IISExpress

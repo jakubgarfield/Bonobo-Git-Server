@@ -48,6 +48,13 @@ namespace Bonobo.Git.Server.Security
             return Repository.GetAllRepositories().Where(repo => HasPermission(userId, userTeams, userIsSystemAdministrator, repo, requiredLevel));
         }
 
+        public bool UserIsAdministratorInRepository(Guid userId, string repositoryName)
+        {
+            var repository = Repository.GetRepository(repositoryName);
+            return repository.Administrators.Any(x => x.Id == userId);
+
+        }
+
         private bool HasPermission(Guid userId, IList<TeamModel> userTeams, bool userIsSystemAdministrator,
             RepositoryModel repositoryModel, RepositoryAccessLevel requiredLevel)
         {

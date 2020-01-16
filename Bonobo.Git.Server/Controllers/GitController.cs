@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
-using System.Net;
+using System.Text;
 using System.Web.Mvc;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Git;
 using Bonobo.Git.Server.Git.GitService;
+using Bonobo.Git.Server.Helpers;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 using Ionic.Zlib;
@@ -56,19 +57,19 @@ namespace Bonobo.Git.Server.Controllers
                 }
             }
 
+            
             var requiredLevel = isPush ? RepositoryAccessLevel.Push : RepositoryAccessLevel.Pull;
             if (RepositoryPermissionService.HasPermission(User.Id(), repositoryName, requiredLevel))
             {
                 return GetInfoRefs(repositoryName, service);
             }
-            else
-            {
-                Log.Warning("GitC: SecureGetInfoRefs unauth because User {UserId} doesn't have permission {Permission} on  repo {RepositoryName}", 
-                    User.Id(),
-                    requiredLevel,
-                    repositoryName);
-                return UnauthorizedResult();
-            }
+
+            Log.Warning("GitC: SecureGetInfoRefs unauth because User {UserId} doesn't have permission {Permission} on  repo {RepositoryName}", 
+                User.Id(),
+                requiredLevel,
+                repositoryName);
+
+            return UnauthorizedResult();
         }
 
         [HttpPost]
@@ -83,10 +84,8 @@ namespace Bonobo.Git.Server.Controllers
             {
                 return ExecuteUploadPack(repositoryName);
             }
-            else
-            {
-                return UnauthorizedResult();
-            }
+
+            return UnauthorizedResult();
         }
 
         [HttpPost]
@@ -97,14 +96,56 @@ namespace Bonobo.Git.Server.Controllers
                 return new HttpNotFoundResult();
             }
 
-            if (RepositoryPermissionService.HasPermission(User.Id(), repositoryName, RepositoryAccessLevel.Push))
-            {
-                return ExecuteReceivePack(repositoryName);
-            }
-            else
-            {
+            if (!RepositoryPermissionService.HasPermission(User.Id(), repositoryName, RepositoryAccessLevel.Push))
                 return UnauthorizedResult();
+
+            var input = new MemoryStream();
+            GetInputStream(true).CopyTo(input);
+            input.Seek(0, SeekOrigin.Begin);
+
+            return !UserIsAllowedToPushIntoMasterBranch(repositoryName, input) ? UnauthorizedResult() : ExecuteReceivePack(repositoryName, input);
+        }
+
+        private bool UserIsAllowedToPushIntoMasterBranch(string repositoryName, Stream input)
+        {
+            var userIsAdmin = RepositoryPermissionService.UserIsAdministratorInRepository(User.Id(), repositoryName);
+            var branch = GetBranchName(input);
+            return !branch.Equals("master", StringComparison.OrdinalIgnoreCase) || userIsAdmin;
+        }
+
+        private static string GetBranchName(Stream inStream)
+        {
+            var pattern = new byte[] { 0x72, 0x65, 0x66, 0x73, 0x2F, 0x68, 0x65, 0x61, 0x64, 0x73, 0x2F }; // = 'refs/heads/'
+            var buffer = new byte[256];
+
+            try
+            {
+                if (inStream.Read(buffer, 0, buffer.Length) == 0)
+                    return string.Empty;
+
+                inStream.Seek(0, SeekOrigin.Begin);
+
+                var readFrom = ByteUtils.IndexOf(buffer, pattern, 60);
+                if (readFrom > -1)
+                {
+                    readFrom += pattern.Length;
+                    var name = new byte[128];
+                    var index = 0;
+                    while (buffer[readFrom] != 0 && (index < name.Length && readFrom < buffer.Length))
+                    {
+                        name[index++] = buffer[readFrom++];
+                    }
+
+                    var result = Encoding.ASCII.GetString(name, 0, index);
+                    return result.Trim();
+                }
             }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e);
+            }
+
+            return string.Empty;
         }
 
         private bool TryCreateOnPush(string repositoryName)
@@ -150,7 +191,7 @@ namespace Bonobo.Git.Server.Controllers
             return RedirectPermanent(Url.Action("Detail", "Repository", new { id = repositoryName}));
         }
 
-        private ActionResult ExecuteReceivePack(string repositoryName)
+        private ActionResult ExecuteReceivePack(string repositoryName, Stream inStream)
         {
             return new GitCmdResult(
                 "application/x-git-receive-pack-result",
@@ -159,7 +200,7 @@ namespace Bonobo.Git.Server.Controllers
                     GitService.ExecuteGitReceivePack(
                         Guid.NewGuid().ToString("N"),
                         repositoryName,
-                        GetInputStream(disableBuffer: true),
+                        inStream,
                         outStream);
                 });
         }
@@ -238,7 +279,7 @@ namespace Bonobo.Git.Server.Controllers
 
         private Stream GetInputStream(bool disableBuffer = false)
         {
-            // For really large uploads we need to get a bufferless input stream and disable the max
+            // For really large uploads we need to get a bufferless inStream stream and disable the max
             // request length.
             Stream requestStream = disableBuffer ?
                 Request.GetBufferlessInputStream(disableMaxRequestLength: true) :
