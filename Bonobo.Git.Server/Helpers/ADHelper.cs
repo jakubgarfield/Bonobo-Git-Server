@@ -21,6 +21,9 @@ namespace Bonobo.Git.Server.Helpers
         private static List<ADCachedPrincipal> CachedPrincipals = new List<ADCachedPrincipal>();
         private static object CachedPrincipalsLock = new object();
 
+        private static readonly TimeSpan DefaultGroupQueryCacheExpiry = new TimeSpan(0, 15, 0);
+        private static readonly TimeSpan DefaultPrincipalCacheExpiry = new TimeSpan(0, 10, 0);
+
 
         /// <summary>
         /// There are various sources of domains which we need to check
@@ -324,7 +327,11 @@ namespace Bonobo.Git.Server.Helpers
         public static IList<Principal> GetGroupMembers(GroupPrincipal group)
         {
             var      groupGuid  = (Guid) group.Guid;
-            TimeSpan tenMinutes = new TimeSpan(0, 10, 0);
+            TimeSpan cacheExpiry =
+                ConfigurationHelper.ParseTimeSpanOrDefault(
+                    ConfigurationManager.AppSettings["ActiveDirectoryGroupQueryCacheExpiry"],
+                    DefaultGroupQueryCacheExpiry
+                );
 
             lock (CachedMemberResultsLock)
             {
@@ -334,7 +341,7 @@ namespace Bonobo.Git.Server.Helpers
                 {
                     var results = CachedMemberResults[groupGuid];
 
-                    if (DateTime.UtcNow.Subtract(tenMinutes) > results.CacheTime)
+                    if (DateTime.UtcNow.Subtract(cacheExpiry) > results.CacheTime)
                     {
                         Log.Verbose("ADCACHE: Cache expired for results of {Guid}", groupGuid);
 
@@ -381,7 +388,11 @@ namespace Bonobo.Git.Server.Helpers
 
         private static ADCachedPrincipal GetCachedPrincipalData(Guid guid)
         {
-            TimeSpan tenMinutes = new TimeSpan(0, 10, 0);
+            TimeSpan cacheExpiry =
+                ConfigurationHelper.ParseTimeSpanOrDefault(
+                    ConfigurationManager.AppSettings["ActiveDirectoryPrincipalCacheExpiry"],
+                    DefaultPrincipalCacheExpiry
+                );
 
             lock (CachedPrincipalsLock)
             {
@@ -389,7 +400,7 @@ namespace Bonobo.Git.Server.Helpers
                 {
                     ADCachedPrincipal dataSet = CachedPrincipals[i];
 
-                    if (DateTime.UtcNow.Subtract(tenMinutes) > dataSet.CacheTime)
+                    if (DateTime.UtcNow.Subtract(cacheExpiry) > dataSet.CacheTime)
                     {
                         Log.Verbose("ADCACHE: Cache expired for {Guid}", guid);
 
@@ -413,8 +424,12 @@ namespace Bonobo.Git.Server.Helpers
 
         private static ADCachedPrincipal GetCachedPrincipalData(string name)
         {
-            TimeSpan tenMinutes = new TimeSpan(0, 10, 0);
-            bool     searchUpn  = name.Contains("@");
+            bool searchUpn = name.Contains("@");
+            TimeSpan cacheExpiry =
+                ConfigurationHelper.ParseTimeSpanOrDefault(
+                    ConfigurationManager.AppSettings["ActiveDirectoryPrincipalCacheExpiry"],
+                    DefaultPrincipalCacheExpiry
+                );
 
             lock (CachedPrincipalsLock)
             {
@@ -422,7 +437,7 @@ namespace Bonobo.Git.Server.Helpers
                 {
                     ADCachedPrincipal dataSet = CachedPrincipals[i];
 
-                    if (DateTime.UtcNow.Subtract(tenMinutes) > dataSet.CacheTime)
+                    if (DateTime.UtcNow.Subtract(cacheExpiry) > dataSet.CacheTime)
                     {
                         Log.Verbose("ADCACHE: Cache expired for {Name}", name);
 
