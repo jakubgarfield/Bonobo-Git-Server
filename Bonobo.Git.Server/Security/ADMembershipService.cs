@@ -46,7 +46,7 @@ namespace Bonobo.Git.Server.Security
 
                     if (user != null)
                     {
-                        if (!group.GetMembers(true).Contains(user))
+                        if (!ADHelper.GetGroupMembers(group).Contains(user))
                         {
                             result = ValidationResult.NotAuthorized;
                         }

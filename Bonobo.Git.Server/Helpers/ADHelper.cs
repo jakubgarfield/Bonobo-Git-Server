@@ -12,6 +12,9 @@ namespace Bonobo.Git.Server.Helpers
 {
     public static class ADHelper
     {
+        private static Dictionary<Guid, ADCachedSearchResult> CachedMemberResults = new Dictionary<Guid, ADCachedSearchResult>();
+        private static object CachedMemberResultsLock = new object();
+
         private static Dictionary<string, PrincipalContext> CachedPrincipalContexts = new Dictionary<string, PrincipalContext>();
         private static object CachedPrincipalContextsLock = new object();
 
@@ -317,6 +320,42 @@ namespace Bonobo.Git.Server.Helpers
             throw new ArgumentException("Could not find principal group: " + name);
         }
 
+
+        public static IList<Principal> GetGroupMembers(GroupPrincipal group)
+        {
+            var      groupGuid  = (Guid) group.Guid;
+            TimeSpan tenMinutes = new TimeSpan(0, 10, 0);
+
+            lock (CachedMemberResultsLock)
+            {
+                Log.Verbose("GetGroupMembers of {Group}", group.SamAccountName);
+
+                if (CachedMemberResults.ContainsKey(groupGuid))
+                {
+                    var results = CachedMemberResults[groupGuid];
+
+                    if (DateTime.UtcNow.Subtract(tenMinutes) > results.CacheTime)
+                    {
+                        Log.Verbose("ADCACHE: Cache expired for results of {Guid}", groupGuid);
+
+                        results.SearchResults.Dispose();
+                        CachedMemberResults.Remove(groupGuid);
+                    }
+                    else
+                    {
+                        Log.Verbose("ADCACHE: Cache hit for results of {Guid}", groupGuid);
+                        return results.Principals;
+                    }
+                }
+
+                Log.Verbose("ADCACHE: Cache miss for results of {Guid}", groupGuid);
+
+                var newCache = new ADCachedSearchResult(group.GetMembers(true));
+                CachedMemberResults.Add(groupGuid, newCache);
+
+                return newCache.Principals;
+            }
+        }
 
         private static PrincipalContext GetPrincipalContext(ContextType contextType, string name)
         {

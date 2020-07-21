@@ -171,7 +171,7 @@ namespace Bonobo.Git.Server.Data
                     Users.Remove(Id);
                 }
 
-                foreach (string username in group.GetMembers(true).OfType<UserPrincipal>().Select(x => x.UserPrincipalName).Where(x => x != null))
+                foreach (string username in ADHelper.GetGroupMembers(group).OfType<UserPrincipal>().Select(x => x.UserPrincipalName).Where(x => x != null))
                 {
                     UserPrincipal principal = ADHelper.GetUserPrincipal(username);
                     UserModel user = GetUserModelFromPrincipal(principal);
@@ -211,7 +211,7 @@ namespace Bonobo.Git.Server.Data
                         Id = group.Guid.Value,
                         Description = group.Description,
                         Name = teamName,
-                        Members = group.GetMembers(true).Select(x => MembershipService.GetUserModel(x.Guid.Value)).Where(o => o != null).ToArray()
+                        Members = ADHelper.GetGroupMembers(group).Select(x => MembershipService.GetUserModel(x.Guid.Value)).Where(o => o != null).ToArray()
                     };
                     Teams.AddOrUpdate(teamModel);
                     Log.Verbose("AD: Updated team {TeamName} OK", teamName);
@@ -242,7 +242,7 @@ namespace Bonobo.Git.Server.Data
                     {
                         Id = group.Guid.Value,
                         Name = roleName,
-                        Members = group.GetMembers(true).Where(x => x is UserPrincipal).Select(x => x.Guid.Value)
+                        Members = ADHelper.GetGroupMembers(group).Where(x => x is UserPrincipal).Select(x => x.Guid.Value)
                                 .ToArray()
                     };
                     Roles.AddOrUpdate(roleModel);
