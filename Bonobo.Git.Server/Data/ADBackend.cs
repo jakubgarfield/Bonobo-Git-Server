@@ -163,23 +163,21 @@ namespace Bonobo.Git.Server.Data
         {
             try
             {
-                GroupPrincipal group;
-                using (var pc = ADHelper.GetMembersGroup(out group))
+                GroupPrincipal   group;
+                PrincipalContext pc = ADHelper.GetMembersGroup(out group);
+
+                foreach (Guid Id in Users.Select(x => x.Id).Where(x => ADHelper.GetUserPrincipal(x) == null))
                 {
-                    foreach (Guid Id in Users.Select(x => x.Id).Where(x => ADHelper.GetUserPrincipal(x) == null))
+                    Users.Remove(Id);
+                }
+
+                foreach (string username in group.GetMembers(true).OfType<UserPrincipal>().Select(x => x.UserPrincipalName).Where(x => x != null))
+                {
+                    UserPrincipal principal = ADHelper.GetUserPrincipal(username);
+                    UserModel user = GetUserModelFromPrincipal(principal);
+                    if (user != null)
                     {
-                        Users.Remove(Id);
-                    }
-                    foreach (string username in group.GetMembers(true).OfType<UserPrincipal>().Select(x => x.UserPrincipalName).Where(x => x != null))
-                    {
-                        using (var principal = ADHelper.GetUserPrincipal(username))
-                        {
-                            UserModel user = GetUserModelFromPrincipal(principal);
-                            if (user != null)
-                            {
-                                Users.AddOrUpdate(user);
-                            }
-                        }
+                        Users.AddOrUpdate(user);
                     }
                 }
             }
@@ -207,17 +205,16 @@ namespace Bonobo.Git.Server.Data
                 try
                 {
                     GroupPrincipal group;
-                    using (var pc = ADHelper.GetPrincipalGroup(groupName, out group))
+                    PrincipalContext pc = ADHelper.GetPrincipalGroup(groupName, out group);
+                    TeamModel teamModel = new TeamModel()
                     {
-                        TeamModel teamModel = new TeamModel() {
-                            Id = group.Guid.Value,
-                            Description = group.Description,
-                            Name = teamName,
-                            Members = group.GetMembers(true).Select(x => MembershipService.GetUserModel(x.Guid.Value)).Where(o => o != null).ToArray()
-                        };
-                        Teams.AddOrUpdate(teamModel);
-                        Log.Verbose("AD: Updated team {TeamName} OK", teamName);
-                    }
+                        Id = group.Guid.Value,
+                        Description = group.Description,
+                        Name = teamName,
+                        Members = group.GetMembers(true).Select(x => MembershipService.GetUserModel(x.Guid.Value)).Where(o => o != null).ToArray()
+                    };
+                    Teams.AddOrUpdate(teamModel);
+                    Log.Verbose("AD: Updated team {TeamName} OK", teamName);
                 }
                 catch (Exception ex)
                 {
@@ -240,18 +237,16 @@ namespace Bonobo.Git.Server.Data
                 try
                 {
                     GroupPrincipal group;
-                    using (var pc = ADHelper.GetPrincipalGroup(groupName, out group))
+                    PrincipalContext pc = ADHelper.GetPrincipalGroup(groupName, out group);
+                    RoleModel roleModel = new RoleModel
                     {
-                        RoleModel roleModel = new RoleModel
-                        {
-                            Id = group.Guid.Value,
-                            Name = roleName,
-                            Members = group.GetMembers(true).Where(x => x is UserPrincipal).Select(x => x.Guid.Value)
+                        Id = group.Guid.Value,
+                        Name = roleName,
+                        Members = group.GetMembers(true).Where(x => x is UserPrincipal).Select(x => x.Guid.Value)
                                 .ToArray()
-                        };
-                        Roles.AddOrUpdate(roleModel);
-                        Log.Verbose("AD: Updated role {RoleName} OK", roleName);
-                    }
+                    };
+                    Roles.AddOrUpdate(roleModel);
+                    Log.Verbose("AD: Updated role {RoleName} OK", roleName);
                 }
                 catch (Exception ex)
                 {
