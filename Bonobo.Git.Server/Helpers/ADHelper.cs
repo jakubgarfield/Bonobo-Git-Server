@@ -177,18 +177,25 @@ namespace Bonobo.Git.Server.Helpers
 
             Log.Verbose("GetUserPrincipal: username {UserName}, domain {DomainName}, stripped {StrippedUserName}", username, parsedDomainName, strippedUsername);
 
-            var cachedUserData = GetCachedPrincipalData(username);
-
-            if (cachedUserData != null)
-                return cachedUserData.Principal as UserPrincipal;
-
-            foreach (var domain in GetAllDomainPossibilities(username))
+            lock (CachedPrincipalsLock)
             {
-                var user = GetUserPrincipal(domain, username, strippedUsername);
-                if (user != null)
-                    return user;
-                Log.Warning("Null principal in domain: {DomainName}, user: {UserName}", domain.Name,
-                    strippedUsername);
+                ADCachedPrincipal cachedUserData;
+
+                if (TryGetCachedPrincipalData(username, out cachedUserData))
+                {
+                    return cachedUserData.Principal as UserPrincipal;
+                }
+
+                foreach (var domain in GetAllDomainPossibilities(username))
+                {
+                    if (TryCacheUserPrincipalData(domain, username, strippedUsername, out cachedUserData))
+                    {
+                        return cachedUserData.Principal as UserPrincipal;
+                    }
+
+                    Log.Warning("Null principal in domain: {DomainName}, user: {UserName}", domain.Name,
+                        strippedUsername);
+                }
             }
 
             return null;
@@ -198,41 +205,24 @@ namespace Bonobo.Git.Server.Helpers
         {
             var attempts = new string[] { fullUsername, strippedUsername };
 
-            foreach (string name in attempts)
+            lock (CachedPrincipalsLock)
             {
-                var cachedUser = GetCachedPrincipalData(name);
+                ADCachedPrincipal cachedUserData;
 
-                if (cachedUser != null)
-                    return cachedUser.Principal as UserPrincipal;
-            }
-
-            try
-            {
-                PrincipalContext pc = GetPrincipalContext(ContextType.Domain, domain.Name);
-
-                UserPrincipal principalBySamName = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, strippedUsername);
-                if (principalBySamName != null)
+                foreach (string name in attempts)
                 {
-                    CachedPrincipals.Add(new ADCachedPrincipal(pc, principalBySamName));
-                    return principalBySamName;
+                    if (TryGetCachedPrincipalData(name, out cachedUserData))
+                    {
+                        return cachedUserData.Principal as UserPrincipal;
+                    }
                 }
 
-                Log.Verbose("GetUserPrincipal: Did not find user {UserName} in domain {DomainName} by SamAccountName", strippedUsername, domain.Name);
-
-                UserPrincipal principalByUPN = UserPrincipal.FindByIdentity(pc, IdentityType.UserPrincipalName, fullUsername);
-                if (principalByUPN == null)
+                if (TryCacheUserPrincipalData(domain, fullUsername, strippedUsername, out cachedUserData))
                 {
-                    Log.Verbose(
-                        "GetUserPrincipal: Did not find user {UserName} in domain {DomainName} by UPN",
-                        fullUsername, domain.Name);
+                    return cachedUserData.Principal as UserPrincipal;
                 }
-                CachedPrincipals.Add(new ADCachedPrincipal(pc, principalByUPN));
-                return principalByUPN;
             }
-            catch (Exception exp)
-            {
-                Log.Error(exp, "GetUserPrincipal in domain: {DomainName}, user: {FullUserName} ({StrippedUserName})", domain.Name, fullUsername, strippedUsername);
-            }
+
             return null;
         }
         /// <summary>
@@ -242,30 +232,21 @@ namespace Bonobo.Git.Server.Helpers
         /// <returns>The Userprincipal if found, else null</returns>
         public static UserPrincipal GetUserPrincipal(Guid id)
         {
-            var cachedUser = GetCachedPrincipalData(id);
-
-            if (cachedUser != null)
-                return cachedUser.Principal as UserPrincipal;
-
-            foreach (Domain domain in GetAllDomainPossibilities())
+            lock (CachedPrincipalsLock)
             {
-                try
+                ADCachedPrincipal cachedUserData;
+
+                if (TryGetCachedPrincipalData(id, out cachedUserData))
                 {
-                    PrincipalContext pc = GetPrincipalContext(ContextType.Domain, domain.Name);
-
-                    Log.Information("Looking for user with guid {guid} in domain {domain}", id.ToString(), domain.Name);
-
-                    var user = UserPrincipal.FindByIdentity(pc, IdentityType.Guid, id.ToString());
-                    if (user != null)
-                    {
-                        CachedPrincipals.Add(new ADCachedPrincipal(pc, user));
-                        return user;
-                    }
+                    return cachedUserData.Principal as UserPrincipal;
                 }
-                catch (Exception exp)
+
+                foreach (Domain domain in GetAllDomainPossibilities())
                 {
-                    Log.Error(exp, "AD: Failed to find user with guid {GUID}", id.ToString());
-                    // let it fail
+                    if (TryCacheUserPrincipalData(domain, id, out cachedUserData))
+                    {
+                        return cachedUserData.Principal as UserPrincipal;
+                    }
                 }
             }
 
@@ -292,34 +273,26 @@ namespace Bonobo.Git.Server.Helpers
         /// <returns>Principal context on which the group was found.</returns>
         public static PrincipalContext GetPrincipalGroup(string name, out GroupPrincipal group)
         {
-            var cachedGroupData = GetCachedPrincipalData(name);
-
-            if (cachedGroupData != null)
+            lock (CachedPrincipalsLock)
             {
-                group = cachedGroupData.Principal as GroupPrincipal;
-                return cachedGroupData.PrincipalContext;
-            }
+                ADCachedPrincipal cachedGroupData;
 
-            foreach (Domain domain in GetAllDomainPossibilities())
-            {
-                Log.Information("Searching for group {name} in domain {domain}", name, domain.Name);
-
-                try
+                if (TryGetCachedPrincipalData(name, out cachedGroupData))
                 {
-                    var pc = new PrincipalContext(ContextType.Domain, domain.Name);
-                    group = GroupPrincipal.FindByIdentity(pc, IdentityType.Name, name);
-                    if (group != null)
+                    group = cachedGroupData.Principal as GroupPrincipal;
+                    return cachedGroupData.PrincipalContext;
+                }
+
+                foreach (Domain domain in GetAllDomainPossibilities())
+                {
+                    if (TryCacheGroupPrincipalData(domain, name, out cachedGroupData))
                     {
-                        CachedPrincipals.Add(new ADCachedPrincipal(pc, group));
-                        return pc;
+                        group = cachedGroupData.Principal as GroupPrincipal;
+                        return cachedGroupData.PrincipalContext;
                     }
                 }
-                catch (Exception exp)
-                {
-                    Log.Error(exp, "GetPrincipal Group with name: " + name);
-                    // let it fail
-                }
             }
+
             throw new ArgumentException("Could not find principal group: " + name);
         }
 
@@ -345,7 +318,7 @@ namespace Bonobo.Git.Server.Helpers
                     {
                         Log.Verbose("ADCACHE: Cache expired for results of {Guid}", groupGuid);
 
-                        results.SearchResults.Dispose();
+                        results.Dispose();
                         CachedMemberResults.Remove(groupGuid);
                     }
                     else
@@ -386,7 +359,100 @@ namespace Bonobo.Git.Server.Helpers
             }
         }
 
-        private static ADCachedPrincipal GetCachedPrincipalData(Guid guid)
+        private static bool TryCacheGroupPrincipalData(Domain domain, string name, out ADCachedPrincipal cacheData)
+        {
+            cacheData = null;
+
+            try
+            {
+                var pc = new PrincipalContext(ContextType.Domain, domain.Name);
+
+                Log.Information("Searching for group {name} in domain {domain}", name, domain.Name);
+
+                var group = GroupPrincipal.FindByIdentity(pc, IdentityType.Name, name);
+
+                if (group != null)
+                {
+                    cacheData = new ADCachedPrincipal(pc, group);
+                    CachedPrincipals.Add(cacheData);
+                    return true;
+                }
+            }
+            catch (Exception exp)
+            {
+                Log.Error(exp, "GetPrincipal Group with name: " + name);
+                // let it fail
+            }
+
+            return false;
+        }
+
+        private static bool TryCacheUserPrincipalData(Domain domain, Guid id, out ADCachedPrincipal cacheData)
+        {
+            cacheData = null;
+
+            try
+            {
+                PrincipalContext pc = GetPrincipalContext(ContextType.Domain, domain.Name);
+
+                Log.Information("Looking for user with guid {guid} in domain {domain}", id.ToString(), domain.Name);
+
+                var user = UserPrincipal.FindByIdentity(pc, IdentityType.Guid, id.ToString());
+                if (user != null)
+                {
+                    cacheData = new ADCachedPrincipal(pc, user);
+                    CachedPrincipals.Add(cacheData);
+                    return true;
+                }
+            }
+            catch (Exception exp)
+            {
+                Log.Error(exp, "AD: Failed to find user with guid {GUID}", id.ToString());
+                // let it fail
+            }
+
+            return false;
+        }
+
+        private static bool TryCacheUserPrincipalData(Domain domain, string fullUsername, string strippedUsername, out ADCachedPrincipal cacheData)
+        {
+            cacheData = null;
+            
+            try
+            {
+                PrincipalContext pc = GetPrincipalContext(ContextType.Domain, domain.Name);
+
+                UserPrincipal principalBySamName = UserPrincipal.FindByIdentity(pc, IdentityType.SamAccountName, strippedUsername);
+                if (principalBySamName != null)
+                {
+                    cacheData = new ADCachedPrincipal(pc, principalBySamName);
+                    CachedPrincipals.Add(cacheData);
+                    return true;
+                }
+
+                Log.Verbose("TryCachePrincipalData: Did not find user {UserName} in domain {DomainName} by SamAccountName", strippedUsername, domain.Name);
+
+                UserPrincipal principalByUPN = UserPrincipal.FindByIdentity(pc, IdentityType.UserPrincipalName, fullUsername);
+                if (principalByUPN != null)
+                {
+                    cacheData = new ADCachedPrincipal(pc, principalByUPN);
+                    CachedPrincipals.Add(cacheData);
+                    return true;
+                }
+
+                Log.Verbose(
+                    "TryCachePrincipalData: Did not find user {UserName} in domain {DomainName} by UPN",
+                    fullUsername, domain.Name);
+            }
+            catch (Exception exp)
+            {
+                Log.Error(exp, "TryCachePrincipalData in domain: {DomainName}, user: {FullUserName} ({StrippedUserName})", domain.Name, fullUsername, strippedUsername);
+            }
+
+            return false;
+        }
+
+        private static bool TryGetCachedPrincipalData(Guid guid, out ADCachedPrincipal cacheData)
         {
             TimeSpan cacheExpiry =
                 ConfigurationHelper.ParseTimeSpanOrDefault(
@@ -394,35 +460,35 @@ namespace Bonobo.Git.Server.Helpers
                     DefaultPrincipalCacheExpiry
                 );
 
-            lock (CachedPrincipalsLock)
+            for (int i = CachedPrincipals.Count - 1; i >= 0; i--)
             {
-                for (int i = CachedPrincipals.Count - 1; i >= 0; i--)
+                ADCachedPrincipal dataSet = CachedPrincipals[i];
+
+                if (DateTime.UtcNow.Subtract(cacheExpiry) > dataSet.CacheTime)
                 {
-                    ADCachedPrincipal dataSet = CachedPrincipals[i];
+                    Log.Verbose("ADCACHE: Cache expired for {Guid}", guid);
 
-                    if (DateTime.UtcNow.Subtract(cacheExpiry) > dataSet.CacheTime)
-                    {
-                        Log.Verbose("ADCACHE: Cache expired for {Guid}", guid);
+                    dataSet.Dispose();
+                    CachedPrincipals.RemoveAt(i);
+                    continue;
+                }
 
-                        dataSet.Principal.Dispose();
-                        CachedPrincipals.RemoveAt(i);
-                        continue;
-                    }
+                if (dataSet.Principal.Guid == guid)
+                {
+                    Log.Verbose("ADCACHE: Cache hit for {Guid}", guid);
 
-                    if (dataSet.Principal.Guid == guid)
-                    {
-                        Log.Verbose("ADCACHE: Cache hit for {Guid}", guid);
-                        return dataSet;
-                    }
+                    cacheData = dataSet;
+                    return true;
                 }
             }
 
             Log.Verbose("ADCACHE: Cache miss for {Guid}", guid);
 
-            return null;
+            cacheData = null;
+            return false;
         }
 
-        private static ADCachedPrincipal GetCachedPrincipalData(string name)
+        private static bool TryGetCachedPrincipalData(string name, out ADCachedPrincipal cacheData)
         {
             bool searchUpn = name.Contains("@");
             TimeSpan cacheExpiry =
@@ -431,43 +497,45 @@ namespace Bonobo.Git.Server.Helpers
                     DefaultPrincipalCacheExpiry
                 );
 
-            lock (CachedPrincipalsLock)
+            for (int i = CachedPrincipals.Count - 1; i >= 0; i--)
             {
-                for (int i = CachedPrincipals.Count - 1; i >= 0; i--)
+                ADCachedPrincipal dataSet = CachedPrincipals[i];
+
+                if (DateTime.UtcNow.Subtract(cacheExpiry) > dataSet.CacheTime)
                 {
-                    ADCachedPrincipal dataSet = CachedPrincipals[i];
+                    Log.Verbose("ADCACHE: Cache expired for {Name}", name);
 
-                    if (DateTime.UtcNow.Subtract(cacheExpiry) > dataSet.CacheTime)
+                    dataSet.Dispose();
+                    CachedPrincipals.RemoveAt(i);
+                    continue;
+                }
+
+                if (searchUpn && !string.IsNullOrEmpty(dataSet.Principal.UserPrincipalName))
+                {
+                    if (dataSet.Principal.UserPrincipalName.Equals(name, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        Log.Verbose("ADCACHE: Cache expired for {Name}", name);
+                        Log.Verbose("ADCACHE: Cache hit for {UPN}", name);
 
-                        dataSet.Principal.Dispose();
-                        CachedPrincipals.RemoveAt(i);
-                        continue;
+                        cacheData = dataSet;
+                        return true;
                     }
+                }
+                else
+                {
+                    if (dataSet.Principal.SamAccountName.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        Log.Verbose("ADCACHE: Cache hit for {SamAccountName}", name);
 
-                    if (searchUpn && !string.IsNullOrEmpty(dataSet.Principal.UserPrincipalName))
-                    {
-                        if (dataSet.Principal.UserPrincipalName.Equals(name, StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            Log.Verbose("ADCACHE: Cache hit for {UPN}", name);
-                            return dataSet;
-                        }
-                    }
-                    else
-                    {
-                        if (dataSet.Principal.SamAccountName.Equals(name, StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            Log.Verbose("ADCACHE: Cache hit for {SamAccountName}", name);
-                            return dataSet;
-                        }
+                        cacheData = dataSet;
+                        return true;
                     }
                 }
             }
 
             Log.Verbose("ADCACHE: Cache miss for {Name}", name);
 
-            return null;
+            cacheData = null;
+            return false;
         }
     }
 }
