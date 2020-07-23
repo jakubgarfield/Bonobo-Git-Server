@@ -12,17 +12,17 @@ namespace Bonobo.Git.Server.Helpers
 {
     public static class ADHelper
     {
-        private static Dictionary<Guid, ADCachedSearchResult> CachedMemberResults = new Dictionary<Guid, ADCachedSearchResult>();
-        private static object CachedMemberResultsLock = new object();
+        private static Dictionary<Guid, ADCachedSearchResult> s_cachedMemberResults = new Dictionary<Guid, ADCachedSearchResult>();
+        private static object s_cachedMemberResultsLock = new object();
 
-        private static Dictionary<string, PrincipalContext> CachedPrincipalContexts = new Dictionary<string, PrincipalContext>();
-        private static object CachedPrincipalContextsLock = new object();
+        private static Dictionary<string, PrincipalContext> s_cachedPrincipalContexts = new Dictionary<string, PrincipalContext>();
+        private static object s_cachedPrincipalContextsLock = new object();
 
-        private static List<ADCachedPrincipal> CachedPrincipals = new List<ADCachedPrincipal>();
-        private static object CachedPrincipalsLock = new object();
+        private static List<ADCachedPrincipal> s_cachedPrincipals = new List<ADCachedPrincipal>();
+        private static object s_cachedPrincipalsLock = new object();
 
-        private static readonly TimeSpan DefaultGroupQueryCacheExpiry = new TimeSpan(0, 15, 0);
-        private static readonly TimeSpan DefaultPrincipalCacheExpiry = new TimeSpan(0, 10, 0);
+        private static readonly TimeSpan s_defaultGroupQueryCacheExpiry = new TimeSpan(0, 15, 0);
+        private static readonly TimeSpan s_defaultPrincipalCacheExpiry = new TimeSpan(0, 10, 0);
 
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Bonobo.Git.Server.Helpers
 
             Log.Verbose("GetUserPrincipal: username {UserName}, domain {DomainName}, stripped {StrippedUserName}", username, parsedDomainName, strippedUsername);
 
-            lock (CachedPrincipalsLock)
+            lock (s_cachedPrincipalsLock)
             {
                 ADCachedPrincipal cachedUserData;
 
@@ -205,7 +205,7 @@ namespace Bonobo.Git.Server.Helpers
         {
             var attempts = new string[] { fullUsername, strippedUsername };
 
-            lock (CachedPrincipalsLock)
+            lock (s_cachedPrincipalsLock)
             {
                 ADCachedPrincipal cachedUserData;
 
@@ -232,7 +232,7 @@ namespace Bonobo.Git.Server.Helpers
         /// <returns>The Userprincipal if found, else null</returns>
         public static UserPrincipal GetUserPrincipal(Guid id)
         {
-            lock (CachedPrincipalsLock)
+            lock (s_cachedPrincipalsLock)
             {
                 ADCachedPrincipal cachedUserData;
 
@@ -273,7 +273,7 @@ namespace Bonobo.Git.Server.Helpers
         /// <returns>Principal context on which the group was found.</returns>
         public static PrincipalContext GetPrincipalGroup(string name, out GroupPrincipal group)
         {
-            lock (CachedPrincipalsLock)
+            lock (s_cachedPrincipalsLock)
             {
                 ADCachedPrincipal cachedGroupData;
 
@@ -303,23 +303,23 @@ namespace Bonobo.Git.Server.Helpers
             TimeSpan cacheExpiry =
                 ConfigurationHelper.ParseTimeSpanOrDefault(
                     ConfigurationManager.AppSettings["ActiveDirectoryGroupQueryCacheExpiry"],
-                    DefaultGroupQueryCacheExpiry
+                    s_defaultGroupQueryCacheExpiry
                 );
 
-            lock (CachedMemberResultsLock)
+            lock (s_cachedMemberResultsLock)
             {
                 Log.Verbose("GetGroupMembers of {Group}", group.SamAccountName);
 
-                if (CachedMemberResults.ContainsKey(groupGuid))
+                if (s_cachedMemberResults.ContainsKey(groupGuid))
                 {
-                    var results = CachedMemberResults[groupGuid];
+                    var results = s_cachedMemberResults[groupGuid];
 
                     if (DateTime.UtcNow.Subtract(cacheExpiry) > results.CacheTime)
                     {
                         Log.Verbose("ADCACHE: Cache expired for results of {Guid}", groupGuid);
 
                         results.Dispose();
-                        CachedMemberResults.Remove(groupGuid);
+                        s_cachedMemberResults.Remove(groupGuid);
                     }
                     else
                     {
@@ -331,7 +331,7 @@ namespace Bonobo.Git.Server.Helpers
                 Log.Verbose("ADCACHE: Cache miss for results of {Guid}", groupGuid);
 
                 var newCache = new ADCachedSearchResult(group.GetMembers(true));
-                CachedMemberResults.Add(groupGuid, newCache);
+                s_cachedMemberResults.Add(groupGuid, newCache);
 
                 return newCache.Principals;
             }
@@ -341,19 +341,19 @@ namespace Bonobo.Git.Server.Helpers
         {
             string safeName = name.ToLower();
 
-            lock (CachedPrincipalContextsLock)
+            lock (s_cachedPrincipalContextsLock)
             {
-                if (CachedPrincipalContexts.ContainsKey(safeName))
+                if (s_cachedPrincipalContexts.ContainsKey(safeName))
                 {
                     Log.Verbose("ADCACHE: Cache hit for context {Domain}", name);
-                    return CachedPrincipalContexts[safeName];
+                    return s_cachedPrincipalContexts[safeName];
                 }
 
                 Log.Verbose("ADCACHE: Cache miss for context {Domain}", name);
 
                 var pc = new PrincipalContext(contextType, name);
 
-                CachedPrincipalContexts.Add(safeName, pc);
+                s_cachedPrincipalContexts.Add(safeName, pc);
 
                 return pc;
             }
@@ -374,7 +374,7 @@ namespace Bonobo.Git.Server.Helpers
                 if (group != null)
                 {
                     cacheData = new ADCachedPrincipal(pc, group);
-                    CachedPrincipals.Add(cacheData);
+                    s_cachedPrincipals.Add(cacheData);
                     return true;
                 }
             }
@@ -401,7 +401,7 @@ namespace Bonobo.Git.Server.Helpers
                 if (user != null)
                 {
                     cacheData = new ADCachedPrincipal(pc, user);
-                    CachedPrincipals.Add(cacheData);
+                    s_cachedPrincipals.Add(cacheData);
                     return true;
                 }
             }
@@ -426,7 +426,7 @@ namespace Bonobo.Git.Server.Helpers
                 if (principalBySamName != null)
                 {
                     cacheData = new ADCachedPrincipal(pc, principalBySamName);
-                    CachedPrincipals.Add(cacheData);
+                    s_cachedPrincipals.Add(cacheData);
                     return true;
                 }
 
@@ -436,7 +436,7 @@ namespace Bonobo.Git.Server.Helpers
                 if (principalByUPN != null)
                 {
                     cacheData = new ADCachedPrincipal(pc, principalByUPN);
-                    CachedPrincipals.Add(cacheData);
+                    s_cachedPrincipals.Add(cacheData);
                     return true;
                 }
 
@@ -457,19 +457,19 @@ namespace Bonobo.Git.Server.Helpers
             TimeSpan cacheExpiry =
                 ConfigurationHelper.ParseTimeSpanOrDefault(
                     ConfigurationManager.AppSettings["ActiveDirectoryPrincipalCacheExpiry"],
-                    DefaultPrincipalCacheExpiry
+                    s_defaultPrincipalCacheExpiry
                 );
 
-            for (int i = CachedPrincipals.Count - 1; i >= 0; i--)
+            for (int i = s_cachedPrincipals.Count - 1; i >= 0; i--)
             {
-                ADCachedPrincipal dataSet = CachedPrincipals[i];
+                ADCachedPrincipal dataSet = s_cachedPrincipals[i];
 
                 if (DateTime.UtcNow.Subtract(cacheExpiry) > dataSet.CacheTime)
                 {
                     Log.Verbose("ADCACHE: Cache expired for {Guid}", guid);
 
                     dataSet.Dispose();
-                    CachedPrincipals.RemoveAt(i);
+                    s_cachedPrincipals.RemoveAt(i);
                     continue;
                 }
 
@@ -494,19 +494,19 @@ namespace Bonobo.Git.Server.Helpers
             TimeSpan cacheExpiry =
                 ConfigurationHelper.ParseTimeSpanOrDefault(
                     ConfigurationManager.AppSettings["ActiveDirectoryPrincipalCacheExpiry"],
-                    DefaultPrincipalCacheExpiry
+                    s_defaultPrincipalCacheExpiry
                 );
 
-            for (int i = CachedPrincipals.Count - 1; i >= 0; i--)
+            for (int i = s_cachedPrincipals.Count - 1; i >= 0; i--)
             {
-                ADCachedPrincipal dataSet = CachedPrincipals[i];
+                ADCachedPrincipal dataSet = s_cachedPrincipals[i];
 
                 if (DateTime.UtcNow.Subtract(cacheExpiry) > dataSet.CacheTime)
                 {
                     Log.Verbose("ADCACHE: Cache expired for {Name}", name);
 
                     dataSet.Dispose();
-                    CachedPrincipals.RemoveAt(i);
+                    s_cachedPrincipals.RemoveAt(i);
                     continue;
                 }
 

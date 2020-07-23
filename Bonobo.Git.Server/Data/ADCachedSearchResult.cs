@@ -13,12 +13,12 @@ namespace Bonobo.Git.Server.Data
         public PrincipalSearchResult<Principal> SearchResults { get; private set; }
 
 
-        private bool _Disposing;
+        private bool _disposing;
 
 
         public ADCachedSearchResult(PrincipalSearchResult<Principal> searchResults)
         {
-            _Disposing = false;
+            _disposing = false;
             CacheTime = DateTime.UtcNow;
             SearchResults = searchResults;
 
@@ -38,12 +38,12 @@ namespace Bonobo.Git.Server.Data
 
         public void Dispose()
         {
-            if (_Disposing)
+            if (_disposing)
             {
-                throw new ObjectDisposedException(nameof(SearchResults));
+                throw new ObjectDisposedException(nameof(ADCachedSearchResult));
             }
 
-            _Disposing = true;
+            _disposing = true;
 
             foreach (Principal principal in Principals)
             {
