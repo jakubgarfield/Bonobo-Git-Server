@@ -37,26 +37,23 @@ namespace Bonobo.Git.Server.Security
             {
                 if (ADHelper.ValidateUser(username, password))
                 {
-                    using (var user = ADHelper.GetUserPrincipal(username))
-                    {
-                        GroupPrincipal group;
-						using (var pc = ADHelper.GetMembersGroup(out group))
-						{
-							if (group == null)
-								result = ValidationResult.Failure;
+                    UserPrincipal user = ADHelper.GetUserPrincipal(username);
+                    GroupPrincipal group;
+                    PrincipalContext pc = ADHelper.GetMembersGroup(out group);
 
-							if (user != null)
-							{
-								if (!group.GetMembers(true).Contains(user))
-								{
-									result = ValidationResult.NotAuthorized;
-								}
-								else
-								{
-									result = ValidationResult.Success;
-								}
-							}
-						}
+                    if (group == null)
+                        result = ValidationResult.Failure;
+
+                    if (user != null)
+                    {
+                        if (!ADHelper.GetGroupMembers(group).Contains(user))
+                        {
+                            result = ValidationResult.NotAuthorized;
+                        }
+                        else
+                        {
+                            result = ValidationResult.Success;
+                        }
                     }
                 }
             }
@@ -87,10 +84,10 @@ namespace Bonobo.Git.Server.Security
 
         public UserModel GetUserModel(string username)
         {
-            using (var upc = ADHelper.GetUserPrincipal(username))
-            {
-                return ADBackend.Instance.Users.FirstOrDefault(n => n.Id == upc.Guid.Value);
-            }
+            UserPrincipal upc = ADHelper.GetUserPrincipal(username);
+
+            return ADBackend.Instance.Users.FirstOrDefault(n => n.Id == upc.Guid.Value);
+
             throw new ArgumentException("User was not found with username: " + username);
         }
 

@@ -202,10 +202,9 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
                 try
                 {
                     GroupPrincipal group;
-                    using (var pc = ADHelper.GetPrincipalGroup(ActiveDirectorySettings.TeamNameToGroupNameMapping[team.Name], out group))
-                    {
-                        newteam.Id = group.Guid.Value;
-                    }
+                    PrincipalContext pc = ADHelper.GetPrincipalGroup(ActiveDirectorySettings.TeamNameToGroupNameMapping[team.Name], out group);
+
+                    newteam.Id = group.Guid.Value;
                 }
                 catch (Exception ex)
                 {
