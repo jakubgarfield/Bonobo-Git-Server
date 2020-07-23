@@ -13,13 +13,13 @@ namespace Bonobo.Git.Server.Data
         public PrincipalContext PrincipalContext { get; private set; }
 
 
-        private bool Disposing;
+        private bool _Disposing;
 
 
         public ADCachedPrincipal(PrincipalContext pc, Principal principal)
         {
+            _Disposing = false;
             CacheTime = DateTime.UtcNow;
-            Disposing = false;
             Principal = principal;
             PrincipalContext = pc;
         }
@@ -27,12 +27,12 @@ namespace Bonobo.Git.Server.Data
 
         public void Dispose()
         {
-            if (Disposing)
+            if (_Disposing)
             {
-                throw new ObjectDisposedException("Principal");
+                throw new ObjectDisposedException(nameof(Principal));
             }
 
-            Disposing = true;
+            _Disposing = true;
             Principal.Dispose();
         }
     }
