@@ -17,9 +17,6 @@ using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Git;
 using Bonobo.Git.Server.Git.GitService;
-using Bonobo.Git.Server.Git.GitService.ReceivePackHook;
-using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability;
-using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks;
 using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 using System.Runtime.Caching;
@@ -29,6 +26,7 @@ using System.Web.Configuration;
 using System.Security.Claims;
 using System.Web.Helpers;
 using System.Web.Hosting;
+using Bonobo.Git.Server.Application.Hooks;
 using Serilog;
 
 namespace Bonobo.Git.Server
@@ -129,16 +127,6 @@ namespace Bonobo.Git.Server
         {
             var container = new UnityContainer();
 
-            /* 
-                The UnityDecoratorContainerExtension breaks resolving named type registrations, like:
-
-                container.RegisterType<IMembershipService, ADMembershipService>("ActiveDirectory");
-                container.RegisterType<IMembershipService, EFMembershipService>("Internal");
-                IMembershipService membershipService = container.Resolve<IMembershipService>(AuthenticationSettings.MembershipService);
-
-                Until this issue is resolved, the following two switch hacks will have to do
-            */
-
             switch (AuthenticationSettings.MembershipService.ToLowerInvariant())
             {
                 case "activedirectory":
@@ -179,7 +167,7 @@ namespace Bonobo.Git.Server
                     return new ConfigurationBasedRepositoryLocator(UserConfiguration.Current.Repositories);
                 })
             );
-                
+ 
             container.RegisterInstance(
                 new GitServiceExecutorParams()
                 {
@@ -190,12 +178,14 @@ namespace Bonobo.Git.Server
 
             container.RegisterType<IDatabaseResetManager, DatabaseResetManager>();
 
-            if (AppSettings.IsPushAuditEnabled)
-            {
-                EnablePushAuditAnalysis(container);
-            }
+            container.RegisterType<IGitService, GitServiceExecutor>("Executor");
+            container.RegisterType<IAfterGitPushHandler, AfterPushAuditHandler>("AuditHandler");
 
-            container.RegisterType<IGitService, GitServiceExecutor>();
+            container.RegisterType<IGitService, GitHandlerInvocationService>(
+                new InjectionConstructor(
+                    new ResolvedParameter<IGitService>("Executor"),
+                    new ResolvedParameter<IAfterGitPushHandler>("AuditHandler"),
+                    new ResolvedParameter<IGitRepositoryLocator>()));
 
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
 
@@ -205,60 +195,6 @@ namespace Bonobo.Git.Server
             var provider = new UnityFilterAttributeFilterProvider(container);
             FilterProviders.Providers.Add(provider);
         }
-
-        private static void EnablePushAuditAnalysis(IUnityContainer container)
-        {
-            var isReceivePackRecoveryProcessEnabled = !string.IsNullOrEmpty(ConfigurationManager.AppSettings["RecoveryDataPath"]);
-
-            if (isReceivePackRecoveryProcessEnabled)
-            {
-                // git service execution durability registrations to enable receive-pack hook execution after failures
-                container.RegisterType<IGitService, DurableGitServiceResult>();
-                container.RegisterType<IHookReceivePack, ReceivePackRecovery>();
-                container.RegisterType<IRecoveryFilePathBuilder, AutoCreateMissingRecoveryDirectories>();
-                container.RegisterType<IRecoveryFilePathBuilder, OneFolderRecoveryFilePathBuilder>();
-                container.RegisterInstance(new NamedArguments.FailedPackWaitTimeBeforeExecution(TimeSpan.FromSeconds(5 * 60)));
-                
-                container.RegisterInstance(new NamedArguments.ReceivePackRecoveryDirectory(
-                    Path.IsPathRooted(ConfigurationManager.AppSettings["RecoveryDataPath"]) ?
-                        ConfigurationManager.AppSettings["RecoveryDataPath"] :
-                        HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["RecoveryDataPath"])));
-            }
-
-            // base git service executor
-            container.RegisterType<IGitService, ReceivePackParser>();
-            container.RegisterType<GitServiceResultParser, GitServiceResultParser>();
-
-            // receive pack hooks
-            container.RegisterType<IHookReceivePack, AuditPusherToGitNotes>();
-            container.RegisterType<IHookReceivePack, NullReceivePackHook>();
-
-            // run receive-pack recovery if possible
-            if (isReceivePackRecoveryProcessEnabled)
-            {
-                var recoveryProcess = container.Resolve<ReceivePackRecovery>(
-                    new ParameterOverride(
-                        "failedPackWaitTimeBeforeExecution",
-                        new NamedArguments.FailedPackWaitTimeBeforeExecution(TimeSpan.FromSeconds(0)))); // on start up set time to wait = 0 so that recovery for all waiting packs is attempted
-
-                try
-                {
-                    recoveryProcess.RecoverAll();
-                }
-                catch
-                {
-                    // don't let a failed recovery attempt stop start-up process
-                }
-                finally
-                {
-                    if (recoveryProcess != null)
-                    {
-                        container.Teardown(recoveryProcess);
-                    }
-                }
-            }
-        }
-
 
         protected void Application_Error(object sender, EventArgs e)
         {

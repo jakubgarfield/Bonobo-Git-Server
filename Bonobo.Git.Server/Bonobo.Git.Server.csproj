@@ -272,6 +272,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnonymousComparer.cs" />
+    <Compile Include="Application\Hooks\AfterPushAuditHandler.cs" />
+    <Compile Include="Application\Hooks\GitBranchPushData.cs" />
+    <Compile Include="Application\Hooks\GitTagPushData.cs" />
+    <Compile Include="Application\Hooks\IAfterGitPushHandler.cs" />
     <Compile Include="Attributes\AllViewsAttribute.cs" />
     <Compile Include="Attributes\FileExtensionsCustom.cs" />
     <Compile Include="Attributes\RepositoryNameNormalizerAttribute.cs" />
@@ -304,21 +308,13 @@
     <Compile Include="Data\Update\SqlServer\AddRepositoryLogo.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Extensions\SignatureExtensions.cs" />
-    <Compile Include="Configuration\AppSettings.cs" />
     <Compile Include="Extensions\UserExtensions.cs" />
-    <Compile Include="Git\GitService\GitServiceResultParser.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\Durability\AutoCreateMissingRecoveryDirectories.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\Durability\OneFolderRecoveryFilePathBuilder.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\Durability\DurableGitServiceResult.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\Durability\IRecoveryFilePathBuilder.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\Durability\NamedArguments.cs" />
+    <Compile Include="Git\GitProtocolCommand.cs" />
+    <Compile Include="Git\GitReceiveCommand.cs" />
+    <Compile Include="Git\GitRefType.cs" />
+    <Compile Include="Git\GitService\GitHandlerInvocationService.cs" />
+    <Compile Include="Git\ReceivePackInspectStream.cs" />
     <Compile Include="Git\GitService\GitExecutionResult.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\GIT_OBJ_TYPE.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\Durability\ReceivePackRecovery.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\Hooks\AuditPusherToGitNotes.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommit.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackCommitSignature.cs" />
-    <Compile Include="Git\GitService\ReplicatingStream.cs" />
     <Compile Include="Helpers\ADHelper.cs" />
     <Compile Include="Helpers\ConfigurationHelper.cs" />
     <Compile Include="Helpers\MembershipHelper.cs" />
@@ -388,11 +384,6 @@
     <Compile Include="Attributes\WebAuthorizeAttribute.cs" />
     <Compile Include="Git\GitCmdResult.cs" />
     <Compile Include="Git\GitService\GitServiceExtensions.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\Hooks\NullReceivePackHook.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\IHookReceivePack.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\ParsedReceivePack.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackPktLine.cs" />
-    <Compile Include="Git\GitService\ReceivePackHook\ReceivePackParser.cs" />
     <Compile Include="Git\IGitRepositoryLocator.cs" />
     <Compile Include="Helpers\ContentDispositionUtil.cs" />
     <Compile Include="Helpers\CssRewriteUrlTransformWrapper.cs" />

@@ -167,6 +167,7 @@
     <Compile Include="TestCategories.cs" />
     <Compile Include="UnitTests\PasswordServiceTest.cs" />
     <Compile Include="UnitTests\GitAuthorizeAttributeTest.cs" />
+    <Compile Include="UnitTests\ReceivePackInspectStreamTest.cs" />
     <Compile Include="UnitTests\UserExtensionsTests.cs" />
     <Compile Include="UnitTests\UserModelTest.cs" />
   </ItemGroup>
@@ -179,6 +180,32 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\git-receive-packs\flush-only.raw" />
+    <Content Include="assets\git-receive-packs\delete-at1.raw" />
+    <Content Include="assets\git-receive-packs\delete-b1.raw" />
+    <Content Include="assets\git-receive-packs\delete-t1-with-commits-referenced-by-no-branch.raw" />
+    <Content Include="assets\git-receive-packs\delete-t1.raw" />
+    <Content Include="assets\git-receive-packs\force-push-amend-initial-commit.raw" />
+    <Content Include="assets\git-receive-packs\force-push-reset-one-commit.raw" />
+    <Content Include="assets\git-receive-packs\force-push-two-commits.raw" />
+    <Content Include="assets\git-receive-packs\push-at1-with-annontation.raw" />
+    <Content Include="assets\git-receive-packs\push-t1-and-t2.raw" />
+    <Content Include="assets\git-receive-packs\push-t1-to-t10.raw" />
+    <Content Include="assets\git-receive-packs\push-t1-with-two-commits.raw" />
+    <Content Include="assets\git-receive-packs\push-t1.raw" />
+    <Content Include="assets\git-receive-packs\push-tag-with-211-chars-name.raw" />
+    <Content Include="assets\git-receive-packs\push-tag-with-6437-chars-annontation.raw" />
+    <Content Include="assets\git-receive-packs\push-to-master-one-commit-10-empty-files.raw" />
+    <Content Include="assets\git-receive-packs\push-to-master-one-commit-empty-file.raw" />
+    <Content Include="assets\git-receive-packs\push-to-feature-branch-one-commit-empty-file.raw" />
+    <Content Include="assets\git-receive-packs\push-to-master-two-commits-empty-files.raw" />
+    <Content Include="assets\git-receive-packs\push-to-new-b1-and-b2-with-no-commits.raw" />
+    <Content Include="assets\git-receive-packs\push-to-new-b1-and-b2-with-one-commit-each.raw" />
+    <Content Include="assets\git-receive-packs\push-to-new-b1-with-no-own-commits.raw" />
+    <Content Include="assets\git-receive-packs\push-to-new-b2-with-one-commit.raw" />
+    <Content Include="assets\git-receive-packs\very-first-push-empty-initial-commit.raw" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

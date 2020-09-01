@@ -73,15 +73,11 @@ else
                 @Html.EnumDropDownListFor(m => m.AllowAnonymousPush, attribs)
                 <i class="fa fa-info-circle" title="@Resources.Repository_AllowAnonymousPushHint"></i>
             </div>
-
-            @if (AppSettings.IsPushAuditEnabled)
-            {
-                <div class="pure-control-group">
-                    @Html.LabelFor(m => m.AuditPushUser)
-                    @Html.CheckBoxFor(m => m.AuditPushUser)
-                    <i class="fa fa-info-circle" title="@Resources.Repository_AuditPushUserHint"></i>
-                </div>
-            }
+            <div class="pure-control-group">
+                @Html.LabelFor(m => m.AuditPushUser)
+                @Html.CheckBoxFor(m => m.AuditPushUser)
+                <i class="fa fa-info-circle" title="@Resources.Repository_AuditPushUserHint"></i>
+            </div>
             <div class="pure-control-group">
                 @Html.LabelFor(m => m.LinksUseGlobal)
                 @Html.CheckBoxFor(m => m.LinksUseGlobal, new { @onClick = "document.getElementById('LinksRegex').disabled = this.checked; document.getElementById('LinksUrl').disabled = this.checked" })
