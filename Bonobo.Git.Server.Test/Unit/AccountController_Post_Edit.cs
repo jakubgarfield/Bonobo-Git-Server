@@ -37,6 +37,7 @@ namespace Bonobo.Git.Server.Test.Unit
 
                 // assert
                 AssertMinimalViewResult(result, userId);
+                Assert.AreEqual(true, (result as ViewResult).ViewBag.UpdateSuccess);
             }
 
             [TestMethod]
@@ -51,6 +52,23 @@ namespace Bonobo.Git.Server.Test.Unit
                 var result = sut.Edit(model);
 
                 AssertMinimalViewResult(result, userId);
+                Assert.AreEqual(true, (result as ViewResult).ViewBag.UpdateSuccess);
+            }
+
+            [TestMethod]
+            public void Executed_With_Model_Data_And_Invalid_ModelData_Referring_To_The_Same_User_Returns_Data_From_The_User()
+            {
+                // Arrange
+                Guid userId = Guid.NewGuid();
+                SetupMinimalEnvironment(userId);
+                UserEditModel model = new UserEditModel { Id = userId };
+                sut.ModelState.AddModelError("test", new Exception());
+
+                // act
+                var result = sut.Edit(model);
+
+                AssertMinimalViewResult(result, userId);
+                Assert.IsNull((result as ViewResult).ViewBag.UpdateSuccess);
             }
 
             [TestMethod]
@@ -99,7 +117,6 @@ namespace Bonobo.Git.Server.Test.Unit
                 Assert.AreEqual(userId, userEditModel.Id);
                 Assert.IsNotNull(userEditModel.Roles);
                 Assert.IsNotNull(viewResult.ViewBag);
-                Assert.AreEqual(true, viewResult.ViewBag.UpdateSuccess);
             }
         }
     }
