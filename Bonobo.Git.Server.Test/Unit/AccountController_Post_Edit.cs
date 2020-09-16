@@ -25,7 +25,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Executed_With_Minimal_Model_Data_Returs_Minimal_Result()
+            public void Executed_Unknown_User_With_Invalid_Model_Data_Returs_The_Same_Model_Data()
             {
                 // Arrange
                 Guid userId = Guid.Empty;
@@ -41,7 +41,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Executed_With_Model_Data_Referring_To_The_Same_User_Returns_Data_From_The_User()
+            public void Executed_With_Invalid_Model_Data_Referring_To_The_Same_User_Returns_The_Same_Model_Data()
             {
                 // Arrange
                 Guid userId = Guid.NewGuid();
@@ -56,7 +56,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Executed_With_Invalid_Model_Data_Referring_To_The_Same_User_Returns_Data_From_The_User()
+            public void Executed_With_Invalid_Model_Data_Referring_To_The_Same_User_Returns_Null_UpdateSuccess_In_ViewBag()
             {
                 // Arrange
                 Guid userId = Guid.NewGuid();
@@ -98,7 +98,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Executed_With_Model_Data_Referring_To_Other_User_Returns_Data_From_The_User()
+            public void Executed_With_Invalid_Model_Data_Referring_To_Other_User_Redirects_To_Home_Unauthorized()
             {
                 // Arrange
                 Guid userId = Guid.NewGuid();
