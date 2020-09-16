@@ -35,6 +35,7 @@ namespace Bonobo.Git.Server.Test.Unit
                 Guid userid = Guid.NewGuid();
                 SetHttpContextMockIntoSUT(userid);
                 SetupMembershipServiceMockIntoSUT();
+                BindModelToController(userid);
 
                 // act
                 var result = sut.Edit(userid);
@@ -53,6 +54,7 @@ namespace Bonobo.Git.Server.Test.Unit
                 // Arrange
                 Guid userid = Guid.NewGuid();
                 SetHttpContextMockIntoSUT(userid);
+                BindModelToController(userid);
 
                 // act
                 var result = sut.Edit(Guid.NewGuid());
@@ -75,6 +77,7 @@ namespace Bonobo.Git.Server.Test.Unit
                 SetHttpContextMockIntoSUT(userid);
                 SetupMembershipServiceMockIntoSUT();
                 SetupUserAsAdmin();
+                BindModelToController(userid);
 
                 // act
                 var result = sut.Edit(otherId);
@@ -91,13 +94,14 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Stays_On_View_When_User_Is_Known_And_Resulting_Model_Is_Not_Null()
             {
                 // Arrange
-                Guid id = Guid.NewGuid();
-                SetHttpContextMockIntoSUT(id);
+                Guid userId = Guid.NewGuid();
+                SetHttpContextMockIntoSUT(userId);
                 SetupMembershipServiceMockIntoSUT();
-                membershipServiceMock.Setup(m => m.GetUserModel(id))
+                BindModelToController(userId);
+                membershipServiceMock.Setup(m => m.GetUserModel(userId))
                                      .Returns(new UserModel
                                      {
-                                         Id = id,
+                                         Id = userId,
                                          Username = "Username",
                                          GivenName = "Given",
                                          Surname = "Sur",
@@ -109,11 +113,11 @@ namespace Bonobo.Git.Server.Test.Unit
                 SetupRolesProviderMockIntoSUT();
                 roleProviderMock.Setup(r => r.GetAllRoles())
                                 .Returns(allRoles);
-                roleProviderMock.Setup(r => r.GetRolesForUser(id))
+                roleProviderMock.Setup(r => r.GetRolesForUser(userId))
                                 .Returns(selectedRoles);
 
                 // act
-                var result = sut.Edit(id);
+                var result = sut.Edit(userId);
                 var viewResult = result as ViewResult;
                 var userEditModel = viewResult?.Model as UserEditModel;
 
@@ -123,7 +127,7 @@ namespace Bonobo.Git.Server.Test.Unit
                 Assert.IsNotNull(viewResult);
                 Assert.IsNotNull(viewResult.Model);
                 Assert.IsInstanceOfType(viewResult.Model, typeof(UserEditModel));
-                Assert.AreEqual(userEditModel.Id, id);
+                Assert.AreEqual(userEditModel.Id, userId);
                 Assert.AreEqual(userEditModel.Username, "Username");
                 Assert.AreEqual(userEditModel.Name, "Given");
                 Assert.AreEqual(userEditModel.Surname, "Sur");

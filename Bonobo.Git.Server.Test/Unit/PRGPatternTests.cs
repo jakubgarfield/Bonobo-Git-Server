@@ -4,6 +4,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Globalization;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Web;
@@ -58,6 +60,19 @@ namespace Bonobo.Git.Server.Test.Unit
         {
             membershipServiceMock = new Mock<IMembershipService>();
             sut.MembershipService = membershipServiceMock.Object;
+        }
+
+        private void BindModelToController(object model)
+        {
+            // see: https://stackoverflow.com/a/5580363/41236
+            var modelBinder = new ModelBindingContext
+            {
+                ModelMetadata = ModelMetadataProviders.Current.GetMetadataForType(() => model, model.GetType()),
+                ValueProvider = new NameValueCollectionValueProvider(new NameValueCollection(), CultureInfo.InvariantCulture)
+            };
+            var binder = new DefaultModelBinder().BindModel(new ControllerContext(), modelBinder);
+            sut.ModelState.Clear();
+            sut.ModelState.Merge(modelBinder.ModelState);
         }
 
         private AccountController sut;

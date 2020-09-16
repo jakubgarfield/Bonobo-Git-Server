@@ -31,13 +31,13 @@ namespace Bonobo.Git.Server.Test.Unit
                 Guid userId = Guid.Empty;
                 SetupMinimalEnvironment(userId);
                 UserEditModel model = new UserEditModel { Id = userId };
+                BindModelToController(model);
 
                 // act
                 var result = sut.Edit(model);
 
                 // assert
                 AssertMinimalViewResult(result, userId);
-                Assert.AreEqual(true, (result as ViewResult).ViewBag.UpdateSuccess);
             }
 
             [TestMethod]
@@ -47,28 +47,54 @@ namespace Bonobo.Git.Server.Test.Unit
                 Guid userId = Guid.NewGuid();
                 SetupMinimalEnvironment(userId);
                 UserEditModel model = new UserEditModel { Id = userId };
+                BindModelToController(model);
 
                 // act
                 var result = sut.Edit(model);
 
                 AssertMinimalViewResult(result, userId);
-                Assert.AreEqual(true, (result as ViewResult).ViewBag.UpdateSuccess);
             }
 
             [TestMethod]
-            public void Executed_With_Model_Data_And_Invalid_ModelData_Referring_To_The_Same_User_Returns_Data_From_The_User()
+            public void Executed_With_Invalid_Model_Data_Referring_To_The_Same_User_Returns_Data_From_The_User()
             {
                 // Arrange
                 Guid userId = Guid.NewGuid();
                 SetupMinimalEnvironment(userId);
                 UserEditModel model = new UserEditModel { Id = userId };
-                sut.ModelState.AddModelError("test", new Exception());
+                BindModelToController(model);
 
                 // act
                 var result = sut.Edit(model);
 
                 AssertMinimalViewResult(result, userId);
+                Assert.IsFalse(sut.ModelState.IsValid);
+                Assert.AreEqual(4, sut.ModelState.Count);
                 Assert.IsNull((result as ViewResult).ViewBag.UpdateSuccess);
+            }
+
+            [TestMethod]
+            public void Executed_With_Valid_Model_Data_Referring_To_The_Same_User_Returns_Data_From_The_User()
+            {
+                // Arrange
+                Guid userId = Guid.NewGuid();
+                SetupMinimalEnvironment(userId);
+                UserEditModel model = new UserEditModel
+                {
+                    Id = userId,
+                    Username = "Username",
+                    Name = "Name",
+                    Surname = "Surname",
+                    Email = "email@test.com",
+                };
+                BindModelToController(model);
+
+                // act
+                var result = sut.Edit(model);
+
+                AssertMinimalViewResult(result, userId);
+                Assert.IsTrue(sut.ModelState.IsValid);
+                Assert.IsTrue((result as ViewResult).ViewBag.UpdateSuccess);
             }
 
             [TestMethod]
@@ -79,6 +105,7 @@ namespace Bonobo.Git.Server.Test.Unit
                 Guid otherId = Guid.NewGuid();
                 SetupMinimalEnvironment(userId);
                 UserEditModel model = new UserEditModel { Id = otherId };
+                BindModelToController(model);
 
                 // act
                 var result = sut.Edit(model);
