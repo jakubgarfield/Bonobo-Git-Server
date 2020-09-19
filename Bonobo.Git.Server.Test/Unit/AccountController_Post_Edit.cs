@@ -1,6 +1,12 @@
+using Bonobo.Git.Server.App_GlobalResources;
+using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
+using System.Configuration;
+using System.Security.Principal;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Bonobo.Git.Server.Test.Unit
@@ -11,7 +17,7 @@ namespace Bonobo.Git.Server.Test.Unit
         public class AccountController_Post_Edit : PRGPatternTests
         {
             [TestMethod]
-            public void Executed_With_Empty_Model_Throws_A_NullReferenceException()
+            public void Executed_With_Unbound_Empty_Model_And_Environment_Unprepared__Throws_A_NullReferenceException()
             {
                 try
                 {
@@ -25,38 +31,60 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Executed_Unknown_User_With_Invalid_Model_Data_Returs_The_Same_Model_Data()
-            {
-                // Arrange
-                Guid userId = Guid.Empty;
-                SetupMinimalEnvironment(userId);
-                UserEditModel model = new UserEditModel { Id = userId };
-                BindModelToController(model);
-
-                // act
-                var result = sut.Edit(model);
-
-                // assert
-                AssertMinimalViewResult(result, userId);
-            }
-
-            [TestMethod]
-            public void Executed_With_Invalid_Model_Data_Referring_To_The_Same_User_Returns_The_Same_Model_Data()
+            public void Executed_With_Unbound_Bare_Model_Data_Referring_To_The_Same_User__Returns_Weird_Data()
             {
                 // Arrange
                 Guid userId = Guid.NewGuid();
-                SetupMinimalEnvironment(userId);
                 UserEditModel model = new UserEditModel { Id = userId };
-                BindModelToController(model);
+
+                SetupMinimalEnvironment(userId);
+                SetupCookiesCollectionToHttpResponse();
 
                 // act
                 var result = sut.Edit(model);
 
                 AssertMinimalViewResult(result, userId);
+                AssertSuccessfulResponse(result);
             }
 
             [TestMethod]
-            public void Executed_With_Invalid_Model_Data_Referring_To_The_Same_User_Returns_Null_UpdateSuccess_In_ViewBag()
+            public void Executed_With_Unbound_Bare_Model_And_Admin_And_DemoActive_Configuration_Set_And_Data_Referring_To_The_Same_UserId__Redirects_To_Home_Unauthorized()
+            {
+                // Arrange
+                ConfigurationManager.AppSettings["demoModeActive"] = "true";
+                ReinitializeAuthenticationSettingsStaticClass();
+
+                Guid userId = Guid.NewGuid();
+                SetupMinimalEnvironment(userId);
+                UserEditModel model = new UserEditModel { Id = userId };
+                SetupUserAsAdmin();
+
+                // Act
+                var result = sut.Edit(model);
+
+                // Assert
+                AssertRedirectToHomeUnauthorized(result);
+            }
+
+            [TestMethod]
+            public void Executed_With_Bound_Empty_Model_And_Correct_Environment__Passes_Execution()
+            {
+                // Arrange
+                sut.ControllerContext = CreateControllerContextFromPrincipal(new Mock<IPrincipal>().Object);
+                SetupMembershipServiceMockIntoSUT();
+                SetupRolesProviderMockIntoSUT();
+                UserEditModel model = new UserEditModel();
+                BindModelToController(model);
+
+                // Act
+                var result = sut.Edit(model);
+
+                // Assert
+                AssertMinimalViewResult(result, Guid.Empty);
+            }
+
+            [TestMethod]
+            public void Executed_With_Bound_Bare_Model_Data_Referring_To_The_Same_User__Returns_Null_Update_Success_In_ViewBag()
             {
                 // Arrange
                 Guid userId = Guid.NewGuid();
@@ -74,11 +102,62 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Executed_With_Valid_Model_Data_Referring_To_The_Same_User_Returns_Data_From_The_User()
+            public void Executed_With_Bound_Bare_Model_Data_Referring_To_Another_User__Redirects_To_Home_Unauthorized()
+            {
+                // Arrange
+                Guid userId = Guid.NewGuid();
+                Guid otherId = Guid.NewGuid();
+                SetupMinimalEnvironment(userId);
+                UserEditModel model = new UserEditModel { Id = otherId };
+                BindModelToController(model);
+
+                // act
+                var result = sut.Edit(model);
+
+                // assert
+                Assert.IsNotNull(result);
+
+                AssertRedirectToHomeUnauthorized(result);
+            }
+
+            [TestMethod]
+            public void Executed_With_Bound_Invalid_Model_With_NewPassword_Not_Empty_And_OldPassword_Empty__Returns_Expected_ModelState()
             {
                 // Arrange
                 Guid userId = Guid.NewGuid();
                 SetupMinimalEnvironment(userId);
+                UserEditModel model = new UserEditModel
+                {
+                    Id = userId,
+                    Username = "Username",
+                    Name = "Name",
+                    Surname = "Surname",
+                    Email = "email@test.com",
+                    NewPassword = "NewPassword"
+                };
+                BindModelToController(model);
+
+                // Act
+                var result = sut.Edit(model);
+
+                // Assert
+                AssertMinimalViewResult(result, userId);
+                Assert.IsFalse(sut.ModelState.IsValid);
+
+                string expectedMessageForConfirmPassword = String.Format(Resources.Validation_Compare, "Confirm Password", "New Password");
+                string actualMessageForConfirmPassword = sut.ModelState["ConfirmPassword"].Errors[0].ErrorMessage;
+
+                Assert.AreEqual(expectedMessageForConfirmPassword, actualMessageForConfirmPassword);
+            }
+
+            [TestMethod]
+            public void Executed_With_Bound_Valid_Model_Data_Referring_To_The_Same_User__Returns_Data_From_The_User()
+            {
+                // Arrange
+                Guid userId = Guid.NewGuid();
+                SetupMinimalEnvironment(userId);
+                SetupCookiesCollectionToHttpResponse();
+
                 UserEditModel model = new UserEditModel
                 {
                     Id = userId,
@@ -93,30 +172,15 @@ namespace Bonobo.Git.Server.Test.Unit
                 var result = sut.Edit(model);
 
                 AssertMinimalViewResult(result, userId);
-                Assert.IsTrue(sut.ModelState.IsValid);
-                Assert.IsTrue((result as ViewResult).ViewBag.UpdateSuccess);
+                AssertSuccessfulResponse(result);
             }
 
-            [TestMethod]
-            public void Executed_With_Invalid_Model_Data_Referring_To_Other_User_Redirects_To_Home_Unauthorized()
+            private static void ReinitializeAuthenticationSettingsStaticClass()
             {
-                // Arrange
-                Guid userId = Guid.NewGuid();
-                Guid otherId = Guid.NewGuid();
-                SetupMinimalEnvironment(userId);
-                UserEditModel model = new UserEditModel { Id = otherId };
-                BindModelToController(model);
-
-                // act
-                var result = sut.Edit(model);
-
-                // assert
-                Assert.IsNotNull(result);
-                Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
-
-                var redirectToRouteResult = result as RedirectToRouteResult;
-                Assert.AreEqual("Home", redirectToRouteResult.RouteValues["controller"]);
-                Assert.AreEqual("Unauthorized", redirectToRouteResult.RouteValues["action"]);
+                // This code allows reinitializing AuthenticationSettings static class after changing a configuration app setting
+                // see: https://stackoverflow.com/a/51758748/41236
+                //
+                typeof(AuthenticationSettings).TypeInitializer.Invoke(null, null);
             }
 
             private void SetupMinimalEnvironment(Guid userId)
@@ -144,6 +208,26 @@ namespace Bonobo.Git.Server.Test.Unit
                 Assert.AreEqual(userId, userEditModel.Id);
                 Assert.IsNotNull(userEditModel.Roles);
                 Assert.IsNotNull(viewResult.ViewBag);
+            }
+
+            private void AssertSuccessfulResponse(ActionResult result)
+            {
+                Assert.IsTrue(sut.ModelState.IsValid);
+
+                ViewResult viewResult = result as ViewResult;
+
+                Assert.IsTrue(viewResult.ViewBag.UpdateSuccess);
+            }
+
+            private void SetupCookiesCollectionToHttpResponse()
+            {
+                var responseMock = new Mock<HttpResponseBase>();
+
+                HttpCookieCollection cookies = new HttpCookieCollection();
+                responseMock.SetupGet(r => r.Cookies)
+                            .Returns(cookies);
+                httpContextMock.SetupGet(c => c.Response)
+                               .Returns(responseMock.Object);
             }
         }
     }

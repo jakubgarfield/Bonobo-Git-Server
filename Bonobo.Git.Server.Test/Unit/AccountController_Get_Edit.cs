@@ -49,7 +49,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Gets_Redirected_To_Home_Unauthorized_When_NonAdmin_User_Queries_Other_User_Id()
+            public void Gets_Redirected_To_Home_Unauthorized_When_Non_Admin_User_Queries_Other_UserId()
             {
                 // Arrange
                 Guid userid = Guid.NewGuid();
@@ -60,12 +60,7 @@ namespace Bonobo.Git.Server.Test.Unit
                 var result = sut.Edit(Guid.NewGuid());
 
                 // assert
-                Assert.IsNotNull(result);
-                Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
-                var redirectToRouteResult = result as RedirectToRouteResult;
-                Assert.IsNotNull(redirectToRouteResult);
-                Assert.AreEqual("Home", redirectToRouteResult.RouteValues["controller"]);
-                Assert.AreEqual("Unauthorized", redirectToRouteResult.RouteValues["action"]);
+                AssertRedirectToHomeUnauthorized(result);
             }
 
             [TestMethod]

@@ -24,7 +24,7 @@ namespace Bonobo.Git.Server.Test.Unit
 
         private void SetupUserAsAdmin()
         {
-            principalMock.Setup(p => p.IsInRole(Definitions.Roles.Administrator))
+            claimsPrincipalMock.Setup(p => p.IsInRole(Definitions.Roles.Administrator))
                          .Returns(true);
         }
 
@@ -33,21 +33,14 @@ namespace Bonobo.Git.Server.Test.Unit
             var claimsIdentity = new ClaimsIdentity(new List<Claim> { new Claim(ClaimTypes.NameIdentifier, id.ToString()) });
 
             // see: https://stackoverflow.com/a/1784417/41236
-            principalMock = new Mock<ClaimsPrincipal>();
-            principalMock.SetupGet(p => p.Identities)
-                         .Returns(new List<ClaimsIdentity> { claimsIdentity });
+            claimsPrincipalMock = new Mock<ClaimsPrincipal>();
+            claimsPrincipalMock.SetupGet(p => p.Identities)
+                               .Returns(new List<ClaimsIdentity> { claimsIdentity });
 
             // see: https://stackoverflow.com/a/1783704/41236
-            IPrincipal user = principalMock.Object;
-            var httpCtxStub = new Mock<HttpContextBase>();
-            httpCtxStub.SetupGet(ctx => ctx.User).Returns(user);
+            IPrincipal user = claimsPrincipalMock.Object;
 
-            var controllerCtx = new ControllerContext
-            {
-                HttpContext = httpCtxStub.Object
-            };
-
-            sut.ControllerContext = controllerCtx;
+            sut.ControllerContext = CreateControllerContextFromPrincipal(user);
         }
 
         private void SetupRolesProviderMockIntoSUT()
@@ -75,9 +68,34 @@ namespace Bonobo.Git.Server.Test.Unit
             sut.ModelState.Merge(modelBinder.ModelState);
         }
 
+        private ControllerContext CreateControllerContextFromPrincipal(IPrincipal user)
+        {
+            httpContextMock = new Mock<HttpContextBase>();
+            httpContextMock.SetupGet(ctx => ctx.User).Returns(user);
+
+            var controllerCtx = new ControllerContext
+            {
+                HttpContext = httpContextMock.Object
+            };
+            return controllerCtx;
+        }
+
+        private static void AssertRedirectToHomeUnauthorized(ActionResult result)
+        {
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
+
+            var redirectToRouteResult = result as RedirectToRouteResult;
+
+            Assert.IsNotNull(redirectToRouteResult);
+            Assert.AreEqual("Home", redirectToRouteResult.RouteValues["controller"]);
+            Assert.AreEqual("Unauthorized", redirectToRouteResult.RouteValues["action"]);
+        }
+
         private AccountController sut;
         private Mock<IMembershipService> membershipServiceMock;
         private Mock<IRoleProvider> roleProviderMock;
-        private Mock<ClaimsPrincipal> principalMock;
+        private Mock<ClaimsPrincipal> claimsPrincipalMock;
+        private Mock<HttpContextBase> httpContextMock;
     }
 }
