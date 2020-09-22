@@ -170,16 +170,16 @@
     <Compile Include="Unit\DatabaseUpdateTestsSqlite.cs" />
     <Compile Include="Unit\DatabaseUpdateTestsSqlServer.cs" />
     <Compile Include="Unit\PathEncoderTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestCategories.cs" />
     <Compile Include="Unit\PasswordServiceTest.cs" />
     <Compile Include="Unit\GitAuthorizeAttributeTest.cs" />
     <Compile Include="Unit\UserConfigurationTests.cs" />
     <Compile Include="Unit\UserExtensionsTests.cs" />
     <Compile Include="Unit\UserModelTest.cs" />
-    <Compile Include="Unit\AccountController_Get_Edit.cs" />
-    <Compile Include="Unit\AccountController_Post_Edit.cs" />
     <Compile Include="Unit\PRGPatternTests.cs" />
+    <Compile Include="Unit\PRGPatternTests.AccountControllerTests.cs" />
+    <Compile Include="Unit\PRGPatternTests.HomeControllerTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestCategories.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bonobo.Git.Server\Bonobo.Git.Server.csproj">

@@ -1,6 +1,4 @@
-﻿using Bonobo.Git.Server.Controllers;
-using Bonobo.Git.Server.Security;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -13,14 +11,9 @@ using System.Web.Mvc;
 
 namespace Bonobo.Git.Server.Test.Unit
 {
-    [TestClass]
     public partial class PRGPatternTests
     {
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            sut = new AccountController();
-        }
+        private T SutAs<T>() where T : Controller => sut as T;
 
         private void SetupUserAsAdmin()
         {
@@ -43,18 +36,6 @@ namespace Bonobo.Git.Server.Test.Unit
             sut.ControllerContext = CreateControllerContextFromPrincipal(user);
         }
 
-        private void SetupRolesProviderMockIntoSUT()
-        {
-            roleProviderMock = new Mock<IRoleProvider>();
-            sut.RoleProvider = roleProviderMock.Object;
-        }
-
-        private void SetupMembershipServiceMockIntoSUT()
-        {
-            membershipServiceMock = new Mock<IMembershipService>();
-            sut.MembershipService = membershipServiceMock.Object;
-        }
-
         private void BindModelToController(object model)
         {
             // see: https://stackoverflow.com/a/5580363/41236
@@ -72,6 +53,10 @@ namespace Bonobo.Git.Server.Test.Unit
         {
             httpContextMock = new Mock<HttpContextBase>();
             httpContextMock.SetupGet(ctx => ctx.User).Returns(user);
+
+            responseMock = new Mock<HttpResponseBase>();
+            httpContextMock.SetupGet(c => c.Response)
+                           .Returns(responseMock.Object);
 
             var controllerCtx = new ControllerContext
             {
@@ -92,10 +77,24 @@ namespace Bonobo.Git.Server.Test.Unit
             Assert.AreEqual("Unauthorized", redirectToRouteResult.RouteValues["action"]);
         }
 
-        private AccountController sut;
-        private Mock<IMembershipService> membershipServiceMock;
-        private Mock<IRoleProvider> roleProviderMock;
+        private void SetupCookiesCollectionToHttpResponse()
+        {
+            HttpCookieCollection cookies = new HttpCookieCollection();
+            responseMock.SetupGet(r => r.Cookies)
+                        .Returns(cookies);
+        }
+
+        private static void ReinitializeStaticClass(Type type)
+        {
+            // This code allows reinitializing a static class 
+            // see: https://stackoverflow.com/a/51758748/41236
+            //
+            type.TypeInitializer.Invoke(null, null);
+        }
+
+        private Controller sut;
         private Mock<ClaimsPrincipal> claimsPrincipalMock;
         private Mock<HttpContextBase> httpContextMock;
+        private Mock<HttpResponseBase> responseMock;
     }
 }
