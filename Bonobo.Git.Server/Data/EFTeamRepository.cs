@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Bonobo.Git.Server.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using Bonobo.Git.Server.Models;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
-using Microsoft.Practices.Unity;
+using System.Linq;
+using Unity;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -43,13 +43,13 @@ namespace Bonobo.Git.Server.Data
 
         private TeamModel GetTeamModel(Team team)
         {
-                return team == null ? null : new TeamModel
-                {
-                    Id = team.Id,
-                    Name = team.Name,
-                    Description = team.Description,
-                    Members = team.Users.Select(user => user.ToModel()).ToArray(),
-                };
+            return team == null ? null : new TeamModel
+            {
+                Id = team.Id,
+                Name = team.Name,
+                Description = team.Description,
+                Members = team.Users.Select(user => user.ToModel()).ToArray(),
+            };
         }
 
         public TeamModel GetTeam(Guid id)

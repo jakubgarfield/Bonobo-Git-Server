@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Bonobo.Git.Server.Data;
+﻿using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
-using System.Security.Cryptography;
-using System.Data.Entity.Core;
-using Microsoft.Practices.Unity;
 using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity.Core;
+using System.Linq;
+using System.Security.Cryptography;
+using Unity;
 
 namespace Bonobo.Git.Server.Security
 {
@@ -139,7 +139,7 @@ namespace Bonobo.Git.Server.Security
                 GivenName = user.GivenName,
                 Surname = user.Surname,
                 Email = user.Email,
-             };
+            };
         }
 
         public UserModel GetUserModel(Guid id)
@@ -197,7 +197,7 @@ namespace Bonobo.Git.Server.Security
                     db.SaveChanges();
                 }
             }
-        } 
+        }
 
         private void SetPassword(User user, string password)
         {
@@ -226,6 +226,6 @@ namespace Bonobo.Git.Server.Security
             Buffer.BlockCopy(salt, 0, outputBytes, 1, SaltSize);
             Buffer.BlockCopy(subkey, 0, outputBytes, 1 + SaltSize, PBKDF2SubkeyLength);
             return Convert.ToBase64String(outputBytes);
-        }        
+        }
     }
 }

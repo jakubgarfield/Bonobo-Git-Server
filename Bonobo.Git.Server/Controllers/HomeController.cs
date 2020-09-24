@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Web;
-using System.Web.Caching;
-using System.Web.Mvc;
-
-using Bonobo.Git.Server.App_GlobalResources;
+﻿using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Helpers;
 using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.Security;
-
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Practices.Unity;
 using Bonobo.Git.Server.Owin.Windows;
+using Bonobo.Git.Server.Security;
+using Microsoft.Owin.Security;
+using System;
 using System.Configuration;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Web;
+using System.Web.Mvc;
+using Unity;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -68,7 +62,7 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult ResetPassword(string digest)
         {
             string username = CheckForPasswordResetUsername(digest);
-            if (username != null )
+            if (username != null)
             {
                 using (var db = new BonoboGitServerContext())
                 {
@@ -77,7 +71,7 @@ namespace Bonobo.Git.Server.Controllers
                     {
                         throw new UnauthorizedAccessException("Unknown user " + username);
                     }
-                    return View(new ResetPasswordModel { Username = username, Digest = digest});
+                    return View(new ResetPasswordModel { Username = username, Digest = digest });
                 }
             }
             else
@@ -139,7 +133,7 @@ namespace Bonobo.Git.Server.Controllers
                     MvcApplication.Cache.Add(token, model.Username, DateTimeOffset.Now.AddHours(1));
 
                     // Passing Requust.Url.Scheme to Url.Action forces it to generate a full URL
-                    var resetUrl = Url.Action("ResetPassword", "Home", new {digest = HttpUtility.UrlEncode(Encoding.UTF8.GetBytes(token))},Request.Url.Scheme);
+                    var resetUrl = Url.Action("ResetPassword", "Home", new { digest = HttpUtility.UrlEncode(Encoding.UTF8.GetBytes(token)) }, Request.Url.Scheme);
 
                     TempData["SendSuccess"] = MembershipHelper.SendForgotPasswordEmail(user, resetUrl);
                 }
@@ -187,7 +181,7 @@ namespace Bonobo.Git.Server.Controllers
                     case ValidationResult.Success:
                         AuthenticationProvider.SignIn(model.Username, Url.IsLocalUrl(model.ReturnUrl) ? model.ReturnUrl : Url.Action("Index", "Home"), model.RememberMe);
                         Response.AppendToLog("SUCCESS");
-                        if (Request.IsLocal && model.DatabaseResetCode > 0 && model.Username == "admin" && ConfigurationManager.AppSettings["AllowDBReset"] == "true" )
+                        if (Request.IsLocal && model.DatabaseResetCode > 0 && model.Username == "admin" && ConfigurationManager.AppSettings["AllowDBReset"] == "true")
                         {
                             ResetManager.DoReset(model.DatabaseResetCode);
                         }
@@ -198,7 +192,7 @@ namespace Bonobo.Git.Server.Controllers
                         ModelState.AddModelError("", Resources.Home_LogOn_UsernamePasswordIncorrect);
                         Response.AppendToLog("FAILURE");
                         break;
-                }                
+                }
             }
 
             return View(model);

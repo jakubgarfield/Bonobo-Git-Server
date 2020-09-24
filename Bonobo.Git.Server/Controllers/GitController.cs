@@ -1,16 +1,15 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Web.Mvc;
-using Bonobo.Git.Server.Configuration;
+﻿using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Git;
 using Bonobo.Git.Server.Git.GitService;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 using Ionic.Zlib;
-using Microsoft.Practices.Unity;
 using Serilog;
+using System;
+using System.IO;
+using System.Web.Mvc;
+using Unity;
 using Repository = LibGit2Sharp.Repository;
 
 namespace Bonobo.Git.Server.Controllers
@@ -63,7 +62,7 @@ namespace Bonobo.Git.Server.Controllers
             }
             else
             {
-                Log.Warning("GitC: SecureGetInfoRefs unauth because User {UserId} doesn't have permission {Permission} on  repo {RepositoryName}", 
+                Log.Warning("GitC: SecureGetInfoRefs unauth because User {UserId} doesn't have permission {Permission} on  repo {RepositoryName}",
                     User.Id(),
                     requiredLevel,
                     repositoryName);
@@ -127,7 +126,7 @@ namespace Bonobo.Git.Server.Controllers
             var user = MembershipService.GetUserModel(User.Id());
             repository.Description = "Auto-created by push for " + user.DisplayName;
             repository.AnonymousAccess = false;
-            repository.Administrators = new[] {user};
+            repository.Administrators = new[] { user };
             if (!RepositoryRepository.Create(repository))
             {
                 // We can't add this to the repo store
@@ -147,7 +146,7 @@ namespace Bonobo.Git.Server.Controllers
         /// </summary>
         public ActionResult GitUrl(string repositoryName)
         {
-            return RedirectPermanent(Url.Action("Detail", "Repository", new { id = repositoryName}));
+            return RedirectPermanent(Url.Action("Detail", "Repository", new { id = repositoryName }));
         }
 
         private ActionResult ExecuteReceivePack(string repositoryName)
@@ -192,13 +191,13 @@ namespace Bonobo.Git.Server.Controllers
                 {
                     GitService.ExecuteServiceByName(
                         Guid.NewGuid().ToString("N"),
-                        repositoryName, 
-                        serviceName, 
+                        repositoryName,
+                        serviceName,
                         new ExecutionOptions() { AdvertiseRefs = true },
                         GetInputStream(),
                         outStream
                     );
-                }, 
+                },
                 advertiseRefsContent);
         }
 
@@ -206,7 +205,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             Response.Clear();
             Response.AddHeader("WWW-Authenticate", "Basic realm=\"Bonobo Git\"");
-            
+
             return new HttpStatusCodeResult(401);
         }
 
