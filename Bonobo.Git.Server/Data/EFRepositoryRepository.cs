@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Bonobo.Git.Server.Models;
+using Serilog;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using Bonobo.Git.Server.Models;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
-using Microsoft.Practices.Unity;
-using Serilog;
+using System.Linq;
+using Unity;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -120,7 +120,7 @@ namespace Bonobo.Git.Server.Data
                     AuditPushUser = model.AuditPushUser,
                     LinksUseGlobal = model.LinksUseGlobal,
                     LinksUrl = model.LinksUrl,
-                    LinksRegex = model.LinksRegex 
+                    LinksRegex = model.LinksRegex
                 };
                 database.Repositories.Add(repository);
                 AddMembers(model.Users.Select(x => x.Id), model.Administrators.Select(x => x.Id), model.Teams.Select(x => x.Id), repository, database);

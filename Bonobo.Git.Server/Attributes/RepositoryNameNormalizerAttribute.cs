@@ -1,6 +1,6 @@
-using System.Web.Mvc;
 using Bonobo.Git.Server.Data;
-using Microsoft.Practices.Unity;
+using System.Web.Mvc;
+using Unity;
 
 namespace Bonobo.Git.Server
 {
@@ -26,7 +26,7 @@ namespace Bonobo.Git.Server
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             object incomingRepositoryNameParameter;
-            if(filterContext.ActionParameters.TryGetValue(_repositoryNameParameterName, out incomingRepositoryNameParameter))
+            if (filterContext.ActionParameters.TryGetValue(_repositoryNameParameterName, out incomingRepositoryNameParameter))
             {
                 var incomingRepositoryName = (string)incomingRepositoryNameParameter;
                 var normalizedName = Repository.NormalizeRepositoryName(incomingRepositoryName, RepositoryRepository);

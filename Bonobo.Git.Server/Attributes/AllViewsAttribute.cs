@@ -1,11 +1,11 @@
 ﻿using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
-using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Unity;
 
 namespace Bonobo.Git.Server.Attributes
 {

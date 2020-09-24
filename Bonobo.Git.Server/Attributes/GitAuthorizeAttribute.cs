@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Bonobo.Git.Server.Data;
+using Bonobo.Git.Server.Helpers;
+using Bonobo.Git.Server.Security;
+using Serilog;
+using System;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using Bonobo.Git.Server.Data;
-using Bonobo.Git.Server.Security;
-using Microsoft.Practices.Unity;
-using Bonobo.Git.Server.Helpers;
-using Serilog;
+using Unity;
 
 namespace Bonobo.Git.Server
 {
@@ -28,7 +28,7 @@ namespace Bonobo.Git.Server
 
         public static string GetRepoPath(string path, string applicationPath)
         {
-            var repo = path.Replace(applicationPath, "").Replace("/","");
+            var repo = path.Replace(applicationPath, "").Replace("/", "");
             return repo.Substring(0, repo.IndexOf(".git"));
         }
 

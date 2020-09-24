@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Web;
-
-using Bonobo.Git.Server.Models;
-
-using Microsoft.Owin;
+﻿using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
-using Microsoft.Practices.Unity;
-
 using Owin;
+using System;
+using System.Security.Claims;
+using System.Web;
 
 namespace Bonobo.Git.Server.Security
 {

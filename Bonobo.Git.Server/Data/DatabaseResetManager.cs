@@ -1,9 +1,8 @@
-﻿using System;
-using System.Runtime.Remoting.Messaging;
-using Bonobo.Git.Server.Security;
-using Microsoft.Practices.Unity;
-using System.Configuration;
+﻿using Bonobo.Git.Server.Security;
 using Serilog;
+using System;
+using System.Configuration;
+using Unity;
 
 namespace Bonobo.Git.Server.Data
 {

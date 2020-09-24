@@ -1,10 +1,7 @@
-﻿using System.Web.Mvc;
-using System.Web.Routing;
-using Bonobo.Git.Server.Data;
-using Bonobo.Git.Server.Security;
-
-using Microsoft.Practices.Unity;
+﻿using Bonobo.Git.Server.Security;
 using System;
+using System.Web.Mvc;
+using Unity;
 
 namespace Bonobo.Git.Server
 {

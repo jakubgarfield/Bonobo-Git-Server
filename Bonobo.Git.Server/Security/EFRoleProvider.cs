@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Bonobo.Git.Server.Data;
+using System;
 using System.Linq;
-using Bonobo.Git.Server.Data;
-using Microsoft.Practices.Unity;
+using Unity;
 
 namespace Bonobo.Git.Server.Security
 {
