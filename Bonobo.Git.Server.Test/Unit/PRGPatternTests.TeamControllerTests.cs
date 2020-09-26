@@ -132,13 +132,14 @@ namespace Bonobo.Git.Server.Test.Unit
                 // Arrange
                 ArrangeControllerContextAndTeamRepository();
                 Guid requestedGuid = Guid.NewGuid();
-                
+
                 TeamEditModel model = new TeamEditModel { Id = requestedGuid };
                 Mock<ITeamRepository> teamRepositoryMock = new Mock<ITeamRepository>();
                 teamRepositoryMock.Setup(t => t.GetTeam(requestedGuid))
-                                  .Returns(new TeamModel { 
-                                      Id = requestedGuid, 
-                                      Members = new UserModel[0] 
+                                  .Returns(new TeamModel
+                                  {
+                                      Id = requestedGuid,
+                                      Members = new UserModel[0]
                                   });
                 SetupMembershipServiceMockIntoSUT();
                 membershipServiceMock.Setup(m => m.GetAllUsers())

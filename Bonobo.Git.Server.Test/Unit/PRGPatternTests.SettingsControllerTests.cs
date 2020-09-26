@@ -5,8 +5,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Configuration;
-using System.IO;
-using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 
@@ -21,6 +19,9 @@ namespace Bonobo.Git.Server.Test.Unit
             public void TestInitialize()
             {
                 sut = new SettingsController();
+                ConfigurationManager.AppSettings["demoModeActive"] = "false";
+                // AuthenticationSettings class controller needs to run again because we changed the demoModelActive appSetting
+                ReinitializeStaticClass(typeof(AuthenticationSettings));
             }
 
             [TestMethod]

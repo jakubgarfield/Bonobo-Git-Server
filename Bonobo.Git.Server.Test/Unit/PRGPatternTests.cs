@@ -21,7 +21,7 @@ namespace Bonobo.Git.Server.Test.Unit
         private void SetupUserAsAdmin()
         {
             claimsPrincipalMock.Setup(p => p.IsInRole(Definitions.Roles.Administrator))
-                         .Returns(true);
+                               .Returns(true);
         }
 
         private void SetHttpContextMockIntoSUT(Guid id)
