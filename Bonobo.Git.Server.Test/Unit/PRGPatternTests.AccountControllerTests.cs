@@ -23,6 +23,9 @@ namespace Bonobo.Git.Server.Test.Unit
                 sut = new AccountController();
             }
 
+            // get Delete
+            // post Delete
+
             [TestMethod]
             public void Get_Edit__Cannot_Handle_Null_Parameters()
             {
@@ -302,6 +305,8 @@ namespace Bonobo.Git.Server.Test.Unit
                 AssertSuccessfulResponse(result);
             }
 
+            // get Create
+            // post Create
 
             private void SetupMinimalEnvironment(Guid userId)
             {

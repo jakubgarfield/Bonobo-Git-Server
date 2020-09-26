@@ -175,6 +175,11 @@ namespace Bonobo.Git.Server.Test.Unit
                 Assert.AreEqual(Resources.Home_LogOn_UsernamePasswordIncorrect, sut.ModelState[""].Errors[0].ErrorMessage);
             }
 
+            // get ResetPassword
+            // post ResetPassword
+            // get ForgotPassword
+            // post ForgotPassword
+
             private void ArrangeBareContext()
             {
                 sut.ControllerContext = CreateControllerContext();
