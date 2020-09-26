@@ -88,7 +88,7 @@ namespace Bonobo.Git.Server.Test.UnitTests
             {
                 // Arrange
                 ArrangeUserConfiguration();
-                sut.ControllerContext = CreateControllerContextFromPrincipal(new Mock<IPrincipal>().Object);
+                sut.ControllerContext = CreateControllerContext();
                 httpContextMock.SetupGet(hc => hc.Server)
                                .Returns(new Mock<HttpServerUtilityBase>().Object);
                 GlobalSettingsModel model = new GlobalSettingsModel();
@@ -107,7 +107,7 @@ namespace Bonobo.Git.Server.Test.UnitTests
             {
                 // Arrange
                 ArrangeUserConfiguration();
-                sut.ControllerContext = CreateControllerContextFromPrincipal(new Mock<IPrincipal>().Object);
+                sut.ControllerContext = CreateControllerContext();
                 httpContextMock.SetupGet(hc => hc.Server)
                                .Returns(new Mock<HttpServerUtilityBase>().Object);
                 GlobalSettingsModel model = new GlobalSettingsModel { RepositoryPath = "-" };

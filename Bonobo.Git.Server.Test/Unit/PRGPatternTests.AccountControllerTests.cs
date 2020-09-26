@@ -77,7 +77,7 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Post_Edit_With_Bound_Empty_Model_And_Correct_Environment__Passes_Execution()
             {
                 // Arrange
-                sut.ControllerContext = CreateControllerContextFromPrincipal(new Mock<IPrincipal>().Object);
+                sut.ControllerContext = CreateControllerContext();
                 SetupMembershipServiceMockIntoSUT();
                 SetupRolesProviderMockIntoSUT();
                 UserEditModel model = new UserEditModel();

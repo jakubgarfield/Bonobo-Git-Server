@@ -177,7 +177,7 @@ namespace Bonobo.Git.Server.Test.Unit
 
             private void ArrangeBareContext()
             {
-                sut.ControllerContext = CreateControllerContextFromPrincipal(new Mock<IPrincipal>().Object);
+                sut.ControllerContext = CreateControllerContext();
                 SetupMembershipServiceMockIntoSUT();
                 SutAs<HomeController>().AuthenticationProvider = new Mock<IAuthenticationProvider>().Object;
                 SutAs<HomeController>().Url = new Mock<UrlHelper>().Object;

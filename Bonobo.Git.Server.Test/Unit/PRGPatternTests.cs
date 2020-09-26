@@ -49,6 +49,11 @@ namespace Bonobo.Git.Server.Test.Unit
             sut.ModelState.Merge(modelBinder.ModelState);
         }
 
+        private ControllerContext CreateControllerContext()
+        {
+            return CreateControllerContextFromPrincipal(new Mock<IPrincipal>().Object);
+        }
+
         private ControllerContext CreateControllerContextFromPrincipal(IPrincipal user)
         {
             httpContextMock = new Mock<HttpContextBase>();
