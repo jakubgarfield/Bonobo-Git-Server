@@ -122,13 +122,6 @@ namespace Bonobo.Git.Server.Test.Unit
                 Assert.IsFalse(sut.ModelState.IsValid);
                 Assert.AreEqual(1, sut.ModelState.Count);
             }
-
-            private static void ArrangeUserConfiguration()
-            {
-                var configFileName = Path.Combine(Path.GetTempFileName(), "BonoboTestConfig.xml");
-                ConfigurationManager.AppSettings["UserConfiguration"] = configFileName;
-                UserConfiguration.InitialiseForTest();
-            }
         }
     }
 }

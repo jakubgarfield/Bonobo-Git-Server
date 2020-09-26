@@ -1,9 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Bonobo.Git.Server.Configuration;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Configuration;
 using System.Globalization;
+using System.IO;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Web;
@@ -87,6 +90,13 @@ namespace Bonobo.Git.Server.Test.Unit
             HttpCookieCollection cookies = new HttpCookieCollection();
             responseMock.SetupGet(r => r.Cookies)
                         .Returns(cookies);
+        }
+
+        private static void ArrangeUserConfiguration()
+        {
+            var configFileName = Path.Combine(Path.GetTempFileName(), "BonoboTestConfig.xml");
+            ConfigurationManager.AppSettings["UserConfiguration"] = configFileName;
+            UserConfiguration.InitialiseForTest();
         }
 
         private static void ReinitializeStaticClass(Type type)
