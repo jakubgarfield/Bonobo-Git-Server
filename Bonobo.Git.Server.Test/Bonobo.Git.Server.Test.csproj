@@ -179,6 +179,8 @@
     <Compile Include="Unit\PRGPatternTests.AccountControllerTests.cs" />
     <Compile Include="Unit\PRGPatternTests.HomeControllerTests.cs" />
     <Compile Include="Unit\PRGPatternTests.SettingsControllerTests.cs" />
+    <Compile Include="Unit\PRGPatternTests.TeamControllerTests.cs" />
+    <Compile Include="Unit\PRGPatternTests.RepositoryControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestCategories.cs" />
   </ItemGroup>

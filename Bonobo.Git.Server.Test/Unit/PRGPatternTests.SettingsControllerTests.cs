@@ -10,7 +10,7 @@ using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Bonobo.Git.Server.Test.UnitTests
+namespace Bonobo.Git.Server.Test.Unit
 {
     public partial class PRGPatternTests
     {
