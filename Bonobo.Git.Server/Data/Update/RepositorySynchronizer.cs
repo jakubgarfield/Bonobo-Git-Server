@@ -1,4 +1,5 @@
-﻿using Bonobo.Git.Server.Configuration;
+﻿using Bonobo.Git.Server.App_Start;
+using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Models;
 using LibGit2Sharp;
 using System;
@@ -30,6 +31,12 @@ namespace Bonobo.Git.Server.Data.Update
             IEnumerable<string> directories = Directory.EnumerateDirectories(UserConfiguration.Current.Repositories, "*.git", SearchOption.AllDirectories);
             foreach (string directory in directories)
             {
+                var repoPath = directory.Remove(0, UserConfiguration.Current.Repositories.Length);
+                var rootDir = repoPath.Split('\\').FirstOrDefault();
+
+                if (DoesControllerExistConstraint.DoesControllerExist(rootDir))
+                    continue; //Do not load as a valid repo
+
                 string path = directory.Remove(0, UserConfiguration.Current.Repositories.Length + "\\".Length);
 
                 RepositoryModel repository = _repositoryRepository.GetRepository(path);
