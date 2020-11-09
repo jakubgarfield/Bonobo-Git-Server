@@ -10,10 +10,10 @@ namespace Bonobo.Git.Server.Test.Unit
         [TestMethod]
         public void GetRepoPathTest()
         {
-            var repo = GitAuthorizeAttribute.GetRepoPath("/other/test.git/info/refs", "/other");
-            Assert.AreEqual("test", repo);
-            repo = GitAuthorizeAttribute.GetRepoPath("/test.git/info/refs", "/");
-            Assert.AreEqual("test", repo);
+            var repo = GitAuthorizeAttribute.GetRepoPath("/other/test.git/info/refs", "/other", false);
+            Assert.AreEqual(@"\test.git", repo);
+            repo = GitAuthorizeAttribute.GetRepoPath("/test.git/info/refs", "/", false);
+            Assert.AreEqual("test.git", repo);
         }
     }
 }

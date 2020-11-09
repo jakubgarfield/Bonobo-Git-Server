@@ -29,19 +29,28 @@ namespace Bonobo.Git.Server
         [Dependency]
         public IRepositoryRepository RepositoryRepository { get; set; }
 
-        public static string GetRepoPath(string url, string applicationPath)
+        public static string GetRepoPath(string url, string applicationPath, bool checkDirectory=true)
         {
             var gitStartIndex = url.IndexOf(".git");
             if (gitStartIndex >= 0)
             {
-                var repositoryPath = url.TrimStart(applicationPath.ToCharArray()).Substring(0, gitStartIndex + 4).Replace('/', '\\').TrimEnd('\\');
+                var repositoryPath = url.Substring(0, gitStartIndex + 4);
 
-                string path = Path.Combine(UserConfiguration.Current.Repositories, repositoryPath);
+                repositoryPath = applicationPath.Length ==1 ? repositoryPath.TrimStart(applicationPath.ToCharArray()) : repositoryPath.Replace(applicationPath, "");
 
-                if (Directory.Exists(path))
+                repositoryPath = repositoryPath.Replace('/', '\\').TrimEnd('\\');
+
+                if (checkDirectory)
                 {
-                    return repositoryPath;
+                    string path = Path.Combine(UserConfiguration.Current.Repositories, repositoryPath);
+
+                    if (Directory.Exists(path))
+                    {
+                        return repositoryPath;
+                    }
                 }
+                else
+                    return repositoryPath;
             }
 
             return null;
