@@ -16,6 +16,7 @@ using Ionic.Zip;
 using Microsoft.Practices.Unity;
 using MimeTypes;
 using System.Security.Principal;
+using Bonobo.Git.Server.App_Start;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -143,14 +144,26 @@ namespace Bonobo.Git.Server.Controllers
                 return RedirectToAction("Unauthorized", "Home");
             }
 
-            if (model != null && !String.IsNullOrEmpty(model.Name))
+            bool isAControllerPath = false;
+            if (model != null && !string.IsNullOrEmpty(model.Name))
             {
                 model.Name = Regex.Replace(model.Name, @"\s", "");
+                model.Name = model.Name.Replace('/', '\\');
+                var rootDir = model.Name.Split('\\').FirstOrDefault();
+                isAControllerPath = DoesControllerExistConstraint.DoesControllerExist(rootDir);
             }
 
-            if (model != null && String.IsNullOrEmpty(model.Name))
+            if (model != null && string.IsNullOrEmpty(model.Name))
             {
                 ModelState.AddModelError("Name", Resources.Repository_Create_NameFailure);
+            }
+            else if (model != null && !model.Name.Contains(".git"))
+            {
+                ModelState.AddModelError("Name", Resources.Repository_Create_NameExtensionFailure);
+            }
+            else if (model != null && isAControllerPath)
+            {
+                ModelState.AddModelError("Name", Resources.Repository_Create_IsAControllerNameFailure);
             }
             else if (ModelState.IsValid)
             {
@@ -242,11 +255,15 @@ namespace Bonobo.Git.Server.Controllers
                                        Request.ApplicationPath == "/" ? "" : Request.ApplicationPath
                                        );
 
-            model.GitUrl = String.Concat(serverAddress, model.Name, ".git");
+            var path = model.Name.Replace('\\', '/');
+
+            model.GitUrl = string.Concat(serverAddress, path);
             if (User.Identity.IsAuthenticated)
             {
+                var usermodel = MembershipService.GetUserModel(User.Username());
+
                 model.PersonalGitUrl =
-                    String.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(User.Username()) + "@"), model.Name, ".git");
+                    string.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(usermodel.Username) + "@"), path);
             }
         }
 
@@ -549,12 +566,12 @@ namespace Bonobo.Git.Server.Controllers
                 return RedirectToAction("Unauthorized", "Home");
             }
 
-            if (model != null && !String.IsNullOrEmpty(model.Name))
+            if (model != null && !string.IsNullOrEmpty(model.Name))
             {
                 model.Name = Regex.Replace(model.Name, @"\s", "");
             }
 
-            if (model != null && String.IsNullOrEmpty(model.Name))
+            if (model != null && string.IsNullOrEmpty(model.Name))
             {
                 ModelState.AddModelError("Name", Resources.Repository_Create_NameFailure);
             }

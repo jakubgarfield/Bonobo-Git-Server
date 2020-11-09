@@ -27,12 +27,12 @@ namespace Bonobo.Git.Server.Data.Update
                 // as this would make it impossible to start the server
                 return;
             }
-            IEnumerable<string> directories = Directory.EnumerateDirectories(UserConfiguration.Current.Repositories);
+            IEnumerable<string> directories = Directory.EnumerateDirectories(UserConfiguration.Current.Repositories, "*.git", SearchOption.AllDirectories);
             foreach (string directory in directories)
             {
-                string name = Path.GetFileName(directory);
+                string path = directory.Remove(0, UserConfiguration.Current.Repositories.Length + "\\".Length);
 
-                RepositoryModel repository = _repositoryRepository.GetRepository(name);
+                RepositoryModel repository = _repositoryRepository.GetRepository(path);
                 if (repository == null)
                 {
                     if (LibGit2Sharp.Repository.IsValid(directory))
@@ -40,7 +40,7 @@ namespace Bonobo.Git.Server.Data.Update
                         repository = new RepositoryModel();
                         repository.Id = Guid.NewGuid();
                         repository.Description = "Discovered in file system.";
-                        repository.Name = name;
+                        repository.Name = path;
                         repository.AnonymousAccess = false;
                         repository.Users = new UserModel[0];
                         repository.Teams = new TeamModel[0];

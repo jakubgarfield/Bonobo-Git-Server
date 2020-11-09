@@ -9,6 +9,9 @@ using Bonobo.Git.Server.Security;
 using Microsoft.Practices.Unity;
 using Bonobo.Git.Server.Helpers;
 using Serilog;
+using System.Linq;
+using System.IO;
+using Bonobo.Git.Server.Configuration;
 
 namespace Bonobo.Git.Server
 {
@@ -26,10 +29,22 @@ namespace Bonobo.Git.Server
         [Dependency]
         public IRepositoryRepository RepositoryRepository { get; set; }
 
-        public static string GetRepoPath(string path, string applicationPath)
+        public static string GetRepoPath(string url, string applicationPath)
         {
-            var repo = path.Replace(applicationPath, "").Replace("/","");
-            return repo.Substring(0, repo.IndexOf(".git"));
+            var gitStartIndex = url.IndexOf(".git");
+            if (gitStartIndex >= 0)
+            {
+                var repositoryPath = url.TrimStart(applicationPath.ToCharArray()).Substring(0, gitStartIndex + 4).Replace('/', '\\').TrimEnd('\\');
+
+                string path = Path.Combine(UserConfiguration.Current.Repositories, repositoryPath);
+
+                if (Directory.Exists(path))
+                {
+                    return repositoryPath;
+                }
+            }
+
+            return null;
         }
 
         public override void OnAuthorization(System.Web.Mvc.AuthorizationContext filterContext)
@@ -42,6 +57,7 @@ namespace Bonobo.Git.Server
             HttpContextBase httpContext = filterContext.HttpContext;
 
             string incomingRepoName = GetRepoPath(httpContext.Request.Path, httpContext.Request.ApplicationPath);
+
             string repoName = Repository.NormalizeRepositoryName(incomingRepoName, RepositoryRepository);
 
             // Add header to prevent redirection to login page even if we fail auth later (see IAuthenticationProvider.Configure)

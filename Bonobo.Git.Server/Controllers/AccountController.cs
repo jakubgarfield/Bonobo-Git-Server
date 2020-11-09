@@ -187,10 +187,10 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult CreateADUser()
         {
             var efms = MembershipService as EFMembershipService;
-            
+
             if ((!Request.IsAuthenticated) || efms == null)
             {
-                Log.Warning("CreateADUser: can't run IsAuth: {IsAuth}, MemServ {MemServ}", 
+                Log.Warning("CreateADUser: can't run IsAuth: {IsAuth}, MemServ {MemServ}",
                     Request.IsAuthenticated,
                     MembershipService.GetType());
                 return RedirectToAction("Unauthorized", "Home");
@@ -201,6 +201,13 @@ namespace Bonobo.Git.Server.Controllers
             if (adUser != null)
             {
                 var userId = adUser.Guid.GetValueOrDefault(Guid.NewGuid());
+
+                if (string.IsNullOrEmpty(adUser.EmailAddress))
+                {
+                    var username = credentials.Split('\\')[1];
+                    adUser.EmailAddress = $"{username}@{AuthenticationSettings.EmailDomain}";
+                }
+
                 if (MembershipService.CreateUser(credentials, Guid.NewGuid().ToString(), adUser.GivenName, adUser.Surname, adUser.EmailAddress, userId))
                 {
                     // 2 because we just added the user and there is the default admin user.
@@ -209,7 +216,7 @@ namespace Bonobo.Git.Server.Controllers
                         Log.Information("Making AD user {User} into an admin", credentials);
 
                         var id = MembershipService.GetUserModel(credentials).Id;
-                        RoleProvider.AddUserToRoles(id, new[] {Definitions.Roles.Administrator});
+                        RoleProvider.AddUserToRoles(id, new[] { Definitions.Roles.Administrator });
 
                         // Add the administrator role to the Identity/cookie
                         var Identity = (ClaimsIdentity)User.Identity;
