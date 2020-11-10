@@ -17,6 +17,7 @@ using Microsoft.Practices.Unity;
 using MimeTypes;
 using System.Security.Principal;
 using Bonobo.Git.Server.App_Start;
+using System.Net.NetworkInformation;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -247,10 +248,22 @@ namespace Bonobo.Git.Server.Controllers
         /// </summary>
         void SetGitUrls(RepositoryDetailModel model)
         {
+            var host = Request.Url.Host;
+
+            if (host == "localhost" && Request.ServerVariables["remote_host"] != "::1")
+            {
+                var networkInfo = IPGlobalProperties.GetIPGlobalProperties();
+
+                if(!string.IsNullOrEmpty(networkInfo.DomainName))
+                    host = $"{networkInfo.HostName}.{networkInfo.DomainName}";
+                else
+                    host = $"{networkInfo.HostName}";
+            }
+
             string serverAddress = System.Configuration.ConfigurationManager.AppSettings["GitServerPath"]
                                    ?? string.Format("{0}://{1}{2}{3}/",
                                        Request.Url.Scheme,
-                                       Request.Url.Host,
+                                       host,
                                        (Request.Url.IsDefaultPort ? "" : (":" + Request.Url.Port)),
                                        Request.ApplicationPath == "/" ? "" : Request.ApplicationPath
                                        );
