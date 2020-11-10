@@ -36,7 +36,7 @@ namespace Bonobo.Git.Server.App_Start
 
             try
             {
-                return cont != null && !string.IsNullOrEmpty(action) ? cont.GetMethod(action) != null : true;
+                return cont != null && (!string.IsNullOrEmpty(action) ? cont.GetMethod(action) != null : true);
             }
             catch(AmbiguousMatchException)
             {

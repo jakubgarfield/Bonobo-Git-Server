@@ -31,7 +31,7 @@ namespace Bonobo.Git.Server.Data.Update
             IEnumerable<string> directories = Directory.EnumerateDirectories(UserConfiguration.Current.Repositories, "*.git", SearchOption.AllDirectories);
             foreach (string directory in directories)
             {
-                var repoPath = directory.Remove(0, UserConfiguration.Current.Repositories.Length);
+                var repoPath = directory.Remove(0, UserConfiguration.Current.Repositories.Length).TrimStart('\\');
                 var rootDir = repoPath.Split('\\').FirstOrDefault();
 
                 if (DoesControllerExistConstraint.DoesControllerExist(rootDir))
