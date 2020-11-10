@@ -34,7 +34,14 @@ namespace Bonobo.Git.Server.App_Start
 
             var cont = Assembly.GetExecutingAssembly().GetType(controllerFullName);
 
-            return cont != null && !string.IsNullOrEmpty(action) ? cont.GetMethod(action) != null : true;
+            try
+            {
+                return cont != null && !string.IsNullOrEmpty(action) ? cont.GetMethod(action) != null : true;
+            }
+            catch(AmbiguousMatchException)
+            {
+                return true;
+            }
         }
     }
 }
