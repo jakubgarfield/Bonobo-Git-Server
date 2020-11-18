@@ -36,6 +36,9 @@ namespace Bonobo.Git.Server.Controllers
         [Dependency]
         public IAuthenticationProvider AuthenticationProvider { get; set; }
 
+        [Dependency]
+        public BonoboGitServerContext DbContext { get; set; }
+
         [WebAuthorize]
         public ActionResult Index(string sortGroup = null, string searchString = null)
         {
@@ -75,27 +78,27 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentUserIsInAdminList = model.PostedSelectedAdministrators != null && model.PostedSelectedAdministrators.Contains(User.Id());
-                if (currentUserIsInAdminList || User.IsInRole(Definitions.Roles.Administrator))
-                {
-                    var existingRepo = RepositoryRepository.GetRepository(model.Id);
-                    var repoModel = ConvertRepositoryDetailModel(model);
-                    MoveRepo(existingRepo, repoModel);
-                    try
-                    {
-                        RepositoryRepository.Update(repoModel);
-                    }
-                    catch (System.Data.Entity.Infrastructure.DbUpdateException)
-                    {
-                        MoveRepo(repoModel, existingRepo);
-                    }
-                    ViewBag.UpdateSuccess = true;
-                }
-                else
-                {
-                    ModelState.AddModelError("Administrators", Resources.Repository_Edit_CantRemoveYourself);
-                }
-            }
+				var currentUserIsInAdminList = model.PostedSelectedAdministrators != null && model.PostedSelectedAdministrators.Contains(User.Id());
+				if (currentUserIsInAdminList || User.IsInRole(Definitions.Roles.Administrator))
+				{
+					var existingRepo = RepositoryRepository.GetRepository(model.Id);
+					var repoModel = ConvertRepositoryDetailModel(model);
+					MoveRepo(existingRepo, repoModel);
+					try
+					{
+						RepositoryRepository.Update(repoModel);
+					}
+					catch (System.Data.Entity.Infrastructure.DbUpdateException)
+					{
+						MoveRepo(repoModel, existingRepo);
+					}
+					ViewBag.UpdateSuccess = true;
+				}
+				else
+				{
+					ModelState.AddModelError("Administrators", Resources.Repository_Edit_CantRemoveYourself);
+				}
+			}
             PopulateCheckboxListData(ref model);
             return View(model);
         }

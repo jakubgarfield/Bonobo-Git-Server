@@ -590,6 +590,8 @@
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\RepositoryGroupToggle.js" />
+    <Content Include="Scripts\search.js" />
+    <Content Include="Style\selectize.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
