@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Models;
+using Serilog;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -76,6 +77,7 @@ namespace Bonobo.Git.Server.Controllers
                     }
                     else
                     {
+                        Log.Error($"Is Path Rooted: {Path.IsPathRooted(model.RepositoryPath)} Path: {model.RepositoryPath}");
                         ModelState.AddModelError("RepositoryPath", Resources.Settings_RepositoryPathNotExists);
                     }
                 }

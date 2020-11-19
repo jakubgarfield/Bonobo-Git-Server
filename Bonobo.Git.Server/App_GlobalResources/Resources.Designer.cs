@@ -19,7 +19,7 @@ namespace Bonobo.Git.Server.App_GlobalResources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -1328,6 +1328,24 @@ namespace Bonobo.Git.Server.App_GlobalResources {
         public static string Repository_Create_Informations {
             get {
                 return ResourceManager.GetString("Repository_Create_Informations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid root repo folder. Choose a different folder name..
+        /// </summary>
+        public static string Repository_Create_IsAControllerNameFailure {
+            get {
+                return ResourceManager.GetString("Repository_Create_IsAControllerNameFailure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must have an extension of .git.
+        /// </summary>
+        public static string Repository_Create_NameExtensionFailure {
+            get {
+                return ResourceManager.GetString("Repository_Create_NameExtensionFailure", resourceCulture);
             }
         }
         

@@ -8,26 +8,6 @@ namespace Bonobo.Git.Server.App_Start
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
-            routes.MapRoute("SecureInfoRefs",
-                            "{repositoryName}.git/info/refs",
-                            new { controller = "Git", action = "SecureGetInfoRefs" },
-                            new { method = new HttpMethodConstraint("GET") });
-
-            routes.MapRoute("SecureUploadPack",
-                            "{repositoryName}.git/git-upload-pack",
-                            new { controller = "Git", action = "SecureUploadPack" },
-                            new { method = new HttpMethodConstraint("POST") });
-
-            routes.MapRoute("SecureReceivePack",
-                            "{repositoryName}.git/git-receive-pack",
-                            new { controller = "Git", action = "SecureReceivePack" },
-                            new { method = new HttpMethodConstraint("POST") });
-
-            routes.MapRoute("GitBaseUrl",
-                            "{repositoryName}.git",
-                            new { controller = "Git", action = "GitUrl" },
-                            new { method = new HttpMethodConstraint("GET") });
-
             routes.MapRoute("IndexRoute",
                             "{controller}/Index/",
                             new { action = "Index" });
@@ -90,11 +70,22 @@ namespace Bonobo.Git.Server.App_Start
 
             routes.MapRoute("RepoCommits",
                             "Repository/Commits/{id}",
-                            new { controller = "Repository", action = "Commits", id = string.Empty});
+                            new { controller = "Repository", action = "Commits", id = string.Empty });
 
             routes.MapRoute("Default",
                             "{controller}/{action}/{id}",
-                            new { controller = "Home", action = "Index", id = String.Empty });
+                            new { controller = "Home", action = "Index", id = String.Empty },
+                            new { action = new DoesControllerExistConstraint() }); //Route constraints
+
+            routes.MapRoute("GitBaseUrl",
+                            "{repositoryName}",
+                            new { controller = "Git", action = "GitUrl" },
+                            new { method = new HttpMethodConstraint("GET") });
+
+            routes.MapRoute(
+                "GitRepoRouting",
+                "{*url}",
+                new { controller = "Git", action = "Index" });
 
             routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
 

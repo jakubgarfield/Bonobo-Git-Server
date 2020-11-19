@@ -16,6 +16,8 @@ using Ionic.Zip;
 using Microsoft.Practices.Unity;
 using MimeTypes;
 using System.Security.Principal;
+using Bonobo.Git.Server.App_Start;
+using System.Net.NetworkInformation;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -143,14 +145,26 @@ namespace Bonobo.Git.Server.Controllers
                 return RedirectToAction("Unauthorized", "Home");
             }
 
-            if (model != null && !String.IsNullOrEmpty(model.Name))
+            bool isAControllerPath = false;
+            if (model != null && !string.IsNullOrEmpty(model.Name))
             {
                 model.Name = Regex.Replace(model.Name, @"\s", "");
+                model.Name = model.Name.Replace('/', '\\');
+                var rootDir = model.Name.Split('\\').FirstOrDefault();
+                isAControllerPath = DoesControllerExistConstraint.DoesControllerExist(rootDir);
             }
 
-            if (model != null && String.IsNullOrEmpty(model.Name))
+            if (model != null && string.IsNullOrEmpty(model.Name))
             {
                 ModelState.AddModelError("Name", Resources.Repository_Create_NameFailure);
+            }
+            else if (model != null && !model.Name.Contains(".git"))
+            {
+                ModelState.AddModelError("Name", Resources.Repository_Create_NameExtensionFailure);
+            }
+            else if (model != null && isAControllerPath)
+            {
+                ModelState.AddModelError("Name", Resources.Repository_Create_IsAControllerNameFailure);
             }
             else if (ModelState.IsValid)
             {
@@ -234,19 +248,35 @@ namespace Bonobo.Git.Server.Controllers
         /// </summary>
         void SetGitUrls(RepositoryDetailModel model)
         {
+            var host = Request.Url.Host;
+
+            if (host == "localhost" && Request.ServerVariables["remote_host"] != "::1")
+            {
+                var networkInfo = IPGlobalProperties.GetIPGlobalProperties();
+
+                if(!string.IsNullOrEmpty(networkInfo.DomainName))
+                    host = $"{networkInfo.HostName}.{networkInfo.DomainName}";
+                else
+                    host = $"{networkInfo.HostName}";
+            }
+
             string serverAddress = System.Configuration.ConfigurationManager.AppSettings["GitServerPath"]
                                    ?? string.Format("{0}://{1}{2}{3}/",
                                        Request.Url.Scheme,
-                                       Request.Url.Host,
+                                       host,
                                        (Request.Url.IsDefaultPort ? "" : (":" + Request.Url.Port)),
                                        Request.ApplicationPath == "/" ? "" : Request.ApplicationPath
                                        );
 
-            model.GitUrl = String.Concat(serverAddress, model.Name, ".git");
+            var path = model.Name.Replace('\\', '/');
+
+            model.GitUrl = string.Concat(serverAddress, path);
             if (User.Identity.IsAuthenticated)
             {
+                var usermodel = MembershipService.GetUserModel(User.Username());
+
                 model.PersonalGitUrl =
-                    String.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(User.Username()) + "@"), model.Name, ".git");
+                    string.Concat(serverAddress.Replace("://", "://" + Uri.EscapeDataString(usermodel.Username) + "@"), path);
             }
         }
 
@@ -549,12 +579,12 @@ namespace Bonobo.Git.Server.Controllers
                 return RedirectToAction("Unauthorized", "Home");
             }
 
-            if (model != null && !String.IsNullOrEmpty(model.Name))
+            if (model != null && !string.IsNullOrEmpty(model.Name))
             {
                 model.Name = Regex.Replace(model.Name, @"\s", "");
             }
 
-            if (model != null && String.IsNullOrEmpty(model.Name))
+            if (model != null && string.IsNullOrEmpty(model.Name))
             {
                 ModelState.AddModelError("Name", Resources.Repository_Create_NameFailure);
             }

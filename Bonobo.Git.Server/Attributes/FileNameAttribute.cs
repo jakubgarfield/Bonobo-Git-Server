@@ -9,7 +9,7 @@ namespace Bonobo.Git.Server
         {
             if (value != null)
             {
-                return value.ToString().IndexOfAny(Path.GetInvalidFileNameChars()) == -1;
+                return value.ToString().IndexOfAny(Path.GetInvalidPathChars()) == -1;
             }
 
             return base.IsValid(null);

@@ -957,4 +957,10 @@ The regular C# string formatting rules apply: To get {} in your link you need to
   <data name="Settings_Global_SiteCssUrl_Hint" xml:space="preserve">
     <value>URL to a CSS file to use for the site.  Site-relative (~) paths are supported.</value>
   </data>
+  <data name="Repository_Create_NameExtensionFailure" xml:space="preserve">
+    <value>Must have an extension of .git</value>
+  </data>
+  <data name="Repository_Create_IsAControllerNameFailure" xml:space="preserve">
+    <value>Invalid root repo folder. Choose a different folder name.</value>
+  </data>
 </root>

@@ -31,7 +31,43 @@ namespace Bonobo.Git.Server.Controllers
         [Dependency]
         public IGitService GitService { get; set; }
 
-        public ActionResult SecureGetInfoRefs(String repositoryName, String service)
+        public ActionResult Index(string url)
+        {
+            if (url != null)
+            {
+                var gitStartIndex = url.IndexOf(".git");
+                if (gitStartIndex >= 0)
+                {
+                    var repositoryPath = url.Substring(0, gitStartIndex + 4).Replace('/', '\\');
+
+                    string path = Path.Combine(UserConfiguration.Current.Repositories, repositoryPath);
+
+                    if (Directory.Exists(path))
+                    {
+                        return RedirectGitQuery(url, repositoryPath);
+                    }
+                }
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        private ActionResult RedirectGitQuery(string url, string repositoryPath)
+        {
+            var queryString = Request.QueryString;
+
+            if (url.EndsWith("/info/refs"))
+                return SecureGetInfoRefs(repositoryPath, queryString["service"]);
+            else if (url.EndsWith("/git-upload-pack"))
+                return SecureUploadPack(repositoryPath);
+            else if (url.EndsWith("/git-receive-pack"))
+                return SecureReceivePack(repositoryPath);
+            else
+                return new HttpNotFoundResult();
+        }
+
+        [HttpGet]
+        private ActionResult SecureGetInfoRefs(String repositoryName, String service)
         {
             bool isPush = String.Equals("git-receive-pack", service, StringComparison.OrdinalIgnoreCase);
 
@@ -72,7 +108,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        public ActionResult SecureUploadPack(String repositoryName)
+        private ActionResult SecureUploadPack(String repositoryName)
         {
             if (!RepositoryIsValid(repositoryName))
             {
@@ -90,7 +126,7 @@ namespace Bonobo.Git.Server.Controllers
         }
 
         [HttpPost]
-        public ActionResult SecureReceivePack(String repositoryName)
+        private ActionResult SecureReceivePack(String repositoryName)
         {
             if (!RepositoryIsValid(repositoryName))
             {

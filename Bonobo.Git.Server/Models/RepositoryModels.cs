@@ -50,7 +50,7 @@ namespace Bonobo.Git.Server.Models
             {
                 // Check for an exact match, not just a substring hit - based on RegularExpressionAttribute
                 Match match = Regex.Match(Name, NameValidityRegex);
-                return match.Success && match.Index == 0 && match.Length == Name.Length;
+                return match.Success;
             }
         }
 
@@ -80,7 +80,7 @@ namespace Bonobo.Git.Server.Models
             }
         }
 
-        public const string NameValidityRegex = @"([\w\.-])*([\w])$";
+        public const string NameValidityRegex = @".*([\w\.-])*([\w])$";
     }
 
     public class RepositoryDetailModel
