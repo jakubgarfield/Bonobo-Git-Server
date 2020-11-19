@@ -108,9 +108,9 @@ else
 				</div>
 				<div class="pure-control-group">
 					@Html.LabelFor(m => m.Users)
-					<span>
+					<span class="multi-select">
 						@*@Html.CheckBoxListFor(m => m.PostedSelectedUsers, m => m.AllUsers, m => m.Id, m => m.DisplayName, m => m.Users, Position.Vertical)*@
-						<select id="select-users" class="contacts selectized" placeholder="Pick some people..." multiple="multiple" tabindex="-1" style="display: none;" name="PostedSelectedUsers">
+						<select id="select-users" class="contacts selectized" placeholder="Pick some people to be contributors..." multiple="multiple" tabindex="-1" style="display: none;" name="PostedSelectedUsers">
 							@foreach (var user in Model.AllUsers)
 							{
 								<option value="@user.Id" data-email="@user.Email" data-name="@user.DisplayName" @(Model.Users.Any(n => n.Id == user.Id) ? "selected" : string.Empty)></option>
@@ -122,23 +122,29 @@ else
 
 				<div class="pure-control-group">
 					@Html.LabelFor(m => m.Administrators)
-					<span>
+					<span class="multi-select">
 						@*@Html.CheckBoxListFor(m => m.PostedSelectedAdministrators, m => m.AllAdministrators, m => m.Id, m => m.DisplayName, m => m.Administrators, Position.Vertical)*@
-						<select id="select-admins" class="contacts selectized" placeholder="Pick some people..." multiple="multiple" tabindex="-1" style="display: none;" name="PostedSelectedAdministrators">
+						<select id="select-admins" class="contacts selectized" placeholder="Pick some people to be admins..." multiple="multiple" tabindex="-1" style="display: none;" name="PostedSelectedAdministrators">
 							@foreach (var administrators in Model.AllAdministrators)
 							{
 								<option value="@administrators.Id" data-email="@administrators.Email" data-name="@administrators.DisplayName" @(Model.Administrators.Any(n => n.Id == administrators.Id) ? "selected" : string.Empty)></option>
 							}
 						</select>
-						<i class="fa fa-info-circle" title="@Resources.Repository_AdministratorsHint"></i>
 					</span>
+					<i class="fa fa-info-circle" title="@Resources.Repository_AdministratorsHint"></i>
 					@Html.ValidationMessageFor(m => m.Administrators)
 				</div>
 
 				<div class="pure-control-group checkboxlist">
 					@Html.LabelFor(m => m.Teams)
 					<span>
-						@Html.CheckBoxListFor(m => m.PostedSelectedTeams, m => m.AllTeams, mm => mm.Id, mm => mm.DisplayName, mm => mm.Teams, Position.Vertical)
+						@*@Html.CheckBoxListFor(m => m.PostedSelectedTeams, m => m.AllTeams, mm => mm.Id, mm => mm.DisplayName, mm => mm.Teams, Position.Vertical)*@
+						<select id="select-teams" class="contacts selectized" placeholder="Pick some teams..." multiple="multiple" tabindex="-1" style="display: none;" name="PostedSelectedTeams">
+							@foreach (var teams in Model.AllTeams)
+							{
+								<option value="@teams.Id" data-name="@teams.DisplayName" @(Model.Teams.Any(n => n.Id == teams.Id) ? "selected" : string.Empty)></option>
+							}
+						</select>
 					</span>
 					<i class="fa fa-info-circle" title="@Resources.Repository_TeamsHint"></i>
 				</div>

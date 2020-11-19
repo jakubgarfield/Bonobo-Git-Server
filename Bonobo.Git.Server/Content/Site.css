@@ -37,8 +37,7 @@ pre code { font-family: Consolas, monospace; }
 .pure-form.detail label { color: silver; }
 textarea.medium, input.medium { width: 30em; }
 textarea.large, input.large { width: 40em;height: 17em; }
-div.pure-control-group.checkboxlist>span { display: inline-block; }
-
+div.pure-control-group.checkboxlist>span { display: inline-block;}
 
 /*table.repositories a.detail { padding-right: 10px }*/
 table.repositories button.copy-to-clip-button { margin-left: 0px; border-radius: 5px; }
