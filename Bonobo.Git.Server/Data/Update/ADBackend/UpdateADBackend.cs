@@ -80,7 +80,7 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
                 try
                 {
                     var x = JsonConvert.DeserializeObject<T>(File.ReadAllText(jsonfile.FullName));
-                    if (x.Id == Guid.Empty)
+                    if (x == null || x.Id == Guid.Empty)
                     {
                         // No GUID - we need to convert
                         return true;
