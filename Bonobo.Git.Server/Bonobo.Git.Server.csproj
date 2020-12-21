@@ -276,6 +276,8 @@
     <Compile Include="Configuration\AuthenticationSettings.cs" />
     <Compile Include="Configuration\DiagnosticReporter.cs" />
     <Compile Include="Configuration\FederationSettings.cs" />
+    <Compile Include="Configuration\HostingEnvironmentPathResolver.cs" />
+    <Compile Include="Configuration\IPathResolver.cs" />
     <Compile Include="Controllers\ValidationController.cs" />
     <Compile Include="Data\ADBackend.cs" />
     <Compile Include="Data\ADBackendStore.cs" />
