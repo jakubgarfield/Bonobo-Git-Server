@@ -27,7 +27,7 @@ namespace Bonobo.Git.Server.Test.Unit
             // post Delete
 
             [TestMethod]
-            public void Get_Edit__Cannot_Handle_Null_Parameters()
+            public void Get_Edit_Executed_With_Null_Parameters__Throws_NullReferenceException()
             {
                 try
                 {

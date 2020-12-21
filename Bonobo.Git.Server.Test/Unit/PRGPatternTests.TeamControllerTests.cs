@@ -157,6 +157,11 @@ namespace Bonobo.Git.Server.Test.Unit
                 Assert.IsNotNull(viewResult.Model);
             }
 
+            // get Create
+            // post Create
+            // get Delete
+            // post Delete
+
             private void SetupMembershipServiceMockIntoSUT()
             {
                 membershipServiceMock = new Mock<IMembershipService>();
@@ -168,11 +173,6 @@ namespace Bonobo.Git.Server.Test.Unit
                 sut.ControllerContext = CreateControllerContext();
                 SutAs<TeamController>().TeamRepository = new Mock<ITeamRepository>().Object;
             }
-
-            // get Create
-            // post Create
-            // get Delete
-            // post Delete
         }
     }
 }
