@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Bonobo.Git.Server.Test.UnitTests
+namespace Bonobo.Git.Server.Test.Unit
 {
     [TestClass]
     public class UserExtensionsTests
