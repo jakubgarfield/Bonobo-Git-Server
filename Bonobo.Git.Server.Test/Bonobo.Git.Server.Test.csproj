@@ -159,16 +159,16 @@
     <Compile Include="MembershipTests\MembershipServiceTestBase.cs" />
     <Compile Include="MembershipTests\EFTests\SqliteTestConnection.cs" />
     <Compile Include="MembershipTests\EFTests\SqlServerTestConnection.cs" />
-    <Compile Include="UnitTests\CustomHtmlHelperTest.cs" />
-    <Compile Include="UnitTests\DatabaseUpdateTestsSqlite.cs" />
-    <Compile Include="UnitTests\DatabaseUpdateTestsSqlServer.cs" />
-    <Compile Include="UnitTests\PathEncoderTest.cs" />
+    <Compile Include="Unit\CustomHtmlHelperTest.cs" />
+    <Compile Include="Unit\DatabaseUpdateTestsSqlite.cs" />
+    <Compile Include="Unit\DatabaseUpdateTestsSqlServer.cs" />
+    <Compile Include="Unit\PathEncoderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestCategories.cs" />
-    <Compile Include="UnitTests\PasswordServiceTest.cs" />
-    <Compile Include="UnitTests\GitAuthorizeAttributeTest.cs" />
-    <Compile Include="UnitTests\UserExtensionsTests.cs" />
-    <Compile Include="UnitTests\UserModelTest.cs" />
+    <Compile Include="Unit\PasswordServiceTest.cs" />
+    <Compile Include="Unit\GitAuthorizeAttributeTest.cs" />
+    <Compile Include="Unit\UserExtensionsTests.cs" />
+    <Compile Include="Unit\UserModelTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bonobo.Git.Server\Bonobo.Git.Server.csproj">

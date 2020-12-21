@@ -4,7 +4,7 @@ using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bonobo.Git.Server.Test.UnitTests
+namespace Bonobo.Git.Server.Test.Unit
 {
     [TestClass]
     public class CustomHtmlHelperTest
