@@ -1,7 +1,4 @@
-﻿using System.Configuration;
-using System.IO;
-using System.Web;
-using System.Web.Hosting;
+﻿using System.IO;
 using System.Xml.Serialization;
 
 namespace Bonobo.Git.Server.Configuration
@@ -9,11 +6,11 @@ namespace Bonobo.Git.Server.Configuration
     public abstract class ConfigurationEntry<Entry> where Entry : ConfigurationEntry<Entry>, new()
     {
         private static Entry _current = null;
+        private static IPathResolver pathResolver = new HostingEnvironmentPathResolver();
         private static readonly object _sync = new object();
         private static readonly XmlSerializer _serializer = new XmlSerializer(typeof(Entry));
-        private static readonly string _configPath = Path.IsPathRooted(ConfigurationManager.AppSettings["UserConfiguration"])
-                                                    ? ConfigurationManager.AppSettings["UserConfiguration"]
-                                                    : HostingEnvironment.MapPath(ConfigurationManager.AppSettings["UserConfiguration"]);
+        public static IPathResolver PathResolver { get => pathResolver; set => pathResolver = value; }
+        private static string ConfigPath { get => PathResolver.ResolveWithConfiguration("UserConfiguration"); }
 
 
         public static Entry Current { get { return _current ?? Load(); } }
@@ -27,7 +24,7 @@ namespace Bonobo.Git.Server.Configuration
                 {
                     try
                     {
-                        using (var stream = File.Open(_configPath, FileMode.Open))
+                        using (var stream = File.Open(ConfigPath, FileMode.Open))
                         {
                             _current = _serializer.Deserialize(stream) as Entry;
                         }
@@ -48,7 +45,7 @@ namespace Bonobo.Git.Server.Configuration
             {
                 if (_current != null)
                 {
-                    using (var stream = File.Open(_configPath, FileMode.Create))
+                    using (var stream = File.Open(ConfigPath, FileMode.Create))
                     {
                         _serializer.Serialize(stream, _current);
                     }
