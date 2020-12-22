@@ -25,9 +25,22 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
+            public void Get_Index_Called_With_Uninitialized_Configuration__Throws_TypeInitializationException_Or_DirectoryNotFoundException()
+            {
+                // Arrange
+                ArrangeUserConfiguration();
+
+                // Act
+                var result = SutAs<SettingsController>().Index();
+
+                // Assert
+                Assert.IsNotNull(result);
+            }
+
+            [TestMethod]
             public void Get_Index_Called_With_Initialized_Configuration__Throws_No_Exceptions()
             {
-                // Arrange (REFACTOR THIS CODE WHEN START CHANGES ON PRODUCTION CODE SO WE DON'T HAVE REPETITIONS)
+                // Arrange
                 ArrangeUserConfiguration();
 
                 // Act

@@ -94,9 +94,12 @@ namespace Bonobo.Git.Server.Test.Unit
 
         private static void ArrangeUserConfiguration()
         {
-            var configFileName = Path.Combine(Path.GetTempFileName(), "BonoboTestConfig.xml");
-            ConfigurationManager.AppSettings["UserConfiguration"] = configFileName;
-            UserConfiguration.InitialiseForTest();
+            Mock<IPathResolver> pathResolverMock = new Mock<IPathResolver>();
+            pathResolverMock.Setup(p => p.Resolve(It.IsAny<string>()))
+                            .Returns(".");
+            pathResolverMock.Setup(p => p.ResolveWithConfiguration(It.IsAny<string>()))
+                            .Returns("test.config");
+            UserConfiguration.PathResolver = pathResolverMock.Object;
         }
 
         private static void ReinitializeStaticClass(Type type)
