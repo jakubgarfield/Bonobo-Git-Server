@@ -16,6 +16,7 @@ namespace Bonobo.Git.Server.Test.Unit
         public class TeamControllerTests : PRGPatternTests
         {
             private Mock<IMembershipService> membershipServiceMock;
+            private Mock<ITeamRepository> teamRepositoryMock;
 
             [TestInitialize]
             public void TestInitialize()
@@ -131,21 +132,18 @@ namespace Bonobo.Git.Server.Test.Unit
             {
                 // Arrange
                 ArrangeControllerContextAndTeamRepository();
+                SetupMembershipServiceMockIntoSUT();
                 Guid requestedGuid = Guid.NewGuid();
 
                 TeamEditModel model = new TeamEditModel { Id = requestedGuid };
-                Mock<ITeamRepository> teamRepositoryMock = new Mock<ITeamRepository>();
                 teamRepositoryMock.Setup(t => t.GetTeam(requestedGuid))
                                   .Returns(new TeamModel
                                   {
                                       Id = requestedGuid,
                                       Members = new UserModel[0]
                                   });
-                SetupMembershipServiceMockIntoSUT();
                 membershipServiceMock.Setup(m => m.GetAllUsers())
                                      .Returns(new List<UserModel>());
-                sut.ControllerContext = CreateControllerContext();
-                SutAs<TeamController>().TeamRepository = teamRepositoryMock.Object;
 
                 // Act
                 var result = SutAs<TeamController>().Edit(model);
@@ -171,7 +169,8 @@ namespace Bonobo.Git.Server.Test.Unit
             private void ArrangeControllerContextAndTeamRepository()
             {
                 sut.ControllerContext = CreateControllerContext();
-                SutAs<TeamController>().TeamRepository = new Mock<ITeamRepository>().Object;
+                teamRepositoryMock = new Mock<ITeamRepository>();
+                SutAs<TeamController>().TeamRepository = teamRepositoryMock.Object;
             }
         }
     }
