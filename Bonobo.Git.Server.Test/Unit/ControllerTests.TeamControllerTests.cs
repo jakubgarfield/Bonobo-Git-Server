@@ -1,23 +1,16 @@
 ﻿using Bonobo.Git.Server.Controllers;
-using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using System;
-using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace Bonobo.Git.Server.Test.Unit
 {
-    public partial class PRGPatternTests
+    public partial class ControllerTests
     {
         [TestClass]
-        public class TeamControllerTests : PRGPatternTests
+        public class TeamControllerTests : ControllerWithTeamRepositoryAndMembershipServiceTests
         {
-            private Mock<IMembershipService> membershipServiceMock;
-            private Mock<ITeamRepository> teamRepositoryMock;
-
             [TestInitialize]
             public void TestInitialize()
             {
@@ -43,13 +36,15 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Get_Edit_Executed_With_ControllerContext_Setup__Returns_ViewResult()
+            public void Get_Edit_Executed_With_ControllerContext_Setup__Returns_ViewResult_With_Null_Model()
             {
                 // Arrange
-                ArrangeControllerContextAndTeamRepository();
+                SetupControllerContextAndTeamRepository();
+                TeamController teamController = SutAs<TeamController>();
+                teamController.TeamRepository = teamRepositoryMock.Object;
 
                 // Act
-                var result = SutAs<TeamController>().Edit(Guid.Empty);
+                var result = teamController.Edit(Guid.Empty);
 
                 // Assert
                 Assert.IsNotNull(result);
@@ -96,7 +91,7 @@ namespace Bonobo.Git.Server.Test.Unit
             [TestMethod]
             public void Post_Edit_Executed_With_Null_Model_And_With_ControllerContext_Setup__Throws_NullReferenceException()
             {
-                ArrangeControllerContextAndTeamRepository();
+                SetupControllerContextAndTeamRepository();
 
                 try
                 {
@@ -113,12 +108,15 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Post_Edit_Executed_With_NonExistent_Model_And_With_ControllerContext_Setup__Returns_ViewResult()
             {
                 // Arrange
-                ArrangeControllerContextAndTeamRepository();
+                SetupControllerContextAndTeamRepository();
+                TeamController teamController = SutAs<TeamController>();
+                teamController.TeamRepository = teamRepositoryMock.Object;
+
                 TeamEditModel model = new TeamEditModel();
                 BindModelToController(model);
 
                 // Act
-                var result = SutAs<TeamController>().Edit(model);
+                var result = teamController.Edit(model);
 
                 // Assert
                 Assert.IsNotNull(result);
@@ -131,22 +129,19 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Post_Edit_Executed_With_Existent_Model_And_With_ControllerContext_Setup__Returns_ViewResult_With_Model()
             {
                 // Arrange
-                ArrangeControllerContextAndTeamRepository();
                 SetupMembershipServiceMockIntoSUT();
+                SetupMembershipServiceMockToReturnAnEmptyListOfUsers();
+                SetupControllerContextAndTeamRepository();
+                TeamController teamController = SutAs<TeamController>();
+                teamController.TeamRepository = teamRepositoryMock.Object;
+
                 Guid requestedGuid = Guid.NewGuid();
 
                 TeamEditModel model = new TeamEditModel { Id = requestedGuid };
-                teamRepositoryMock.Setup(t => t.GetTeam(requestedGuid))
-                                  .Returns(new TeamModel
-                                  {
-                                      Id = requestedGuid,
-                                      Members = new UserModel[0]
-                                  });
-                membershipServiceMock.Setup(m => m.GetAllUsers())
-                                     .Returns(new List<UserModel>());
+                SetupTeamRepositoryMockToReturnASpecificTeamWhenCallingGetTeamMethod(requestedGuid);
 
                 // Act
-                var result = SutAs<TeamController>().Edit(model);
+                var result = teamController.Edit(model);
 
                 // Assert
                 Assert.IsNotNull(result);
@@ -159,19 +154,6 @@ namespace Bonobo.Git.Server.Test.Unit
             // post Create
             // get Delete
             // post Delete
-
-            private void SetupMembershipServiceMockIntoSUT()
-            {
-                membershipServiceMock = new Mock<IMembershipService>();
-                SutAs<TeamController>().MembershipService = membershipServiceMock.Object;
-            }
-
-            private void ArrangeControllerContextAndTeamRepository()
-            {
-                sut.ControllerContext = CreateControllerContext();
-                teamRepositoryMock = new Mock<ITeamRepository>();
-                SutAs<TeamController>().TeamRepository = teamRepositoryMock.Object;
-            }
         }
     }
 }

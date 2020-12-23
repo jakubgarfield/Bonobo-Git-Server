@@ -172,15 +172,16 @@
     <Compile Include="Unit\PathEncoderTest.cs" />
     <Compile Include="Unit\PasswordServiceTest.cs" />
     <Compile Include="Unit\GitAuthorizeAttributeTest.cs" />
+    <Compile Include="Unit\ControllerWithTeamRepositoryAndMembershipServiceTests.cs" />
     <Compile Include="Unit\UserConfigurationTests.cs" />
     <Compile Include="Unit\UserExtensionsTests.cs" />
     <Compile Include="Unit\UserModelTest.cs" />
-    <Compile Include="Unit\PRGPatternTests.cs" />
-    <Compile Include="Unit\PRGPatternTests.AccountControllerTests.cs" />
-    <Compile Include="Unit\PRGPatternTests.HomeControllerTests.cs" />
-    <Compile Include="Unit\PRGPatternTests.SettingsControllerTests.cs" />
-    <Compile Include="Unit\PRGPatternTests.TeamControllerTests.cs" />
-    <Compile Include="Unit\PRGPatternTests.RepositoryControllerTests.cs" />
+    <Compile Include="Unit\ControllerTests.cs" />
+    <Compile Include="Unit\ControllerTests.AccountControllerTests.cs" />
+    <Compile Include="Unit\ControllerTests.HomeControllerTests.cs" />
+    <Compile Include="Unit\ControllerTests.SettingsControllerTests.cs" />
+    <Compile Include="Unit\ControllerTests.TeamControllerTests.cs" />
+    <Compile Include="Unit\ControllerTests.RepositoryControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestCategories.cs" />
   </ItemGroup>

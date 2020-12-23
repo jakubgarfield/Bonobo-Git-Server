@@ -10,10 +10,10 @@ using System.Web.Mvc;
 
 namespace Bonobo.Git.Server.Test.Unit
 {
-    public partial class PRGPatternTests
+    public partial class ControllerTests
     {
         [TestClass]
-        public class SettingsControllerTests : PRGPatternTests
+        public class SettingsControllerTests : ControllerTests
         {
             [TestInitialize]
             public void TestInitialize()

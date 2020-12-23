@@ -4,9 +4,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Configuration;
 using System.Globalization;
-using System.IO;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Web;
@@ -14,7 +12,7 @@ using System.Web.Mvc;
 
 namespace Bonobo.Git.Server.Test.Unit
 {
-    public partial class PRGPatternTests
+    public partial class ControllerTests
     {
         private T SutAs<T>() where T : Controller => sut as T;
 
@@ -57,7 +55,7 @@ namespace Bonobo.Git.Server.Test.Unit
             return CreateControllerContextFromPrincipal(new Mock<IPrincipal>().Object);
         }
 
-        private ControllerContext CreateControllerContextFromPrincipal(IPrincipal user)
+        protected ControllerContext CreateControllerContextFromPrincipal(IPrincipal user)
         {
             httpContextMock = new Mock<HttpContextBase>();
             httpContextMock.SetupGet(ctx => ctx.User).Returns(user);
@@ -75,14 +73,19 @@ namespace Bonobo.Git.Server.Test.Unit
 
         private static void AssertRedirectToHomeUnauthorized(ActionResult result)
         {
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
-
-            var redirectToRouteResult = result as RedirectToRouteResult;
+            RedirectToRouteResult redirectToRouteResult = AssertAndGetRedirectToRouteResult(result);
 
             Assert.IsNotNull(redirectToRouteResult);
             Assert.AreEqual("Home", redirectToRouteResult.RouteValues["controller"]);
             Assert.AreEqual("Unauthorized", redirectToRouteResult.RouteValues["action"]);
+        }
+
+        private static RedirectToRouteResult AssertAndGetRedirectToRouteResult(ActionResult result)
+        {
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
+
+            return result as RedirectToRouteResult;
         }
 
         private void SetupCookiesCollectionToHttpResponse()

@@ -9,10 +9,10 @@ using System.Collections.Generic;
 
 namespace Bonobo.Git.Server.Test.Unit
 {
-    public partial class PRGPatternTests
+    public partial class ControllerTests
     {
         [TestClass]
-        public class RepositoryControllerTests : PRGPatternTests
+        public class RepositoryControllerTests : ControllerTests
         {
             [TestInitialize]
             public void TestInitialize()
