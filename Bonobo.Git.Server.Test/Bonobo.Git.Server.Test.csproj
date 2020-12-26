@@ -172,7 +172,7 @@
     <Compile Include="Unit\PathEncoderTest.cs" />
     <Compile Include="Unit\PasswordServiceTest.cs" />
     <Compile Include="Unit\GitAuthorizeAttributeTest.cs" />
-    <Compile Include="Unit\ControllerWithTeamRepositoryAndMembershipServiceTests.cs" />
+    <Compile Include="Unit\ControllerDependendencyBuilders.cs" />
     <Compile Include="Unit\UserConfigurationTests.cs" />
     <Compile Include="Unit\UserExtensionsTests.cs" />
     <Compile Include="Unit\UserModelTest.cs" />

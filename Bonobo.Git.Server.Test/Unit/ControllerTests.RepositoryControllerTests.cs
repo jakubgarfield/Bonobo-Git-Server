@@ -12,7 +12,7 @@ namespace Bonobo.Git.Server.Test.Unit
     public partial class ControllerTests
     {
         [TestClass]
-        public class RepositoryControllerTests : ControllerTests
+        public class RepositoryControllerTests : ControllerDependendencyBuilders
         {
             [TestInitialize]
             public void TestInitialize()
