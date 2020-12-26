@@ -129,11 +129,12 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Post_Edit_Executed_With_Existent_Model_And_With_ControllerContext_Setup__Returns_ViewResult_With_Model()
             {
                 // Arrange
-                SetupMembershipServiceMockIntoSUT();
+                SetupMembershipServiceMock();
                 SetupMembershipServiceMockToReturnAnEmptyListOfUsers();
                 SetupControllerContextAndTeamRepository();
                 TeamController teamController = SutAs<TeamController>();
                 teamController.TeamRepository = teamRepositoryMock.Object;
+                teamController.MembershipService = membershipServiceMock.Object;
 
                 Guid requestedGuid = Guid.NewGuid();
 

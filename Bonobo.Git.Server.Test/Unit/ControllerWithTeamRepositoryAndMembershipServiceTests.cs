@@ -25,10 +25,9 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             // MembershipService Mock
-            protected void SetupMembershipServiceMockIntoSUT()
+            protected void SetupMembershipServiceMock()
             {
                 membershipServiceMock = new Mock<IMembershipService>();
-                SutAs<TeamController>().MembershipService = membershipServiceMock.Object;
             }
 
             protected void SetupMembershipServiceMockToReturnAnEmptyListOfUsers()
