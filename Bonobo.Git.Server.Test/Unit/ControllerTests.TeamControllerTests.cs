@@ -12,8 +12,6 @@ namespace Bonobo.Git.Server.Test.Unit
         [TestClass]
         public class TeamControllerTests : ControllerDependendencyBuilders
         {
-            private static Mock<IRepositoryRepository> repositoryRepositoryMock;
-
             [TestInitialize]
             public void TestInitialize()
             {
@@ -458,9 +456,9 @@ namespace Bonobo.Git.Server.Test.Unit
                 // Arrange
                 Guid requestedId = Guid.NewGuid();
                 TeamController teamController = SutAs<TeamController>();
-                SetupRepositoryRepositoryToReturnAnEmptyListForASpecificId(requestedId);
                 var teamRepositoryMock = SetupControllerContextAndTeamRepository();
                 var membershipServiceMock = SetupMembershipServiceMock();
+                var repositoryRepositoryMock = SetupRepositoryRepositoryToReturnAnEmptyListForASpecificId(requestedId);
                 SetupTeamRepositoryMockToReturnASpecificTeamWhenCallingGetTeamMethod(teamRepositoryMock, requestedId);
                 teamController.TeamRepository = teamRepositoryMock.Object;
                 teamController.MembershipService = membershipServiceMock.Object;
@@ -475,14 +473,6 @@ namespace Bonobo.Git.Server.Test.Unit
 
                 var viewResult = result as ViewResult;
                 Assert.IsNotNull(viewResult.Model);
-            }
-
-            private void SetupRepositoryRepositoryToReturnAnEmptyListForASpecificId(Guid requestedId)
-            {
-                repositoryRepositoryMock = new Mock<IRepositoryRepository>();
-                repositoryRepositoryMock.Setup(r => r.GetTeamRepositories(new[] { requestedId }))
-                                        .Returns(new List<RepositoryModel>());
-                
             }
         }
     }

@@ -50,6 +50,14 @@ namespace Bonobo.Git.Server.Test.Unit
                                      .Returns(new List<UserModel>());
                 return membershipServiceMock;
             }
+
+            protected Mock<IRepositoryRepository> SetupRepositoryRepositoryToReturnAnEmptyListForASpecificId(Guid requestedId)
+            {
+                var repositoryRepositoryMock = new Mock<IRepositoryRepository>();
+                repositoryRepositoryMock.Setup(r => r.GetTeamRepositories(new[] { requestedId }))
+                                        .Returns(new List<RepositoryModel>());
+                return repositoryRepositoryMock;
+            }
         }
     }
 }
