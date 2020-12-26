@@ -22,13 +22,13 @@ namespace Bonobo.Git.Server.Test.Unit
 
             // get Edit
             [TestMethod]
-            public void Get_Edit_Executed_With_Null_Parameters__Throws_NullReferenceException()
+            public void Get_Edit_Executed_With_Empty_Id__Throws_NullReferenceException()
             {
                 // Arrange
                 try
                 {
                     // Act
-                    SutAs<RepositoryController>().Edit(null);
+                    SutAs<RepositoryController>().Edit(Guid.Empty);
                 }
                 catch (NullReferenceException)
                 {
