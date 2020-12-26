@@ -46,7 +46,7 @@ namespace Bonobo.Git.Server.Test.Unit
                 ArrangeUserConfiguration();
                 var guid = Guid.NewGuid();
 
-                var sut = SutAs<RepositoryController>();
+                var repositoryController = SutAs<RepositoryController>();
                 var repositoryRepositoryMock = new Mock<IRepositoryRepository>();
                 repositoryRepositoryMock.Setup(s => s.GetRepository(guid))
                                         .Returns(new RepositoryModel
@@ -61,12 +61,12 @@ namespace Bonobo.Git.Server.Test.Unit
                 var teamRepositoryMock = new Mock<ITeamRepository>();
                 teamRepositoryMock.Setup(s => s.GetAllTeams())
                                   .Returns(new List<TeamModel> { });
-                sut.RepositoryRepository = repositoryRepositoryMock.Object;
-                sut.MembershipService = membershipServiceMock.Object;
-                sut.TeamRepository = teamRepositoryMock.Object;
+                repositoryController.RepositoryRepository = repositoryRepositoryMock.Object;
+                repositoryController.MembershipService = membershipServiceMock.Object;
+                repositoryController.TeamRepository = teamRepositoryMock.Object;
 
                 //act
-                var result = sut.Edit(guid);
+                var result = repositoryController.Edit(guid);
 
                 Assert.IsNotNull(result);
             }
