@@ -27,10 +27,18 @@ namespace Bonobo.Git.Server.Test.Unit
                                .Returns(true);
         }
 
+
         private void SetHttpContextMockIntoSUT(Guid id)
         {
             var claimsIdentity = new ClaimsIdentity(new List<Claim> { new Claim(ClaimTypes.NameIdentifier, id.ToString()) });
 
+            IPrincipal user = CreateClaimsPrincipalFromClaimsIdentity(claimsIdentity);
+
+            sut.ControllerContext = CreateControllerContextFromPrincipal(user);
+        }
+
+        private IPrincipal CreateClaimsPrincipalFromClaimsIdentity(ClaimsIdentity claimsIdentity)
+        {
             // see: https://stackoverflow.com/a/1784417/41236
             claimsPrincipalMock = new Mock<ClaimsPrincipal>();
             claimsPrincipalMock.SetupGet(p => p.Identities)
@@ -38,8 +46,7 @@ namespace Bonobo.Git.Server.Test.Unit
 
             // see: https://stackoverflow.com/a/1783704/41236
             IPrincipal user = claimsPrincipalMock.Object;
-
-            sut.ControllerContext = CreateControllerContextFromPrincipal(user);
+            return user;
         }
 
         private void BindModelToController(object model)
