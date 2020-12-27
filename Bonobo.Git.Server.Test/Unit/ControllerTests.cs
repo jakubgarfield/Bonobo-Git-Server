@@ -16,6 +16,11 @@ namespace Bonobo.Git.Server.Test.Unit
     {
         private T SutAs<T>() where T : Controller => sut as T;
 
+        private Mock<T> SetupMock<T>() where T : class
+        {
+            return new Mock<T>();
+        }
+
         private void SetupUserAsAdmin()
         {
             claimsPrincipalMock.Setup(p => p.IsInRole(Definitions.Roles.Administrator))

@@ -12,7 +12,7 @@ namespace Bonobo.Git.Server.Test.Unit
     public partial class ControllerTests
     {
         [TestClass]
-        public class RepositoryControllerTests : ControllerDependendencyBuilders
+        public class RepositoryControllerTests : ControllerTests
         {
             [TestInitialize]
             public void TestInitialize()
@@ -47,14 +47,7 @@ namespace Bonobo.Git.Server.Test.Unit
                 var guid = Guid.NewGuid();
 
                 var repositoryController = SutAs<RepositoryController>();
-                var repositoryRepositoryMock = new Mock<IRepositoryRepository>();
-                repositoryRepositoryMock.Setup(s => s.GetRepository(guid))
-                                        .Returns(new RepositoryModel
-                                        {
-                                            Id = guid,
-                                            Administrators = new UserModel[0],
-                                            Name = "name"
-                                        });
+                var repositoryRepositoryMock = new Mock<IRepositoryRepository>().SetupToReturnAModelWithASpecificIdWhenCallingGetRepositoryMethod(guid);
                 var membershipServiceMock = new Mock<IMembershipService>();
                 membershipServiceMock.Setup(s => s.GetAllUsers())
                                      .Returns(new List<UserModel> { });
