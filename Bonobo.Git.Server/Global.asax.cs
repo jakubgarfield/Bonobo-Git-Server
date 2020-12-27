@@ -67,8 +67,6 @@ namespace Bonobo.Git.Server
             AreaRegistration.RegisterAllAreas();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            UnityConfig.RegisterFilters();
-
             UserConfiguration.Initialize();
             GlobalFilters.Filters.Add(DependencyResolver.Current.GetService<AllViewsFilter>());
 

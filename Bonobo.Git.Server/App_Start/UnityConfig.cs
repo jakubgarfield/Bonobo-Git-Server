@@ -118,17 +118,6 @@ namespace Bonobo.Git.Server
             }
 
             container.RegisterType<IGitService, GitServiceExecutor>();
-
-            DependencyResolver.SetResolver(new UnityDependencyResolver(container));
-        }
-
-        public static void RegisterFilters()
-        {
-            var oldProvider = FilterProviders.Providers.Single(f => f is FilterAttributeFilterProvider);
-            FilterProviders.Providers.Remove(oldProvider);
-
-            var provider = new UnityFilterAttributeFilterProvider(Container);
-            FilterProviders.Providers.Add(provider);
         }
 
         private static void EnablePushAuditAnalysis(IUnityContainer container)
