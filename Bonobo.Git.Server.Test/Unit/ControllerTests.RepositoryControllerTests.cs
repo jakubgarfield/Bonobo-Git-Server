@@ -47,11 +47,9 @@ namespace Bonobo.Git.Server.Test.Unit
                 var guid = Guid.NewGuid();
 
                 var repositoryController = SutAs<RepositoryController>();
-                var repositoryRepositoryMock = new Mock<IRepositoryRepository>().SetupToReturnAModelWithASpecificIdWhenCallingGetRepositoryMethod(guid);
-                var membershipServiceMock = new Mock<IMembershipService>();
-                membershipServiceMock.Setup(s => s.GetAllUsers())
-                                     .Returns(new List<UserModel> { });
-                var teamRepositoryMock = new Mock<ITeamRepository>();
+                var repositoryRepositoryMock = SetupMock<IRepositoryRepository>().SetupToReturnAModelWithASpecificIdWhenCallingGetRepositoryMethod(guid);
+                var membershipServiceMock = SetupMock<IMembershipService>().SetupToReturnAnEmptyUserModelListWhenCallingGetAllUsers();                
+                var teamRepositoryMock = SetupMock<ITeamRepository>();
                 teamRepositoryMock.Setup(s => s.GetAllTeams())
                                   .Returns(new List<TeamModel> { });
                 repositoryController.RepositoryRepository = repositoryRepositoryMock.Object;

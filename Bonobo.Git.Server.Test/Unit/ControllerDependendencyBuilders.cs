@@ -36,6 +36,13 @@ namespace Bonobo.Git.Server.Test.Unit
             return membershipServiceMock;
         }
 
+        public static Mock<IMembershipService> SetupToReturnAnEmptyUserModelListWhenCallingGetAllUsers(this Mock<IMembershipService> membershipServiceMock)
+        {
+            membershipServiceMock.Setup(s => s.GetAllUsers())
+                                 .Returns(new List<UserModel> { });
+            return membershipServiceMock;
+        }
+
         // IRepositoryRepository Mock
         public static Mock<IRepositoryRepository> SetupToReturnAnEmptyListForASpecificIdWhenCallingGetTeamRepositories(this Mock<IRepositoryRepository> repositoryRepositoryMock, Guid requestedId)
         {
