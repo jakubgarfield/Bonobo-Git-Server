@@ -267,7 +267,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Post_Create_Executed_With_Valid_ViewModel_Arranging_TeamRepository__Throws_NullReferenceException()
+            public void Post_Create_Executed_With_Valid_ViewModel_Arranging_TeamRepository__Returns_RedirectToViewResult_With_TempData_Flag_True_And_ModelId()
             {
                 // Arrange
                 sut.ControllerContext = CreateControllerContext();
@@ -278,6 +278,7 @@ namespace Bonobo.Git.Server.Test.Unit
                 var model = new TeamEditModel
                 {
                     Name = "name",
+                    Id = Guid.NewGuid()
                 };
 
                 // Act
@@ -285,7 +286,13 @@ namespace Bonobo.Git.Server.Test.Unit
 
                 // Assert
                 Assert.AreEqual(true, teamController.TempData["CreateSuccess"]);
-                AssertAndGetRedirectToRouteResult(result);
+                var redirectToRouteResult = AssertAndGetRedirectToRouteResult(result);
+                Assert.AreEqual(1, redirectToRouteResult.RouteValues.Count);
+                Assert.AreEqual("action", redirectToRouteResult.RouteValues.Keys.First());
+                Assert.AreEqual("Index", redirectToRouteResult.RouteValues["action"]);
+                Assert.AreEqual(2, sut.TempData.Count);
+                Assert.AreEqual(true, sut.TempData["CreateSuccess"]);
+                Assert.AreEqual(model.Id, sut.TempData["NewTeamId"]);
             }
 
             // get Delete
