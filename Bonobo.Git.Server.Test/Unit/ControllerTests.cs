@@ -76,13 +76,12 @@ namespace Bonobo.Git.Server.Test.Unit
             return controllerCtx;
         }
 
-        private static void AssertRedirectToHomeUnauthorized(ActionResult result)
+        private static ViewResult AssertAndGetViewResult(ActionResult result)
         {
-            RedirectToRouteResult redirectToRouteResult = AssertAndGetRedirectToRouteResult(result);
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
 
-            Assert.IsNotNull(redirectToRouteResult);
-            Assert.AreEqual("Home", redirectToRouteResult.RouteValues["controller"]);
-            Assert.AreEqual("Unauthorized", redirectToRouteResult.RouteValues["action"]);
+            return result as ViewResult;
         }
 
         private static RedirectToRouteResult AssertAndGetRedirectToRouteResult(ActionResult result)
@@ -91,6 +90,15 @@ namespace Bonobo.Git.Server.Test.Unit
             Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
 
             return result as RedirectToRouteResult;
+        }
+
+        private static void AssertRedirectToHomeUnauthorized(ActionResult result)
+        {
+            RedirectToRouteResult redirectToRouteResult = AssertAndGetRedirectToRouteResult(result);
+
+            Assert.IsNotNull(redirectToRouteResult);
+            Assert.AreEqual("Home", redirectToRouteResult.RouteValues["controller"]);
+            Assert.AreEqual("Unauthorized", redirectToRouteResult.RouteValues["action"]);
         }
 
         private void SetupCookiesCollectionToHttpResponse()
