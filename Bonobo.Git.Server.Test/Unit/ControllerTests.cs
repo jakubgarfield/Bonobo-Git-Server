@@ -49,12 +49,12 @@ namespace Bonobo.Git.Server.Test.Unit
             return user;
         }
 
-        private void BindModelToController(object model)
+        private void BindModelToController<T>(T model)
         {
             // see: https://stackoverflow.com/a/5580363/41236
             var modelBinder = new ModelBindingContext
             {
-                ModelMetadata = ModelMetadataProviders.Current.GetMetadataForType(() => model, model.GetType()),
+                ModelMetadata = ModelMetadataProviders.Current.GetMetadataForType(() => model, typeof(T)),
                 ValueProvider = new NameValueCollectionValueProvider(new NameValueCollection(), CultureInfo.InvariantCulture)
             };
             var binder = new DefaultModelBinder().BindModel(new ControllerContext(), modelBinder);
