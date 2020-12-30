@@ -63,7 +63,7 @@ namespace Bonobo.Git.Server.Test.Unit
                 sut.ControllerContext = CreateControllerContext();
                 var requestedGuid = Guid.NewGuid();
                 var teamRepositoryMock = SetupMock<ITeamRepository>().SetupToReturnASpecificTeamWhenCallingGetTeamMethod(requestedGuid);
-                var membershipServiceMock = SetupMock<IMembershipService>().SetupToReturnAnEmptyListOfUsers();
+                var membershipServiceMock = SetupMock<IMembershipService>().SetupToReturnAnEmptyUserModelListWhenCallingGetAllUsers();
 
                 var teamController = SutAs<TeamController>();
                 teamController.TeamRepository = teamRepositoryMock.Object;
@@ -158,7 +158,7 @@ namespace Bonobo.Git.Server.Test.Unit
                 // Arrange
                 sut.ControllerContext = CreateControllerContext();
                 var requestedGuid = Guid.NewGuid();
-                var membershipServiceMock = SetupMock<IMembershipService>().SetupToReturnAnEmptyListOfUsers();
+                var membershipServiceMock = SetupMock<IMembershipService>().SetupToReturnAnEmptyUserModelListWhenCallingGetAllUsers();
                 var teamRepositoryMock = SetupMock<ITeamRepository>().SetupToReturnASpecificTeamWhenCallingGetTeamMethod(requestedGuid);
 
                 var teamController = SutAs<TeamController>();
@@ -197,7 +197,7 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Get_Create_Executed_Arranging_MembershipService__Returns_ViewResult()
             {
                 // Arrange
-                var membershipServiceMock = SetupMock<IMembershipService>().SetupToReturnAnEmptyListOfUsers();
+                var membershipServiceMock = SetupMock<IMembershipService>().SetupToReturnAnEmptyUserModelListWhenCallingGetAllUsers();
                 var teamController = SutAs<TeamController>();
                 teamController.MembershipService = membershipServiceMock.Object;
 
@@ -338,7 +338,7 @@ namespace Bonobo.Git.Server.Test.Unit
                 sut.ControllerContext = CreateControllerContext();
                 var requestedId = Guid.NewGuid();
                 var teamRepositoryMock = SetupMock<ITeamRepository>().SetupToReturnASpecificTeamWhenCallingGetTeamMethod(requestedId);
-                var membershipServiceMock = SetupMock<IMembershipService>().SetupToReturnAnEmptyListOfUsers();
+                var membershipServiceMock = SetupMock<IMembershipService>().SetupToReturnAnEmptyUserModelListWhenCallingGetAllUsers();
 
                 var teamController = SutAs<TeamController>();
                 teamController.TeamRepository = teamRepositoryMock.Object;

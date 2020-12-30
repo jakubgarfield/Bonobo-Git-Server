@@ -29,17 +29,24 @@ namespace Bonobo.Git.Server.Test.Unit
         }
 
         // MembershipService Mock
-        public static Mock<IMembershipService> SetupToReturnAnEmptyListOfUsers(this Mock<IMembershipService> membershipServiceMock)
+        public static Mock<IMembershipService> SetupToReturnAnEmptyUserModelListWhenCallingGetAllUsers(this Mock<IMembershipService> membershipServiceMock)
         {
             membershipServiceMock.Setup(m => m.GetAllUsers())
                                  .Returns(new List<UserModel>());
             return membershipServiceMock;
         }
 
-        public static Mock<IMembershipService> SetupToReturnAnEmptyUserModelListWhenCallingGetAllUsers(this Mock<IMembershipService> membershipServiceMock)
+        public static Mock<IMembershipService> SetupToReturnARequestedUserModel(this Mock<IMembershipService> membershipServiceMock, string requestedUserName)
         {
-            membershipServiceMock.Setup(s => s.GetAllUsers())
-                                 .Returns(new List<UserModel> { });
+            membershipServiceMock.Setup(m => m.GetUserModel(requestedUserName))
+                                 .Returns(new UserModel { Username = requestedUserName });
+            return membershipServiceMock;
+        }
+
+        public static Mock<IMembershipService> SetupToGenerateResetToken(this Mock<IMembershipService> membershipServiceMock, string token, string requestedUserName)
+        {
+            membershipServiceMock.Setup(m => m.GenerateResetToken(requestedUserName))
+                                 .Returns(token);
             return membershipServiceMock;
         }
 
