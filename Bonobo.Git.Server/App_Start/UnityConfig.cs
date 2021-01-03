@@ -118,6 +118,7 @@ namespace Bonobo.Git.Server
             }
 
             container.RegisterType<IGitService, GitServiceExecutor>();
+            container.RegisterType<IPathResolver, HostingEnvironmentPathResolver>();
         }
 
         private static void EnablePushAuditAnalysis(IUnityContainer container)

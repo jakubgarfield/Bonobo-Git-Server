@@ -28,6 +28,12 @@ namespace Bonobo.Git.Server.Controllers
         [Dependency]
         public IDatabaseResetManager ResetManager { get; set; }
 
+        [Dependency]
+        public MembershipHelper MembershipHelper { get; set; }
+
+        [Dependency]
+        public DiagnosticReporter DiagnosticReporter { get; set; }
+
         [WebAuthorize]
         public ActionResult Index()
         {
@@ -219,8 +225,7 @@ namespace Bonobo.Git.Server.Controllers
         {
             if (Request.IsLocal)
             {
-                var verifier = new DiagnosticReporter();
-                return Content(verifier.GetVerificationReport(), "text/plain", Encoding.UTF8);
+                return Content(DiagnosticReporter.GetVerificationReport(), "text/plain", Encoding.UTF8);
             }
             else
             {

@@ -1,4 +1,5 @@
 ﻿using Bonobo.Git.Server.Data;
+using Bonobo.Git.Server.Helpers;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
 using Moq;
@@ -50,6 +51,13 @@ namespace Bonobo.Git.Server.Test.Unit
             return membershipServiceMock;
         }
 
+        public static Mock<IMembershipService> SetupToReturnCertainResultWhenCallingValidateUser(this Mock<IMembershipService> membershipServiceMock, string username, string password, ValidationResult validationResult)
+        {
+            membershipServiceMock.Setup(mp => mp.ValidateUser(username, password))
+                                 .Returns(validationResult);
+            return membershipServiceMock;
+        }
+
         // IRepositoryRepository Mock
         public static Mock<IRepositoryRepository> SetupToReturnAnEmptyListForASpecificIdWhenCallingGetTeamRepositories(this Mock<IRepositoryRepository> repositoryRepositoryMock, Guid requestedId)
         {
@@ -68,6 +76,13 @@ namespace Bonobo.Git.Server.Test.Unit
                                         Name = "name"
                                     });
             return repositoryRepositoryMock;
+        }
+
+        public static Mock<MembershipHelper> SetupToRespondTrueWhenSendingForgotPasswordEmail(this Mock<MembershipHelper> membershipHelperMock)
+        {
+            membershipHelperMock.Setup(m => m.SendForgotPasswordEmail(It.IsAny<UserModel>(), It.IsAny<string>()))
+                                .Returns(true);
+            return membershipHelperMock;
         }
     }
 }

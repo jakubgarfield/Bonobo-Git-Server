@@ -1,4 +1,5 @@
 ﻿using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
@@ -9,6 +10,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace Bonobo.Git.Server.Test.Unit
 {
@@ -34,7 +36,7 @@ namespace Bonobo.Git.Server.Test.Unit
 
             IPrincipal user = CreateClaimsPrincipalFromClaimsIdentity(claimsIdentity);
 
-            sut.ControllerContext = CreateControllerContextFromPrincipal(user);
+            sut.ControllerContext = CreateControllerContext(user);
         }
 
         private IPrincipal CreateClaimsPrincipalFromClaimsIdentity(ClaimsIdentity claimsIdentity)
@@ -64,10 +66,29 @@ namespace Bonobo.Git.Server.Test.Unit
 
         private ControllerContext CreateControllerContext()
         {
-            return CreateControllerContextFromPrincipal(new Mock<IPrincipal>().Object);
+            return CreateControllerContext(new Mock<IPrincipal>().Object);
         }
 
-        protected ControllerContext CreateControllerContextFromPrincipal(IPrincipal user)
+        private ControllerContext CreateControllerContext(string name)
+        {
+            var principalMock = new Mock<IPrincipal>();
+            principalMock.SetupGet(p => p.Identity)
+                         .Returns(new GenericIdentity(name));
+            return CreateControllerContext(principalMock.Object);
+        }
+
+        private void SetupOwinEnvironment()
+        {
+            var requestContextMock = new Mock<RequestContext>();
+            requestContextMock.SetupGet(r => r.HttpContext)
+                              .Returns(httpContextMock.Object);
+            requestMock.SetupGet(r => r.RequestContext)
+                       .Returns(requestContextMock.Object);
+            httpContextMock.SetupGet(c => c.Items["owin.Environment"])
+                           .Returns(new Dictionary<string, object>());
+        }
+
+        protected ControllerContext CreateControllerContext(IPrincipal user)
         {
             httpContextMock = new Mock<HttpContextBase>();
             httpContextMock.SetupGet(ctx => ctx.User).Returns(user);
@@ -75,6 +96,9 @@ namespace Bonobo.Git.Server.Test.Unit
             responseMock = new Mock<HttpResponseBase>();
             httpContextMock.SetupGet(c => c.Response)
                            .Returns(responseMock.Object);
+            requestMock = new Mock<HttpRequestBase>();
+            httpContextMock.SetupGet(ctx => ctx.Request)
+                           .Returns(requestMock.Object);
 
             var controllerCtx = new ControllerContext
             {
@@ -97,6 +121,22 @@ namespace Bonobo.Git.Server.Test.Unit
             Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
 
             return result as RedirectToRouteResult;
+        }
+
+        private static RedirectResult AssertAndGetRedirectResult(ActionResult result)
+        {
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(RedirectResult));
+
+            return result as RedirectResult;
+        }
+
+        private static ContentResult AssertAndGetContentResult(ActionResult result)
+        {
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ContentResult));
+
+            return result as ContentResult;
         }
 
         private static void AssertRedirectToHomeUnauthorized(ActionResult result)
@@ -132,10 +172,30 @@ namespace Bonobo.Git.Server.Test.Unit
             //
             type.TypeInitializer.Invoke(null, null);
         }
+        private bool ArePropertiesEqual(LogOnModel expected, LogOnModel actual)
+        {
+            return expected.ReturnUrl == actual.ReturnUrl &&
+                   expected.DatabaseResetCode == actual.DatabaseResetCode &&
+                   expected.Password == actual.Password &&
+                   expected.RememberMe == actual.RememberMe &&
+                   expected.ReturnUrl == actual.ReturnUrl;
+        }
+
+        private static void PrepairCache(string token, string userName)
+        {
+            MvcApplication.Cache.Add(token, userName, DateTimeOffset.Now.AddMinutes(1));
+        }
+
+        private static void AssertNextErrorMessageIs(IEnumerator<ModelError> modelStateErrorsEnumerator, string expected)
+        {
+            modelStateErrorsEnumerator.MoveNext();
+            Assert.AreEqual(expected, modelStateErrorsEnumerator.Current.ErrorMessage);
+        }
 
         private Controller sut;
         private Mock<ClaimsPrincipal> claimsPrincipalMock;
         private Mock<HttpContextBase> httpContextMock;
         private Mock<HttpResponseBase> responseMock;
+        private Mock<HttpRequestBase> requestMock;
     }
 }

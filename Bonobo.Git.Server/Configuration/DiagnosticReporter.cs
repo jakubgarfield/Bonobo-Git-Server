@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Bonobo.Git.Server.Data;
+using Bonobo.Git.Server.Security;
+using System;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Web.Hosting;
-using Bonobo.Git.Server.Data;
-using Bonobo.Git.Server.Security;
+using Unity;
 
 namespace Bonobo.Git.Server.Configuration
 {
@@ -20,6 +20,9 @@ namespace Bonobo.Git.Server.Configuration
     {
         private readonly StringBuilder _report = new StringBuilder();
         private readonly UserConfiguration _userConfig = UserConfiguration.Current;
+
+        [Dependency]
+        public virtual IPathResolver PathResolver { get; set; }
 
         public string GetVerificationReport()
         {
@@ -39,22 +42,22 @@ namespace Bonobo.Git.Server.Configuration
             ExceptionLog();
         }
 
-        
+
         private void DumpAppSettings()
         {
             _report.AppendLine("Web.Config AppSettings");
             foreach (string key in ConfigurationManager.AppSettings)
             {
-                QuotedReport("AppSettings."+key, ConfigurationManager.AppSettings[key]);
+                QuotedReport("AppSettings." + key, ConfigurationManager.AppSettings[key]);
             }
         }
 
         private void CheckUserConfigurationFile()
         {
             _report.AppendLine("User Configuration:");
-            var configFile = MapPath(AppSetting("UserConfiguration"));
+            var configFile = PathResolver.ResolveWithConfiguration("UserConfiguration");
             QuotedReport("User config file", configFile);
-            SafelyReport("User config readable", () => !String.IsNullOrEmpty(File.ReadAllText(configFile)));
+            SafelyReport("User config readable", () => !string.IsNullOrEmpty(File.ReadAllText(configFile)));
             SafelyReport("User config saveable", () =>
             {
                 UserConfiguration.Current.Save();
@@ -75,7 +78,7 @@ namespace Bonobo.Git.Server.Configuration
         private void CheckGitSettings()
         {
             _report.AppendLine("Git Exe");
-            var gitPath = MapPath(AppSetting("GitPath"));
+            var gitPath = PathResolver.ResolveWithConfiguration("GitPath");
             QuotedReport("Git path", gitPath);
             SafelyReport("Git.exe exists", () => File.Exists(gitPath));
         }
@@ -87,9 +90,9 @@ namespace Bonobo.Git.Server.Configuration
             {
                 SafelyReport("Metadata available", () =>
                 {
-                    WebClient client = new WebClient();
+                    var client = new WebClient();
                     var metadata = client.DownloadString(AppSetting("FederationMetadataAddress"));
-                    return !String.IsNullOrWhiteSpace(metadata);
+                    return !string.IsNullOrWhiteSpace(metadata);
                 });
 
             }
@@ -105,8 +108,8 @@ namespace Bonobo.Git.Server.Configuration
 
             if (AppSetting("MembershipService") == "ActiveDirectory")
             {
-                SafelyReport("Backend folder exists", () => Directory.Exists(MapPath(AppSetting("ActiveDirectoryBackendPath"))));
-                ReportDirectoryStatus("Backend folder", MapPath(AppSetting("ActiveDirectoryBackendPath")));
+                SafelyReport("Backend folder exists", () => Directory.Exists(PathResolver.ResolveWithConfiguration("ActiveDirectoryBackendPath")));
+                ReportDirectoryStatus("Backend folder", PathResolver.ResolveWithConfiguration("ActiveDirectoryBackendPath"));
 
                 var ad = ADBackend.Instance;
                 SafelyReport("User count", () => ad.Users.Count());
@@ -141,7 +144,7 @@ namespace Bonobo.Git.Server.Configuration
             var sb = new StringBuilder();
             if (Directory.Exists(directory))
             {
-                sb.AppendFormat("Exists, {0} files, {1} entries, ", 
+                sb.AppendFormat("Exists, {0} files, {1} entries, ",
                     Directory.GetFiles(directory).Length,
                     Directory.GetFileSystemEntries(directory).Length
                     );
@@ -156,7 +159,7 @@ namespace Bonobo.Git.Server.Configuration
 
         private bool DirectoryIsWritable(string directory)
         {
-            string probeFile = Path.Combine(directory, "Probe.txt");
+            var probeFile = Path.Combine(directory, "Probe.txt");
             try
             {
                 File.WriteAllBytes(probeFile, new byte[16]);
@@ -238,7 +241,7 @@ namespace Bonobo.Git.Server.Configuration
         {
             try
             {
-                object result = func();
+                var result = func();
                 if (result is bool)
                 {
                     if ((bool)result)
@@ -259,11 +262,6 @@ namespace Bonobo.Git.Server.Configuration
             {
                 Report(tag, FormatException(ex));
             }
-        }
-
-        private string MapPath(string path)
-        {
-            return Path.IsPathRooted(path) ? path : HostingEnvironment.MapPath(path);
         }
 
         private string AppSetting(string name)
@@ -290,7 +288,7 @@ namespace Bonobo.Git.Server.Configuration
 
         private void QuotedReport(string tag, object value)
         {
-            Report(tag, "'"+value+"'");
+            Report(tag, "'" + value + "'");
         }
     }
 }

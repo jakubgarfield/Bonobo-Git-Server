@@ -6,9 +6,9 @@ using Serilog;
 
 namespace Bonobo.Git.Server.Helpers
 {
-    public static class MembershipHelper
+    public class MembershipHelper
     {
-        public static bool SendForgotPasswordEmail(UserModel user, string passwordResetUrl)
+        public virtual bool SendForgotPasswordEmail(UserModel user, string passwordResetUrl)
         {
             bool result = true;
             try
