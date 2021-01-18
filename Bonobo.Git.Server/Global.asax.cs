@@ -128,7 +128,7 @@ namespace Bonobo.Git.Server
                     routeData.Values.Add("action", "Error");
                     if (exception != null)
                     {
-                        Log.Error(exception, "Exception caught in Global.asax1");
+                        Log.Error(exception, "Exception caught in Global.asax");
                     }
                 }
                 else
