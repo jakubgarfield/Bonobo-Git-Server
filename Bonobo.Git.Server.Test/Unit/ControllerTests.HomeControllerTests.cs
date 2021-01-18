@@ -567,7 +567,7 @@ namespace Bonobo.Git.Server.Test.Unit
                 var homeController = SutAs<HomeController>();
                 homeController.MembershipHelper = SetupMock<MembershipHelper>().SetupToRespondTrueWhenSendingForgotPasswordEmail()
                                                                                .Object;
-                homeController.MembershipService = SetupMock<IMembershipService>().SetupToReturnARequestedUserModel(model.Username)
+                homeController.MembershipService = SetupMock<IMembershipService>().SetupToReturnARequestedUserModelByName(model.Username)
                                                                                   .SetupToGenerateResetToken(resetToken, model.Username)
                                                                                   .Object;
 

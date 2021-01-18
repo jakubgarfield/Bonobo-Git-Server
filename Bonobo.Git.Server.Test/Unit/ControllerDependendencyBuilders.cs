@@ -29,6 +29,13 @@ namespace Bonobo.Git.Server.Test.Unit
             return teamRepositoryMock;
         }
 
+        public static Mock<ITeamRepository> SetupToGetAllTeamsReturnAListOfTeams(this Mock<ITeamRepository> teamRepositoryMock, IList<TeamModel> teams)
+        {
+            teamRepositoryMock.Setup(s => s.GetAllTeams())
+                              .Returns(teams);
+            return teamRepositoryMock;
+        }
+
         // MembershipService Mock
         public static Mock<IMembershipService> SetupToReturnAnEmptyUserModelListWhenCallingGetAllUsers(this Mock<IMembershipService> membershipServiceMock)
         {
@@ -37,10 +44,17 @@ namespace Bonobo.Git.Server.Test.Unit
             return membershipServiceMock;
         }
 
-        public static Mock<IMembershipService> SetupToReturnARequestedUserModel(this Mock<IMembershipService> membershipServiceMock, string requestedUserName)
+        public static Mock<IMembershipService> SetupToReturnARequestedUserModelByName(this Mock<IMembershipService> membershipServiceMock, string requestedUserName)
         {
             membershipServiceMock.Setup(m => m.GetUserModel(requestedUserName))
                                  .Returns(new UserModel { Username = requestedUserName });
+            return membershipServiceMock;
+        }
+
+        public static Mock<IMembershipService> SetupToReturnARequestedUserModelById(this Mock<IMembershipService> membershipServiceMock, Guid guid)
+        {
+            membershipServiceMock.Setup(m => m.GetUserModel(guid))
+                                 .Returns(new UserModel { Id = guid });
             return membershipServiceMock;
         }
 
@@ -78,11 +92,27 @@ namespace Bonobo.Git.Server.Test.Unit
             return repositoryRepositoryMock;
         }
 
+        // MembershipHelper Mock
         public static Mock<MembershipHelper> SetupToRespondTrueWhenSendingForgotPasswordEmail(this Mock<MembershipHelper> membershipHelperMock)
         {
             membershipHelperMock.Setup(m => m.SendForgotPasswordEmail(It.IsAny<UserModel>(), It.IsAny<string>()))
                                 .Returns(true);
             return membershipHelperMock;
+        }
+
+        // IRepositoryPermissionService mock
+        public static Mock<IRepositoryPermissionService> SetupGetAllPermittedRepositoriesToReturnAList(this Mock<IRepositoryPermissionService> repositoryPermissionServiceMock, IList<RepositoryModel> repositoryPermissionList)
+        {
+            repositoryPermissionServiceMock.Setup(p => p.GetAllPermittedRepositories(It.IsAny<Guid>(), It.IsAny<RepositoryAccessLevel>()))
+                                           .Returns(repositoryPermissionList);
+            return repositoryPermissionServiceMock;
+        }
+
+        public static Mock<IRepositoryPermissionService> SetupHasCreatePermissionToReturnTrue(this Mock<IRepositoryPermissionService> repositoryPermissionServiceMock, Guid id)
+        {
+            repositoryPermissionServiceMock.Setup(p => p.HasCreatePermission(id))
+                                           .Returns(true);
+            return repositoryPermissionServiceMock;
         }
     }
 }

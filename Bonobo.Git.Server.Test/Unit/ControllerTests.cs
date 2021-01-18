@@ -34,7 +34,7 @@ namespace Bonobo.Git.Server.Test.Unit
         {
             var claimsIdentity = new ClaimsIdentity(new List<Claim> { new Claim(ClaimTypes.NameIdentifier, id.ToString()) });
 
-            IPrincipal user = CreateClaimsPrincipalFromClaimsIdentity(claimsIdentity);
+            var user = CreateClaimsPrincipalFromClaimsIdentity(claimsIdentity);
 
             sut.ControllerContext = CreateControllerContext(user);
         }
@@ -77,18 +77,7 @@ namespace Bonobo.Git.Server.Test.Unit
             return CreateControllerContext(principalMock.Object);
         }
 
-        private void SetupOwinEnvironment()
-        {
-            var requestContextMock = new Mock<RequestContext>();
-            requestContextMock.SetupGet(r => r.HttpContext)
-                              .Returns(httpContextMock.Object);
-            requestMock.SetupGet(r => r.RequestContext)
-                       .Returns(requestContextMock.Object);
-            httpContextMock.SetupGet(c => c.Items["owin.Environment"])
-                           .Returns(new Dictionary<string, object>());
-        }
-
-        protected ControllerContext CreateControllerContext(IPrincipal user)
+        private ControllerContext CreateControllerContext(IPrincipal user)
         {
             httpContextMock = new Mock<HttpContextBase>();
             httpContextMock.SetupGet(ctx => ctx.User).Returns(user);
@@ -105,6 +94,17 @@ namespace Bonobo.Git.Server.Test.Unit
                 HttpContext = httpContextMock.Object
             };
             return controllerCtx;
+        }
+
+        private void SetupOwinEnvironment()
+        {
+            var requestContextMock = new Mock<RequestContext>();
+            requestContextMock.SetupGet(r => r.HttpContext)
+                              .Returns(httpContextMock.Object);
+            requestMock.SetupGet(r => r.RequestContext)
+                       .Returns(requestContextMock.Object);
+            httpContextMock.SetupGet(c => c.Items["owin.Environment"])
+                           .Returns(new Dictionary<string, object>());
         }
 
         private static ViewResult AssertAndGetViewResult(ActionResult result)
@@ -141,7 +141,7 @@ namespace Bonobo.Git.Server.Test.Unit
 
         private static void AssertRedirectToHomeUnauthorized(ActionResult result)
         {
-            RedirectToRouteResult redirectToRouteResult = AssertAndGetRedirectToRouteResult(result);
+            var redirectToRouteResult = AssertAndGetRedirectToRouteResult(result);
 
             Assert.IsNotNull(redirectToRouteResult);
             Assert.AreEqual("Home", redirectToRouteResult.RouteValues["controller"]);
@@ -150,14 +150,14 @@ namespace Bonobo.Git.Server.Test.Unit
 
         private void SetupCookiesCollectionToHttpResponse()
         {
-            HttpCookieCollection cookies = new HttpCookieCollection();
+            var cookies = new HttpCookieCollection();
             responseMock.SetupGet(r => r.Cookies)
                         .Returns(cookies);
         }
 
         private static void ArrangeUserConfiguration()
         {
-            Mock<IPathResolver> pathResolverMock = new Mock<IPathResolver>();
+            var pathResolverMock = new Mock<IPathResolver>();
             pathResolverMock.Setup(p => p.Resolve(It.IsAny<string>()))
                             .Returns(".");
             pathResolverMock.Setup(p => p.ResolveWithConfiguration(It.IsAny<string>()))
