@@ -178,7 +178,7 @@
     <Compile Include="Unit\UserConfigurationTests.cs" />
     <Compile Include="Unit\UserExtensionsTests.cs" />
     <Compile Include="Unit\UserModelTest.cs" />
-    <Compile Include="Unit\ControllerTests.cs" />
+    <Compile Include="Unit\ControllerTests.-.cs" />
     <Compile Include="Unit\ControllerTests.AccountControllerTests.cs" />
     <Compile Include="Unit\ControllerTests.HomeControllerTests.cs" />
     <Compile Include="Unit\ControllerTests.SettingsControllerTests.cs" />
