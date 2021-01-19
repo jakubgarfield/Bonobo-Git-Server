@@ -21,3 +21,4 @@ namespace Bonobo.Git.Server.Test.Unit
             // Get IsValidRegex
         }
     }
+}
