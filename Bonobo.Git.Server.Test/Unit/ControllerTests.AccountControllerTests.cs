@@ -7,7 +7,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Configuration;
-using System.Security.Principal;
 using System.Web.Mvc;
 
 namespace Bonobo.Git.Server.Test.Unit
@@ -29,26 +28,18 @@ namespace Bonobo.Git.Server.Test.Unit
             [TestMethod]
             public void Get_Edit_Executed_With_Null_Parameters__Throws_NullReferenceException()
             {
-                try
-                {
-                    // arrange
-                    SetHttpContextMockIntoSUT(Guid.Empty);
-                    // act
-                    var result = SutAs<AccountController>().Edit(null);
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-                //assert
-                Assert.Fail();
+                // Arrange
+                SetHttpContextMockIntoSUT(Guid.Empty);
+
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<AccountController>().Edit(default(UserEditModel)));
             }
 
             [TestMethod]
             public void Get_Edit_When_User_Is_Unknown_And_Resulting_Model_Is_Null__Stays_On_View()
             {
                 // Arrange
-                Guid userid = Guid.NewGuid();
+                var userid = Guid.NewGuid();
                 SetHttpContextMockIntoSUT(userid);
                 SetupMembershipServiceMockIntoSUT();
                 BindModelToController(userid);
@@ -68,7 +59,7 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Get_Edit_When_Non_Admin_User_Queries_Other_UserId__Gets_Redirected_To_Home_Unauthorized()
             {
                 // Arrange
-                Guid userid = Guid.NewGuid();
+                var userid = Guid.NewGuid();
                 SetHttpContextMockIntoSUT(userid);
                 BindModelToController(userid);
 
@@ -83,8 +74,8 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Get_Edit_When_Admin_User_Queries_Other_User_Id_And_Resulting_Model_Is_Null__Stays_On_View()
             {
                 // Arrange
-                Guid userid = Guid.NewGuid();
-                Guid otherId = Guid.NewGuid();
+                var userid = Guid.NewGuid();
+                var otherId = Guid.NewGuid();
                 SetHttpContextMockIntoSUT(userid);
                 SetupMembershipServiceMockIntoSUT();
                 SetupUserAsAdmin();
@@ -105,7 +96,7 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Get_Edit_When_User_Is_Known_And_Resulting_Model_Is_Not_Null__Stays_On_View()
             {
                 // Arrange
-                Guid userId = Guid.NewGuid();
+                var userId = Guid.NewGuid();
                 SetHttpContextMockIntoSUT(userId);
                 SetupMembershipServiceMockIntoSUT();
                 BindModelToController(userId);
@@ -119,8 +110,8 @@ namespace Bonobo.Git.Server.Test.Unit
                                          Email = "email"
                                      });
 
-                string[] allRoles = new string[] { "role1", "role2" };
-                string[] selectedRoles = new string[] { "role1" };
+                var allRoles = new string[] { "role1", "role2" };
+                var selectedRoles = new string[] { "role1" };
                 SetupRolesProviderMockIntoSUT();
                 roleProviderMock.Setup(r => r.GetAllRoles())
                                 .Returns(allRoles);
@@ -150,23 +141,17 @@ namespace Bonobo.Git.Server.Test.Unit
             [TestMethod]
             public void Post_Edit_With_Unbound_Empty_Model_And_Environment_Unprepared__Throws_A_NullReferenceException()
             {
-                try
-                {
-                    SutAs<AccountController>().Edit(new UserEditModel());
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-                Assert.Fail();
+                // Arrange
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<AccountController>().Edit(new UserEditModel()));
             }
 
             [TestMethod]
             public void Post_Edit_With_Unbound_Bare_Model_Data_Referring_To_The_Same_User__Returns_Weird_Data()
             {
                 // Arrange
-                Guid userId = Guid.NewGuid();
-                UserEditModel model = new UserEditModel { Id = userId };
+                var userId = Guid.NewGuid();
+                var model = new UserEditModel { Id = userId };
 
                 SetupMinimalEnvironment(userId);
 
@@ -185,9 +170,9 @@ namespace Bonobo.Git.Server.Test.Unit
                 // AuthenticationSettings class controller needs to run again because we changed the demoModelActive appSetting
                 ReinitializeStaticClass(typeof(AuthenticationSettings));
 
-                Guid userId = Guid.NewGuid();
+                var userId = Guid.NewGuid();
                 SetupMinimalEnvironment(userId);
-                UserEditModel model = new UserEditModel { Id = userId };
+                var model = new UserEditModel { Id = userId };
                 SetupUserAsAdmin();
 
                 // Act
@@ -204,7 +189,7 @@ namespace Bonobo.Git.Server.Test.Unit
                 sut.ControllerContext = CreateControllerContext();
                 SetupMembershipServiceMockIntoSUT();
                 SetupRolesProviderMockIntoSUT();
-                UserEditModel model = new UserEditModel();
+                var model = new UserEditModel();
                 BindModelToController(model);
 
                 // Act
@@ -218,9 +203,9 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Post_Edit_With_Bound_Bare_Model_Data_Referring_To_The_Same_User__Returns_Null_Update_Success_In_ViewBag()
             {
                 // Arrange
-                Guid userId = Guid.NewGuid();
+                var userId = Guid.NewGuid();
                 SetupMinimalEnvironment(userId);
-                UserEditModel model = new UserEditModel { Id = userId };
+                var model = new UserEditModel { Id = userId };
                 BindModelToController(model);
 
                 // act
@@ -236,10 +221,10 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Post_Edit_With_Bound_Bare_Model_Data_Referring_To_Another_User__Redirects_To_Home_Unauthorized()
             {
                 // Arrange
-                Guid userId = Guid.NewGuid();
-                Guid otherId = Guid.NewGuid();
+                var userId = Guid.NewGuid();
+                var otherId = Guid.NewGuid();
                 SetupMinimalEnvironment(userId);
-                UserEditModel model = new UserEditModel { Id = otherId };
+                var model = new UserEditModel { Id = otherId };
                 BindModelToController(model);
 
                 // act
@@ -255,9 +240,9 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Post_Edit_With_Bound_Invalid_Model_With_NewPassword_Not_Empty_And_OldPassword_Empty__Returns_Expected_ModelState()
             {
                 // Arrange
-                Guid userId = Guid.NewGuid();
+                var userId = Guid.NewGuid();
                 SetupMinimalEnvironment(userId);
-                UserEditModel model = new UserEditModel
+                var model = new UserEditModel
                 {
                     Id = userId,
                     Username = "Username",
@@ -275,8 +260,8 @@ namespace Bonobo.Git.Server.Test.Unit
                 AssertMinimalViewResult(result, userId);
                 Assert.IsFalse(sut.ModelState.IsValid);
 
-                string expectedMessageForConfirmPassword = String.Format(Resources.Validation_Compare, "Confirm Password", "New Password");
-                string actualMessageForConfirmPassword = sut.ModelState["ConfirmPassword"].Errors[0].ErrorMessage;
+                var expectedMessageForConfirmPassword = string.Format(Resources.Validation_Compare, "Confirm Password", "New Password");
+                var actualMessageForConfirmPassword = sut.ModelState["ConfirmPassword"].Errors[0].ErrorMessage;
 
                 Assert.AreEqual(expectedMessageForConfirmPassword, actualMessageForConfirmPassword);
             }
@@ -285,10 +270,10 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Post_Edit_With_Bound_Valid_Model_Data_Referring_To_The_Same_User__Returns_Data_From_The_User()
             {
                 // Arrange
-                Guid userId = Guid.NewGuid();
+                var userId = Guid.NewGuid();
                 SetupMinimalEnvironment(userId);
 
-                UserEditModel model = new UserEditModel
+                var model = new UserEditModel
                 {
                     Id = userId,
                     Username = "Username",
@@ -339,7 +324,7 @@ namespace Bonobo.Git.Server.Test.Unit
             {
                 Assert.IsTrue(sut.ModelState.IsValid);
 
-                ViewResult viewResult = result as ViewResult;
+                var viewResult = result as ViewResult;
 
                 Assert.IsTrue(viewResult.ViewBag.UpdateSuccess);
             }

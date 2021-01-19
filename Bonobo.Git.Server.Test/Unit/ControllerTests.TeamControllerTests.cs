@@ -24,17 +24,9 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Get_Edit_Executed_Without_ControllerContext_Setup__Throws_NullReferenceException()
             {
                 // Arrange
-                try
-                {
-                    // Act
-                    SutAs<TeamController>().Edit(Guid.Empty);
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-                // Assert
-                Assert.Fail();
+
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<TeamController>().Edit(Guid.Empty));
             }
 
             [TestMethod]
@@ -87,49 +79,29 @@ namespace Bonobo.Git.Server.Test.Unit
             [TestMethod]
             public void Post_Edit_Executed_With_Null_Model_And_Without_ControllerContext_Setup__Throws_NullReferenceException()
             {
-                try
-                {
-                    SutAs<TeamController>().Edit(null);
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-                Assert.Fail();
+                // Arrange
+
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<TeamController>().Edit(default(TeamEditModel)));
             }
 
             [TestMethod]
             public void Post_Edit_Executed_With_Bare_Model_And_Without_ControllerContext_Setup__Throws_NullReferenceException()
             {
                 // Arrange
-                try
-                {
-                    // Act
-                    SutAs<TeamController>().Edit(new TeamEditModel());
 
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-                // Assert
-                Assert.Fail();
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<TeamController>().Edit(new TeamEditModel()));
             }
 
             [TestMethod]
             public void Post_Edit_Executed_With_Null_Model_And_With_ControllerContext_Setup__Throws_NullReferenceException()
             {
+                // Arrange
                 sut.ControllerContext = CreateControllerContext();
 
-                try
-                {
-                    SutAs<TeamController>().Edit(null);
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-                Assert.Fail();
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<TeamController>().Edit(null));
             }
 
             [TestMethod]
@@ -180,17 +152,9 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Get_Create_Executed_Without_Arranging_TeamRepository__Throws_NullReferenceException()
             {
                 // Arrange
-                try
-                {
-                    // Act
-                    SutAs<TeamController>().Create();
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-                // Assert
-                Assert.Fail();
+
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<TeamController>().Create());
             }
 
             [TestMethod]
@@ -215,34 +179,18 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Post_Create_Executed_With_Null_ViewModel__Throws_NullReferenceException()
             {
                 // Arrange
-                try
-                {
-                    // Act
-                    SutAs<TeamController>().Create(null);
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-                // Assert
-                Assert.Fail();
+
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<TeamController>().Create(default(TeamEditModel)));
             }
 
             [TestMethod]
             public void Post_Create_Executed_With_NonNull_ViewModel_Without_Arranging_TeamRepository__Throws_NullReferenceException()
             {
                 // Arrange
-                try
-                {
-                    // Act
-                    SutAs<TeamController>().Create(new TeamEditModel());
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-                // Assert
-                Assert.Fail();
+
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<TeamController>().Create(new TeamEditModel()));
             }
 
             [TestMethod]
@@ -300,17 +248,9 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Get_Delete_Executed_Without_Arranging_TeamRepository_With_Empty_Id__Throws_NullReferenceException()
             {
                 // Arrange
-                try
-                {
-                    // Act
-                    SutAs<TeamController>().Delete(Guid.Empty);
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-                // Assert
-                Assert.Fail();
+
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<TeamController>().Delete(Guid.Empty));
             }
 
             [TestMethod]
@@ -400,18 +340,8 @@ namespace Bonobo.Git.Server.Test.Unit
             {
                 // Arrange
 
-                // Act
-                try
-                {
-                    SutAs<TeamController>().Detail(Guid.Empty);
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-
-                // Assert
-                Assert.Fail();
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<TeamController>().Detail(Guid.Empty));
             }
 
             [TestMethod]

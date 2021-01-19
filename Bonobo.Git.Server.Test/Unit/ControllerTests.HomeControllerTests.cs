@@ -205,21 +205,13 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Post_ResetPassword_Called_With_Null_Parameter__Throws_NullReferenceException()
             {
                 // Arrange
-                try
-                {
-                    // Act
-                    SutAs<HomeController>().ResetPassword(default(ResetPasswordModel));
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-                // Assert
-                Assert.Fail();
+
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<HomeController>().ResetPassword(default(ResetPasswordModel)));
             }
 
             [TestMethod]
-            public void Post_ResetPassword_Called_With_Empty_And_No_Binding_Model__Throws_UnauthorizedAccessException()
+            public void Post_ResetPassword_Called_With_Empty_And_No_Binding_Model__Throws_ArgumentNullException()
             {
                 // Arrange
                 var model = new ResetPasswordModel();
@@ -372,18 +364,8 @@ namespace Bonobo.Git.Server.Test.Unit
 
                 BindModelToController(model);
 
-                // Act
-                try
-                {
-                    SutAs<HomeController>().ResetPassword(model);
-                }
-                // Assert
-                catch (UnauthorizedAccessException)
-                {
-                    return;
-                }
-
-                Assert.Fail();
+                // Act & Assert
+                Assert.ThrowsException<UnauthorizedAccessException>(() => SutAs<HomeController>().ResetPassword(model));
             }
 
             //
@@ -444,17 +426,8 @@ namespace Bonobo.Git.Server.Test.Unit
                 // Arrange
                 var model = default(ForgotPasswordModel);
 
-                try
-                {
-                    // Act
-                    var result = SutAs<HomeController>().ForgotPassword(model);
-                }
-                // Assert
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-                Assert.Fail();
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<HomeController>().ForgotPassword(model));
             }
 
             [TestMethod]
@@ -586,17 +559,9 @@ namespace Bonobo.Git.Server.Test.Unit
             public void Get_WindowsLogin_Called_With_Defaut_Parameter_With_No_Arrange__Throws_NullReferenceException()
             {
                 // Arrange
-                try
-                {
-                    // Act
-                    SutAs<HomeController>().WindowsLogin(default(string));
-                }
-                // Assert
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-                Assert.Fail();
+
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<HomeController>().WindowsLogin(default(string)));
             }
 
             [TestMethod]
@@ -605,18 +570,8 @@ namespace Bonobo.Git.Server.Test.Unit
                 // Arrange
                 sut.ControllerContext = CreateControllerContext("user");
 
-                try
-                {
-                    // Act
-                    SutAs<HomeController>().WindowsLogin(default(string));
-                }
-                catch (ArgumentException)
-                {
-                    return;
-                }
-
-                // Assert
-                Assert.Fail();
+                // Act & Assert
+                Assert.ThrowsException<ArgumentException>(() => SutAs<HomeController>().WindowsLogin(default(string)));
             }
 
             [TestMethod]
@@ -647,7 +602,7 @@ namespace Bonobo.Git.Server.Test.Unit
 
             // get LogOn
             [TestMethod]
-            public void Get_LogOn_Called_With_Null_Url__Throws_No_Exceptions()
+            public void Get_LogOn_Called_With_Null_Url__Returns_ViewResult()
             {
                 // Arrange
                 string returnUrl = null;
@@ -732,18 +687,8 @@ namespace Bonobo.Git.Server.Test.Unit
                 // Arrange
                 LogOnModel model = null;
 
-                try
-                {
-                    // Act
-                    SutAs<HomeController>().LogOn(model);
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-
-                // Assert
-                Assert.Fail();
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<HomeController>().LogOn(model));
             }
 
             [TestMethod]
@@ -837,15 +782,10 @@ namespace Bonobo.Git.Server.Test.Unit
             [TestMethod]
             public void Get_LogOff_Called_Without_AuthenticationProvider__Throws_NullReferenceException()
             {
-                try
-                {
-                    SutAs<HomeController>().LogOff();
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-                Assert.Fail();
+                // Arrange
+
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<HomeController>().LogOff());
             }
 
             [TestMethod]
@@ -898,18 +838,8 @@ namespace Bonobo.Git.Server.Test.Unit
             {
                 // Arrange
 
-                try
-                {
-                    // Act
-                    SutAs<HomeController>().ChangeCulture(default(string), default(string));
-                }
-                catch (ArgumentNullException)
-                {
-                    return;
-                }
-
-                // Assert
-                Assert.Fail();
+                // Act & Assert
+                Assert.ThrowsException<ArgumentNullException>(() => SutAs<HomeController>().ChangeCulture(default(string), default(string)));
             }
 
             [TestMethod]
@@ -917,18 +847,8 @@ namespace Bonobo.Git.Server.Test.Unit
             {
                 // Arrange
 
-                // Act
-                try
-                {
-                    SutAs<HomeController>().ChangeCulture(string.Empty, string.Empty);
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-
-                // Assert
-                Assert.Fail();
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<HomeController>().ChangeCulture(string.Empty, string.Empty));
             }
 
             [TestMethod]
@@ -939,18 +859,8 @@ namespace Bonobo.Git.Server.Test.Unit
                 httpContextMock.SetupGet(c => c.Session)
                                .Returns(new Mock<HttpSessionStateBase>().Object);
 
-                // Act
-                try
-                {
-                    SutAs<HomeController>().ChangeCulture(string.Empty, string.Empty);
-                }
-                catch (ArgumentException)
-                {
-                    return;
-                }
-
-                // Assert
-                Assert.Fail();
+                // Act & Assert
+                Assert.ThrowsException<ArgumentException>(() => SutAs<HomeController>().ChangeCulture(string.Empty, string.Empty));
             }
 
             [TestMethod]
@@ -975,18 +885,8 @@ namespace Bonobo.Git.Server.Test.Unit
             {
                 // Arrange
 
-                // Act
-                try
-                {
-                    SutAs<HomeController>().Diagnostics();
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-
-                // Assert
-                Assert.Fail();
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<HomeController>().Diagnostics());
             }
 
             [TestMethod]

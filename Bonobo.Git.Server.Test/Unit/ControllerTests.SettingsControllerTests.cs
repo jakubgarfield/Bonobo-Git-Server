@@ -38,7 +38,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Get_Index_Called_With_Initialized_Configuration__Throws_No_Exceptions()
+            public void Get_Index_Called_With_Initialized_Configuration__Returns_ViewResult()
             {
                 // Arrange
                 ArrangeUserConfiguration();
@@ -62,18 +62,8 @@ namespace Bonobo.Git.Server.Test.Unit
                 // Arrange
                 ArrangeUserConfiguration();
 
-                try
-                {
-                    // Act
-                    SutAs<SettingsController>().Index(null);
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-
-                // Assert
-                Assert.Fail();
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<SettingsController>().Index(default(GlobalSettingsModel)));
             }
 
             [TestMethod]
@@ -82,19 +72,8 @@ namespace Bonobo.Git.Server.Test.Unit
                 // Arrange
                 ArrangeUserConfiguration();
 
-                try
-                {
-                    // Act
-                    SutAs<SettingsController>().Index(new GlobalSettingsModel());
-
-                }
-                catch (NullReferenceException)
-                {
-                    return;
-                }
-
-                // Assert
-                Assert.Fail();
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<SettingsController>().Index(new GlobalSettingsModel()));
             }
 
             [TestMethod]
@@ -105,7 +84,7 @@ namespace Bonobo.Git.Server.Test.Unit
                 sut.ControllerContext = CreateControllerContext();
                 httpContextMock.SetupGet(hc => hc.Server)
                                .Returns(new Mock<HttpServerUtilityBase>().Object);
-                GlobalSettingsModel model = new GlobalSettingsModel();
+                var model = new GlobalSettingsModel();
                 BindModelToController(model);
 
                 // Act
@@ -124,7 +103,7 @@ namespace Bonobo.Git.Server.Test.Unit
                 sut.ControllerContext = CreateControllerContext();
                 httpContextMock.SetupGet(hc => hc.Server)
                                .Returns(new Mock<HttpServerUtilityBase>().Object);
-                GlobalSettingsModel model = new GlobalSettingsModel { RepositoryPath = "-" };
+                var model = new GlobalSettingsModel { RepositoryPath = "-" };
                 BindModelToController(model);
 
                 // Act
