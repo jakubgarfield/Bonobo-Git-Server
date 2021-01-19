@@ -175,6 +175,8 @@
     <Compile Include="Unit\PasswordServiceTest.cs" />
     <Compile Include="Unit\GitAuthorizeAttributeTest.cs" />
     <Compile Include="Unit\ControllerDependendencyBuilders.cs" />
+    <Compile Include="Unit\ControllerTests.GitControllerTests.cs" />
+    <Compile Include="Unit\ControllerTests.ValidationControllerTests.cs" />
     <Compile Include="Unit\UserConfigurationTests.cs" />
     <Compile Include="Unit\UserExtensionsTests.cs" />
     <Compile Include="Unit\UserModelTest.cs" />
