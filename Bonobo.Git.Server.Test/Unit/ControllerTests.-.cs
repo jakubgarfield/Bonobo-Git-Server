@@ -186,6 +186,12 @@ namespace Bonobo.Git.Server.Test.Unit
             MvcApplication.Cache.Add(token, userName, DateTimeOffset.Now.AddMinutes(1));
         }
 
+        private static void AssertNextErrorMessageIs(IEnumerator<ModelError> modelStateErrorsEnumerator, string expected, string message)
+        {
+            modelStateErrorsEnumerator.MoveNext();
+            Assert.AreEqual(expected, modelStateErrorsEnumerator.Current.ErrorMessage, $"expected <{expected}> actual <{modelStateErrorsEnumerator.Current.ErrorMessage}>: {message}");
+        }
+
         private static void AssertNextErrorMessageIs(IEnumerator<ModelError> modelStateErrorsEnumerator, string expected)
         {
             modelStateErrorsEnumerator.MoveNext();

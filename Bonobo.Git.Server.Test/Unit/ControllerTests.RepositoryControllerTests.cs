@@ -286,6 +286,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
+            // this test randomly fails in marked line
             public void Post_Create_Executed_Arranging_RepositoryPermissionService_With_Empty_Model_When_User_Has_Create_Permissions_Not_Mocking_RepositoryRepository_Binding_Model_To_Controller_Mocking_MembershipService_And_TeamsRepository__Returns_ViewResult()
             {
                 // Arrange
@@ -307,34 +308,26 @@ namespace Bonobo.Git.Server.Test.Unit
                 var result = repositoryController.Create(model);
 
                 // Assert
-                Assert.IsFalse(repositoryController.ModelState.IsValid);
-                Assert.AreEqual(1, repositoryController.ModelState.Count);
-                var modelStateEnumerator = repositoryController.ModelState.GetEnumerator();
-                try
-                {
-                    modelStateEnumerator.MoveNext();
-                    Assert.AreEqual("Name", modelStateEnumerator.Current.Key);
-                    Assert.AreEqual(3, modelStateEnumerator.Current.Value.Errors.Count);
-                    var modelStateErrorEnumerator = modelStateEnumerator.Current.Value.Errors.GetEnumerator();
-                    try
-                    {
-                        AssertNextErrorMessageIs(modelStateErrorEnumerator, "empty repo name?");
-                        AssertNextErrorMessageIs(modelStateErrorEnumerator, "\"Name\" contains characters that can't be in a file or directory name.");
-                        AssertNextErrorMessageIs(modelStateErrorEnumerator, "\"Name\" shouldn't contain only whitespace characters.");
-                    }
-                    finally
-                    {
-                        modelStateErrorEnumerator.Dispose();
-                    }
-                }
-                finally
-                {
-                    modelStateEnumerator.Dispose();
-                }
                 var viewResult = AssertAndGetViewResult(result);
                 Assert.IsNotNull(viewResult.Model);
                 Assert.IsInstanceOfType(viewResult.Model, typeof(RepositoryDetailModel));
                 var repositoryDetailModel = viewResult.Model as RepositoryDetailModel;
+
+                Assert.IsFalse(repositoryController.ModelState.IsValid);
+                Assert.AreEqual(1, repositoryController.ModelState.Count);
+                using (var modelStateEnumerator = repositoryController.ModelState.GetEnumerator())
+                {
+                    modelStateEnumerator.MoveNext();
+                    Assert.AreEqual("Name", modelStateEnumerator.Current.Key);
+                    Assert.AreEqual(3, modelStateEnumerator.Current.Value.Errors.Count);
+                    using (var modelStateErrorEnumerator = modelStateEnumerator.Current.Value.Errors.GetEnumerator())
+                    {
+                        // this test randomly fails here need to investigate why
+                        AssertNextErrorMessageIs(modelStateErrorEnumerator, "empty repo name?", $"repository name '{repositoryDetailModel.Name ?? "<null>"}'");
+                        AssertNextErrorMessageIs(modelStateErrorEnumerator, "\"Name\" contains characters that can't be in a file or directory name.");
+                        AssertNextErrorMessageIs(modelStateErrorEnumerator, "\"Name\" shouldn't contain only whitespace characters.");
+                    }
+                }
                 Assert.IsNotNull(repositoryDetailModel.AllAdministrators);
                 Assert.IsNotNull(repositoryDetailModel.AllUsers);
                 Assert.IsNotNull(repositoryDetailModel.AllTeams);
