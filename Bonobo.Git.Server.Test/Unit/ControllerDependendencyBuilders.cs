@@ -92,6 +92,18 @@ namespace Bonobo.Git.Server.Test.Unit
             return repositoryRepositoryMock;
         }
 
+        public static Mock<IRepositoryRepository> SetupToReturnAModelWithASpecificIdWhenCallingGetRepositoryMethod(this Mock<IRepositoryRepository> repositoryRepositoryMock, string repositoryName, Guid guid)
+        {
+            repositoryRepositoryMock.Setup(s => s.GetRepository(repositoryName))
+                                    .Returns(new RepositoryModel
+                                    {
+                                        Id = guid,
+                                        Administrators = new UserModel[0],
+                                        Name = repositoryName
+                                    });
+            return repositoryRepositoryMock;
+        }
+
         // MembershipHelper Mock
         public static Mock<MembershipHelper> SetupToRespondTrueWhenSendingForgotPasswordEmail(this Mock<MembershipHelper> membershipHelperMock)
         {

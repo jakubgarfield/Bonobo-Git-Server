@@ -142,11 +142,18 @@ namespace Bonobo.Git.Server.Controllers
 
         /// <summary>
         /// This is the action invoked if you browse to a .git URL
-        /// We just redirect to the repo details page, which is basically what GitHub does
+        /// We just redirect to the repo details page, which is basically what GitHub does,
+        /// looking for the ID in the database first, if not found using the repo name directly, 
+        /// so the error is thrown at the UI level
         /// </summary>
         public ActionResult GitUrl(string repositoryName)
         {
-            return RedirectPermanent(Url.Action("Detail", "Repository", new { id = repositoryName }));
+            var repo = RepositoryRepository.GetRepository(repositoryName);
+            if (repo == null)
+            {
+                return RedirectPermanent(Url.Action("Detail", "Repository", new { id = repositoryName }));
+            }
+            return RedirectPermanent(Url.Action("Detail", "Repository", new { id = repo.Id }));
         }
 
         private ActionResult ExecuteReceivePack(string repositoryName)
