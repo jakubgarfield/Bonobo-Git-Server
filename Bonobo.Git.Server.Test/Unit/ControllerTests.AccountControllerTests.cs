@@ -23,8 +23,137 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             // get Delete
-            // post Delete
+            [TestMethod]
+            public void Get_Delete_Executed_With_Empty_Id_Without_Setting_Mocks__Throws_NullReferenceException()
+            {
+                // Arrange
 
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<AccountController>().Delete(Guid.Empty));
+            }
+
+            [TestMethod]
+            public void Get_Delete_Executed_With_Empty_Id_Setting_Mock_To_MembershipService__Returns_RedirectToRouteResult()
+            {
+                // Arrange
+                var accountController = SutAs<AccountController>();
+                accountController.MembershipService = SetupMock<IMembershipService>().Object;
+
+                // Act
+                var result = accountController.Delete(Guid.Empty);
+
+                // Assert
+                var redirectToRouteResult = AssertAndGetRedirectToRouteResult(result);
+                Assert.AreEqual("", redirectToRouteResult.RouteName);
+                Assert.AreEqual(1, redirectToRouteResult.RouteValues.Count);
+                using (var routeValuesEnumerator = redirectToRouteResult.RouteValues.GetEnumerator())
+                {
+                    routeValuesEnumerator.MoveNext();
+                    Assert.AreEqual("action", routeValuesEnumerator.Current.Key);
+                    Assert.AreEqual("Index", routeValuesEnumerator.Current.Value);
+                }
+            }
+
+            [TestMethod]
+            public void Get_Delete_Executed_With_Valid_Id_Setting_Mock_To_MembershipService_To_Return_A_User__Returns_ViewResult()
+            {
+                // Arrange
+                var accountController = SutAs<AccountController>();
+                var id = Guid.NewGuid();
+                accountController.MembershipService = SetupMock<IMembershipService>().SetupToReturnARequestedUserModelById(id).Object;
+
+                // Act
+                var result = accountController.Delete(id);
+
+                // Assert
+                var viewResult = AssertAndGetViewResult(result);
+                Assert.IsNotNull(viewResult.Model);
+                Assert.IsInstanceOfType(viewResult.Model, typeof(UserModel));
+                var userModel = viewResult.Model as UserModel;
+                Assert.AreEqual(id, userModel.Id);
+            }
+
+            // post Delete
+            [TestMethod]
+            public void Post_Delete_Executed_With_Null_Model__Returns_RedirectToRouteResult()
+            {
+                // Arrange
+
+                // Act
+                var result = SutAs<AccountController>().Delete(default(UserDetailModel));
+
+                // Assert
+                var redirectToRouteResult = AssertAndGetRedirectToRouteResult(result);
+                Assert.AreEqual("", redirectToRouteResult.RouteName);
+                Assert.AreEqual(1, redirectToRouteResult.RouteValues.Count);
+                using (var routeValuesEnumerator = redirectToRouteResult.RouteValues.GetEnumerator())
+                {
+                    routeValuesEnumerator.MoveNext();
+                    Assert.AreEqual("action", routeValuesEnumerator.Current.Key);
+                    Assert.AreEqual("Index", routeValuesEnumerator.Current.Value);
+                }
+                Assert.IsNull(sut.TempData["DeleteSuccess"]);
+            }
+
+            [TestMethod]
+            public void Post_Delete_Executed_With_Non_Null_Model_With_User_Id_Equals_Current_User_Id__Returns_RedirectToRouteResult_With_TempData_DeleteSuccess_False()
+            {
+                // Arrange
+                var model = new UserDetailModel { Id = Guid.NewGuid() };
+                SetHttpContextMockIntoSUT(model.Id);
+
+                // Act
+                var result = SutAs<AccountController>().Delete(model);
+
+                // Assert
+                var redirectToRouteResult = AssertAndGetRedirectToRouteResult(result);
+                Assert.AreEqual("", redirectToRouteResult.RouteName);
+                Assert.AreEqual(1, redirectToRouteResult.RouteValues.Count);
+                using (var routeValuesEnumerator = redirectToRouteResult.RouteValues.GetEnumerator())
+                {
+                    routeValuesEnumerator.MoveNext();
+                    Assert.AreEqual("action", routeValuesEnumerator.Current.Key);
+                    Assert.AreEqual("Index", routeValuesEnumerator.Current.Value);
+                }
+                Assert.AreEqual(false, sut.TempData["DeleteSuccess"]);
+            }
+
+            [TestMethod]
+            public void Post_Delete_Executed_With_Non_Null_Model_With_User_Id_Not_Equal_Current_User_Id_Without_Controller_Mocks__Throws_NullReferenceException()
+            {
+                // Arrange
+                var model = new UserDetailModel { Id = Guid.NewGuid() };
+                SetHttpContextMockIntoSUT(Guid.NewGuid());
+
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<AccountController>().Delete(model));
+            }
+
+            [TestMethod]
+            public void Post_Delete_Executed_With_Non_Null_Model_With_User_Id_N1ot_Equal_Current_User_Id_With_Mocked_IMembershipService__Returns_TempData_DeleteSuccess_True()
+            {
+                // Arrange
+                var model = new UserDetailModel { Id = Guid.NewGuid() };
+                SetHttpContextMockIntoSUT(Guid.NewGuid());
+                var accountController = SutAs<AccountController>();
+                accountController.MembershipService = SetupMock<IMembershipService>().SetupToReturnARequestedUserModelById(model.Id)
+                                                                                     .Object;
+                // Act
+                var result = accountController.Delete(model);
+
+                var redirectToRouteResult = AssertAndGetRedirectToRouteResult(result);
+                Assert.AreEqual("", redirectToRouteResult.RouteName);
+                Assert.AreEqual(1, redirectToRouteResult.RouteValues.Count);
+                using (var routeValuesEnumerator = redirectToRouteResult.RouteValues.GetEnumerator())
+                {
+                    routeValuesEnumerator.MoveNext();
+                    Assert.AreEqual("action", routeValuesEnumerator.Current.Key);
+                    Assert.AreEqual("Index", routeValuesEnumerator.Current.Value);
+                }
+                Assert.AreEqual(true, sut.TempData["DeleteSuccess"]);
+            }
+
+            // get Edit
             [TestMethod]
             public void Get_Edit_Executed_With_Null_Parameters__Throws_NullReferenceException()
             {
@@ -36,7 +165,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Get_Edit_When_User_Is_Unknown_And_Resulting_Model_Is_Null__Stays_On_View()
+            public void Get_Edit_Executed_When_User_Is_Unknown_And_Resulting_Model_Is_Null__Stays_On_View()
             {
                 // Arrange
                 var userid = Guid.NewGuid();
@@ -56,7 +185,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Get_Edit_When_Non_Admin_User_Queries_Other_UserId__Gets_Redirected_To_Home_Unauthorized()
+            public void Get_Edit_Executed_When_Non_Admin_User_Queries_Other_UserId__Gets_Redirected_To_Home_Unauthorized()
             {
                 // Arrange
                 var userid = Guid.NewGuid();
@@ -71,7 +200,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Get_Edit_When_Admin_User_Queries_Other_User_Id_And_Resulting_Model_Is_Null__Stays_On_View()
+            public void Get_Edit_Executed_When_Admin_User_Queries_Other_User_Id_And_Resulting_Model_Is_Null__Stays_On_View()
             {
                 // Arrange
                 var userid = Guid.NewGuid();
@@ -93,7 +222,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Get_Edit_When_User_Is_Known_And_Resulting_Model_Is_Not_Null__Stays_On_View()
+            public void Get_Edit_Executed_When_User_Is_Known_And_Resulting_Model_Is_Not_Null__Stays_On_View()
             {
                 // Arrange
                 var userId = Guid.NewGuid();
@@ -138,8 +267,9 @@ namespace Bonobo.Git.Server.Test.Unit
                 Assert.AreEqual(userEditModel.SelectedRoles, selectedRoles);
             }
 
+            // post Edit
             [TestMethod]
-            public void Post_Edit_With_Unbound_Empty_Model_And_Environment_Unprepared__Throws_A_NullReferenceException()
+            public void Post_Edit_Executed_With_Unbound_Empty_Model_And_Environment_Unprepared__Throws_A_NullReferenceException()
             {
                 // Arrange
                 // Act & Assert
@@ -147,7 +277,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Post_Edit_With_Unbound_Bare_Model_Data_Referring_To_The_Same_User__Returns_Weird_Data()
+            public void Post_Edit_Executed_With_Unbound_Bare_Model_Data_Referring_To_The_Same_User__Returns_Weird_Data()
             {
                 // Arrange
                 var userId = Guid.NewGuid();
@@ -163,7 +293,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Post_Edit_With_Unbound_Bare_Model_And_Admin_And_DemoActive_Configuration_Set_And_Data_Referring_To_The_Same_UserId__Redirects_To_Home_Unauthorized()
+            public void Post_Edit_Executed_With_Unbound_Bare_Model_And_Admin_And_DemoActive_Configuration_Set_And_Data_Referring_To_The_Same_UserId__Redirects_To_Home_Unauthorized()
             {
                 // Arrange
                 ConfigurationManager.AppSettings["demoModeActive"] = "true";
@@ -183,7 +313,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Post_Edit_With_Bound_Empty_Model_And_Correct_Environment__Passes_Execution()
+            public void Post_Edit_Executed_With_Bound_Empty_Model_And_Correct_Environment__Passes_Execution()
             {
                 // Arrange
                 sut.ControllerContext = CreateControllerContext();
@@ -200,7 +330,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Post_Edit_With_Bound_Bare_Model_Data_Referring_To_The_Same_User__Returns_Null_Update_Success_In_ViewBag()
+            public void Post_EditExecuted__With_Bound_Bare_Model_Data_Referring_To_The_Same_User__Returns_Null_Update_Success_In_ViewBag()
             {
                 // Arrange
                 var userId = Guid.NewGuid();
@@ -218,7 +348,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Post_Edit_With_Bound_Bare_Model_Data_Referring_To_Another_User__Redirects_To_Home_Unauthorized()
+            public void Post_Edit_Executed_With_Bound_Bare_Model_Data_Referring_To_Another_User__Redirects_To_Home_Unauthorized()
             {
                 // Arrange
                 var userId = Guid.NewGuid();
@@ -237,7 +367,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Post_Edit_With_Bound_Invalid_Model_With_NewPassword_Not_Empty_And_OldPassword_Empty__Returns_Expected_ModelState()
+            public void Post_Edit_Executed_With_Bound_Invalid_Model_With_NewPassword_Not_Empty_And_OldPassword_Empty__Returns_Expected_ModelState()
             {
                 // Arrange
                 var userId = Guid.NewGuid();
@@ -267,7 +397,7 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             [TestMethod]
-            public void Post_Edit_With_Bound_Valid_Model_Data_Referring_To_The_Same_User__Returns_Data_From_The_User()
+            public void Post_Edit_Executed_With_Bound_Valid_Model_Data_Referring_To_The_Same_User__Returns_Data_From_The_User()
             {
                 // Arrange
                 var userId = Guid.NewGuid();
@@ -291,6 +421,51 @@ namespace Bonobo.Git.Server.Test.Unit
             }
 
             // get Create
+            [TestMethod]
+            public void Get_Create_Executed_Without_Any_Setup__Throws_NullReferenceException()
+            {
+                // Arrange
+
+                // Act & Assert
+                Assert.ThrowsException<NullReferenceException>(() => SutAs<AccountController>().Create());
+            }
+
+            [TestMethod]
+            public void Get_Create_Executed_With_HttpContext_Setup__Throws_ArgumentNullException()
+            {
+                // Arrange
+                ReinitializeStaticClass(typeof(ConfigurationEntry<UserConfiguration>));
+                SetHttpContextMockIntoSUT(Guid.NewGuid());
+
+                // Act & Assert
+                Assert.ThrowsException<ArgumentNullException>(() => SutAs<AccountController>().Create());
+            }
+
+            [TestMethod]
+            public void Get_Create_Executed_With_HttpContext_And_UserConfiguration_Setup__Returns_RedirectToRouteResult_To_Home_Unauthorized()
+            {
+                // Arrange
+                SetHttpContextMockIntoSUT(Guid.NewGuid());
+                ArrangeUserConfiguration();
+
+                // Act
+                var result = SutAs<AccountController>().Create();
+
+                // Assert
+                var redirectToRouteResult = AssertAndGetRedirectToRouteResult(result);
+                Assert.AreEqual("", redirectToRouteResult.RouteName);
+                Assert.AreEqual(2, redirectToRouteResult.RouteValues.Count);
+                using (var routeValuesEnumerator = redirectToRouteResult.RouteValues.GetEnumerator())
+                {
+                    routeValuesEnumerator.MoveNext();
+                    Assert.AreEqual("action", routeValuesEnumerator.Current.Key);
+                    Assert.AreEqual("Unauthorized", routeValuesEnumerator.Current.Value);
+                    routeValuesEnumerator.MoveNext();
+                    Assert.AreEqual("controller", routeValuesEnumerator.Current.Key);
+                    Assert.AreEqual("Home", routeValuesEnumerator.Current.Value);
+                }
+            }
+
             // post Create
 
             private void SetupMinimalEnvironment(Guid userId)
