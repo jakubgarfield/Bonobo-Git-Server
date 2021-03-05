@@ -7,6 +7,8 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Bonobo.Git.Server.Git.GitService
 {
@@ -93,15 +95,41 @@ namespace Bonobo.Git.Server.Git.GitService
 
             using (var process = Process.Start(info))
             {
-                inStream.CopyTo(process.StandardInput.BaseStream);
-                if (options.endStreamWithClose) {
-                    process.StandardInput.Close();
-                } else {
-                    process.StandardInput.Write('\0');
-                }
+                //Do asynchronous copy i.e. spin up a separate task so we can simultaneously read/write &
+                //avoid deadlock due to filled buffers within git process
+                Task stdInTask = inStream.CopyToAsync(process.StandardInput.BaseStream);
 
-                process.StandardOutput.BaseStream.CopyTo(outStream);
-                process.WaitForExit();
+                //Don't bother waiting on completion of stdOutTask while process is running.
+                //task will be sitting idle waiting for new bytes on stdOut of git
+                Task stdOutTask = process.StandardOutput.BaseStream.CopyToAsync(outStream);
+
+                //wait for process death and ensure all data is sent and received
+                bool completionJobDone = false;
+                while (true)
+                {
+                    //check if all output has been sent to git exe via stdin
+                    if ((stdInTask.IsCompleted) && (completionJobDone==false))
+                    {
+                        //all output has been sent to git process, send final signal.
+                        if (options.endStreamWithClose)
+                        {
+                            process.StandardInput.Close();
+                        }
+                        else
+                        {
+                            process.StandardInput.Write('\0');
+                        }
+                        completionJobDone = true;
+                    }
+
+                    //check if git has terminated
+                    if (process.HasExited)
+                        break;
+
+                    //lets not hog all the CPU, sleep for a little while (20ms)
+                    Thread.Sleep(20);
+                }
+                stdOutTask.Wait();
             }
         }
 
