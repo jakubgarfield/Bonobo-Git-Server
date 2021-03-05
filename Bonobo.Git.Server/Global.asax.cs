@@ -1,16 +1,5 @@
-﻿using System;
-using System.Configuration;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Security.Principal;
-using System.Threading;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Optimization;
-using System.Web.Routing;
-using System.Web.Security;
-using Bonobo.Git.Server.App_Start;
+﻿using Bonobo.Git.Server.App_Start;
+using Bonobo.Git.Server.Attributes;
 using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Controllers;
 using Bonobo.Git.Server.Data;
@@ -21,21 +10,32 @@ using Bonobo.Git.Server.Git.GitService.ReceivePackHook;
 using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Durability;
 using Bonobo.Git.Server.Git.GitService.ReceivePackHook.Hooks;
 using Bonobo.Git.Server.Security;
-using Microsoft.Practices.Unity;
+using Serilog;
+using System;
+using System.Configuration;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Runtime.Caching;
-using Bonobo.Git.Server.Attributes;
-using Microsoft.Practices.Unity.Mvc;
-using System.Web.Configuration;
 using System.Security.Claims;
+using System.Threading;
+using System.Web;
+using System.Web.Configuration;
 using System.Web.Helpers;
 using System.Web.Hosting;
-using Serilog;
+using System.Web.Mvc;
+using System.Web.Optimization;
+using System.Web.Routing;
+using Unity;
+using Unity.AspNet.Mvc;
+using Unity.Injection;
+using Unity.Resolution;
 
 namespace Bonobo.Git.Server
 {
     public class MvcApplication : HttpApplication
     {
-        public static ObjectCache Cache = MemoryCache.Default; 
+        public static ObjectCache Cache = MemoryCache.Default;
 
         protected void Application_AcquireRequestState(object sender, EventArgs e)
         {
@@ -86,7 +86,7 @@ namespace Bonobo.Git.Server
             var connectionstring = WebConfigurationManager.ConnectionStrings["BonoboGitServerContext"];
             if (connectionstring.ProviderName.ToLowerInvariant() == "system.data.sqlite")
             {
-                if(!connectionstring.ConnectionString.ToLowerInvariant().Contains("binaryguid=false"))
+                if (!connectionstring.ConnectionString.ToLowerInvariant().Contains("binaryguid=false"))
                 {
                     Log.Error("Please ensure that the sqlite connection string contains 'BinaryGUID=false;'.");
                     throw new ConfigurationErrorsException("Please ensure that the sqlite connection string contains 'BinaryGUID=false;'.");
@@ -174,12 +174,8 @@ namespace Bonobo.Git.Server
                     throw new ArgumentException("Missing declaration in web.config", "AuthenticationProvider");
             }
 
-            container.RegisterType<IGitRepositoryLocator, ConfigurationBasedRepositoryLocator>(
-                new InjectionFactory((ctr, type, name) => {
-                    return new ConfigurationBasedRepositoryLocator(UserConfiguration.Current.Repositories);
-                })
-            );
-                
+            container.RegisterFactory<IGitRepositoryLocator>((ctr, type, name) => new ConfigurationBasedRepositoryLocator(UserConfiguration.Current.Repositories));
+
             container.RegisterInstance(
                 new GitServiceExecutorParams()
                 {
@@ -201,7 +197,7 @@ namespace Bonobo.Git.Server
 
             var oldProvider = FilterProviders.Providers.Single(f => f is FilterAttributeFilterProvider);
             FilterProviders.Providers.Remove(oldProvider);
-            
+
             var provider = new UnityFilterAttributeFilterProvider(container);
             FilterProviders.Providers.Add(provider);
         }
@@ -218,7 +214,7 @@ namespace Bonobo.Git.Server
                 container.RegisterType<IRecoveryFilePathBuilder, AutoCreateMissingRecoveryDirectories>();
                 container.RegisterType<IRecoveryFilePathBuilder, OneFolderRecoveryFilePathBuilder>();
                 container.RegisterInstance(new NamedArguments.FailedPackWaitTimeBeforeExecution(TimeSpan.FromSeconds(5 * 60)));
-                
+
                 container.RegisterInstance(new NamedArguments.ReceivePackRecoveryDirectory(
                     Path.IsPathRooted(ConfigurationManager.AppSettings["RecoveryDataPath"]) ?
                         ConfigurationManager.AppSettings["RecoveryDataPath"] :
@@ -251,10 +247,6 @@ namespace Bonobo.Git.Server
                 }
                 finally
                 {
-                    if (recoveryProcess != null)
-                    {
-                        container.Teardown(recoveryProcess);
-                    }
                 }
             }
         }

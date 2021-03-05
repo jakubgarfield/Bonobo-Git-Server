@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using Bonobo.Git.Server.App_GlobalResources;
+using Bonobo.Git.Server.Configuration;
+using Bonobo.Git.Server.Helpers;
+using Bonobo.Git.Server.Models;
+using Bonobo.Git.Server.Security;
+using Microsoft.Owin.Security;
+using Serilog;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
-
-using Bonobo.Git.Server.App_GlobalResources;
-using Bonobo.Git.Server.Configuration;
-using Bonobo.Git.Server.Extensions;
-using Bonobo.Git.Server.Models;
-using Bonobo.Git.Server.Security;
-
-using Bonobo.Git.Server.Helpers;
-using System.DirectoryServices.AccountManagement;
-
-using Microsoft.Practices.Unity;
-using Serilog;
-using Microsoft.Owin.Security;
+using Unity;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -187,10 +179,10 @@ namespace Bonobo.Git.Server.Controllers
         public ActionResult CreateADUser()
         {
             var efms = MembershipService as EFMembershipService;
-            
+
             if ((!Request.IsAuthenticated) || efms == null)
             {
-                Log.Warning("CreateADUser: can't run IsAuth: {IsAuth}, MemServ {MemServ}", 
+                Log.Warning("CreateADUser: can't run IsAuth: {IsAuth}, MemServ {MemServ}",
                     Request.IsAuthenticated,
                     MembershipService.GetType());
                 return RedirectToAction("Unauthorized", "Home");
@@ -209,7 +201,7 @@ namespace Bonobo.Git.Server.Controllers
                         Log.Information("Making AD user {User} into an admin", credentials);
 
                         var id = MembershipService.GetUserModel(credentials).Id;
-                        RoleProvider.AddUserToRoles(id, new[] {Definitions.Roles.Administrator});
+                        RoleProvider.AddUserToRoles(id, new[] { Definitions.Roles.Administrator });
 
                         // Add the administrator role to the Identity/cookie
                         var Identity = (ClaimsIdentity)User.Identity;

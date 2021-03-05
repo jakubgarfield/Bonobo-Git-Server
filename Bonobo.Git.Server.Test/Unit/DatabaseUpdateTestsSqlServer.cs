@@ -4,7 +4,7 @@ using Bonobo.Git.Server.Test.MembershipTests.EFTests;
 using Bonobo.Git.Server.Data.Update;
 using Bonobo.Git.Server.Data;
 
-namespace Bonobo.Git.Server.Test.UnitTests
+namespace Bonobo.Git.Server.Test.Unit
 {
     [TestClass]
     public class DatabaseUpdateTestsSqlServer

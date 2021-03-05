@@ -1,7 +1,7 @@
 ﻿using Bonobo.Git.Server.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bonobo.Git.Server.Test.UnitTests
+namespace Bonobo.Git.Server.Test.Unit
 {
     [TestClass]
     public sealed class UserModelTest

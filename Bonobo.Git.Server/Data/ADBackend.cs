@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-using Bonobo.Git.Server.Models;
-using System.DirectoryServices.AccountManagement;
-using System.Threading.Tasks;
-using Bonobo.Git.Server.Configuration;
-using Bonobo.Git.Server.Security;
-using System.Threading;
-using Microsoft.Practices.Unity;
+﻿using Bonobo.Git.Server.Configuration;
 using Bonobo.Git.Server.Helpers;
+using Bonobo.Git.Server.Models;
+using Bonobo.Git.Server.Security;
 using Serilog;
+using System;
+using System.DirectoryServices.AccountManagement;
+using System.Linq;
+using System.Threading;
+using Unity;
 
 namespace Bonobo.Git.Server.Data
 {
@@ -107,7 +103,7 @@ namespace Bonobo.Git.Server.Data
                     UpdateRoles();
                     UpdateRepositories();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Log.Error(ex, "Failed to update data from AD");
                 }
@@ -146,7 +142,7 @@ namespace Bonobo.Git.Server.Data
 
         private void UpdateRepositories()
         {
-            foreach(RepositoryModel repository in Repositories)
+            foreach (RepositoryModel repository in Repositories)
             {
                 UserModel[] usersToRemove = repository.Users.Where(repoUser => !Users.Select(u => u.Id).Contains(repoUser.Id)).ToArray();
                 TeamModel[] teamsToRemove = repository.Teams.Where(repoTeam => !Teams.Select(team => team.Id).Contains(repoTeam.Id)).ToArray();
@@ -163,7 +159,7 @@ namespace Bonobo.Git.Server.Data
         {
             try
             {
-                GroupPrincipal   group;
+                GroupPrincipal group;
                 PrincipalContext pc = ADHelper.GetMembersGroup(out group);
 
                 foreach (Guid Id in Users.Select(x => x.Id).Where(x => ADHelper.GetUserPrincipal(x) == null))
@@ -194,7 +190,7 @@ namespace Bonobo.Git.Server.Data
                 Teams.Remove(team.Id);
             }
 
-            if(MembershipService == null)
+            if (MembershipService == null)
                 MembershipService = new ADMembershipService();
 
             foreach (string teamName in ActiveDirectorySettings.TeamNameToGroupNameMapping.Keys)
@@ -229,7 +225,7 @@ namespace Bonobo.Git.Server.Data
             {
                 Roles.Remove(role.Id);
             }
-            
+
             foreach (string roleName in ActiveDirectorySettings.RoleNameToGroupNameMapping.Keys)
             {
                 string groupName = ActiveDirectorySettings.RoleNameToGroupNameMapping[roleName];

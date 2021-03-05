@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-
+﻿using Bonobo.Git.Server.App_GlobalResources;
 using Bonobo.Git.Server.Data;
 using Bonobo.Git.Server.Models;
 using Bonobo.Git.Server.Security;
-using Bonobo.Git.Server.App_GlobalResources;
-
-using Microsoft.Practices.Unity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using Unity;
 
 namespace Bonobo.Git.Server.Controllers
 {
@@ -40,7 +38,7 @@ namespace Bonobo.Git.Server.Controllers
         [ValidateAntiForgeryToken]
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Edit(TeamEditModel model)
-        {           
+        {
             if (ModelState.IsValid)
             {
                 TeamRepository.Update(ConvertTeamDetailModel(model));
@@ -53,7 +51,7 @@ namespace Bonobo.Git.Server.Controllers
         [WebAuthorize(Roles = Definitions.Roles.Administrator)]
         public ActionResult Create()
         {
-            var model = new TeamEditModel 
+            var model = new TeamEditModel
             {
                 AllUsers = MembershipService.GetAllUsers().ToArray(),
                 SelectedUsers = new UserModel[] { }
