@@ -5,8 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Linq;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 
 namespace Bonobo.Git.Server.Git.GitService
 {
@@ -35,6 +35,12 @@ namespace Bonobo.Git.Server.Git.GitService
             this.gitHomePath = parameters.GitHomePath;
             this.repositoriesDirPath = parameters.RepositoriesDirPath;
             this.repoLocator = repoLocator;
+        }
+
+        private class StreamHelper
+        {
+	        public Stream FromStream { get; set; }
+	        public Stream ToStream { get; set; }
         }
 
         public void ExecuteServiceByName(
@@ -93,17 +99,40 @@ namespace Bonobo.Git.Server.Git.GitService
 
             using (var process = Process.Start(info))
             {
-                inStream.CopyTo(process.StandardInput.BaseStream);
-                if (options.endStreamWithClose) {
-                    process.StandardInput.Close();
-                } else {
-                    process.StandardInput.Write('\0');
-                }
+				var readStreamHelper = new StreamHelper {
+									FromStream = process.StandardOutput.BaseStream,
+									ToStream = outStream
+				                };
 
-                process.StandardOutput.BaseStream.CopyTo(outStream);
-                process.WaitForExit();
+				//Seperate thread for reading the output to prevent a buffer overflow at the  4k console buffer limit
+				var thrdRead = new Thread((obj) => {
+															try
+															{
+															  var strmHelper = (StreamHelper) obj;
+															  strmHelper.FromStream.CopyTo(strmHelper.ToStream);
+															}
+															//Extra to prevent error if client disconnected
+															catch (System.Web.HttpException)
+															{
+															}
+														});
+
+				thrdRead.Start(readStreamHelper);
+				
+				inStream.CopyTo(process.StandardInput.BaseStream);
+				if (options.endStreamWithClose) {
+				  process.StandardInput.Close();
+				} else {
+				  process.StandardInput.Write('\0');
+				}
+
+	            process.WaitForExit();
+
+	            thrdRead.Abort();
+
             }
         }
+
 
         private void SetHomePath(ProcessStartInfo info)
         {
