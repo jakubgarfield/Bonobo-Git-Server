@@ -176,6 +176,12 @@ namespace Bonobo.Git.Server.Data.Update.ADBackendUpdate
                 var members = new List<Guid>();
                 foreach (var memberName in role.Members)
                 {
+                    if (memberName == null)
+                    {
+                        Log.Warning("Role {0} in file {1} contained member with value \"null\". Skipping this member.", role.Name, dir);
+                        continue;
+                    }
+
                     Models.UserModel user;
                     if (users.TryGetValue(memberName, out user))
                     {
