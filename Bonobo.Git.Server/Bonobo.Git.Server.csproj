@@ -378,7 +378,6 @@
     <Compile Include="Data\EFTeamRepository.cs" />
     <Compile Include="Data\IRepositoryRepository.cs" />
     <Compile Include="Data\ITeamRepository.cs" />
-    <Compile Include="Attributes\EmailAttribute.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="FileActionResult.cs" />
     <Compile Include="Attributes\FileNameAttribute.cs" />

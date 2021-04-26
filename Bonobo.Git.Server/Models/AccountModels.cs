@@ -92,7 +92,7 @@ namespace Bonobo.Git.Server.Models
         public string Surname { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
-        [Email(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Email")]
+        [EmailAddress(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Email")]
         [DataType(DataType.EmailAddress)]
         [Display(ResourceType = typeof(Resources), Name = "Account_Edit_Email")]
         public string Email { get; set; }
@@ -163,7 +163,7 @@ namespace Bonobo.Git.Server.Models
 
         [Required(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Required")]
         [StringLength(50, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_StringLength")]
-        [Email(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Email")]
+        [EmailAddress(ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "Validation_Email")]
         [DataType(DataType.EmailAddress)]
         [Display(ResourceType = typeof(Resources), Name = "Account_Create_Email")]
         public string Email { get; set; }
