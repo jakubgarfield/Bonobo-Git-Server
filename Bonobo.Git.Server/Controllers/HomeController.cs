@@ -161,6 +161,9 @@ namespace Bonobo.Git.Server.Controllers
 
         public ActionResult LogOn(string returnUrl)
         {
+            if (AuthenticationProvider is WindowsAuthenticationProvider) {
+                return RedirectToAction("WindowsLogin", new { ReturnUrl = returnUrl });
+            }
             return View(new LogOnModel { ReturnUrl = returnUrl });
         }
 
