@@ -117,6 +117,7 @@
             <div class="pure-u-1">
                 @{
                     var permitted = new WebGrid(source: model.Value, defaultSort: "Name", rowsPerPage: 15);
+                    string defaultView = System.Configuration.ConfigurationManager.AppSettings["DefaultRepositoriesView"] ?? "Detail";
 
 
                     var columns = new List<WebGridColumn>();
@@ -129,7 +130,7 @@
                         format: (item) => Html.ActionLink(
                                 GetNameToDisplay((string)item.Name, (RepositoryDetailStatus)item.Status),
 
-                                "Detail",
+                                defaultView,
                                 new { id = item.Id },
                                 new
                                 {
